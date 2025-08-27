@@ -1,0 +1,118 @@
+# Build outputs
+dist
+build
+lib
+coverage
+.next
+.turbo
+.rsbuild
+
+# Docusaurus specific
+.docusaurus
+.cache-loader
+build/
+website/static/**
+
+# Dependencies
+node_modules/
+jspm_packages/
+.pnp/
+.pnp.js
+.yarn-integrity
+
+# Package manager files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.yarn
+yarn-error.lg
+
+# TypeScript
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+*.d.ts.map
+packages/**/tsconfig.tsbuildinfo
+apps/**/tsconfig.tsbuildinfo
+
+# React/Testing
+# React testing snapshots
+**/__snapshots__/
+# Jest
+jest.config.js.map
+
+# Generated files
+packages/**/lib
+packages/**/dist
+packages/**/.next
+packages/**/coverage
+packages/**/node_modules
+packages/**/.rpt2_cache
+packages/**/.rts2_cache*
+
+# Environment variables
+.env
+.env.*
+packages/**.env
+
+# Logs
+logs
+*.log
+debug-*.log
+*.cache
+report.*
+*storybook.log
+debug-storybook.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage
+.nyc_output
+
+# Grunt intermediate storage
+.grunt
+
+# Bower dependency directory
+bower_components
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons
+build/Release
+
+# Typescript v1 declaration files
+typings/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Mac files
+.DS_Store
+
+# IDE
+.idea
+.vscode/
+*.backup
+
+# Deployment
+.netlify
+.vercel
+.velite
+
+# Drafts
+draft*
