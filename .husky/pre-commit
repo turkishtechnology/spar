@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Hata durumunda script'i durdur
+set -e
+
+echo "🔍 Pre-commit kontrollerine başlanıyor..."
+
+# Staged dosyaları kontrol et
+echo "📝 Lint-staged çalıştırılıyor..."
+pnpm lint-staged
+
+# TypeScript tip kontrolü
+echo "🔍 TypeScript tip kontrolü yapılıyor..."
+pnpm check-types
+
+echo "✅ Pre-commit kontrolleri tamamlandı!"
