@@ -29,7 +29,7 @@
       "@/*": ["./src/*"],
       "react": ["./node_modules/@types/react"]
     },
-    "types": []
+    "types": ["jest", "@testing-library/jest-dom", "jest-axe"]
   },
   "include": ["src/**/*"],
   "exclude": [
