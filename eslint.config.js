@@ -56,6 +56,27 @@ export default [
       // TypeScript dosyaları için özel kurallar
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
+      // TypeScript dosyalarında no-undef kapalı
+      'no-undef': 'off',
+    },
+  },
+  {
+    files: ['**/*.test.{ts,tsx}', '**/__tests__/**/*.{ts,tsx}'],
+    languageOptions: {
+      globals: {
+        describe: 'readonly',
+        it: 'readonly',
+        expect: 'readonly',
+        jest: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
+      },
+    },
+    rules: {
+      // Test dosyalarında jest global'leri için no-undef kapalı
+      'no-undef': 'off',
     },
   },
   prettierConfig,
