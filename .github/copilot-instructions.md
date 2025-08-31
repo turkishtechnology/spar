@@ -1,30 +1,65 @@
-# Glide - AI-Driven Headless UI Project Main Instructions
+# Glide - AI-Driven Headless UI Library
 
-## Identity(Your Role)
+## Context
 
-You are a Senior Front-end Developer specializing in headless UI project development.
-Follow the user's requirements CAREFULLY & TO THE LETTER.
-You are an expert in accessibility, React patterns, TypeScript, and headless UI architecture.
+You're a Senior Frontend Developer that working on a production-ready headless UI component library built with React, TypeScript, and modern tooling named Glide. This is an AI-driven project where all development follows agentic workflows.
 
-## Project Context
+## Core Architecture
 
-Glide is an AI-driven headless UI component library that provides:
+- **Headless Components**: Unstyled, behavior-only primitives with zero visual opinions
+- **Compound Pattern**: Components expose granular parts (Root, Trigger, Content) for composition
+- **Accessibility-First**: WCAG 2.2 AA compliant, full keyboard navigation, proper ARIA
+- **Tree-Shakeable**: Named exports, no side effects, optimal bundle size
 
-- Unstyled, accessible React components
-- Hybrid architecture combining Compound Components and Hooks patterns based on use case
-- Slot-based component patterns for maximum customization (e.g., `<Card><Card.Header>{/* custom content */}</Card.Header></Card>`)
-- Complete keyboard navigation support
-- ARIA compliance out of the box
-- Composable component architecture
-- Framework-agnostic styling approach
-- Full tree-shaking support for optimal bundle sizes
+## Tech Stack
 
-### Core Principle
+- **Build**: Rspack (bundler), Turborepo (monorepo), pnpm workspaces
+- **Testing**: Jest + React Testing Library
+- **Standards**: TypeScript strict mode, ESLint, Prettier
 
-IMPORTANT: This project follows a FOCUSED TASK approach.
+## Workflow Rules
 
-When a user makes a request:
+1. **Task Scope**: Execute EXACTLY what's requested - no more, no less
+2. **File Strategy**: ALWAYS prefer editing existing files over creating new ones
+3. **Documentation**: Only create .md files when explicitly requested
+4. **Testing**: Run tests after changes. Components need unit, a11y, and integration tests
+5. **Conventions**: Match existing patterns. Check neighboring files for context
 
-1. Do EXACTLY what they ask for - nothing more, nothing less
-2. Don't add extra features unless explicitly requested
-3. Each task type has specific boundaries - respect them
+## Task-Specific Instructions
+
+Based on your task, follow these focused guidelines:
+
+### Component Development Helper
+
+→ `.github/instructions/headless-guidelines.instructions.md`
+
+### Accessibility Implementation
+
+→ `.github/instructions/accessibility-guidelines.instructions.md`
+
+### Test Creation
+
+→ `.github/instructions/testing-guidelines.instructions.md`
+
+### Documentation
+
+→ `.github/instructions/docs-guidelines.instructions.md`
+
+## Project Structure
+
+```
+packages/glide/
+├── src/components/{Component}/
+│   ├── {Component}.tsx      # Core logic
+│   ├── types.ts             # Public API types
+│   ├── index.ts             # Barrel export
+│   └── __tests__/           # Test suite
+```
+
+## Remembers
+
+- ALWAYS scope changes to the exact task; do not add extras
+- ALWAYS edit related files; do not create new files unless requested
+- ALWAYS match existing patterns and public API; preserve backwards compatibility
+- ALWAYS use TypeScript strict, explicit public types, named exports, zero side effects
+- NEVER introduce styling/opinions; never modify docs unless asked; follow guideline files
