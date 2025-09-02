@@ -57,6 +57,38 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
+    navbar: {
+      // title: "Takeoff UI",
+      logo: {
+        alt: 'Takeoff UI Logo',
+        src: 'img/takeoff-logo-black.svg',
+        srcDark: 'img/takeoff-logo-white.svg',
+      },
+      items: [
+        {
+          type: 'docSidebar',
+          sidebarId: 'tutorialSidebar',
+          position: 'left',
+          label: 'Documentation',
+        },
+        // { to: "/blog", label: "Blog", position: "left" },
+        {
+          to: '/release-notes',
+          label: 'v0.2.0',
+          position: 'right',
+        },
+        {
+          href: 'https://github.com/turkishtechnology/headless',
+          label: 'Github',
+          position: 'right',
+        },
+        {
+          type: 'localeDropdown',
+          position: 'right',
+        },
+      ],
+      hideOnScroll: true,
+    },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
