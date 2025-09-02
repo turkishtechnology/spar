@@ -1,4 +1,5 @@
 import { useColorMode } from '@docusaurus/theme-common';
+import Link from '@docusaurus/Link';
 export default function LandingHeader() {
   const color = useColorMode().colorMode === 'light' ? 'black' : 'white';
   return (
@@ -52,7 +53,9 @@ export default function LandingHeader() {
             examples that you can copy and paste into your apps.
           </div>
           <div className='flex border-solid border-[1px] border-gray-300 rounded-lg p-2'>
-            <button className='relative'>Get Started</button>
+            <Link className='relative' to='/docs/introduction'>
+              Get Started
+            </Link>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='24'

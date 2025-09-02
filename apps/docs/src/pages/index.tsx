@@ -22,7 +22,6 @@ export default function Home() {
               <Theming />
             </div>
           </section>
-
           <Ending />
         </main>
       </div>

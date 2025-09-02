@@ -73,11 +73,6 @@ const config: Config = {
         },
         // { to: "/blog", label: "Blog", position: "left" },
         {
-          to: '/release-notes',
-          label: 'v0.2.0',
-          position: 'right',
-        },
-        {
           href: 'https://github.com/turkishtechnology/headless',
           label: 'Github',
           position: 'right',
