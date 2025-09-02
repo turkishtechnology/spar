@@ -22,9 +22,8 @@ export default function Home() {
               <Theming />
             </div>
           </section>
-          <footer className='flex w-full'>
-            <Ending />
-          </footer>
+
+          <Ending />
         </main>
       </div>
     </Layout>
