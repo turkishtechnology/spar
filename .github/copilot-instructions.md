@@ -13,6 +13,7 @@ You're a Senior Frontend Developer that working on a production-ready headless U
 
 ## Tech Stack
 
+- **Core**: React, TypeScript
 - **Build**: Rspack (bundler), Turborepo (monorepo), pnpm workspaces
 - **Testing**: Jest + React Testing Library
 - **Standards**: TypeScript strict mode, ESLint, Prettier
@@ -27,23 +28,23 @@ You're a Senior Frontend Developer that working on a production-ready headless U
 
 ## Task-Specific Instructions
 
-Based on your task, follow these focused guidelines:
+Based on your task, follow these focused guidelines in the .github/instructions folder:
 
 ### Component Development Helper
 
-→ `.github/instructions/headless-guidelines.instructions.md`
+[//]: # (→ `/headless-guidelines.instructions.md`)
 
 ### Accessibility Implementation
 
-→ `.github/instructions/accessibility-guidelines.instructions.md`
+[//]: # (→ `/accessibility-guidelines.instructions.md`)
 
 ### Test Creation
 
-→ `.github/instructions/testing-guidelines.instructions.md`
+[//]: # (→ `/testing-guidelines.instructions.md`)
 
 ### Documentation
 
-→ `.github/instructions/docs-guidelines.instructions.md`
+[//]: # (→ `/docs-guidelines.instructions.md`)
 
 ## Project Structure
 
@@ -62,4 +63,7 @@ packages/glide/
 - ALWAYS edit related files; do not create new files unless requested
 - ALWAYS match existing patterns and public API; preserve backwards compatibility
 - ALWAYS use TypeScript strict, explicit public types, named exports, zero side effects
+- ALWAYS use PNPM for package management.
+- ALWAYS read referenced instruction files BEFORE starting.
+- ALWAYS keep components UNSTYLED by design.
 - NEVER introduce styling/opinions; never modify docs unless asked; follow guideline files
