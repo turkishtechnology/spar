@@ -3,6 +3,7 @@ import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
+import docusaurusPlugin from '@docusaurus/eslint-plugin';
 
 export default [
   js.configs.recommended,
@@ -79,6 +80,42 @@ export default [
       'no-undef': 'off',
     },
   },
+  // Docusaurus özel konfigürasyonu (sadece docs app için)
+  {
+    files: ['apps/docs/**/*.{js,jsx,ts,tsx,md,mdx}'],
+    plugins: {
+      '@docusaurus': docusaurusPlugin,
+    },
+    languageOptions: {
+      globals: {
+        // Docusaurus için browser global'leri
+        window: 'readonly',
+        document: 'readonly',
+        navigator: 'readonly',
+        location: 'readonly',
+        localStorage: 'readonly',
+        sessionStorage: 'readonly',
+        fetch: 'readonly',
+      },
+    },
+    rules: {
+      // Docusaurus önerilen kuralları
+      '@docusaurus/string-literal-i18n-messages': 'error',
+      '@docusaurus/no-untranslated-text': [
+        'warn',
+        {
+          ignoredStrings: ['·', '—', '×', '→', '←', '↑', '↓'],
+        },
+      ],
+      '@docusaurus/no-html-links': 'error',
+      '@docusaurus/prefer-docusaurus-heading': 'warn',
+
+      // Docs'ta console izinli
+      'no-console': 'off',
+      // Config dosyaları için daha esnek
+      '@typescript-eslint/no-var-requires': 'off',
+    },
+  },
   prettierConfig,
   {
     ignores: [
@@ -90,6 +127,9 @@ export default [
       'coverage/**',
       '*.config.js',
       '*.config.ts',
+      // Docusaurus generate edilmiş dosyalar
+      'apps/docs/.docusaurus/**',
+      'apps/docs/build/**',
     ],
   },
 ];
