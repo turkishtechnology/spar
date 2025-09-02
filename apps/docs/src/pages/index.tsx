@@ -14,14 +14,12 @@ export default function Home() {
       <div className='flex'>
         <main className='flex-1'>
           <section className='justify-self-center'>
-            <div className='container m-12'>
-              <div className='flex flex-col items-center gap-16'>
-                <LandingHeader />
-                <LandingSubHeader />
-                <Features />
-                <AIDriven />
-                <Theming />
-              </div>
+            <div className='container flex flex-col items-center gap-16 m-12'>
+              <LandingHeader />
+              <LandingSubHeader />
+              <Features />
+              <AIDriven />
+              <Theming />
             </div>
           </section>
           <footer className='flex w-full'>

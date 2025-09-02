@@ -1,8 +1,8 @@
 export default function LandingSubHeader() {
   return (
-    <div className='flex flex-col gap-8 pt-16 px-28'>
+    <div className='flex flex-col gap-8'>
       <div className='flex flex-col gap-12'>
-        <div className='flex flex-col gap-8 px-12'>
+        <div className='flex flex-col gap-8'>
           <div className='flex flex-col gap-2'>
             <div className='flex gap-1'>
               <svg
