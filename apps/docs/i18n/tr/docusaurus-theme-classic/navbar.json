@@ -1,0 +1,18 @@
+{
+  "logo.alt": {
+    "message": "Takeoff UI Logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Documentation": {
+    "message": "Dokümentasyon",
+    "description": "Navbar item with label Documentation"
+  },
+  "item.label.v0.2.0": {
+    "message": "v0.2.0",
+    "description": "Navbar item with label v0.2.0"
+  },
+  "item.label.Github": {
+    "message": "Github'a Git",
+    "description": "Navbar item with label Github"
+  }
+}

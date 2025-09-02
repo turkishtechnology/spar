@@ -1,3 +1,5 @@
+import Translate from '@docusaurus/Translate';
+
 export default function Theming() {
   return (
     <div className='flex justify-center mx-28'>
@@ -22,17 +24,27 @@ export default function Theming() {
                 fill='#C90019'
               />
             </svg>
-            <div>THEMES</div>
+            <div>
+              <Translate description='THEMES'>theming.themes</Translate>
+            </div>
           </div>
           <div className='flex gap-3'>
-            <div className='text-5xl font-semibold text-[#C90019] underline'>Simple</div>
-            <div className='text-5xl font-semibold'>Development</div>
+            <div className='text-5xl font-semibold text-[#C90019] underline'>
+              <Translate description='Simple'>theming.simple</Translate>
+            </div>
+            <div className='text-5xl font-semibold'>
+              <Translate description='Development'>theming.development</Translate>
+            </div>
           </div>
           <div className='flex font-light text-[#525866]'>
-            Built for the modern user interfaces to engage users
+            <Translate description='Built for the modern user interfaces to engage users'>
+              theming.description
+            </Translate>
           </div>
           <div className='bg-[#C90019] flex items-center justify-center rounded-lg p-2 w-[140px]'>
-            <button className='text-white'>Try It Now</button>
+            <button className='text-white'>
+              <Translate description='Try It Now'>theming.try.it.now</Translate>
+            </button>
           </div>
         </div>
         <div className='flex'>

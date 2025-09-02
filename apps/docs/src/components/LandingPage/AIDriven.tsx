@@ -1,3 +1,5 @@
+import Translate from '@docusaurus/Translate';
+
 export default function AIDriven() {
   return (
     <div>
@@ -23,18 +25,27 @@ export default function AIDriven() {
                   fill='#C90019'
                 />
               </svg>
-              <div>FEATURES</div>
+              <div>
+                <Translate description='FEATURES'>aidriven.features</Translate>
+              </div>
             </div>
             <div className='flex gap-3'>
-              <div className='text-5xl font-semibold text-[#C90019] underline'>Ai Driven</div>
-              <div className='text-5xl font-semibold'>Development</div>
+              <div className='text-5xl font-semibold text-[#C90019] underline'>
+                <Translate description='Ai Driven'>aidriven.ai.driven</Translate>
+              </div>
+              <div className='text-5xl font-semibold'>
+                <Translate description='Development'>aidriven.development</Translate>
+              </div>
             </div>
             <div className='flex font-light text-[#525866]'>
-              Support for error-free and rapid development processes with artificial intelligence
-              assistance
+              <Translate description='Support for error-free and rapid development processes with artificial intelligence assistance'>
+                aidriven.description
+              </Translate>
             </div>
             <div className='bg-[#C90019] flex items-center justify-center rounded-lg p-2 w-[140px]'>
-              <button className='text-white'>Explore</button>
+              <button className='text-white'>
+                <Translate description='Explore'>aidriven.explore</Translate>
+              </button>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 width='25'
