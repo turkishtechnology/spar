@@ -17,6 +17,7 @@ export default {
         'chore', // Kaynak kodu etkilemeyen diğer değişiklikler
         'revert', // Önceki commit'i geri alma
         'wip', // Work in progress (geçici commit)
+        'conflict',
       ],
     ],
     'type-case': [2, 'always', 'lower-case'],
