@@ -1,43 +1,34 @@
-import type { ReactNode } from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import Heading from '@theme/Heading';
+import LandingHeader from '../components/LandingPage/LandingHeader';
+import LandingSubHeader from '../components/LandingPage/LandingSubHeader';
+import Features from '../components/LandingPage/Features';
+import AIDriven from '../components/LandingPage/AIDriven';
+import Theming from '../components/LandingPage/Theming';
+import Ending from '../components/LandingPage/Ending';
 
-import styles from './index.module.css';
-
-function HomepageHeader() {
+export default function Home() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className='container'>
-        <Heading as='h1' className='hero__title'>
-          {siteConfig.title}
-        </Heading>
-        <p className='hero__subtitle'>{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link className='button button--secondary button--lg' to='/docs/intro'>
-            Docusaurus Tutorial - 5min ⏱️
-          </Link>
-        </div>
+    <Layout title={`${siteConfig.title}`}>
+      <div className='flex'>
+        <main className='flex-1'>
+          <section className='justify-self-center'>
+            <div className='container m-12'>
+              <div className='flex flex-col items-center gap-16'>
+                <LandingHeader />
+                <LandingSubHeader />
+                <Features />
+                <AIDriven />
+                <Theming />
+              </div>
+            </div>
+          </section>
+          <footer className='flex w-full'>
+            <Ending />
+          </footer>
+        </main>
       </div>
-    </header>
-  );
-}
-
-export default function Home(): ReactNode {
-  const { siteConfig } = useDocusaurusContext();
-  return (
-    <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description='Description will go into a meta tag in <head />'
-    >
-      <HomepageHeader />
-      <main>
-        <HomepageFeatures />
-      </main>
     </Layout>
   );
 }
