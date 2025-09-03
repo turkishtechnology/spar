@@ -1,11 +1,10 @@
 import Translate from '@docusaurus/Translate';
-
 export default function Theming() {
   return (
-    <div className='flex justify-center mx-28'>
-      <div className='flex flex-col mb-16 mt-8 gap-12'>
-        <div className='flex flex-col items-center gap-8'>
-          <div className='flex gap-1'>
+    <div className='theming-container'>
+      <div className='theming-inner'>
+        <div className='theming-content'>
+          <div className='theming-features'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='16'
@@ -28,26 +27,26 @@ export default function Theming() {
               <Translate description='THEMES'>theming.themes</Translate>
             </div>
           </div>
-          <div className='flex gap-3'>
-            <div className='text-5xl font-semibold text-[#C90019] underline'>
+          <div className='theming-title-row'>
+            <div className='theming-title-accent'>
               <Translate description='Simple'>theming.simple</Translate>
             </div>
-            <div className='text-5xl font-semibold'>
+            <div className='theming-title'>
               <Translate description='Development'>theming.development</Translate>
             </div>
           </div>
-          <div className='flex font-light text-[#525866]'>
+          <div className='theming-desc'>
             <Translate description='Built for the modern user interfaces to engage users'>
               theming.description
             </Translate>
           </div>
-          <div className='bg-[#C90019] flex items-center justify-center rounded-lg p-2 w-[140px]'>
-            <button className='text-white'>
+          <div className='theming-cta'>
+            <button className='theming-cta-btn'>
               <Translate description='Try It Now'>theming.try.it.now</Translate>
             </button>
           </div>
         </div>
-        <div className='flex'>
+        <div className='theming-image'>
           <img src='img/Topbar.png'></img>
         </div>
       </div>

@@ -6,15 +6,16 @@ import Features from '../components/LandingPage/Features';
 import AIDriven from '../components/LandingPage/AIDriven';
 import Theming from '../components/LandingPage/Theming';
 import Ending from '../components/LandingPage/Ending';
+import '../styles/index.scss';
 
 export default function Home() {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout title={`${siteConfig.title}`}>
-      <div className='flex'>
-        <main className='flex-1'>
-          <section className='justify-self-center'>
-            <div className='container flex flex-col items-center gap-16 m-12'>
+      <div className='home-container'>
+        <main className='home-main'>
+          <section className='home-section'>
+            <div className='home-content'>
               <LandingHeader />
               <LandingSubHeader />
               <Features />

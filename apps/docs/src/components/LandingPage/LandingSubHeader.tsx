@@ -2,11 +2,11 @@ import Translate from '@docusaurus/Translate';
 
 export default function LandingSubHeader() {
   return (
-    <div className='flex flex-col gap-8'>
-      <div className='flex flex-col gap-12'>
-        <div className='flex flex-col gap-8'>
-          <div className='flex flex-col gap-2'>
-            <div className='flex gap-1'>
+    <div className='subheader-container'>
+      <div className='subheader-content'>
+        <div className='subheader-section'>
+          <div className='subheader-title-group'>
+            <div className='subheader-title-icon'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 width='16'
@@ -25,51 +25,53 @@ export default function LandingSubHeader() {
                   fill='#C90019'
                 />
               </svg>
-              <div className='flex text-[#C90019]'>
+              <div className='subheader-title-text'>
                 <Translate description='WHY TAKEOFF HEADLESS'>
                   landing.why.takeoff.headless
                 </Translate>
               </div>
             </div>
-            <div className='flex text-5xl font-semibold gap-2'>
+            <div className='subheader-main-title'>
               <Translate description='Build (subheader)'>landing.build.subheader</Translate>
-              <div className='flex text-5xl font-semibold text-[#C90019] underline'>
+              <div className='subheader-main-title-accent'>
                 <Translate description='Smarter'>landing.smarter</Translate>
               </div>
-              <div className='flex text-5xl font-semibold'>
+              <div className='subheader-main-title-normal'>
                 <Translate description=', not Harder'>landing.not.harder</Translate>
               </div>
             </div>
           </div>
-          <div className='flex gap-6'>
-            <div className='flex flex-col gap-1'>
-              <div className='flex text-2xl'>
+          <div className='subheader-features'>
+            <div className='subheader-feature'>
+              <div className='subheader-feature-title'>
                 <Translate description='Speed up your workflow'>
                   landing.speed.up.workflow
                 </Translate>
               </div>
-              <div className='flex font-light text-[#717784]'>
+              <div className='subheader-feature-desc'>
                 <Translate description='Managing logic-heavy UI components description'>
                   landing.workflow.description
                 </Translate>
               </div>
             </div>
-            <div className='flex flex-col gap-1'>
-              <div className='flex text-2xl'>
+            <div className='subheader-feature'>
+              <div className='subheader-feature-title'>
                 <Translate description='Your UI, your rules'>landing.your.ui.rules</Translate>
               </div>
-              <div className='flex font-light text-[#717784]'>
+              <div className='subheader-feature-desc'>
                 <Translate description='Skip the styling limitations description'>
                   landing.styling.description
                 </Translate>
               </div>
             </div>
           </div>
-          <div className='grid grid-cols-4 gap-4'>
-            <div className='flex gap-1'>
-              <div className='w-px h-16 bg-[#E1E4EA] mx-1' />
-              <div className='flex flex-col gap-1'>
-                <div className='flex text-4xl font-semibold text-[#C90019]'>80k+</div>
+          <div className='subheader-stats'>
+            <div className='subheader-stat'>
+              <div className='subheader-stat-divider' />
+              <div className='subheader-stat-content'>
+                <div className='subheader-stat-number'>
+                  <Translate>80k+</Translate>
+                </div>
                 <div>
                   <Translate description='Monthly npm downloads'>
                     landing.monthly.downloads
@@ -77,10 +79,12 @@ export default function LandingSubHeader() {
                 </div>
               </div>
             </div>
-            <div className='flex gap-1'>
-              <div className='w-px h-16 bg-[#E1E4EA] mx-1' />
-              <div className='flex flex-col gap-1 '>
-                <div className='flex text-4xl font-semibold text-[#C90019]'>200+</div>
+            <div className='subheader-stat'>
+              <div className='subheader-stat-divider' />
+              <div className='subheader-stat-content'>
+                <div className='subheader-stat-number'>
+                  <Translate>200+</Translate>
+                </div>
                 <div>
                   <Translate description='Developers building with Takeoff'>
                     landing.developers.building
@@ -88,19 +92,23 @@ export default function LandingSubHeader() {
                 </div>
               </div>
             </div>
-            <div className='flex gap-1'>
-              <div className='w-px h-16 bg-[#E1E4EA] mx-1' />
-              <div className='flex flex-col gap-1'>
-                <div className='flex text-4xl font-semibold text-[#C90019]'>900+</div>
+            <div className='subheader-stat'>
+              <div className='subheader-stat-divider' />
+              <div className='subheader-stat-content'>
+                <div className='subheader-stat-number'>
+                  <Translate>900+</Translate>
+                </div>
                 <div>
                   <Translate description='Github Stars'>landing.github.stars</Translate>
                 </div>
               </div>
             </div>
-            <div className='flex gap-1'>
-              <div className='w-px h-16 bg-[#E1E4EA] mx-1' />
-              <div className='flex flex-col gap-1'>
-                <div className='flex text-4xl font-semibold text-[#C90019]'>30+</div>
+            <div className='subheader-stat'>
+              <div className='subheader-stat-divider' />
+              <div className='subheader-stat-content'>
+                <div className='subheader-stat-number'>
+                  <Translate>30+</Translate>
+                </div>
                 <div>
                   <Translate description='Headless components included'>
                     landing.headless.components

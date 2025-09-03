@@ -1,0 +1,68 @@
+.aidriven-container {
+    display: flex;
+    justify-content: center;
+    margin-left: 7rem;
+    margin-right: 7rem;
+  }
+  
+  .aidriven-inner {
+    display: flex;
+    margin-bottom: 4rem;
+    margin-top: 2rem;
+  }
+  
+  .aidriven-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  .aidriven-features {
+    display: flex;
+    gap: 0.25rem;
+  }
+  
+  .aidriven-title {
+    display: flex;
+    gap: 0.75rem;
+  }
+  
+  .aidriven-title-ai {
+    font-size: 3rem;
+    font-weight: 600;
+    color: #C90019;
+    text-decoration: underline;
+  }
+  
+  .aidriven-title-dev {
+    font-size: 3rem;
+    font-weight: 600;
+  }
+  
+  .aidriven-description {
+    display: flex;
+    font-weight: 300;
+    color: #525866;
+  }
+  
+  .aidriven-explore {
+    background: #C90019;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    width: 140px;
+  }
+  
+  .aidriven-explore-btn {
+    color: white;
+  }
+  
+  .aidriven-explore-icon {
+    width: 25px;
+    height: 24px;
+    margin-left: 0.5rem;
+  }
+  

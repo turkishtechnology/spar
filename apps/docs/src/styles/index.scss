@@ -7,10 +7,6 @@
 
 /* You can override the default Infima variables here. */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import url('https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap');
 
 .geologica {
@@ -61,3 +57,66 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+.home-container {
+  display: flex;
+}
+.home-main {
+  flex: 1;
+}
+.home-section {
+  justify-self: center;
+}
+.home-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+  margin: 3rem;
+}
+
+.footer-container {
+  display: flex;
+  background: #222530;
+  width: 100%;
+  justify-content: space-between;
+  padding-left: 3.5rem;
+  padding-right: 3.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.footer-copyright {
+  font-size: 0.75rem;
+  color: #99A0AE;
+}
+.footer-links {
+  display: flex;
+  gap: 1rem;
+}
+.footer-link {
+  color: #99A0AE;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.footer-scrolltop {
+  border: 1px solid white;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@import './LandingPage/AIDriven.scss';
+@import './LandingPage/Ending.scss';
+@import './LandingPage/Feature.scss';
+@import './LandingPage/LandingHeader.scss';
+@import './LandingPage/LandingSubHeader.scss';
+@import './LandingPage/Theming.scss';
+

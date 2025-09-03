@@ -3,8 +3,8 @@ import Translate from '@docusaurus/Translate';
 
 const Footer: React.FC = () => {
   return (
-    <footer data-tk-navbar className={`flex bg-[#222530] w-full justify-between px-14 py-4`}>
-      <div className='flex items-center gap-8'>
+    <footer data-tk-navbar className='footer-container'>
+      <div className='footer-left'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           width='90'
@@ -72,7 +72,7 @@ const Footer: React.FC = () => {
           />
           <path d='M63.026 13.4453H60.8555V22.8363H63.026V13.4453Z' fill='white' />
         </svg>
-        <span className='text-xs text-[#99A0AE]'>
+        <span className='footer-copyright'>
           <Translate
             id='footer.copyright'
             description='Footer copyright text'
@@ -80,19 +80,19 @@ const Footer: React.FC = () => {
           />
         </span>
       </div>
-      <div className='flex gap-4'>
-        <button className='text-[#99A0AE]'>
+      <div className='footer-links'>
+        <button className='footer-link'>
           <Translate id='footer.term' description='Footer term button' />
         </button>
-        <button className='text-[#99A0AE]'>
+        <button className='footer-link'>
           <Translate id='footer.privacy' description='Footer privacy button' />
         </button>
-        <button className='text-[#99A0AE]'>
+        <button className='footer-link'>
           <Translate id='footer.cookies' description='Footer cookies button' />
         </button>
       </div>
       <div
-        className={`border-white border-solid border-1 rounded-lg p-2`}
+        className='footer-scrolltop'
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         style={{ cursor: 'pointer' }}
       >

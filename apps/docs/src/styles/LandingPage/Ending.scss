@@ -1,0 +1,32 @@
+
+.ending-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .ending-bar {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    background: #C90019;
+  }
+  
+  .ending-texts {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-end;
+  }
+  
+  .ending-title1 {
+    font-size: 2.25rem;
+    color: #eeb0b8;
+    font-weight: 600;
+  }
+  
+  .ending-title2 {
+    font-size: 2.25rem;
+    color: #fff;
+    font-weight: 600;
+  }
+  

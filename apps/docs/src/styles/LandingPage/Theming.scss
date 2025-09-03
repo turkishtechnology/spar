@@ -1,0 +1,58 @@
+
+.theming-container {
+    display: flex;
+    justify-content: center;
+    margin-left: 7rem;
+    margin-right: 7rem;
+  }
+  .theming-inner {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 4rem;
+    margin-top: 2rem;
+    gap: 3rem;
+  }
+  .theming-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+  .theming-features {
+    display: flex;
+    gap: 0.25rem;
+  }
+  .theming-title-row {
+    display: flex;
+    gap: 0.75rem;
+  }
+  .theming-title-accent {
+    font-size: 3rem;
+    font-weight: 600;
+    color: #C90019;
+    text-decoration: underline;
+  }
+  .theming-title {
+    font-size: 3rem;
+    font-weight: 600;
+  }
+  .theming-desc {
+    display: flex;
+    font-weight: 300;
+    color: #525866;
+  }
+  .theming-cta {
+    background: #C90019;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    width: 140px;
+  }
+  .theming-cta-btn {
+    color: white;
+  }
+  .theming-image {
+    display: flex;
+  }

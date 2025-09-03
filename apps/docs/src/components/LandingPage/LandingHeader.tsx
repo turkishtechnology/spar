@@ -1,25 +1,26 @@
 import { useColorMode } from '@docusaurus/theme-common';
 import Translate from '@docusaurus/Translate';
 import Link from '@docusaurus/Link';
+
 export default function LandingHeader() {
   const color = useColorMode().colorMode === 'light' ? 'black' : 'white';
   return (
     <div
-      className='flex'
+      className='landing-header-container'
       style={{
         backgroundImage: "url('/img/Vector.svg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
     >
-      <div className='flex flex-col gap-8'>
-        <div className='flex flex-col gap-8'>
-          <div className='flex justify-center gap-6'>
+      <div className='landing-header-content'>
+        <div className='landing-header-top'>
+          <div className='landing-header-top-row'>
             <div>
               <Translate description="WHAT'S NEW">landing.whats.new</Translate>
             </div>
-            <div className='w-px h-6 bg-[#E1E4EA] mx-1' />
-            <div className='flex gap-1'>
+            <div className='landing-header-divider' />
+            <div className='landing-header-insights'>
               <div>
                 <Translate description='Faster insights with five new features'>
                   landing.insights
@@ -40,40 +41,40 @@ export default function LandingHeader() {
             </div>
           </div>
         </div>
-        <div className='flex flex-col items-center gap-3'>
-          <div className='flex gap-3'>
-            <div className='text-7xl font-semibold'>
+        <div className='landing-header-titles'>
+          <div className='landing-header-title-row'>
+            <div className='landing-header-title'>
               <Translate description='Build'>landing.build</Translate>
             </div>
-            <div className='text-7xl font-semibold text-white bg-[#C90019]'>
+            <div className='landing-header-title landing-header-title-accent'>
               <Translate description='faster'>landing.faster</Translate>
             </div>
           </div>
-          <div className='flex gap-3'>
-            <div className='text-7xl font-semibold'>
+          <div className='landing-header-title-row'>
+            <div className='landing-header-title'>
               <Translate description='with'>landing.with</Translate>
             </div>
-            <div className='text-7xl font-semibold text-white bg-[#C90019]'>
+            <div className='landing-header-title landing-header-title-accent'>
               <Translate description="Takeoff's">landing.takeoffs</Translate>
             </div>
           </div>
-          <div className='flex gap-3 text-7xl'>
-            <div className='text-7xl font-semibold text-white bg-[#C90019]'>
+          <div className='landing-header-title-row'>
+            <div className='landing-header-title landing-header-title-accent'>
               <Translate description='Headless'>landing.headless</Translate>
             </div>
-            <div className='text-7xl font-semibold'>
+            <div className='landing-header-title'>
               <Translate description='UI system'>landing.ui.system</Translate>
             </div>
           </div>
         </div>
-        <div className='flex flex-col items-center gap-8 mb-[-80px]'>
-          <div className='flex font-light text-center'>
+        <div className='landing-header-bottom'>
+          <div className='landing-header-desc'>
             <Translate description='Open-source library with unstyled, primitive components description'>
               landing.description
             </Translate>
           </div>
-          <div className='flex border-solid border-[1px] border-gray-300 rounded-lg p-2'>
-            <Link className='relative' to='/docs/introduction'>
+          <div className='landing-header-getstarted'>
+            <Link className='landing-header-getstarted-link' to='/docs/introduction'>
               <Translate description='Get Started'>landing.get.started</Translate>
             </Link>
             <svg
