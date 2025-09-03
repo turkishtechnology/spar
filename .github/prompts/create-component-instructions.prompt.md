@@ -15,6 +15,7 @@ Use Context7 MCP or web search to analyze:
 - Leading headless component libraries (architecture and API patterns)
 - Recognized accessibility standards and authoring practices
 - Modern interaction and keyboard navigation patterns
+- NEVER mention those libraries in the instruction, just search and decide the final features of the component
 
 Focus on: API patterns, accessibility, state management, composition structure.
 
@@ -47,6 +48,7 @@ Use the exact section order and headings below:
 - Focus management
 - Announcements (screen reader)
 - Name/Role/Value exposure
+- Use .github/instructions/accessibility-guidelines.instructions.md file to rules
 
 ## 5. Implementation Architecture
 
