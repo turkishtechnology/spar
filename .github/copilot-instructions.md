@@ -36,7 +36,7 @@ Based on your task, follow these focused guidelines in the .github/instructions 
 
 ### Accessibility Implementation
 
-[//]: # (→ `/accessibility-guidelines.instructions.md`)
+→ `.github/instructions/accessibility-guidelines.instructions.md`
 
 ### Test Creation
 
