@@ -116,8 +116,8 @@ export default function LandingHeader() {
                 y2='-17.6321'
                 gradientUnits='userSpaceOnUse'
               >
-                <stop stop-color='#DB5465' />
-                <stop offset='1' stop-color='#B70017' />
+                <stop stopColor='#DB5465' />
+                <stop offset='1' stopColor='#B70017' />
               </linearGradient>
             </defs>
           </svg>
