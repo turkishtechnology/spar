@@ -19,6 +19,20 @@
       "dependsOn": ["^check-types"],
       "inputs": ["$TURBO_DEFAULT$", "tsconfig.json"],
       "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^test"],
+      "inputs": ["$TURBO_DEFAULT$", "jest.config.*", "tsconfig.test.json"],
+      "outputs": []
+    },
+    "format": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".prettierrc*",
+        "prettier.config.*",
+        "**/*.{js,jsx,ts,tsx,md,json,yml,yaml,css,scss,less,html}"
+      ],
+      "outputs": []
     }
   }
 }
