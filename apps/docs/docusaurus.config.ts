@@ -8,7 +8,7 @@ import tailwindPlugin from './plugins/tailwind-plugin';
 const config: Config = {
   title: 'Turkish Technology Headless UI',
   tagline: 'Modern headless React component library',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/Vector3.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
