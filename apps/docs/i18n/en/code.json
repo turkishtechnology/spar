@@ -1,46 +1,46 @@
 {
   "theme.ErrorPageContent.title": {
-    "message": "Bu sayfa çöktü.",
+    "message": "This page has crashed.",
     "description": "The title of the fallback page when the page crashed"
   },
   "theme.BackToTopButton.buttonAriaLabel": {
-    "message": "Sayfa başına dön",
+    "message": "Back to top",
     "description": "The ARIA label for the back to top button"
   },
   "theme.blog.archive.title": {
-    "message": "Arşiv",
+    "message": "Archive",
     "description": "The page & hero title of the blog archive page"
   },
   "theme.blog.archive.description": {
-    "message": "Arşiv",
+    "message": "Archive",
     "description": "The page & hero description of the blog archive page"
   },
   "theme.blog.paginator.navAriaLabel": {
-    "message": "Blog gönderi sayfası navigasyonu",
+    "message": "Blog post page navigation",
     "description": "The ARIA label for the blog pagination"
   },
   "theme.blog.paginator.newerEntries": {
-    "message": "Yeni Girdiler",
+    "message": "Newer Entries",
     "description": "The label used to navigate to the newer blog posts page (previous page)"
   },
   "theme.blog.paginator.olderEntries": {
-    "message": "Eski Girdiler",
+    "message": "Older Entries",
     "description": "The label used to navigate to the older blog posts page (next page)"
   },
   "theme.blog.post.paginator.navAriaLabel": {
-    "message": "Blog gönderi sayfası navigasyonu",
+    "message": "Blog post page navigation",
     "description": "The ARIA label for the blog posts pagination"
   },
   "theme.blog.post.paginator.newerPost": {
-    "message": "Daha Yeni Gönderi",
+    "message": "Newer Post",
     "description": "The blog post button label to navigate to the newer/previous post"
   },
   "theme.blog.post.paginator.olderPost": {
-    "message": "Daha Eski Gönderi",
+    "message": "Older Post",
     "description": "The blog post button label to navigate to the older/next post"
   },
   "theme.tags.tagsPageLink": {
-    "message": "Tüm Etiketleri Görüntüle",
+    "message": "View All Tags",
     "description": "The label of the link targeting the tag list page"
   },
   "theme.colorToggle.ariaLabel.mode.system": {
@@ -48,210 +48,210 @@
     "description": "The name for the system color mode"
   },
   "theme.colorToggle.ariaLabel.mode.light": {
-    "message": "Aydınlık mod",
+    "message": "Light mode",
     "description": "The name for the light color mode"
   },
   "theme.colorToggle.ariaLabel.mode.dark": {
-    "message": "Karanlık mod",
+    "message": "Dark mode",
     "description": "The name for the dark color mode"
   },
   "theme.colorToggle.ariaLabel": {
-    "message": "Karanlık ve aydınlık mod arasında geçiş yapın (şu anda {mode})",
+    "message": "Toggle between dark and light mode (currently {mode})",
     "description": "The ARIA label for the color mode toggle"
   },
   "theme.docs.breadcrumbs.navAriaLabel": {
-    "message": "Gezinti yolu",
+    "message": "Breadcrumbs",
     "description": "The ARIA label for the breadcrumbs"
   },
   "theme.docs.DocCard.categoryDescription.plurals": {
-    "message": "1 öğe|{count} öğe",
+    "message": "1 item|{count} items",
     "description": "The default description for a category card in the generated index about how many items this category includes"
   },
   "theme.docs.paginator.navAriaLabel": {
-    "message": "Dokümanlar sayfası",
+    "message": "Docs page",
     "description": "The ARIA label for the docs pagination"
   },
   "theme.docs.paginator.previous": {
-    "message": "Önceki",
+    "message": "Previous",
     "description": "The label used to navigate to the previous doc"
   },
   "theme.docs.paginator.next": {
-    "message": "Sonraki",
+    "message": "Next",
     "description": "The label used to navigate to the next doc"
   },
   "theme.docs.tagDocListPageTitle.nDocsTagged": {
-    "message": "Bir doküman etiketlendi|{count} doküman etiketlendi",
+    "message": "1 doc tagged|{count} docs tagged",
     "description": "Pluralized label for \"{count} docs tagged\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
   },
   "theme.docs.tagDocListPageTitle": {
-    "message": "\"{tagName}\" ile etiketlenmiş {nDocsTagged}",
+    "message": "{nDocsTagged} tagged with \"{tagName}\"",
     "description": "The title of the page for a docs tag"
   },
   "theme.docs.versionBadge.label": {
-    "message": "Versiyon: {versionLabel}"
+    "message": "Version: {versionLabel}"
   },
   "theme.docs.versions.unreleasedVersionLabel": {
-    "message": "Bu, {siteTitle} {versionLabel} sürümü için yayınlanmamış dokümantasyondur.",
+    "message": "This is the unpublished documentation for {siteTitle} {versionLabel}.",
     "description": "The label used to tell the user that he's browsing an unreleased doc version"
   },
   "theme.docs.versions.unmaintainedVersionLabel": {
-    "message": "Bu, {siteTitle} {versionLabel} dokümantasyonudur ve bakımı sonlanmıştır.",
+    "message": "This is the documentation for {siteTitle} {versionLabel} and it is no longer maintained.",
     "description": "The label used to tell the user that he's browsing an unmaintained doc version"
   },
   "theme.docs.versions.latestVersionSuggestionLabel": {
-    "message": "Güncel belgeler için bkz. {latestVersionLink} ({versionLabel}).",
+    "message": "See {latestVersionLink} ({versionLabel}) for the latest docs.",
     "description": "The label used to tell the user to check the latest version"
   },
   "theme.docs.versions.latestVersionLinkLabel": {
-    "message": "en son sürüm",
+    "message": "latest version",
     "description": "The label used for the latest version suggestion link label"
   },
   "theme.common.editThisPage": {
-    "message": "Bu sayfayı düzenle",
+    "message": "Edit this page",
     "description": "The link label to edit the current page"
   },
   "theme.common.headingLinkTitle": {
-    "message": "{heading} doğrudan bağlantı",
+    "message": "{heading} direct link",
     "description": "Title for link to heading"
   },
   "theme.lastUpdated.atDate": {
-    "message": " {date} tarihinde",
+    "message": " on {date}",
     "description": "The words used to describe on which date a page has been last updated"
   },
   "theme.lastUpdated.byUser": {
-    "message": " {user} tarafından",
+    "message": " by {user}",
     "description": "The words used to describe by who the page has been last updated"
   },
   "theme.lastUpdated.lastUpdatedAtBy": {
-    "message": "En son {atDate} {byUser} güncellendi",
+    "message": "Last updated {atDate} {byUser}",
     "description": "The sentence used to display when a page has been last updated, and by who"
   },
   "theme.NotFound.title": {
-    "message": "Sayfa Bulunamadı",
+    "message": "Page Not Found",
     "description": "The title of the 404 page"
   },
   "theme.navbar.mobileVersionsDropdown.label": {
-    "message": "Versiyonlar",
+    "message": "Versions",
     "description": "The label for the navbar versions dropdown on mobile view"
   },
   "theme.tags.tagsListLabel": {
-    "message": "Etiketler:",
+    "message": "Tags:",
     "description": "The label alongside a tag list"
   },
   "theme.AnnouncementBar.closeButtonAriaLabel": {
-    "message": "Kapat",
+    "message": "Close",
     "description": "The ARIA label for close button of announcement bar"
   },
   "theme.admonition.caution": {
-    "message": "uyarı",
+    "message": "caution",
     "description": "The default label used for the Caution admonition (:::caution)"
   },
   "theme.admonition.danger": {
-    "message": "tehlike",
+    "message": "danger",
     "description": "The default label used for the Danger admonition (:::danger)"
   },
   "theme.admonition.info": {
-    "message": "bilgi",
+    "message": "info",
     "description": "The default label used for the Info admonition (:::info)"
   },
   "theme.admonition.note": {
-    "message": "not",
+    "message": "note",
     "description": "The default label used for the Note admonition (:::note)"
   },
   "theme.admonition.tip": {
-    "message": "ipucu",
+    "message": "tip",
     "description": "The default label used for the Tip admonition (:::tip)"
   },
   "theme.admonition.warning": {
-    "message": "uyarı",
+    "message": "warning",
     "description": "The default label used for the Warning admonition (:::warning)"
   },
   "theme.blog.sidebar.navAriaLabel": {
-    "message": "Blog son gönderiler navigasyonu",
+    "message": "Blog recent posts navigation",
     "description": "The ARIA label for recent posts in the blog sidebar"
   },
   "theme.DocSidebarItem.expandCategoryAriaLabel": {
-    "message": "Kenar çubuğu kategorisini genişlet '{label}'",
+    "message": "Expand sidebar category '{label}'",
     "description": "The ARIA label to expand the sidebar category"
   },
   "theme.DocSidebarItem.collapseCategoryAriaLabel": {
-    "message": "Kenar çubuğu kategorisini daralt '{label}'",
+    "message": "Collapse sidebar category '{label}'",
     "description": "The ARIA label to collapse the sidebar category"
   },
   "theme.NavBar.navAriaLabel": {
-    "message": "Ana menü",
+    "message": "Main menu",
     "description": "The ARIA label for the main navigation"
   },
   "theme.NotFound.p1": {
-    "message": "Aradığınız şeyi bulamadık.",
+    "message": "We couldn't find what you were looking for.",
     "description": "The first paragraph of the 404 page"
   },
   "theme.NotFound.p2": {
-    "message": "Lütfen sizi orijinal URL'ye yönlendiren sitenin sahibiyle iletişime geçin ve bağlantısının bozuk olduğunu bildirin.",
+    "message": "Please contact the owner of the site that linked you to the original URL and let them know their link is broken.",
     "description": "The 2nd paragraph of the 404 page"
   },
   "theme.TOCCollapsible.toggleButtonLabel": {
-    "message": "Bu sayfada",
+    "message": "On this page",
     "description": "The label used by the button on the collapsible TOC component"
   },
   "theme.navbar.mobileLanguageDropdown.label": {
-    "message": "Diller",
+    "message": "Languages",
     "description": "The label for the mobile language switcher dropdown"
   },
   "theme.blog.post.readMore": {
-    "message": "Daha Fazla",
+    "message": "Read More",
     "description": "The label used in blog post item excerpts to link to full blog posts"
   },
   "theme.blog.post.readMoreLabel": {
-    "message": "{title} hakkında daha fazla bilgi edinin",
+    "message": "Learn more about {title}",
     "description": "The ARIA label for the link to full blog posts from excerpts"
   },
   "theme.blog.post.readingTime.plurals": {
-    "message": "{readingTime} dakikalık okuma|{readingTime} dakikalık okuma",
+    "message": "{readingTime} min read|{readingTime} min read",
     "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
   },
   "theme.CodeBlock.copy": {
-    "message": "Kopyala",
+    "message": "Copy",
     "description": "The copy button label on code blocks"
   },
   "theme.CodeBlock.copied": {
-    "message": "Kopyalandı",
+    "message": "Copied",
     "description": "The copied button label on code blocks"
   },
   "theme.CodeBlock.copyButtonAriaLabel": {
-    "message": "Kodu panoya kopyala",
+    "message": "Copy code to clipboard",
     "description": "The ARIA label for copy code blocks button"
   },
   "theme.CodeBlock.wordWrapToggle": {
-    "message": "Kelime kaydırmayı aç/kapat",
+    "message": "Toggle word wrap",
     "description": "The title attribute for toggle word wrapping button of code block lines"
   },
   "theme.docs.breadcrumbs.home": {
-    "message": "Ana sayfa",
+    "message": "Home",
     "description": "The ARIA label for the home page in the breadcrumbs"
   },
   "theme.docs.sidebar.collapseButtonTitle": {
-    "message": "Kenar çubuğunu daralt",
+    "message": "Collapse sidebar",
     "description": "The title attribute for collapse button of doc sidebar"
   },
   "theme.docs.sidebar.collapseButtonAriaLabel": {
-    "message": "Kenar çubuğunu daralt",
+    "message": "Collapse sidebar",
     "description": "The title attribute for collapse button of doc sidebar"
   },
   "theme.docs.sidebar.navAriaLabel": {
-    "message": "Belgeler kenar çubuğu",
+    "message": "Docs sidebar",
     "description": "The ARIA label for the sidebar navigation"
   },
   "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
-    "message": "Gezinme çubuğunu kapat",
+    "message": "Close navigation bar",
     "description": "The ARIA label for close button of mobile sidebar"
   },
   "theme.docs.sidebar.toggleSidebarButtonAriaLabel": {
-    "message": "Gezinme çubuğunu aç/kapat",
+    "message": "Toggle navigation bar",
     "description": "The ARIA label for hamburger menu button of mobile navigation"
   },
   "theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel": {
-    "message": "← Ana menüye dön",
+    "message": "← Back to main menu",
     "description": "The label of the back button to return to main menu, inside the mobile navbar sidebar secondary menu (notably used to display the docs sidebar)"
   },
   "theme.navbar.mobileDropdown.collapseButton.expandAriaLabel": {
@@ -263,19 +263,19 @@
     "description": "The ARIA label of the button to collapse the mobile dropdown navbar item"
   },
   "theme.docs.sidebar.expandButtonTitle": {
-    "message": "Kenar çubuğunu genişlet",
+    "message": "Expand sidebar",
     "description": "The ARIA label and title attribute for expand button of doc sidebar"
   },
   "theme.docs.sidebar.expandButtonAriaLabel": {
-    "message": "Kenar çubuğunu genişlet",
+    "message": "Expand sidebar",
     "description": "The ARIA label and title attribute for expand button of doc sidebar"
   },
   "theme.blog.post.plurals": {
-    "message": "Bir gönderi|{count} gönderi",
+    "message": "One post|{count} posts",
     "description": "Pluralized label for \"{count} posts\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
   },
   "theme.blog.tagTitle": {
-    "message": "\"{tagName}\" ile etiketlenmiş {nPosts}",
+    "message": "{nPosts} tagged with \"{tagName}\"",
     "description": "The title of the page for a blog tag"
   },
   "theme.blog.author.pageTitle": {
@@ -283,67 +283,67 @@
     "description": "The title of the page for a blog author"
   },
   "theme.blog.authorsList.pageTitle": {
-    "message": "Yazarlar",
+    "message": "Authors",
     "description": "The title of the authors page"
   },
   "theme.blog.authorsList.viewAll": {
-    "message": "Tüm Yazarları Görüntüle",
+    "message": "View All Authors",
     "description": "The label of the link targeting the blog authors page"
   },
   "theme.blog.author.noPosts": {
-    "message": "Bu yazar henüz herhangi bir yazı yazmadı.",
+    "message": "This author hasn't written any posts yet.",
     "description": "The text for authors with 0 blog post"
   },
   "theme.contentVisibility.unlistedBanner.title": {
-    "message": "Listelenmeyen sayfa",
+    "message": "Unlisted page",
     "description": "The unlisted content banner title"
   },
   "theme.contentVisibility.unlistedBanner.message": {
-    "message": "Bu sayfa listelenmemiş. Arama motorları dizine eklemez ve yalnızca doğrudan bağlantısı olan kullanıcılar buna erişebilir.",
+    "message": "This page is unlisted. Search engines will not index it and only users with a direct link can access it.",
     "description": "The unlisted content banner message"
   },
   "theme.contentVisibility.draftBanner.title": {
-    "message": "Taslak sayfa",
+    "message": "Draft page",
     "description": "The draft content banner title"
   },
   "theme.contentVisibility.draftBanner.message": {
-    "message": "Bu sayfa bir taslaktır. Sadece dev'de görünür olacak ve üretim yapısından hariç tutulacaktır.",
+    "message": "This page is a draft. It will only be visible in dev and excluded from production builds.",
     "description": "The draft content banner message"
   },
   "theme.ErrorPageContent.tryAgain": {
-    "message": "Tekrar deneyin",
+    "message": "Try again",
     "description": "The label of the button to try again rendering when the React error boundary captures an error"
   },
   "theme.common.skipToMainContent": {
-    "message": "Ana içeriğe geç",
+    "message": "Skip to main content",
     "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
   },
   "theme.tags.tagsPageTitle": {
-    "message": "Etiketler",
+    "message": "Tags",
     "description": "The title of the tag list page"
   },
   "landing.whats.new": {
-    "message": "YENİ ÖZELLİKLER",
+    "message": "WHAT'S NEW",
     "description": "WHAT'S NEW"
   },
   "landing.insights": {
-    "message": "Beş yeni özellik ile daha hızlı içgörüler",
+    "message": "Faster insights with five new features",
     "description": "Faster insights with five new features"
   },
   "landing.build": {
-    "message": "Geliştir",
+    "message": "Build",
     "description": "Build"
   },
   "landing.faster": {
-    "message": "daha hızlı",
+    "message": "faster",
     "description": "faster"
   },
   "landing.with": {
-    "message": "ile",
+    "message": "with",
     "description": "with"
   },
   "landing.takeoffs": {
-    "message": "Takeoff'un",
+    "message": "Takeoff's",
     "description": "Takeoff's"
   },
   "landing.headless": {
@@ -351,159 +351,159 @@
     "description": "Headless"
   },
   "landing.ui.system": {
-    "message": "UI sistemi",
+    "message": "UI system",
     "description": "UI system"
   },
   "landing.description": {
-    "message": "Stilsiz, temel bileşenler içeren açık kaynak kütüphanesi, uygulamalarınıza kopyalayıp yapıştırabileceğiniz stillendirilmiş örnekler koleksiyonu ile birlikte.",
+    "message": "Open-source library with unstyled, primitive components, plus a collection of styled examples you can copy-paste into your apps.",
     "description": "Open-source library with unstyled, primitive components description"
   },
   "landing.get.started": {
-    "message": "Başlayın",
+    "message": "Get Started",
     "description": "Get Started"
   },
   "landing.why.takeoff.headless": {
-    "message": "NEDEN TAKEOFF HEADLESS",
+    "message": "WHY TAKEOFF HEADLESS",
     "description": "WHY TAKEOFF HEADLESS"
   },
   "landing.build.subheader": {
-    "message": "Geliştir",
+    "message": "Build",
     "description": "Build (subheader)"
   },
   "landing.smarter": {
-    "message": "Daha Akıllı",
+    "message": "Smarter",
     "description": "Smarter"
   },
   "landing.not.harder": {
-    "message": ", Daha Zor Değil",
+    "message": ", not Harder",
     "description": ", not Harder"
   },
   "landing.speed.up.workflow": {
-    "message": "İş akışınızı hızlandırın",
+    "message": "Speed up your workflow",
     "description": "Speed up your workflow"
   },
   "landing.workflow.description": {
-    "message": "Mantık ağırlıklı UI bileşenlerini yönetmek zaman alıcıdır. Takeoff Headless durum, erişilebilirlik ve klavye etkileşimlerini hazır olarak sunar—böylece ürününüzü benzersiz kılan şeyleri geliştirmeye odaklanabilirsiniz.",
+    "message": "Managing logic-heavy UI components is time-consuming. Takeoff Headless provides state, accessibility, and keyboard interactions out of the box—so you can focus on what makes your product unique.",
     "description": "Managing logic-heavy UI components description"
   },
   "landing.your.ui.rules": {
-    "message": "UI'nız, kurallarınız",
+    "message": "Your UI, your rules",
     "description": "Your UI, your rules"
   },
   "landing.styling.description": {
-    "message": "Stil sınırlamalarını atlayın. Headless bileşenlerimiz size tasarım üzerinde tam kontrol sağlarken, davranış ve erişilebilirlik gibi zor kısımlarla perde arkasında ilgilenir.",
+    "message": "Skip the styling limitations. Our headless components give you full control over design, while handling the hard parts like behavior and accessibility behind the scenes.",
     "description": "Skip the styling limitations description"
   },
   "landing.monthly.downloads": {
-    "message": "Aylık npm indirmeleri",
+    "message": "Monthly npm downloads",
     "description": "Monthly npm downloads"
   },
   "landing.developers.building": {
-    "message": "Takeoff ile geliştiren geliştirici",
+    "message": "Developers building with Takeoff",
     "description": "Developers building with Takeoff"
   },
   "landing.github.stars": {
-    "message": "GitHub Yıldızları",
+    "message": "Github Stars",
     "description": "Github Stars"
   },
   "landing.headless.components": {
-    "message": "Dahil edilen headless bileşen",
+    "message": "Headless components included",
     "description": "Headless components included"
   },
   "features.wai.aria.ready": {
-    "message": "WAI-ARIA Hazır",
+    "message": "WAI-ARIA Ready",
     "description": "WAI-ARIA Ready"
   },
   "features.wai.aria.description": {
-    "message": "Takeoff, yardımcı teknolojiler için anlamsal ve davranışsal doğruluğu sağlamak amacıyla WAI-ARIA en iyi uygulamalarını takip eder",
+    "message": "Takeoff follows WAI-ARIA best practices to ensure semantic and behavioral correctness for assistive technologies.",
     "description": "Takeoff follows WAI-ARIA best practices description"
   },
   "features.keyboard.support": {
-    "message": "Tam Klavye Desteği",
+    "message": "Full Keyboard Support",
     "description": "Full Keyboard Support"
   },
   "features.keyboard.description": {
-    "message": "Tüm Takeoff bileşenleri tam klavye etkileşimini destekler—tab, ok tuşları, enter/escape—hazır olarak gelir.",
+    "message": "All Takeoff components support full keyboard interaction—tab, arrow keys, enter/escape—out of the box.",
     "description": "All Takeoff components support full keyboard interaction description"
   },
   "features.focus.handling": {
-    "message": "Akıllı Odak Yönetimi",
+    "message": "Smart Focus Handling",
     "description": "Smart Focus Handling"
   },
   "features.focus.description": {
-    "message": "Odak yönetimi varsayılan olarak beklendiği gibi çalışır ve karmaşık UI akışları için özelleştirilebilir.",
+    "message": "Focus management works as expected by default and is customizable for complex UI flows.",
     "description": "Focus management works as expected by default description"
   },
   "features.screen.reader": {
-    "message": "Ekran Okuyucu Dostu",
+    "message": "Screen Reader Friendly",
     "description": "Screen Reader Friendly"
   },
   "features.screen.reader.description": {
-    "message": "Yaygın tuzakları önlemek ve tutarlı davranış sağlamak için başlıca ekran okuyucular üzerinde test edilmiştir.",
+    "message": "Tested across major screen readers to avoid common pitfalls and ensure consistent behavior.",
     "description": "Tested across major screen readers description"
   },
   "aidriven.features": {
-    "message": "ÖZELLİKLER",
+    "message": "FEATURES",
     "description": "FEATURES"
   },
   "aidriven.ai.driven": {
-    "message": "Yapay Zeka Destekli",
+    "message": "AI Driven",
     "description": "Ai Driven"
   },
   "aidriven.development": {
-    "message": "Geliştirme",
+    "message": "Development",
     "description": "Development"
   },
   "aidriven.description": {
-    "message": "Yapay zeka desteği ile hatasız ve hızlı geliştirme süreçleri için destek",
+    "message": "Support for error-free and rapid development processes with artificial intelligence assistance",
     "description": "Support for error-free and rapid development processes with artificial intelligence assistance"
   },
   "aidriven.explore": {
-    "message": "Keşfet",
+    "message": "Explore",
     "description": "Explore"
   },
   "ending.ready.to.use": {
-    "message": "Kullanmaya hazır mısınız",
+    "message": "Are you ready to use the",
     "description": "Are you ready to use the"
   },
   "ending.headless.library": {
-    "message": "headless Takeoff UI kütüphanesini?",
+    "message": "headless Takeoff UI library?",
     "description": "headless Takeoff UI library?"
   },
   "theming.themes": {
-    "message": "TEMALAR",
+    "message": "THEMES",
     "description": "THEMES"
   },
   "theming.simple": {
-    "message": "Basit",
+    "message": "Simple",
     "description": "Simple"
   },
   "theming.development": {
-    "message": "Geliştirme",
+    "message": "Development",
     "description": "Development"
   },
   "theming.description": {
-    "message": "Kullanıcıları etkilemek için modern kullanıcı arayüzleri için tasarlanmıştır",
+    "message": "Built for the modern user interfaces to engage users",
     "description": "Built for the modern user interfaces to engage users"
   },
   "theming.try.it.now": {
-    "message": "Şimdi Deneyin",
+    "message": "Try It Now",
     "description": "Try It Now"
   },
   "footer.copyright": {
-    "message": "© {year} Türk Hava Yolları Tüm hakları saklıdır.",
+    "message": "© {year} Turkish Airlines. All rights reserved.",
     "description": "Footer copyright text"
   },
   "footer.term": {
-    "message": "Şartlar",
+    "message": "Term",
     "description": "Footer term button"
   },
   "footer.privacy": {
-    "message": "Gizlilik",
+    "message": "Privacy",
     "description": "Footer privacy button"
   },
   "footer.cookies": {
-    "message": "Çerezler",
+    "message": "Cookies",
     "description": "Footer cookies button"
   }
 }

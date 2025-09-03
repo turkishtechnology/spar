@@ -77,9 +77,8 @@ const config: Config = {
     navbar: {
       // title: "Takeoff UI",
       logo: {
-        alt: 'Takeoff UI Logo',
-        src: 'img/takeoff-logo-black.svg',
-        srcDark: 'img/takeoff-logo-white.svg',
+        srcDark: 'img/thy.svg',
+        src: 'img/thy-black.svg',
       },
       items: [
         {

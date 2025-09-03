@@ -4,11 +4,11 @@
     "description": "The alt text of navbar logo"
   },
   "item.label.Documentation": {
-    "message": "Dokümentasyon",
+    "message": "Documentation",
     "description": "Navbar item with label Documentation"
   },
   "item.label.Github": {
-    "message": "Github'a Git",
+    "message": "Go to Github",
     "description": "Navbar item with label Github"
   }
 }

@@ -1,0 +1,26 @@
+{
+  "sidebar.tutorialSidebar.category.Components": {
+    "message": "Components",
+    "description": "sidebar tutorialSidebar category label Components"
+  },
+  "sidebar.tutorialSidebar.category.introduction": {
+    "message": "Introduction",
+    "description": "sidebar tutorialSidebar category label Introduction"
+  },
+  "sidebar.tutorialSidebar.category.installation": {
+    "message": "Installation",
+    "description": "sidebar tutorialSidebar category label Installation"
+  },
+  "sidebar.tutorialSidebar.category.testing": {
+    "message": "Test Strategy & Guidelines",
+    "description": "sidebar tutorialSidebar category label Test Strategy & Guidelines"
+  },
+  "sidebar.tutorialSidebar.category.Components.Button": {
+    "message": "Button",
+    "description": "sidebar tutorialSidebar label Button"
+  },
+  "sidebar.tutorialSidebar.category.Components.Input": {
+    "message": "Input",
+    "description": "sidebar tutorialSidebar label Input"
+  }
+}
