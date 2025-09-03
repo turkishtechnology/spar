@@ -1,6 +1,4 @@
 // Public API barrel file
-// Re-export hooks, types, and utils from this package.
-export * from './hooks';
+// Re-export types and components from this package.
 export * from './types';
-export * from './utils';
 export * from './components';
