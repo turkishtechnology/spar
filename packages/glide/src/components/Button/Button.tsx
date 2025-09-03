@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import type { ButtonProps } from './types';
+import type { ButtonProps } from './Button.types';
 
 /**
  * TK Headless Button Component
