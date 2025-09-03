@@ -1,4 +1,5 @@
 import { useColorMode } from '@docusaurus/theme-common';
+import Translate from '@docusaurus/Translate';
 import Link from '@docusaurus/Link';
 export default function LandingHeader() {
   const color = useColorMode().colorMode === 'light' ? 'black' : 'white';
@@ -14,10 +15,16 @@ export default function LandingHeader() {
       <div className='flex flex-col gap-8'>
         <div className='flex flex-col gap-8'>
           <div className='flex justify-center gap-6'>
-            <div>WHAT'S NEW</div>
+            <div>
+              <Translate description="WHAT'S NEW">landing.whats.new</Translate>
+            </div>
             <div className='w-px h-6 bg-[#E1E4EA] mx-1' />
             <div className='flex gap-1'>
-              <div>Faster insights with five new features</div>
+              <div>
+                <Translate description='Faster insights with five new features'>
+                  landing.insights
+                </Translate>
+              </div>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 width='24'
@@ -35,26 +42,39 @@ export default function LandingHeader() {
         </div>
         <div className='flex flex-col items-center gap-3'>
           <div className='flex gap-3'>
-            <div className='text-7xl font-semibold'> Build</div>
-            <div className='text-7xl font-semibold text-white bg-[#C90019]'>faster</div>
+            <div className='text-7xl font-semibold'>
+              <Translate description='Build'>landing.build</Translate>
+            </div>
+            <div className='text-7xl font-semibold text-white bg-[#C90019]'>
+              <Translate description='faster'>landing.faster</Translate>
+            </div>
           </div>
           <div className='flex gap-3'>
-            <div className='text-7xl font-semibold'>with</div>
-            <div className='text-7xl font-semibold text-white bg-[#C90019]'>Takeoff's</div>
+            <div className='text-7xl font-semibold'>
+              <Translate description='with'>landing.with</Translate>
+            </div>
+            <div className='text-7xl font-semibold text-white bg-[#C90019]'>
+              <Translate description="Takeoff's">landing.takeoffs</Translate>
+            </div>
           </div>
           <div className='flex gap-3 text-7xl'>
-            <div className='text-7xl font-semibold text-white bg-[#C90019]'>Headless</div>
-            <div className='text-7xl font-semibold'>UI system</div>
+            <div className='text-7xl font-semibold text-white bg-[#C90019]'>
+              <Translate description='Headless'>landing.headless</Translate>
+            </div>
+            <div className='text-7xl font-semibold'>
+              <Translate description='UI system'>landing.ui.system</Translate>
+            </div>
           </div>
         </div>
         <div className='flex flex-col items-center gap-8 mb-[-80px]'>
           <div className='flex font-light text-center'>
-            Open-source library with unstyled, primitive components, with a collection of styled
-            examples that you can copy and paste into your apps.
+            <Translate description='Open-source library with unstyled, primitive components description'>
+              landing.description
+            </Translate>
           </div>
           <div className='flex border-solid border-[1px] border-gray-300 rounded-lg p-2'>
             <Link className='relative' to='/docs/introduction'>
-              Get Started
+              <Translate description='Get Started'>landing.get.started</Translate>
             </Link>
             <svg
               xmlns='http://www.w3.org/2000/svg'

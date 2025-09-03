@@ -1,4 +1,6 @@
 import { useColorMode } from '@docusaurus/theme-common';
+import Translate from '@docusaurus/Translate';
+
 export default function Features() {
   const color = useColorMode().colorMode === 'light' ? 'white' : 'black';
   return (
@@ -43,10 +45,13 @@ export default function Features() {
                   </g>
                 </svg>
                 <div className='flex flex-col gap-1'>
-                  <div className='flex text-2xl'>WAI-ARIA Ready</div>
+                  <div className='flex text-2xl'>
+                    <Translate description='WAI-ARIA Ready'>features.wai.aria.ready</Translate>
+                  </div>
                   <div className='flex font-light text-[#717784]'>
-                    Takeoff follows WAI-ARIA best practices to ensure semantic and behavioral
-                    correctness for assistive technologies
+                    <Translate description='Takeoff follows WAI-ARIA best practices description'>
+                      features.wai.aria.description
+                    </Translate>
                   </div>
                 </div>
               </div>
@@ -81,10 +86,15 @@ export default function Features() {
                   </g>
                 </svg>
                 <div className='flex flex-col gap-1'>
-                  <div className='flex text-2xl'>Full Keyboard Support</div>
+                  <div className='flex text-2xl'>
+                    <Translate description='Full Keyboard Support'>
+                      features.keyboard.support
+                    </Translate>
+                  </div>
                   <div className='flex font-light text-[#717784]'>
-                    All Takeoff components support full keyboard interaction—tabs, arrows,
-                    enter/escape—out of the box.
+                    <Translate description='All Takeoff components support full keyboard interaction description'>
+                      features.keyboard.description
+                    </Translate>
                   </div>
                 </div>
               </div>
@@ -121,10 +131,15 @@ export default function Features() {
                   </g>
                 </svg>
                 <div className='flex flex-col gap-1'>
-                  <div className='flex text-2xl'>Smart Focus Handling</div>
+                  <div className='flex text-2xl'>
+                    <Translate description='Smart Focus Handling'>
+                      features.focus.handling
+                    </Translate>
+                  </div>
                   <div className='flex font-light text-[#717784]'>
-                    Focus management works as expected by default, and can be customized for complex
-                    UI flows.
+                    <Translate description='Focus management works as expected by default description'>
+                      features.focus.description
+                    </Translate>
                   </div>
                 </div>
               </div>
@@ -147,10 +162,15 @@ export default function Features() {
                   />
                 </svg>
                 <div className='flex flex-col gap-1'>
-                  <div className='flex text-2xl'>Screen Reader Friendly</div>
+                  <div className='flex text-2xl'>
+                    <Translate description='Screen Reader Friendly'>
+                      features.screen.reader
+                    </Translate>
+                  </div>
                   <div className='flex font-light text-[#717784]'>
-                    Tested across major screen readers to avoid common pitfalls and ensure
-                    consistent behavior.
+                    <Translate description='Tested across major screen readers description'>
+                      features.screen.reader.description
+                    </Translate>
                   </div>
                 </div>
               </div>

@@ -1,3 +1,5 @@
+import Translate from '@docusaurus/Translate';
+
 export default function LandingSubHeader() {
   return (
     <div className='flex flex-col gap-8'>
@@ -23,29 +25,43 @@ export default function LandingSubHeader() {
                   fill='#C90019'
                 />
               </svg>
-              <div className='flex text-[#C90019]'>WHY TAKEOFF HEADLESS</div>
+              <div className='flex text-[#C90019]'>
+                <Translate description='WHY TAKEOFF HEADLESS'>
+                  landing.why.takeoff.headless
+                </Translate>
+              </div>
             </div>
             <div className='flex text-5xl font-semibold gap-2'>
-              Build
-              <div className='flex text-5xl font-semibold text-[#C90019] underline'>Smarter</div>
-              <div className='flex text-5xl font-semibold'>, not Harder</div>
+              <Translate description='Build (subheader)'>landing.build.subheader</Translate>
+              <div className='flex text-5xl font-semibold text-[#C90019] underline'>
+                <Translate description='Smarter'>landing.smarter</Translate>
+              </div>
+              <div className='flex text-5xl font-semibold'>
+                <Translate description=', not Harder'>landing.not.harder</Translate>
+              </div>
             </div>
           </div>
           <div className='flex gap-6'>
             <div className='flex flex-col gap-1'>
-              <div className='flex text-2xl'>Speed up your workflow</div>
+              <div className='flex text-2xl'>
+                <Translate description='Speed up your workflow'>
+                  landing.speed.up.workflow
+                </Translate>
+              </div>
               <div className='flex font-light text-[#717784]'>
-                Managing logic-heavy UI components is time-consuming. Takeoff Headless handles
-                state, accessibility, and keyboard interactions out of the box—so you can focus on
-                building what makes your product unique.
+                <Translate description='Managing logic-heavy UI components description'>
+                  landing.workflow.description
+                </Translate>
               </div>
             </div>
             <div className='flex flex-col gap-1'>
-              <div className='flex text-2xl'>Your UI, your rules</div>
+              <div className='flex text-2xl'>
+                <Translate description='Your UI, your rules'>landing.your.ui.rules</Translate>
+              </div>
               <div className='flex font-light text-[#717784]'>
-                Skip the styling limitations. Our headless components give you full control over
-                design, while taking care of the hard parts like behavior and accessibility under
-                the hood.
+                <Translate description='Skip the styling limitations description'>
+                  landing.styling.description
+                </Translate>
               </div>
             </div>
           </div>
@@ -54,28 +70,42 @@ export default function LandingSubHeader() {
               <div className='w-px h-16 bg-[#E1E4EA] mx-1' />
               <div className='flex flex-col gap-1'>
                 <div className='flex text-4xl font-semibold text-[#C90019]'>80k+</div>
-                <div>Monthly npm downloads</div>
+                <div>
+                  <Translate description='Monthly npm downloads'>
+                    landing.monthly.downloads
+                  </Translate>
+                </div>
               </div>
             </div>
             <div className='flex gap-1'>
               <div className='w-px h-16 bg-[#E1E4EA] mx-1' />
               <div className='flex flex-col gap-1 '>
                 <div className='flex text-4xl font-semibold text-[#C90019]'>200+</div>
-                <div>Developers building with Takeoff</div>
+                <div>
+                  <Translate description='Developers building with Takeoff'>
+                    landing.developers.building
+                  </Translate>
+                </div>
               </div>
             </div>
             <div className='flex gap-1'>
               <div className='w-px h-16 bg-[#E1E4EA] mx-1' />
               <div className='flex flex-col gap-1'>
                 <div className='flex text-4xl font-semibold text-[#C90019]'>900+</div>
-                <div>Github Stars</div>
+                <div>
+                  <Translate description='Github Stars'>landing.github.stars</Translate>
+                </div>
               </div>
             </div>
             <div className='flex gap-1'>
               <div className='w-px h-16 bg-[#E1E4EA] mx-1' />
               <div className='flex flex-col gap-1'>
                 <div className='flex text-4xl font-semibold text-[#C90019]'>30+</div>
-                <div>Headless components included</div>
+                <div>
+                  <Translate description='Headless components included'>
+                    landing.headless.components
+                  </Translate>
+                </div>
               </div>
             </div>
           </div>
