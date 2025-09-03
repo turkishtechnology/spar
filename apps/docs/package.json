@@ -1,5 +1,5 @@
 {
-  "name": "docs",
+  "name": "@turkishtechnology/docs",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -21,7 +21,8 @@
     "clsx": "^2.0.0",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "@turkish-technology/glide": "workspace:*"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.8.1",
