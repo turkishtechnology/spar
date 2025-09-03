@@ -122,8 +122,3 @@ aria-describedby={hasError ? "error-id" : undefined}
 - Proper focus management and indicators
 - Error handling with announcements
 - jest-axe tests passing with 0 violations
-
-**Never ship without**:
-- APG pattern research and implementation
-- Accessibility test coverage
-- Screen reader compatibility  
