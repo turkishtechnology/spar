@@ -1,0 +1,85 @@
+.subheader-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.subheader-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+.subheader-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.subheader-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.subheader-title-icon {
+  display: flex;
+  gap: 0.25rem;
+}
+.subheader-title-text {
+  color: #c90019;
+  display: flex;
+}
+.subheader-main-title {
+  display: flex;
+  font-size: 3rem;
+  font-weight: 600;
+  gap: 0.5rem;
+}
+.subheader-main-title-accent {
+  color: #c90019;
+  text-decoration: underline;
+}
+.subheader-main-title-normal {
+  color: inherit;
+}
+.subheader-features {
+  display: flex;
+  gap: 1.5rem;
+}
+.subheader-feature {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.subheader-feature-title {
+  font-size: 1.5rem;
+  display: flex;
+}
+.subheader-feature-desc {
+  font-weight: 300;
+  color: #717784;
+  display: flex;
+}
+.subheader-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.subheader-stat {
+  display: flex;
+  gap: 0.25rem;
+}
+.subheader-stat-divider {
+  width: 1px;
+  height: 4rem;
+  background: #e1e4ea;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+.subheader-stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.subheader-stat-number {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #c90019;
+}

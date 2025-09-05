@@ -1,0 +1,70 @@
+.landing-header-container {
+  display: flex;
+}
+.landing-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.landing-header-top {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.landing-header-top-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+.landing-header-divider {
+  width: 1px;
+  height: 1.5rem;
+  background: #e1e4ea;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+.landing-header-insights {
+  display: flex;
+  gap: 0.25rem;
+}
+.landing-header-titles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+.landing-header-title-row {
+  display: flex;
+  gap: 0.75rem;
+}
+.landing-header-title {
+  font-size: 4.5rem;
+  font-weight: 600;
+}
+.landing-header-title-accent {
+  color: #fff;
+  background: #c90019;
+}
+.landing-header-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: -80px;
+}
+.landing-header-desc {
+  display: flex;
+  font-weight: 300;
+  text-align: center;
+}
+.landing-header-getstarted {
+  display: flex;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+.landing-header-getstarted-link {
+  position: relative;
+}

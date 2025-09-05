@@ -1,0 +1,114 @@
+/**
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+
+@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap');
+
+.geologica {
+  font-family: 'Geologica', sans-serif;
+}
+
+* {
+  font-family: 'Geologica', sans-serif;
+}
+
+* {
+  /*Reset's every elements apperance*/
+  background: none repeat scroll 0 0 transparent;
+  border: medium none;
+  border-spacing: 0;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 20px;
+  list-style: none outside none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: none;
+  text-indent: 0;
+}
+
+:root {
+  --ifm-color-primary: #222530;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-navbar-padding-vertical: 12px;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: white;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+.home-container {
+  display: flex;
+}
+.home-main {
+  flex: 1;
+}
+.home-section {
+  justify-self: center;
+}
+.home-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+  margin: 3rem;
+}
+
+.footer-container {
+  display: flex;
+  background: #222530;
+  width: 100%;
+  justify-content: space-between;
+  padding-left: 3.5rem;
+  padding-right: 3.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.footer-copyright {
+  font-size: 0.75rem;
+  color: #99a0ae;
+}
+.footer-links {
+  display: flex;
+  gap: 1rem;
+}
+.footer-link {
+  color: #99a0ae;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.footer-scrolltop {
+  border: 1px solid white;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
