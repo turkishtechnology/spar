@@ -156,7 +156,3 @@ pnpm test:a11y-unit       # A11y tests only
 **Prerequisites:** Run `pnpm install` at root level first to install all dependencies.
 
 Every component ships with complete test coverage. No exceptions.
-
-```
-
-```
