@@ -32,19 +32,19 @@ Based on your task, follow these focused guidelines in the .github/instructions 
 
 ### Component Development Helper
 
-[//]: # (→ `/headless-guidelines.instructions.md`)
+[//]: # '→ `./headless-guidelines.instructions.md`'
 
 ### Accessibility Implementation
 
-→ `.github/instructions/accessibility-guidelines.instructions.md`
+→ `./accessibility-guidelines.instructions.md`
 
 ### Test Creation
 
-[//]: # (→ `/testing-guidelines.instructions.md`)
+→ `./testing-guidelines.instructions.md`
 
 ### Documentation
 
-[//]: # (→ `/docs-guidelines.instructions.md`)
+[//]: # '→ `./docs-guidelines.instructions.md`'
 
 ## Project Structure
 

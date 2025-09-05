@@ -29,9 +29,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:unit": "jest --testPathPattern=\"(test|spec)\\.(ts|tsx)$\"",
-    "test:integration": "jest --testPathPattern=\"integration\\.(test|spec)\\.(ts|tsx)$\"",
-    "test:a11y-unit": "jest --testPathPattern=\"a11y\\.(test|spec)\\.(ts|tsx)$\"",
+    "test:unit": "jest --testPathPatterns=\"(test|spec)\\.(ts|tsx)$\"",
+    "test:integration": "jest --testPathPatterns=\"integration\\.(test|spec)\\.(ts|tsx)$\"",
+    "test:a11y-unit": "jest --testPathPatterns=\"a11y\\.(test|spec)\\.(ts|tsx)$\"",
     "size-check": "size-limit"
   },
   "repository": {
