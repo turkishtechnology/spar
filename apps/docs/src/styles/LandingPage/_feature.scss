@@ -1,12 +1,6 @@
 .features-container {
   display: flex;
-  margin-top: 4rem;
-  margin-bottom: 4rem;
-}
-.features-center {
-  display: flex;
-  justify-content: center;
-  width: 100%;
+  margin: 4rem 0;
 }
 .features-grid {
   display: grid;
@@ -30,12 +24,19 @@
   display: flex;
   gap: 0.75rem;
 }
-.features-card-content .features-title {
+.features-card-content-text {
   display: flex;
-  font-size: 1.5rem;
+  flex-direction: column;
+  gap: 4px;
 }
-.features-card-content .features-desc {
+.features-title {
+  font-size: 24px;
+  line-height: 30px;
+}
+.features-desc {
   display: flex;
   font-weight: 300;
   color: #717784;
+  font-size: 14px;
+  line-height: 20px;
 }

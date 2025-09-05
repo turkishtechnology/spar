@@ -1,16 +1,10 @@
 .theming-container {
   display: flex;
   justify-content: center;
-  margin-left: 7rem;
-  margin-right: 7rem;
-}
-.theming-inner {
-  display: flex;
   flex-direction: column;
-  margin-bottom: 4rem;
-  margin-top: 2rem;
-  gap: 3rem;
+  gap: 2rem;
 }
+
 .theming-content {
   display: flex;
   flex-direction: column;
@@ -20,25 +14,36 @@
 .theming-features {
   display: flex;
   gap: 0.25rem;
+  color: var(--primary-dark, #8F0012);
+  text-align: center;
+  font-size: 14px;
+  line-height: 20px; 
+  text-transform: uppercase;
+}
+.theming-text{
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  gap: 1.5rem;
 }
 .theming-title-row {
   display: flex;
+  text-align: center;
   gap: 0.75rem;
+  line-height: 48px;
+  font-size: 3rem;
+  font-weight: 600;
 }
 .theming-title-accent {
-  font-size: 3rem;
-  font-weight: 600;
   color: #c90019;
   text-decoration: underline;
-}
-.theming-title {
-  font-size: 3rem;
-  font-weight: 600;
 }
 .theming-desc {
   display: flex;
   font-weight: 300;
   color: #525866;
+  font-size: 16px;
+  line-height: 24px;
 }
 .theming-cta {
   background: #c90019;
@@ -48,8 +53,6 @@
   border-radius: 0.5rem;
   padding: 0.5rem;
   width: 140px;
-}
-.theming-cta-btn {
   color: white;
 }
 .theming-image {

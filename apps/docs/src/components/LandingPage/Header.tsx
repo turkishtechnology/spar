@@ -8,63 +8,49 @@ export default function LandingHeader() {
     <div
       className='landing-header-container'
       style={{
-        backgroundImage: "url('/img/Vector.svg')",
+        backgroundImage: "url('/img/header-bg.svg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
     >
       <div className='landing-header-content'>
         <div className='landing-header-top'>
-          <div className='landing-header-top-row'>
-            <div>
-              <Translate description="WHAT'S NEW">landing.whats.new</Translate>
-            </div>
-            <div className='landing-header-divider' />
-            <div className='landing-header-insights'>
-              <div>
-                <Translate description='Faster insights with five new features'>
-                  landing.insights
-                </Translate>
-              </div>
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='24'
-                height='24'
-                viewBox='0 0 24 24'
-                fill='none'
-              >
-                <path
-                  d='M16.1194 11.0039H5.10938C4.55937 11.0039 4.10938 11.4539 4.10938 12.0039C4.10938 12.5539 4.55937 13.0039 5.10938 13.0039H16.1194V14.7939C16.1194 15.2439 16.6594 15.4639 16.9694 15.1439L19.7494 12.3539C19.9394 12.1539 19.9394 11.8439 19.7494 11.6439L16.9694 8.85392C16.6594 8.53392 16.1194 8.76392 16.1194 9.20392V11.0039Z'
-                  fill={color}
-                />
-              </svg>
-            </div>
-          </div>
+          <Translate description="WHAT'S NEW">landing.whats.new</Translate>
+          <div className='landing-header-divider' />
+          <Translate description='Faster insights with five new features'>
+            landing.insights
+          </Translate>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='24'
+            height='24'
+            viewBox='0 0 24 24'
+            fill='none'
+          >
+            <path
+              d='M16.1194 11.0039H5.10938C4.55937 11.0039 4.10938 11.4539 4.10938 12.0039C4.10938 12.5539 4.55937 13.0039 5.10938 13.0039H16.1194V14.7939C16.1194 15.2439 16.6594 15.4639 16.9694 15.1439L19.7494 12.3539C19.9394 12.1539 19.9394 11.8439 19.7494 11.6439L16.9694 8.85392C16.6594 8.53392 16.1194 8.76392 16.1194 9.20392V11.0039Z'
+              fill={color}
+            />
+          </svg>
         </div>
         <div className='landing-header-titles'>
           <div className='landing-header-title-row'>
-            <div className='landing-header-title'>
-              <Translate description='Build'>landing.build</Translate>
-            </div>
-            <div className='landing-header-title landing-header-title-accent'>
+            <Translate description='Build'>landing.build</Translate>
+            <div className='landing-header-title-accent'>
               <Translate description='faster'>landing.faster</Translate>
             </div>
           </div>
           <div className='landing-header-title-row'>
-            <div className='landing-header-title'>
-              <Translate description='with'>landing.with</Translate>
-            </div>
-            <div className='landing-header-title landing-header-title-accent'>
+            <Translate description='with'>landing.with</Translate>
+            <div className='landing-header-title-accent'>
               <Translate description="Takeoff's">landing.takeoffs</Translate>
             </div>
           </div>
           <div className='landing-header-title-row'>
-            <div className='landing-header-title landing-header-title-accent'>
+            <div className='landing-header-title-accent'>
               <Translate description='Headless'>landing.headless</Translate>
             </div>
-            <div className='landing-header-title'>
-              <Translate description='UI system'>landing.ui.system</Translate>
-            </div>
+            <Translate description='UI system'>landing.ui.system</Translate>
           </div>
         </div>
         <div className='landing-header-bottom'>
@@ -74,7 +60,7 @@ export default function LandingHeader() {
             </Translate>
           </div>
           <div className='landing-header-getstarted'>
-            <Link className='landing-header-getstarted-link' to='/docs/introduction'>
+            <Link to='/docs/introduction'>
               <Translate description='Get Started'>landing.get.started</Translate>
             </Link>
             <svg

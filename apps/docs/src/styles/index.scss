@@ -17,21 +17,6 @@
   font-family: 'Geologica', sans-serif;
 }
 
-* {
-  /*Reset's every elements apperance*/
-  background: none repeat scroll 0 0 transparent;
-  border: medium none;
-  border-spacing: 0;
-  font-size: 16px;
-  font-weight: normal;
-  line-height: 20px;
-  list-style: none outside none;
-  margin: 0;
-  padding: 0;
-  text-align: left;
-  text-decoration: none;
-  text-indent: 0;
-}
 
 :root {
   --ifm-color-primary: #222530;
@@ -73,42 +58,5 @@
   align-items: center;
   gap: 4rem;
   margin: 3rem;
-}
-
-.footer-container {
-  display: flex;
-  background: #222530;
-  width: 100%;
-  justify-content: space-between;
-  padding-left: 3.5rem;
-  padding-right: 3.5rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-.footer-left {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-.footer-copyright {
-  font-size: 0.75rem;
-  color: #99a0ae;
-}
-.footer-links {
-  display: flex;
-  gap: 1rem;
-}
-.footer-link {
-  color: #99a0ae;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-.footer-scrolltop {
-  border: 1px solid white;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 3rem 10rem;
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import Translate from '@docusaurus/Translate';
+import '../../styles/Footer/index.scss';
 
 const Footer: React.FC = () => {
   return (
@@ -72,24 +73,22 @@ const Footer: React.FC = () => {
           />
           <path d='M63.026 13.4453H60.8555V22.8363H63.026V13.4453Z' fill='white' />
         </svg>
-        <span className='footer-copyright'>
-          <Translate
-            id='footer.copyright'
-            description='Footer copyright text'
-            values={{ year: new Date().getFullYear() }}
-          />
-        </span>
+        <Translate
+          id='footer.copyright'
+          description='Footer copyright text'
+          values={{ year: new Date().getFullYear() }}
+        />
       </div>
       <div className='footer-links'>
-        <button className='footer-link'>
+        <div className='footer-link'>
           <Translate id='footer.term' description='Footer term button' />
-        </button>
-        <button className='footer-link'>
+        </div>
+        <div className='footer-link'>
           <Translate id='footer.privacy' description='Footer privacy button' />
-        </button>
-        <button className='footer-link'>
+        </div>
+        <div className='footer-link'>
           <Translate id='footer.cookies' description='Footer cookies button' />
-        </button>
+        </div>
       </div>
       <div
         className='footer-scrolltop'

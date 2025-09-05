@@ -3,41 +3,30 @@
   flex-direction: column;
   gap: 2rem;
 }
-.subheader-content {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
-.subheader-section {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
 .subheader-title-group {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 0.5rem;
 }
 .subheader-title-icon {
   display: flex;
-  gap: 0.25rem;
-}
-.subheader-title-text {
+  gap: 0.5rem;  
   color: #c90019;
-  display: flex;
+  text-align: center;
+  font-size: 14px;
+  line-height:  20px;
+  text-transform: uppercase;
 }
 .subheader-main-title {
   display: flex;
   font-size: 3rem;
   font-weight: 600;
   gap: 0.5rem;
+  line-height:  48px;
 }
 .subheader-main-title-accent {
   color: #c90019;
   text-decoration: underline;
-}
-.subheader-main-title-normal {
-  color: inherit;
 }
 .subheader-features {
   display: flex;
@@ -45,17 +34,18 @@
 }
 .subheader-feature {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-.subheader-feature-title {
   font-size: 1.5rem;
-  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  line-height: 30x;
 }
 .subheader-feature-desc {
   font-weight: 300;
   color: #717784;
   display: flex;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
 }
 .subheader-stats {
   display: grid;
@@ -65,21 +55,25 @@
 .subheader-stat {
   display: flex;
   gap: 0.25rem;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
 }
 .subheader-stat-divider {
   width: 1px;
   height: 4rem;
   background: #e1e4ea;
-  margin-left: 0.25rem;
-  margin-right: 0.25rem;
+  margin: 0 0.25rem;
 }
 .subheader-stat-content {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  justify-content: center;
+  gap: 0.5rem;
 }
 .subheader-stat-number {
   font-size: 2.5rem;
   font-weight: 600;
   color: #c90019;
+  line-height: 37.5px;
 }
