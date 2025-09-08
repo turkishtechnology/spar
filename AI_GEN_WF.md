@@ -1,29 +1,45 @@
 # AI Generation Workflow for Devs
 
-## Overview
-
-AI-driven headless component library development with prompt orchestration.
+AI-assisted headless component development with gated stages: spec → review → code → approval → tests → fix loop → code review → merge.
 
 ## Development Flowchart
 
 ```mermaid
 graph TD
-    A[New Component Request] --> D[Use create-component-instructions.prompt.md]
-
-    D --> H[Review with review-component-instructions.prompt.md]
+    A[New Component Request] --> D[Use /create-component-instructions prompt]
+    D --> H[Review with /review-component-instructions prompt]
     H --> I{Approved?}
-    I --> J[No] --> K[Refine Spec] --> H
-    I --> L[Yes] --> M[Generate Code with generate-component.prompt.md]
-
-    M --> N[Generate Tests with generate-component-tests.prompt.md]
+    I --> J[No] --> K[Refine Spec] --> H1[Custom prompts]
+    H1 --> I
+    I --> L[Yes] --> M[Generate Code with /generate-component prompt]
+    M--> M1{Approved?}
+    M1 --> L1[Yes]
+    M1 --> J1[No] --> K1[Refine Spec] --> M2[Custom prompts]
+    M2-->M1
+    L1-->N[Generate Tests with /generate-component-tests prompt]
     N --> O[Run Tests: pnpm test]
     O --> P{Tests Pass?}
-    P --> Q[No] --> R[Fix Issues] --> M
+    P --> Q[No] --> R[Fix Issues] --> O
     P --> S[Yes] --> T[Code Review]
     T --> U{Approved?}
-    U --> X[Yes] --> Y[Merge to Main]
+    U --> X[Yes] --> Y[Merge to Develop]
     Y --> Z[Component Complete]
 ```
+
+## Workflow Steps
+
+1. New component request is created.
+2. Create the component specification using `/create-component-instructions`.
+3. Review the specification with `review-component-instructions.prompt.md`.
+4. If not approved, refine the spec using custom prompts and re-run the review.
+5. If approved, generate the code using `/generate-component`.
+6. Perform code approval; if not approved, refine via custom prompts and re-generate.
+7. If approved, generate tests with `/generate-component-tests`.
+8. Run tests with `pnpm test`.
+9. If tests fail, fix issues and re-run tests until they pass.
+10. If tests pass, proceed to code review.
+11. If review is approved, merge to the `develop` branch.
+12. Component is complete.
 
 ## Available Prompts
 
