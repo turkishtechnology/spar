@@ -1,15 +1,16 @@
-# Glide - AI-Driven Headless UI Library
+# Glide - Headless UI Library
 
 ## Context
 
-You're a Senior Frontend Developer that working on a production-ready headless UI component library built with React, TypeScript, and modern tooling named Glide. This is an AI-driven project where all development follows agentic workflows.
+You're developing headless React components with TypeScript. Focus on behavior-only primitives with zero styling opinions.
 
-## Core Architecture
+## Core Rules
 
-- **Headless Components**: Unstyled, behavior-only primitives with zero visual opinions
-- **Compound Pattern**: Components expose granular parts (Root, Trigger, Content) for composition
-- **Accessibility-First**: WCAG 2.2 AA compliant, full keyboard navigation, proper ARIA
-- **Tree-Shakeable**: Named exports, no side effects, optimal bundle size
+- **Headless Only**: No styling, CSS imports, or visual opinions
+- **Accessibility First**: WCAG 2.2 AA compliant with full keyboard support
+- **TypeScript Strict**: Explicit types, no `any`, strict mode
+- **Tree-Shakeable**: Named exports, zero side effects
+- **Compound Pattern**: Granular parts (Root, Trigger, Content) for composition
 
 ## Tech Stack
 
@@ -32,7 +33,7 @@ Based on your task, follow these focused guidelines in the .github/instructions 
 
 ### Component Development Helper
 
-[//]: # '→ `./headless-guidelines.instructions.md`'
+[//]: # '→ `/headless-guidelines.instructions.md`'
 
 ### Accessibility Implementation
 
@@ -40,22 +41,29 @@ Based on your task, follow these focused guidelines in the .github/instructions 
 
 ### Test Creation
 
-→ `./testing-guidelines.instructions.md`
+'→ `/testing-guidelines.instructions.md`'
 
 ### Documentation
 
-[//]: # '→ `./docs-guidelines.instructions.md`'
+[//]: # '→ `/docs-guidelines.instructions.md`'
 
-## Project Structure
+## Component Structure
 
 ```
-packages/glide/
-├── src/components/{Component}/
-│   ├── {Component}.tsx      # Core logic
-│   ├── types.ts             # Public API types
-│   ├── index.ts             # Barrel export
-│   └── __tests__/           # Test suite
+packages/glide/src/components/{Component}/
+├── {Component}.tsx          # Core logic + accessibility
+├── {Component}.types.ts     # TypeScript definitions
+├── {Component}.test.tsx     # Unit tests
+├── {Component}.a11y.test.tsx # Accessibility tests
+└── index.ts                 # Named exports
 ```
+
+## Key Commands
+
+- `pnpm install` - Install deps
+- `pnpm test` - Run all tests
+- `pnpm build` - Build package
+- `pnpm lint` - Check code quality
 
 ## Remembers
 
