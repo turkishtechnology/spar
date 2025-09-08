@@ -256,22 +256,17 @@ export const Component = React.memo(ComponentImpl, (prevProps, nextProps) => {
 
 ## Error Handling
 
-### Error Boundaries
+### Component Error States
 ```typescript
-// ✅ ALWAYS: Error boundaries for components
-interface ErrorBoundaryState {
-  hasError: boolean;
-  error?: Error;
-}
-
-class ComponentErrorBoundary extends React.Component<
-  React.PropsWithChildren,
-  ErrorBoundaryState
-> {
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error };
+// ✅ ALWAYS: Handle error states gracefully
+const Component = ({ data, ...props }: ComponentProps) => {
+  if (!data) {
+    console.warn('Component: data prop is required');
+    return null;
   }
-}
+  
+  return <div {...props}>{data.content}</div>;
+};
 ```
 
 ### Runtime Validation
