@@ -1,4 +1,3 @@
-```instructions
 # Testing Guidelines - Glide
 
 ## Context
