@@ -5,19 +5,23 @@ AI-assisted headless component development with gated stages: spec â†’ review â†
 ## Development Flowchart
 
 ```mermaid
+---
+config:
+  theme: neo
+---
 graph TD
-    A[New Component Request] --> D[Use /create-component-instructions prompt]
-    D --> H[Review with /review-component-instructions prompt]
+    A[New Component Request] --> D[Use **/create-component-instructions** prompt]
+    D --> H[Review with **/review-component-instructions** prompt]
     H --> I{Approved?}
     I --> J[No] --> K[Refine Spec] --> H1[Custom prompts]
     H1 --> I
-    I --> L[Yes] --> M[Generate Code with /generate-component prompt]
+    I --> L[Yes] --> M[Generate Code with **/generate-component** prompt]
     M--> M1{Approved?}
     M1 --> L1[Yes]
     M1 --> J1[No] --> K1[Refine Spec] --> M2[Custom prompts]
     M2-->M1
-    L1-->N[Generate Tests with /generate-component-tests prompt]
-    N --> O[Run Tests: pnpm test]
+    L1-->N[Generate Tests with **/generate-component-tests** prompt]
+    N --> O[Run Tests: **pnpm test**]
     O --> P{Tests Pass?}
     P --> Q[No] --> R[Fix Issues] --> O
     P --> S[Yes] --> T[Code Review]
