@@ -41,7 +41,7 @@ Based on your task, follow these focused guidelines in the .github/instructions 
 
 ### Test Creation
 
-'→ `/testing-guidelines.instructions.md`'
+→ `/testing-guidelines.instructions.md`
 
 ### Documentation
 
@@ -53,8 +53,10 @@ Based on your task, follow these focused guidelines in the .github/instructions 
 packages/glide/src/components/{Component}/
 ├── {Component}.tsx          # Core logic + accessibility
 ├── {Component}.types.ts     # TypeScript definitions
-├── {Component}.test.tsx     # Unit tests
-├── {Component}.a11y.test.tsx # Accessibility tests
+├── __tests__/
+│   ├── {Component}.test.tsx     # Unit tests
+│   ├── {Component}.a11y.test.tsx # Accessibility tests
+│   └── {Component}.integration.test.tsx # Integration tests
 └── index.ts                 # Named exports
 ```
 

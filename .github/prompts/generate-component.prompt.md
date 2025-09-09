@@ -1,6 +1,6 @@
 ---
 mode: agent
-model: claude-4.1-opus
+model: Claude Opus 4.1
 description: Generate headless component implementation (logic only - no tests, no docs)
 ---
 
@@ -12,6 +12,7 @@ Create the core implementation for **${input:ComponentName:Button}** component.
 
 Check that `.github/instructions/components/${ComponentName}.md` exists.
 If not, ask the user to run `.github/prompts/create-component-instructions.prompt.md` first.
+IMPORTANT: ALWAYS read `.github/instructions/coding-standards.instructions.md` for general coding guidelines.
 
 ## Task Scope - LOGIC ONLY
 
@@ -31,7 +32,7 @@ packages/glide/src/components/${ComponentName}/
 - Follow component specific instructions in `.github/instructions/components/${ComponentName}.md`
 - Compound component pattern if applicable
 - Controlled/uncontrolled support
-- Ref forwarding with forwardRef
+- Ref forwarding support
 - Props spreading (className, style, data-_, aria-_)
 - NO styling, NO CSS imports
 - NO default ARIA (will be added in accessibility phase)
