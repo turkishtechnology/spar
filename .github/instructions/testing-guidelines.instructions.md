@@ -1,3 +1,7 @@
+---
+applyTo: "**/*.test.tsx"
+---
+
 # Testing Guidelines - Glide
 
 ## Context

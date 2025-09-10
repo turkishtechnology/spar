@@ -1,3 +1,7 @@
+---
+applyTo: "**/components/**/*.tsx"
+---
+
 # Coding Standards - Glide
 
 ## TypeScript Standards

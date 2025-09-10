@@ -1,3 +1,7 @@
+---
+applyTo: "**/components/**/*.tsx"
+---
+
 # Accessibility Guidelines - Glide
 
 ## Context
