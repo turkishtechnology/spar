@@ -1,6 +1,6 @@
 # AI Generation Workflow for Devs
 
-AI-assisted headless component development with gated stages: spec → review → code → approval → tests → fix loop → code review → merge.
+AI-assisted headless component development with gated stages: spec → review → code → approval → coding standards → approval → tests → fix loop → code review → merge.
 
 ## Development Flowchart
 
@@ -10,24 +10,28 @@ config:
   theme: neo
 ---
 graph TD
-    A[New Component Request] --> D[Use **/create-component-instructions** prompt]
-    D --> H[Review with **/review-component-instructions** prompt]
-    H --> I{Approved?}
-    I --> J[No] --> K[Refine Spec] --> H1[Custom prompts]
-    H1 --> I
-    I --> L[Yes] --> M[Generate Code with **/generate-component** prompt]
-    M--> M1{Approved?}
-    M1 --> L1[Yes]
-    M1 --> J1[No] --> K1[Refine Spec] --> M2[Custom prompts]
-    M2-->M1
-    L1-->N[Generate Tests with **/generate-component-tests** prompt]
-    N --> O[Run Tests: **pnpm test**]
-    O --> P{Tests Pass?}
-    P --> Q[No] --> R[Fix Issues] --> O
-    P --> S[Yes] --> T[Code Review]
-    T --> U{Approved?}
-    U --> X[Yes] --> Y[Merge to Develop]
-    Y --> Z[Component Complete]
+    A[New Component Request] --> B[Use **/create-component-instructions** prompt]
+    B --> C[Review with **/review-component-instructions** prompt]
+    C --> D{Approved?}
+    D --> E[No] --> F[Refine Spec] --> G[Custom prompts]
+    G --> D
+    D --> H[Yes] --> I[Generate Code with **/generate-component** prompt]
+    I --> J{Approved?}
+    J --> K[Yes]
+    J --> L[No] --> M[Refine Spec] --> N[Custom prompts]
+    N --> J
+    K --> O[Apply **/coding-standards** for best practices]
+    O --> P{Approved?}
+    P --> Q[Yes] --> R[Generate Tests with **/generate-component-tests** prompt]
+    P --> S[No] --> T[Custom Prompt]
+    T --> P
+    R --> U[Run Tests: **pnpm test**]
+    U --> V{Tests Pass?}
+    V --> W[No] --> X[Fix Issues] --> U
+    V --> Y[Yes] --> Z[Code Review]
+    Z --> AA{Approved?}
+    AA --> BB[Yes] --> CC[Merge to Develop]
+    CC --> DD[Component Complete]
 ```
 
 ## Workflow Steps
@@ -38,19 +42,22 @@ graph TD
 4. If not approved, refine the spec using custom prompts and re-run the review.
 5. If approved, generate the code using `/generate-component`.
 6. Perform code approval; if not approved, refine via custom prompts and re-generate.
-7. If approved, generate tests with `/generate-component-tests`.
-8. Run tests with `pnpm test`.
-9. If tests fail, fix issues and re-run tests until they pass.
-10. If tests pass, proceed to code review.
-11. If review is approved, merge to the `develop` branch.
-12. Component is complete.
+7. If approved, apply coding standards to the generated code using `/coding-standards`.
+8. Perform coding standards approval; if not approved, refine via custom prompts and re-apply standards.
+9. If approved, generate tests with `/generate-component-tests`.
+10. Run tests with `pnpm test`.
+11. If tests fail, fix issues and re-run tests until they pass.
+12. If tests pass, proceed to code review.
+13. If review is approved, merge to the `develop` branch.
+14. Component is complete.
 
 ## Available Prompts
 
 | Prompt                                      | Purpose                  | When to Use               |
 | ------------------------------------------- | ------------------------ | ------------------------- |
 | `create-component-instructions.prompt.md`   | Component specifications | New component development |
-| `review-component-instructions.prompt.md`   | Quality validation       | After spec creation       |
+| `coding-standards.prompt.md`                | Coding standards application | After code generation |
+| `review-component-instructions.prompt.md`   | Quality validation       | After spec creation |
 | `testing-guidelines.instructions.prompt.md` | Test specifications      | Before spec creation      |
 | `generate-component.prompt.md`              | Code implementation      | After approved spec       |
 | `generate-component-tests.prompt.md`        | Test generation          | After approved spec       |
@@ -72,6 +79,10 @@ graph TD
 ```
 
 ```
+/coding-standards Apply coding standards to generated Button code
+```
+
+```
 /generate-component-tests Create comprehensive tests for Button component including a11y
 ```
 
@@ -87,6 +98,7 @@ graph TD
 /create-component-instructions Design Button component with primary/secondary variants, loading states, and disabled mode
 /review-component-instructions Validate Button accessibility compliance with keyboard navigation and screen reader support
 /generate-component Build Button with compound pattern and ARIA attributes
+/coding-standards Apply coding standards to generated Button code
 /generate-component-tests Generate tests covering all button states and interactions
 ```
 
@@ -95,6 +107,7 @@ graph TD
 ```
 /create-component-instructions Create Input component with validation, error states, and label association
 /generate-component Implement Input with proper ARIA labeling and error announcements
+/coding-standards Apply coding standards to generated Input code
 /generate-component-tests Create tests for input validation, keyboard navigation, and accessibility
 ```
 
@@ -104,6 +117,7 @@ graph TD
 /create-component-instructions Design Menu component with keyboard navigation, focus management, and submenu support
 /review-component-instructions Check Menu against ARIA authoring practices for menu patterns
 /generate-component Build Menu with roving focus and proper ARIA attributes
+/coding-standards Apply coding standards to generated Menu code
 ```
 
 ## Key Rules
