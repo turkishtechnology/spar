@@ -35,6 +35,7 @@ export default [
       prettier: prettier,
     },
     rules: {
+      'no-unused-vars': 'off', // TypeScript ile çakışmaması için kapalı
       // TypeScript kuralları (sadece mevcut olanlar)
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'warn',
