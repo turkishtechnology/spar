@@ -1,12 +1,14 @@
 ---
 mode: agent
-model: claude-4.1-opus
+model: Claude Opus 4.1
 description: Generate comprehensive test suite for Glide components
 ---
 
 # Test Generator
 
 Generate tests for **${input:ComponentName:Button}** component.
+
+ALWAYS follow instructions in [Testing Guidelines](../instructions/testing-guidelines.instructions.md).
 
 ## Test Types
 
