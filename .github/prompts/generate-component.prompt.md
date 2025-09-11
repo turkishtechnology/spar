@@ -10,7 +10,7 @@ Create the core implementation for **${input:ComponentName:Button}** component.
 
 ## Prerequisites
 
-Check that `.github/instructions/components/${ComponentName}.md` exists.
+Check that `.github/instructions/components/${component-name}.md` exists.
 If not, ask the user to run `.github/prompts/create-component-instructions.prompt.md` first.
 IMPORTANT: ALWAYS read `.github/instructions/coding-standards.instructions.md` for general coding guidelines.
 
@@ -29,7 +29,7 @@ packages/glide/src/components/${ComponentName}/
 
 ### Implementation Requirements
 
-- Follow component specific instructions in `.github/instructions/components/${ComponentName}.md`
+- Follow component specific instructions in `.github/instructions/components/${component-name}.md`
 - Compound component pattern if applicable
 - Controlled/uncontrolled support
 - Ref forwarding support
