@@ -1,2 +1,9 @@
 export { Input } from './Input';
-export type { InputProps } from './Input.types';
+export type {
+  InputContextValue,
+  InputRootProps,
+  InputFieldProps,
+  InputLabelProps,
+  InputDescriptionProps,
+  InputErrorMessageProps,
+} from './types';
