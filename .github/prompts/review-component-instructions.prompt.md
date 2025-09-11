@@ -20,7 +20,7 @@ Use Context7 MCP or web search for up-to-date sources.
 
 ## Phase 2: Component Analysis
 
-Examine `packages/glide/src/components/${ComponentName}/` and `.github/instructions/components/${ComponentName}.md`:
+Examine `packages/glide/src/components/${ComponentName}/` and `.github/instructions/components/${component-name}.md`:
 
 ### 1. Instruction Template Conformance
 
