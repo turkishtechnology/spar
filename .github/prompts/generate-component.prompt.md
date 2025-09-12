@@ -6,11 +6,11 @@ description: Generate headless component implementation (logic only - no tests, 
 
 # Generate Component Logic
 
-Create the core implementation for **${input:ComponentName:Button}** component.
+Create the core implementation for **${input:ComponentName}** component.
 
 ## Prerequisites
 
-Check that `.github/instructions/components/${ComponentName}.md` exists.
+Check that `.github/instructions/components/${ComponentName}.md` exists, ignoring uppercase/lowercase differences
 If not, ask the user to run `.github/prompts/create-component-instructions.prompt.md` first.
 IMPORTANT: ALWAYS read `.github/instructions/coding-standards.instructions.md` for general coding guidelines.
 
@@ -40,5 +40,5 @@ packages/glide/src/components/${ComponentName}/
 ## Success Criteria
 
 - Component builds without errors
-- TypeScript strict mode passes
+- TypeScript strict mode passes (run type checking using `pnpm check-types`)
 - Exports are tree-shakeable
