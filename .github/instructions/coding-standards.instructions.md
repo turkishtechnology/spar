@@ -164,9 +164,6 @@ const Content = AccordionContent;
 
 // Export both named components AND aliases
 export {
-  // Utility functions if any
-  createAccordionScope,
-
   // Named exports (for direct imports)
   Accordion,
   AccordionItem,
