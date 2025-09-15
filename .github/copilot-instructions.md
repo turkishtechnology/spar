@@ -21,11 +21,12 @@ You're developing headless React components with TypeScript. Focus on behavior-o
 
 ## Workflow Rules
 
-1. **Task Scope**: Execute EXACTLY what's requested - no more, no less
+1. **Task Scope**: Execute EXACTLY what's requested - no more, no less. Stay within the defined scope
 2. **File Strategy**: ALWAYS prefer editing existing files over creating new ones
 3. **Documentation**: Only create .md files when explicitly requested
-4. **Testing**: Run tests after changes. Components need unit, a11y, and integration tests
+4. **Testing**: Tests are created in a separate phase after component logic is complete
 5. **Conventions**: Match existing patterns. Check neighboring files for context
+6. **Package Management**: Use `pnpm dlx` instead of `npx` for running packages
 
 ## Task-Specific Instructions
 
@@ -63,17 +64,21 @@ packages/glide/src/components/{Component}/
 ## Key Commands
 
 - `pnpm install` - Install deps
-- `pnpm test` - Run all tests
+- `pnpm test` - Run all tests (only after test files exist)
 - `pnpm build` - Build package
-- `pnpm lint` - Check code quality
+- `pnpm lint` - Check code quality (run after creating/editing components)
+- `pnpm check-types` - Verify TypeScript types
+- `pnpm dlx <package>` - Execute package (instead of npx)
 
 ## Remembers
 
-- ALWAYS scope changes to the exact task; do not add extras
+- ALWAYS scope changes to the exact task; do not add extras or exceed requested scope
 - ALWAYS edit related files; do not create new files unless requested
 - ALWAYS match existing patterns and public API; preserve backwards compatibility
 - ALWAYS use TypeScript strict, explicit public types, named exports, zero side effects
-- ALWAYS use PNPM for package management.
-- ALWAYS read referenced instruction files BEFORE starting.
-- ALWAYS keep components UNSTYLED by design.
+- ALWAYS use PNPM for package management (pnpm dlx instead of npx)
+- ALWAYS read referenced instruction files BEFORE starting
+- ALWAYS keep components UNSTYLED by design
+- ALWAYS run `pnpm lint` after creating/modifying components
 - NEVER introduce styling/opinions; never modify docs unless asked; follow guideline files
+- NEVER run tests during component creation phase (tests are created separately)
