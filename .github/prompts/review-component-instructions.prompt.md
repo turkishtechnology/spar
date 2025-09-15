@@ -1,16 +1,18 @@
 ---
 mode: agent
 model: claude-4.1-opus
-description: Comprehensive review of Glide headless component implementation against accessibility and headless standards
+description: Comprehensive review of Glide component instruction files against accessibility and headless standards
 ---
 
-# Component Review & Validation
+# Component Instructions Review & Validation
 
-Review the **${input:ComponentName:Button}** component for compliance with Glide headless crinciples: fully headless (unstyled), accessible by default, keyboard navigable, and assistive-technology friendly.
+Review the **${input:ComponentName}** component instructions for compliance with Glide headless principles: fully headless (unstyled), accessible by default, keyboard navigable, and assistive-technology friendly.
+
+**Important**: This review focuses ONLY on the component instructions file (`.github/instructions/components/${ComponentName}.md`). Do NOT examine any actual component implementation files, as the component may not yet be implemented.
 
 ## Phase 1: Benchmark Research
 
-Compare implementation against:
+Compare the instruction specifications against:
 
 - Leading headless component libraries (architecture patterns, API design)
 - Recognized accessibility standards and authoring practices
@@ -18,9 +20,9 @@ Compare implementation against:
 
 Use Context7 MCP or web search for up-to-date sources.
 
-## Phase 2: Component Analysis
+## Phase 2: Component Instructions Analysis
 
-Examine `packages/glide/src/components/${ComponentName}/` and `.github/instructions/components/${ComponentName}.md`:
+Review the component instructions file `.github/instructions/components/${ComponentName}.md`:
 
 ### 1. Instruction Template Conformance
 
