@@ -1,0 +1,142 @@
+// Live code container styling
+
+
+.live-preview-wrapper {
+  border: 2px solid rgba(104, 104, 104, 0.15);
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  
+
+  .live-preview {
+    width: 100%;
+    padding: 24px;
+    justify-items: center;
+    
+    // Reset any inherited styles that might interfere
+    * {
+      box-sizing: border-box;
+    }
+  }
+  
+  .live-error {
+    color: #c90019;
+    padding: 16px;
+    border-radius: 10px;
+    border: 2px solid rgba(201, 0, 25, 0.2);
+    font-size: 14px;
+    white-space: pre-wrap;
+    max-width: 100%;
+    word-break: break-word;
+  }
+  
+}
+.collapsible-code-block {
+  margin: 0;
+  overflow: hidden;
+
+  .collapsible-toggle {
+    width: 100%;
+    padding: 16px 20px;
+    border: none;
+    background: linear-gradient(135deg, rgba(201, 0, 25, 0.08) 0%, rgba(201, 0, 25, 0.03) 100%);
+    color: #c90019;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      background: linear-gradient(135deg, rgba(201, 0, 25, 0.12) 0%, rgba(201, 0, 25, 0.06) 100%);
+      color: #a5001a;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(201, 0, 25, 0.15);
+    }
+
+    &:focus {
+      outline: 3px solid rgba(201, 0, 25, 0.3);
+      outline-offset: 2px;
+    }
+
+    &[aria-expanded="true"] {
+      background: linear-gradient(135deg, rgba(201, 0, 25, 0.15) 0%, rgba(201, 0, 25, 0.08) 100%);
+      border-bottom-color: rgba(201, 0, 25, 0.2);
+      color: #8b0016;
+    }
+
+    .toggle-icon {
+      font-size: 14px;
+      color: #c90019;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      line-height: 1;
+      width: 16px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .toggle-text {
+      flex: 1;
+      user-select: none;
+    }
+  }
+
+  .collapsible-content {
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &[style*="opacity: 0"] {
+      pointer-events: none;
+    }
+
+    // Ensure code blocks inside have proper styling
+    pre {
+      margin: 0;
+      border-radius: 0;
+      border: none;
+    }
+
+    // Handle nested elements properly
+    > :first-child {
+      margin-top: 0;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Animation states
+  &.collapsed {
+    .collapsible-toggle .toggle-icon {
+      transform: rotate(0deg) scale(1);
+    }
+  }
+
+  &.expanded {
+    .collapsible-toggle .toggle-icon {
+      transform: rotate(90deg) scale(1.1);
+    }
+  }
+
+}
+
+.live-code-wrapper {
+  position: relative;
+
+  overflow: hidden;
+
+  .live-editor {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: auto;
+  
+  }
+}

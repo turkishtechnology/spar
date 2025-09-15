@@ -18,12 +18,14 @@
     "@docusaurus/core": "3.8.1",
     "@docusaurus/preset-classic": "3.8.1",
     "@docusaurus/theme-common": "^3.8.1",
+    "@docusaurus/theme-live-codeblock": "^3.8.1",
     "@mdx-js/react": "^3.0.0",
+    "@turkish-technology/glide": "workspace:*",
     "clsx": "^2.0.0",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "@turkish-technology/glide": "workspace:*"
+    "react-live": "^4.1.8"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.8.1",
