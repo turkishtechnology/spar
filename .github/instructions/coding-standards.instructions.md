@@ -11,12 +11,7 @@ applyTo: '**/components/**/*.tsx'
 ### Type Safety (SonarQube Compliant)
 
 ```typescript
-// NEVER: Using any type
-interface ComponentProps {
-  data: any; // Breaks type safety
-}
-
-// ALWAYS: Explicit typing with union types
+// ✅ ALWAYS: Explicit typing with union types
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'tertiary';
   orientation?: 'horizontal' | 'vertical';
@@ -25,16 +20,11 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 ```
 
-### Null Safety
+### Null Safety & Optional Chaining
 
 ```typescript
-// NEVER: Access without null checks
-const Component = ({ user }: { user: User }) => (
-  <div>{user.name.length}</div> // Runtime error if user.name is null
-);
-
-// ALWAYS: Optional chaining and conditional rendering
-const Component = ({ user }: { user: User }) => (
+// ✅ ALWAYS: Safe access patterns
+const Component = ({ user }: { user: User | null }) => (
   <div>
     {user?.name && <span>{user.name}</span>}
     <p>Length: {user?.name?.length ?? 0}</p>
@@ -57,35 +47,58 @@ export const Label = ({ ref, ...props }: LabelProps) => {
 };
 
 Label.displayName = 'Label';
+
+// LEGACY: Only when supporting React 18
+const Label = forwardRef<HTMLLabelElement, LabelProps>((props, ref) => (
+  <label ref={ref} {...props} />
+));
 ```
 
 ### Hooks Rules
 
 ```typescript
-// NEVER: Hooks inside conditions or loops
-const Component = ({ shouldUseState }: { shouldUseState: boolean }) => {
-  if (shouldUseState) {
-    const [state, setState] = useState(0); // Breaks rules of hooks
-  }
-  return <div>Content</div>;
-};
-
-// ALWAYS: Hooks at top level with functional updates
-const Component = ({ shouldUseState }: { shouldUseState: boolean }) => {
+// ✅ ALWAYS: Proper hooks usage
+const Component = ({ shouldUseState, userId }: Props) => {
   const [count, setCount] = useState(0);
 
   const increment = useCallback(() => {
     setCount(prevCount => prevCount + 1); // Functional update
   }, []);
 
+  // Exhaustive dependencies
   useEffect(() => {
-    // Effect logic with cleanup
+    if (shouldUseState) {
+      fetchUser(userId);
+    }
     return () => {
       // Cleanup
     };
-  }, [count]); // Clear dependency justification
+  }, [shouldUseState, userId]); // All dependencies included
 
   return <div>{shouldUseState ? count : null}</div>;
+};
+```
+
+### Rendering Best Practices
+
+```typescript
+// ✅ ALWAYS: Stable keys and memoized handlers
+const ItemList = ({ items }: { items: Item[] }) => {
+  const handleItemClick = useCallback((id: string) => {
+    handleClick(id);
+  }, []);
+
+  return (
+    <ul>
+      {items.map(item => (
+        <ItemButton
+          key={item.id} // Stable unique key
+          item={item}
+          onClick={handleItemClick}
+        />
+      ))}
+    </ul>
+  );
 };
 ```
 
@@ -93,22 +106,39 @@ const Component = ({ shouldUseState }: { shouldUseState: boolean }) => {
 
 ### Component Template
 
-```typescript
+````typescript
 import type { ComponentProps } from './Component.types';
 
 /**
- Brief component description in 2-3 sentences maximum. Explain what the component does without going into excessive detail. Focus on the main purpose and functionality.
+ * Brief component description focusing on behavior and accessibility.
+ *
+ * @example
+ * ```tsx
+ * <Component orientation="vertical" isDisabled={false}>
+ *   Content
+ * </Component>
+ * ```
  */
-export const Component = ({}: ComponentProps) => {
+export const Component = ({
+  orientation = 'horizontal',
+  isDisabled = false,
+  children,
+  ...props
+}: ComponentProps) => {
   return (
-    <div>
-      {Content}
+    <div
+      data-orientation={orientation}
+      data-disabled={isDisabled}
+      aria-disabled={isDisabled}
+      {...props}
+    >
+      {children}
     </div>
   );
 };
 
 Component.displayName = 'Component';
-```
+````
 
 ### Props Interface Template
 
@@ -149,21 +179,10 @@ export interface ComponentProps extends React.HTMLAttributes<HTMLElement> {
 }
 ```
 
-### Compound Pattern (Glide Standard)
+### Compound Pattern
 
 ```typescript
-// NEVER: Monolithic component
-function ComplexComponent() {
-  return (
-    <div>
-      <header>...</header>
-      <main>...</main>
-      <footer>...</footer>
-    </div>
-  );
-}
-
-// ALWAYS: Compound pattern
+// ✅ ALWAYS: Compound pattern for complex components
 const Dialog = ({ children, ...props }: DialogProps) => (
   <div role="dialog" {...props}>{children}</div>
 );
@@ -176,29 +195,11 @@ const DialogContent = ({ children }: DialogContentProps) => (
   <main>{children}</main>
 );
 
+// Compound composition
 Dialog.Header = DialogHeader;
 Dialog.Content = DialogContent;
-```
 
-### Headless Pattern
-
-```typescript
-// NEVER: Styling in component logic
-const Button = ({ variant }: ButtonProps) => {
-  const className = variant === 'primary' ? 'btn-primary' : 'btn-secondary';
-  return <button className={className} />;
-};
-
-// ALWAYS: Headless pattern - data attributes only
-const Button = ({ variant, className, ...props }: ButtonProps) => {
-  return (
-    <button
-      className={className}
-      data-variant={variant}
-      {...props}
-    />
-  );
-};
+export { Dialog };
 ```
 
 ## State Management
@@ -206,15 +207,12 @@ const Button = ({ variant, className, ...props }: ButtonProps) => {
 ### Complex State
 
 ```typescript
-// ALWAYS: Import discriminated unions from types
-import type { RequestState } from './types';
-
-// types.ts:
-// export type RequestState =
-//   | { status: 'idle' }
-//   | { status: 'loading' }
-//   | { status: 'success'; data: unknown }
-//   | { status: 'error'; error: Error };
+// ✅ ALWAYS: Discriminated unions for complex state
+type RequestState =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'success'; data: unknown }
+  | { status: 'error'; error: Error };
 
 const [requestState, setRequestState] = useState<RequestState>({
   status: 'idle',
@@ -309,6 +307,27 @@ function utilityFunction(param: string): string {
 }
 ```
 
+### Styling Approach
+
+```typescript
+// ✅ ALWAYS: Pure behavior, zero styling
+const Button = ({ children, ...props }: ButtonProps) => (
+  <button {...props}>{children}</button>
+);
+
+// ✅ ALWAYS: Provide data attributes for external styling
+const Button = ({ variant, isDisabled, children, ...props }: ButtonProps) => (
+  <button
+    data-variant={variant}
+    data-disabled={isDisabled}
+    data-state={isDisabled ? 'disabled' : 'enabled'}
+    {...props}
+  >
+    {children}
+  </button>
+);
+```
+
 ## Naming Conventions
 
 ### Components and Types
@@ -317,29 +336,9 @@ function utilityFunction(param: string): string {
 - **Props**: PascalCase + "Props" suffix (`ButtonProps`)
 - **Hooks**: camelCase + "use" prefix (`useButton`, `useDialog`)
 - **Utilities**: camelCase (`formatDate`, `validateEmail`)
-
-### Event Handlers
-
-```typescript
-// ALWAYS: handle prefix
-const handleClick = () => {};
-const handleInputChange = () => {};
-const handleKeyDown = () => {};
-
-// NEVER: on prefix or unclear names
-const onClick = () => {}; // Confusing with prop
-const click = () => {}; // Unclear
-```
-
-### Boolean Props
-
-```typescript
-// ALWAYS: is/has/should/can prefix
-(isDisabled, hasError, shouldAutoFocus, canSubmit);
-
-// NEVER: Ambiguous names
-(disabled, error, focus, submit);
-```
+- **Handlers** : handle + Action ( `handleClick`, `handleSubmit` )
+- **Booleans** : is/has/should/can ( `isDisabled`, `hasError` )
+- **Types** : PascalCase ( `Orientation`, `Variant` )
 
 ## Performance Guidelines
 
@@ -363,20 +362,68 @@ return isLoading ? <Spinner /> : error ? <Error /> : <Content />; // Hard to rea
 
 ## Security Considerations
 
-### Safe Prop Spreading
+### XSS Prevention
 
 ```typescript
-// ALWAYS: Extract known props
-const { variant, isDisabled, children, ...safeProps } = props;
-return <button {...safeProps}>{children}</button>;
+// ❌ NEVER: Unsafe HTML injection
+const Component = ({ htmlContent }: { htmlContent: string }) => (
+  <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+);
 
-// NEVER: Blind prop spreading with sensitive props
-return <button {...props} />; // Could override critical props
+// ✅ ALWAYS: Sanitized content or safe alternatives
+import DOMPurify from 'dompurify';
+
+const Component = ({ htmlContent }: { htmlContent: string }) => (
+  <div dangerouslySetInnerHTML={{
+    __html: DOMPurify.sanitize(htmlContent)
+  }} />
+);
 ```
 
-## ESLint Configuration
+## Accessibility
 
-Required ESLint rules for quality compliance:
+### Event Handler Naming
+
+```typescript
+// ❌ NEVER: Non-standard event handler names
+interface ButtonProps {
+  click?: () => void; // Should start with "on"
+  handlePress?: () => void; // Not a prop name
+}
+
+// ✅ ALWAYS: Standard event handler naming
+interface ButtonProps {
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onPress?: (event: React.KeyboardEvent<HTMLButtonElement>) => void;
+  onValueChange?: (value: string) => void;
+}
+```
+
+### ARIA Compliance
+
+```typescript
+// ✅ ALWAYS: Proper ARIA attributes
+const Button = ({
+  isPressed,
+  isExpanded,
+  children,
+  'aria-label': ariaLabel,
+  ...props
+}: ButtonProps) => (
+  <button
+    aria-pressed={isPressed}
+    aria-expanded={isExpanded}
+    aria-label={ariaLabel}
+    {...props}
+  >
+    {children}
+  </button>
+);
+```
+
+## 🔧 ESLint Configuration
+
+Required rules for SonarQube compliance:
 
 ```json
 {
