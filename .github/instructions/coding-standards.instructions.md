@@ -1,5 +1,5 @@
 ---
-applyTo: "**/components/**/*.tsx"
+applyTo: '**/components/**/*.tsx'
 ---
 
 # Coding Standards - Glide
@@ -7,17 +7,18 @@ applyTo: "**/components/**/*.tsx"
 ## TypeScript Standards
 
 ### Component Props Pattern
+
 ```typescript
 // ALWAYS: Extend appropriate HTML element props
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   orientation?: Orientation;
 }
-
 ```
 
 ## React Patterns
 
 ### Component Structure (React 19+)
+
 ```typescript
 // MODERN: React 19+ pattern (no forwardRef needed)
 interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
@@ -35,6 +36,7 @@ const Label = forwardRef<HTMLLabelElement, LabelProps>((props, ref) => (
 ```
 
 ### Hooks Usage
+
 ```typescript
 // ALWAYS: Typed state with imported types
 import type { RequestStatus } from './types';
@@ -54,6 +56,7 @@ useEffect(() => {
 ## Component Architecture
 
 ### Component Template
+
 ```typescript
 import type { ComponentProps } from './Component.types';
 
@@ -72,6 +75,7 @@ Component.displayName = 'Component';
 ```
 
 ### Props Interface Template
+
 ```typescript
 export type Orientation = 'vertical' | 'horizontal';
 /**
@@ -84,25 +88,25 @@ export interface ComponentProps extends React.HTMLAttributes<HTMLElement> {
    * @defaultValue 'horizontal'
    */
   orientation?: Orientation;
-  
+
   /**
    * Disabled state - properly announced to screen readers
    * @defaultValue false
    */
   isDisabled?: boolean;
-  
-  /** 
+
+  /**
    * Loading state with screen reader support
    * @defaultValue false
    */
   isLoading?: boolean;
-  
-  /** 
+
+  /**
    * Required for icon-only variants
    */
   'aria-label'?: React.AriaAttributes['aria-label'];
-  
-  /** 
+
+  /**
    * Component content
    */
   children?: React.ReactNode;
@@ -112,6 +116,7 @@ export interface ComponentProps extends React.HTMLAttributes<HTMLElement> {
 ## State Management
 
 ### Complex State
+
 ```typescript
 // ALWAYS: Import discriminated unions from types
 import type { RequestState } from './types';
@@ -124,28 +129,86 @@ import type { RequestState } from './types';
 //   | { status: 'error'; error: Error };
 
 const [requestState, setRequestState] = useState<RequestState>({
-  status: 'idle'
+  status: 'idle',
 });
 ```
 
 ## Import/Export Standards
 
 ### Module Exports
+
+#### Simple Components
+
 ```typescript
-// ALWAYS: Index files for clean imports
 // packages/glide/src/components/Button/index.ts
 export { Button } from './Button';
 export type { ButtonProps } from './Button.types';
+```
 
-// ALWAYS: Index files for clean imports
+#### Compound/Grouped Components - Dual Export Pattern
+
+```typescript
+// packages/glide/src/components/Accordion/index.ts
+import { Accordion } from './Accordion';
+import { AccordionItem } from './AccordionItem';
+import { AccordionHeader } from './AccordionHeader';
+import { AccordionTrigger } from './AccordionTrigger';
+import { AccordionContent } from './AccordionContent';
+
+// Aliased exports for grouped usage
+const Root = Accordion;
+const Item = AccordionItem;
+const Header = AccordionHeader;
+const Trigger = AccordionTrigger;
+const Content = AccordionContent;
+
+// Export both named components AND aliases
+export {
+  // Utility functions if any
+  createAccordionScope,
+
+  // Named exports (for direct imports)
+  Accordion,
+  AccordionItem,
+  AccordionHeader,
+  AccordionTrigger,
+  AccordionContent,
+
+  // Aliased exports (for grouped pattern)
+  Root,
+  Item,
+  Header,
+  Trigger,
+  Content,
+};
+
+// Export types
+export type {
+  AccordionProps,
+  AccordionItemProps,
+  AccordionHeaderProps,
+  AccordionTriggerProps,
+  AccordionContentProps,
+} from './types';
+
+// Usage examples:
+// Direct import: import { AccordionTrigger } from '@glide/components';
+// Grouped import: import { Root, Trigger, Content } from '@glide/components/Accordion';
+```
+
+#### Root Index Exports
+
+```typescript
 // packages/glide/src/components/index.ts
 export * from './Button';
 export * from './Dialog';
+export * from './Accordion';
 ```
 
 ## Code Style
 
 ### Function Declaration
+
 ```typescript
 // ALWAYS: Arrow functions for consistency
 const handleSubmit = (data: FormData): void => {
@@ -165,12 +228,14 @@ function utilityFunction(param: string): string {
 ## Naming Conventions
 
 ### Components and Types
+
 - **Components**: PascalCase (`Button`, `DialogOverlay`)
 - **Props**: PascalCase + "Props" suffix (`ButtonProps`)
 - **Hooks**: camelCase + "use" prefix (`useButton`, `useDialog`)
 - **Utilities**: camelCase (`formatDate`, `validateEmail`)
 
 ### Event Handlers
+
 ```typescript
 // ALWAYS: handle prefix
 const handleClick = () => {};
@@ -183,17 +248,19 @@ const click = () => {}; // Unclear
 ```
 
 ### Boolean Props
+
 ```typescript
 // ALWAYS: is/has/should/can prefix
-isDisabled, hasError, shouldAutoFocus, canSubmit
+(isDisabled, hasError, shouldAutoFocus, canSubmit);
 
 // NEVER: Ambiguous names
-disabled, error, focus, submit
+(disabled, error, focus, submit);
 ```
 
 ## Performance Guidelines
 
 ### Conditional Rendering
+
 ```typescript
 // ALWAYS: Early returns for conditionals
 if (isLoading) {
@@ -213,6 +280,7 @@ return isLoading ? <Spinner /> : error ? <Error /> : <Content />; // Hard to rea
 ## Security Considerations
 
 ### Safe Prop Spreading
+
 ```typescript
 // ALWAYS: Extract known props
 const { variant, isDisabled, children, ...safeProps } = props;
