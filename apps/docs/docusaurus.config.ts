@@ -51,7 +51,7 @@ const config: Config = {
       },
     },
   },
-  plugins: ['docusaurus-plugin-sass', '@docusaurus/theme-live-codeblock'],
+  plugins: ['docusaurus-plugin-sass'],
   presets: [
     [
       'classic',
@@ -70,13 +70,6 @@ const config: Config = {
   ],
 
   themeConfig: {
-    liveCodeBlock: {
-      /**
-       * The position of the live playground, above or under the editor
-       * Possible values: "top" | "bottom"
-       */
-      playgroundPosition: 'top',
-    },
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
