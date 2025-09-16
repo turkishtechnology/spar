@@ -1,0 +1,159 @@
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import type { ButtonProps } from './types';
+
+/**
+ * A headless, accessible button component that provides complete keyboard support and toggle functionality.
+ */
+export const Button = ({
+  as: Element = 'button',
+  type = 'button',
+  isDisabled = false,
+  shouldAutoFocus = false,
+  isLoading = false,
+  isPressed,
+  onPressedChange,
+  loadingText = 'Loading',
+  children,
+  onClick,
+  onKeyDown,
+  className,
+  style,
+  ref,
+  ...htmlProps
+}: ButtonProps) => {
+  // Internal state for uncontrolled toggle
+  const [internalPressed, setInternalPressed] = useState<boolean>(false);
+
+  // Determine if this is a toggle button and current pressed state
+  const isToggle = isPressed !== undefined;
+  const currentPressed = isToggle ? isPressed : internalPressed;
+
+  // Interactive state
+  const isInteractive = !isDisabled && !isLoading;
+
+  // Auto focus handling
+  useEffect(() => {
+    if (shouldAutoFocus && ref && typeof ref === 'object' && ref.current) {
+      ref.current.focus();
+    }
+  }, [shouldAutoFocus, ref]);
+
+  // Unified activation handler for click and keyboard
+  const handleActivation = useCallback(
+    (event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>) => {
+      if (!isInteractive) return;
+
+      // Toggle logic
+      if (isToggle) {
+        const newPressed = !currentPressed;
+        if (onPressedChange) {
+          onPressedChange(newPressed);
+        } else {
+          setInternalPressed(newPressed);
+        }
+      }
+
+      // Fire click handler
+      if (onClick && 'button' in event.nativeEvent) {
+        onClick(event as React.MouseEvent<HTMLButtonElement>);
+      }
+    },
+    [isInteractive, isToggle, currentPressed, onPressedChange, onClick],
+  );
+
+  // Click handler
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      handleActivation(event);
+    },
+    [handleActivation],
+  );
+
+  // Keyboard handler
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLElement>) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        handleActivation(event);
+      }
+
+      if (onKeyDown) {
+        onKeyDown(event as React.KeyboardEvent<HTMLButtonElement>);
+      }
+    },
+    [handleActivation, onKeyDown],
+  );
+
+  // Memoize data attributes to prevent object recreation
+  const dataAttributes = useMemo(
+    () => ({
+      'data-disabled': isDisabled ? 'true' : undefined,
+      'data-loading': isLoading ? 'true' : undefined,
+      'data-pressed': isToggle ? String(currentPressed) : undefined,
+      'data-autofocus': shouldAutoFocus ? 'true' : undefined,
+    }),
+    [isDisabled, isLoading, isToggle, currentPressed, shouldAutoFocus],
+  );
+
+  // Determine ARIA attributes
+  const ariaAttributes = useMemo(() => {
+    const attrs: Record<string, boolean | string> = {};
+
+    // Only add aria-pressed for toggle buttons
+    if (isToggle && currentPressed !== undefined) {
+      attrs['aria-pressed'] = currentPressed;
+    }
+
+    // Loading state
+    if (isLoading) {
+      attrs['aria-busy'] = true;
+    }
+
+    // Disabled state
+    if (isDisabled) {
+      attrs['aria-disabled'] = true;
+    }
+
+    return attrs;
+  }, [isToggle, currentPressed, isLoading, isDisabled]);
+
+  // Build props for the element
+  const elementProps: Record<string, unknown> = {
+    ref,
+    className,
+    style,
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    tabIndex: isDisabled ? -1 : 0,
+    ...dataAttributes,
+    ...ariaAttributes,
+    ...htmlProps,
+  };
+
+  // Add button-specific props when rendering as button
+  if (Element === 'button') {
+    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).type = type;
+    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = isDisabled;
+  }
+
+  // Add role when not rendering as button
+  if (Element !== 'button') {
+    elementProps.role = 'button';
+  }
+
+  // Screen reader announcement for loading
+  const screenReaderContent = isLoading ? (
+    <>
+      <span aria-live='polite' aria-atomic='true' className='sr-only'>
+        {loadingText}
+      </span>
+      {children}
+    </>
+  ) : (
+    children
+  );
+
+  return <Element {...elementProps}>{screenReaderContent}</Element>;
+};
+
+Button.displayName = 'Button';
