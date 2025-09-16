@@ -1,0 +1,110 @@
+import type React from 'react';
+
+/**
+ * Props for Collapsible root component
+ * @remarks Fully accessible, headless component
+ */
+export interface CollapsibleProps extends React.HTMLAttributes<HTMLDivElement> {
+  /**
+   * Controlled open state
+   */
+  open?: boolean;
+
+  /**
+   * Default open state for uncontrolled usage
+   * @defaultValue false
+   */
+  defaultOpen?: boolean;
+
+  /**
+   * Callback fired when open state changes
+   */
+  onOpenChange?: (open: boolean) => void;
+
+  /**
+   * Whether the collapsible is disabled
+   * @defaultValue false
+   */
+  isDisabled?: boolean;
+
+  /**
+   * Child components
+   */
+  children: React.ReactNode;
+}
+
+/**
+ * Props for CollapsibleTrigger component
+ * @remarks Button element that toggles visibility
+ */
+export interface CollapsibleTriggerProps extends React.HTMLAttributes<HTMLElement> {
+  /**
+   * Element type for polymorphic rendering
+   * @defaultValue 'button'
+   */
+  as?: React.ElementType;
+
+  /**
+   * Trigger content
+   */
+  children?: React.ReactNode;
+}
+
+/**
+ * Props for CollapsibleContent component
+ * @remarks Panel containing the collapsible content
+ */
+export interface CollapsibleContentProps extends React.HTMLAttributes<HTMLElement> {
+  /**
+   * Element type for polymorphic rendering
+   * @defaultValue 'div'
+   */
+  as?: React.ElementType;
+
+  /**
+   * Force content to remain mounted when closed
+   * @defaultValue false
+   */
+  forceMount?: boolean;
+
+  /**
+   * Content to be shown/hidden
+   */
+  children?: React.ReactNode;
+
+  /**
+   * Callback fired when content is found via browser search
+   */
+  onBeforeMatch?: (event: Event) => void;
+}
+
+/**
+ * Context value shared between Collapsible components
+ * @internal
+ */
+export interface CollapsibleContextValue {
+  /**
+   * Current open state
+   */
+  isOpen: boolean;
+
+  /**
+   * Toggle function to change open state
+   */
+  toggle: () => void;
+
+  /**
+   * Whether the collapsible is disabled
+   */
+  isDisabled: boolean;
+
+  /**
+   * ID of the trigger element
+   */
+  triggerId: string;
+
+  /**
+   * ID of the content element
+   */
+  contentId: string;
+}
