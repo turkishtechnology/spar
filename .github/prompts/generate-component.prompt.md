@@ -1,6 +1,6 @@
 ---
 mode: agent
-model: Claude Opus 4.1
+model: Claude Sonnet 4 (copilot)
 description: Generate headless component implementation (logic only - no tests, no docs)
 ---
 
