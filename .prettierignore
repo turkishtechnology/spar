@@ -1,0 +1,10 @@
+# Ignore .github directory
+.github/
+
+# Common ignore patterns
+node_modules/
+dist/
+build/
+coverage/
+*.min.js
+*.min.css

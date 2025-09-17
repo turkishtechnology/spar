@@ -1,43 +1,31 @@
-import type { ReactNode } from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import Heading from '@theme/Heading';
+import LandingHeader from '../components/LandingPage/Header';
+import LandingSubHeader from '../components/LandingPage/SubHeader';
+import Features from '../components/LandingPage/Features';
+import AIDriven from '../components/LandingPage/AIDriven';
+import Theming from '../components/LandingPage/Theming';
+import Ending from '../components/LandingPage/Ending';
+import '../styles/LandingPage/index.scss';
 
-import styles from './index.module.css';
-
-function HomepageHeader() {
+export default function Home() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className='container'>
-        <Heading as='h1' className='hero__title'>
-          {siteConfig.title}
-        </Heading>
-        <p className='hero__subtitle'>{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link className='button button--secondary button--lg' to='/docs/intro'>
-            Docusaurus Tutorial - 5min ⏱️
-          </Link>
-        </div>
+    <Layout title={`${siteConfig.title}`}>
+      <div className='home-container'>
+        <main className='home-main'>
+          <section className='home-section'>
+            <div className='home-content'>
+              <LandingHeader />
+              <LandingSubHeader />
+              <Features />
+              <AIDriven />
+              <Theming />
+            </div>
+          </section>
+          <Ending />
+        </main>
       </div>
-    </header>
-  );
-}
-
-export default function Home(): ReactNode {
-  const { siteConfig } = useDocusaurusContext();
-  return (
-    <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description='Description will go into a meta tag in <head />'
-    >
-      <HomepageHeader />
-      <main>
-        <HomepageFeatures />
-      </main>
     </Layout>
   );
 }
