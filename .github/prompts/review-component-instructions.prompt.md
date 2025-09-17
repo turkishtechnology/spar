@@ -1,6 +1,6 @@
 ---
 mode: agent
-model: claude-4.1-opus
+model: Claude Sonnet 4 (copilot)
 description: Comprehensive review of Glide component instruction files against accessibility and headless standards
 ---
 

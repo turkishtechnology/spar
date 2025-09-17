@@ -1,5 +1,6 @@
 ---
 mode: agent
+model: Claude Sonnet 4 (copilot)
 description: Design comprehensive specifications for new Glide headless components
 ---
 
