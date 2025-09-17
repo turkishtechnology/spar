@@ -1,6 +1,5 @@
 ---
 mode: agent
-model: claude-4.1-opus
 description: Design comprehensive specifications for new Glide headless components
 ---
 
