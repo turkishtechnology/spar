@@ -1,0 +1,23 @@
+.ending-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  background: #c90019;
+}
+.ending-texts {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+  font-weight: 600;
+  font-size: 2.25rem;
+  margin: 0 0 0 60px;
+}
+
+.ending-title1 {
+  color: #eeb0b8;
+  margin-bottom: -25px;
+}
+
+.ending-title2 {
+  color: #fff;
+}

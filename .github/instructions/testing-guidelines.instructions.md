@@ -1,31 +1,41 @@
 ---
-applyTo: "**/*.test.tsx"
+applyTo: '**/*.test.tsx'
 ---
 
 # Testing Guidelines - Glide
 
 ## Context
+
 Every component requires comprehensive testing: **Unit**, **Accessibility**, and **Integration** tests. No component ships without full test coverage.
 
+**IMPORTANT**: Component logic and tests are created in separate phases:
+
+1. First phase: Component implementation (logic only)
+2. Second phase: Test creation (after component logic is complete and linted)
+
 ## Coverage Requirements
+
 - **Statements**: 90%
 - **Branches**: 90%
 - **Functions**: 90%
 - **Lines**: 90%
 
 ## Test Structure
+
 Each component must have 3 test files in `__tests__/` directory:
+
 ```
 
 Component/
 ├── **tests**/
 │ ├── Component.test.tsx # Unit tests
-│ ├── Component.a11y.test.tsx # Accessibility tests  
+│ ├── Component.a11y.test.tsx # Accessibility tests
 │ └── Component.integration.test.tsx # Integration tests
 
-````
+```
 
 ## Testing Tools
+
 - **Framework**: Jest + React Testing Library
 - **A11y**: jest-axe (mandatory, zero violations)
 - **Interactions**: userEvent (prefer over fireEvent)
@@ -34,6 +44,7 @@ Component/
 ## Test Examples
 
 **Basic Test Pattern:**
+
 ```tsx
 import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
@@ -58,7 +69,7 @@ describe('Component', () => {
     expect(results).toHaveNoViolations();
   });
 });
-````
+```
 
 ## Mandatory Test Categories
 
@@ -124,6 +135,14 @@ it('should throw error for invalid props', () => {
    ```tsx
    afterEach(() => jest.clearAllMocks());
    ```
+
+## Pre-Test Requirements
+
+Before creating or running tests:
+
+1. **Run linting** - Execute `pnpm lint` to verify code quality
+2. **Fix any ESLint errors** - All linting issues must be resolved
+3. **Type checking** - Run `pnpm check-types` to ensure TypeScript compliance
 
 ## Running Tests
 

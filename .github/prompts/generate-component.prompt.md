@@ -6,7 +6,7 @@ description: Generate headless component implementation (logic only - no tests, 
 
 # Generate Component Logic
 
-Create the core implementation for **${input:ComponentName:Button}** component.
+Create the core implementation for **${input:ComponentName}** component.
 
 ## Prerequisites
 
@@ -16,7 +16,7 @@ IMPORTANT: ALWAYS read `.github/instructions/coding-standards.instructions.md` f
 
 ## Task Scope - LOGIC ONLY
 
-Generate ONLY the component implementation:
+Generate ONLY the component implementation. DO NOT run tests or create test files.
 
 ### Files to Create
 
@@ -36,9 +36,53 @@ packages/glide/src/components/${ComponentName}/
 - Props spreading (className, style, data-_, aria-_)
 - NO styling, NO CSS imports
 - NO default ARIA (will be added in accessibility phase)
+- NO test files (tests will be generated in a separate phase)
+
+### Export Patterns
+
+For compound components, use the dual export pattern to support both usage styles:
+
+```typescript
+// index.ts
+import { Accordion } from './Accordion';
+import { AccordionItem } from './AccordionItem';
+import { AccordionTrigger } from './AccordionTrigger';
+import { AccordionContent } from './AccordionContent';
+
+// Create aliases for grouped pattern
+const Root = Accordion;
+const Item = AccordionItem;
+const Trigger = AccordionTrigger;
+const Content = AccordionContent;
+
+// Export both patterns
+export {
+  // Named exports (tree-shakeable)
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+
+  // Aliased exports (for grouped usage)
+  Root,
+  Item,
+  Trigger,
+  Content,
+};
+
+// Export types
+export type {
+  AccordionProps,
+  AccordionItemProps,
+  AccordionTriggerProps,
+  AccordionContentProps,
+} from './types';
+```
 
 ## Success Criteria
 
 - Component builds without errors
-- TypeScript strict mode passes
+- TypeScript strict mode passes (run type checking using `pnpm check-types`)
+- ESLint passes (run `pnpm lint` to verify)
 - Exports are tree-shakeable
+- DO NOT run `pnpm test` (tests will be created separately)
