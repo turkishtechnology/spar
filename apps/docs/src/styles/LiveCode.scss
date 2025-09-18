@@ -5,111 +5,118 @@
   flex-direction: column;
   
 
-.live-preview-wrapper {
-  border: 2px solid var(--ifm-gray);
-  min-height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  border-radius: 12px 12px 0 0;
-  
-
-  .live-preview {
-    width: 100%;
-    padding: 24px;
-    justify-items: center;
-    
-    // Reset any inherited styles that might interfere
-    * {
-      box-sizing: border-box;
-    }
-  }
-  
-  pre.live-error {
-    background: none;
-    color: #c90019;
-    padding: 16px;
-    font-size: 14px;
-    white-space: pre-wrap;
-    max-width: 100%;
-
-  }
-  
-}
-.collapsible-code-block {
-  margin: 0;
-  overflow: hidden;
-
-  .collapsible-toggle {
-    width: 100%;
-    padding: 16px 20px;
-    border: none;
-    border-radius: 0 -12px 0 0;
-    background: var(--ifm-gray);
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
+  .live-preview-wrapper {
+    border: 2px solid var(--ifm-gray);
+    min-height: 140px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    text-align: left;
+    justify-content: center;
+    position: relative;
+    border-radius: 12px 12px 0 0;
 
-    &:hover {
+
+    .live-preview {
+      width: 100%;
+      padding: 24px;
+      justify-items: center;
+
+      // Reset any inherited styles that might interfere
+      * {
+        box-sizing: border-box;
+      }
+    }
+
+    pre.live-error {
+      background: none;
       color: #c90019;
+      padding: 16px;
+      font-size: 14px;
+      white-space: pre-wrap;
+      max-width: 100%;
+
     }
 
-
-    .toggle-icon {
-      font-size: 12px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      width: 12px;
-      text-align: center;
-    }
   }
+  .collapsible-code-block {
+    margin: 0;
+    overflow: hidden;
 
-  .collapsible-content {
-    overflow: auto;
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    &[style*="opacity: 0"] {
-      pointer-events: none;
-    }
-
-    // Ensure code blocks inside have proper styling
-    pre {
-      margin: 0;
-      border-radius: 0;
+    .collapsible-toggle {
+      width: 100%;
+      padding: 16px 20px;
       border: none;
+      border-radius: 0 -12px 0 0;
+      background: var(--ifm-gray);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+
+      &:hover {
+        color: #c90019;
+      }
+
+
+      .toggle-icon {
+        font-size: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 12px;
+        text-align: center;
+      }
     }
 
+    .collapsible-content {
+      overflow: auto;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+
+      .copy-button{
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        background: none;
+      }
+      &[style*="opacity: 0"] {
+        pointer-events: none;
+      }
+
+      // Ensure code blocks inside have proper styling
+      pre {
+        margin: 0;
+        border-radius: 0;
+        border: none;
+      }
+
+
+    }
+
+    // Animation states
+    &.collapsed {
+      .collapsible-toggle .toggle-icon {
+        transform: rotate(0deg) scale(1);
+      }
+    }
+
+    &.expanded {
+      .collapsible-toggle .toggle-icon {
+        transform: rotate(90deg) scale(1.1);
+      }
+    }
 
   }
+  .live-code-wrapper{
 
-  // Animation states
-  &.collapsed {
-    .collapsible-toggle .toggle-icon {
-      transform: rotate(0deg) scale(1);
+    .live-editor {
+    
+      pre[class*="language-"] {
+      
+        border-radius: 0 0 12px 12px;
+        overflow-y: auto ;
+      
+      }
     }
   }
-
-  &.expanded {
-    .collapsible-toggle .toggle-icon {
-      transform: rotate(90deg) scale(1.1);
-    }
-  }
-
-}
-
-.live-editor {
-
-  pre[class*="language-"] {
-    background:  #242526 !important;
-
-    border-radius: 0 0 12px 12px;
-    overflow-y: auto ;
-
-  }
-}
-
 }

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
+import { themes } from 'prism-react-renderer';
 
 interface LiveCodeProps {
   title?: string;
   code?: string;
+  theme?: 'vsDark' | 'vsLight';
 }
 
 interface CollapsibleCodeBlockProps {
@@ -41,16 +43,29 @@ const CollapsibleCodeBlock: React.FC<CollapsibleCodeBlockProps> = ({
     </div>
   );
 };
-const LiveCode: React.FC<LiveCodeProps> = ({ title, code }) => {
+const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
   // Code'u children veya code prop'undan al
   const codeContent = code || '';
-
+  const selectedTheme = themes[theme as keyof typeof themes] || themes.vsDark;
   // React Live scope - burada kullanılabilir değişkenler ve bileşenler
   const scope = {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
     // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
+  };
+
+  const [copied, setCopied] = useState(false);
+  const handleCopy = async () => {
+    if (code) {
+      try {
+        await navigator.clipboard.writeText(code);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    }
   };
 
   // Live code block'u collapsible wrapper ile sar
@@ -64,7 +79,39 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code }) => {
 
         <CollapsibleCodeBlock title={title}>
           <div className='live-code-wrapper'>
-            <LiveEditor className='live-editor' />
+            <button
+              className='copy-button'
+              onClick={handleCopy}
+              title={copied ? 'Kopyalandı!' : 'Kodu Kopyala'}
+            >
+              {copied ? (
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='24'
+                  height='24'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='white'
+                  strokeWidth='2'
+                >
+                  <polyline points='20,6 9,17 4,12'></polyline>
+                </svg>
+              ) : (
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='24'
+                  height='24'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='white'
+                  strokeWidth='2'
+                >
+                  <rect x='9' y='9' width='13' height='13' rx='2' ry='2'></rect>
+                  <path d='m5,15 L5,5 A2,2 0 0,1 7,3 L17,3'></path>
+                </svg>
+              )}
+            </button>
+            <LiveEditor theme={selectedTheme} className='live-editor' />
           </div>
         </CollapsibleCodeBlock>
       </LiveProvider>
