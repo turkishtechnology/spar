@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
-import { Tooltip } from '@turkish-technology/glide';
+
 interface LiveCodeProps {
   title?: string;
   code?: string;
@@ -9,9 +9,13 @@ interface LiveCodeProps {
 
 interface CollapsibleCodeBlockProps {
   title?: string;
+  children: React.ReactNode;
 }
 
-const CollapsibleCodeBlock: React.FC<CollapsibleCodeBlockProps> = ({ title = 'Kodu Göster' }) => {
+const CollapsibleCodeBlock: React.FC<CollapsibleCodeBlockProps> = ({
+  title = 'Kodu Göster',
+  children,
+}) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
@@ -31,7 +35,9 @@ const CollapsibleCodeBlock: React.FC<CollapsibleCodeBlockProps> = ({ title = 'Ko
           maxHeight: isCollapsed ? '0' : '1000px',
           opacity: isCollapsed ? 0 : 1,
         }}
-      ></div>
+      >
+        {children}
+      </div>
     </div>
   );
 };
@@ -44,7 +50,6 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
-    Tooltip,
     // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
   };
 
