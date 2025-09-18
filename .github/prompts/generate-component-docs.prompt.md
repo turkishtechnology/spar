@@ -28,12 +28,12 @@ Generate documentation for **${input:ComponentName:Button}** component.
    - pnpm install command, import statement, peer dependencies if any
 4. **Live Demo**
    - Single interactive LiveCode example (minimal, accessibility demonstrated)
-5. **Code Examples**
-   - Multiple progressive, static TypeScript code blocks (unstyled, headless, accessible, real-world scenarios)
-6. **Features List**
+5. **Features List**
    - Bulleted list of actual capabilities, accessibility, keyboard support, ARIA compliance
-7. **Anatomy Diagram**
+6. **Anatomy Diagram**
    - Component tree structure, all compound parts, hierarchy, data flow
+7. **Code Examples**
+   - Multiple progressive, static TypeScript code blocks (unstyled, headless, accessible, real-world scenarios)
 8. **API Reference Tables**
    - For EACH compound part: Props, Events, ARIA tables (exact TypeScript types, actual defaults, required indicators)
 9. **Keyboard Interactions**

@@ -287,11 +287,15 @@ import { [ComponentName] } from '@turkishtechnology/glide'
 
 ## Code Examples
 
+[Detailed code example explanation]
+
 [Generate sections only for features that actually exist]
 
 ## API Reference
 
 ### ComponentName.Root
+
+[Detailed compound explanation]
 
 **Props**
 
@@ -316,6 +320,8 @@ import { [ComponentName] } from '@turkishtechnology/glide'
 | `role` | `"group"` | Groups related elements | Root element |
 
 ### ComponentName.Trigger
+
+[Detailed compound explanation]
 
 **Props**
 
