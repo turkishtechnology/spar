@@ -91,11 +91,11 @@ Every component documentation page MUST follow this exact structure:
 - **Props Table Columns**: Name, Type, Default, Description
 - **Events Table Columns**: Name, Parameters, Description, When Triggered
 - **Methods Table Columns**: Name, Parameters, Returns, Description
-- **Keyboard Table Columns**: Key, Action, Context, Notes
 - **ARIA Table Columns**: Attribute, Value, Purpose, Applied To
 - **Clear Types**: Use exact TypeScript notation (e.g., `string | number | undefined`)
 - **Required Indicators**: Use TypeScript `?` syntax in Name column (`prop?` for optional)
 - **Default Values**: Show actual default values, use `undefined` when applicable
+- **Keyboard Table Columns**: Key, Action, Context, Notes
 
 ## LiveCode Component Integration
  
@@ -151,7 +151,6 @@ const scope = {
   React,
   useState: React.useState,
   useEffect: React.useEffect,
-  // Add new Glide components here
   Button,
   Input,
   Popover,
@@ -225,7 +224,6 @@ description: [Brief description for SEO]
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
-import CodeBlock from '@theme/CodeBlock';
  
 # [ComponentName]
  
@@ -293,89 +291,151 @@ import { [ComponentName] } from '@turkishtechnology/glide'
 
 ## API Reference
 
-**EVERY compound component part must have its own dedicated section with complete documentation:**
+### ComponentName.Root
 
-[Document only actual compound parts and their real props/events/methods]
+**Props**
 
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Root content |
+| `open?` | `boolean` | `false` | Controls open state |
+| `onOpenChange?` | `(open: boolean) => void` | `undefined` | State change handler |
+| `defaultOpen?` | `boolean` | `false` | Initial open state |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onOpenChange` | `(open: boolean)` | Open state changes | User interaction or programmatic change |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `aria-expanded` | `boolean` | Indicates expansion state | Root element |
+| `role` | `"group"` | Groups related elements | Root element |
+
+### ComponentName.Trigger
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Trigger content |
+| `asChild?` | `boolean` | `false` | Render as child element |
+| `disabled?` | `boolean` | `false` | Disables trigger |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onClick` | `(event: MouseEvent)` | Trigger clicked | Mouse click |
+| `onKeyDown` | `(event: KeyboardEvent)` | Key pressed | Keyboard interaction |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `aria-expanded` | `boolean` | Indicates if content is expanded | Trigger element |
+| `aria-controls` | `string` | References controlled content | Trigger element |
+
+
+[Continue this pattern for EVERY compound part that exists]
+
+## Keyboard Interactions
+
+Complete keyboard behavior for the entire component:
+
+| Key | Action | Context | Notes |
+|-----|--------|---------|-------|
+| `Tab` | Navigate | Always | Moves focus through interactive elements |
+| `Shift + Tab` | Navigate backward | Always | Moves focus backward through elements |
+| `Enter` | Activate | Focusable elements | Triggers primary action |
+| `Space` | Activate | Buttons/toggles | Alternative activation method |
+| `Escape` | Close/Cancel | Open states | Closes overlays, returns to trigger |
+| `ArrowDown` | Navigate down | Lists/menus | Moves to next item |
+| `ArrowUp` | Navigate up | Lists/menus | Moves to previous item |
+| `Home` | First item | Lists/menus | Moves to first item |
+| `End` | Last item | Lists/menus | Moves to last item |
+
+**Note**: Only document keyboard interactions that are actually implemented in the component.
 ```
 
 ## Documentation Requirements
- 
-### MUST Include FOR EACH COMPOUND PART
-- **Complete Props Table**: All props with exact TypeScript types
-- **Complete Events Table**: All event handlers with parameters
-- **Complete Keyboard Table**: All keyboard interactions for that part
-- **Complete ARIA Table**: All accessibility attributes for that part
-- **Individual Sections**: Each compound part gets its own dedicated section
+
+### FOR EACH COMPOUND PART - Include These 3 Tables
+- **Props Table**: All props with TypeScript types
+- **Events Table**: Event handlers with parameters  
+- **ARIA Table**: Accessibility attributes
 
 ### MUST Include
-- All compound component parts documented
-- Real TypeScript types from component interfaces
-- Actual accessibility implementation
-- Real keyboard navigation that exists
-- Verified ARIA attributes that are applied
-- Working code examples using actual component features
- 
+- All compound parts documented separately
+- Real TypeScript types from component files
+- Actual accessibility features that exist
+- Real keyboard navigation
+- Working code examples using actual component
+
 ### MUST NOT Include
-- Framework-specific styling solutions
-- Theme or design system references
-- Marketing language or sales copy
- 
-### Quality Checklist FOR EACH COMPOUND PART
-- [ ] Props table with all actual props and exact TypeScript types
-- [ ] Events table with all actual event handlers and parameters  
-- [ ] Keyboard interactions table with all actual keyboard behaviors
-- [ ] ARIA attributes table with all actual accessibility attributes
-- [ ] Required props clearly marked with TypeScript `?` syntax
-- [ ] Default values showing actual defaults from implementation
-- [ ] Complete documentation for every compound part that exists
+- Styling examples or CSS
+- Design system references
+- Marketing language
 
-### Quality Checklist
+### Before Writing Documentation
+- [ ] Analyze component TypeScript interfaces
+- [ ] Identify all compound parts
+- [ ] Verify accessibility implementation
+- [ ] Test examples with real component
+
+### Quality Check FOR EACH COMPOUND PART
+- [ ] Props table complete with TypeScript types
+- [ ] Events table with all handlers
+- [ ] ARIA table with accessibility attributes
+- [ ] Optional props marked with `?` syntax
+- [ ] Real default values shown
+
+### Final Quality Check
 - [ ] Accessibility features explained
-- [ ] Code examples are functional and headless
-- [ ] Installation instructions are accurate
-- [ ] Component anatomy diagram is clear
+- [ ] Code examples work and are headless
+- [ ] Installation instructions correct
+- [ ] Component diagram clear
+- [ ] Global keyboard interactions documented
 
-## Documentation Workflow
-1. **Component Analysis**: Examine actual TypeScript interfaces and implementation
-2. **Create Base Structure**: Use template with actual component details
-3. **Feature Documentation**: List only behavioral capabilities that exist
-4. **LiveCode Demo**: Single example using actual component API
-5. **Code Examples**: Progressive examples using actual component features
-6. **API Documentation**: Generate complete tables from TypeScript types
-7. **Accessibility Audit**: Document only implemented a11y features
-8. **Review & Validate**: Ensure examples work and types are accurate
+## Documentation Steps
+1. **Analyze Component** - Check TypeScript files and implementation
+2. **Create Structure** - Use template with real component details
+3. **Document Features** - Only what actually exists
+4. **Add LiveCode Demo** - Single working example
+5. **Write Code Examples** - Progressive examples using real API
+6. **Create API Tables** - From actual TypeScript types
+7. **Document Accessibility** - Only implemented features
+8. **Add Global Keyboard Interactions** - Complete keyboard behavior documentation
+9. **Review & Test** - Ensure examples work
 
-## Special Considerations
- 
-### Compound Components Documentation Strategy
-- **Analyze component structure**: Identify all compound parts (Root, Trigger, Content, Item, etc.)
-- **Document each part separately**: Every compound part gets its own section
-- **Complete table coverage**: Each part needs Props, Events, Keyboard, ARIA tables
-- **Real implementation**: Only document compound parts and features that actually exist
-- **Progressive complexity**: Start with Root, then child parts in logical order
+## Compound Components Strategy
+- **Find all parts**: Root, Trigger, Content, Item, etc.
+- **Document each separately**: Every part gets own section
+- **Complete tables**: Each part needs all 3 tables
+- **Use real implementation**: Only document what exists
+- **Start simple**: Root first, then child parts
+- **End with keyboard**: Global keyboard interactions as final section
 
- 
 ### Accessibility Documentation
-- Always include keyboard interaction table
+- Document ARIA roles and properties for each compound part
 - Document ARIA roles and properties
 - Explain screen reader behavior
-- Show focus management examples
- 
-### TypeScript Integration
-- Use actual TypeScript interfaces in documentation
-- Show generic type usage where applicable
+- Show focus management
+
+### TypeScript Documentation
+- Use actual interfaces from component files
+- Show generic types when applicable
 - Document complex type patterns
-- Include type-only imports when relevant
- 
-## Integration with Docusaurus
- 
+- Include type-only imports
+
+## Docusaurus Integration
 - Use proper frontmatter for SEO
 - Include sidebar positioning
 - Add meta descriptions
-- Use proper heading hierarchy (H1 → H6)
-- Include code block language hints
-- Use admonitions for important notes
- 
-Remember: Documentation should empower developers to implement accessible, headless components confidently without imposing design opinions.
- 
+- Use heading hierarchy (H1 → H6)
+- Add code block language hints
+
+**Remember: Document only what actually exists. No styling. Help developers build accessible components.**
