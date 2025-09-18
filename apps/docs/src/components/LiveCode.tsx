@@ -1,28 +1,18 @@
 import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
+import { Tooltip } from '@turkish-technology/glide';
 interface LiveCodeProps {
-  children?: string;
-  className?: string;
-  metastring?: string;
   title?: string;
-  defaultCollapsed?: boolean;
   code?: string;
-  editorHidden?: boolean;
 }
 
 interface CollapsibleCodeBlockProps {
-  children: React.ReactNode;
   title?: string;
-  defaultCollapsed?: boolean;
 }
 
-const CollapsibleCodeBlock: React.FC<CollapsibleCodeBlockProps> = ({
-  children,
-  title = 'Kodu Göster',
-  defaultCollapsed = true,
-}) => {
-  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+const CollapsibleCodeBlock: React.FC<CollapsibleCodeBlockProps> = ({ title = 'Kodu Göster' }) => {
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
     <div className={`collapsible-code-block ${isCollapsed ? 'collapsed' : 'expanded'}`}>
@@ -41,27 +31,20 @@ const CollapsibleCodeBlock: React.FC<CollapsibleCodeBlockProps> = ({
           maxHeight: isCollapsed ? '0' : '1000px',
           opacity: isCollapsed ? 0 : 1,
         }}
-      >
-        {children}
-      </div>
+      ></div>
     </div>
   );
 };
-const LiveCode: React.FC<LiveCodeProps> = ({
-  children,
-  title = 'Kodu Göster',
-  defaultCollapsed = true,
-  code,
-  editorHidden = false,
-}) => {
+const LiveCode: React.FC<LiveCodeProps> = ({ title, code }) => {
   // Code'u children veya code prop'undan al
-  const codeContent = code || children || '';
+  const codeContent = code || '';
 
   // React Live scope - burada kullanılabilir değişkenler ve bileşenler
   const scope = {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
+    Tooltip,
     // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
   };
 
@@ -73,13 +56,12 @@ const LiveCode: React.FC<LiveCodeProps> = ({
           <LivePreview className='live-preview' />
           <LiveError className='live-error' />
         </div>
-        {!editorHidden && (
-          <CollapsibleCodeBlock title={title} defaultCollapsed={defaultCollapsed}>
-            <div className='live-code-wrapper'>
-              <LiveEditor className='live-editor' />
-            </div>
-          </CollapsibleCodeBlock>
-        )}
+
+        <CollapsibleCodeBlock title={title}>
+          <div className='live-code-wrapper'>
+            <LiveEditor className='live-editor' />
+          </div>
+        </CollapsibleCodeBlock>
       </LiveProvider>
     </div>
   );
