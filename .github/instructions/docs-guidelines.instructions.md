@@ -1,5 +1,5 @@
 ---
-applyTo: 'docs/Components/*.mdx'
+applyTo: 'apps/docs/docs/Components/*.mdx'
 ---
 
 # Documentation Guidelines
@@ -30,30 +30,31 @@ Every component documentation page MUST follow this exact structure:
 - Any peer dependency notes
  
 ### 4. Live Demo
-- Interactive live example using the `LiveCode` component
-- Minimal working implementation showing core functionality
+- Single interactive example using the `LiveCode` component
+- Shows the most basic, minimal working implementation
+- Demonstrates core functionality only
+- Basic inline styles allowed for demonstration purposes (borders, padding for visibility)
+- Include accessibility features demonstration
+
+### 5. Code Examples
+- Multiple progressive examples without `LiveCode` component
+- Static code blocks using standard markdown syntax
 - Must be unstyled (headless) - no visual styling opinions
 - Include accessibility features demonstration
 - Progressive examples from basic to advanced
- 
-### 5. Features List
+- Use standard markdown code blocks with TypeScript syntax highlighting
+
+### 6. Features List
 - Bulleted list of key capabilities
 - Accessibility features highlighted
 - Keyboard interaction support
 - ARIA compliance notes
  
-### 6. Anatomy Diagram
+### 7. Anatomy Diagram
 - Visual component tree structure
 - Shows all compound component parts
 - Hierarchical relationship diagram
 - Data flow indicators where relevant
- 
-### 7. Core Features & Code Examples
-- **Basic Usage**: Minimal implementation with LiveCode
-- **Advanced Usage**: Complex scenarios
-- **Accessibility**: ARIA patterns and keyboard navigation
-- **Customization**: Render props, compound patterns
-- **Integration**: Common use cases with other components
  
 ### 8. API Reference Tables
 - **Root Component Props Table**
@@ -61,52 +62,48 @@ Every component documentation page MUST follow this exact structure:
 - **Event Handlers Table**
 - **Methods/Refs Table** (if applicable)
 - **Keyboard Interactions Table** (accessibility)
-- **CSS Custom Properties** (if any styling hooks exist)
  
 ## Content Rules
- 
+
 ### Writing Style
 - **Developer-First**: Technical accuracy over marketing copy
 - **Concise**: Clear, scannable content
 - **Action-Oriented**: Focus on what developers can do
 - **Inclusive**: Accessibility-first language
- 
-### Code Examples
-- **TypeScript**: All examples use TypeScript
-- **Headless**: No styling in examples
+
+### Live Demo Guidelines
+- **Single Example Only**: One basic interactive example using LiveCode
+- **Core Functionality**: Demonstrates primary component behavior
+- **Basic Inline Styles**: Minimal styles allowed for visibility
+- **Accessibility Demo**: Show one key accessibility feature
+- **Minimal Implementation**: Simplest working example possible
+
+### Code Examples Guidelines
+- **TypeScript**: All examples use TypeScript syntax
+- **Headless**: Completely unstyled - no visual styling opinions
+- **Standard Markdown**: Use triple backtick code blocks only
 - **Functional**: Real-world scenarios, not toy examples
 - **Accessible**: Demonstrate ARIA patterns and keyboard navigation
 - **Progressive**: Simple to complex examples
-- **Interactive**: Use LiveCode component for all executable examples
+- **No LiveCode**: Static examples only, no interactive components
 
- 
 ### Table Standards
-- **Props Table Columns**: Name, Type, Default, Required, Description
+- **Props Table Columns**: Name, Type, Default, Description
 - **Events Table Columns**: Name, Parameters, Description, When Triggered
 - **Methods Table Columns**: Name, Parameters, Returns, Description
 - **Keyboard Table Columns**: Key, Action, Context, Notes
 - **ARIA Table Columns**: Attribute, Value, Purpose, Applied To
 - **Clear Types**: Use exact TypeScript notation (e.g., `string | number | undefined`)
-- **Required Indicators**: Use ✅ for required, ❌ for optional
+- **Required Indicators**: Use TypeScript `?` syntax in Name column (`prop?` for optional)
 - **Default Values**: Show actual default values, use `undefined` when applicable
- 
+
 ## LiveCode Component Integration
  
-### Import Requirements
-Always import the LiveCode component at the top of your MDX documentation:
-
-```tsx
-import React from 'react';
-import LiveCode from '../../src/components/LiveCode';
-```
-
 ### LiveCode Props
 - `code`: String containing the example code to execute
 - `title`: Title for the collapsible code section (default: "Show Code")
-- `defaultCollapsed`: Whether code editor starts collapsed (default: true)
-- `editorHidden`: Hide the code editor completely (default: false)
 
-### LiveCode Usage Patterns
+### LiveCode Usage Pattern
 
 #### Basic Example
 ```tsx
@@ -121,73 +118,23 @@ import LiveCode from '../../src/components/LiveCode';
 />
 ```
 
-#### Advanced Example with State
-```tsx
-<LiveCode 
-  title="Advanced Implementation"
-  defaultCollapsed={false}
-  code={`function AdvancedExample() {
-  const [isOpen, setIsOpen] = React.useState(false);
-  
-  return (
-    <ComponentName.Root open={isOpen} onOpenChange={setIsOpen}>
-      <ComponentName.Trigger>
-        {isOpen ? 'Close' : 'Open'}
-      </ComponentName.Trigger>
-      <ComponentName.Content>
-        <ComponentName.Item>Item 1</ComponentName.Item>
-        <ComponentName.Item>Item 2</ComponentName.Item>
-      </ComponentName.Content>
-    </ComponentName.Root>
-  );
-}`}
-/>
-```
-
-#### Accessibility Demo
-```tsx
-<LiveCode 
-  title="Accessibility Features"
-  code={`function A11yExample() {
-  return (
-    <ComponentName.Root>
-      <ComponentName.Trigger 
-        aria-label="Open menu with 3 options"
-      >
-        Menu
-      </ComponentName.Trigger>
-      <ComponentName.Content role="menu">
-        <ComponentName.Item role="menuitem">
-          Option 1
-        </ComponentName.Item>
-        <ComponentName.Item role="menuitem">
-          Option 2
-        </ComponentName.Item>
-      </ComponentName.Content>
-    </ComponentName.Root>
-  );
-}`}
-/>
-```
-
 ### LiveCode Best Practices
-
 #### DO
-- ✅ Keep examples functional and behavior-focused
+- ✅ Keep the example minimal and focused on core functionality
 - ✅ Show real component interactions (state changes, events)
-- ✅ Demonstrate accessibility features
-- ✅ Use meaningful variable names
-- ✅ Include keyboard interaction examples
-- ✅ Progressive complexity (basic → advanced)
-- ✅ Focus on headless behavior only
+- ✅ Use basic inline styles only for visibility (borders, padding)
+- ✅ Demonstrate one key accessibility feature
+- ✅ Use meaningful but simple content
+- ✅ Show the most basic working implementation
 
 #### DON'T
-- ❌ Add any CSS styling or visual opinions
+- ❌ Show multiple variations or complex scenarios
+- ❌ Include advanced features or customization
+- ❌ Add complex styling or design opinions
+- ❌ Create multiple LiveCode examples
+- ❌ Include framework-specific patterns
 - ❌ Include theme or design system references
 - ❌ Use external styling libraries (Tailwind, styled-components)
-- ❌ Create overly complex examples for basic usage
-- ❌ Include non-functional or toy examples
-- ❌ Add visual styling even with inline styles
 
 ### Available Scope in LiveCode
 The LiveCode component provides these React utilities in scope:
@@ -211,32 +158,61 @@ const scope = {
   // etc.
 };
 ```
+## Code Examples Integration
 
-### LiveCode Error Handling
-The LiveCode component automatically displays errors in the preview area. Common error patterns:
+### Code Examples Usage Pattern
 
-- **Import Errors**: Component not in scope
-- **Syntax Errors**: Invalid JavaScript/JSX
-- **Runtime Errors**: Component crashes during execution
-- **Type Errors**: TypeScript compilation failures
+#### Standard Markdown Code Blocks
+Use triple backtick syntax for all static code examples:
 
-### LiveCode Styling Rules
-The LiveCode component automatically:
-- Renders examples in a bordered preview area
-- Provides collapsible code editor
-- Shows errors in red text
-- Maintains clean, minimal presentation
-- No custom styling should be added to examples
+```tsx
+function codeExample() {
+  return (
+    <ComponentName.Root>
+      <ComponentName.Trigger>
+        Click me
+      </ComponentName.Trigger>
+      <ComponentName.Content>
+        Basic content
+      </ComponentName.Content>
+    </ComponentName.Root>
+  );
+}
+```
+
+### Code Examples Best Practices
+
+#### DO for Code Examples
+- ✅ Use TypeScript syntax highlighting (`tsx`)
+- ✅ Show progressive complexity across examples
+- ✅ Include comprehensive accessibility patterns
+- ✅ Demonstrate real-world usage scenarios
+- ✅ Keep examples functional and behavior-focused
+- ✅ Show state management patterns
+- ✅ Include keyboard interaction examples
+- ✅ Add meaningful variable names and comments
+- ✅ Demonstrate error states and loading states
+
+#### DON'T for Code Examples
+- ❌ Add any styling (completely headless)
+- ❌ Include LiveCode component (static only)
+- ❌ Use external styling libraries
+- ❌ Add visual design opinions
+- ❌ Include theme or design system references
+- ❌ Create non-functional or toy examples
+- ❌ Skip error handling in complex examples
+- ❌ Ignore accessibility patterns
 
 ## File Naming & Structure
- 
+
 ```
-docs/Components/{ComponentName}.md
+apps/docs/docs/Components/{ComponentName}.mdx
 ```
  
 - Use PascalCase for component names
 - Match the actual component name exactly
-- Place in `/docs/Components/` directory
+- Place in `/apps/docs/docs/Components/` directory
+- Use `.mdx` extension for LiveCode integration
  
 ## Template Structure
  
@@ -249,6 +225,7 @@ description: [Brief description for SEO]
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import CodeBlock from '@theme/CodeBlock';
  
 # [ComponentName]
  
@@ -309,90 +286,75 @@ import { [ComponentName] } from '@turkishtechnology/glide'
   </ComponentName.Content>
 </ComponentName.Root>
 ```
- 
-## Examples
- 
-### Basic Usage
- 
-[Simple, minimal example]
- 
-### Advanced Usage
- 
-[Complex scenario examples]
- 
-### Accessibility Features
- 
-[Demonstrate ARIA patterns and keyboard navigation]
- 
+
+## Code Examples
+
+[Generate sections only for features that actually exist]
+
 ## API Reference
- 
-### ComponentName.Root
- 
-[Props table]
- 
-### ComponentName.Trigger
- 
-[Props table]
- 
-### ComponentName.Content
- 
-[Props table]
- 
-### Events
- 
-[Events table]
- 
-### Methods
- 
-[Methods table if applicable]
+
+**EVERY compound component part must have its own dedicated section with complete documentation:**
+
+[Document only actual compound parts and their real props/events/methods]
+
 ```
 
 ## Documentation Requirements
  
+### MUST Include FOR EACH COMPOUND PART
+- **Complete Props Table**: All props with exact TypeScript types
+- **Complete Events Table**: All event handlers with parameters
+- **Complete Keyboard Table**: All keyboard interactions for that part
+- **Complete ARIA Table**: All accessibility attributes for that part
+- **Individual Sections**: Each compound part gets its own dedicated section
+
 ### MUST Include
 - All compound component parts documented
-- Complete TypeScript types in tables
-- Accessibility implementation details
-- Keyboard navigation instructions
-- ARIA attributes explanation
-- Real-world code examples using LiveCode component
-- Installation and import instructions
+- Real TypeScript types from component interfaces
+- Actual accessibility implementation
+- Real keyboard navigation that exists
+- Verified ARIA attributes that are applied
+- Working code examples using actual component features
  
 ### MUST NOT Include
-- Styling examples or CSS
-- Visual design opinions
 - Framework-specific styling solutions
 - Theme or design system references
 - Marketing language or sales copy
  
+### Quality Checklist FOR EACH COMPOUND PART
+- [ ] Props table with all actual props and exact TypeScript types
+- [ ] Events table with all actual event handlers and parameters  
+- [ ] Keyboard interactions table with all actual keyboard behaviors
+- [ ] ARIA attributes table with all actual accessibility attributes
+- [ ] Required props clearly marked with TypeScript `?` syntax
+- [ ] Default values showing actual defaults from implementation
+- [ ] Complete documentation for every compound part that exists
+
 ### Quality Checklist
-- [ ] All props documented with correct TypeScript types
-- [ ] Required props clearly marked
-- [ ] Event handlers documented with parameters
 - [ ] Accessibility features explained
 - [ ] Code examples are functional and headless
 - [ ] Installation instructions are accurate
 - [ ] Component anatomy diagram is clear
-- [ ] Live demos work without styling dependencies
-- [ ] Keyboard interactions table is complete
- 
+
 ## Documentation Workflow
- 
-1. **Create Base Structure**: Use the template above
-2. **Component Analysis**: Examine the component's TypeScript interface
-3. **Feature Documentation**: List all behavioral capabilities
-4. **LiveCode Examples**: Create progressive examples using the LiveCode component
-5. **API Documentation**: Generate complete tables from TypeScript types
-6. **Accessibility Audit**: Document all a11y features and patterns
-7. **Review & Validate**: Ensure examples work and types are accurate
- 
+1. **Component Analysis**: Examine actual TypeScript interfaces and implementation
+2. **Create Base Structure**: Use template with actual component details
+3. **Feature Documentation**: List only behavioral capabilities that exist
+4. **LiveCode Demo**: Single example using actual component API
+5. **Code Examples**: Progressive examples using actual component features
+6. **API Documentation**: Generate complete tables from TypeScript types
+7. **Accessibility Audit**: Document only implemented a11y features
+8. **Review & Validate**: Ensure examples work and types are accurate
+
 ## Special Considerations
  
-### Compound Components
-- Document each part separately
-- Show hierarchical relationships
-- Explain data flow between parts
-- Include composition examples
+### Compound Components Documentation Strategy
+- **Analyze component structure**: Identify all compound parts (Root, Trigger, Content, Item, etc.)
+- **Document each part separately**: Every compound part gets its own section
+- **Complete table coverage**: Each part needs Props, Events, Keyboard, ARIA tables
+- **Real implementation**: Only document compound parts and features that actually exist
+- **Progressive complexity**: Start with Root, then child parts in logical order
+
  
 ### Accessibility Documentation
 - Always include keyboard interaction table
