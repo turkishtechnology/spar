@@ -17,26 +17,32 @@ Every component documentation page MUST follow this exact structure:
 - One-sentence description of the component's purpose
 - Badge indicators (accessibility, tree-shakeable, etc.)
  
-### 2. Component Description
-- Detailed explanation of what the component does
-- Use cases and scenarios where it's most effective
-- Key behavioral characteristics
-- Design principles it follows
- 
-### 3. Installation
-- Package installation commands
-- Import statements
-- Basic setup requirements
-- Any peer dependency notes
- 
-### 4. Live Demo
+### 2. Live Demo
 - Single interactive example using the `LiveCode` component
 - Shows the most basic, minimal working implementation
 - Demonstrates core functionality only
 - Basic inline styles allowed for demonstration purposes (borders, padding for visibility)
 - Include accessibility features demonstration
 
-### 5. Code Examples
+### 3. Features List
+- Bulleted list of key capabilities
+- Accessibility features highlighted
+- Keyboard interaction support
+- ARIA compliance notes
+
+### 4. Installation
+- Package installation commands
+- Import statements
+- Basic setup requirements
+- Any peer dependency notes
+
+### 5. Anatomy Diagram
+- Visual component tree structure
+- Shows all compound component parts
+- Hierarchical relationship diagram
+- Data flow indicators where relevant
+
+### 6. Code Examples
 - Multiple progressive examples without `LiveCode` component
 - Static code blocks using standard markdown syntax
 - Must be unstyled (headless) - no visual styling opinions
@@ -44,19 +50,7 @@ Every component documentation page MUST follow this exact structure:
 - Progressive examples from basic to advanced
 - Use standard markdown code blocks with TypeScript syntax highlighting
 
-### 6. Features List
-- Bulleted list of key capabilities
-- Accessibility features highlighted
-- Keyboard interaction support
-- ARIA compliance notes
- 
-### 7. Anatomy Diagram
-- Visual component tree structure
-- Shows all compound component parts
-- Hierarchical relationship diagram
-- Data flow indicators where relevant
- 
-### 8. API Reference Tables
+### 7. API Reference Tables
 - **Root Component Props Table**
 - **Child Component Props Tables** (for each compound part)
 - **Event Handlers Table**
@@ -86,6 +80,7 @@ Every component documentation page MUST follow this exact structure:
 - **Accessible**: Demonstrate ARIA patterns and keyboard navigation
 - **Progressive**: Simple to complex examples
 - **No LiveCode**: Static examples only, no interactive components
+- **Description**: Detailed code example explanation
 
 ### Table Standards
 - **Props Table Columns**: Name, Type, Default, Description
@@ -231,22 +226,6 @@ import LiveCode from '../../src/components/LiveCode';
  
 ![Accessibility Badge] ![Tree-shakeable Badge] ![TypeScript Badge]
  
-## Description
- 
-[Detailed component description, use cases, and design principles]
- 
-## Installation
- 
-```bash
-pnpm add @turkishtechnology/glide
-npm install @turkishtechnology/glide
-yarn add @turkishtechnology/glide
-```
- 
-```tsx
-import { [ComponentName] } from '@turkishtechnology/glide'
-```
- 
 ## Live Demo
  
 <LiveCode 
@@ -271,6 +250,18 @@ import { [ComponentName] } from '@turkishtechnology/glide'
 - ✅ Full keyboard navigation
 - ✅ ARIA compliance
 - ✅ [Additional features...]
+
+## Installation
+ 
+```bash
+pnpm add @turkish-technology/glide
+npm install @turkish-technology/glide
+yarn add @turkish-technology/glide
+```
+ 
+```tsx
+import { [ComponentName] } from '@turkish-technology/glide'
+```
  
 ## Anatomy
  

@@ -22,21 +22,19 @@ Generate documentation for **${input:ComponentName:Button}** component.
 
 1. **Component Name & Brief Description**
    - Title, one-sentence purpose, badges (accessibility, tree-shakeable, TypeScript)
-2. **Component Description**
-   - Detailed explanation, use cases, design principles
-3. **Installation**
-   - pnpm install command, import statement, peer dependencies if any
-4. **Live Demo**
+2. **Live Demo**
    - Single interactive LiveCode example (minimal, accessibility demonstrated)
-5. **Features List**
+3. **Features List**
    - Bulleted list of actual capabilities, accessibility, keyboard support, ARIA compliance
-6. **Anatomy Diagram**
+4. **Installation**
+   - pnpm install command, import statement, peer dependencies if any
+5. **Anatomy Diagram**
    - Component tree structure, all compound parts, hierarchy, data flow
-7. **Code Examples**
+6. **Code Examples**
    - Multiple progressive, static TypeScript code blocks (unstyled, headless, accessible, real-world scenarios)
-8. **API Reference Tables**
+6. **API Reference Tables**
    - For EACH compound part: Props, Events, ARIA tables (exact TypeScript types, actual defaults, required indicators)
-9. **Keyboard Interactions**
+7. **Keyboard Interactions**
    - Global keyboard behavior table for the entire component
 
 ## Requirements
@@ -65,7 +63,7 @@ Create documentation at: `apps/docs/docs/Components/${ComponentName}.mdx`
 
 ## Success Criteria
 
-- **Structure Compliance**: Follows 8-section structure exactly
+- **Structure Compliance**: Follows 7-section structure exactly
 - **Compound Documentation**: All compound parts documented separately
 - **LiveCode Functionality**: Example renders correctly
 - **Headless Implementation**: No styling opinions
