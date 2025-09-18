@@ -19,6 +19,7 @@
     "isolatedModules": true,
     "noEmit": false,
     "jsx": "react-jsx",
+    "jsxImportSource": "react",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
@@ -26,12 +27,12 @@
     "removeComments": false,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "react": ["./node_modules/@types/react"]
+      "@/*": ["./src/*"]
     },
-    "types": ["jest", "@testing-library/jest-dom", "jest-axe"]
+    "types": [],
+    "typeRoots": ["./node_modules/@types", "../../node_modules/@types"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/types/react.d.ts"],
   "exclude": [
     "node_modules",
     "dist",
