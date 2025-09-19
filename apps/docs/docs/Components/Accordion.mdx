@@ -1,0 +1,410 @@
+---
+sidebar_position: 1
+title: Accordion
+description: A headless accordion component that supports single and multiple panel expansion with full keyboard navigation and accessibility.
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+
+# Accordion
+
+A collapsible content component that supports single or multiple panel expansion with keyboard navigation and full accessibility support.
+
+![Accessibility Badge](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-Yes-blue) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-Strict-blue)
+
+## Live Demo
+
+<LiveCode
+  title='Show Code'
+  code={`function BasicAccordion() {
+  return (
+    <Accordion.Root type="single" isCollapsible style={{ border: '1px solid #ccc', borderRadius: '4px' }}>
+      <Accordion.Item value="item-1" style={{ borderBottom: '1px solid #eee' }}>
+        <Accordion.Header>
+          <Accordion.Trigger style={{ width: '100%', padding: '12px 16px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}>
+            What is accessibility?
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content style={{ padding: '12px 16px', background: '#f9f9f9' }}>
+          Accessibility means designing and building products that can be used by people with disabilities. This includes considerations for vision, hearing, mobility, and cognitive differences.
+        </Accordion.Content>
+      </Accordion.Item>
+      
+      <Accordion.Item value="item-2" style={{ borderBottom: '1px solid #eee' }}>
+        <Accordion.Header>
+          <Accordion.Trigger style={{ width: '100%', padding: '12px 16px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}>
+            Why use headless components?
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content style={{ padding: '12px 16px', background: '#f9f9f9' }}>
+          Headless components provide behavior and accessibility without visual styling, giving you complete control over the appearance while ensuring proper functionality.
+        </Accordion.Content>
+      </Accordion.Item>
+      
+      <Accordion.Item value="item-3">
+        <Accordion.Header>
+          <Accordion.Trigger style={{ width: '100%', padding: '12px 16px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}>
+            How does keyboard navigation work?
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content style={{ padding: '12px 16px', background: '#f9f9f9' }}>
+          Use Arrow keys to navigate between accordion triggers, Enter or Space to expand/collapse panels, and Tab to navigate to focusable content within expanded panels.
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}`}
+/>
+
+## Features
+
+- ✅ Single or multiple panel expansion modes
+- ✅ Controlled and uncontrolled state management
+- ✅ Optional collapsible behavior for single mode
+- ✅ Comprehensive keyboard navigation with arrow keys
+- ✅ Screen reader support with proper ARIA attributes
+- ✅ Focus management and visual focus indicators
+- ✅ Disabled state support for individual items or entire accordion
+- ✅ Semantic heading structure with configurable levels
+- ✅ Horizontal and vertical orientation support
+- ✅ Polymorphic component support with `as` prop
+- ✅ Force mount option for content preservation
+
+## Installation
+
+```tsx
+import { Accordion } from '@turkish-technology/glide';
+```
+
+## Anatomy
+
+The Accordion component consists of a root container with multiple collapsible items, each containing a header with trigger button and expandable content panel.
+
+```tsx
+<Accordion.Root>
+  <Accordion.Item>
+    <Accordion.Header>
+      <Accordion.Trigger />
+    </Accordion.Header>
+    <Accordion.Content />
+  </Accordion.Item>
+  <Accordion.Item>
+    <Accordion.Header>
+      <Accordion.Trigger />
+    </Accordion.Header>
+    <Accordion.Content />
+  </Accordion.Item>
+</Accordion.Root>
+```
+
+## Code Examples
+
+### Basic Single Panel Accordion
+
+Basic accordion that allows only one panel to be expanded at a time:
+
+```tsx
+function SingleAccordion() {
+  return (
+    <Accordion.Root type='single' isCollapsible defaultValue='item-1'>
+      <Accordion.Item value='item-1'>
+        <Accordion.Header>
+          <Accordion.Trigger>Section 1</Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content>Content for the first section</Accordion.Content>
+      </Accordion.Item>
+
+      <Accordion.Item value='item-2'>
+        <Accordion.Header>
+          <Accordion.Trigger>Section 2</Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content>Content for the second section</Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+```
+
+### Multiple Panel Expansion
+
+Accordion that allows multiple panels to be expanded simultaneously:
+
+```tsx
+function MultipleAccordion() {
+  return (
+    <Accordion.Root type='multiple' defaultValue={['item-1', 'item-3']}>
+      <Accordion.Item value='item-1'>
+        <Accordion.Header>
+          <Accordion.Trigger>Always Expanded Section</Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content>This section starts expanded</Accordion.Content>
+      </Accordion.Item>
+
+      <Accordion.Item value='item-2'>
+        <Accordion.Header>
+          <Accordion.Trigger>Collapsed Section</Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content>This section starts collapsed</Accordion.Content>
+      </Accordion.Item>
+
+      <Accordion.Item value='item-3'>
+        <Accordion.Header>
+          <Accordion.Trigger>Another Expanded Section</Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content>This section also starts expanded</Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+```
+
+### Controlled State Management
+
+Accordion with external state control and change handling:
+
+```tsx
+function ControlledAccordion() {
+  const [value, setValue] = useState<string>('');
+
+  return (
+    <div>
+      <p>Current expanded: {value || 'none'}</p>
+      <button onClick={() => setValue('item-2')}>Expand Section 2</button>
+
+      <Accordion.Root type='single' value={value} onValueChange={setValue}>
+        <Accordion.Item value='item-1'>
+          <Accordion.Header>
+            <Accordion.Trigger>Section 1</Accordion.Trigger>
+          </Accordion.Header>
+          <Accordion.Content>First section content</Accordion.Content>
+        </Accordion.Item>
+
+        <Accordion.Item value='item-2'>
+          <Accordion.Header>
+            <Accordion.Trigger>Section 2</Accordion.Trigger>
+          </Accordion.Header>
+          <Accordion.Content>Second section content</Accordion.Content>
+        </Accordion.Item>
+      </Accordion.Root>
+    </div>
+  );
+}
+```
+
+### Custom Heading Levels and Disabled Items
+
+Accordion with proper heading hierarchy and disabled states:
+
+```tsx
+function CustomAccordion() {
+  return (
+    <Accordion.Root type='single' isCollapsible>
+      <Accordion.Item value='item-1'>
+        <Accordion.Header level={2}>
+          <Accordion.Trigger>Main Section (H2)</Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content>Main content with proper heading hierarchy</Accordion.Content>
+      </Accordion.Item>
+
+      <Accordion.Item value='item-2' isDisabled>
+        <Accordion.Header level={2}>
+          <Accordion.Trigger>Disabled Section (H2)</Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content>This content cannot be accessed</Accordion.Content>
+      </Accordion.Item>
+
+      <Accordion.Item value='item-3'>
+        <Accordion.Header level={2}>
+          <Accordion.Trigger>Another Section (H2)</Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content>More content at the same level</Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+```
+
+### Horizontal Orientation
+
+Accordion with horizontal keyboard navigation:
+
+```tsx
+function HorizontalAccordion() {
+  return (
+    <Accordion.Root type='single' isCollapsible orientation='horizontal'>
+      <Accordion.Item value='tab-1'>
+        <Accordion.Header>
+          <Accordion.Trigger>Tab 1</Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content>Content for horizontal tab 1</Accordion.Content>
+      </Accordion.Item>
+
+      <Accordion.Item value='tab-2'>
+        <Accordion.Header>
+          <Accordion.Trigger>Tab 2</Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content>Content for horizontal tab 2</Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
+}
+```
+
+## API Reference
+
+### Accordion.Root
+
+The root container that provides context and manages the state for all accordion items within it.
+
+**Props**
+
+| Name             | Type                                  | Default      | Description                                            |
+| ---------------- | ------------------------------------- | ------------ | ------------------------------------------------------ |
+| `type?`          | `"single" \| "multiple"`              | `"single"`   | Whether single or multiple panels can be expanded      |
+| `isCollapsible?` | `boolean`                             | `false`      | Whether panels can be collapsed (only for single type) |
+| `value?`         | `string \| string[]`                  | `undefined`  | Controlled state - single value or array for multiple  |
+| `defaultValue?`  | `string \| string[]`                  | `undefined`  | Uncontrolled initial state                             |
+| `onValueChange?` | `(value: string \| string[]) => void` | `undefined`  | Callback when state changes                            |
+| `isDisabled?`    | `boolean`                             | `false`      | Disables all accordion items                           |
+| `orientation?`   | `"vertical" \| "horizontal"`          | `"vertical"` | Orientation for keyboard navigation                    |
+| `as?`            | `React.ElementType`                   | `"div"`      | Polymorphic component type                             |
+| `children`       | `React.ReactNode`                     | -            | AccordionItem components                               |
+
+**Events**
+
+| Name            | Parameters                    | Description                               | When Triggered                          |
+| --------------- | ----------------------------- | ----------------------------------------- | --------------------------------------- |
+| `onValueChange` | `(value: string \| string[])` | State changes when panels expand/collapse | User interaction or programmatic change |
+
+**ARIA Attributes**
+
+| Attribute          | Value                        | Purpose                          | Applied To   |
+| ------------------ | ---------------------------- | -------------------------------- | ------------ |
+| `role`             | `"region"`                   | Groups related accordion items   | Root element |
+| `data-orientation` | `"vertical" \| "horizontal"` | Indicates navigation orientation | Root element |
+
+### Accordion.Item
+
+Individual accordion item that contains a header and content panel.
+
+**Props**
+
+| Name          | Type                | Default | Description                                     |
+| ------------- | ------------------- | ------- | ----------------------------------------------- |
+| `value`       | `string`            | -       | Unique identifier for the item                  |
+| `isDisabled?` | `boolean`           | `false` | Disables this specific item                     |
+| `as?`         | `React.ElementType` | `"div"` | Polymorphic component type                      |
+| `children`    | `React.ReactNode`   | -       | AccordionHeader and AccordionContent components |
+
+**Events**
+
+| Name | Parameters | Description                                 | When Triggered |
+| ---- | ---------- | ------------------------------------------- | -------------- |
+| None | -          | Item manages internal state through context | -              |
+
+**ARIA Attributes**
+
+| Attribute       | Value                | Purpose                   | Applied To                 |
+| --------------- | -------------------- | ------------------------- | -------------------------- |
+| `data-state`    | `"open" \| "closed"` | Indicates expansion state | Item element               |
+| `data-disabled` | `boolean`            | Indicates disabled state  | Item element when disabled |
+
+### Accordion.Header
+
+Semantic heading wrapper for the accordion trigger button.
+
+**Props**
+
+| Name       | Type                | Default | Description                                  |
+| ---------- | ------------------- | ------- | -------------------------------------------- |
+| `level?`   | `number`            | `3`     | Heading level (1-6) for document hierarchy   |
+| `as?`      | `React.ElementType` | `"h3"`  | Polymorphic component type (heading element) |
+| `children` | `React.ReactNode`   | -       | AccordionTrigger component                   |
+
+**Events**
+
+| Name | Parameters | Description               | When Triggered |
+| ---- | ---------- | ------------------------- | -------------- |
+| None | -          | Header is purely semantic | -              |
+
+**ARIA Attributes**
+
+| Attribute    | Value       | Purpose                       | Applied To     |
+| ------------ | ----------- | ----------------------------- | -------------- |
+| `role`       | `"heading"` | Identifies as heading element | Header element |
+| `aria-level` | `number`    | Specifies heading level       | Header element |
+
+### Accordion.Trigger
+
+Button that toggles the visibility of the associated content panel.
+
+**Props**
+
+| Name         | Type                                   | Default     | Description                    |
+| ------------ | -------------------------------------- | ----------- | ------------------------------ |
+| `as?`        | `React.ElementType`                    | `"button"`  | Polymorphic component type     |
+| `children`   | `React.ReactNode`                      | -           | Trigger content (heading text) |
+| `onClick?`   | `(event: React.MouseEvent) => void`    | `undefined` | Custom click handler           |
+| `onKeyDown?` | `(event: React.KeyboardEvent) => void` | `undefined` | Custom keydown handler         |
+
+**Events**
+
+| Name        | Parameters                     | Description            | When Triggered         |
+| ----------- | ------------------------------ | ---------------------- | ---------------------- |
+| `onClick`   | `(event: React.MouseEvent)`    | Trigger clicked        | Mouse click on trigger |
+| `onKeyDown` | `(event: React.KeyboardEvent)` | Key pressed on trigger | Keyboard interaction   |
+
+**ARIA Attributes**
+
+| Attribute       | Value     | Purpose                          | Applied To                    |
+| --------------- | --------- | -------------------------------- | ----------------------------- |
+| `aria-expanded` | `boolean` | Indicates if content is expanded | Trigger element               |
+| `aria-controls` | `string`  | References controlled content ID | Trigger element               |
+| `aria-disabled` | `boolean` | Indicates disabled state         | Trigger element when disabled |
+| `id`            | `string`  | Unique identifier for trigger    | Trigger element               |
+
+### Accordion.Content
+
+Collapsible panel containing the accordion item content.
+
+**Props**
+
+| Name          | Type                | Default | Description                                    |
+| ------------- | ------------------- | ------- | ---------------------------------------------- |
+| `forceMount?` | `boolean`           | `false` | Force content to remain mounted when collapsed |
+| `as?`         | `React.ElementType` | `"div"` | Polymorphic component type                     |
+| `children`    | `React.ReactNode`   | -       | Panel content                                  |
+
+**Events**
+
+| Name | Parameters | Description                           | When Triggered |
+| ---- | ---------- | ------------------------------------- | -------------- |
+| None | -          | Content visibility managed by context | -              |
+
+**ARIA Attributes**
+
+| Attribute         | Value                | Purpose                           | Applied To      |
+| ----------------- | -------------------- | --------------------------------- | --------------- |
+| `role`            | `"region"`           | Identifies as content region      | Content element |
+| `aria-labelledby` | `string`             | References controlling trigger ID | Content element |
+| `id`              | `string`             | Unique identifier for content     | Content element |
+| `data-state`      | `"open" \| "closed"` | Indicates visibility state        | Content element |
+
+## Keyboard Interactions
+
+Complete keyboard behavior for the accordion component:
+
+| Key           | Action            | Context                      | Notes                                              |
+| ------------- | ----------------- | ---------------------------- | -------------------------------------------------- |
+| `Tab`         | Navigate          | Always                       | Moves focus to next focusable element in DOM order |
+| `Shift + Tab` | Navigate backward | Always                       | Moves focus to previous focusable element          |
+| `Enter`       | Toggle panel      | Focused trigger              | Expands/collapses the associated panel             |
+| `Space`       | Toggle panel      | Focused trigger              | Alternative activation method for triggers         |
+| `ArrowDown`   | Next trigger      | Focused trigger (vertical)   | Moves focus to next accordion trigger              |
+| `ArrowUp`     | Previous trigger  | Focused trigger (vertical)   | Moves focus to previous accordion trigger          |
+| `ArrowRight`  | Next trigger      | Focused trigger (horizontal) | Moves focus to next accordion trigger              |
+| `ArrowLeft`   | Previous trigger  | Focused trigger (horizontal) | Moves focus to previous accordion trigger          |
+| `Home`        | First trigger     | Focused trigger              | Moves focus to first accordion trigger             |
+| `End`         | Last trigger      | Focused trigger              | Moves focus to last accordion trigger              |
+| `Escape`      | No action         | Any context                  | Reserved for potential future use                  |
