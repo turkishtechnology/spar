@@ -25,16 +25,20 @@ Every component documentation page MUST follow this exact structure:
 - Include accessibility features demonstration
 
 ### 3. Features List
-- Bulleted list of key capabilities
-- Accessibility features highlighted
-- Keyboard interaction support
-- ARIA compliance notes
+- Bulleted list of component specific actual capabilities
+
+#### DO
+- ✅ Functional features
+
+#### DON'T
+- ❌ Keyboard navigation
+- ❌ Accecbility features
+- ❌ Aria and Data attributes
+- ❌ Zero styling and styling hooks
+- ❌ Compound component
 
 ### 4. Installation
-- Package installation commands
 - Import statements
-- Basic setup requirements
-- Any peer dependency notes
 
 ### 5. Anatomy Diagram
 - Visual component tree structure
@@ -247,17 +251,9 @@ import LiveCode from '../../src/components/LiveCode';
  
 - ✅ [Feature 1]
 - ✅ [Feature 2]
-- ✅ Full keyboard navigation
-- ✅ ARIA compliance
-- ✅ [Additional features...]
+- ✅ [Additional Component Spesification features...]
 
 ## Installation
- 
-```bash
-pnpm add @turkish-technology/glide
-npm install @turkish-technology/glide
-yarn add @turkish-technology/glide
-```
  
 ```tsx
 import { [ComponentName] } from '@turkish-technology/glide'

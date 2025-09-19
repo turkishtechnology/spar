@@ -25,7 +25,8 @@ Generate documentation for **${input:ComponentName:Button}** component.
 2. **Live Demo**
    - Single interactive LiveCode example (minimal, accessibility demonstrated)
 3. **Features List**
-   - Bulleted list of actual capabilities, accessibility, keyboard support, ARIA compliance
+   - Bulleted list of component specific actual capabilities
+   - Pay attention to the do's and don'ts
 4. **Installation**
    - pnpm install command, import statement, peer dependencies if any
 5. **Anatomy Diagram**
