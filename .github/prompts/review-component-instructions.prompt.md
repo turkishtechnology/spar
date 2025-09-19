@@ -1,6 +1,6 @@
 ---
 mode: agent
-model: claude-4.1-opus
+model: Claude Sonnet 4 (copilot)
 description: Comprehensive review of Glide component instruction files against accessibility and headless standards
 ---
 
@@ -22,7 +22,7 @@ Use Context7 MCP or web search for up-to-date sources.
 
 ## Phase 2: Component Instructions Analysis
 
-Review the component instructions file `.github/instructions/components/${ComponentName}.md`:
+Examine `packages/glide/src/components/${ComponentName}/` and `.github/instructions/components/${component-name}.md`:
 
 ### 1. Instruction Template Conformance
 
