@@ -15,6 +15,11 @@
       "inputs": ["$TURBO_DEFAULT$", ".eslintrc*", "eslint.config.*"],
       "outputs": []
     },
+    "lint:fix": {
+      "dependsOn": ["^lint:fix"],
+      "inputs": ["$TURBO_DEFAULT$", ".eslintrc*", "eslint.config.*"],
+      "outputs": []
+    },
     "check-types": {
       "dependsOn": ["^check-types"],
       "inputs": ["$TURBO_DEFAULT$", "tsconfig.json"],
