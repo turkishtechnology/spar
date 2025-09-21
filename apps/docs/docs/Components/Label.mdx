@@ -1,0 +1,418 @@
+---
+sidebar_position: 1
+title: Label
+description: Accessible form labels with indicators, variants, and compound composition support
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+
+# Label
+
+Accessible form labels with indicators, variants, and compound composition support.
+
+![Accessibility Badge](https://img.shields.io/badge/accessibility-WCAG%202.2%20AA-green) ![Tree-shakeable Badge](https://img.shields.io/badge/tree--shakeable-yes-brightgreen) ![TypeScript Badge](https://img.shields.io/badge/typescript-included-blue)
+
+## Live Demo
+
+<LiveCode 
+  code={`function BasicExample() {
+  return (
+    <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
+      <LabelRoot htmlFor="email-input" isRequired>
+        Email Address
+      </LabelRoot>
+      <input 
+        id="email-input" 
+        type="email" 
+        style={{ 
+          marginTop: '8px', 
+          padding: '8px', 
+          border: '1px solid #ccc', 
+          borderRadius: '4px',
+          width: '100%' 
+        }} 
+        aria-required="true"
+      />
+    </div>
+  );
+}`}
+/>
+
+## Features
+
+- ✅ Polymorphic rendering for flexible HTML structure
+- ✅ Built-in required field indicators with screen reader support
+- ✅ Loading states with live region announcements
+- ✅ Multiple size and variant options
+- ✅ Compound component architecture for complex compositions
+- ✅ Form association support via `htmlFor` attribute
+- ✅ Disabled state handling
+- ✅ Custom indicator content support
+
+## Installation
+
+```tsx
+import { Label, LabelRoot, LabelText, LabelIndicator } from '@turkish-technology/glide'
+```
+
+## Anatomy
+
+The Label component follows a compound pattern with three main parts:
+
+```tsx
+<LabelRoot>
+  <LabelText />
+  <LabelIndicator />
+</LabelRoot>
+```
+
+- **LabelRoot**: Main container with form association and state management
+- **LabelText**: Text content wrapper for complex compositions  
+- **LabelIndicator**: Required, loading, or custom status indicators
+
+## Code Examples
+
+### Basic Form Label
+
+Simple label with form control association:
+
+```tsx
+function BasicLabel() {
+  return (
+    <div>
+      <LabelRoot htmlFor="username">Username</LabelRoot>
+      <input id="username" type="text" />
+    </div>
+  );
+}
+```
+
+### Required Field with Indicator
+
+Label with required field indicator and proper ARIA attributes:
+
+```tsx
+function RequiredField() {
+  return (
+    <div>
+      <LabelRoot htmlFor="email" isRequired>
+        Email Address
+      </LabelRoot>
+      <input 
+        id="email" 
+        type="email" 
+        aria-required="true" 
+      />
+    </div>
+  );
+}
+```
+
+### Loading State with Accessibility
+
+Loading indicator with screen reader announcements:
+
+```tsx
+function LoadingLabel() {
+  const [isValidating, setIsValidating] = React.useState(false);
+  
+  return (
+    <div>
+      <LabelRoot 
+        htmlFor="validation-input" 
+        isLoading={isValidating}
+        loadingText="Validating input..."
+      >
+        Validation Field
+      </LabelRoot>
+      <input 
+        id="validation-input" 
+        type="text"
+        aria-busy={isValidating}
+      />
+      <button onClick={() => setIsValidating(!isValidating)}>
+        Toggle Validation
+      </button>
+    </div>
+  );
+}
+```
+
+### Size and Variant Options
+
+Different visual presentations for labels:
+
+```tsx
+function VariantExamples() {
+  return (
+    <div>
+      {/* Size variants */}
+      <LabelRoot size="xs">Extra Small Label</LabelRoot>
+      <LabelRoot size="sm">Small Label</LabelRoot>
+      <LabelRoot size="md">Medium Label</LabelRoot>
+      <LabelRoot size="lg">Large Label</LabelRoot>
+      <LabelRoot size="xl">Extra Large Label</LabelRoot>
+      
+      {/* Visual variants */}
+      <LabelRoot variant="default">Default Label</LabelRoot>
+      <LabelRoot variant="primary">Primary Label</LabelRoot>
+      <LabelRoot variant="secondary">Secondary Label</LabelRoot>
+      <LabelRoot variant="danger">Danger Label</LabelRoot>
+      <LabelRoot variant="warning">Warning Label</LabelRoot>
+      <LabelRoot variant="success">Success Label</LabelRoot>
+    </div>
+  );
+}
+```
+
+### Compound Component Composition
+
+Complex label structures with multiple content areas:
+
+```tsx
+function CompoundLabel() {
+  return (
+    <LabelRoot htmlFor="file-upload">
+      <LabelText>Upload Document</LabelText>
+      <LabelIndicator type="required" />
+      <LabelText as="small"> (PDF, DOC, or TXT files only)</LabelText>
+    </LabelRoot>
+  );
+}
+```
+
+### Polymorphic Rendering
+
+Label as different HTML elements for various contexts:
+
+```tsx
+function PolymorphicExamples() {
+  return (
+    <div>
+      {/* As fieldset legend */}
+      <fieldset>
+        <LabelRoot as="legend">Personal Information</LabelRoot>
+        <input type="text" placeholder="First Name" />
+        <input type="text" placeholder="Last Name" />
+      </fieldset>
+      
+      {/* As section header */}
+      <LabelRoot as="h3">Account Settings</LabelRoot>
+      
+      {/* As paragraph text */}
+      <LabelRoot as="p">
+        This field is optional but recommended for better security.
+      </LabelRoot>
+    </div>
+  );
+}
+```
+
+### Form Integration with Validation
+
+Complete form workflow with validation states:
+
+```tsx
+function FormIntegration() {
+  const [formData, setFormData] = React.useState({
+    email: '',
+    password: ''
+  });
+  const [errors, setErrors] = React.useState({});
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newErrors = {};
+    
+    if (!formData.email.includes('@')) {
+      newErrors.email = 'Please enter a valid email';
+    }
+    if (formData.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters';
+    }
+    
+    setErrors(newErrors);
+  };
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <LabelRoot htmlFor="form-email" isRequired>
+          Email Address
+        </LabelRoot>
+        <input
+          id="form-email"
+          type="email"
+          value={formData.email}
+          onChange={(e) => setFormData({...formData, email: e.target.value})}
+          aria-required="true"
+          aria-invalid={!!errors.email}
+          aria-describedby={errors.email ? 'email-error' : undefined}
+        />
+        {errors.email && (
+          <div id="email-error" role="alert">
+            {errors.email}
+          </div>
+        )}
+      </div>
+      
+      <div>
+        <LabelRoot htmlFor="form-password" isRequired>
+          Password
+        </LabelRoot>
+        <input
+          id="form-password"
+          type="password"
+          value={formData.password}
+          onChange={(e) => setFormData({...formData, password: e.target.value})}
+          aria-required="true"
+          aria-invalid={!!errors.password}
+        />
+        {errors.password && (
+          <div role="alert">{errors.password}</div>
+        )}
+      </div>
+      
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+### Checkbox and Radio Button Labels
+
+Labels containing form controls:
+
+```tsx
+function ControlLabels() {
+  return (
+    <div>
+      {/* Checkbox label */}
+      <LabelRoot htmlFor="terms">
+        <input id="terms" type="checkbox" />
+        I agree to the terms and conditions
+      </LabelRoot>
+      
+      {/* Radio button group */}
+      <fieldset>
+        <LabelRoot as="legend">Preferred Contact Method</LabelRoot>
+        
+        <LabelRoot htmlFor="contact-email">
+          <input id="contact-email" type="radio" name="contact" value="email" />
+          Email
+        </LabelRoot>
+        
+        <LabelRoot htmlFor="contact-phone">
+          <input id="contact-phone" type="radio" name="contact" value="phone" />
+          Phone
+        </LabelRoot>
+      </fieldset>
+    </div>
+  );
+}
+```
+
+## API Reference
+
+### LabelRoot
+
+The main label component that provides form association, state management, and accessibility features.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'label'` | Polymorphic element type |
+| `htmlFor?` | `string` | `undefined` | Associates label with form control by ID |
+| `variant?` | `'default' \| 'primary' \| 'secondary' \| 'danger' \| 'warning' \| 'success'` | `'default'` | Visual variant for styling |
+| `size?` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Size variant for text scaling |
+| `isRequired?` | `boolean` | `false` | Required state - properly announced to screen readers |
+| `isDisabled?` | `boolean` | `false` | Disabled state styling |
+| `isLoading?` | `boolean` | `false` | Loading state with screen reader support |
+| `loadingText?` | `string` | `'Loading...'` | Screen reader text for loading state |
+| `requiredIndicator?` | `ReactNode` | `'*'` | Custom required field indicator |
+| `children` | `ReactNode` | - | Label content |
+| `ref?` | `React.Ref<HTMLLabelElement>` | `undefined` | Forwarded ref to underlying element |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onClick` | `(event: MouseEvent)` | Label clicked | Mouse click on label |
+| `onKeyDown` | `(event: KeyboardEvent)` | Key pressed | Keyboard interaction |
+| `onFocus` | `(event: FocusEvent)` | Label focused | Focus received |
+| `onBlur` | `(event: FocusEvent)` | Label blurred | Focus lost |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `aria-hidden` | `'true'` | Hides decorative required indicator | Required indicator span |
+| `aria-live` | `'polite'` | Announces loading state changes | Loading indicator span |
+| `aria-atomic` | `'true'` | Ensures complete loading message is read | Loading indicator span |
+
+### LabelText
+
+Text content wrapper for complex label compositions. Provides semantic structure for labels with multiple content areas.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'span'` | Polymorphic element type |
+| `children` | `ReactNode` | - | Text content |
+| `ref?` | `React.Ref<HTMLSpanElement>` | `undefined` | Forwarded ref to underlying element |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onClick` | `(event: MouseEvent)` | Text clicked | Mouse click on text |
+| `onKeyDown` | `(event: KeyboardEvent)` | Key pressed | Keyboard interaction |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| N/A | N/A | Inherits semantic meaning from parent label | Text wrapper |
+
+### LabelIndicator
+
+Indicator component for required fields, loading states, or custom status. Handles accessibility patterns for various indicator types.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `type?` | `'required' \| 'loading' \| 'custom'` | `'required'` | Indicator type |
+| `children?` | `ReactNode` | `undefined` | Custom indicator content |
+| `ref?` | `React.Ref<HTMLSpanElement>` | `undefined` | Forwarded ref to underlying element |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onClick` | `(event: MouseEvent)` | Indicator clicked | Mouse click on indicator |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `aria-hidden` | `'true'` | Hides decorative indicators from screen readers | Required and custom indicators |
+| `aria-live` | `'polite'` | Announces loading state changes | Loading indicators |
+| `aria-atomic` | `'true'` | Ensures complete loading message is read | Loading indicators |
+
+## Keyboard Interactions
+
+The Label component follows standard HTML label keyboard behavior:
+
+| Key | Action | Context | Notes |
+|-----|--------|---------|-------|
+| `Click` | Focus associated control | Label with `htmlFor` | Clicking label focuses linked input |
+| `Tab` | Navigate | Always | Moves focus through interactive elements, skips labels |
+| `Shift + Tab` | Navigate backward | Always | Moves focus backward through elements |
+| `Enter` | Activate | Labels containing controls | Activates checkboxes/radio buttons within label |
+| `Space` | Activate | Labels containing controls | Alternative activation for controls within label |
+
+**Note**: Labels themselves are not focusable elements. Focus management is delegated to associated form controls via the `htmlFor` attribute or controls contained within the label.
