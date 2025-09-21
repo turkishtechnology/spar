@@ -2,6 +2,23 @@ import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { themes } from 'prism-react-renderer';
+import {
+  SelectRoot,
+  SelectTrigger,
+  SelectValue,
+  SelectIcon,
+  SelectContent,
+  SelectViewport,
+  SelectGroup,
+  SelectLabel,
+  SelectSeparator,
+  SelectItem,
+  SelectItemText,
+  SelectItemIndicator,
+  SelectScrollUpButton,
+  SelectScrollDownButton,
+  SelectPortal,
+} from '@turkish-technology/glide';
 
 interface LiveCodeProps {
   title?: string;
@@ -52,7 +69,22 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
-    // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
+    // Glide components
+    SelectRoot,
+    SelectTrigger,
+    SelectValue,
+    SelectIcon,
+    SelectContent,
+    SelectViewport,
+    SelectGroup,
+    SelectLabel,
+    SelectSeparator,
+    SelectItem,
+    SelectItemText,
+    SelectItemIndicator,
+    SelectScrollUpButton,
+    SelectScrollDownButton,
+    SelectPortal,
   };
 
   const [copied, setCopied] = useState(false);
