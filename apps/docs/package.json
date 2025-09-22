@@ -1,5 +1,5 @@
 {
-  "name": "@turkishtechnology/docs",
+  "name": "@turkish-technology/docs",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -17,17 +17,21 @@
   "dependencies": {
     "@docusaurus/core": "3.8.1",
     "@docusaurus/preset-classic": "3.8.1",
+    "@docusaurus/theme-common": "^3.8.1",
     "@mdx-js/react": "^3.0.0",
+    "@turkish-technology/glide": "workspace:*",
     "clsx": "^2.0.0",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "@turkish-technology/glide": "workspace:*"
+    "react-live": "^4.1.8"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.8.1",
     "@docusaurus/tsconfig": "3.8.1",
     "@docusaurus/types": "3.8.1",
+    "docusaurus-plugin-sass": "^0.2.6",
+    "sass": "^1.92.0",
     "typescript": "~5.6.2"
   },
   "browserslist": {

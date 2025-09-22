@@ -5,11 +5,11 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "dev:docs": "pnpm --filter @turkish-technology/glide build && pnpm --filter @turkishtechnology/docs start",
+    "dev:docs": "pnpm --filter @turkish-technology/glide build && pnpm --filter @turkish-technology/docs start",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
-    "format": "prettier --write \"**/*.{ts,tsx,md,json,yml,yaml}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,md,json,yml,yaml}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,mdx,json,yml,yaml,css,scss}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx,json,yml,yaml,css,scss}\"",
     "check-types": "turbo run check-types",
     "prepare": "husky"
   },
