@@ -2,6 +2,14 @@ import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { themes } from 'prism-react-renderer';
+import {
+  TooltipProvider,
+  TooltipRoot,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipPortal,
+  TooltipArrow,
+} from '@turkish-technology/glide';
 
 interface LiveCodeProps {
   title?: string;
@@ -52,7 +60,13 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
-    // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
+    // Glide Tooltip components
+    TooltipProvider,
+    TooltipRoot,
+    TooltipTrigger,
+    TooltipContent,
+    TooltipPortal,
+    TooltipArrow,
   };
 
   const [copied, setCopied] = useState(false);
