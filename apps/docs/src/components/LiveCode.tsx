@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { themes } from 'prism-react-renderer';
+import { Tooltip } from '../../../../packages/glide/src/components/Tooltip';
+import {
+  PopoverRoot,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverAnchor,
+  PopoverClose,
+} from '../../../../packages/glide/src/components/Popover';
 
 interface LiveCodeProps {
   title?: string;
@@ -52,6 +61,13 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
+    Tooltip,
+    PopoverRoot,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverArrow,
+    PopoverAnchor,
+    PopoverClose,
     // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
   };
 
