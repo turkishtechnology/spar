@@ -216,6 +216,15 @@ export const TooltipTrigger = ({
 
     const handleGlobalKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        // Check if the event originated from tooltip content
+        const target = event.target as HTMLElement;
+        const tooltipContent = document.getElementById(context.contentId);
+
+        // If the event came from tooltip content, let the content handle it
+        if (tooltipContent && (target === tooltipContent || tooltipContent.contains(target))) {
+          return;
+        }
+
         event.preventDefault();
         event.stopPropagation();
         context.onOpenChange(false);
@@ -302,6 +311,34 @@ export const TooltipContent = ({
       trigger?.focus();
     }
   };
+
+  // Handle native escape key events (for testing and edge cases)
+  useEffect(() => {
+    if (!context.isOpen) return;
+
+    const handleNativeKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        const target = event.target as HTMLElement;
+        const contentElement = contentRef.current;
+
+        // Only handle if the event originated from this tooltip content
+        if (contentElement && (target === contentElement || contentElement.contains(target))) {
+          event.preventDefault();
+          event.stopPropagation();
+          onEscapeKeyDown?.(event);
+          context.onOpenChange(false);
+          // Refocus the trigger after closing
+          const trigger = document.getElementById(context.triggerId);
+          trigger?.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleNativeKeyDown, true);
+    return () => {
+      document.removeEventListener('keydown', handleNativeKeyDown, true);
+    };
+  }, [context.isOpen, context.contentId, context.triggerId, onEscapeKeyDown]);
 
   // Handle mouse enter/leave for hoverable content
   const handleMouseEnter = () => {
