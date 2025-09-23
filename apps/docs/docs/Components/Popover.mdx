@@ -20,73 +20,52 @@ A non-modal overlay that displays rich content in a positioned container relativ
   const [isOpen, setIsOpen] = React.useState(false);
   
   return (
-    <div style={{ padding: '60px', display: 'flex', gap: '20px', alignItems: 'center' }}>
+    <div style={{ padding: '60px' }}>
       <PopoverRoot>
-        <PopoverTrigger style={{ 
+        <PopoverTrigger asChild>
+          <button  style={{ 
           padding: '8px 16px', 
           border: '1px solid #ccc', 
           borderRadius: '4px',
           cursor: 'pointer',
           backgroundColor: 'white'
         }}>
-          Click to open
+            Click to open
+          </button>
         </PopoverTrigger>
-        <PopoverContent style={{
-          padding: '16px',
-          border: '1px solid #ddd',
-          borderRadius: '8px',
-          backgroundColor: 'white',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-          maxWidth: '300px'
-        }}>
-          <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Popover Title</h3>
-          <p style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#666' }}>
-            This popover demonstrates basic functionality with keyboard navigation support.
-          </p>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <button style={{ 
-              padding: '4px 8px', 
-              border: '1px solid #ccc', 
-              borderRadius: '4px',
-              fontSize: '12px'
-            }}>
-              Action
-            </button>
-            <PopoverClose style={{ 
-              padding: '4px 8px', 
-              border: '1px solid #ccc', 
-              borderRadius: '4px',
-              fontSize: '12px'
-            }}>
-              Close
-            </PopoverClose>
-          </div>
-          <PopoverArrow style={{ fill: 'white', stroke: '#ddd', strokeWidth: 1 }} />
-        </PopoverContent>
-      </PopoverRoot>
-      
-      <PopoverRoot isOpen={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger style={{ 
-          padding: '8px 16px', 
-          border: '1px solid #007acc', 
-          borderRadius: '4px',
-          cursor: 'pointer',
-          backgroundColor: '#007acc',
-          color: 'white'
-        }}>
-          Controlled: {isOpen ? 'Open' : 'Closed'}
-        </PopoverTrigger>
-        <PopoverContent style={{
-          padding: '16px',
-          border: '1px solid #ddd',
-          borderRadius: '8px',
-          backgroundColor: 'white',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-        }}>
-          <p style={{ margin: 0, fontSize: '14px' }}>
-            This popover uses controlled state. Press Escape or click outside to close.
-          </p>
-        </PopoverContent>
+        <PopoverPortal>
+          <PopoverContent style={{
+            padding: '16px',
+            border: '1px solid #ddd',
+            borderRadius: '8px',
+            backgroundColor: 'white',
+            maxWidth: '300px'
+          }}>
+            <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Popover Title</h3>
+            <p style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#666' }}>
+              This popover demonstrates basic functionality with keyboard navigation support.
+            </p>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button style={{ 
+                padding: '4px 8px', 
+                border: '1px solid #ccc', 
+                borderRadius: '4px',
+                fontSize: '12px'
+              }}>
+                Action
+              </button>
+              <PopoverClose style={{ 
+                padding: '4px 8px', 
+                border: '1px solid #ccc', 
+                borderRadius: '4px',
+                fontSize: '12px'
+              }}>
+                Close
+              </PopoverClose>
+            </div>
+            <PopoverArrow style={{ fill: 'white', stroke: '#ddd', strokeWidth: 1 }} />
+          </PopoverContent>
+        </PopoverPortal>
       </PopoverRoot>
     </div>
   );
