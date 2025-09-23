@@ -17,11 +17,14 @@ A popup that displays supplementary information when an element receives focus o
 
 <LiveCode 
   code={`function BasicTooltipExample() {
+  const containerRef = React.useRef(null);
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => { setMounted(true); }, []);
   return (
-    <div style={{ padding: '50px', textAlign: 'center' }}>
+    <div ref={containerRef} style={{ padding: '50px', textAlign: 'center', position: 'relative' }}>
       <TooltipProvider>
         <TooltipRoot>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <button 
               style={{ 
                 padding: '8px 16px', 
@@ -33,20 +36,37 @@ A popup that displays supplementary information when an element receives focus o
               Hover me
             </button>
           </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent
-              style={{
-                backgroundColor: '#333',
-                color: 'white',
-                padding: '8px 12px',
-                borderRadius: '4px',
-                fontSize: '14px',
-                maxWidth: '200px'
-              }}
-            >
-              This is helpful tooltip information!
-            </TooltipContent>
-          </TooltipPortal>
+          {mounted && (
+            <TooltipPortal container={containerRef.current}>
+              <TooltipContent
+                style={{
+                  position: 'absolute',
+                  left: '50%',
+                  bottom: '70%',
+                  transform: 'translateX(-50%)',
+                  zIndex: 1000,
+                  backgroundColor: '#333',
+                  color: 'white',
+                  padding: '8px 12px',
+                  borderRadius: '4px',
+                }}
+                data-state-open={true}
+                data-placement="top"
+              >
+                <TooltipArrow
+                  style={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: '100%',
+                    transform: 'translateX(-50%) rotate(180deg)',
+                    zIndex: 1000,
+                    fill: '#333',
+                  }}
+                />
+                This is helpful tooltip information!
+              </TooltipContent>
+            </TooltipPortal>
+          )}
         </TooltipRoot>
       </TooltipProvider>
     </div>
@@ -117,7 +137,7 @@ function BasicTooltip() {
   return (
     <TooltipProvider>
       <TooltipRoot>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           <button>Save Document</button>
         </TooltipTrigger>
         <TooltipPortal>
@@ -142,7 +162,7 @@ function ControlledTooltip() {
   return (
     <TooltipProvider>
       <TooltipRoot isOpen={isOpen} onOpenChange={setIsOpen}>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           <button>Controlled Trigger</button>
         </TooltipTrigger>
         <TooltipPortal>
@@ -203,7 +223,7 @@ function IconButtonWithLabel() {
   return (
     <TooltipProvider>
       <TooltipRoot>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           <button aria-label="Close dialog">
             <CloseIcon />
           </button>
@@ -228,7 +248,7 @@ function CustomTooltip() {
   return (
     <TooltipProvider>
       <TooltipRoot>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           <button>Advanced Example</button>
         </TooltipTrigger>
         <TooltipPortal>
@@ -236,7 +256,6 @@ function CustomTooltip() {
             side="bottom" 
             align="start"
             sideOffset={10}
-            alignOffset={5}
           >
             <TooltipArrow />
             Custom positioned tooltip with arrow
@@ -258,7 +277,7 @@ function PlacementExample() {
     <TooltipProvider delayDuration={500} skipDelayDuration={200}>
       <div style={{ display: 'flex', gap: '16px' }}>
         <TooltipRoot>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <button>First</button>
           </TooltipTrigger>
           <TooltipPortal>
@@ -269,7 +288,7 @@ function PlacementExample() {
         </TooltipRoot>
 
         <TooltipRoot>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <button>Second</button>
           </TooltipTrigger>
           <TooltipPortal>
@@ -305,7 +324,7 @@ function ConditionalTooltip() {
         </label>
         
         <TooltipRoot isDisabled={!showHelp}>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <button>Submit Form</button>
           </TooltipTrigger>
           <TooltipPortal>
