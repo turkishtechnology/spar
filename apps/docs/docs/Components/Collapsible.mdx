@@ -20,24 +20,18 @@ A headless collapsible component that manages the visibility of content sections
   const [isOpen, setIsOpen] = React.useState(false);
 
 return (
-<Collapsible.Root
-open={isOpen}
-onOpenChange={setIsOpen}
-style={{ border: '1px solid #ccc', padding: '16px', borderRadius: '8px' }} >
-<Collapsible.Trigger style={{
+<Collapsible>
+<CollapsibleTrigger style={{
         padding: '8px 12px',
         background: '#f0f0f0',
         border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer'
       }}>
-{isOpen ? 'Hide' : 'Show'} Content
-</Collapsible.Trigger>
-<Collapsible.Content style={{ marginTop: '8px', padding: '8px' }}>
+ShowContent
+</CollapsibleTrigger>
+<CollapsibleContent style={{ marginTop: '8px', padding: '8px' }}>
 <p>This content can be collapsed and expanded.</p>
-<p>It supports keyboard navigation and screen readers.</p>
-</Collapsible.Content>
-</Collapsible.Root>
+</CollapsibleContent>
+</Collapsible>
 );
 }`}
 />
@@ -69,9 +63,9 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-te
 ## Anatomy
 
 ```
-Collapsible.Root
-├── Collapsible.Trigger    // Button that toggles visibility
-└── Collapsible.Content    // Container for collapsible content
+CollapsibleRoot
+├── CollapsibleTrigger    // Button that toggles visibility
+└── CollapsibleContent    // Container for collapsible content
 ```
 
 The Collapsible component consists of three main parts:
@@ -89,12 +83,12 @@ import { Collapsible } from '@turkish-technology/glide';
 
 function BasicCollapsible() {
   return (
-    <Collapsible.Root>
-      <Collapsible.Trigger>Toggle Content</Collapsible.Trigger>
-      <Collapsible.Content>
+    <CollapsibleRoot>
+      <CollapsibleTrigger>Toggle Content</CollapsibleTrigger>
+      <CollapsibleContent>
         <p>This content can be toggled.</p>
-      </Collapsible.Content>
-    </Collapsible.Root>
+      </CollapsibleContent>
+    </CollapsibleRoot>
   );
 }
 ```
@@ -109,15 +103,15 @@ function ControlledCollapsible() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Collapsible.Root open={isOpen} onOpenChange={setIsOpen}>
-      <Collapsible.Trigger>{isOpen ? 'Collapse' : 'Expand'}</Collapsible.Trigger>
-      <Collapsible.Content>
+    <CollapsibleRoot open={isOpen} onOpenChange={setIsOpen}>
+      <CollapsibleTrigger>{isOpen ? 'Collapse' : 'Expand'}</CollapsibleTrigger>
+      <CollapsibleContent>
         <div>
           <h3>Controlled Content</h3>
-          <p>The parent component controls this state.</p>
+          <p>The parent component controls this state</p>
         </div>
-      </Collapsible.Content>
-    </Collapsible.Root>
+      </CollapsibleContent>
+    </CollapsibleRoot>
   );
 }
 ```
@@ -129,12 +123,12 @@ import { Collapsible } from '@turkish-technology/glide';
 
 function DefaultOpenCollapsible() {
   return (
-    <Collapsible.Root defaultOpen={true}>
-      <Collapsible.Trigger>Toggle Content</Collapsible.Trigger>
-      <Collapsible.Content>
-        <p>This content starts expanded.</p>
-      </Collapsible.Content>
-    </Collapsible.Root>
+    <CollapsibleRoot defaultOpen={true}>
+      <CollapsibleTrigger>Toggle Content</CollapsibleTrigger>
+      <CollapsibleContent>
+        <p>This content starts expanded</p>
+      </CollapsibleContent>
+    </CollapsibleRoot>
   );
 }
 ```
@@ -146,14 +140,14 @@ import { Collapsible } from '@turkish-technology/glide';
 
 function CustomTriggerCollapsible() {
   return (
-    <Collapsible.Root>
-      <Collapsible.Trigger as='div' style={{ cursor: 'pointer' }}>
+    <CollapsibleRoot>
+      <CollapsibleTrigger as='div' style={{ cursor: 'pointer' }}>
         <h3>Click this heading to expand</h3>
-      </Collapsible.Trigger>
-      <Collapsible.Content>
+      </CollapsibleTrigger>
+      <CollapsibleContent>
         <p>Content revealed by custom trigger.</p>
-      </Collapsible.Content>
-    </Collapsible.Root>
+      </CollapsibleContent>
+    </CollapsibleRoot>
   );
 }
 ```
@@ -165,13 +159,13 @@ import { Collapsible } from '@turkish-technology/glide';
 
 function ForceMountCollapsible() {
   return (
-    <Collapsible.Root>
-      <Collapsible.Trigger>Toggle (Content Always Mounted)</Collapsible.Trigger>
-      <Collapsible.Content forceMount={true}>
+    <CollapsibleRoot>
+      <CollapsibleTrigger>Toggle (Content Always Mounted)</CollapsibleTrigger>
+      <CollapsibleContent forceMount={true}>
         <p>This content stays in the DOM even when collapsed.</p>
         <p>Useful for maintaining component state or enabling browser search.</p>
-      </Collapsible.Content>
-    </Collapsible.Root>
+      </CollapsibleContent>
+    </CollapsibleRoot>
   );
 }
 ```
@@ -183,19 +177,19 @@ import { Collapsible } from '@turkish-technology/glide';
 
 function DisabledCollapsible() {
   return (
-    <Collapsible.Root isDisabled={true}>
-      <Collapsible.Trigger>Disabled Trigger</Collapsible.Trigger>
-      <Collapsible.Content>
-        <p>This content cannot be toggled.</p>
-      </Collapsible.Content>
-    </Collapsible.Root>
+    <CollapsibleRoot isDisabled={true}>
+      <CollapsibleTrigger>Disabled Trigger</CollapsibleTrigger>
+      <CollapsibleContent>
+        <p>This content cannot be toggled</p>
+      </CollapsibleContent>
+    </CollapsibleRoot>
   );
 }
 ```
 
 ## API Reference
 
-### Collapsible.Root
+### CollapsibleRoot
 
 The root component that provides context and state management for the collapsible.
 
@@ -222,7 +216,7 @@ The root component that provides context and state management for the collapsibl
 | `data-state`    | `"open" \| "closed"` | Indicates current state  | Root element |
 | `data-disabled` | `""` (when disabled) | Indicates disabled state | Root element |
 
-### Collapsible.Trigger
+### CollapsibleTrigger
 
 Interactive element that toggles the content visibility with full accessibility support.
 
@@ -253,7 +247,7 @@ Interactive element that toggles the content visibility with full accessibility 
 | `data-state`    | `"open" \| "closed"` | Indicates current state                        | Trigger element    |
 | `data-disabled` | `""` (when disabled) | Indicates disabled state                       | Trigger element    |
 
-### Collapsible.Content
+### CollapsibleContent
 
 Container that shows/hides based on the collapsible state with advanced features.
 

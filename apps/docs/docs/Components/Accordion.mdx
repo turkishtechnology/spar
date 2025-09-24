@@ -16,46 +16,75 @@ A collapsible content component that supports single or multiple panel expansion
 ## Live Demo
 
 <LiveCode
-  title='Show Code'
-  code={`function BasicAccordion() {
+  title="Basic Accordion Example"
+  code={`
+function Example() {
   return (
-    <Accordion.Root type="single" isCollapsible style={{ border: '1px solid #ccc', borderRadius: '4px' }}>
-      <Accordion.Item value="item-1" style={{ borderBottom: '1px solid #eee' }}>
-        <Accordion.Header>
-          <Accordion.Trigger style={{ width: '100%', padding: '12px 16px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}>
-            What is accessibility?
-          </Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Content style={{ padding: '12px 16px', background: '#f9f9f9' }}>
-          Accessibility means designing and building products that can be used by people with disabilities. This includes considerations for vision, hearing, mobility, and cognitive differences.
-        </Accordion.Content>
-      </Accordion.Item>
-      
-      <Accordion.Item value="item-2" style={{ borderBottom: '1px solid #eee' }}>
-        <Accordion.Header>
-          <Accordion.Trigger style={{ width: '100%', padding: '12px 16px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}>
-            Why use headless components?
-          </Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Content style={{ padding: '12px 16px', background: '#f9f9f9' }}>
-          Headless components provide behavior and accessibility without visual styling, giving you complete control over the appearance while ensuring proper functionality.
-        </Accordion.Content>
-      </Accordion.Item>
-      
-      <Accordion.Item value="item-3">
-        <Accordion.Header>
-          <Accordion.Trigger style={{ width: '100%', padding: '12px 16px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer' }}>
-            How does keyboard navigation work?
-          </Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Content style={{ padding: '12px 16px', background: '#f9f9f9' }}>
-          Use Arrow keys to navigate between accordion triggers, Enter or Space to expand/collapse panels, and Tab to navigate to focusable content within expanded panels.
-        </Accordion.Content>
-      </Accordion.Item>
-    </Accordion.Root>
+    <div style={{ width: '500px'}}>
+      <Accordion isCollapsible={true} style={{padding:'12px'}}>
+        <AccordionItem value="item1">
+          <AccordionHeader>
+            <AccordionTrigger style={{
+              width: '100%',
+              padding: '12px',
+              border: '1px solid #ccc',
+            }}>
+              What is Glide Accordion?
+            </AccordionTrigger>
+          </AccordionHeader>
+          <AccordionContent style={{
+            padding: '12px',
+            margin: '12px 0',
+            border: '1px solid #ccc',
+          }}>
+            Glide Accordion is a headless, accessible React component with no default styling.
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="item2">
+          <AccordionHeader>
+            <AccordionTrigger style={{
+              width: '100%',
+              padding: '12px',
+              border: '1px solid #ccc',
+            }}>
+              How to use it?
+            </AccordionTrigger>
+          </AccordionHeader>
+          <AccordionContent style={{
+            padding: '12px',
+            margin: '12px 0',
+            border: '1px solid #ccc',
+          }}>
+            Simply import the components and compose them together. Add your own CSS for styling.
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="item3">
+          <AccordionHeader>
+            <AccordionTrigger style={{
+              width: '100%',
+              padding: '12px',
+              border: '1px solid #ccc',
+            }}>
+              Is it accessible?
+            </AccordionTrigger>
+          </AccordionHeader>
+          <AccordionContent style={{
+            padding: '12px',
+            margin: '12px 0',
+            border: '1px solid #ccc',
+          }}>
+            Yes! Full ARIA support and keyboard navigation are built-in.
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
   );
-}`}
-/>
+}
+  `}
+  />
+---
 
 ## Features
 
@@ -73,30 +102,42 @@ A collapsible content component that supports single or multiple panel expansion
 
 ## Installation
 
-```tsx
-import { Accordion } from '@turkish-technology/glide';
+```sh
+pnpm install @turkish-technology/glide
 ```
+
+```ts
+import {
+  Accordion,
+  AccordionItem,
+  AccordionHeader,
+  AccordionTrigger,
+  AccordionContent,
+} from '@turkish-technology/glide';
+```
+---
 
 ## Anatomy
 
-The Accordion component consists of a root container with multiple collapsible items, each containing a header with trigger button and expandable content panel.
-
-```tsx
-<Accordion.Root>
-  <Accordion.Item>
-    <Accordion.Header>
-      <Accordion.Trigger />
-    </Accordion.Header>
-    <Accordion.Content />
-  </Accordion.Item>
-  <Accordion.Item>
-    <Accordion.Header>
-      <Accordion.Trigger />
-    </Accordion.Header>
-    <Accordion.Content />
-  </Accordion.Item>
-</Accordion.Root>
+```jsx
+<Accordion>
+  <AccordionItem value="item-1">
+    <AccordionHeader>
+      <AccordionTrigger>...</AccordionTrigger>
+    </AccordionHeader>
+    <AccordionContent>...</AccordionContent>
+  </AccordionItem>
+  ...
+</Accordion>
 ```
+
+- `Accordion`: Root context provider
+- `AccordionItem`: Represents a single collapsible section
+- `AccordionHeader`: Semantic heading wrapper for proper document structure
+- `AccordionTrigger`: Button to toggle the item
+- `AccordionContent`: Panel revealed when open
+
+---
 
 ## Code Examples
 
@@ -105,23 +146,22 @@ The Accordion component consists of a root container with multiple collapsible i
 Basic accordion that allows only one panel to be expanded at a time:
 
 ```tsx
-function SingleAccordion() {
+export function BasicAccordion() {
   return (
-    <Accordion.Root type='single' isCollapsible defaultValue='item-1'>
-      <Accordion.Item value='item-1'>
-        <Accordion.Header>
-          <Accordion.Trigger>Section 1</Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Content>Content for the first section</Accordion.Content>
-      </Accordion.Item>
-
-      <Accordion.Item value='item-2'>
-        <Accordion.Header>
-          <Accordion.Trigger>Section 2</Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Content>Content for the second section</Accordion.Content>
-      </Accordion.Item>
-    </Accordion.Root>
+    <Accordion>
+      <AccordionItem value="a">
+        <AccordionHeader>
+          <AccordionTrigger>Toggle A</AccordionTrigger>
+        </AccordionHeader>
+        <AccordionContent>Panel A</AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="b">
+        <AccordionHeader>
+          <AccordionTrigger>Toggle B</AccordionTrigger>
+        </AccordionHeader>
+        <AccordionContent>Panel B</AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 }
 ```
@@ -131,32 +171,20 @@ function SingleAccordion() {
 Accordion that allows multiple panels to be expanded simultaneously:
 
 ```tsx
-function MultipleAccordion() {
-  return (
-    <Accordion.Root type='multiple' defaultValue={['item-1', 'item-3']}>
-      <Accordion.Item value='item-1'>
-        <Accordion.Header>
-          <Accordion.Trigger>Always Expanded Section</Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Content>This section starts expanded</Accordion.Content>
-      </Accordion.Item>
-
-      <Accordion.Item value='item-2'>
-        <Accordion.Header>
-          <Accordion.Trigger>Collapsed Section</Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Content>This section starts collapsed</Accordion.Content>
-      </Accordion.Item>
-
-      <Accordion.Item value='item-3'>
-        <Accordion.Header>
-          <Accordion.Trigger>Another Expanded Section</Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Content>This section also starts expanded</Accordion.Content>
-      </Accordion.Item>
-    </Accordion.Root>
-  );
-}
+<Accordion type="multiple" defaultValue={['a']}>
+  <AccordionItem value="a">
+    <AccordionHeader>
+      <AccordionTrigger>Section A</AccordionTrigger>
+    </AccordionHeader>
+    <AccordionContent>...</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="b">
+    <AccordionHeader>
+      <AccordionTrigger>Section B</AccordionTrigger>
+    </AccordionHeader>
+    <AccordionContent>...</AccordionContent>
+  </AccordionItem>
+</Accordion>
 ```
 
 ### Controlled State Management
@@ -164,97 +192,22 @@ function MultipleAccordion() {
 Accordion with external state control and change handling:
 
 ```tsx
-function ControlledAccordion() {
-  const [value, setValue] = useState<string>('');
+const [openItems, setOpenItems] = React.useState<string[]>(['a']);
 
-  return (
-    <div>
-      <p>Current expanded: {value || 'none'}</p>
-      <button onClick={() => setValue('item-2')}>Expand Section 2</button>
-
-      <Accordion.Root type='single' value={value} onValueChange={setValue}>
-        <Accordion.Item value='item-1'>
-          <Accordion.Header>
-            <Accordion.Trigger>Section 1</Accordion.Trigger>
-          </Accordion.Header>
-          <Accordion.Content>First section content</Accordion.Content>
-        </Accordion.Item>
-
-        <Accordion.Item value='item-2'>
-          <Accordion.Header>
-            <Accordion.Trigger>Section 2</Accordion.Trigger>
-          </Accordion.Header>
-          <Accordion.Content>Second section content</Accordion.Content>
-        </Accordion.Item>
-      </Accordion.Root>
-    </div>
-  );
-}
+<Accordion
+  type="multiple"
+  value={openItems}
+  onValueChange={setOpenItems}
+>
+  {/* ...items */}
+</Accordion>
 ```
 
-### Custom Heading Levels and Disabled Items
-
-Accordion with proper heading hierarchy and disabled states:
-
-```tsx
-function CustomAccordion() {
-  return (
-    <Accordion.Root type='single' isCollapsible>
-      <Accordion.Item value='item-1'>
-        <Accordion.Header level={2}>
-          <Accordion.Trigger>Main Section (H2)</Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Content>Main content with proper heading hierarchy</Accordion.Content>
-      </Accordion.Item>
-
-      <Accordion.Item value='item-2' isDisabled>
-        <Accordion.Header level={2}>
-          <Accordion.Trigger>Disabled Section (H2)</Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Content>This content cannot be accessed</Accordion.Content>
-      </Accordion.Item>
-
-      <Accordion.Item value='item-3'>
-        <Accordion.Header level={2}>
-          <Accordion.Trigger>Another Section (H2)</Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Content>More content at the same level</Accordion.Content>
-      </Accordion.Item>
-    </Accordion.Root>
-  );
-}
-```
-
-### Horizontal Orientation
-
-Accordion with horizontal keyboard navigation:
-
-```tsx
-function HorizontalAccordion() {
-  return (
-    <Accordion.Root type='single' isCollapsible orientation='horizontal'>
-      <Accordion.Item value='tab-1'>
-        <Accordion.Header>
-          <Accordion.Trigger>Tab 1</Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Content>Content for horizontal tab 1</Accordion.Content>
-      </Accordion.Item>
-
-      <Accordion.Item value='tab-2'>
-        <Accordion.Header>
-          <Accordion.Trigger>Tab 2</Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Content>Content for horizontal tab 2</Accordion.Content>
-      </Accordion.Item>
-    </Accordion.Root>
-  );
-}
-```
+---
 
 ## API Reference
 
-### Accordion.Root
-
+### Accordion
 The root container that provides context and manages the state for all accordion items within it.
 
 **Props**
@@ -284,7 +237,7 @@ The root container that provides context and manages the state for all accordion
 | `role`             | `"region"`                   | Groups related accordion items   | Root element |
 | `data-orientation` | `"vertical" \| "horizontal"` | Indicates navigation orientation | Root element |
 
-### Accordion.Item
+### AccordionItem
 
 Individual accordion item that contains a header and content panel.
 
@@ -310,7 +263,7 @@ Individual accordion item that contains a header and content panel.
 | `data-state`    | `"open" \| "closed"` | Indicates expansion state | Item element               |
 | `data-disabled` | `boolean`            | Indicates disabled state  | Item element when disabled |
 
-### Accordion.Header
+### AccordionHeader
 
 Semantic heading wrapper for the accordion trigger button.
 
@@ -335,7 +288,7 @@ Semantic heading wrapper for the accordion trigger button.
 | `role`       | `"heading"` | Identifies as heading element | Header element |
 | `aria-level` | `number`    | Specifies heading level       | Header element |
 
-### Accordion.Trigger
+### AccordionTrigger
 
 Button that toggles the visibility of the associated content panel.
 
@@ -364,7 +317,7 @@ Button that toggles the visibility of the associated content panel.
 | `aria-disabled` | `boolean` | Indicates disabled state         | Trigger element when disabled |
 | `id`            | `string`  | Unique identifier for trigger    | Trigger element               |
 
-### Accordion.Content
+### AccordionContent
 
 Collapsible panel containing the accordion item content.
 
