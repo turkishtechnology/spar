@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { themes } from 'prism-react-renderer';
+import { Button } from '@turkish-technology/glide';
 
 interface LiveCodeProps {
   title?: string;
@@ -53,6 +54,7 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     useState: React.useState,
     useEffect: React.useEffect,
     // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
+    Button,
   };
 
   const [copied, setCopied] = useState(false);
