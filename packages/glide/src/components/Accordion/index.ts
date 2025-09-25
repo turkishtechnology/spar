@@ -1,31 +1,37 @@
-import { Accordion } from './Accordion';
+import { Accordion as AccordionRoot } from './Accordion';
 import { AccordionItem } from './AccordionItem';
 import { AccordionHeader } from './AccordionHeader';
 import { AccordionTrigger } from './AccordionTrigger';
 import { AccordionContent } from './AccordionContent';
 
-// Create aliases for grouped pattern
-const Root = Accordion;
-const Item = AccordionItem;
-const Header = AccordionHeader;
-const Trigger = AccordionTrigger;
-const Content = AccordionContent;
+// Create compound component with dot notation support
+const Accordion = AccordionRoot as typeof AccordionRoot & {
+  Root: typeof AccordionRoot;
+  Item: typeof AccordionItem;
+  Header: typeof AccordionHeader;
+  Trigger: typeof AccordionTrigger;
+  Content: typeof AccordionContent;
+};
+
+Accordion.Root = AccordionRoot;
+Accordion.Item = AccordionItem;
+Accordion.Header = AccordionHeader;
+Accordion.Trigger = AccordionTrigger;
+Accordion.Content = AccordionContent;
 
 // Export both patterns
 export {
-  // Named exports (tree-shakeable)
+  // Compound component (with dot notation)
   Accordion,
+
+  // Named exports (tree-shakeable)
   AccordionItem,
   AccordionHeader,
   AccordionTrigger,
   AccordionContent,
 
-  // Aliased exports (for grouped usage)
-  Root,
-  Item,
-  Header,
-  Trigger,
-  Content,
+  // Root alias for explicit usage
+  AccordionRoot,
 };
 
 // Export types
