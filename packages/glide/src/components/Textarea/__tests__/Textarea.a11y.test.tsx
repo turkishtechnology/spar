@@ -130,23 +130,23 @@ describe('Textarea Accessibility', () => {
       expect(textarea).toHaveAttribute('aria-invalid', 'true');
     });
 
-    it('should associate helper text with aria-describedby', () => {
+    it('should not automatically associate helper text with aria-describedby', () => {
       render(<Textarea aria-label='Comments' helperText='Maximum 200 characters' />);
       const textarea = screen.getByRole('textbox');
-      const describedBy = textarea.getAttribute('aria-describedby');
 
-      expect(describedBy).toMatch(/-helper$/);
+      expect(textarea).not.toHaveAttribute('aria-describedby');
+      expect(textarea).toHaveAttribute('data-has-helper', 'true');
     });
 
-    it('should associate error message with aria-describedby', () => {
+    it('should not automatically associate error message with aria-describedby', () => {
       render(<Textarea aria-label='Comments' errorMessage='This field is required' />);
       const textarea = screen.getByRole('textbox');
-      const describedBy = textarea.getAttribute('aria-describedby');
 
-      expect(describedBy).toMatch(/-error$/);
+      expect(textarea).not.toHaveAttribute('aria-describedby');
+      expect(textarea).toHaveAttribute('aria-invalid', 'true');
     });
 
-    it('should combine multiple aria-describedby references', () => {
+    it('should use manual aria-describedby when provided', () => {
       render(
         <Textarea
           aria-label='Comments'
@@ -158,9 +158,9 @@ describe('Textarea Accessibility', () => {
       const textarea = screen.getByRole('textbox');
       const describedBy = textarea.getAttribute('aria-describedby');
 
-      expect(describedBy).toContain('external-description');
-      expect(describedBy).toMatch(/-error$/);
-      // Helper text should be overridden by error message
+      // Only manual aria-describedby should be used
+      expect(describedBy).toBe('external-description');
+      expect(textarea).toHaveAttribute('aria-invalid', 'true');
     });
 
     it('should use label prop as aria-label when provided', () => {
@@ -344,7 +344,8 @@ describe('Textarea Accessibility', () => {
       const textarea = screen.getByRole('textbox');
 
       expect(textarea).toHaveAttribute('aria-invalid', 'true');
-      expect(textarea.getAttribute('aria-describedby')).toMatch(/-error$/);
+      expect(textarea).not.toHaveAttribute('aria-describedby');
+      expect(textarea).toHaveAttribute('data-has-error', 'true');
     });
 
     it('should announce character count for screen readers', () => {
@@ -371,12 +372,12 @@ describe('Textarea Accessibility', () => {
       expect(textarea).toHaveAttribute('readonly');
     });
 
-    it('should properly associate helper text for screen readers', () => {
+    it('should provide helper text info via data attributes for screen readers', () => {
       render(<Textarea aria-label='Comments' helperText='Provide detailed feedback' />);
       const textarea = screen.getByRole('textbox');
-      const describedBy = textarea.getAttribute('aria-describedby');
 
-      expect(describedBy).toMatch(/-helper$/);
+      expect(textarea).not.toHaveAttribute('aria-describedby');
+      expect(textarea).toHaveAttribute('data-has-helper', 'true');
     });
 
     it('should announce multiline nature via role textbox', () => {
@@ -397,12 +398,14 @@ describe('Textarea Accessibility', () => {
       expect(textarea).toHaveAttribute('data-invalid', 'true');
     });
 
-    it('should associate error message with textarea', () => {
+    it('should indicate error state without automatic aria-describedby', () => {
       render(<Textarea aria-label='Comments' errorMessage='Invalid input format' />);
       const textarea = screen.getByRole('textbox');
-      const errorId = textarea.getAttribute('aria-describedby');
 
-      expect(errorId).toMatch(/-error$/);
+      // Error state is indicated via aria-invalid and data attributes
+      expect(textarea).toHaveAttribute('aria-invalid', 'true');
+      expect(textarea).toHaveAttribute('data-has-error', 'true');
+      expect(textarea).not.toHaveAttribute('aria-describedby');
     });
 
     it('should handle multiple validation errors', () => {
@@ -413,15 +416,17 @@ describe('Textarea Accessibility', () => {
       expect(textarea).toHaveAttribute('aria-invalid', 'true');
     });
 
-    it('should prioritize error message over helper text in aria-describedby', () => {
+    it('should indicate error and helper states via data attributes', () => {
       render(
         <Textarea aria-label='Comments' helperText='Helper text' errorMessage='Error message' />,
       );
       const textarea = screen.getByRole('textbox');
-      const describedBy = textarea.getAttribute('aria-describedby');
 
-      expect(describedBy).toMatch(/-error$/);
-      expect(describedBy).not.toMatch(/-helper$/);
+      // Both helper and error states are indicated via data attributes
+      expect(textarea).toHaveAttribute('data-has-helper', 'true');
+      expect(textarea).toHaveAttribute('data-has-error', 'true');
+      expect(textarea).toHaveAttribute('aria-invalid', 'true');
+      expect(textarea).not.toHaveAttribute('aria-describedby');
     });
   });
 

@@ -1,0 +1,451 @@
+---
+sidebar_position: 3
+title: Textarea
+description: A headless, multi-line text input component with accessibility, validation, and keyboard navigation support
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+
+# Textarea
+
+A headless, multi-line text input control that provides accessibility, keyboard navigation, and form integration capabilities.
+
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-brightgreen) ![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-✅-brightgreen) ![TypeScript](https://img.shields.io/badge/TypeScript-✅-blue)
+
+## Live Demo
+
+<LiveCode 
+  code={`function BasicExample() {
+  const [value, setValue] = React.useState('');
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
+      <Textarea
+        label="Comments"
+        placeholder="Enter your comments here..."
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        rows={4}
+        helperText="Share your thoughts with us"
+        style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+      />
+    </div>
+  );
+}`}
+/>
+
+## Features
+
+- ✅ Controlled and uncontrolled modes
+- ✅ Built-in validation with error handling
+- ✅ Character count and length limits
+- ✅ Helper text and error message support
+- ✅ Focus and blur state management
+- ✅ Polymorphic component support
+- ✅ Multiple validation behaviors (ARIA/native)
+- ✅ Text wrapping options
+- ✅ Form integration with name and validation
+
+## Installation
+
+```tsx
+import { Textarea } from '@turkish-technology/glide'
+```
+
+## Anatomy
+
+The Textarea component is a single, self-contained element that handles all textarea functionality internally.
+
+```tsx
+<Textarea
+  label="Label"
+  placeholder="Placeholder"
+  helperText="Helper text"
+  errorMessage="Error message"
+/>
+```
+
+## Code Examples
+
+### Basic Usage
+
+```tsx
+function BasicTextarea() {
+  const [value, setValue] = useState('');
+
+  return (
+    <Textarea
+      label="Description"
+      placeholder="Enter description..."
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
+}
+```
+
+### With Validation
+
+```tsx
+function ValidatedTextarea() {
+  const [value, setValue] = useState('');
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const validateValue = (inputValue: string) => {
+    const newErrors: string[] = [];
+    
+    if (!inputValue.trim() && isRequired) {
+      newErrors.push('This field is required');
+    }
+    
+    if (inputValue.length > 0 && inputValue.length < 10) {
+      newErrors.push('Must be at least 10 characters');
+    }
+    
+    if (inputValue.length > 500) {
+      newErrors.push('Must not exceed 500 characters');
+    }
+    
+    return newErrors;
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.target.value;
+    setValue(newValue);
+    
+    // Clear errors when user starts typing
+    if (errors.length > 0) {
+      setErrors([]);
+    }
+  };
+
+  const handleBlur = () => {
+    // Validate on blur
+    const validationErrors = validateValue(value);
+    setErrors(validationErrors);
+  };
+
+  const isRequired = true;
+
+  return (
+    <div>
+      <label htmlFor="bio-textarea">Bio *</label>
+      
+      {/* Error messages displayed above textarea */}
+      {errors.length > 0 && (
+        <div style={{ color: 'red', fontSize: '14px', marginBottom: '4px' }}>
+          {errors.map((error, index) => (
+            <div key={index}>• {error}</div>
+          ))}
+        </div>
+      )}
+      
+      <Textarea
+        id="bio-textarea"
+        placeholder="Tell us about yourself..."
+        value={value}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        maxLength={500}
+        isRequired={isRequired}
+        style={{
+          width: '100%',
+          padding: '8px',
+          border: errors.length > 0 ? '2px solid red' : '1px solid #ccc',
+          borderRadius: '4px'
+        }}
+      />
+      
+      {/* Helper text displayed below textarea */}
+      <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
+        {value.length}/500 characters
+      </div>
+    </div>
+  );
+}
+```
+
+### Read-only and Disabled States
+
+```tsx
+function StateExamples() {
+  return (
+    <div>
+      <Textarea
+        label="Read-only Textarea"
+        value="This content cannot be edited"
+        isReadOnly
+        helperText="This field is read-only"
+      />
+      
+      <Textarea
+        label="Disabled Textarea"
+        placeholder="This textarea is disabled"
+        isDisabled
+        helperText="This field is currently disabled"
+      />
+    </div>
+  );
+}
+```
+
+### Advanced Form Integration
+
+```tsx
+function FormIntegration() {
+  const [formData, setFormData] = useState({
+    message: '',
+    notes: ''
+  });
+  const [errors, setErrors] = useState<Record<string, string[]>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  const validateField = (name: string, value: string) => {
+    const fieldErrors: string[] = [];
+    
+    if (name === 'message') {
+      if (!value.trim()) {
+        fieldErrors.push('Message is required');
+      } else if (value.length < 10) {
+        fieldErrors.push('Message must be at least 10 characters');
+      }
+    }
+    
+    return fieldErrors;
+  };
+
+  const handleFieldBlur = (fieldName: string) => {
+    setTouched(prev => ({ ...prev, [fieldName]: true }));
+    const fieldErrors = validateField(fieldName, formData[fieldName as keyof typeof formData]);
+    setErrors(prev => ({ ...prev, [fieldName]: fieldErrors }));
+  };
+
+  const handleFieldChange = (fieldName: string, value: string) => {
+    setFormData(prev => ({ ...prev, [fieldName]: value }));
+    
+    // Clear errors when user starts typing (only if field was touched)
+    if (touched[fieldName] && errors[fieldName]?.length > 0) {
+      setErrors(prev => ({ ...prev, [fieldName]: [] }));
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validate all fields
+    const newErrors: Record<string, string[]> = {};
+    newErrors.message = validateField('message', formData.message);
+    
+    // Mark all fields as touched
+    setTouched({ message: true, notes: true });
+    setErrors(newErrors);
+    
+    // Check if form is valid
+    const hasErrors = Object.values(newErrors).some(fieldErrors => fieldErrors.length > 0);
+    
+    if (!hasErrors) {
+      console.log('Form submitted:', formData);
+      alert('Form submitted successfully!');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} style={{ maxWidth: '500px', margin: '0 auto' }}>
+      <div style={{ marginBottom: '20px' }}>
+        <label htmlFor="message-field" style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>
+          Message *
+        </label>
+        
+        {/* Error messages for message field */}
+        {touched.message && errors.message?.length > 0 && (
+          <div id="message-error" style={{ color: 'red', fontSize: '14px', marginBottom: '4px' }}>
+            {errors.message.map((error, index) => (
+              <div key={index}>• {error}</div>
+            ))}
+          </div>
+        )}
+        
+        <Textarea
+          id="message-field"
+          name="message"
+          placeholder="Enter your message..."
+          value={formData.message}
+          onChange={(e) => handleFieldChange('message', e.target.value)}
+          onBlur={() => handleFieldBlur('message')}
+          isRequired
+          validationErrors={touched.message ? errors.message : []}
+          aria-describedby={
+            touched.message && errors.message?.length > 0 
+              ? "message-error message-count"
+              : "message-count"
+          }
+          rows={4}
+          style={{
+            width: '100%',
+            padding: '8px',
+            border: touched.message && errors.message?.length > 0 ? '2px solid red' : '1px solid #ccc',
+            borderRadius: '4px',
+            fontSize: '14px'
+          }}
+        />
+        
+        {/* Character count for message */}
+        <div id="message-count" style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
+          {formData.message.length}/1000 characters
+        </div>
+      </div>
+
+      <div style={{ marginBottom: '20px' }}>
+        <label htmlFor="notes-field" style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>
+          Additional Notes
+        </label>
+        
+        <Textarea
+          id="notes-field"
+          name="notes"
+          placeholder="Any additional notes..."
+          value={formData.notes}
+          onChange={(e) => handleFieldChange('notes', e.target.value)}
+          onBlur={() => handleFieldBlur('notes')}
+          maxLength={500}
+          validationErrors={[]} // No validation errors for optional field
+          aria-describedby="notes-helper"
+          rows={3}
+          style={{
+            width: '100%',
+            padding: '8px',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            fontSize: '14px'
+          }}
+        />
+        
+        {/* Helper text for notes */}
+        <div id="notes-helper" style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
+          Optional field for additional information ({formData.notes.length}/500)
+        </div>
+      </div>
+      
+      <button 
+        type="submit" 
+        style={{ 
+          padding: '10px 20px', 
+          backgroundColor: '#007bff', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '4px', 
+          cursor: 'pointer' 
+        }}
+      >
+        Submit
+      </button>
+    </form>
+  );
+}
+```
+
+## API Reference
+
+### Textarea
+
+A fully accessible, headless multi-line text input component that extends the native HTML textarea with enhanced validation, state management, and accessibility features.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `value?` | `string` | `undefined` | Controlled value of the textarea |
+| `defaultValue?` | `string` | `undefined` | Uncontrolled default value |
+| `onChange?` | `(event: ChangeEvent<HTMLTextAreaElement>) => void` | `undefined` | Value change handler |
+| `onBlur?` | `(event: FocusEvent<HTMLTextAreaElement>) => void` | `undefined` | Blur event handler |
+| `onFocus?` | `(event: FocusEvent<HTMLTextAreaElement>) => void` | `undefined` | Focus event handler |
+| `onInvalid?` | `(errors: string[]) => void` | `undefined` | Validation error handler |
+| `label?` | `string` | `undefined` | Accessible label text |
+| `placeholder?` | `string` | `undefined` | Placeholder text |
+| `helperText?` | `string` | `undefined` | Helper text below textarea |
+| `errorMessage?` | `string` | `undefined` | Error message (sets invalid state) |
+| `validationErrors?` | `string[]` | `undefined` | Multiple validation error messages |
+| `validationBehavior?` | `ValidationBehavior` | `'aria'` | Validation behavior mode ('aria' or 'native') |
+| `isRequired?` | `boolean` | `false` | Required field indicator |
+| `isDisabled?` | `boolean` | `false` | Disabled state |
+| `isReadOnly?` | `boolean` | `false` | Read-only state |
+| `isInvalid?` | `boolean` | `false` | Invalid state (controlled) |
+| `rows?` | `number` | `3` | Visible rows of text |
+| `cols?` | `number` | `undefined` | Visible columns (character width) |
+| `maxLength?` | `number` | `undefined` | Maximum character limit |
+| `minLength?` | `number` | `undefined` | Minimum character limit |
+| `wrap?` | `WrapMode` | `'soft'` | Text wrapping mode ('soft', 'hard', 'off') |
+| `inputMode?` | `string` | `undefined` | Input mode for mobile keyboards |
+| `autoComplete?` | `string` | `undefined` | Autocomplete attribute |
+| `autoFocus?` | `boolean` | `false` | Auto-focus on mount |
+| `spellCheck?` | `boolean` | `undefined` | Spell check enable/disable |
+| `name?` | `string` | `undefined` | Form field name |
+| `form?` | `string` | `undefined` | Form ID association |
+| `as?` | `React.ElementType` | `'textarea'` | Polymorphic component type |
+| `id?` | `string` | `undefined` | Element ID (auto-generated if not provided) |
+| `className?` | `string` | `undefined` | CSS class name |
+| `style?` | `React.CSSProperties` | `undefined` | Inline styles |
+| `ref?` | `React.Ref<HTMLTextAreaElement>` | `undefined` | Forward ref to textarea element |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onChange` | `(event: ChangeEvent<HTMLTextAreaElement>)` | Text content changes | User types or pastes content |
+| `onFocus` | `(event: FocusEvent<HTMLTextAreaElement>)` | Textarea receives focus | User clicks or tabs into textarea |
+| `onBlur` | `(event: FocusEvent<HTMLTextAreaElement>)` | Textarea loses focus | User clicks outside or tabs away |
+| `onInvalid` | `(errors: string[])` | Validation errors occur | Validation fails during blur or submission |
+| `onKeyDown` | `(event: KeyboardEvent<HTMLTextAreaElement>)` | Key is pressed | User presses any key while focused |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `aria-label` | `string` | Accessible name when no visible label | Textarea element |
+| `aria-labelledby` | `string` | References label element | Textarea element |
+| `aria-describedby` | `string` | References helper/error text | Textarea element |
+| `aria-invalid` | `boolean` | Indicates validation state | Textarea element |
+| `aria-required` | `boolean` | Indicates required field | Textarea element |
+| `aria-readonly` | `boolean` | Indicates read-only state | Textarea element |
+| `role` | `'textbox'` | Semantic role (implicit) | Textarea element |
+
+**Data Attributes**
+
+| Attribute | Value | Purpose |
+|-----------|-------|---------|
+| `data-glide-textarea` | `''` | Component identifier |
+| `data-focused` | `'true' \| 'false'` | Focus state |
+| `data-focus-visible` | `'true' \| undefined` | Keyboard focus indicator |
+| `data-disabled` | `'true' \| undefined` | Disabled state |
+| `data-readonly` | `'true' \| undefined` | Read-only state |
+| `data-required` | `'true' \| undefined` | Required field |
+| `data-invalid` | `'true' \| undefined` | Invalid state |
+| `data-empty` | `'true' \| undefined` | Empty value state |
+| `data-rows` | `string` | Number of rows |
+| `data-cols` | `string` | Number of columns |
+| `data-has-error` | `'true' \| undefined` | Has error message |
+| `data-has-helper` | `'true' \| undefined` | Has helper text |
+| `data-character-count` | `string` | Character count display |
+| `data-validation-behavior` | `ValidationBehavior` | Validation mode |
+
+## Keyboard Interactions
+
+| Key | Action | Context | Notes |
+|-----|--------|---------|-------|
+| `Tab` | Navigate to textarea | Always | Moves focus to the textarea |
+| `Shift + Tab` | Navigate away | Always | Moves focus to previous element |
+| `Enter` | New line | While focused | Adds line break in textarea |
+| `Ctrl + A` / `Cmd + A` | Select all | While focused | Selects all text content |
+| `Ctrl + C` / `Cmd + C` | Copy | While focused | Copies selected text |
+| `Ctrl + V` / `Cmd + V` | Paste | While focused | Pastes clipboard content |
+| `Ctrl + X` / `Cmd + X` | Cut | While focused | Cuts selected text |
+| `Ctrl + Z` / `Cmd + Z` | Undo | While focused | Undoes last action |
+| `Ctrl + Y` / `Cmd + Shift + Z` | Redo | While focused | Redoes last undone action |
+| `Arrow Keys` | Move cursor | While focused | Navigates within text |
+| `Home` | Line start | While focused | Moves cursor to beginning of line |
+| `End` | Line end | While focused | Moves cursor to end of line |
+| `Ctrl + Home` / `Cmd + Home` | Text start | While focused | Moves cursor to beginning of text |
+| `Ctrl + End` / `Cmd + End` | Text end | While focused | Moves cursor to end of text |
+| `Shift + Arrow` | Select text | While focused | Extends selection |
+| `Ctrl + Shift + Arrow` | Select word | While focused | Extends selection by word |

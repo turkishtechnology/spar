@@ -53,24 +53,22 @@ describe('Textarea Component', () => {
     it('should render with helper text', () => {
       render(<Textarea helperText='Maximum 500 characters' />);
       const textarea = screen.getByRole('textbox');
-      const helperId = textarea.getAttribute('aria-describedby');
 
-      expect(helperId).toMatch(/-helper$/);
+      expect(textarea).not.toHaveAttribute('aria-describedby');
       expect(textarea).toHaveAttribute('data-has-helper', 'true');
     });
 
     it('should render with error message', () => {
       render(<Textarea errorMessage='This field is required' />);
       const textarea = screen.getByRole('textbox');
-      const errorId = textarea.getAttribute('aria-describedby');
 
-      expect(errorId).toMatch(/-error$/);
+      expect(textarea).not.toHaveAttribute('aria-describedby');
       expect(textarea).toHaveAttribute('aria-invalid', 'true');
       expect(textarea).toHaveAttribute('data-invalid', 'true');
       expect(textarea).toHaveAttribute('data-has-error', 'true');
     });
 
-    it('should combine multiple aria-describedby values', () => {
+    it('should use manual aria-describedby when provided', () => {
       render(
         <Textarea
           helperText='Helper text'
@@ -81,8 +79,8 @@ describe('Textarea Component', () => {
       const textarea = screen.getByRole('textbox');
       const describedBy = textarea.getAttribute('aria-describedby');
 
-      expect(describedBy).toContain('external-description');
-      expect(describedBy).toMatch(/-error$/);
+      expect(describedBy).toBe('external-description');
+      expect(textarea).toHaveAttribute('aria-invalid', 'true');
     });
   });
 
@@ -150,14 +148,6 @@ describe('Textarea Component', () => {
       const textarea = screen.getByRole('textbox');
 
       expect(textarea).toHaveAttribute('minlength', '10');
-    });
-
-    it('should handle resize behavior', () => {
-      render(<Textarea resize='none' />);
-      const textarea = screen.getByRole('textbox');
-
-      expect(textarea).toHaveStyle({ resize: 'none' });
-      expect(textarea).toHaveAttribute('data-resize', 'none');
     });
 
     it('should handle wrap mode', () => {
@@ -433,7 +423,6 @@ describe('Textarea Component', () => {
         <Textarea
           rows={5}
           cols={40}
-          resize='both'
           isRequired
           isDisabled
           isReadOnly
@@ -450,7 +439,6 @@ describe('Textarea Component', () => {
       expect(textarea).toHaveAttribute('data-glide-textarea', '');
       expect(textarea).toHaveAttribute('data-rows', '5');
       expect(textarea).toHaveAttribute('data-cols', '40');
-      expect(textarea).toHaveAttribute('data-resize', 'both');
       expect(textarea).toHaveAttribute('data-required', 'true');
       expect(textarea).toHaveAttribute('data-disabled', 'true');
       expect(textarea).toHaveAttribute('data-readonly', 'true');

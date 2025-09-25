@@ -8,7 +8,7 @@ The Textarea component is a headless, multi-line text input control that provide
 
 - Multi-line text input for forms (comments, descriptions, messages)
 - Content editing areas with validation feedback
-- Resizable text input with character/word limits
+- Text input with character/word limits and validation
 - Accessible text areas with proper labeling and error states
 
 **Compound component structure:**
@@ -48,7 +48,6 @@ The Textarea component is a headless, multi-line text input control that provide
 | `cols`               | `number`                                            | No       | `undefined`      | Visible columns (character width)        |
 | `maxLength`          | `number`                                            | No       | `undefined`      | Maximum character limit                  |
 | `minLength`          | `number`                                            | No       | `undefined`      | Minimum character limit                  |
-| `resize`             | `'none' \| 'both' \| 'horizontal' \| 'vertical'`    | No       | `'vertical'`     | Resize behavior                          |
 | `autoComplete`       | `string`                                            | No       | `undefined`      | Autocomplete attribute                   |
 | `autoFocus`          | `boolean`                                           | No       | `false`          | Auto-focus on mount                      |
 | `spellCheck`         | `boolean`                                           | No       | `undefined`      | Spell check setting                      |
@@ -82,7 +81,6 @@ The Textarea component is a headless, multi-line text input control that provide
 | **Disabled**   | `isDisabled=true`                      | Non-interactive state                   | `disabled` attribute, `data-disabled="true"`                |
 | **ReadOnly**   | `isReadOnly=true`                      | Non-editable but focusable              | `readonly` attribute, `data-readonly="true"`                |
 | **Required**   | `isRequired=true`                      | Required field indicator                | `required` attribute, `aria-required="true"`                |
-| **Resize**     | User drags resize handle               | Textarea dimensions change              | CSS resize property controls behavior                       |
 | **Max Length** | Character limit reached                | Prevents further input                  | Browser native behavior, may show count                     |
 
 ## 4. Accessibility
@@ -108,10 +106,8 @@ The Textarea component is a headless, multi-line text input control that provide
 - **Arrow Keys**: Navigate within text content
 - **Ctrl+A/Cmd+A**: Select all text
 - **Home/End**: Move to line beginning/end
-- **Page Up/Page Down**: Scroll content (if scrollable)
 - **Ctrl+Home/Ctrl+End**: Move to document beginning/end
 - **Enter**: Insert line break (multiline behavior)
-- **Escape**: No default behavior (can be customized)
 
 **Focus Management:**
 
@@ -198,10 +194,6 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>((props, ref) => 
 - `data-invalid="true"`: Error state (when error present)
 - `data-empty="true"`: Empty state (when no value)
 
-**Resize Attributes:**
-
-- `data-resize="none|both|horizontal|vertical"`: Resize behavior
-
 **Size Attributes:**
 
 - `data-rows="{number}"`: Number of visible rows
@@ -250,7 +242,6 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>((props, ref) => 
 - Error handling workflows
 - Real-world usage scenarios
 - Cross-browser compatibility
-- Resize behavior testing
 
 ## 8. Constraints
 
@@ -313,8 +304,6 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>((props, ref) => 
 **Advanced Features:**
 
 - [ ] Character/word counting (if maxLength)
-- [ ] Resize behavior control
-- [ ] Auto-resize functionality (optional)
 - [ ] Form integration
 - [ ] SSR-safe ID generation
 - [ ] Mobile keyboard optimization (inputMode)

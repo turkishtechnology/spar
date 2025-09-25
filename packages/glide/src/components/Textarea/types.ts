@@ -1,7 +1,6 @@
 import type { ChangeEvent, FocusEvent } from 'react';
 
 export type ValidationBehavior = 'native' | 'aria';
-export type ResizeBehavior = 'none' | 'both' | 'horizontal' | 'vertical';
 export type WrapMode = 'soft' | 'hard' | 'off';
 
 /**
@@ -110,12 +109,6 @@ export interface TextareaProps
    * Minimum character limit
    */
   minLength?: number;
-
-  /**
-   * Resize behavior
-   * @defaultValue 'vertical'
-   */
-  resize?: ResizeBehavior;
 
   /**
    * Text wrapping mode

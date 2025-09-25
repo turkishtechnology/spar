@@ -677,52 +677,5 @@ describe('Textarea Integration Tests', () => {
       const preview = screen.getByTestId('preview');
       expect(preview).toHaveTextContent('This is **bold** text.');
     });
-
-    it('should work with auto-resize functionality', async () => {
-      const user = userEvent.setup();
-
-      const AutoResizeTextarea = () => {
-        const [value, setValue] = useState('');
-        const [rows, setRows] = useState(3);
-        const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-        React.useEffect(() => {
-          if (textareaRef.current) {
-            const lineCount = value.split('\n').length;
-            const minRows = 3;
-            const maxRows = 10;
-            setRows(Math.max(minRows, Math.min(maxRows, lineCount)));
-          }
-        }, [value]);
-
-        return (
-          <div>
-            <Textarea
-              ref={textareaRef}
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              rows={rows}
-              aria-label='Auto-resize textarea'
-            />
-            <div data-testid='row-count'>Rows: {rows}</div>
-          </div>
-        );
-      };
-
-      render(<AutoResizeTextarea />);
-
-      const textarea = screen.getByRole('textbox');
-      const rowCount = screen.getByTestId('row-count');
-
-      // Initial state
-      expect(rowCount).toHaveTextContent('Rows: 3');
-
-      // Add multiple lines
-      await user.type(textarea, 'Line 1\nLine 2\nLine 3\nLine 4\nLine 5');
-
-      await waitFor(() => {
-        expect(rowCount).toHaveTextContent('Rows: 5');
-      });
-    });
   });
 });

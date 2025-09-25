@@ -11,6 +11,7 @@ export const Textarea = ({
   onChange,
   onBlur,
   onFocus,
+  onKeyDown,
   onInvalid,
   label,
   placeholder,
@@ -26,7 +27,6 @@ export const Textarea = ({
   cols,
   maxLength,
   minLength,
-  resize = 'vertical',
   autoComplete,
   autoFocus = false,
   spellCheck,
@@ -71,13 +71,8 @@ export const Textarea = ({
     [currentValue, maxLength],
   );
 
-  // ID generation for associated elements
-  const helperTextId = helperText ? `${textareaId}-helper` : undefined;
-  const errorId = hasError ? `${textareaId}-error` : undefined;
-
-  // Build aria-describedby
-  const describedByIds =
-    [ariaDescribedBy, helperTextId, errorId].filter(Boolean).join(' ') || undefined;
+  // Build aria-describedby (only use provided ariaDescribedBy)
+  const describedByIds = ariaDescribedBy || undefined;
 
   // Event handlers
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -109,6 +104,9 @@ export const Textarea = ({
     if (event.key === 'Tab') {
       setIsFocusVisible(true);
     }
+
+    // Call the provided onKeyDown handler if it exists
+    onKeyDown?.(event);
   };
 
   // Data attributes for styling
@@ -121,7 +119,6 @@ export const Textarea = ({
     'data-required': isRequired ? 'true' : undefined,
     'data-invalid': hasError ? 'true' : undefined,
     'data-empty': !currentValue ? 'true' : undefined,
-    'data-resize': resize,
     'data-rows': rows.toString(),
     'data-cols': cols?.toString(),
     'data-has-error': hasError ? 'true' : undefined,
@@ -166,10 +163,7 @@ export const Textarea = ({
       aria-required={isRequired}
       aria-readonly={isReadOnly}
       className={className}
-      style={{
-        resize,
-        ...style,
-      }}
+      style={style}
       {...cleanDataAttributes}
       {...rest}
     />
