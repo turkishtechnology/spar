@@ -34,37 +34,55 @@ export const Accordion = ({
   };
 
   const [internalValue, setInternalValue] = useState<string | string[]>(getInitialValue);
-  const [registeredItems, setRegisteredItems] = useState(() => new Set<string>());
+  const [registeredItems, setRegisteredItems] = useState(() => new Map<string, number>());
   const [focusedIndex, setFocusedIndex] = useState(-1);
 
   // Use controlled value if provided, otherwise use internal state
   const currentValue = controlledValue !== undefined ? controlledValue : internalValue;
 
   const registerItem = useCallback((itemValue: string) => {
-    setRegisteredItems((prev) => new Set(prev).add(itemValue));
+    setRegisteredItems((prev) => {
+      if (prev.has(itemValue)) return prev;
+
+      const newMap = new Map(prev);
+      newMap.set(itemValue, prev.size);
+      return newMap;
+    });
   }, []);
 
   const unregisterItem = useCallback((itemValue: string) => {
-    setRegisteredItems((prev) => new Set(Array.from(prev).filter((item) => item !== itemValue)));
+    setRegisteredItems((prev) => {
+      if (!prev.has(itemValue)) return prev;
+
+      const newMap = new Map();
+      let index = 0;
+
+      // Rebuild map with updated indices
+      for (const [key] of prev) {
+        if (key !== itemValue) {
+          newMap.set(key, index++);
+        }
+      }
+
+      return newMap;
+    });
   }, []);
 
+  // Use registeredItems.size as dependency - it changes when items are added/removed
+  // but doesn't cause infinite loops since it's a primitive value
   const getItemIndex = useCallback(
     (itemValue: string): number => {
-      return Array.from(registeredItems).indexOf(itemValue);
+      return registeredItems.get(itemValue) ?? -1;
     },
-    [registeredItems],
+    [registeredItems.size],
   );
 
   const getItemAtIndex = useCallback(
     (index: number): string | undefined => {
-      return Array.from(registeredItems)[index];
+      return Array.from(registeredItems.keys())[index];
     },
-    [registeredItems],
+    [registeredItems.size],
   );
-
-  const getTotalItems = useCallback((): number => {
-    return registeredItems.size;
-  }, [registeredItems]);
 
   const handleItemToggle = useCallback(
     (itemValue: string) => {
@@ -112,7 +130,7 @@ export const Accordion = ({
       setFocusedIndex,
       getItemIndex,
       getItemAtIndex,
-      getTotalItems,
+      itemCount: registeredItems.size,
     }),
     [
       type,
@@ -121,14 +139,12 @@ export const Accordion = ({
       handleItemToggle,
       isDisabled,
       orientation,
-      registeredItems,
       registerItem,
       unregisterItem,
       focusedIndex,
       setFocusedIndex,
       getItemIndex,
       getItemAtIndex,
-      getTotalItems,
     ],
   );
 

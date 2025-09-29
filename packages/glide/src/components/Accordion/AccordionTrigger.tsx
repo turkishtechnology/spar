@@ -33,7 +33,7 @@ export const AccordionTrigger = ({
       const currentIndex = accordionContext.getItemIndex(
         accordionContext.registeredItems.has(itemContext.value) ? itemContext.value : '',
       );
-      const totalItems = accordionContext.getTotalItems();
+      const totalItems = accordionContext.itemCount;
 
       switch (key) {
         case 'Enter':
