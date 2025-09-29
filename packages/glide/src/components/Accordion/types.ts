@@ -158,14 +158,14 @@ export interface AccordionContextValue {
   onItemToggle: (itemValue: string) => void;
   isDisabled: boolean;
   orientation: AccordionOrientation;
-  registeredItems: Set<string>;
+  registeredItems: Map<string, number>;
   registerItem: (itemValue: string) => void;
   unregisterItem: (itemValue: string) => void;
   focusedIndex: number;
   setFocusedIndex: (index: number) => void;
   getItemIndex: (itemValue: string) => number;
   getItemAtIndex: (index: number) => string | undefined;
-  getTotalItems: () => number;
+  itemCount: number;
 }
 
 export interface AccordionItemContextValue {
