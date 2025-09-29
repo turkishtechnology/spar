@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useId, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useId, useEffect, useMemo, useCallback } from 'react';
 import type { AccordionItemProps, AccordionItemContextValue } from './types';
 import { useAccordionContext } from './Accordion';
 
@@ -45,11 +45,11 @@ export const AccordionItem = ({
   // Determine if this item is disabled
   const isDisabled = accordionContext.isDisabled || itemIsDisabled;
 
-  const handleToggle = () => {
+  const handleToggle = useCallback(() => {
     if (!isDisabled) {
       accordionContext.onItemToggle(value);
     }
-  };
+  }, [isDisabled, value]);
 
   const itemContextValue = useMemo<AccordionItemContextValue>(
     () => ({
