@@ -34,25 +34,19 @@ export const Accordion = ({
   };
 
   const [internalValue, setInternalValue] = useState<string | string[]>(getInitialValue);
-  const [registeredItems] = useState(() => new Set<string>());
+  const [registeredItems, setRegisteredItems] = useState(() => new Set<string>());
   const [focusedIndex, setFocusedIndex] = useState(-1);
 
   // Use controlled value if provided, otherwise use internal state
   const currentValue = controlledValue !== undefined ? controlledValue : internalValue;
 
-  const registerItem = useCallback(
-    (itemValue: string) => {
-      registeredItems.add(itemValue);
-    },
-    [registeredItems],
-  );
+  const registerItem = useCallback((itemValue: string) => {
+    setRegisteredItems((prev) => new Set(prev).add(itemValue));
+  }, []);
 
-  const unregisterItem = useCallback(
-    (itemValue: string) => {
-      registeredItems.delete(itemValue);
-    },
-    [registeredItems],
-  );
+  const unregisterItem = useCallback((itemValue: string) => {
+    setRegisteredItems((prev) => new Set(Array.from(prev).filter((item) => item !== itemValue)));
+  }, []);
 
   const getItemIndex = useCallback(
     (itemValue: string): number => {

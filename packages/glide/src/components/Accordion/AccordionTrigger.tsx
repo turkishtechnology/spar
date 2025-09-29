@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
 import type { AccordionTriggerProps } from './types';
 import { useAccordionContext } from './Accordion';
 import { useAccordionItemContext } from './AccordionItem';
@@ -16,7 +16,6 @@ export const AccordionTrigger = ({
   const accordionContext = useAccordionContext();
   const itemContext = useAccordionItemContext();
   const { isExpanded, isDisabled, triggerId, contentId, onToggle } = itemContext;
-  const triggerRef = useRef<HTMLElement>(null);
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
@@ -100,7 +99,6 @@ export const AccordionTrigger = ({
   return (
     <Component
       {...props}
-      ref={triggerRef}
       id={triggerId}
       type={Component === 'button' ? 'button' : undefined}
       aria-expanded={isExpanded}
