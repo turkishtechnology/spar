@@ -1,4 +1,3 @@
-// @ts-nocheck - Temporary workaround for React type issues
 import { useCallback, useRef, useEffect, useState } from 'react';
 import type { TimerId } from './types';
 

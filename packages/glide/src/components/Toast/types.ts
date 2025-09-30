@@ -1,12 +1,11 @@
-// @ts-nocheck - Temporary workaround for React type issues
-
-// Import types from our custom React declarations
-type ElementType = unknown;
-type ReactNode = unknown;
-type HTMLAttributes = Record<string, unknown>;
-type ButtonHTMLAttributes = Record<string, unknown>;
-type MouseEvent = Event;
-type Ref = { current: unknown | null };
+import {
+  ButtonHTMLAttributes,
+  ElementType,
+  HTMLAttributes,
+  MouseEvent,
+  ReactNode,
+  Ref,
+} from 'react';
 
 // Core Toast Types with const assertions for better performance
 export type ToastVariant = 'success' | 'error' | 'warning' | 'info' | 'loading';

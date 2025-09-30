@@ -1,6 +1,3 @@
-/// <reference path="../../types/react.d.ts" />
-// @ts-nocheck - Temporary workaround for React type issues
-
 import {
   createContext,
   useContext,
