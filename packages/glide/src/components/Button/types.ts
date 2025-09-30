@@ -12,12 +12,6 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   as?: ElementType;
 
   /**
-   * Button type (only applies when as="button")
-   * @defaultValue "button"
-   */
-  type?: 'button' | 'submit' | 'reset';
-
-  /**
    * Disabled state - properly announced to screen readers
    * @defaultValue false
    */
@@ -45,12 +39,6 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
    * Callback fired when toggle state changes
    */
   onPressedChange?: (pressed: boolean) => void;
-
-  /**
-   * Screen reader text announced during loading (should be localized)
-   * @defaultValue "Loading"
-   */
-  loadingText?: string;
 
   /**
    * Component content

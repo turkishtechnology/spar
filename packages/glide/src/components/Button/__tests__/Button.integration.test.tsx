@@ -244,7 +244,7 @@ describe('Button Integration', () => {
 
         return (
           <div>
-            <Button onClick={handleClick} isLoading={isLoading} loadingText='Processing'>
+            <Button onClick={handleClick} isLoading={isLoading}>
               {result || 'Start Process'}
             </Button>
             {result && <div data-testid='result'>{result}</div>}
@@ -263,7 +263,6 @@ describe('Button Integration', () => {
 
       // Should be in loading state
       expect(button).toHaveAttribute('aria-busy', 'true');
-      expect(screen.getByText('Processing', { selector: '[aria-live]' })).toBeInTheDocument();
 
       // Wait for async operation to complete
       await screen.findByTestId('result');

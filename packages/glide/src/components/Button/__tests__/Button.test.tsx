@@ -109,18 +109,20 @@ describe('Button', () => {
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('aria-busy', 'true');
       expect(button).toHaveAttribute('data-loading', 'true');
-      expect(screen.getByText('Loading', { selector: '[aria-live="polite"]' })).toBeInTheDocument();
+      // Component is headless - no built-in loading text structure
+      expect(screen.getByText('Loading')).toBeInTheDocument();
     });
 
-    it('uses custom loading text', () => {
+    it('allows developer to handle loading content', () => {
       render(
-        <Button isLoading loadingText='Please wait'>
+        <Button isLoading>
+          <span aria-live='polite'>Please wait</span>
           Submit
         </Button>,
       );
-      expect(
-        screen.getByText('Please wait', { selector: '[aria-live="polite"]' }),
-      ).toBeInTheDocument();
+      // Developer controls loading text structure
+      expect(screen.getByText('Please wait')).toBeInTheDocument();
+      expect(screen.getByText('Submit')).toBeInTheDocument();
     });
 
     it('prevents click when loading', async () => {
@@ -136,15 +138,11 @@ describe('Button', () => {
       expect(handleClick).not.toHaveBeenCalled();
     });
 
-    it('shows both loading text and children', () => {
-      render(
-        <Button isLoading loadingText='Loading...'>
-          Submit Form
-        </Button>,
-      );
-      expect(
-        screen.getByText('Loading...', { selector: '[aria-live="polite"]' }),
-      ).toBeInTheDocument();
+    it('exposes loading state via data attributes', () => {
+      render(<Button isLoading>Submit Form</Button>);
+      const button = screen.getByRole('button');
+      expect(button).toHaveAttribute('data-loading', 'true');
+      expect(button).toHaveAttribute('aria-busy', 'true');
       expect(screen.getByText('Submit Form')).toBeInTheDocument();
     });
   });

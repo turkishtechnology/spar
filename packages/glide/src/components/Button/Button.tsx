@@ -12,7 +12,6 @@ export const Button = ({
   isLoading = false,
   isPressed,
   onPressedChange,
-  loadingText = 'Loading',
   children,
   onClick,
   onKeyDown,
@@ -31,12 +30,18 @@ export const Button = ({
   // Interactive state
   const isInteractive = !isDisabled && !isLoading;
 
-  // Auto focus handling
+  // Auto focus handling - SSR safe with stable dependency array
   useEffect(() => {
+    // Only run on client-side after mount
+    if (typeof window === 'undefined') return;
+
     if (shouldAutoFocus && ref && typeof ref === 'object' && ref.current) {
-      ref.current.focus();
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        ref.current?.focus();
+      });
     }
-  }, [shouldAutoFocus, ref]);
+  }, [shouldAutoFocus]);
 
   // Unified activation handler for click and keyboard
   const handleActivation = useCallback(
@@ -53,8 +58,8 @@ export const Button = ({
         }
       }
 
-      // Fire click handler
-      if (onClick && 'button' in event.nativeEvent) {
+      // Fire click handler - only for mouse events
+      if (onClick && event.type === 'click') {
         onClick(event as React.MouseEvent<HTMLButtonElement>);
       }
     },
@@ -141,19 +146,7 @@ export const Button = ({
     elementProps.role = 'button';
   }
 
-  // Screen reader announcement for loading
-  const screenReaderContent = isLoading ? (
-    <>
-      <span aria-live='polite' aria-atomic='true' className='sr-only'>
-        {loadingText}
-      </span>
-      {children}
-    </>
-  ) : (
-    children
-  );
-
-  return <Element {...elementProps}>{screenReaderContent}</Element>;
+  return <Element {...elementProps}>{children}</Element>;
 };
 
 Button.displayName = 'Button';
