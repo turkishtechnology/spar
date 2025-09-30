@@ -2,8 +2,18 @@ import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { themes } from 'prism-react-renderer';
-import { Button } from '@turkish-technology/glide';
 
+import {
+  Accordion,
+  AccordionItem,
+  AccordionHeader,
+  AccordionTrigger,
+  AccordionContent,
+  Button,
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from '@turkish-technology/glide';
 interface LiveCodeProps {
   title?: string;
   code?: string;
@@ -53,8 +63,18 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
-    // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
+    // Accordion components
+    Accordion,
+    AccordionItem,
+    AccordionHeader,
+    AccordionTrigger,
+    AccordionContent,
+    // Button component
     Button,
+    // Collapsible components
+    Collapsible,
+    CollapsibleTrigger,
+    CollapsibleContent,
   };
 
   const [copied, setCopied] = useState(false);

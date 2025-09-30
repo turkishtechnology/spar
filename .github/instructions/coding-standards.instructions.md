@@ -53,6 +53,36 @@ useEffect(() => {
 }, [dependency]); // Clear why dependency is needed
 ```
 
+## ARIA Attributes Standards
+
+### Type Safety for ARIA Properties
+
+```typescript
+// ALWAYS: Use React.AriaAttributes for aria-* props when available
+interface ComponentProps extends React.HTMLAttributes<HTMLElement> {
+  /**
+   * EXAMPLE: Use React's typed ARIA attributes
+   */
+  'aria-label'?: React.AriaAttributes['aria-label'];
+  'aria-describedby'?: React.AriaAttributes['aria-describedby'];
+  
+  /**
+   * Role with React's predefined types
+   */
+  role?: React.AriaRole;
+}
+
+// NEVER: Generic string for standard ARIA attributes
+interface BadProps {
+  'aria-label'?: string; // Should use React.AriaAttributes['aria-label']
+}
+```
+
+### ARIA Implementation Priority
+
+1. **First Priority**: Use `React.AriaAttributes['aria-*']` if available
+2. **Fallback**: Use `string` only for truly custom attributes
+
 ## Component Architecture
 
 ### Component Template
