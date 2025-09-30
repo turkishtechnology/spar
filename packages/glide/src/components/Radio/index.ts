@@ -1,21 +1,16 @@
 import { Radio, RadioGroup, RadioItem } from './Radio';
 
-// Aliased exports for grouped usage
-const Root = RadioGroup;
-const Group = RadioGroup;
-const Item = RadioItem;
-
-// Export both named components AND aliases
+// Export both patterns
 export {
-  // Named exports (for direct imports)
+  // Compound component (with dot notation)
   Radio,
+
+  // Named exports (tree-shakeable)
   RadioGroup,
   RadioItem,
 
-  // Aliased exports (for grouped pattern)
-  Root,
-  Group,
-  Item,
+  // Root alias for explicit usage
+  RadioGroup as RadioRoot,
 };
 
 // Export types
