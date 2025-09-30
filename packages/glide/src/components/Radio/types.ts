@@ -8,6 +8,10 @@ export type Orientation = 'horizontal' | 'vertical';
  */
 export interface RadioGroupProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   /**
+   * Ref forwarded to the root element
+   */
+  ref?: React.Ref<HTMLDivElement>;
+  /**
    * Controlled value of selected radio item
    */
   value?: string;
@@ -88,6 +92,10 @@ export interface RadioGroupProps extends Omit<React.HTMLAttributes<HTMLDivElemen
 export interface RadioItemProps
   extends Omit<React.LabelHTMLAttributes<HTMLLabelElement>, 'onChange'> {
   /**
+   * Ref forwarded to the root element
+   */
+  ref?: React.Ref<HTMLLabelElement>;
+  /**
    * Unique value for this radio item
    */
   value: string;
@@ -134,5 +142,4 @@ export interface RadioGroupContextValue {
   isInToolbar: boolean;
   registerItem: (value: string) => void;
   unregisterItem: (value: string) => void;
-  getItems: () => string[];
 }

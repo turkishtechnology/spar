@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 title: Radio
 description: Accessible radio group component for mutually exclusive selections with full keyboard navigation and ARIA support.
 ---
@@ -63,7 +63,11 @@ Accessible radio group component for creating mutually exclusive selections with
 ## Installation
 
 ```tsx
+// Compound component (recommended)
 import { Radio } from '@turkish-technology/glide'
+
+// Named imports (tree-shakeable)
+import { RadioGroup, RadioItem } from '@turkish-technology/glide'
 ```
 
 ## Anatomy
@@ -76,6 +80,17 @@ The Radio component is built as a compound component with two main parts:
   <Radio.Item />
   <Radio.Item />
 </Radio.Group>
+```
+
+**Alternative: Tree-shakeable named imports**
+```tsx
+import { RadioGroup, RadioItem } from '@turkish-technology/glide'
+
+<RadioGroup>
+  <RadioItem />
+  <RadioItem />
+  <RadioItem />
+</RadioGroup>
 ```
 
 **Data Flow:**
