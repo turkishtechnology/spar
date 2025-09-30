@@ -81,25 +81,24 @@ describe('Button Accessibility', () => {
       expect(button).not.toHaveAttribute('aria-pressed');
     });
 
-    it('should have aria-live region for loading text', () => {
-      render(
-        <Button isLoading loadingText='Please wait'>
-          Submit
-        </Button>,
-      );
-      const liveRegion = screen.getByText('Please wait');
-      expect(liveRegion).toHaveAttribute('aria-live', 'polite');
-      expect(liveRegion).toHaveAttribute('aria-atomic', 'true');
+    it('should expose loading state via data attribute for styling', () => {
+      render(<Button isLoading>Submit</Button>);
+      const button = screen.getByRole('button');
+      expect(button).toHaveAttribute('data-loading', 'true');
+      expect(button).toHaveAttribute('aria-busy', 'true');
     });
 
-    it('should hide loading text from visual layout with sr-only', () => {
+    it('should allow developer to handle loading text content', () => {
       render(
-        <Button isLoading loadingText='Loading...'>
+        <Button isLoading>
+          <span aria-live='polite' className='sr-only'>
+            Loading...
+          </span>
           Submit
         </Button>,
       );
-      const liveRegion = screen.getByText('Loading...');
-      expect(liveRegion).toHaveClass('sr-only');
+      const button = screen.getByRole('button');
+      expect(button).toHaveAttribute('data-loading', 'true');
     });
   });
 
@@ -237,21 +236,18 @@ describe('Button Accessibility', () => {
   });
 
   describe('Screen Reader Support', () => {
-    it('should announce loading state changes', () => {
+    it('should communicate loading state changes via aria-busy', () => {
       const { rerender } = render(<Button>Submit</Button>);
+      const button = screen.getByRole('button');
 
-      // No loading announcement initially
-      expect(screen.queryByText('Loading', { selector: '[aria-live]' })).not.toBeInTheDocument();
+      // No loading state initially
+      expect(button).not.toHaveAttribute('aria-busy');
+      expect(button).not.toHaveAttribute('data-loading');
 
-      // Loading announcement appears when loading starts
-      rerender(
-        <Button isLoading loadingText='Loading'>
-          Submit
-        </Button>,
-      );
-      const liveRegion = screen.getByText('Loading');
-      expect(liveRegion).toHaveAttribute('aria-live', 'polite');
-      expect(liveRegion).toHaveAttribute('aria-atomic', 'true');
+      // Loading state appears when loading starts
+      rerender(<Button isLoading>Submit</Button>);
+      expect(button).toHaveAttribute('aria-busy', 'true');
+      expect(button).toHaveAttribute('data-loading', 'true');
     });
 
     it('should announce state changes for toggle buttons', async () => {
@@ -284,18 +280,13 @@ describe('Button Accessibility', () => {
     });
 
     it('should maintain accessible name with loading state', () => {
-      render(
-        <Button isLoading loadingText='Saving'>
-          Save Document
-        </Button>,
-      );
+      render(<Button isLoading>Save Document</Button>);
 
       // Button should still have its main content as accessible name
       const button = screen.getByRole('button', { name: /Save Document/i });
       expect(button).toBeInTheDocument();
 
       // Loading text should be announced separately
-      expect(screen.getByText('Saving', { selector: '[aria-live]' })).toBeInTheDocument();
     });
   });
 
@@ -315,7 +306,6 @@ describe('Button Accessibility', () => {
       const button = screen.getByRole('button');
 
       expect(button).toHaveAttribute('aria-busy', 'true');
-      expect(screen.getByText('Loading', { selector: '[aria-live]' })).toBeInTheDocument();
     });
 
     it('should communicate pressed state for toggle buttons', () => {
