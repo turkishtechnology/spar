@@ -1,0 +1,291 @@
+---
+sidebar_position: 2
+title: Collapsible
+description: A headless collapsible component that manages the visibility of content sections with full accessibility support.
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+
+# Collapsible
+
+A headless collapsible component that manages the visibility of content sections with full accessibility support.
+
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green) ![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-✓-success) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
+
+## Live Demo
+
+<LiveCode 
+  code={`function BasicExample() {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+return (
+<Collapsible>
+<CollapsibleTrigger style={{
+        padding: '8px 12px',
+        background: '#f0f0f0',
+        border: 'none',
+      }}>
+ShowContent
+</CollapsibleTrigger>
+<CollapsibleContent style={{ marginTop: '8px', padding: '8px' }}>
+<p>This content can be collapsed and expanded.</p>
+</CollapsibleContent>
+</Collapsible>
+);
+}`}
+/>
+
+## Features
+
+- **Controlled and uncontrolled modes** - Full control over open state or automatic management
+- **Keyboard navigation** - Enter and Space key support for trigger activation
+- **Focus management** - Proper focus handling and restoration
+- **Screen reader support** - ARIA attributes for accessibility
+- **Flexible trigger elements** - Support for button and custom elements with proper semantics
+- **Force mount option** - Keep content mounted when closed for performance or search optimization
+- **Browser search integration** - Content findability with `beforematch` event support
+- **Animation support** - CSS custom properties for smooth transitions
+- **Polymorphic components** - Render as any element using the `as` prop
+
+## Installation
+
+```bash
+pnpm install @turkish-technology/glide
+```
+
+```tsx
+import { Collapsible } from '@turkish-technology/glide';
+// or
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/glide';
+```
+
+## Anatomy
+
+```
+CollapsibleRoot
+├── CollapsibleTrigger    // Button that toggles visibility
+└── CollapsibleContent    // Container for collapsible content
+```
+
+The Collapsible component consists of three main parts:
+
+- **Root**: Provides context and state management for the collapsible
+- **Trigger**: Interactive element that toggles the content visibility
+- **Content**: Container that shows/hides based on the collapsible state
+
+## Code Examples
+
+### Basic Usage
+
+```tsx
+import { Collapsible } from '@turkish-technology/glide';
+
+function BasicCollapsible() {
+  return (
+    <CollapsibleRoot>
+      <CollapsibleTrigger>Toggle Content</CollapsibleTrigger>
+      <CollapsibleContent>
+        <p>This content can be toggled.</p>
+      </CollapsibleContent>
+    </CollapsibleRoot>
+  );
+}
+```
+
+### Controlled State
+
+```tsx
+import { Collapsible } from '@turkish-technology/glide';
+import { useState } from 'react';
+
+function ControlledCollapsible() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <CollapsibleRoot open={isOpen} onOpenChange={setIsOpen}>
+      <CollapsibleTrigger>{isOpen ? 'Collapse' : 'Expand'}</CollapsibleTrigger>
+      <CollapsibleContent>
+        <div>
+          <h3>Controlled Content</h3>
+          <p>The parent component controls this state</p>
+        </div>
+      </CollapsibleContent>
+    </CollapsibleRoot>
+  );
+}
+```
+
+### Default Open State
+
+```tsx
+import { Collapsible } from '@turkish-technology/glide';
+
+function DefaultOpenCollapsible() {
+  return (
+    <CollapsibleRoot defaultOpen={true}>
+      <CollapsibleTrigger>Toggle Content</CollapsibleTrigger>
+      <CollapsibleContent>
+        <p>This content starts expanded</p>
+      </CollapsibleContent>
+    </CollapsibleRoot>
+  );
+}
+```
+
+### Custom Trigger Element
+
+```tsx
+import { Collapsible } from '@turkish-technology/glide';
+
+function CustomTriggerCollapsible() {
+  return (
+    <CollapsibleRoot>
+      <CollapsibleTrigger as='div' style={{ cursor: 'pointer' }}>
+        <h3>Click this heading to expand</h3>
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <p>Content revealed by custom trigger.</p>
+      </CollapsibleContent>
+    </CollapsibleRoot>
+  );
+}
+```
+
+### Force Mount Content
+
+```tsx
+import { Collapsible } from '@turkish-technology/glide';
+
+function ForceMountCollapsible() {
+  return (
+    <CollapsibleRoot>
+      <CollapsibleTrigger>Toggle (Content Always Mounted)</CollapsibleTrigger>
+      <CollapsibleContent forceMount={true}>
+        <p>This content stays in the DOM even when collapsed.</p>
+        <p>Useful for maintaining component state or enabling browser search.</p>
+      </CollapsibleContent>
+    </CollapsibleRoot>
+  );
+}
+```
+
+### Disabled State
+
+```tsx
+import { Collapsible } from '@turkish-technology/glide';
+
+function DisabledCollapsible() {
+  return (
+    <CollapsibleRoot isDisabled={true}>
+      <CollapsibleTrigger>Disabled Trigger</CollapsibleTrigger>
+      <CollapsibleContent>
+        <p>This content cannot be toggled</p>
+      </CollapsibleContent>
+    </CollapsibleRoot>
+  );
+}
+```
+
+## API Reference
+
+### CollapsibleRoot
+
+The root component that provides context and state management for the collapsible.
+
+**Props**
+
+| Name            | Type                      | Default | Description                               |
+| --------------- | ------------------------- | ------- | ----------------------------------------- |
+| `open?`         | `boolean`                 | -       | Controlled open state                     |
+| `defaultOpen?`  | `boolean`                 | `false` | Default open state for uncontrolled usage |
+| `onOpenChange?` | `(open: boolean) => void` | -       | Callback fired when open state changes    |
+| `isDisabled?`   | `boolean`                 | `false` | Whether the collapsible is disabled       |
+| `children`      | `ReactNode`               | -       | Child components                          |
+
+**Events**
+
+| Name           | Parameters        | Description        | When Triggered                          |
+| -------------- | ----------------- | ------------------ | --------------------------------------- |
+| `onOpenChange` | `(open: boolean)` | Open state changes | User interaction or programmatic change |
+
+**ARIA Attributes**
+
+| Attribute       | Value                | Purpose                  | Applied To   |
+| --------------- | -------------------- | ------------------------ | ------------ |
+| `data-state`    | `"open" \| "closed"` | Indicates current state  | Root element |
+| `data-disabled` | `""` (when disabled) | Indicates disabled state | Root element |
+
+### CollapsibleTrigger
+
+Interactive element that toggles the content visibility with full accessibility support.
+
+**Props**
+
+| Name        | Type                | Default    | Description                            |
+| ----------- | ------------------- | ---------- | -------------------------------------- |
+| `as?`       | `React.ElementType` | `"button"` | Element type for polymorphic rendering |
+| `children?` | `ReactNode`         | -          | Trigger content                        |
+
+**Events**
+
+| Name        | Parameters                     | Description            | When Triggered          |
+| ----------- | ------------------------------ | ---------------------- | ----------------------- |
+| `onClick`   | `(event: React.MouseEvent)`    | Trigger clicked        | Mouse click interaction |
+| `onKeyDown` | `(event: React.KeyboardEvent)` | Key pressed on trigger | Keyboard interaction    |
+
+**ARIA Attributes**
+
+| Attribute       | Value                | Purpose                                        | Applied To         |
+| --------------- | -------------------- | ---------------------------------------------- | ------------------ |
+| `aria-expanded` | `boolean`            | Indicates if content is expanded               | Trigger element    |
+| `aria-controls` | `string`             | References the controlled content              | Trigger element    |
+| `aria-disabled` | `boolean`            | Indicates disabled state (non-button elements) | Trigger element    |
+| `disabled`      | `boolean`            | Native disabled attribute (button elements)    | Button trigger     |
+| `role`          | `"button"`           | Semantic button role (non-button elements)     | Non-button trigger |
+| `tabIndex`      | `0 \| -1`            | Focus management (non-button elements)         | Non-button trigger |
+| `data-state`    | `"open" \| "closed"` | Indicates current state                        | Trigger element    |
+| `data-disabled` | `""` (when disabled) | Indicates disabled state                       | Trigger element    |
+
+### CollapsibleContent
+
+Container that shows/hides based on the collapsible state with advanced features.
+
+**Props**
+
+| Name             | Type                     | Default | Description                                             |
+| ---------------- | ------------------------ | ------- | ------------------------------------------------------- |
+| `as?`            | `React.ElementType`      | `"div"` | Element type for polymorphic rendering                  |
+| `forceMount?`    | `boolean`                | `false` | Force content to remain mounted when closed             |
+| `children?`      | `ReactNode`              | -       | Content to be shown/hidden                              |
+| `onBeforeMatch?` | `(event: Event) => void` | -       | Callback fired when content is found via browser search |
+
+**Events**
+
+| Name            | Parameters       | Description                      | When Triggered                                   |
+| --------------- | ---------------- | -------------------------------- | ------------------------------------------------ |
+| `onBeforeMatch` | `(event: Event)` | Content found via browser search | Browser's "find on page" feature locates content |
+
+**ARIA Attributes**
+
+| Attribute       | Value                   | Purpose                             | Applied To      |
+| --------------- | ----------------------- | ----------------------------------- | --------------- |
+| `hidden`        | `true \| "until-found"` | Controls visibility and findability | Content element |
+| `data-state`    | `"open" \| "closed"`    | Indicates current state             | Content element |
+| `data-disabled` | `""` (when disabled)    | Indicates disabled state            | Content element |
+
+**CSS Custom Properties**
+
+| Property                             | Description                      | When Available       |
+| ------------------------------------ | -------------------------------- | -------------------- |
+| `--glide-collapsible-content-width`  | Current content width in pixels  | When content is open |
+| `--glide-collapsible-content-height` | Current content height in pixels | When content is open |
+
+## Keyboard Interactions
+
+| Key           | Action                     | Context         | Notes                                      |
+| ------------- | -------------------------- | --------------- | ------------------------------------------ |
+| `Tab`         | Navigate to trigger        | Always          | Moves focus to the trigger element         |
+| `Shift + Tab` | Navigate away from trigger | Always          | Moves focus to previous focusable element  |
+| `Enter`       | Toggle content             | Trigger focused | Activates the trigger to show/hide content |
+| `Space`       | Toggle content             | Trigger focused | Alternative activation method for trigger  |
