@@ -1,4 +1,10 @@
-import { sortToastQueue, getVisibleToasts, generateToastId, getAriaRole, getAriaLive } from '../utils';
+import {
+  sortToastQueue,
+  getVisibleToasts,
+  generateToastId,
+  getAriaRole,
+  getAriaLive,
+} from '../utils';
 import { PRIORITY_ORDER } from '../constants';
 import type { ToastPriority } from '../Toast.types';
 
@@ -7,7 +13,7 @@ describe('Toast Utils', () => {
     it('should generate unique IDs', () => {
       const id1 = generateToastId();
       const id2 = generateToastId();
-      
+
       expect(id1).not.toBe(id2);
       expect(id1).toMatch(/^toast-\d+-\d+$/);
       expect(id2).toMatch(/^toast-\d+-\d+$/);
@@ -16,13 +22,13 @@ describe('Toast Utils', () => {
     it('should generate IDs with incremental counters', () => {
       const id1 = generateToastId();
       const id2 = generateToastId();
-      
+
       const parts1 = id1.split('-');
       const parts2 = id2.split('-');
-      
+
       const counter1 = parseInt(parts1[1] || '0');
       const counter2 = parseInt(parts2[1] || '0');
-      
+
       expect(counter2).toBe(counter1 + 1);
     });
   });
@@ -44,7 +50,7 @@ describe('Toast Utils', () => {
       const sorted = toasts.sort((a, b) => sortToastQueue(a, b, PRIORITY_ORDER));
 
       expect(sorted[0]!.priority).toBe('high');
-      expect(sorted[1]!.priority).toBe('normal'); 
+      expect(sorted[1]!.priority).toBe('normal');
       expect(sorted[2]!.priority).toBe('low');
     });
 
@@ -71,10 +77,12 @@ describe('Toast Utils', () => {
 
       const sorted = toasts.sort((a, b) => sortToastQueue(a, b, PRIORITY_ORDER));
 
-      expect(sorted[0]).toEqual(expect.objectContaining({
-        priority: 'high',
-        createdAt: 3000,
-      }));
+      expect(sorted[0]).toEqual(
+        expect.objectContaining({
+          priority: 'high',
+          createdAt: 3000,
+        }),
+      );
     });
 
     it('should handle complex mixed priority and time scenarios', () => {
@@ -89,9 +97,9 @@ describe('Toast Utils', () => {
       const sorted = toasts.sort((a, b) => sortToastQueue(a, b, PRIORITY_ORDER));
 
       // Should be: high(1000), high(4000), normal(1500), normal(3000), low(2000)
-      expect(sorted.map(t => `${t.priority}-${t.createdAt}`)).toEqual([
+      expect(sorted.map((t) => `${t.priority}-${t.createdAt}`)).toEqual([
         'high-1000',
-        'high-4000', 
+        'high-4000',
         'normal-1500',
         'normal-3000',
         'low-2000',
@@ -107,10 +115,7 @@ describe('Toast Utils', () => {
     });
 
     it('should return all toasts when under visible limit', () => {
-      const toasts = [
-        createMockToast('high', 1000),
-        createMockToast('normal', 2000),
-      ];
+      const toasts = [createMockToast('high', 1000), createMockToast('normal', 2000)];
 
       const result = getVisibleToasts(toasts, 5, PRIORITY_ORDER);
 
@@ -131,11 +136,11 @@ describe('Toast Utils', () => {
 
       expect(result.visible).toHaveLength(2);
       expect(result.queued).toHaveLength(2);
-      
+
       // Visible should be high priority toasts
       expect(result.visible[0]!.priority).toBe('high');
       expect(result.visible[1]!.priority).toBe('high');
-      
+
       // Queued should be lower priority
       expect(result.queued[0]!.priority).toBe('normal');
       expect(result.queued[1]!.priority).toBe('low');
@@ -151,12 +156,12 @@ describe('Toast Utils', () => {
 
       const result = getVisibleToasts(toasts, 2, PRIORITY_ORDER);
 
-      expect(result.visible.map(t => `${t.priority}-${t.createdAt}`)).toEqual([
+      expect(result.visible.map((t) => `${t.priority}-${t.createdAt}`)).toEqual([
         'high-1000',
         'normal-1500',
       ]);
-      
-      expect(result.queued.map(t => `${t.priority}-${t.createdAt}`)).toEqual([
+
+      expect(result.queued.map((t) => `${t.priority}-${t.createdAt}`)).toEqual([
         'normal-3000',
         'low-2000',
       ]);
@@ -164,7 +169,7 @@ describe('Toast Utils', () => {
 
     it('should handle empty array', () => {
       const result = getVisibleToasts([], 3, PRIORITY_ORDER);
-      
+
       expect(result.visible).toEqual([]);
       expect(result.queued).toEqual([]);
     });
@@ -172,7 +177,7 @@ describe('Toast Utils', () => {
     it('should handle zero visible limit', () => {
       const toasts = [createMockToast('high', 1000)];
       const result = getVisibleToasts(toasts, 0, PRIORITY_ORDER);
-      
+
       expect(result.visible).toEqual([]);
       expect(result.queued).toEqual(toasts);
     });

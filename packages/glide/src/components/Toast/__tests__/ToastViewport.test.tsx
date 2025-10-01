@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { ToastProvider } from '../ToastProvider';
 import { ToastViewport } from '../ToastViewport';
-import { toast } from '../ToastComponents';
 
 describe('ToastViewport Positioning', () => {
   beforeEach(() => {
@@ -16,14 +15,14 @@ describe('ToastViewport Positioning', () => {
   afterEach(() => {
     // Clean up after each test
     const containers = document.querySelectorAll('[data-toast-portal]');
-    containers.forEach(container => container.remove());
+    containers.forEach((container) => container.remove());
   });
 
   it('renders with default top-right position', () => {
     render(
       <ToastProvider>
         <ToastViewport />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     const viewport = screen.getByRole('region', { name: 'Notifications' });
@@ -33,8 +32,8 @@ describe('ToastViewport Positioning', () => {
   it('renders with custom position', () => {
     render(
       <ToastProvider>
-        <ToastViewport position="bottom-left" />
-      </ToastProvider>
+        <ToastViewport position='bottom-left' />
+      </ToastProvider>,
     );
 
     const viewport = screen.getByRole('region', { name: 'Notifications' });
@@ -45,7 +44,7 @@ describe('ToastViewport Positioning', () => {
     render(
       <ToastProvider>
         <ToastViewport zIndex={99999} />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     const viewport = screen.getByRole('region', { name: 'Notifications' });
@@ -55,8 +54,8 @@ describe('ToastViewport Positioning', () => {
   it('applies custom max-width', () => {
     render(
       <ToastProvider>
-        <ToastViewport maxWidth="600px" />
-      </ToastProvider>
+        <ToastViewport maxWidth='600px' />
+      </ToastProvider>,
     );
 
     const viewport = screen.getByRole('region', { name: 'Notifications' });
@@ -67,7 +66,7 @@ describe('ToastViewport Positioning', () => {
     render(
       <ToastProvider>
         <ToastViewport maxWidth={500} />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     const viewport = screen.getByRole('region', { name: 'Notifications' });
@@ -77,8 +76,8 @@ describe('ToastViewport Positioning', () => {
   it('applies custom className', () => {
     render(
       <ToastProvider>
-        <ToastViewport className="custom-toast-viewport" />
-      </ToastProvider>
+        <ToastViewport className='custom-toast-viewport' />
+      </ToastProvider>,
     );
 
     const viewport = screen.getByRole('region', { name: 'Notifications' });
@@ -89,7 +88,7 @@ describe('ToastViewport Positioning', () => {
     render(
       <ToastProvider>
         <ToastViewport />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     const portalContainer = document.getElementById('toast-portal-root');
@@ -106,7 +105,7 @@ describe('ToastViewport Positioning', () => {
     render(
       <ToastProvider>
         <ToastViewport container={customContainer} />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     const viewport = screen.getByRole('region', { name: 'Notifications' });
@@ -119,23 +118,23 @@ describe('ToastViewport Positioning', () => {
   it('renders all position variants correctly', () => {
     const positions = [
       'top-right',
-      'top-left', 
+      'top-left',
       'top-center',
       'bottom-right',
       'bottom-left',
-      'bottom-center'
+      'bottom-center',
     ] as const;
 
-    positions.forEach(position => {
+    positions.forEach((position) => {
       const { unmount } = render(
         <ToastProvider>
           <ToastViewport position={position} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       const viewport = screen.getByRole('region', { name: 'Notifications' });
       expect(viewport).toHaveAttribute('data-position', position);
-      
+
       unmount();
     });
   });
@@ -144,12 +143,12 @@ describe('ToastViewport Positioning', () => {
     render(
       <div>
         <ToastProvider>
-          <ToastViewport position="top-right" className="viewport-1" />
+          <ToastViewport position='top-right' className='viewport-1' />
         </ToastProvider>
         <ToastProvider>
-          <ToastViewport position="bottom-left" className="viewport-2" />
+          <ToastViewport position='bottom-left' className='viewport-2' />
         </ToastProvider>
-      </div>
+      </div>,
     );
 
     const viewports = screen.getAllByRole('region', { name: 'Notifications' });
@@ -162,7 +161,7 @@ describe('ToastViewport Positioning', () => {
     render(
       <ToastProvider>
         <ToastViewport />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     const viewport = screen.getByRole('region', { name: 'Notifications' });
@@ -175,7 +174,7 @@ describe('ToastViewport Positioning', () => {
     const { unmount } = render(
       <ToastProvider>
         <ToastViewport />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     // Container should exist
@@ -201,7 +200,7 @@ describe('ToastViewport CSS Integration', () => {
     render(
       <ToastProvider>
         <ToastViewport />
-      </ToastProvider>
+      </ToastProvider>,
     );
 
     const viewport = screen.getByRole('region', { name: 'Notifications' });
@@ -211,8 +210,8 @@ describe('ToastViewport CSS Integration', () => {
   it('applies position-specific CSS classes', () => {
     render(
       <ToastProvider>
-        <ToastViewport position="bottom-center" />
-      </ToastProvider>
+        <ToastViewport position='bottom-center' />
+      </ToastProvider>,
     );
 
     const viewport = screen.getByRole('region', { name: 'Notifications' });

@@ -1,28 +1,31 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { render, screen, act } from '@testing-library/react';
 import { ToastProvider, useToastContext } from '../ToastProvider';
 
 // Simple test component for swipe configuration tests
-const SwipeConfigTestComponent = ({ 
-  onToastsChange 
-}: { 
-  onToastsChange: (toasts: readonly any[]) => void 
+const SwipeConfigTestComponent = ({
+  onToastsChange,
+}: {
+  onToastsChange: (toasts: readonly any[]) => void;
 }) => {
   const { toasts, addToast } = useToastContext();
-  
+
   React.useEffect(() => {
     onToastsChange([...toasts]);
   }, [toasts, onToastsChange]);
 
   return (
     <div>
-      <button 
-        onClick={() => addToast({ 
-          content: 'Swipe test toast',
-          variant: 'info',
-          duration: 5000
-        })}
-        data-testid="add-swipe-toast"
+      <button
+        onClick={() =>
+          addToast({
+            content: 'Swipe test toast',
+            variant: 'info',
+            duration: 5000,
+          })
+        }
+        data-testid='add-swipe-toast'
       >
         Add Swipe Toast
       </button>
@@ -32,7 +35,7 @@ const SwipeConfigTestComponent = ({
 
 describe('Swipe Configuration Tests', () => {
   let toastsList: any[] = [];
-  
+
   const onToastsChange = (toasts: readonly any[]) => {
     toastsList = [...toasts];
   };
@@ -51,9 +54,9 @@ describe('Swipe Configuration Tests', () => {
   describe('Provider Swipe Settings', () => {
     it('should configure swipe direction through provider', () => {
       render(
-        <ToastProvider swipeDirection="left" shouldCloseOnSwipeEnd={true}>
+        <ToastProvider swipeDirection='left' shouldCloseOnSwipeEnd={true}>
           <SwipeConfigTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       act(() => {
@@ -66,9 +69,9 @@ describe('Swipe Configuration Tests', () => {
 
     it('should configure right swipe direction', () => {
       render(
-        <ToastProvider swipeDirection="right">
+        <ToastProvider swipeDirection='right'>
           <SwipeConfigTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       act(() => {
@@ -80,9 +83,9 @@ describe('Swipe Configuration Tests', () => {
 
     it('should configure up swipe direction', () => {
       render(
-        <ToastProvider swipeDirection="up">
+        <ToastProvider swipeDirection='up'>
           <SwipeConfigTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       act(() => {
@@ -94,9 +97,9 @@ describe('Swipe Configuration Tests', () => {
 
     it('should configure down swipe direction', () => {
       render(
-        <ToastProvider swipeDirection="down">
+        <ToastProvider swipeDirection='down'>
           <SwipeConfigTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       act(() => {
@@ -110,7 +113,7 @@ describe('Swipe Configuration Tests', () => {
       render(
         <ToastProvider shouldCloseOnSwipeEnd={false}>
           <SwipeConfigTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       act(() => {
@@ -125,7 +128,7 @@ describe('Swipe Configuration Tests', () => {
       render(
         <ToastProvider shouldCloseOnSwipeEnd={true}>
           <SwipeConfigTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       act(() => {
@@ -141,7 +144,7 @@ describe('Swipe Configuration Tests', () => {
       render(
         <ToastProvider>
           <SwipeConfigTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Add multiple toasts
@@ -152,16 +155,16 @@ describe('Swipe Configuration Tests', () => {
       });
 
       expect(toastsList).toHaveLength(3);
-      expect(toastsList.every(toast => toast.content === 'Swipe test toast')).toBe(true);
+      expect(toastsList.every((toast) => toast.content === 'Swipe test toast')).toBe(true);
     });
   });
 
   describe('Swipe Integration with Priority', () => {
     it('should work with priority system', () => {
       render(
-        <ToastProvider maxToasts={2} swipeDirection="right">
+        <ToastProvider maxToasts={2} swipeDirection='right'>
           <SwipeConfigTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Add toasts that will test priority + swipe

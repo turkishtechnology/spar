@@ -1,10 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { ToastRoot } from '../ToastRoot';
 import { ToastProvider } from '../ToastProvider';
 
 // Mock ToastProvider context
-const MockToastProvider = ({ children, config = {} }: { children: React.ReactNode; config?: any }) => {
+const MockToastProvider = ({
+  children,
+  config = {},
+}: {
+  children: React.ReactNode;
+  config?: any;
+}) => {
   const defaultConfig = {
     maxToasts: 5,
     visibleLimit: 3,
@@ -14,14 +21,10 @@ const MockToastProvider = ({ children, config = {} }: { children: React.ReactNod
     shouldPauseOnFocus: true,
     swipeDirection: 'right',
     shouldCloseOnSwipeEnd: true,
-    ...config
+    ...config,
   };
 
-  return (
-    <ToastProvider {...defaultConfig}>
-      {children}
-    </ToastProvider>
-  );
+  return <ToastProvider {...defaultConfig}>{children}</ToastProvider>;
 };
 
 describe('ToastRoot', () => {
@@ -39,10 +42,10 @@ describe('ToastRoot', () => {
     it('should render with correct ARIA attributes', () => {
       render(
         <MockToastProvider>
-          <ToastRoot variant="error" open={true}>
+          <ToastRoot variant='error' open={true}>
             Error message
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       const toast = screen.getByRole('alert');
@@ -56,8 +59,10 @@ describe('ToastRoot', () => {
     it('should render different ARIA roles for different variants', () => {
       const { rerender } = render(
         <MockToastProvider>
-          <ToastRoot variant="success" open={true}>Success</ToastRoot>
-        </MockToastProvider>
+          <ToastRoot variant='success' open={true}>
+            Success
+          </ToastRoot>
+        </MockToastProvider>,
       );
 
       expect(screen.getByRole('status')).toBeInTheDocument();
@@ -65,8 +70,10 @@ describe('ToastRoot', () => {
 
       rerender(
         <MockToastProvider>
-          <ToastRoot variant="loading" open={true}>Loading</ToastRoot>
-        </MockToastProvider>
+          <ToastRoot variant='loading' open={true}>
+            Loading
+          </ToastRoot>
+        </MockToastProvider>,
       );
 
       expect(screen.getByRole('log')).toBeInTheDocument();
@@ -75,10 +82,10 @@ describe('ToastRoot', () => {
     it('should be hidden when closed', () => {
       render(
         <MockToastProvider>
-          <ToastRoot variant="info" open={false}>
+          <ToastRoot variant='info' open={false}>
             Hidden toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       const toast = screen.getByRole('status', { hidden: true });
@@ -89,10 +96,10 @@ describe('ToastRoot', () => {
     it('should show loading state correctly', () => {
       render(
         <MockToastProvider>
-          <ToastRoot variant="info" loading={true} open={true}>
+          <ToastRoot variant='info' loading={true} open={true}>
             Loading toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       const toast = screen.getByRole('status');
@@ -108,14 +115,10 @@ describe('ToastRoot', () => {
 
       render(
         <MockToastProvider config={{ duration: 2000 }}>
-          <ToastRoot 
-            open={true} 
-            onOpenChange={onOpenChange}
-            onDurationEnd={onDurationEnd}
-          >
+          <ToastRoot open={true} onOpenChange={onOpenChange} onDurationEnd={onDurationEnd}>
             Auto-close toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       // Fast-forward time with act
@@ -134,14 +137,14 @@ describe('ToastRoot', () => {
 
       render(
         <MockToastProvider config={{ duration: 2000 }}>
-          <ToastRoot 
-            open={true} 
+          <ToastRoot
+            open={true}
             duration={5000} // Custom duration
             onOpenChange={onOpenChange}
           >
             Custom duration toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       // Should not close at provider default time
@@ -164,14 +167,10 @@ describe('ToastRoot', () => {
 
       render(
         <MockToastProvider config={{ duration: 1000 }}>
-          <ToastRoot 
-            open={true} 
-            persistent={true}
-            onOpenChange={onOpenChange}
-          >
+          <ToastRoot open={true} persistent={true} onOpenChange={onOpenChange}>
             Persistent toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       act(() => {
@@ -185,14 +184,10 @@ describe('ToastRoot', () => {
 
       render(
         <MockToastProvider config={{ duration: 1000 }}>
-          <ToastRoot 
-            open={true} 
-            loading={true}
-            onOpenChange={onOpenChange}
-          >
+          <ToastRoot open={true} loading={true} onOpenChange={onOpenChange}>
             Loading toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       act(() => {
@@ -206,14 +201,10 @@ describe('ToastRoot', () => {
 
       render(
         <MockToastProvider>
-          <ToastRoot 
-            open={true} 
-            duration={0}
-            onOpenChange={onOpenChange}
-          >
+          <ToastRoot open={true} duration={0} onOpenChange={onOpenChange}>
             No auto-close toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       act(() => {
@@ -232,7 +223,7 @@ describe('ToastRoot', () => {
           <ToastRoot open={true} onOpenChange={onOpenChange}>
             Hoverable toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       const toast = screen.getByRole('status');
@@ -246,7 +237,7 @@ describe('ToastRoot', () => {
       act(() => {
         fireEvent.mouseEnter(toast);
       });
-      
+
       // Advance time while paused - should not close
       act(() => {
         jest.advanceTimersByTime(2000);
@@ -257,12 +248,12 @@ describe('ToastRoot', () => {
       act(() => {
         fireEvent.mouseLeave(toast);
       });
-      
+
       // Should close after remaining time (1000ms remaining)
       act(() => {
         jest.advanceTimersByTime(1000);
       });
-      
+
       await waitFor(() => {
         expect(onOpenChange).toHaveBeenCalledWith(false);
       });
@@ -271,15 +262,13 @@ describe('ToastRoot', () => {
     it('should not pause on hover when disabled', () => {
       render(
         <MockToastProvider config={{ shouldPauseOnHover: false }}>
-          <ToastRoot open={true}>
-            Non-hoverable toast
-          </ToastRoot>
-        </MockToastProvider>
+          <ToastRoot open={true}>Non-hoverable toast</ToastRoot>
+        </MockToastProvider>,
       );
 
       const toast = screen.getByRole('status');
       fireEvent.mouseEnter(toast);
-      
+
       // Should not have paused attribute
       expect(toast).toHaveAttribute('data-paused', 'false');
     });
@@ -292,7 +281,7 @@ describe('ToastRoot', () => {
           <ToastRoot open={true} onOpenChange={onOpenChange}>
             Focusable toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       const toast = screen.getByRole('status');
@@ -301,7 +290,7 @@ describe('ToastRoot', () => {
       act(() => {
         fireEvent.focus(toast);
       });
-      
+
       // Should not close while focused
       act(() => {
         jest.advanceTimersByTime(3000);
@@ -312,12 +301,12 @@ describe('ToastRoot', () => {
       act(() => {
         fireEvent.blur(toast);
       });
-      
+
       // Should close after duration
       act(() => {
         jest.advanceTimersByTime(2000);
       });
-      
+
       await waitFor(() => {
         expect(onOpenChange).toHaveBeenCalledWith(false);
       });
@@ -331,7 +320,7 @@ describe('ToastRoot', () => {
           <ToastRoot open={true} duration={2000} onOpenChange={onOpenChange}>
             Duration changing toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       // Advance partway through original duration
@@ -346,7 +335,7 @@ describe('ToastRoot', () => {
             <ToastRoot open={true} duration={5000} onOpenChange={onOpenChange}>
               Duration changing toast
             </ToastRoot>
-          </MockToastProvider>
+          </MockToastProvider>,
         );
       });
 
@@ -360,7 +349,7 @@ describe('ToastRoot', () => {
       act(() => {
         jest.advanceTimersByTime(4000); // Total 5000ms from duration change
       });
-      
+
       await waitFor(() => {
         expect(onOpenChange).toHaveBeenCalledWith(false);
       });
@@ -374,18 +363,14 @@ describe('ToastRoot', () => {
 
       render(
         <MockToastProvider>
-          <ToastRoot 
-            open={true} 
-            onOpenChange={onOpenChange}
-            onDurationEnd={onDurationEnd}
-          >
+          <ToastRoot open={true} onOpenChange={onOpenChange} onDurationEnd={onDurationEnd}>
             Closeable toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       const toast = screen.getByRole('status');
-      
+
       fireEvent.keyDown(toast, { key: 'Escape' });
 
       await waitFor(() => {
@@ -402,11 +387,11 @@ describe('ToastRoot', () => {
           <ToastRoot open={true} onOpenChange={onOpenChange}>
             Key test toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       const toast = screen.getByRole('status');
-      
+
       fireEvent.keyDown(toast, { key: 'Enter' });
       fireEvent.keyDown(toast, { key: 'Space' });
       fireEvent.keyDown(toast, { key: 'Tab' });
@@ -419,10 +404,8 @@ describe('ToastRoot', () => {
     it('should work in uncontrolled mode', () => {
       render(
         <MockToastProvider>
-          <ToastRoot defaultOpen={true}>
-            Uncontrolled toast
-          </ToastRoot>
-        </MockToastProvider>
+          <ToastRoot defaultOpen={true}>Uncontrolled toast</ToastRoot>
+        </MockToastProvider>,
       );
 
       expect(screen.getByRole('status')).toHaveAttribute('data-state', 'open');
@@ -431,20 +414,16 @@ describe('ToastRoot', () => {
     it('should work in controlled mode', () => {
       const { rerender } = render(
         <MockToastProvider>
-          <ToastRoot open={true}>
-            Controlled toast
-          </ToastRoot>
-        </MockToastProvider>
+          <ToastRoot open={true}>Controlled toast</ToastRoot>
+        </MockToastProvider>,
       );
 
       expect(screen.getByRole('status')).toHaveAttribute('data-state', 'open');
 
       rerender(
         <MockToastProvider>
-          <ToastRoot open={false}>
-            Controlled toast
-          </ToastRoot>
-        </MockToastProvider>
+          <ToastRoot open={false}>Controlled toast</ToastRoot>
+        </MockToastProvider>,
       );
 
       expect(screen.getByRole('status')).toHaveAttribute('data-state', 'closed');
@@ -455,10 +434,10 @@ describe('ToastRoot', () => {
     it('should render as different component when "as" prop is provided', () => {
       render(
         <MockToastProvider>
-          <ToastRoot as="section" open={true} data-testid="custom-toast">
+          <ToastRoot as='section' open={true} data-testid='custom-toast'>
             Custom component toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       expect(screen.getByTestId('custom-toast').tagName).toBe('SECTION');
@@ -467,15 +446,15 @@ describe('ToastRoot', () => {
     it('should apply custom className and other props', () => {
       render(
         <MockToastProvider>
-          <ToastRoot 
-            open={true} 
-            className="custom-class"
-            data-testid="custom-toast"
+          <ToastRoot
+            open={true}
+            className='custom-class'
+            data-testid='custom-toast'
             style={{ backgroundColor: 'red' }}
           >
             Custom styled toast
           </ToastRoot>
-        </MockToastProvider>
+        </MockToastProvider>,
       );
 
       const toast = screen.getByTestId('custom-toast');

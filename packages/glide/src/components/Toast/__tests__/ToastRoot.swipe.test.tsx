@@ -1,8 +1,7 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { ToastProvider } from '../ToastProvider';
 import { ToastRoot } from '../ToastRoot';
 import { useSwipeGesture } from '../useSwipeGesture';
-import type { SwipeDirection } from '../Toast.types';
 
 // Mock the useSwipeGesture hook
 jest.mock('../useSwipeGesture');
@@ -15,7 +14,7 @@ describe('ToastRoot Swipe Integration', () => {
   beforeEach(() => {
     mockOnSwipeStart = jest.fn();
     mockOnSwipeEnd = jest.fn();
-    
+
     // Reset mock to default implementation
     mockUseSwipeGesture.mockReturnValue({
       isSwping: false,
@@ -42,13 +41,13 @@ describe('ToastRoot Swipe Integration', () => {
         >
           Test Toast Content
         </ToastRoot>
-      </ToastProvider>
+      </ToastProvider>,
     );
   };
 
   it('should render toast with swipe attributes', () => {
     renderToastRoot();
-    
+
     const toastElement = screen.getByText('Test Toast Content');
     expect(toastElement).toHaveAttribute('data-swping', 'false');
     expect(toastElement).toHaveAttribute('data-swipe-direction', 'null');
@@ -56,27 +55,27 @@ describe('ToastRoot Swipe Integration', () => {
 
   it('should accept swipe threshold prop', () => {
     renderToastRoot({ swipeThreshold: 100 });
-    
+
     expect(mockUseSwipeGesture).toHaveBeenCalledWith(
       expect.objectContaining({
         threshold: 100,
-      })
+      }),
     );
   });
 
   it('should use default swipe threshold when not provided', () => {
     renderToastRoot();
-    
+
     expect(mockUseSwipeGesture).toHaveBeenCalledWith(
       expect.objectContaining({
         threshold: 50,
-      })
+      }),
     );
   });
 
   it('should pass swipe gesture configuration to hook', () => {
     renderToastRoot({ swipeThreshold: 75 });
-    
+
     expect(mockUseSwipeGesture).toHaveBeenCalledWith({
       threshold: 75,
       velocityThreshold: 0.3,
@@ -109,7 +108,7 @@ describe('ToastRoot Swipe Integration', () => {
     });
 
     renderToastRoot();
-    
+
     const toastElement = screen.getByText('Test Toast Content');
     expect(toastElement).toHaveAttribute('data-swping', 'true');
     expect(toastElement).toHaveAttribute('data-swipe-direction', 'left');
@@ -128,9 +127,9 @@ describe('ToastRoot Swipe Integration', () => {
     });
 
     renderToastRoot();
-    
+
     const toastElement = screen.getByText('Test Toast Content');
-    
+
     // Simulate mouse down
     fireEvent.mouseDown(toastElement);
     expect(mockHandlers.onMouseDown).toHaveBeenCalled();

@@ -69,7 +69,7 @@ export const ToastRoot = ({
   // Enhanced timer management with remaining time tracking
   const [timeRemaining, setTimeRemaining] = useState<number>(duration);
   const startTime = useRef<number>(0);
-  
+
   const clearTimer = useCallback(() => {
     if (timerId.current) {
       clearTimeout(timerId.current);
@@ -79,7 +79,7 @@ export const ToastRoot = ({
 
   const startTimer = useCallback(() => {
     clearTimer();
-    
+
     if (!open || persistent || duration <= 0 || loading) {
       return;
     }
@@ -93,7 +93,17 @@ export const ToastRoot = ({
       onDurationEnd?.();
       timerId.current = null;
     }, remainingTime);
-  }, [open, persistent, duration, loading, isPaused, timeRemaining, onDurationEnd, setOpen, clearTimer]);
+  }, [
+    open,
+    persistent,
+    duration,
+    loading,
+    isPaused,
+    timeRemaining,
+    onDurationEnd,
+    setOpen,
+    clearTimer,
+  ]);
 
   // Timer lifecycle management
   useEffect(() => {
@@ -155,29 +165,35 @@ export const ToastRoot = ({
   );
 
   // Swipe gesture handlers
-  const handleSwipeStart = useCallback((swipeEvent: SwipeEvent) => {
-    // Pause timer during swipe
-    setIsPaused(true);
-    onSwipeStart?.(swipeEvent.direction!);
-  }, [onSwipeStart]);
+  const handleSwipeStart = useCallback(
+    (swipeEvent: SwipeEvent) => {
+      // Pause timer during swipe
+      setIsPaused(true);
+      onSwipeStart?.(swipeEvent.direction!);
+    },
+    [onSwipeStart],
+  );
 
-  const handleSwipeMove = useCallback((swipeEvent: SwipeEvent) => {
+  const handleSwipeMove = useCallback((_swipeEvent: SwipeEvent) => {
     // Could add visual feedback here for swipe progress
     // For now, we just track the swipe movement
   }, []);
 
-  const handleSwipeEnd = useCallback((swipeEvent: SwipeEvent) => {
-    // Resume timer after swipe
-    setIsPaused(false);
-    
-    if (swipeEvent.direction) {
-      onSwipeEnd?.(swipeEvent.direction);
-      
-      // Auto-dismiss on successful swipe
-      setOpen(false);
-      onDurationEnd?.();
-    }
-  }, [onSwipeEnd, setOpen, onDurationEnd]);
+  const handleSwipeEnd = useCallback(
+    (swipeEvent: SwipeEvent) => {
+      // Resume timer after swipe
+      setIsPaused(false);
+
+      if (swipeEvent.direction) {
+        onSwipeEnd?.(swipeEvent.direction);
+
+        // Auto-dismiss on successful swipe
+        setOpen(false);
+        onDurationEnd?.();
+      }
+    },
+    [onSwipeEnd, setOpen, onDurationEnd],
+  );
 
   const handleSwipeCancel = useCallback(() => {
     // Resume timer if swipe was cancelled

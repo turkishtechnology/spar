@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { 
-  SwipeDirection, 
-  SwipeCoordinates, 
-  SwipeEvent, 
-  SwipeGestureConfig 
+import type {
+  SwipeDirection,
+  SwipeCoordinates,
+  SwipeEvent,
+  SwipeGestureConfig,
 } from './Toast.types';
 
 interface UseSwipeGestureProps extends SwipeGestureConfig {
@@ -42,8 +42,8 @@ function getCoordinates(event: MouseEvent | TouchEvent): SwipeCoordinates {
 }
 
 function calculateDirection(
-  start: SwipeCoordinates, 
-  current: SwipeCoordinates
+  start: SwipeCoordinates,
+  current: SwipeCoordinates,
 ): SwipeDirection | null {
   const deltaX = current.x - start.x;
   const deltaY = current.y - start.y;
@@ -83,73 +83,81 @@ export function useSwipeGesture({
 }: UseSwipeGestureProps = {}): UseSwipeGestureReturn {
   const [isSwping, setIsSwping] = useState(false);
   const [currentSwipe, setCurrentSwipe] = useState<SwipeEvent | null>(null);
-  
+
   const startCoordinates = useRef<SwipeCoordinates | null>(null);
   const startTime = useRef<number>(0);
   const isMouseDown = useRef(false);
 
-  const createSwipeEvent = useCallback((
-    start: SwipeCoordinates,
-    current: SwipeCoordinates,
-    timestamp: number
-  ): SwipeEvent => {
-    const direction = calculateDirection(start, current);
-    const distance = calculateDistance(start, current);
-    const timeDelta = timestamp - startTime.current;
-    const velocity = calculateVelocity(distance, timeDelta);
+  const createSwipeEvent = useCallback(
+    (start: SwipeCoordinates, current: SwipeCoordinates, timestamp: number): SwipeEvent => {
+      const direction = calculateDirection(start, current);
+      const distance = calculateDistance(start, current);
+      const timeDelta = timestamp - startTime.current;
+      const velocity = calculateVelocity(distance, timeDelta);
 
-    return {
-      startCoordinates: start,
-      currentCoordinates: current,
-      direction,
-      distance,
-      velocity,
-      timestamp,
-    };
-  }, []);
+      return {
+        startCoordinates: start,
+        currentCoordinates: current,
+        direction,
+        distance,
+        velocity,
+        timestamp,
+      };
+    },
+    [],
+  );
 
-  const handleStart = useCallback((coordinates: SwipeCoordinates) => {
-    startCoordinates.current = coordinates;
-    startTime.current = Date.now();
-    setIsSwping(true);
-    isMouseDown.current = true;
+  const handleStart = useCallback(
+    (coordinates: SwipeCoordinates) => {
+      startCoordinates.current = coordinates;
+      startTime.current = Date.now();
+      setIsSwping(true);
+      isMouseDown.current = true;
 
-    const swipeEvent = createSwipeEvent(coordinates, coordinates, startTime.current);
-    setCurrentSwipe(swipeEvent);
-    onSwipeStart?.(swipeEvent);
-  }, [createSwipeEvent, onSwipeStart]);
+      const swipeEvent = createSwipeEvent(coordinates, coordinates, startTime.current);
+      setCurrentSwipe(swipeEvent);
+      onSwipeStart?.(swipeEvent);
+    },
+    [createSwipeEvent, onSwipeStart],
+  );
 
-  const handleMove = useCallback((coordinates: SwipeCoordinates) => {
-    if (!startCoordinates.current || !isMouseDown.current) return;
+  const handleMove = useCallback(
+    (coordinates: SwipeCoordinates) => {
+      if (!startCoordinates.current || !isMouseDown.current) return;
 
-    const now = Date.now();
-    const swipeEvent = createSwipeEvent(startCoordinates.current, coordinates, now);
-    setCurrentSwipe(swipeEvent);
-    onSwipeMove?.(swipeEvent);
-  }, [createSwipeEvent, onSwipeMove]);
+      const now = Date.now();
+      const swipeEvent = createSwipeEvent(startCoordinates.current, coordinates, now);
+      setCurrentSwipe(swipeEvent);
+      onSwipeMove?.(swipeEvent);
+    },
+    [createSwipeEvent, onSwipeMove],
+  );
 
-  const handleEnd = useCallback((coordinates: SwipeCoordinates) => {
-    if (!startCoordinates.current || !isMouseDown.current) return;
+  const handleEnd = useCallback(
+    (coordinates: SwipeCoordinates) => {
+      if (!startCoordinates.current || !isMouseDown.current) return;
 
-    const now = Date.now();
-    const swipeEvent = createSwipeEvent(startCoordinates.current, coordinates, now);
-    
-    // Check if swipe meets threshold requirements
-    const meetsDistanceThreshold = swipeEvent.distance >= threshold;
-    const meetsVelocityThreshold = swipeEvent.velocity >= velocityThreshold;
-    
-    if (meetsDistanceThreshold || meetsVelocityThreshold) {
-      onSwipeEnd?.(swipeEvent);
-    } else {
-      onSwipeCancel?.();
-    }
+      const now = Date.now();
+      const swipeEvent = createSwipeEvent(startCoordinates.current, coordinates, now);
 
-    // Reset state
-    setIsSwping(false);
-    setCurrentSwipe(null);
-    startCoordinates.current = null;
-    isMouseDown.current = false;
-  }, [createSwipeEvent, onSwipeEnd, onSwipeCancel, threshold, velocityThreshold]);
+      // Check if swipe meets threshold requirements
+      const meetsDistanceThreshold = swipeEvent.distance >= threshold;
+      const meetsVelocityThreshold = swipeEvent.velocity >= velocityThreshold;
+
+      if (meetsDistanceThreshold || meetsVelocityThreshold) {
+        onSwipeEnd?.(swipeEvent);
+      } else {
+        onSwipeCancel?.();
+      }
+
+      // Reset state
+      setIsSwping(false);
+      setCurrentSwipe(null);
+      startCoordinates.current = null;
+      isMouseDown.current = false;
+    },
+    [createSwipeEvent, onSwipeEnd, onSwipeCancel, threshold, velocityThreshold],
+  );
 
   const handleCancel = useCallback(() => {
     setIsSwping(false);
@@ -160,28 +168,34 @@ export function useSwipeGesture({
   }, [onSwipeCancel]);
 
   // Mouse event handlers
-  const handleMouseDown = useCallback((event: React.MouseEvent) => {
-    if (!enableMouse) return;
-    
-    if (preventScroll) {
-      event.preventDefault();
-    }
-    
-    const coordinates = getCoordinates(event.nativeEvent);
-    handleStart(coordinates);
-  }, [enableMouse, preventScroll, handleStart]);
+  const handleMouseDown = useCallback(
+    (event: React.MouseEvent) => {
+      if (!enableMouse) return;
+
+      if (preventScroll) {
+        event.preventDefault();
+      }
+
+      const coordinates = getCoordinates(event.nativeEvent);
+      handleStart(coordinates);
+    },
+    [enableMouse, preventScroll, handleStart],
+  );
 
   // Touch event handlers
-  const handleTouchStart = useCallback((event: React.TouchEvent) => {
-    if (!enableTouch) return;
-    
-    if (preventScroll) {
-      event.preventDefault();
-    }
-    
-    const coordinates = getCoordinates(event.nativeEvent);
-    handleStart(coordinates);
-  }, [enableTouch, preventScroll, handleStart]);
+  const handleTouchStart = useCallback(
+    (event: React.TouchEvent) => {
+      if (!enableTouch) return;
+
+      if (preventScroll) {
+        event.preventDefault();
+      }
+
+      const coordinates = getCoordinates(event.nativeEvent);
+      handleStart(coordinates);
+    },
+    [enableTouch, preventScroll, handleStart],
+  );
 
   // Global mouse events
   useEffect(() => {
@@ -189,18 +203,18 @@ export function useSwipeGesture({
 
     const handleMouseMove = (event: MouseEvent) => {
       if (!isMouseDown.current) return;
-      
+
       if (preventScroll) {
         event.preventDefault();
       }
-      
+
       const coordinates = getCoordinates(event);
       handleMove(coordinates);
     };
 
     const handleMouseUp = (event: MouseEvent) => {
       if (!isMouseDown.current) return;
-      
+
       const coordinates = getCoordinates(event);
       handleEnd(coordinates);
     };
@@ -230,18 +244,18 @@ export function useSwipeGesture({
 
     const handleTouchMove = (event: TouchEvent) => {
       if (!isMouseDown.current) return;
-      
+
       if (preventScroll) {
         event.preventDefault();
       }
-      
+
       const coordinates = getCoordinates(event);
       handleMove(coordinates);
     };
 
     const handleTouchEnd = (event: TouchEvent) => {
       if (!isMouseDown.current) return;
-      
+
       const coordinates = getCoordinates(event);
       handleEnd(coordinates);
     };

@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { renderHook, act, fireEvent } from '@testing-library/react';
 import { useSwipeGesture } from '../useSwipeGesture';
-import type { SwipeEvent } from '../Toast.types';
 
 // Mock DOM methods
 Object.defineProperty(HTMLElement.prototype, 'clientX', {
@@ -47,7 +47,7 @@ describe('useSwipeGesture', () => {
         onSwipeMove: mockOnSwipeMove,
         onSwipeEnd: mockOnSwipeEnd,
         onSwipeCancel: mockOnSwipeCancel,
-      })
+      }),
     );
 
     // Create mock mouse event
@@ -99,7 +99,7 @@ describe('useSwipeGesture', () => {
         threshold: 50,
         onSwipeStart: mockOnSwipeStart,
         onSwipeEnd: mockOnSwipeEnd,
-      })
+      }),
     );
 
     // Create mock touch event
@@ -145,7 +145,7 @@ describe('useSwipeGesture', () => {
       useSwipeGesture({
         threshold: 50,
         onSwipeEnd: mockOnSwipeEnd,
-      })
+      }),
     );
 
     // Test horizontal right swipe
@@ -171,7 +171,7 @@ describe('useSwipeGesture', () => {
       expect.objectContaining({
         direction: 'right',
         distance: 100,
-      })
+      }),
     );
   });
 
@@ -182,7 +182,7 @@ describe('useSwipeGesture', () => {
         velocityThreshold: 100, // Very high velocity threshold (100 px/ms)
         onSwipeEnd: mockOnSwipeEnd,
         onSwipeCancel: mockOnSwipeCancel,
-      })
+      }),
     );
 
     // Start swipe
@@ -213,7 +213,7 @@ describe('useSwipeGesture', () => {
     const { result } = renderHook(() =>
       useSwipeGesture({
         onSwipeCancel: mockOnSwipeCancel,
-      })
+      }),
     );
 
     // Start swipe
@@ -244,7 +244,7 @@ describe('useSwipeGesture', () => {
       useSwipeGesture({
         enableMouse: false,
         onSwipeStart: mockOnSwipeStart,
-      })
+      }),
     );
 
     const mouseDownEvent = {
@@ -265,7 +265,7 @@ describe('useSwipeGesture', () => {
       useSwipeGesture({
         enableTouch: false,
         onSwipeStart: mockOnSwipeStart,
-      })
+      }),
     );
 
     const touchStartEvent = {
@@ -285,12 +285,12 @@ describe('useSwipeGesture', () => {
 
   it('should calculate velocity correctly', () => {
     jest.useFakeTimers();
-    
+
     const { result } = renderHook(() =>
       useSwipeGesture({
         velocityThreshold: 0.5,
         onSwipeEnd: mockOnSwipeEnd,
-      })
+      }),
     );
 
     // Start swipe
@@ -319,7 +319,7 @@ describe('useSwipeGesture', () => {
       expect.objectContaining({
         velocity: 0.5, // 50px / 100ms = 0.5 px/ms
         distance: 50,
-      })
+      }),
     );
 
     jest.useRealTimers();
@@ -329,7 +329,7 @@ describe('useSwipeGesture', () => {
     const { result } = renderHook(() =>
       useSwipeGesture({
         onSwipeMove: mockOnSwipeMove,
-      })
+      }),
     );
 
     // Start swipe

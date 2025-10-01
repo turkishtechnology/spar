@@ -10,8 +10,13 @@ import {
 } from 'react';
 
 import type { ToastProviderProps, ToastContextValue, ToastItem, ToastConfig } from './Toast.types';
-import { TOAST_DEFAULT_DURATION, TOAST_MAX_COUNT, TOAST_VISIBLE_LIMIT, PRIORITY_ORDER } from './constants';
-import { generateToastId, sortToastQueue, getVisibleToasts, sortByPriority } from './utils';
+import {
+  TOAST_DEFAULT_DURATION,
+  TOAST_MAX_COUNT,
+  TOAST_VISIBLE_LIMIT,
+  PRIORITY_ORDER,
+} from './constants';
+import { generateToastId, sortToastQueue, getVisibleToasts } from './utils';
 
 // Context
 const ToastContext = createContext<ToastContextValue | null>(null);
@@ -38,7 +43,7 @@ export const useToastContext = (): ToastContextValue => {
 export const ToastProvider = ({
   ref,
   maxToasts = TOAST_MAX_COUNT,
-  visibleLimit = TOAST_VISIBLE_LIMIT,  
+  visibleLimit = TOAST_VISIBLE_LIMIT,
   position = 'top-right',
   duration = TOAST_DEFAULT_DURATION,
   shouldPauseOnHover = true,
@@ -49,7 +54,6 @@ export const ToastProvider = ({
   ...props
 }: ToastProviderProps) => {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
-  const [isPaused, setIsPaused] = useState<boolean>(false);
 
   const config = useMemo(
     () => ({
@@ -136,24 +140,21 @@ export const ToastProvider = ({
   );
 
   const pauseAll = useCallback((): void => {
-    setIsPaused(true);
-  }, [setIsPaused]);
+    // Pause functionality - implementation can be added later if needed
+  }, []);
 
   const resumeAll = useCallback((): void => {
-    setIsPaused(false);
-  }, [setIsPaused]);
+    // Resume functionality - implementation can be added later if needed
+  }, []);
 
   const clearAll = useCallback((): void => {
-    startTransition(() => {
-      setToasts([]);
-      setIsPaused(false);
-    });
-  }, [setToasts, setIsPaused]);
+    setToasts([]);
+  }, [setToasts]);
 
   // Calculate visible and queued toasts
-  const { visible: visibleToasts, queued: queuedToasts } = useMemo(() => 
-    getVisibleToasts(toasts, visibleLimit, PRIORITY_ORDER),
-    [toasts, visibleLimit]
+  const { visible: visibleToasts, queued: queuedToasts } = useMemo(
+    () => getVisibleToasts(toasts, visibleLimit, PRIORITY_ORDER),
+    [toasts, visibleLimit],
   );
 
   const contextValue = useMemo<ToastContextValue>(
@@ -169,7 +170,18 @@ export const ToastProvider = ({
       clearAll,
       config: config as Required<ToastProviderProps>,
     }),
-    [toasts, visibleToasts, queuedToasts, addToast, removeToast, updateToast, pauseAll, resumeAll, clearAll, config],
+    [
+      toasts,
+      visibleToasts,
+      queuedToasts,
+      addToast,
+      removeToast,
+      updateToast,
+      pauseAll,
+      resumeAll,
+      clearAll,
+      config,
+    ],
   );
 
   // Global toast event listener'ları
@@ -203,9 +215,7 @@ export const ToastProvider = ({
 
   return (
     <div ref={ref} {...props}>
-      <ToastContext.Provider value={contextValue}>
-        {children}
-      </ToastContext.Provider>
+      <ToastContext.Provider value={contextValue}>{children}</ToastContext.Provider>
     </div>
   );
 };

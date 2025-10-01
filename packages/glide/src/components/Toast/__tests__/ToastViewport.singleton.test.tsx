@@ -8,8 +8,8 @@ describe('ToastViewport - Singleton and Portal Management', () => {
   beforeEach(() => {
     // Clear any existing portal containers
     const existingPortals = document.querySelectorAll('#toast-portal-root');
-    existingPortals.forEach(portal => portal.remove());
-    
+    existingPortals.forEach((portal) => portal.remove());
+
     jest.clearAllTimers();
     jest.useFakeTimers();
   });
@@ -17,20 +17,20 @@ describe('ToastViewport - Singleton and Portal Management', () => {
   afterEach(() => {
     jest.runOnlyPendingTimers();
     jest.useRealTimers();
-    
+
     // Clean up portal containers
     const portals = document.querySelectorAll('#toast-portal-root');
-    portals.forEach(portal => portal.remove());
+    portals.forEach((portal) => portal.remove());
   });
 
   describe('Portal Container Management', () => {
     it('should create a single portal container for multiple viewports', () => {
       render(
         <ToastProvider>
-          <ToastViewport position="top-right" />
-          <ToastViewport position="bottom-left" />
-          <ToastViewport position="top-center" />
-        </ToastProvider>
+          <ToastViewport position='top-right' />
+          <ToastViewport position='bottom-left' />
+          <ToastViewport position='top-center' />
+        </ToastProvider>,
       );
 
       // Should only have one portal container
@@ -49,8 +49,8 @@ describe('ToastViewport - Singleton and Portal Management', () => {
 
       render(
         <ToastProvider>
-          <ToastViewport position="top-right" />
-        </ToastProvider>
+          <ToastViewport position='top-right' />
+        </ToastProvider>,
       );
 
       // Should still only have one portal
@@ -66,8 +66,8 @@ describe('ToastViewport - Singleton and Portal Management', () => {
 
       render(
         <ToastProvider>
-          <ToastViewport position="top-right" container={customContainer} />
-        </ToastProvider>
+          <ToastViewport position='top-right' container={customContainer} />
+        </ToastProvider>,
       );
 
       // Should not create auto portal when custom container provided
@@ -84,8 +84,8 @@ describe('ToastViewport - Singleton and Portal Management', () => {
     it('should clean up auto-created portal when no toasts exist', () => {
       const { unmount } = render(
         <ToastProvider>
-          <ToastViewport position="top-right" />
-        </ToastProvider>
+          <ToastViewport position='top-right' />
+        </ToastProvider>,
       );
 
       // Portal should exist
@@ -104,9 +104,9 @@ describe('ToastViewport - Singleton and Portal Management', () => {
     it('should render multiple viewports with different positions', () => {
       render(
         <ToastProvider>
-          <ToastViewport position="top-right" data-testid="viewport-top-right" />
-          <ToastViewport position="bottom-left" data-testid="viewport-bottom-left" />
-        </ToastProvider>
+          <ToastViewport position='top-right' data-testid='viewport-top-right' />
+          <ToastViewport position='bottom-left' data-testid='viewport-bottom-left' />
+        </ToastProvider>,
       );
 
       const topRightViewport = screen.getByTestId('viewport-top-right');
@@ -120,9 +120,9 @@ describe('ToastViewport - Singleton and Portal Management', () => {
       // This tests a potential edge case - multiple viewports with same position
       render(
         <ToastProvider>
-          <ToastViewport position="top-right" data-testid="viewport-1" />
-          <ToastViewport position="top-right" data-testid="viewport-2" />
-        </ToastProvider>
+          <ToastViewport position='top-right' data-testid='viewport-1' />
+          <ToastViewport position='top-right' data-testid='viewport-2' />
+        </ToastProvider>,
       );
 
       const viewport1 = screen.getByTestId('viewport-1');
@@ -130,7 +130,7 @@ describe('ToastViewport - Singleton and Portal Management', () => {
 
       expect(viewport1).toHaveAttribute('data-position', 'top-right');
       expect(viewport2).toHaveAttribute('data-position', 'top-right');
-      
+
       // Both should render independently
       expect(viewport1).toBeInTheDocument();
       expect(viewport2).toBeInTheDocument();
@@ -139,9 +139,9 @@ describe('ToastViewport - Singleton and Portal Management', () => {
     it('should distribute toasts to all viewports', async () => {
       render(
         <ToastProvider>
-          <ToastViewport position="top-right" data-testid="viewport-1" />
-          <ToastViewport position="top-right" data-testid="viewport-2" />
-        </ToastProvider>
+          <ToastViewport position='top-right' data-testid='viewport-1' />
+          <ToastViewport position='top-right' data-testid='viewport-2' />
+        </ToastProvider>,
       );
 
       // Add a toast
@@ -162,39 +162,39 @@ describe('ToastViewport - Singleton and Portal Management', () => {
     it('should apply custom styling props', () => {
       render(
         <ToastProvider>
-          <ToastViewport 
-            position="top-center"
+          <ToastViewport
+            position='top-center'
             zIndex={9999}
             maxWidth={500}
-            className="custom-viewport"
-            data-testid="styled-viewport"
+            className='custom-viewport'
+            data-testid='styled-viewport'
           />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       const viewport = screen.getByTestId('styled-viewport');
-      
+
       expect(viewport).toHaveAttribute('data-position', 'top-center');
       expect(viewport).toHaveClass('custom-viewport');
       expect(viewport).toHaveStyle({
         zIndex: '9999',
-        maxWidth: '500px'
+        maxWidth: '500px',
       });
     });
 
     it('should handle different maxWidth formats', () => {
       const { rerender } = render(
         <ToastProvider>
-          <ToastViewport maxWidth={400} data-testid="viewport" />
-        </ToastProvider>
+          <ToastViewport maxWidth={400} data-testid='viewport' />
+        </ToastProvider>,
       );
 
       expect(screen.getByTestId('viewport')).toHaveStyle({ maxWidth: '400px' });
 
       rerender(
         <ToastProvider>
-          <ToastViewport maxWidth="50%" data-testid="viewport" />
-        </ToastProvider>
+          <ToastViewport maxWidth='50%' data-testid='viewport' />
+        </ToastProvider>,
       );
 
       expect(screen.getByTestId('viewport')).toHaveStyle({ maxWidth: '50%' });
@@ -203,8 +203,8 @@ describe('ToastViewport - Singleton and Portal Management', () => {
     it('should not apply style object when no custom styles provided', () => {
       render(
         <ToastProvider>
-          <ToastViewport position="bottom-right" data-testid="viewport" />
-        </ToastProvider>
+          <ToastViewport position='bottom-right' data-testid='viewport' />
+        </ToastProvider>,
       );
 
       const viewport = screen.getByTestId('viewport');
@@ -216,8 +216,8 @@ describe('ToastViewport - Singleton and Portal Management', () => {
     it('should have correct ARIA attributes', () => {
       render(
         <ToastProvider>
-          <ToastViewport position="top-right" data-testid="viewport" />
-        </ToastProvider>
+          <ToastViewport position='top-right' data-testid='viewport' />
+        </ToastProvider>,
       );
 
       const viewport = screen.getByTestId('viewport');
@@ -229,8 +229,8 @@ describe('ToastViewport - Singleton and Portal Management', () => {
     it('should be accessible to screen readers', () => {
       render(
         <ToastProvider>
-          <ToastViewport position="bottom-center" />
-        </ToastProvider>
+          <ToastViewport position='bottom-center' />
+        </ToastProvider>,
       );
 
       const region = screen.getByRole('region', { name: /notifications/i });
@@ -243,8 +243,8 @@ describe('ToastViewport - Singleton and Portal Management', () => {
     it('should render toasts in correct viewport', async () => {
       render(
         <ToastProvider>
-          <ToastViewport position="top-left" data-testid="viewport" />
-        </ToastProvider>
+          <ToastViewport position='top-left' data-testid='viewport' />
+        </ToastProvider>,
       );
 
       act(() => {
@@ -253,7 +253,7 @@ describe('ToastViewport - Singleton and Portal Management', () => {
 
       const viewport = screen.getByTestId('viewport');
       expect(viewport).toHaveTextContent('Integration test toast');
-      
+
       // Should have toast with correct attributes
       const toastElement = viewport.querySelector('[data-toast-root]');
       expect(toastElement).toBeInTheDocument();
@@ -263,8 +263,8 @@ describe('ToastViewport - Singleton and Portal Management', () => {
     it('should handle empty toast list gracefully', () => {
       render(
         <ToastProvider>
-          <ToastViewport position="top-right" data-testid="viewport" />
-        </ToastProvider>
+          <ToastViewport position='top-right' data-testid='viewport' />
+        </ToastProvider>,
       );
 
       const viewport = screen.getByTestId('viewport');
@@ -275,12 +275,12 @@ describe('ToastViewport - Singleton and Portal Management', () => {
     it('should update when toasts are added and removed', async () => {
       render(
         <ToastProvider>
-          <ToastViewport position="bottom-right" data-testid="viewport" />
-        </ToastProvider>
+          <ToastViewport position='bottom-right' data-testid='viewport' />
+        </ToastProvider>,
       );
 
       const viewport = screen.getByTestId('viewport');
-      
+
       // Initially empty
       expect(viewport).toBeEmptyDOMElement();
 
@@ -305,8 +305,8 @@ describe('ToastViewport - Singleton and Portal Management', () => {
     it('should handle null container gracefully', () => {
       render(
         <ToastProvider>
-          <ToastViewport position="top-right" container={null} />
-        </ToastProvider>
+          <ToastViewport position='top-right' container={null} />
+        </ToastProvider>,
       );
 
       // Should fallback to creating auto portal
@@ -317,7 +317,7 @@ describe('ToastViewport - Singleton and Portal Management', () => {
     it('should handle missing document.body gracefully', () => {
       // This test simulates SSR or edge cases where document.body might not exist
       const originalBody = document.body;
-      
+
       // Temporarily remove body
       Object.defineProperty(document, 'body', {
         writable: true,
@@ -327,8 +327,8 @@ describe('ToastViewport - Singleton and Portal Management', () => {
       expect(() => {
         render(
           <ToastProvider>
-            <ToastViewport position="top-right" />
-          </ToastProvider>
+            <ToastViewport position='top-right' />
+          </ToastProvider>,
         );
       }).not.toThrow();
 
@@ -346,11 +346,11 @@ describe('ToastViewport - Singleton and Portal Management', () => {
 
       render(
         <ToastProvider>
-          <ToastViewport position="top-right" />
-          <ToastViewport position="top-left" />
-          <ToastViewport position="bottom-right" />
-          <ToastViewport position="bottom-left" />
-        </ToastProvider>
+          <ToastViewport position='top-right' />
+          <ToastViewport position='top-left' />
+          <ToastViewport position='bottom-right' />
+          <ToastViewport position='bottom-left' />
+        </ToastProvider>,
       );
 
       const finalElementCount = document.querySelectorAll('*').length;
@@ -366,20 +366,20 @@ describe('ToastViewport - Singleton and Portal Management', () => {
     it('should reuse portal container across re-renders', () => {
       const { rerender } = render(
         <ToastProvider>
-          <ToastViewport position="top-right" />
-        </ToastProvider>
+          <ToastViewport position='top-right' />
+        </ToastProvider>,
       );
 
       const firstPortal = document.querySelector('#toast-portal-root');
 
       rerender(
         <ToastProvider>
-          <ToastViewport position="bottom-left" />
-        </ToastProvider>
+          <ToastViewport position='bottom-left' />
+        </ToastProvider>,
       );
 
       const secondPortal = document.querySelector('#toast-portal-root');
-      
+
       // Should be the same DOM element
       expect(secondPortal).toBe(firstPortal);
     });

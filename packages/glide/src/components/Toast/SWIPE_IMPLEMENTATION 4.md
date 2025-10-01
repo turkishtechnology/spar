@@ -5,6 +5,7 @@ Bu implementasyon, toast bileşenlerine mouse ve touch swipe gesture desteği ek
 ## 🎯 Özellikler
 
 ### ✅ Swipe Gesture Desteği
+
 - **Mouse Support**: Fare ile tıklayıp sürükleme
 - **Touch Support**: Dokunmatik cihazlarda parmak ile sürükleme
 - **4 Yön**: Yukarı, aşağı, sol, sağ tüm yönlerde swipe desteği
@@ -12,12 +13,14 @@ Bu implementasyon, toast bileşenlerine mouse ve touch swipe gesture desteği ek
 - **Velocity Detection**: Hız tabanlı swipe algılama
 
 ### 🎨 Animasyon & CSS
+
 - **Real-time Feedback**: Swipe sırasında görsel geri bildirim
 - **Direction-aware Animations**: Yön bazlı çıkış animasyonları
 - **Smooth Transitions**: Pürüzsüz geçişler ve dönüşümler
 - **Accessibility**: Reduced motion desteği
 
 ### ⚙️ API & Hooks
+
 - **useSwipeGesture**: Yeniden kullanılabilir swipe gesture hook'u
 - **Event Callbacks**: onSwipeStart, onSwipeEnd callback'leri
 - **Timer Integration**: Swipe sırasında timer duraklatma
@@ -26,6 +29,7 @@ Bu implementasyon, toast bileşenlerine mouse ve touch swipe gesture desteği ek
 ## 📁 Yeni Dosyalar
 
 ### 1. `useSwipeGesture.ts` - Ana Swipe Hook'u
+
 ```typescript
 export function useSwipeGesture({
   threshold = 50,
@@ -37,10 +41,11 @@ export function useSwipeGesture({
   onSwipeMove,
   onSwipeEnd,
   onSwipeCancel,
-}: UseSwipeGestureProps): UseSwipeGestureReturn
+}: UseSwipeGestureProps): UseSwipeGestureReturn;
 ```
 
 **Özellikler:**
+
 - Cross-platform koordinat hesaplama
 - Direction detection (4 yön)
 - Distance & velocity calculation
@@ -48,6 +53,7 @@ export function useSwipeGesture({
 - State management (isSwping, currentSwipe)
 
 ### 2. `Toast.types.ts` - Tip Genişletmeleri
+
 ```typescript
 // Yeni tipler
 export type SwipeDirection = 'up' | 'down' | 'left' | 'right';
@@ -79,39 +85,55 @@ export interface ToastRootProps {
 ```
 
 ### 3. `toast.css` - Swipe CSS Animasyonları
+
 ```css
 /* Swipe gesture states */
 [data-toast-root] {
   cursor: grab;
-  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+  transition:
+    transform 0.2s ease-out,
+    opacity 0.2s ease-out;
   user-select: none;
   touch-action: pan-y;
 }
 
-[data-toast-root][data-swping="true"] {
+[data-toast-root][data-swping='true'] {
   transition: none;
   will-change: transform;
 }
 
 /* Direction-specific animations */
 @keyframes toast-swipe-out-left {
-  to { opacity: 0; transform: translateX(-100%); }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
 }
 
 @keyframes toast-swipe-out-right {
-  to { opacity: 0; transform: translateX(100%); }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
 }
 
 @keyframes toast-swipe-out-up {
-  to { opacity: 0; transform: translateY(-100%); }
+  to {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
 }
 
 @keyframes toast-swipe-out-down {
-  to { opacity: 0; transform: translateY(100%); }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
 }
 ```
 
 ### 4. Test Dosyaları
+
 - `__tests__/useSwipeGesture.test.tsx` - Hook testleri (10 test case)
 - `__tests__/ToastRoot.swipe.test.tsx` - Entegrasyon testleri
 
@@ -135,7 +157,7 @@ export const ToastRoot = ({
 
   const handleSwipeEnd = useCallback((swipeEvent: SwipeEvent) => {
     setIsPaused(false); // Timer'ı devam ettir
-    
+
     if (swipeEvent.direction) {
       onSwipeEnd?.(swipeEvent.direction);
       setOpen(false); // Toast'ı kapat
@@ -168,17 +190,19 @@ export const ToastRoot = ({
 ## 📱 Kullanım Örnekleri
 
 ### Basit Swipe Toast
+
 ```typescript
 import { toast } from '@glide/toast';
 
 toast.success('Swipe me to dismiss!', {
   onSwipeEnd: (direction) => {
     console.log(`Swiped ${direction}`);
-  }
+  },
 });
 ```
 
 ### Custom Threshold
+
 ```typescript
 toast.info('Swipe 100px to dismiss', {
   swipeThreshold: 100,
@@ -188,6 +212,7 @@ toast.info('Swipe 100px to dismiss', {
 ```
 
 ### Deklaratif Kullanım
+
 ```tsx
 <ToastRoot
   open={true}
@@ -202,6 +227,7 @@ toast.info('Swipe 100px to dismiss', {
 ## 🧪 Test Coverage
 
 ### useSwipeGesture Hook Testleri
+
 - ✅ Default state initialization
 - ✅ Mouse gesture handling
 - ✅ Touch gesture handling
@@ -213,6 +239,7 @@ toast.info('Swipe 100px to dismiss', {
 - ✅ Current swipe state tracking
 
 ### ToastRoot Entegrasyon Testleri
+
 - ✅ Swipe attributes rendering
 - ✅ Threshold prop handling
 - ✅ Configuration passing
@@ -222,6 +249,7 @@ toast.info('Swipe 100px to dismiss', {
 ## 🚀 Demo Component
 
 `SwipeDemo.tsx` dosyası ile canlı demo mevcut:
+
 - Farklı variant toast'lar
 - Custom threshold örnekleri
 - Multiple toast test senaryoları
@@ -230,12 +258,14 @@ toast.info('Swipe 100px to dismiss', {
 ## 📊 Diff Özeti
 
 **Yeni Dosyalar:**
+
 - `useSwipeGesture.ts` (276 satır)
 - `SwipeDemo.tsx` (157 satır)
 - `__tests__/useSwipeGesture.test.tsx` (333 satır)
 - `__tests__/ToastRoot.swipe.test.tsx` (134 satır)
 
 **Güncellenen Dosyalar:**
+
 - `Toast.types.ts` (+47 satır) - Swipe tipleri eklendi
 - `ToastRoot.tsx` (+45 satır) - Swipe entegrasyonu
 - `toast.css` (+89 satır) - CSS animasyonları
@@ -247,6 +277,7 @@ toast.info('Swipe 100px to dismiss', {
 ## ✨ Sonuç
 
 Toast bileşenine eksiksiz swipe-to-dismiss özelliği eklendi:
+
 - **Mouse + Touch** desteği
 - **4 yönlü** swipe detection
 - **Configurable threshold**

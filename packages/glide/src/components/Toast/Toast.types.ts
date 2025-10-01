@@ -544,7 +544,7 @@ export interface UseToastReturn {
   toasts: ToastContextValue['toasts']; // Visible toasts
   allToasts: ToastContextValue['allToasts']; // All toasts including queued
   queuedToasts: ToastContextValue['queuedToasts']; // Queued toasts
-  
+
   // Convenience functions with duration override support
   toast: (content: ReactNode, config?: ToastConfig) => string;
   success: (content: ReactNode, config?: Omit<ToastConfig, 'variant'>) => string;
@@ -552,12 +552,12 @@ export interface UseToastReturn {
   warning: (content: ReactNode, config?: Omit<ToastConfig, 'variant'>) => string;
   info: (content: ReactNode, config?: Omit<ToastConfig, 'variant'>) => string;
   loading: (content: ReactNode, config?: Omit<ToastConfig, 'variant'>) => string;
-  
+
   // Duration-specific shortcuts
   quick: (content: ReactNode, config?: ToastConfig) => string;
   long: (content: ReactNode, config?: ToastConfig) => string;
   persistent: (content: ReactNode, config?: ToastConfig) => string;
-  
+
   remove: (id: string) => void;
   update: (id: string, updates: Partial<ToastItem>) => void;
   clear: () => void;

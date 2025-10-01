@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { render, screen, act, waitFor } from '@testing-library/react';
 import { ToastProvider, useToastContext } from '../ToastProvider';
@@ -5,53 +6,47 @@ import { ToastRoot } from '../ToastRoot';
 import { toast, useToastFunction } from '../ToastComponents';
 
 // Test component for accessing toast context
-const ToastTestComponent = ({ 
-  onToastsChange 
-}: { 
-  onToastsChange: (toasts: readonly any[]) => void 
+const ToastTestComponent = ({
+  onToastsChange,
+}: {
+  onToastsChange: (toasts: readonly any[]) => void;
 }) => {
   const { toasts } = useToastContext();
   const toastFn = useToastFunction();
-  
+
   React.useEffect(() => {
     onToastsChange([...toasts]); // Convert readonly to mutable
   }, [toasts, onToastsChange]);
 
   return (
-    <div data-testid="toast-controller">
-      <button 
+    <div data-testid='toast-controller'>
+      <button
         onClick={() => toastFn.info('Provider duration toast')}
-        data-testid="add-provider-duration"
+        data-testid='add-provider-duration'
       >
         Add Provider Duration Toast
       </button>
-      <button 
+      <button
         onClick={() => toastFn.success('Custom duration toast', { duration: 1000 })}
-        data-testid="add-custom-duration"
+        data-testid='add-custom-duration'
       >
         Add Custom Duration Toast
       </button>
-      <button 
+      <button
         onClick={() => toastFn.warning('Zero duration toast', { duration: 0 })}
-        data-testid="add-zero-duration"
+        data-testid='add-zero-duration'
       >
         Add Zero Duration Toast
       </button>
-      <button 
-        onClick={() => toastFn.quick('Quick toast')}
-        data-testid="add-quick-toast"
-      >
+      <button onClick={() => toastFn.quick('Quick toast')} data-testid='add-quick-toast'>
         Add Quick Toast
       </button>
-      <button 
-        onClick={() => toastFn.long('Long toast')}
-        data-testid="add-long-toast"
-      >
+      <button onClick={() => toastFn.long('Long toast')} data-testid='add-long-toast'>
         Add Long Toast
       </button>
-      <button 
+      <button
         onClick={() => toastFn.persistent('Persistent toast')}
-        data-testid="add-persistent-toast"
+        data-testid='add-persistent-toast'
       >
         Add Persistent Toast
       </button>
@@ -79,13 +74,13 @@ describe('Duration Override System', () => {
   describe('Provider vs Component Duration Priority', () => {
     it('should use provider default duration when component duration not specified', async () => {
       const onOpenChange = jest.fn();
-      
+
       render(
         <ToastProvider duration={2000}>
           <ToastRoot open={true} onOpenChange={onOpenChange}>
             Provider duration toast
           </ToastRoot>
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Should auto-close after provider duration (2000ms)
@@ -100,24 +95,20 @@ describe('Duration Override System', () => {
 
     it('should override provider duration with component duration', async () => {
       const onOpenChange = jest.fn();
-      
+
       render(
         <ToastProvider duration={3000}>
-          <ToastRoot 
-            open={true} 
-            duration={1500}
-            onOpenChange={onOpenChange}
-          >
+          <ToastRoot open={true} duration={1500} onOpenChange={onOpenChange}>
             Custom duration toast
           </ToastRoot>
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Should close after 1500ms (component duration), not 3000ms (provider)
       act(() => {
         jest.advanceTimersByTime(1500);
       });
-      
+
       await waitFor(() => {
         expect(onOpenChange).toHaveBeenCalledWith(false);
       });
@@ -125,17 +116,17 @@ describe('Duration Override System', () => {
 
     it('should handle zero duration as infinite (no auto-close)', () => {
       const onOpenChange = jest.fn();
-      
+
       render(
         <ToastProvider duration={2000}>
-          <ToastRoot 
-            open={true} 
+          <ToastRoot
+            open={true}
             duration={0} // Zero means no auto-close
             onOpenChange={onOpenChange}
           >
             Infinite duration toast
           </ToastRoot>
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Should never auto-close
@@ -147,17 +138,17 @@ describe('Duration Override System', () => {
 
     it('should handle missing duration fallback to provider', async () => {
       const onOpenChange = jest.fn();
-      
+
       render(
         <ToastProvider duration={1500}>
-          <ToastRoot 
-            open={true} 
+          <ToastRoot
+            open={true}
             // No duration prop - should fallback to provider
             onOpenChange={onOpenChange}
           >
             Fallback duration toast
           </ToastRoot>
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Should use provider duration
@@ -176,7 +167,7 @@ describe('Duration Override System', () => {
       render(
         <ToastProvider duration={3000}>
           <ToastTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Add toast with custom duration via addToast
@@ -193,7 +184,7 @@ describe('Duration Override System', () => {
       render(
         <ToastProvider duration={2500}>
           <ToastTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Add toast without duration specified
@@ -210,7 +201,7 @@ describe('Duration Override System', () => {
       render(
         <ToastProvider duration={2000}>
           <ToastTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Add toast with zero duration
@@ -229,7 +220,7 @@ describe('Duration Override System', () => {
       render(
         <ToastProvider duration={5000}>
           <ToastTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Add toast with custom duration using toast function
@@ -246,7 +237,7 @@ describe('Duration Override System', () => {
       render(
         <ToastProvider duration={4000}>
           <ToastTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Add toast without options
@@ -263,21 +254,21 @@ describe('Duration Override System', () => {
       render(
         <ToastProvider duration={3000}>
           <ToastTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       act(() => {
         toast.quick('Quick toast');
-        toast.long('Long toast'); 
+        toast.long('Long toast');
         toast.persistent('Persistent toast');
       });
 
       expect(toastsList).toHaveLength(3);
-      
+
       // Check duration shortcuts
-      const quickToast = toastsList.find(t => t.content === 'Quick toast');
-      const longToast = toastsList.find(t => t.content === 'Long toast');
-      const persistentToast = toastsList.find(t => t.content === 'Persistent toast');
+      const quickToast = toastsList.find((t) => t.content === 'Quick toast');
+      const longToast = toastsList.find((t) => t.content === 'Long toast');
+      const persistentToast = toastsList.find((t) => t.content === 'Persistent toast');
 
       expect(quickToast?.duration).toBe(2000); // Quick duration
       expect(longToast?.duration).toBe(8000); // Long duration (8 seconds)
@@ -292,37 +283,37 @@ describe('Duration Override System', () => {
           name: 'Component wins over provider',
           providerDuration: 5000,
           componentDuration: 2000,
-          expected: 2000
+          expected: 2000,
         },
         {
-          name: 'Programmatic wins over provider', 
+          name: 'Programmatic wins over provider',
           providerDuration: 3000,
           programmaticDuration: 1500,
-          expected: 1500
+          expected: 1500,
         },
         {
           name: 'Component wins over programmatic',
           providerDuration: 4000,
           componentDuration: 1000,
-          programmaticDuration: 2000, 
-          expected: 1000
-        }
+          programmaticDuration: 2000,
+          expected: 1000,
+        },
       ];
 
       for (const scenario of scenarios) {
         const onOpenChange = jest.fn();
-        
+
         const componentDuration = scenario.componentDuration || scenario.programmaticDuration;
         const { unmount } = render(
           <ToastProvider duration={scenario.providerDuration}>
-            <ToastRoot 
+            <ToastRoot
               open={true}
               {...(componentDuration && { duration: componentDuration })}
               onOpenChange={onOpenChange}
             >
               {scenario.name}
             </ToastRoot>
-          </ToastProvider>
+          </ToastProvider>,
         );
 
         // Test that it closes at expected duration
@@ -343,7 +334,7 @@ describe('Duration Override System', () => {
       render(
         <ToastProvider duration={3000}>
           <ToastTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       act(() => {
@@ -355,9 +346,9 @@ describe('Duration Override System', () => {
 
       expect(toastsList).toHaveLength(3);
 
-      const defaultToast = toastsList.find(t => t.content === 'Provider default');
-      const overrideToast = toastsList.find(t => t.content === 'With override');
-      const zeroToast = toastsList.find(t => t.content === 'Zero override');
+      const defaultToast = toastsList.find((t) => t.content === 'Provider default');
+      const overrideToast = toastsList.find((t) => t.content === 'With override');
+      const zeroToast = toastsList.find((t) => t.content === 'Zero override');
 
       expect(defaultToast?.duration).toBe(3000);
       expect(overrideToast?.duration).toBe(1500);
@@ -370,7 +361,7 @@ describe('Duration Override System', () => {
       render(
         <ToastProvider duration={2000}>
           <ToastTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       act(() => {
@@ -384,11 +375,11 @@ describe('Duration Override System', () => {
 
     it('should handle very large duration values', () => {
       const largeDuration = Number.MAX_SAFE_INTEGER;
-      
+
       render(
         <ToastProvider duration={2000}>
           <ToastTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       act(() => {
@@ -401,13 +392,13 @@ describe('Duration Override System', () => {
 
     it('should handle duration changes during toast lifetime', async () => {
       const onOpenChange = jest.fn();
-      
+
       const { rerender } = render(
         <ToastProvider duration={3000}>
           <ToastRoot open={true} duration={2000} onOpenChange={onOpenChange}>
             Duration changing toast
           </ToastRoot>
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Advance partway through
@@ -420,9 +411,9 @@ describe('Duration Override System', () => {
         rerender(
           <ToastProvider duration={3000}>
             <ToastRoot open={true} duration={5000} onOpenChange={onOpenChange}>
-              Duration changing toast  
+              Duration changing toast
             </ToastRoot>
-          </ToastProvider>
+          </ToastProvider>,
         );
       });
 
@@ -446,7 +437,7 @@ describe('Duration Override System', () => {
       const { rerender } = render(
         <ToastProvider duration={2000}>
           <ToastTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Add toast with provider default
@@ -460,7 +451,7 @@ describe('Duration Override System', () => {
       rerender(
         <ToastProvider duration={5000}>
           <ToastTestComponent onToastsChange={onToastsChange} />
-        </ToastProvider>
+        </ToastProvider>,
       );
 
       // Existing toast should keep original duration

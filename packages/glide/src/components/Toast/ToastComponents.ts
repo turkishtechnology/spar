@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useToastContext } from './ToastProvider';
-import type { ToastConfig, ToastVariant } from './Toast.types';
+import type { ToastConfig } from './Toast.types';
 
 /**
  * Programmatik toast oluşturma fonksiyonu
@@ -8,10 +8,7 @@ import type { ToastConfig, ToastVariant } from './Toast.types';
  * @param config - Toast konfigürasyonu
  * @returns Toast ID
  */
-export function toast(
-  content: ReactNode,
-  config?: ToastConfig
-): string {
+export function toast(content: ReactNode, config?: ToastConfig): string {
   // Bu fonksiyon hook dışında kullanılabilir olmalı
   // Global context'e erişim için singleton pattern kullanacağız
   if (typeof window === 'undefined') {
@@ -19,13 +16,13 @@ export function toast(
   }
 
   const event = new CustomEvent('glide-toast', {
-    detail: { content, config }
+    detail: { content, config },
   });
-  
+
   window.dispatchEvent(event);
-  
+
   // ID'yi event detail'inde döneceğiz
-  return (event as any).detail.id || '';
+  return (event as CustomEvent & { detail: { id?: string } }).detail.id || '';
 }
 
 /**
@@ -61,51 +58,51 @@ toast.persistent = (content: ReactNode, config?: ToastConfig) =>
 /**
  * Promise-based toast
  */
-toast.promise = async <T,>(
+toast.promise = async <T>(
   promise: Promise<T>,
   options: {
     loading?: ReactNode;
     success?: ReactNode | ((data: T) => ReactNode);
-    error?: ReactNode | ((error: any) => ReactNode);
+    error?: ReactNode | ((error: unknown) => ReactNode);
     config?: ToastConfig;
-  }
+  },
 ): Promise<T> => {
-  const loadingToastId = toast.loading(
-    options.loading || 'Loading...', 
-    { ...options.config, isPersistent: true }
-  );
+  const loadingToastId = toast.loading(options.loading || 'Loading...', {
+    ...options.config,
+    isPersistent: true,
+  });
 
   try {
     const data = await promise;
-    
+
     // Loading toast'ını kapat
     const event = new CustomEvent('glide-toast-remove', {
-      detail: { id: loadingToastId }
+      detail: { id: loadingToastId },
     });
     window.dispatchEvent(event);
 
     // Success toast göster
-    const successContent = typeof options.success === 'function' 
-      ? options.success(data) 
-      : options.success || 'Success!';
-    
+    const successContent =
+      typeof options.success === 'function' ? options.success(data) : options.success || 'Success!';
+
     toast.success(successContent, options.config);
-    
+
     return data;
   } catch (error) {
     // Loading toast'ını kapat
     const removeEvent = new CustomEvent('glide-toast-remove', {
-      detail: { id: loadingToastId }
+      detail: { id: loadingToastId },
     });
     window.dispatchEvent(removeEvent);
 
     // Error toast göster
-    const errorContent = typeof options.error === 'function' 
-      ? options.error(error) 
-      : options.error || 'Something went wrong';
-    
+    const errorContent =
+      typeof options.error === 'function'
+        ? options.error(error)
+        : options.error || 'Something went wrong';
+
     toast.error(errorContent, options.config);
-    
+
     throw error;
   }
 };
@@ -127,39 +124,39 @@ export function useToastFunction() {
       return addToast({ content, ...resolvedConfig });
     },
     success: (content: ReactNode, toastConfig?: Omit<ToastConfig, 'variant'>) =>
-      addToast({ 
-        content, 
-        ...toastConfig, 
+      addToast({
+        content,
+        ...toastConfig,
         variant: 'success',
-        duration: toastConfig?.duration ?? config.duration 
+        duration: toastConfig?.duration ?? config.duration,
       }),
     error: (content: ReactNode, toastConfig?: Omit<ToastConfig, 'variant'>) =>
-      addToast({ 
-        content, 
-        ...toastConfig, 
+      addToast({
+        content,
+        ...toastConfig,
         variant: 'error',
-        duration: toastConfig?.duration ?? config.duration 
+        duration: toastConfig?.duration ?? config.duration,
       }),
     warning: (content: ReactNode, toastConfig?: Omit<ToastConfig, 'variant'>) =>
-      addToast({ 
-        content, 
-        ...toastConfig, 
+      addToast({
+        content,
+        ...toastConfig,
         variant: 'warning',
-        duration: toastConfig?.duration ?? config.duration 
+        duration: toastConfig?.duration ?? config.duration,
       }),
     info: (content: ReactNode, toastConfig?: Omit<ToastConfig, 'variant'>) =>
-      addToast({ 
-        content, 
-        ...toastConfig, 
+      addToast({
+        content,
+        ...toastConfig,
         variant: 'info',
-        duration: toastConfig?.duration ?? config.duration 
+        duration: toastConfig?.duration ?? config.duration,
       }),
     loading: (content: ReactNode, toastConfig?: Omit<ToastConfig, 'variant'>) =>
-      addToast({ 
-        content, 
-        ...toastConfig, 
+      addToast({
+        content,
+        ...toastConfig,
         variant: 'loading',
-        duration: toastConfig?.duration ?? config.duration 
+        duration: toastConfig?.duration ?? config.duration,
       }),
     // Duration shortcuts
     quick: (content: ReactNode, toastConfig?: ToastConfig) =>

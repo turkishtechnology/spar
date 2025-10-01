@@ -39,12 +39,12 @@ export const sortToastQueue = (
 ): number => {
   // Primary sort: Priority DESC (high priority first)
   const priorityDiff = priorityOrder[b.priority] - priorityOrder[a.priority];
-  
+
   // Secondary sort: CreatedAt ASC (older first for same priority)
   if (priorityDiff === 0) {
     return a.createdAt - b.createdAt;
   }
-  
+
   return priorityDiff;
 };
 
@@ -64,7 +64,7 @@ export const getVisibleToasts = <T extends { priority: ToastPriority; createdAt:
   priorityOrder: PriorityOrder,
 ): { visible: T[]; queued: T[] } => {
   const sorted = [...toasts].sort((a, b) => sortToastQueue(a, b, priorityOrder));
-  
+
   return {
     visible: sorted.slice(0, visibleLimit),
     queued: sorted.slice(visibleLimit),

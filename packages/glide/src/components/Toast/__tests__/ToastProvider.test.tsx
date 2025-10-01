@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, no-console */
 import React from 'react';
-import { render, renderHook, act, waitFor } from '@testing-library/react';
+import { render, renderHook, act } from '@testing-library/react';
 import { ToastProvider, useToastContext } from '../ToastProvider';
 import { TOAST_DEFAULT_DURATION, TOAST_MAX_COUNT } from '../constants';
 
@@ -18,8 +19,12 @@ describe('ToastProvider', () => {
   const renderWithProvider = (props?: Partial<React.ComponentProps<typeof ToastProvider>>) => {
     return render(
       <ToastProvider {...props}>
-        <MockChild onContextReceived={(ctx) => { mockContext = ctx; }} />
-      </ToastProvider>
+        <MockChild
+          onContextReceived={(ctx) => {
+            mockContext = ctx;
+          }}
+        />
+      </ToastProvider>,
     );
   };
 
@@ -37,7 +42,7 @@ describe('ToastProvider', () => {
   describe('Provider Setup', () => {
     it('should provide context with default configuration', () => {
       renderWithProvider();
-      
+
       expect(mockContext).toBeDefined();
       expect(mockContext.config).toEqual(
         expect.objectContaining({
@@ -49,7 +54,7 @@ describe('ToastProvider', () => {
           shouldPauseOnFocus: true,
           swipeDirection: 'right',
           shouldCloseOnSwipeEnd: true,
-        })
+        }),
       );
     });
 
@@ -61,7 +66,7 @@ describe('ToastProvider', () => {
         duration: 3000,
         shouldPauseOnHover: false,
       });
-      
+
       expect(mockContext.config).toEqual(
         expect.objectContaining({
           maxToasts: 10,
@@ -69,19 +74,22 @@ describe('ToastProvider', () => {
           position: 'bottom-left',
           duration: 3000,
           shouldPauseOnHover: false,
-        })
+        }),
       );
     });
 
     it('should throw error when used outside provider', () => {
       // Suppress console.error for this test
       const originalError = console.error;
+
       console.error = jest.fn();
-      
+
       expect(() => {
         renderHook(() => useToastContext());
-      }).toThrow('Toast components must be used within ToastProvider. Wrap your component tree with <ToastProvider>.');
-      
+      }).toThrow(
+        'Toast components must be used within ToastProvider. Wrap your component tree with <ToastProvider>.',
+      );
+
       console.error = originalError;
     });
   });
@@ -95,7 +103,7 @@ describe('ToastProvider', () => {
       act(() => {
         const id1 = mockContext.addToast({ content: 'Toast 1', variant: 'info' });
         const id2 = mockContext.addToast({ content: 'Toast 2', variant: 'success' });
-        
+
         expect(typeof id1).toBe('string');
         expect(typeof id2).toBe('string');
         expect(id1).not.toBe(id2);
@@ -119,18 +127,19 @@ describe('ToastProvider', () => {
       expect(mockContext.allToasts).toHaveLength(5);
       expect(mockContext.toasts).toHaveLength(3); // Only 3 visible
       expect(mockContext.queuedToasts).toHaveLength(2); // 2 queued
-      
+
       // High priority should be visible
-      expect(mockContext.toasts.every((t: any) => 
-        t.priority === 'high' || t.priority === 'normal'
-      )).toBe(true);
+      expect(
+        mockContext.toasts.every((t: any) => t.priority === 'high' || t.priority === 'normal'),
+      ).toBe(true);
     });
 
     it('should maintain priority order in queue', () => {
       const now = Date.now();
-      jest.spyOn(Date, 'now')
+      jest
+        .spyOn(Date, 'now')
         .mockReturnValueOnce(now + 1000) // Toast 1
-        .mockReturnValueOnce(now + 2000) // Toast 2  
+        .mockReturnValueOnce(now + 2000) // Toast 2
         .mockReturnValueOnce(now + 3000) // Toast 3
         .mockReturnValueOnce(now + 4000); // Toast 4
 
@@ -145,7 +154,7 @@ describe('ToastProvider', () => {
       expect(mockContext.toasts[0]!.content).toBe('High Priority 1');
       expect(mockContext.toasts[1]!.content).toBe('High Priority 2');
       expect(mockContext.toasts[2]!.content).toBe('Normal Priority');
-      
+
       // Low priority should be queued
       expect(mockContext.queuedToasts[0]!.content).toBe('Low Priority');
     });
@@ -182,9 +191,9 @@ describe('ToastProvider', () => {
       act(() => {
         // Add 7 toasts (maxToasts is 5)
         for (let i = 1; i <= 7; i++) {
-          mockContext.addToast({ 
-            content: `Toast ${i}`, 
-            priority: i <= 3 ? 'high' : 'low' 
+          mockContext.addToast({
+            content: `Toast ${i}`,
+            priority: i <= 3 ? 'high' : 'low',
           });
         }
       });
@@ -209,10 +218,10 @@ describe('ToastProvider', () => {
       });
 
       act(() => {
-        mockContext.updateToast(toastId, { 
-          content: 'Updated', 
+        mockContext.updateToast(toastId, {
+          content: 'Updated',
           variant: 'success',
-          progress: 50 
+          progress: 50,
         });
       });
 
@@ -222,7 +231,7 @@ describe('ToastProvider', () => {
           content: 'Updated',
           variant: 'success',
           progress: 50,
-        })
+        }),
       );
       expect(updatedToast.updatedAt).toBeGreaterThanOrEqual(updatedToast.createdAt);
     });
@@ -289,10 +298,10 @@ describe('ToastProvider', () => {
 
     it('should handle global toast events', () => {
       const event = new CustomEvent('glide-toast', {
-        detail: { 
-          content: 'Global Toast', 
-          config: { variant: 'success' } 
-        }
+        detail: {
+          content: 'Global Toast',
+          config: { variant: 'success' },
+        },
       });
 
       act(() => {
@@ -304,10 +313,10 @@ describe('ToastProvider', () => {
         expect.objectContaining({
           content: 'Global Toast',
           variant: 'success',
-        })
+        }),
       );
 
-            // Check that ID was set in event detail
+      // Check that ID was set in event detail
       expect((event.detail as any).id).toBeDefined();
     });
 
@@ -321,7 +330,7 @@ describe('ToastProvider', () => {
       expect(mockContext.allToasts).toHaveLength(1);
 
       const removeEvent = new CustomEvent('glide-toast-remove', {
-        detail: { id: toastId }
+        detail: { id: toastId },
       });
 
       act(() => {
@@ -334,10 +343,10 @@ describe('ToastProvider', () => {
     it('should resolve duration from event config or provider default', () => {
       // Toast with custom duration
       const customEvent = new CustomEvent('glide-toast', {
-        detail: { 
-          content: 'Custom Duration', 
-          config: { duration: 5000 } 
-        }
+        detail: {
+          content: 'Custom Duration',
+          config: { duration: 5000 },
+        },
       });
 
       act(() => {
@@ -347,15 +356,15 @@ describe('ToastProvider', () => {
       expect(mockContext.allToasts[0]).toEqual(
         expect.objectContaining({
           duration: 5000,
-        })
+        }),
       );
 
       // Toast without custom duration (should use provider default)
       const defaultEvent = new CustomEvent('glide-toast', {
-        detail: { 
-          content: 'Default Duration', 
-          config: {} 
-        }
+        detail: {
+          content: 'Default Duration',
+          config: {},
+        },
       });
 
       act(() => {
@@ -365,7 +374,7 @@ describe('ToastProvider', () => {
       expect(mockContext.allToasts[1]).toEqual(
         expect.objectContaining({
           duration: 2000, // Provider default
-        })
+        }),
       );
     });
   });
