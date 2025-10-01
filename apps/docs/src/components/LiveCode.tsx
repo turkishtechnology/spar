@@ -13,6 +13,9 @@ import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
+  Radio,
+  RadioGroup,
+  RadioItem,
 } from '@turkish-technology/glide';
 interface LiveCodeProps {
   title?: string;
@@ -75,6 +78,10 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Collapsible,
     CollapsibleTrigger,
     CollapsibleContent,
+    // Radio components
+    Radio,
+    RadioGroup,
+    RadioItem,
   };
 
   const [copied, setCopied] = useState(false);
