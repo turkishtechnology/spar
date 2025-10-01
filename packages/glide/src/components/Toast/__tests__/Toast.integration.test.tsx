@@ -11,7 +11,7 @@ import {
   ToastClose,
   ToastIcon,
   ToastProgress,
-} from '../Toast';
+} from '../index';
 
 // Mock timer functions for testing auto-dismiss and animations
 jest.useFakeTimers();

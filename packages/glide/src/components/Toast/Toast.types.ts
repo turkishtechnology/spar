@@ -28,6 +28,29 @@ export type SwipeDirection = 'up' | 'down' | 'left' | 'right';
 
 export type ToastState = 'closed' | 'opening' | 'open' | 'closing';
 
+// Swipe gesture types
+export interface SwipeCoordinates {
+  readonly x: number;
+  readonly y: number;
+}
+
+export interface SwipeEvent {
+  readonly startCoordinates: SwipeCoordinates;
+  readonly currentCoordinates: SwipeCoordinates;
+  readonly direction: SwipeDirection | null;
+  readonly distance: number;
+  readonly velocity: number;
+  readonly timestamp: number;
+}
+
+export interface SwipeGestureConfig {
+  readonly threshold?: number; // minimum distance to trigger swipe (default: 50)
+  readonly velocityThreshold?: number; // minimum velocity to trigger swipe (default: 0.3)
+  readonly preventScroll?: boolean; // prevent default scroll behavior (default: true)
+  readonly enableMouse?: boolean; // enable mouse swipe gestures (default: true)
+  readonly enableTouch?: boolean; // enable touch swipe gestures (default: true)
+}
+
 // Utility types for better type safety
 export type RequiredToastConfig = Required<
   Pick<ToastConfig, 'variant' | 'size' | 'priority' | 'isPersistent' | 'isLoading'>
@@ -50,6 +73,9 @@ export interface ToastConfig {
   readonly isPersistent?: boolean;
   readonly isLoading?: boolean;
   readonly progress?: number;
+  readonly onSwipeStart?: (direction: SwipeDirection) => void;
+  readonly onSwipeEnd?: (direction: SwipeDirection) => void;
+  readonly swipeThreshold?: number;
 }
 
 // Context Types with improved performance and type safety
@@ -63,9 +89,11 @@ export interface ToastItem extends RequiredToastConfig {
   readonly progress?: number;
 }
 
-// Enhanced context value with better method signatures
+// Enhanced context value with queue management
 export interface ToastContextValue {
-  readonly toasts: readonly ToastItem[];
+  readonly toasts: readonly ToastItem[]; // Visible toasts only
+  readonly allToasts: readonly ToastItem[]; // All toasts including queued
+  readonly queuedToasts: readonly ToastItem[]; // Queued (hidden) toasts
   readonly addToast: (config: ToastConfig & { content: ReactNode }) => string;
   readonly removeToast: (id: string) => void;
   readonly updateToast: (id: string, updates: Partial<ToastItem>) => void;
@@ -88,10 +116,16 @@ export interface ToastProviderProps extends HTMLAttributes<HTMLDivElement> {
   ref?: Ref<HTMLDivElement>;
 
   /**
-   * Maximum number of toasts visible at once
+   * Maximum number of toasts in memory (queue limit)
    * @defaultValue 5
    */
   maxToasts?: number;
+
+  /**
+   * Maximum number of toasts visible at once (others queued)
+   * @defaultValue 3
+   */
+  visibleLimit?: number;
 
   /**
    * Global positioning for toast container
@@ -221,6 +255,12 @@ export interface ToastRootProps extends HTMLAttributes<HTMLDivElement> {
    * Swipe gesture end handler
    */
   onSwipeEnd?: (direction: SwipeDirection) => void;
+
+  /**
+   * Swipe gesture threshold distance in pixels
+   * @defaultValue 50
+   */
+  swipeThreshold?: number;
 
   /**
    * ARIA role for the toast element
@@ -501,7 +541,26 @@ export interface UseToastReturn {
   removeToast: ToastContextValue['removeToast'];
   updateToast: ToastContextValue['updateToast'];
   clearAll: ToastContextValue['clearAll'];
-  toasts: ToastContextValue['toasts'];
+  toasts: ToastContextValue['toasts']; // Visible toasts
+  allToasts: ToastContextValue['allToasts']; // All toasts including queued
+  queuedToasts: ToastContextValue['queuedToasts']; // Queued toasts
+  
+  // Convenience functions with duration override support
+  toast: (content: ReactNode, config?: ToastConfig) => string;
+  success: (content: ReactNode, config?: Omit<ToastConfig, 'variant'>) => string;
+  error: (content: ReactNode, config?: Omit<ToastConfig, 'variant'>) => string;
+  warning: (content: ReactNode, config?: Omit<ToastConfig, 'variant'>) => string;
+  info: (content: ReactNode, config?: Omit<ToastConfig, 'variant'>) => string;
+  loading: (content: ReactNode, config?: Omit<ToastConfig, 'variant'>) => string;
+  
+  // Duration-specific shortcuts
+  quick: (content: ReactNode, config?: ToastConfig) => string;
+  long: (content: ReactNode, config?: ToastConfig) => string;
+  persistent: (content: ReactNode, config?: ToastConfig) => string;
+  
+  remove: (id: string) => void;
+  update: (id: string, updates: Partial<ToastItem>) => void;
+  clear: () => void;
 }
 
 export interface UseToastStateReturn {

@@ -11,7 +11,7 @@ import {
   ToastIcon,
   ToastProgress,
   useToastContext,
-} from '../Toast';
+} from '../index';
 
 describe('ToastProvider', () => {
   beforeEach(() => {

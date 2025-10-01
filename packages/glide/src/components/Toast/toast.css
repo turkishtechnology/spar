@@ -1,0 +1,442 @@
+/* Toast Positioning Styles */
+:root {
+  --toast-z-index: 9999;
+  --toast-gap: 1rem;
+  --toast-viewport-padding: 1rem;
+  --toast-viewport-max-width: 420px;
+  --toast-viewport-width: 100%;
+}
+
+/* Base viewport styles */
+[data-toast-viewport] {
+  position: fixed;
+  z-index: var(--toast-z-index);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--toast-gap);
+  max-width: var(--toast-viewport-max-width);
+  width: var(--toast-viewport-width);
+  padding: var(--toast-viewport-padding);
+  box-sizing: border-box;
+  
+  /* Ensure viewport doesn't interfere with page interaction */
+  overflow: visible;
+}
+
+/* Position variants using modern CSS logical properties */
+[data-toast-viewport][data-position="top-right"] {
+  top: 0;
+  right: 0;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+}
+
+[data-toast-viewport][data-position="top-left"] {
+  top: 0;
+  left: 0;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+}
+
+[data-toast-viewport][data-position="top-center"] {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  inset-block-start: 0;
+  inset-inline-start: 50%;
+}
+
+[data-toast-viewport][data-position="bottom-right"] {
+  bottom: 0;
+  right: 0;
+  flex-direction: column-reverse;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+}
+
+[data-toast-viewport][data-position="bottom-left"] {
+  bottom: 0;
+  left: 0;
+  flex-direction: column-reverse;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+}
+
+[data-toast-viewport][data-position="bottom-center"] {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-direction: column-reverse;
+  inset-block-end: 0;
+  inset-inline-start: 50%;
+}
+
+/* Toast item styles */
+[data-toast-item] {
+  pointer-events: auto;
+  position: relative;
+  transform-origin: var(--toast-transform-origin, center);
+  transition: all 0.2s ease-out;
+  user-select: none;
+  touch-action: pan-y; /* Allow vertical scrolling but capture horizontal swipes */
+}
+
+/* Swipe gesture states */
+[data-toast-root] {
+  cursor: grab;
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
+
+[data-toast-root]:active {
+  cursor: grabbing;
+}
+
+[data-toast-root][data-swping="true"] {
+  transition: none; /* Disable transitions during swipe for immediate feedback */
+  will-change: transform;
+}
+
+/* Swipe direction feedback */
+[data-toast-root][data-swipe-direction="left"] {
+  transform: translateX(var(--swipe-translate-x, 0));
+}
+
+[data-toast-root][data-swipe-direction="right"] {
+  transform: translateX(var(--swipe-translate-x, 0));
+}
+
+[data-toast-root][data-swipe-direction="up"] {
+  transform: translateY(var(--swipe-translate-y, 0));
+}
+
+[data-toast-root][data-swipe-direction="down"] {
+  transform: translateY(var(--swipe-translate-y, 0));
+}
+
+/* Animation states */
+[data-toast-item][data-state="open"] {
+  animation: toast-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-toast-item][data-state="closed"] {
+  animation: toast-slide-out 0.2s ease-in forwards;
+}
+
+/* Swipe dismiss animations */
+[data-toast-root][data-state="closed"][data-swipe-direction="left"] {
+  animation: toast-swipe-out-left 0.2s ease-in forwards;
+}
+
+[data-toast-root][data-state="closed"][data-swipe-direction="right"] {
+  animation: toast-swipe-out-right 0.2s ease-in forwards;
+}
+
+[data-toast-root][data-state="closed"][data-swipe-direction="up"] {
+  animation: toast-swipe-out-up 0.2s ease-in forwards;
+}
+
+[data-toast-root][data-state="closed"][data-swipe-direction="down"] {
+  animation: toast-swipe-out-down 0.2s ease-in forwards;
+}
+
+/* Position-specific transform origins for better animations */
+[data-toast-viewport][data-position="top-right"] [data-toast-item] {
+  --toast-transform-origin: top right;
+}
+
+[data-toast-viewport][data-position="top-left"] [data-toast-item] {
+  --toast-transform-origin: top left;
+}
+
+[data-toast-viewport][data-position="top-center"] [data-toast-item] {
+  --toast-transform-origin: top center;
+}
+
+[data-toast-viewport][data-position="bottom-right"] [data-toast-item] {
+  --toast-transform-origin: bottom right;
+}
+
+[data-toast-viewport][data-position="bottom-left"] [data-toast-item] {
+  --toast-transform-origin: bottom left;
+}
+
+[data-toast-viewport][data-position="bottom-center"] [data-toast-item] {
+  --toast-transform-origin: bottom center;
+}
+
+/* Keyframe animations */
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes toast-slide-out {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+}
+
+/* Swipe dismiss keyframes */
+@keyframes toast-swipe-out-left {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes toast-swipe-out-right {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes toast-swipe-out-up {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes toast-swipe-out-down {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+/* Bottom positions slide up instead of down */
+[data-toast-viewport][data-position^="bottom"] [data-toast-item] {
+  @keyframes toast-slide-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  
+  @keyframes toast-slide-out {
+    from {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.95) translateY(20px);
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  :root {
+    --toast-viewport-padding: 0.75rem;
+    --toast-gap: 0.75rem;
+    --toast-viewport-max-width: none;
+  }
+  
+  [data-toast-viewport] {
+    max-width: none;
+    width: calc(100% - 2 * var(--toast-viewport-padding));
+  }
+  
+  /* Center positions take full width on mobile */
+  [data-toast-viewport][data-position$="-center"] {
+    left: var(--toast-viewport-padding);
+    right: var(--toast-viewport-padding);
+    transform: none;
+    inset-inline-start: var(--toast-viewport-padding);
+    inset-inline-end: var(--toast-viewport-padding);
+    width: auto;
+  }
+  
+  /* Adjust side positions for better mobile experience */
+  [data-toast-viewport][data-position$="-left"] {
+    left: var(--toast-viewport-padding);
+    inset-inline-start: var(--toast-viewport-padding);
+  }
+  
+  [data-toast-viewport][data-position$="-right"] {
+    right: var(--toast-viewport-padding);
+    inset-inline-end: var(--toast-viewport-padding);
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  :root {
+    --toast-viewport-padding: 0.5rem;
+    --toast-gap: 0.5rem;
+  }
+  
+  [data-toast-viewport] {
+    /* Force all positions to be full-width on very small screens */
+    left: var(--toast-viewport-padding) !important;
+    right: var(--toast-viewport-padding) !important;
+    transform: none !important;
+    inset-inline-start: var(--toast-viewport-padding) !important;
+    inset-inline-end: var(--toast-viewport-padding) !important;
+    width: auto !important;
+  }
+}
+
+/* Tablet portrait */
+@media (min-width: 641px) and (max-width: 768px) {
+  :root {
+    --toast-viewport-max-width: 380px;
+    --toast-viewport-padding: 1rem;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1200px) {
+  :root {
+    --toast-viewport-max-width: 460px;
+    --toast-viewport-padding: 1.5rem;
+  }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1600px) {
+  :root {
+    --toast-viewport-padding: 2rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  [data-toast-viewport] {
+    --toast-z-index: 10000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  [data-toast-item] {
+    transition: none;
+    animation: none !important;
+  }
+  
+  [data-toast-item][data-state="closed"] {
+    opacity: 0;
+  }
+}
+
+/* Focus management */
+[data-toast-viewport]:focus-within {
+  outline: none;
+}
+
+/* Ensure toasts are above common z-index layers */
+.toast-portal-root {
+  position: relative;
+  z-index: var(--toast-z-index);
+}
+
+/* Override for known high z-index elements */
+body:has([data-toast-viewport]) {
+  --modal-z-index: 9998; /* Ensure modals stay below toasts */
+  --dropdown-z-index: 9997;
+  --tooltip-z-index: 9996;
+  --popover-z-index: 9995;
+  --overlay-z-index: 9994;
+}
+
+/* Additional z-index isolation for common component libraries */
+.toast-portal-root {
+  /* Create a new stacking context */
+  isolation: isolate;
+  
+  /* Ensure we're above most common z-index values */
+  z-index: var(--toast-z-index);
+}
+
+/* Fallback for browsers without :has() support */
+@supports not (selector(:has(*))) {
+  .toast-portal-root {
+    /* Force highest z-index when :has() is not available */
+    z-index: 999999;
+  }
+}
+
+/* Common framework overrides */
+/* Ant Design */
+.ant-modal-mask,
+.ant-drawer-mask,
+.ant-popover {
+  z-index: calc(var(--toast-z-index, 9999) - 1) !important;
+}
+
+/* Material-UI / MUI */
+.MuiModal-root,
+.MuiDrawer-root,
+.MuiPopover-root {
+  z-index: calc(var(--toast-z-index, 9999) - 1) !important;
+}
+
+/* Chakra UI */
+.chakra-modal__overlay,
+.chakra-drawer__overlay,
+.chakra-popover__content {
+  z-index: calc(var(--toast-z-index, 9999) - 1) !important;
+}
+
+/* Mantine */
+.mantine-Modal-root,
+.mantine-Drawer-root,
+.mantine-Popover-dropdown {
+  z-index: calc(var(--toast-z-index, 9999) - 1) !important;
+}
+
+/* Bootstrap */
+.modal,
+.dropdown-menu,
+.tooltip {
+  z-index: calc(var(--toast-z-index, 9999) - 1) !important;
+}
+
+/* Ensure toast viewport is never clipped by parent containers */
+[data-toast-viewport] {
+  /* Force contain: layout to prevent unwanted clipping */
+  contain: layout style;
+  
+  /* Prevent parent overflow:hidden from affecting toasts */
+  position: fixed !important;
+  
+  /* Ensure we break out of any transform contexts */
+  transform-style: preserve-3d;
+  
+  /* Force our own stacking context */
+  isolation: isolate;
+}

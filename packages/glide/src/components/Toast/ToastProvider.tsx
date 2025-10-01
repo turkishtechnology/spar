@@ -5,12 +5,13 @@ import {
   useCallback,
   startTransition,
   useState,
+  useEffect,
   type ReactNode,
 } from 'react';
 
 import type { ToastProviderProps, ToastContextValue, ToastItem, ToastConfig } from './Toast.types';
-import { TOAST_DEFAULT_DURATION, TOAST_MAX_COUNT, PRIORITY_ORDER } from './constants';
-import { generateToastId, sortByPriority } from './utils';
+import { TOAST_DEFAULT_DURATION, TOAST_MAX_COUNT, TOAST_VISIBLE_LIMIT, PRIORITY_ORDER } from './constants';
+import { generateToastId, sortToastQueue, getVisibleToasts, sortByPriority } from './utils';
 
 // Context
 const ToastContext = createContext<ToastContextValue | null>(null);
@@ -37,6 +38,7 @@ export const useToastContext = (): ToastContextValue => {
 export const ToastProvider = ({
   ref,
   maxToasts = TOAST_MAX_COUNT,
+  visibleLimit = TOAST_VISIBLE_LIMIT,  
   position = 'top-right',
   duration = TOAST_DEFAULT_DURATION,
   shouldPauseOnHover = true,
@@ -52,6 +54,7 @@ export const ToastProvider = ({
   const config = useMemo(
     () => ({
       maxToasts,
+      visibleLimit,
       position,
       duration,
       shouldPauseOnHover,
@@ -61,6 +64,7 @@ export const ToastProvider = ({
     }),
     [
       maxToasts,
+      visibleLimit,
       position,
       duration,
       shouldPauseOnHover,
@@ -85,20 +89,21 @@ export const ToastProvider = ({
         priority: toastConfig.priority ?? 'normal',
         isPersistent: toastConfig.isPersistent ?? false,
         isLoading: toastConfig.isLoading ?? false,
-        ...(toastConfig.duration !== undefined && { duration: toastConfig.duration }),
+        duration: toastConfig.duration ?? duration, // Use provider default if not specified
         ...(toastConfig.progress !== undefined && { progress: toastConfig.progress }),
       };
 
       startTransition(() => {
         setToasts((prevToasts) => {
-          const updatedToasts = [...prevToasts];
+          let updatedToasts = [...prevToasts, newToast];
 
-          if (updatedToasts.length >= maxToasts) {
-            updatedToasts.sort((a, b) => sortByPriority(a, b, PRIORITY_ORDER));
-            updatedToasts.shift();
+          // Remove oldest low priority toast if we exceed maxToasts limit
+          if (updatedToasts.length > maxToasts) {
+            // Sort by priority DESC, createdAt ASC to find least important toast
+            updatedToasts.sort((a, b) => sortToastQueue(a, b, PRIORITY_ORDER));
+            updatedToasts = updatedToasts.slice(0, maxToasts);
           }
 
-          updatedToasts.push(newToast);
           return updatedToasts;
         });
       });
@@ -145,9 +150,17 @@ export const ToastProvider = ({
     });
   }, [setToasts, setIsPaused]);
 
+  // Calculate visible and queued toasts
+  const { visible: visibleToasts, queued: queuedToasts } = useMemo(() => 
+    getVisibleToasts(toasts, visibleLimit, PRIORITY_ORDER),
+    [toasts, visibleLimit]
+  );
+
   const contextValue = useMemo<ToastContextValue>(
     () => ({
-      toasts,
+      toasts: visibleToasts, // Only expose visible toasts to viewport
+      allToasts: toasts, // All toasts for internal management
+      queuedToasts,
       addToast,
       removeToast,
       updateToast,
@@ -156,26 +169,42 @@ export const ToastProvider = ({
       clearAll,
       config: config as Required<ToastProviderProps>,
     }),
-    [toasts, addToast, removeToast, updateToast, pauseAll, resumeAll, clearAll, config],
+    [toasts, visibleToasts, queuedToasts, addToast, removeToast, updateToast, pauseAll, resumeAll, clearAll, config],
   );
+
+  // Global toast event listener'ları
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleToastEvent = (event: CustomEvent) => {
+      const { content, config: eventConfig } = event.detail;
+      // Duration resolution: event config > provider default
+      const resolvedConfig = {
+        ...eventConfig,
+        duration: eventConfig?.duration ?? duration,
+      };
+      const id = addToast({ content, ...resolvedConfig });
+      event.detail.id = id;
+    };
+
+    const handleRemoveEvent = (event: CustomEvent) => {
+      const { id } = event.detail;
+      removeToast(id);
+    };
+
+    window.addEventListener('glide-toast', handleToastEvent as EventListener);
+    window.addEventListener('glide-toast-remove', handleRemoveEvent as EventListener);
+
+    return () => {
+      window.removeEventListener('glide-toast', handleToastEvent as EventListener);
+      window.removeEventListener('glide-toast-remove', handleRemoveEvent as EventListener);
+    };
+  }, [addToast, removeToast]);
 
   return (
     <div ref={ref} {...props}>
       <ToastContext.Provider value={contextValue}>
         {children}
-        <div data-toast-viewport data-position={position} data-paused={isPaused}>
-          {toasts.map((toast: ToastItem) => (
-            <div
-              key={toast.id}
-              data-toast-item
-              data-variant={toast.variant}
-              data-size={toast.size}
-              data-state={toast.open ? 'open' : 'closed'}
-            >
-              {toast.content}
-            </div>
-          ))}
-        </div>
       </ToastContext.Provider>
     </div>
   );

@@ -11,7 +11,7 @@ import {
   ToastClose,
   ToastIcon,
   ToastProgress,
-} from '../Toast';
+} from '../index';
 
 // Extend Jest matchers for accessibility
 expect.extend(toHaveNoViolations);

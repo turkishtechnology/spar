@@ -1,7 +1,8 @@
 import { useState, useCallback, useEffect, useRef, type KeyboardEvent } from 'react';
-import type { ToastRootProps, TimerId } from './Toast.types';
+import type { ToastRootProps, TimerId, SwipeEvent } from './Toast.types';
 import { useToastContext } from './ToastProvider';
 import { getAriaRole, getAriaLive } from './utils';
+import { useSwipeGesture } from './useSwipeGesture';
 
 /**
  * Hook for controllable state pattern
@@ -48,8 +49,9 @@ export const ToastRoot = ({
   persistent = false,
   loading = false,
   progress: _progress,
-  onSwipeStart: _onSwipeStart,
-  onSwipeEnd: _onSwipeEnd,
+  onSwipeStart,
+  onSwipeEnd,
+  swipeThreshold = 50,
   children,
   ...props
 }: ToastRootProps) => {
@@ -64,29 +66,57 @@ export const ToastRoot = ({
   const ariaRole = getAriaRole(variant);
   const ariaLive = getAriaLive(variant);
 
-  // Timer management
-  useEffect(() => {
+  // Enhanced timer management with remaining time tracking
+  const [timeRemaining, setTimeRemaining] = useState<number>(duration);
+  const startTime = useRef<number>(0);
+  
+  const clearTimer = useCallback(() => {
     if (timerId.current) {
       clearTimeout(timerId.current);
       timerId.current = null;
     }
+  }, []);
 
-    if (!open || persistent || duration <= 0 || isPaused) {
+  const startTimer = useCallback(() => {
+    clearTimer();
+    
+    if (!open || persistent || duration <= 0 || loading) {
       return;
     }
+
+    const remainingTime = isPaused ? timeRemaining : duration;
+    startTime.current = Date.now();
+    setTimeRemaining(remainingTime);
 
     timerId.current = setTimeout(() => {
       setOpen(false);
       onDurationEnd?.();
-    }, duration);
+      timerId.current = null;
+    }, remainingTime);
+  }, [open, persistent, duration, loading, isPaused, timeRemaining, onDurationEnd, setOpen, clearTimer]);
 
-    return () => {
-      if (timerId.current) {
-        clearTimeout(timerId.current);
-        timerId.current = null;
+  // Timer lifecycle management
+  useEffect(() => {
+    if (isPaused) {
+      // Pause: Calculate remaining time
+      if (timerId.current && startTime.current > 0) {
+        const elapsed = Date.now() - startTime.current;
+        const remaining = Math.max(0, timeRemaining - elapsed);
+        setTimeRemaining(remaining);
+        clearTimer();
       }
-    };
-  }, [open, persistent, duration, isPaused, onDurationEnd, setOpen]);
+    } else {
+      // Resume or start
+      startTimer();
+    }
+
+    return clearTimer;
+  }, [open, persistent, duration, loading, isPaused, startTimer, clearTimer]);
+
+  // Reset timer when duration changes
+  useEffect(() => {
+    setTimeRemaining(duration);
+  }, [duration]);
 
   // Event handlers
   const handleMouseEnter = useCallback((): void => {
@@ -124,6 +154,49 @@ export const ToastRoot = ({
     [setOpen, onDurationEnd],
   );
 
+  // Swipe gesture handlers
+  const handleSwipeStart = useCallback((swipeEvent: SwipeEvent) => {
+    // Pause timer during swipe
+    setIsPaused(true);
+    onSwipeStart?.(swipeEvent.direction!);
+  }, [onSwipeStart]);
+
+  const handleSwipeMove = useCallback((swipeEvent: SwipeEvent) => {
+    // Could add visual feedback here for swipe progress
+    // For now, we just track the swipe movement
+  }, []);
+
+  const handleSwipeEnd = useCallback((swipeEvent: SwipeEvent) => {
+    // Resume timer after swipe
+    setIsPaused(false);
+    
+    if (swipeEvent.direction) {
+      onSwipeEnd?.(swipeEvent.direction);
+      
+      // Auto-dismiss on successful swipe
+      setOpen(false);
+      onDurationEnd?.();
+    }
+  }, [onSwipeEnd, setOpen, onDurationEnd]);
+
+  const handleSwipeCancel = useCallback(() => {
+    // Resume timer if swipe was cancelled
+    setIsPaused(false);
+  }, []);
+
+  // Initialize swipe gesture hook
+  const { isSwping, currentSwipe, handlers } = useSwipeGesture({
+    threshold: swipeThreshold,
+    velocityThreshold: 0.3,
+    preventScroll: true,
+    enableMouse: true,
+    enableTouch: true,
+    onSwipeStart: handleSwipeStart,
+    onSwipeMove: handleSwipeMove,
+    onSwipeEnd: handleSwipeEnd,
+    onSwipeCancel: handleSwipeCancel,
+  });
+
   return (
     <Component
       ref={ref}
@@ -144,6 +217,10 @@ export const ToastRoot = ({
       onFocus={handleFocus}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
+      onMouseDown={handlers.onMouseDown}
+      onTouchStart={handlers.onTouchStart}
+      data-swping={isSwping}
+      data-swipe-direction={currentSwipe?.direction || null}
       {...props}
     >
       {children}
