@@ -1,10 +1,12 @@
-import {
+import type {
   ButtonHTMLAttributes,
   ElementType,
   HTMLAttributes,
   MouseEvent,
   ReactNode,
   Ref,
+  AriaAttributes,
+  AriaRole,
 } from 'react';
 
 // Core Toast Types with const assertions for better performance
@@ -53,7 +55,7 @@ export interface ToastConfig {
 // Context Types with improved performance and type safety
 export interface ToastItem extends RequiredToastConfig {
   readonly id: string;
-  readonly isOpen: boolean;
+  readonly open: boolean;
   readonly content: ReactNode;
   readonly createdAt: number;
   readonly updatedAt: number;
@@ -164,18 +166,18 @@ export interface ToastRootProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Controlled open state
    */
-  isOpen?: boolean;
+  open?: boolean;
 
   /**
    * Uncontrolled default open state
    * @defaultValue false
    */
-  defaultIsOpen?: boolean;
+  defaultOpen?: boolean;
 
   /**
    * Open state change handler
    */
-  onOpenChange?: (isOpen: boolean) => void;
+  onOpenChange?: (open: boolean) => void;
 
   /**
    * Override provider duration
@@ -197,13 +199,13 @@ export interface ToastRootProps extends HTMLAttributes<HTMLDivElement> {
    * Prevents auto-dismiss
    * @defaultValue false
    */
-  isPersistent?: boolean;
+  persistent?: boolean;
 
   /**
    * Shows loading state with progress
    * @defaultValue false
    */
-  isLoading?: boolean;
+  loading?: boolean;
 
   /**
    * Loading progress (0-100)
@@ -219,6 +221,46 @@ export interface ToastRootProps extends HTMLAttributes<HTMLDivElement> {
    * Swipe gesture end handler
    */
   onSwipeEnd?: (direction: SwipeDirection) => void;
+
+  /**
+   * ARIA role for the toast element
+   */
+  role?: AriaRole;
+
+  /**
+   * Live region politeness setting
+   */
+  'aria-live'?: AriaAttributes['aria-live'];
+
+  /**
+   * Whether screen readers should read the entire region
+   */
+  'aria-atomic'?: AriaAttributes['aria-atomic'];
+
+  /**
+   * Indicates if the element is currently busy/loading
+   */
+  'aria-busy'?: AriaAttributes['aria-busy'];
+
+  /**
+   * Hides the element from screen readers when closed
+   */
+  'aria-hidden'?: AriaAttributes['aria-hidden'];
+
+  /**
+   * Accessible label for the toast
+   */
+  'aria-label'?: AriaAttributes['aria-label'];
+
+  /**
+   * Associated label element ID
+   */
+  'aria-labelledby'?: AriaAttributes['aria-labelledby'];
+
+  /**
+   * Associated description element ID
+   */
+  'aria-describedby'?: AriaAttributes['aria-describedby'];
 
   /**
    * Root content
@@ -320,6 +362,16 @@ export interface ToastActionProps extends ButtonHTMLAttributes<HTMLButtonElement
   altText: string;
 
   /**
+   * Accessible label - use React's built-in ARIA type
+   */
+  'aria-label'?: AriaAttributes['aria-label'];
+
+  /**
+   * Associated description element ID
+   */
+  'aria-describedby'?: AriaAttributes['aria-describedby'];
+
+  /**
    * Action content
    */
   children?: ReactNode;
@@ -347,6 +399,11 @@ export interface ToastCloseProps extends ButtonHTMLAttributes<HTMLButtonElement>
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 
   /**
+   * Accessible label for close button
+   */
+  'aria-label'?: AriaAttributes['aria-label'];
+
+  /**
    * Close button content
    */
   children?: ReactNode;
@@ -367,6 +424,12 @@ export interface ToastIconProps extends HTMLAttributes<HTMLSpanElement> {
    * @defaultValue 'span'
    */
   as?: ElementType;
+
+  /**
+   * Hides decorative icons from screen readers
+   * @defaultValue 'true'
+   */
+  'aria-hidden'?: AriaAttributes['aria-hidden'];
 
   /**
    * Icon content
@@ -400,6 +463,31 @@ export interface ToastProgressProps extends HTMLAttributes<HTMLDivElement> {
    * @defaultValue 100
    */
   max?: number;
+
+  /**
+   * Accessible label for progress bar
+   */
+  'aria-label'?: AriaAttributes['aria-label'];
+
+  /**
+   * Element ID describing the progress
+   */
+  'aria-describedby'?: AriaAttributes['aria-describedby'];
+
+  /**
+   * Current progress value for screen readers
+   */
+  'aria-valuenow'?: AriaAttributes['aria-valuenow'];
+
+  /**
+   * Minimum progress value
+   */
+  'aria-valuemin'?: AriaAttributes['aria-valuemin'];
+
+  /**
+   * Maximum progress value
+   */
+  'aria-valuemax'?: AriaAttributes['aria-valuemax'];
 
   /**
    * Progress content

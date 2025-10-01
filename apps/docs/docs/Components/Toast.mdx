@@ -1,0 +1,903 @@
+---
+sidebar_position: 6
+title: Toast
+description: Accessible toast notifications for displaying temporary messages to users
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+
+# Toast
+
+A headless toast notification system for displaying temporary messages with accessibility, state management, and flexible positioning.
+
+![Accessibility Badge](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-Yes-blue) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-Strict-blue)
+
+:::warning Provider Required
+All Toast components **must** be wrapped within `ToastProvider`. Without the provider, Toast components will throw an error as they depend on React Context for state management.
+:::
+
+## Live Demo
+
+<LiveCode 
+  code={`function BasicToastExample() {
+  const [open, setOpen] = React.useState(false);
+  
+  const handleClose = () => {
+    setOpen(false);
+  };
+  
+  return (
+    <ToastProvider position="top-right" maxToasts={3}>
+      <div style={{ padding: '20px' }}>
+        <button onClick={() => setOpen(true)} style={{ marginBottom: '20px', padding: '8px 16px', border: '1px solid #ccc', borderRadius: '4px' }}>
+          Show Toast
+        </button>
+        
+        {open && (
+          <Toast.Root 
+            open={open} 
+            onOpenChange={setOpen}
+            variant="success"
+            style={{ 
+              border: '1px solid #e1e5e9', 
+              borderRadius: '8px', 
+              padding: '16px', 
+              backgroundColor: '#f8f9fa',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+              maxWidth: '400px',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '12px'
+            }}
+          >
+            <Toast.Content style={{ flex: 1 }}>
+              <Toast.Title style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>Success!</Toast.Title>
+              <Toast.Description style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#666' }}>Your changes have been saved.</Toast.Description>
+            </Toast.Content>
+            <Toast.Close 
+              onClick={handleClose}
+              style={{ 
+                padding: '4px 8px', 
+                border: '1px solid #ccc', 
+                borderRadius: '4px',
+                background: 'white',
+                cursor: 'pointer',
+                fontSize: '16px'
+              }}
+            >
+              ×
+            </Toast.Close>
+          </Toast.Root>
+        )}
+      </div>
+    </ToastProvider>
+  );
+}`}
+/>
+
+## Features
+
+- ✅ Controlled and uncontrolled open state management
+- ✅ Auto-dismiss with configurable duration
+- ✅ Priority-based queueing system 
+- ✅ Swipe gesture support for dismissal
+- ✅ Pause on hover and focus interactions
+- ✅ Loading states with progress indicators
+- ✅ Multiple semantic variants (success, error, warning, info, loading)
+- ✅ Flexible positioning options
+- ✅ Polymorphic component support
+- ✅ Action buttons and custom content
+- ✅ Persistent notifications option
+
+> **⚠️ Important**: All Toast components must be wrapped within `ToastProvider`. The provider manages global state, positioning, and configuration for all toasts.
+
+## Installation
+
+```tsx
+import { Toast, ToastProvider } from '@turkish-technology/glide'
+// or
+import { 
+  ToastProvider, 
+  ToastRoot, 
+  ToastContent, 
+  ToastTitle, 
+  ToastDescription,
+  ToastAction,
+  ToastClose,
+  ToastIcon,
+  ToastProgress
+} from '@turkish-technology/glide'
+```
+
+**Required Setup**: Wrap your application with `ToastProvider` at the root level:
+
+```tsx
+function App() {
+  return (
+    <ToastProvider>
+      {/* Your app content */}
+    </ToastProvider>
+  );
+}
+```
+
+## Anatomy
+
+```tsx
+<ToastProvider>
+  <Toast.Root>
+    <Toast.Content>
+      <Toast.Icon />
+      <Toast.Title />
+      <Toast.Description />
+      <Toast.Action />
+      <Toast.Close />
+      <Toast.Progress />
+    </Toast.Content>
+  </Toast.Root>
+</ToastProvider>
+```
+
+## Code Examples
+
+### Provider Setup (Required)
+
+```tsx
+function ProviderSetupExample() {
+  const [open, setOpen] = React.useState(false);
+  
+  const handleClose = () => {
+    setOpen(false);
+  };
+  
+  return (
+    <ToastProvider 
+      maxToasts={3} 
+      position="top-right"
+      duration={5000}
+      shouldPauseOnHover={true}
+    >
+      <div style={{ padding: '20px' }}>
+        <h3>My App with Toast</h3>
+        
+        <button 
+          onClick={() => setOpen(true)}
+          style={{ padding: '8px 16px', border: '1px solid #ccc', borderRadius: '4px' }}
+        >
+          Show Toast
+        </button>
+        
+        {open && (
+          <Toast.Root 
+            open={open} 
+            onOpenChange={setOpen}
+            style={{ 
+              border: '1px solid #ccc', 
+              borderRadius: '4px', 
+              padding: '12px', 
+              marginTop: '10px',
+              backgroundColor: '#f9f9f9'
+            }}
+          >
+            <Toast.Content>
+              <Toast.Title style={{ margin: 0, fontWeight: 'bold' }}>Toast Title</Toast.Title>
+              <Toast.Description style={{ margin: '4px 0 0 0' }}>Toast message</Toast.Description>
+              <Toast.Close 
+                onClick={handleClose}
+                style={{ marginTop: '8px', padding: '4px 8px', border: '1px solid #ccc', borderRadius: '4px' }}
+              >
+                ×
+              </Toast.Close>
+            </Toast.Content>
+          </Toast.Root>
+        )}
+      </div>
+    </ToastProvider>
+  );
+}
+```
+
+### Controlled Toast State
+
+```tsx
+function ControlledToastExample() {
+  const [open, setOpen] = React.useState(false);
+  const [variant, setVariant] = React.useState('success');
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleVariantChange = (newVariant) => {
+    setVariant(newVariant);
+    setOpen(true);
+  };
+
+  return (
+    <ToastProvider>
+      <div style={{ padding: '20px' }}>
+        <div style={{ marginBottom: '16px' }}>
+          <button onClick={() => handleVariantChange('success')} style={{ margin: '4px', padding: '6px 12px', border: '1px solid #ccc', borderRadius: '4px' }}>
+            Success
+          </button>
+          <button onClick={() => handleVariantChange('error')} style={{ margin: '4px', padding: '6px 12px', border: '1px solid #ccc', borderRadius: '4px' }}>
+            Error
+          </button>
+          <button onClick={() => handleVariantChange('warning')} style={{ margin: '4px', padding: '6px 12px', border: '1px solid #ccc', borderRadius: '4px' }}>
+            Warning
+          </button>
+          <button onClick={() => handleVariantChange('info')} style={{ margin: '4px', padding: '6px 12px', border: '1px solid #ccc', borderRadius: '4px' }}>
+            Info
+          </button>
+        </div>
+        
+        {open && (
+          <Toast.Root 
+            open={open} 
+            onOpenChange={setOpen}
+            variant={variant}
+            duration={3000}
+            style={{ 
+              border: '1px solid #ccc', 
+              borderRadius: '4px', 
+              padding: '12px', 
+              backgroundColor: '#f9f9f9',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '8px'
+            }}
+          >
+            <Toast.Content style={{ flex: 1 }}>
+              <Toast.Icon />
+              <Toast.Title style={{ margin: 0, fontWeight: 'bold' }}>
+                {variant === 'success' && 'Success!'}
+                {variant === 'error' && 'Error occurred'}
+                {variant === 'warning' && 'Warning'}
+                {variant === 'info' && 'Information'}
+              </Toast.Title>
+              <Toast.Description style={{ margin: '4px 0 0 0' }}>
+                This is a {variant} message.
+              </Toast.Description>
+            </Toast.Content>
+            <Toast.Close 
+              onClick={handleClose}
+              style={{ padding: '4px 8px', border: '1px solid #ccc', borderRadius: '4px' }}
+            >
+              Close
+            </Toast.Close>
+          </Toast.Root>
+        )}
+      </div>
+    </ToastProvider>
+  );
+}
+```
+
+### Toast with Actions
+
+```tsx
+function ToastWithActionsExample() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleUndo = () => {
+    console.log('Undo action triggered');
+    setOpen(false);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <ToastProvider>
+      <div style={{ padding: '20px' }}>
+        <button 
+          onClick={() => setOpen(true)}
+          style={{ padding: '8px 16px', border: '1px solid #ccc', borderRadius: '4px' }}
+        >
+          Delete Item
+        </button>
+        
+        {open && (
+          <Toast.Root 
+            open={open} 
+            onOpenChange={setOpen}
+            variant="warning"
+            persistent
+            style={{ 
+              border: '1px solid #ff9800', 
+              borderRadius: '4px', 
+              padding: '12px', 
+              marginTop: '10px',
+              backgroundColor: '#fff3e0'
+            }}
+          >
+            <Toast.Content>
+              <Toast.Title style={{ margin: 0, fontWeight: 'bold', color: '#f57c00' }}>Item deleted</Toast.Title>
+              <Toast.Description style={{ margin: '4px 0 8px 0' }}>
+                The item has been moved to trash.
+              </Toast.Description>
+              
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <Toast.Action 
+                  altText="Undo delete action"
+                  onClick={handleUndo}
+                  style={{ padding: '4px 8px', border: '1px solid #f57c00', borderRadius: '4px', backgroundColor: '#f57c00', color: 'white' }}
+                >
+                  Undo
+                </Toast.Action>
+                
+                <Toast.Close 
+                  onClick={handleClose}
+                  style={{ padding: '4px 8px', border: '1px solid #ccc', borderRadius: '4px' }}
+                >
+                  Dismiss
+                </Toast.Close>
+              </div>
+            </Toast.Content>
+          </Toast.Root>
+        )}
+      </div>
+    </ToastProvider>
+  );
+}
+```
+
+### Loading Toast with Progress
+
+```tsx
+function LoadingToastExample() {
+  const [open, setOpen] = React.useState(false);
+  const [progress, setProgress] = React.useState(0);
+
+  const handleClose = () => {
+    setOpen(false);
+    setProgress(0);
+  };
+
+  const startUpload = () => {
+    setOpen(true);
+    setProgress(0);
+  };
+
+  React.useEffect(() => {
+    if (!open) return;
+
+    const interval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) {
+          setOpen(false);
+          return 0;
+        }
+        return prev + 10;
+      });
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [open]);
+
+  return (
+    <ToastProvider>
+      <div style={{ padding: '20px' }}>
+        <button 
+          onClick={startUpload}
+          style={{ padding: '8px 16px', border: '1px solid #ccc', borderRadius: '4px' }}
+        >
+          Start Upload
+        </button>
+        
+        {open && (
+          <Toast.Root 
+            open={open} 
+            onOpenChange={setOpen}
+            variant="loading"
+            loading={true}
+            progress={progress}
+            style={{ 
+              border: '1px solid #2196f3', 
+              borderRadius: '4px', 
+              padding: '12px', 
+              marginTop: '10px',
+              backgroundColor: '#e3f2fd'
+            }}
+          >
+            <Toast.Content>
+              <Toast.Title style={{ margin: 0, fontWeight: 'bold', color: '#1976d2' }}>Uploading file...</Toast.Title>
+              <Toast.Description style={{ margin: '4px 0 8px 0' }}>
+                Please wait while we upload your file.
+              </Toast.Description>
+              
+              <div style={{ marginBottom: '8px' }}>
+                <Toast.Progress 
+                  value={progress}
+                  aria-label={`Upload progress: ${progress}%`}
+                  style={{ 
+                    width: '100%', 
+                    height: '8px', 
+                    backgroundColor: '#ccc', 
+                    borderRadius: '4px',
+                    overflow: 'hidden'
+                  }}
+                >
+                  <div style={{ 
+                    width: `${progress}%`, 
+                    height: '100%', 
+                    backgroundColor: '#2196f3',
+                    transition: 'width 0.3s ease'
+                  }} />
+                </Toast.Progress>
+                <div style={{ fontSize: '12px', marginTop: '4px', textAlign: 'center' }}>
+                  {progress}%
+                </div>
+              </div>
+              
+              {progress < 100 && (
+                <Toast.Close 
+                  onClick={handleClose}
+                  style={{ padding: '4px 8px', border: '1px solid #ccc', borderRadius: '4px' }}
+                >
+                  Cancel
+                </Toast.Close>
+              )}
+            </Toast.Content>
+          </Toast.Root>
+        )}
+      </div>
+    </ToastProvider>
+  );
+}
+```
+
+### Advanced Provider Configuration
+
+```tsx
+function AdvancedProviderExample() {
+  const [notifications, setNotifications] = React.useState([]);
+
+  const addNotification = (message) => {
+    const id = Date.now().toString();
+    setNotifications(prev => [...prev, { id, message }]);
+  };
+
+  const removeNotification = (id) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  };
+
+  return (
+    <ToastProvider
+      maxToasts={5}
+      position="bottom-right"
+      duration={4000}
+      shouldPauseOnHover={true}
+      shouldPauseOnFocus={true}
+      swipeDirection="right"
+      shouldCloseOnSwipeEnd={true}
+    >
+      <div style={{ padding: '20px' }}>
+        <h3>Advanced Provider Configuration</h3>
+        
+        <button 
+          onClick={() => addNotification('New notification!')}
+          style={{ padding: '8px 16px', border: '1px solid #ccc', borderRadius: '4px' }}
+        >
+          Add Notification
+        </button>
+
+        {notifications.map(notification => (
+          <Toast.Root
+            key={notification.id}
+            open={true}
+            onOpenChange={(open) => {
+              if (!open) removeNotification(notification.id);
+            }}
+            variant="info"
+            style={{ 
+              border: '1px solid #2196f3', 
+              borderRadius: '4px', 
+              padding: '12px', 
+              marginTop: '10px',
+              backgroundColor: '#e3f2fd',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '8px'
+            }}
+          >
+            <Toast.Content style={{ flex: 1 }}>
+              <Toast.Title style={{ margin: 0, fontWeight: 'bold', color: '#1976d2' }}>Notification</Toast.Title>
+              <Toast.Description style={{ margin: '4px 0 0 0' }}>{notification.message}</Toast.Description>
+            </Toast.Content>
+            <Toast.Close 
+              onClick={() => removeNotification(notification.id)}
+              style={{ padding: '4px 8px', border: '1px solid #ccc', borderRadius: '4px' }}
+            >
+              ×
+            </Toast.Close>
+          </Toast.Root>
+        ))}
+      </div>
+    </ToastProvider>
+  );
+}
+```
+
+### Multiple Variants with Priority
+
+```tsx
+function MultipleVariantsExample() {
+  const [toasts, setToasts] = React.useState([]);
+
+  const addToast = (variant, priority) => {
+    const id = Math.random().toString(36);
+    setToasts(prev => [...prev, { id, variant, priority }]);
+  };
+
+  const removeToast = (id) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  };
+
+  const getVariantColor = (variant) => {
+    switch(variant) {
+      case 'success': return { border: '#4caf50', background: '#e8f5e8', color: '#2e7d32' };
+      case 'error': return { border: '#f44336', background: '#ffebee', color: '#c62828' };
+      case 'warning': return { border: '#ff9800', background: '#fff3e0', color: '#f57c00' };
+      case 'info': return { border: '#2196f3', background: '#e3f2fd', color: '#1976d2' };
+      default: return { border: '#ccc', background: '#f9f9f9', color: '#333' };
+    }
+  };
+
+  return (
+    <ToastProvider maxToasts={5} position="top-right">
+      <div style={{ padding: '20px' }}>
+        <h3>Multiple Variants with Priority</h3>
+        
+        <div style={{ marginBottom: '16px' }}>
+          <button 
+            onClick={() => addToast('info', 'low')}
+            style={{ margin: '4px', padding: '6px 12px', border: '1px solid #ccc', borderRadius: '4px' }}
+          >
+            Low Priority Info
+          </button>
+          <button 
+            onClick={() => addToast('warning', 'normal')}
+            style={{ margin: '4px', padding: '6px 12px', border: '1px solid #ccc', borderRadius: '4px' }}
+          >
+            Normal Warning  
+          </button>
+          <button 
+            onClick={() => addToast('error', 'high')}
+            style={{ margin: '4px', padding: '6px 12px', border: '1px solid #ccc', borderRadius: '4px' }}
+          >
+            High Priority Error
+          </button>
+        </div>
+
+        {toasts.map(toast => {
+          const colors = getVariantColor(toast.variant);
+          return (
+            <Toast.Root 
+              key={toast.id}
+              open={true}
+              variant={toast.variant}
+              priority={toast.priority}
+              onOpenChange={(open) => {
+                if (!open) {
+                  removeToast(toast.id);
+                }
+              }}
+              style={{ 
+                border: `1px solid ${colors.border}`, 
+                borderRadius: '4px', 
+                padding: '12px', 
+                marginTop: '8px',
+                backgroundColor: colors.background,
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '8px'
+              }}
+            >
+              <Toast.Content style={{ flex: 1 }}>
+                <Toast.Title style={{ margin: 0, fontWeight: 'bold', color: colors.color }}>
+                  {toast.priority.toUpperCase()} {toast.variant}
+                </Toast.Title>
+              </Toast.Content>
+              <Toast.Close 
+                onClick={() => removeToast(toast.id)}
+                style={{ padding: '4px 8px', border: '1px solid #ccc', borderRadius: '4px' }}
+              >
+                ×
+              </Toast.Close>
+            </Toast.Root>
+          );
+        })}
+      </div>
+    </ToastProvider>
+  );
+}
+```
+
+## API Reference
+
+### ToastProvider
+
+Root provider component that manages global toast state and configuration.
+
+**⚠️ Required Component**: All Toast components must be descendants of `ToastProvider`. The provider manages context, state, and configuration for all toasts in your application.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | Provider content |
+| `maxToasts?` | `number` | `5` | Maximum number of toasts visible at once |
+| `position?` | `ToastPosition` | `'top-right'` | Global positioning for toast container |
+| `duration?` | `number` | `5000` | Default auto-dismiss timeout in ms (0 disables) |
+| `shouldPauseOnHover?` | `boolean` | `true` | Pause auto-dismiss when hovering |
+| `shouldPauseOnFocus?` | `boolean` | `true` | Pause auto-dismiss when focused |
+| `swipeDirection?` | `SwipeDirection` | `'right'` | Swipe direction for dismissal |
+| `shouldCloseOnSwipeEnd?` | `boolean` | `true` | Auto-close when swipe gesture completes |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| *None* | - | Provider manages state internally | - |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `"region"` | Identifies toast container region | Provider element |
+| `aria-label` | `"Notifications"` | Labels notification region | Provider element |
+
+### Toast.Root
+
+Core toast container component with state management and accessibility features.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `children?` | `ReactNode` | - | Root content |
+| `as?` | `ElementType` | `'div'` | Polymorphic element type |
+| `variant?` | `ToastVariant` | `'info'` | Toast semantic variant |
+| `size?` | `ToastSize` | `'medium'` | Toast size variant |
+| `open?` | `boolean` | `undefined` | Controlled open state |
+| `defaultOpen?` | `boolean` | `false` | Uncontrolled default open state |
+| `onOpenChange?` | `(open: boolean) => void` | `undefined` | Open state change handler |
+| `duration?` | `number` | `undefined` | Override provider duration |
+| `onDurationEnd?` | `() => void` | `undefined` | Called when duration expires |
+| `priority?` | `ToastPriority` | `'normal'` | Queue priority level |
+| `persistent?` | `boolean` | `false` | Prevents auto-dismiss |
+| `loading?` | `boolean` | `false` | Shows loading state with progress |
+| `progress?` | `number` | `undefined` | Loading progress (0-100) |
+| `onSwipeStart?` | `(direction: SwipeDirection) => void` | `undefined` | Swipe gesture start handler |
+| `onSwipeEnd?` | `(direction: SwipeDirection) => void` | `undefined` | Swipe gesture end handler |
+| `role?` | `AriaRole` | `undefined` | ARIA role for the toast element |
+| `aria-live?` | `AriaAttributes['aria-live']` | `undefined` | Live region politeness setting |
+| `aria-atomic?` | `AriaAttributes['aria-atomic']` | `undefined` | Whether screen readers should read the entire region |
+| `aria-label?` | `AriaAttributes['aria-label']` | `undefined` | Accessible label for the toast |
+| `aria-labelledby?` | `AriaAttributes['aria-labelledby']` | `undefined` | Associated label element ID |
+| `aria-describedby?` | `AriaAttributes['aria-describedby']` | `undefined` | Associated description element ID |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onOpenChange` | `(open: boolean)` | Open state changes | User interaction, auto-dismiss, or programmatic change |
+| `onDurationEnd` | `()` | Duration timer expires | Auto-dismiss timeout completes |
+| `onSwipeStart` | `(direction: SwipeDirection)` | Swipe gesture begins | User starts swiping the toast |
+| `onSwipeEnd` | `(direction: SwipeDirection)` | Swipe gesture completes | User completes swipe gesture |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `"alert" \| "status" \| "log"` | Indicates importance level based on variant | Root element |
+| `aria-live` | `"assertive" \| "polite"` | Controls screen reader announcement | Root element |
+| `aria-atomic` | `"true"` | Ensures entire toast is read | Root element |
+| `aria-hidden` | `"true"` | Hides closed toasts from screen readers | Root element when closed |
+
+### Toast.Content
+
+Content wrapper component for toast body elements.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `children?` | `ReactNode` | - | Content |
+| `as?` | `ElementType` | `'div'` | Polymorphic element type |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| *None* | - | Static wrapper component | - |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| *None* | - | Content wrapper has no accessibility requirements | - |
+
+### Toast.Title
+
+Accessible heading component for toast titles.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `children?` | `ReactNode` | - | Title content |
+| `as?` | `ElementType` | `'h3'` | Polymorphic element type |
+| `level?` | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `3` | Heading level for accessibility |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| *None* | - | Static heading component | - |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `id` | `string` | Auto-generated ID for labeling | Title element |
+| `role` | `"heading"` | Identifies as heading | Title element |
+| `aria-level` | `number` | Indicates heading level | Title element |
+
+### Toast.Description
+
+Descriptive text component for toast content.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `children?` | `ReactNode` | - | Description content |
+| `as?` | `ElementType` | `'p'` | Polymorphic element type |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| *None* | - | Static text component | - |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `id` | `string` | Auto-generated ID for description | Description element |
+
+### Toast.Action
+
+Interactive action button component for toast actions.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `children?` | `ReactNode` | - | Action content |
+| `as?` | `ElementType` | `'button'` | Polymorphic element type |
+| `altText` | `string` | - | Alternative action text for accessibility |
+| `aria-label?` | `AriaAttributes['aria-label']` | `undefined` | Accessible label |
+| `aria-describedby?` | `AriaAttributes['aria-describedby']` | `undefined` | Associated description element ID |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onClick` | `(event: MouseEvent)` | Action button clicked | User clicks or activates button |
+| `onKeyDown` | `(event: KeyboardEvent)` | Key pressed on action | User presses key while focused |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `aria-label` | `string` | Accessible name for action | Action button |
+| `role` | `"button"` | Identifies as interactive button | Action element |
+| `tabindex` | `"0"` | Makes focusable | Action element |
+
+### Toast.Close
+
+Close/dismiss button component.
+
+> **Note**: `Toast.Close` is a headless component. You must provide your own `onClick` handler to close the toast by calling the `onOpenChange` prop of `Toast.Root`.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `children?` | `ReactNode` | - | Close button content |
+| `as?` | `ElementType` | `'button'` | Polymorphic element type |
+| `onClick?` | `(event: MouseEvent<HTMLButtonElement>) => void` | `undefined` | Click handler for close action - **Required for functionality** |
+| `aria-label?` | `AriaAttributes['aria-label']` | `undefined` | Accessible label |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onClick` | `(event: MouseEvent)` | Close button clicked | User clicks close button |
+| `onKeyDown` | `(event: KeyboardEvent)` | Key pressed on close button | User presses key while focused |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `aria-label` | `"Close notification"` | Default accessible close label | Close button |
+| `role` | `"button"` | Identifies as interactive button | Close button |
+| `tabindex` | `"0"` | Makes focusable | Close button |
+
+### Toast.Icon
+
+Icon indicator component for semantic variants.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `children?` | `ReactNode` | - | Icon content |
+| `as?` | `ElementType` | `'span'` | Polymorphic element type |
+| `aria-hidden?` | `AriaAttributes['aria-hidden']` | `'true'` | Hides decorative icons from screen readers |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| *None* | - | Static decorative component | - |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `aria-hidden` | `"true"` | Hides decorative icons from screen readers | Icon element |
+| `role` | `"img"` | Identifies as image when not decorative | Icon element |
+
+### Toast.Progress
+
+Progress indicator component for loading states.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `children?` | `ReactNode` | - | Progress content |
+| `as?` | `ElementType` | `'div'` | Polymorphic element type |
+| `value?` | `number` | `undefined` | Progress value (0-100) |
+| `max?` | `number` | `100` | Maximum progress value |
+| `aria-label?` | `AriaAttributes['aria-label']` | `undefined` | Accessible label for progress bar |
+| `aria-describedby?` | `AriaAttributes['aria-describedby']` | `undefined` | Element ID describing the progress |
+| `aria-valuenow?` | `AriaAttributes['aria-valuenow']` | `undefined` | Current progress value for screen readers |
+| `aria-valuemin?` | `AriaAttributes['aria-valuemin']` | `undefined` | Minimum progress value |
+| `aria-valuemax?` | `AriaAttributes['aria-valuemax']` | `undefined` | Maximum progress value |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| *None* | - | Static progress indicator | - |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `"progressbar"` | Identifies as progress indicator | Progress element |
+| `aria-valuenow` | `number` | Current progress value | Progress element |
+| `aria-valuemin` | `"0"` | Minimum progress value | Progress element |
+| `aria-valuemax` | `"100"` | Maximum progress value | Progress element |
+| `aria-label` | `"Loading progress"` | Default progress label | Progress element |
+
+## Keyboard Interactions
+
+| Key | Action | Context | Notes |
+|-----|--------|---------|-------|
+| `Tab` | Navigate | Always | Moves focus through interactive elements (actions, close) |
+| `Shift + Tab` | Navigate backward | Always | Moves focus backward through interactive elements |
+| `Enter` | Activate | Focused buttons | Triggers action or close button |
+| `Space` | Activate | Focused buttons | Alternative activation for action and close buttons |
+| `Escape` | Close toast | Toast focused | Dismisses the current toast |
+| `ArrowRight` | Next toast | Multiple toasts | Moves focus to next toast in queue |
+| `ArrowLeft` | Previous toast | Multiple toasts | Moves focus to previous toast in queue |
+| `Home` | First toast | Multiple toasts | Moves focus to first toast in queue |
+| `End` | Last toast | Multiple toasts | Moves focus to last toast in queue |

@@ -1,5 +1,5 @@
 import { useCallback, useRef, useEffect, useState } from 'react';
-import type { TimerId } from './types';
+import type { TimerId } from './Toast.types';
 
 /**
  * Optimized hook for managing toast timers with proper cleanup
@@ -51,42 +51,6 @@ export function useToastTimer(
 }
 
 /**
- * Optimized hook for stable object references
- */
-export function useStableCallback<T extends (...args: unknown[]) => unknown>(callback: T): T {
-  const callbackRef = useRef<T>(callback);
-
-  useEffect(() => {
-    callbackRef.current = callback;
-  }, [callback]);
-
-  return useCallback(
-    ((...args: Parameters<T>) => {
-      return callbackRef.current(...args);
-    }) as T,
-    [],
-  );
-}
-
-/**
- * Performance-optimized event handler hook
- */
-export function useEventHandler<T extends Event>(
-  handler: ((event: T) => void) | undefined,
-  dependencies: unknown[] = [],
-): ((event: T) => void) | undefined {
-  return useCallback(
-    handler
-      ? (event: T) => {
-          event.preventDefault?.();
-          handler(event);
-        }
-      : undefined,
-    [handler, ...dependencies],
-  );
-}
-
-/**
  * Optimized hook for managing component visibility state
  */
 export function useVisibility(initialVisible: boolean = false): {
@@ -102,22 +66,4 @@ export function useVisibility(initialVisible: boolean = false): {
   const toggle = useCallback(() => setIsVisible((prev: boolean) => !prev), []);
 
   return { isVisible, show, hide, toggle };
-}
-
-/**
- * Performance hook for batching state updates
- */
-export function useBatchedState<T>(
-  initialState: T,
-): [T, (updates: Partial<T> | ((prev: T) => Partial<T>)) => void] {
-  const [state, setState] = useState(initialState);
-
-  const batchedSetState = useCallback((updates: Partial<T> | ((prev: T) => Partial<T>)) => {
-    setState((prevState: T) => {
-      const resolvedUpdates = typeof updates === 'function' ? updates(prevState) : updates;
-      return { ...prevState, ...resolvedUpdates };
-    });
-  }, []);
-
-  return [state, batchedSetState];
 }

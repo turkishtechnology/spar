@@ -11,6 +11,16 @@ import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
+  Toast,
+  ToastProvider,
+  ToastRoot,
+  ToastContent,
+  ToastTitle,
+  ToastDescription,
+  ToastAction,
+  ToastClose,
+  ToastIcon,
+  ToastProgress,
 } from '@turkish-technology/glide';
 interface LiveCodeProps {
   title?: string;
@@ -71,6 +81,17 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Collapsible,
     CollapsibleTrigger,
     CollapsibleContent,
+    // Toast components
+    Toast,
+    ToastProvider,
+    ToastRoot,
+    ToastContent,
+    ToastTitle,
+    ToastDescription,
+    ToastAction,
+    ToastClose,
+    ToastIcon,
+    ToastProgress,
   };
 
   const [copied, setCopied] = useState(false);
