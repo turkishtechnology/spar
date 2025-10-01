@@ -19,6 +19,7 @@ export default defineConfig([
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.jsx'],
+      tsConfig: './tsconfig.json',
     },
     module: {
       rules: [
@@ -69,6 +70,7 @@ export default defineConfig([
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.jsx'],
+      tsConfig: './tsconfig.json',
     },
     module: {
       rules: [
