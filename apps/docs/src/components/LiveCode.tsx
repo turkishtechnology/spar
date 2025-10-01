@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { themes } from 'prism-react-renderer';
+
 import {
   Accordion,
   AccordionItem,
   AccordionHeader,
   AccordionTrigger,
   AccordionContent,
+  Button,
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
@@ -67,6 +69,8 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     AccordionHeader,
     AccordionTrigger,
     AccordionContent,
+    // Button component
+    Button,
     // Collapsible components
     Collapsible,
     CollapsibleTrigger,
