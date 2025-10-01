@@ -95,7 +95,7 @@ All Toast components **must** be wrapped within `ToastProvider`. Without the pro
 ## Installation
 
 ```tsx
-import { Toast, ToastProvider } from '@turkish-technology/glide'
+import { Toast, ToastProvider, useToastContext } from '@turkish-technology/glide'
 // or
 import { 
   ToastProvider, 
@@ -106,7 +106,8 @@ import {
   ToastAction,
   ToastClose,
   ToastIcon,
-  ToastProgress
+  ToastProgress,
+  useToastContext
 } from '@turkish-technology/glide'
 ```
 
@@ -449,6 +450,216 @@ function LoadingToastExample() {
 }
 ```
 
+### Programmatic Toast with useToastContext
+
+<LiveCode 
+  code={`function ProgrammaticToastExample() {
+  // useToastContext hook'u provider içinde kullanılmalı
+  const MyToastComponent = () => {
+    const { addToast, removeToast, updateToast, clearAll } = useToastContext();
+    const [loadingToastId, setLoadingToastId] = React.useState(null);
+
+    const showSuccessToast = () => {
+      addToast({
+        content: (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ color: '#4caf50', fontSize: '18px' }}>✅</span>
+            <div>
+              <div style={{ fontWeight: 'bold' }}>Success!</div>
+              <div style={{ fontSize: '14px', color: '#666' }}>Operation completed successfully</div>
+            </div>
+          </div>
+        ),
+        variant: 'success',
+        duration: 3000
+      });
+    };
+
+    const showErrorToast = () => {
+      addToast({
+        content: (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ color: '#f44336', fontSize: '18px' }}>❌</span>
+            <div>
+              <div style={{ fontWeight: 'bold' }}>Error occurred!</div>
+              <div style={{ fontSize: '14px', color: '#666' }}>Something went wrong</div>
+            </div>
+          </div>
+        ),
+        variant: 'error',
+        priority: 'high',
+        isPersistent: true // Won't auto-dismiss
+      });
+    };
+
+    const showLoadingToast = () => {
+      const toastId = addToast({
+        content: (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ 
+              width: '16px', 
+              height: '16px', 
+              border: '2px solid #f3f3f3', 
+              borderTop: '2px solid #2196f3', 
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite'
+            }}></div>
+            <div>
+              <div style={{ fontWeight: 'bold' }}>Loading...</div>
+              <div style={{ fontSize: '14px', color: '#666' }}>Please wait</div>
+            </div>
+          </div>
+        ),
+        variant: 'loading',
+        isPersistent: true
+      });
+      
+      setLoadingToastId(toastId);
+      
+      // Simulate async operation
+      setTimeout(() => {
+        removeToast(toastId);
+        showSuccessToast();
+        setLoadingToastId(null);
+      }, 3000);
+    };
+
+    const showComplexToast = () => {
+      addToast({
+        content: (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '18px' }}>📁</span>
+              <div>
+                <div style={{ fontWeight: 'bold' }}>File uploaded</div>
+                <div style={{ fontSize: '14px', color: '#666' }}>document.pdf was uploaded successfully</div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+              <button 
+                style={{ 
+                  padding: '4px 8px', 
+                  border: '1px solid #2196f3', 
+                  borderRadius: '4px', 
+                  backgroundColor: '#2196f3', 
+                  color: 'white',
+                  cursor: 'pointer'
+                }}
+                onClick={() => console.log('Viewing file')}
+              >
+                View
+              </button>
+              <button 
+                style={{ 
+                  padding: '4px 8px', 
+                  border: '1px solid #ccc', 
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+                onClick={() => console.log('Sharing file')}
+              >
+                Share
+              </button>
+            </div>
+          </div>
+        ),
+        variant: 'info',
+        size: 'large'
+      });
+    };
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '20px' }}>
+        <style>
+          {\`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }\`}
+        </style>
+        
+        <h3>Programmatic Toast Examples</h3>
+        
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <button 
+            onClick={showSuccessToast}
+            style={{ 
+              padding: '8px 16px', 
+              border: '1px solid #4caf50', 
+              borderRadius: '4px', 
+              backgroundColor: '#4caf50', 
+              color: 'white',
+              cursor: 'pointer'
+            }}
+          >
+            Show Success
+          </button>
+          
+          <button 
+            onClick={showErrorToast}
+            style={{ 
+              padding: '8px 16px', 
+              border: '1px solid #f44336', 
+              borderRadius: '4px', 
+              backgroundColor: '#f44336', 
+              color: 'white',
+              cursor: 'pointer'
+            }}
+          >
+            Show Error
+          </button>
+          
+          <button 
+            onClick={showLoadingToast}
+            disabled={loadingToastId}
+            style={{ 
+              padding: '8px 16px', 
+              border: '1px solid #2196f3', 
+              borderRadius: '4px', 
+              backgroundColor: loadingToastId ? '#ccc' : '#2196f3', 
+              color: 'white',
+              cursor: loadingToastId ? 'not-allowed' : 'pointer'
+            }}
+          >
+            Show Loading
+          </button>
+          
+          <button 
+            onClick={showComplexToast}
+            style={{ 
+              padding: '8px 16px', 
+              border: '1px solid #ff9800', 
+              borderRadius: '4px', 
+              backgroundColor: '#ff9800', 
+              color: 'white',
+              cursor: 'pointer'
+            }}
+          >
+            Show Complex
+          </button>
+          
+          <button 
+            onClick={clearAll}
+            style={{ 
+              padding: '8px 16px', 
+              border: '1px solid #666', 
+              borderRadius: '4px', 
+              backgroundColor: '#666', 
+              color: 'white',
+              cursor: 'pointer'
+            }}
+          >
+            Clear All
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <ToastProvider position="top-right" maxToasts={3}>
+      <MyToastComponent />
+    </ToastProvider>
+  );
+}`}
+/>
+
 ### Advanced Provider Configuration
 
 ```tsx
@@ -611,6 +822,91 @@ function MultipleVariantsExample() {
           );
         })}
       </div>
+    </ToastProvider>
+  );
+}
+```
+
+## useToastContext Hook
+
+The `useToastContext` hook provides programmatic access to toast management functions. It must be used within a `ToastProvider`.
+
+```tsx
+const {
+  addToast,
+  removeToast,
+  updateToast,
+  clearAll,
+  pauseAll,
+  resumeAll,
+  toasts,
+  config
+} = useToastContext();
+```
+
+### Hook Methods
+
+| Method | Type | Description |
+|--------|------|-------------|
+| `addToast` | `(config: ToastConfig & { content: ReactNode }) => string` | Adds a new toast and returns its ID |
+| `removeToast` | `(id: string) => void` | Removes a specific toast by ID |
+| `updateToast` | `(id: string, updates: Partial<ToastItem>) => void` | Updates an existing toast |
+| `clearAll` | `() => void` | Removes all active toasts |
+| `pauseAll` | `() => void` | Pauses auto-dismiss for all toasts |
+| `resumeAll` | `() => void` | Resumes auto-dismiss for all toasts |
+| `toasts` | `readonly ToastItem[]` | Array of current active toasts |
+| `config` | `Required<ToastProviderProps>` | Current provider configuration |
+
+### Usage Examples
+
+```tsx
+function MyComponent() {
+  const { addToast, removeToast, clearAll } = useToastContext();
+
+  const handleSuccess = () => {
+    const toastId = addToast({
+      content: <div>Success message!</div>,
+      variant: 'success',
+      duration: 3000
+    });
+    
+    // Optionally remove it later
+    setTimeout(() => removeToast(toastId), 2000);
+  };
+
+  const handleError = () => {
+    addToast({
+      content: <div>Error occurred!</div>,
+      variant: 'error',
+      priority: 'high',
+      isPersistent: true // Won't auto-dismiss
+    });
+  };
+
+  return (
+    <div>
+      <button onClick={handleSuccess}>Show Success</button>
+      <button onClick={handleError}>Show Error</button>
+      <button onClick={clearAll}>Clear All</button>
+    </div>
+  );
+}
+```
+
+**Error Handling**: The hook will throw an error if used outside of `ToastProvider`:
+
+```tsx
+// ❌ This will throw an error
+function ComponentOutsideProvider() {
+  const toast = useToastContext(); // Error: Must be used within ToastProvider
+  return <div>Content</div>;
+}
+
+// ✅ Correct usage
+function App() {
+  return (
+    <ToastProvider>
+      <ComponentInsideProvider />
     </ToastProvider>
   );
 }

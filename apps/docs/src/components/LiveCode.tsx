@@ -21,6 +21,7 @@ import {
   ToastClose,
   ToastIcon,
   ToastProgress,
+  useToastContext,
 } from '@turkish-technology/glide';
 interface LiveCodeProps {
   title?: string;
@@ -92,6 +93,7 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     ToastClose,
     ToastIcon,
     ToastProgress,
+    useToastContext,
   };
 
   const [copied, setCopied] = useState(false);
