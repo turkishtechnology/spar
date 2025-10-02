@@ -1,26 +1,24 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useId } from 'react';
 import type {
-  DropdownMenuProps,
-  DropdownMenuContextValue,
+  DropdownMenuSubProps,
+  DropdownMenuSubContextValue,
   DropdownMenuFocusStrategy,
 } from './types';
-import { DropdownMenuContext } from './contexts';
+import { useDropdownMenuRootContext, DropdownMenuSubContext } from './contexts';
 
-export const DropdownMenu = ({
+export const DropdownMenuSub = ({
   open,
   defaultOpen = false,
   onOpenChange,
-  modal = true,
-  dir = 'ltr',
-  closeOnSelect = 'auto',
   children,
-}: DropdownMenuProps) => {
+}: DropdownMenuSubProps) => {
+  const rootContext = useDropdownMenuRootContext();
   const isControlled = open !== undefined;
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isOpen = isControlled ? Boolean(open) : internalOpen;
-  const triggerRef = useRef<HTMLElement | null>(null);
   const triggerId = useId();
   const contentId = useId();
+  const triggerRef = useRef<HTMLElement | null>(null);
   const [focusStrategy, setFocusStrategy] = useState<DropdownMenuFocusStrategy>('none');
   const restoreFocusRef = useRef(true);
   const previousOpenRef = useRef(isOpen);
@@ -55,15 +53,21 @@ export const DropdownMenu = ({
     previousOpenRef.current = isOpen;
   }, [isOpen]);
 
-  const contextValue = useMemo<DropdownMenuContextValue>(
+  useEffect(() => {
+    if (!rootContext.open && isOpen) {
+      handleOpenChange(false);
+    }
+  }, [rootContext.open, isOpen, handleOpenChange]);
+
+  const contextValue = useMemo<DropdownMenuSubContextValue>(
     () => ({
       open: isOpen,
       onOpenChange: handleOpenChange,
       triggerId,
       contentId,
-      modal,
-      dir,
-      closeOnSelect,
+      modal: rootContext.modal,
+      dir: rootContext.dir,
+      closeOnSelect: rootContext.closeOnSelect,
       focusStrategy,
       setFocusStrategy,
       triggerRef,
@@ -74,9 +78,9 @@ export const DropdownMenu = ({
       handleOpenChange,
       triggerId,
       contentId,
-      modal,
-      dir,
-      closeOnSelect,
+      rootContext.modal,
+      rootContext.dir,
+      rootContext.closeOnSelect,
       focusStrategy,
       setFocusStrategy,
       triggerRef,
@@ -85,8 +89,10 @@ export const DropdownMenu = ({
   );
 
   return (
-    <DropdownMenuContext.Provider value={contextValue}>{children}</DropdownMenuContext.Provider>
+    <DropdownMenuSubContext.Provider value={contextValue}>
+      {children}
+    </DropdownMenuSubContext.Provider>
   );
 };
 
-DropdownMenu.displayName = 'DropdownMenu';
+DropdownMenuSub.displayName = 'DropdownMenuSub';

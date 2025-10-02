@@ -15,7 +15,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
-} from '../DropdownMenu';
+} from '../';
 
 expect.extend(toHaveNoViolations);
 

@@ -15,7 +15,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
-} from '../DropdownMenu';
+} from '../';
 
 describe('DropdownMenu Integration', () => {
   describe('Real-world User Workflows', () => {

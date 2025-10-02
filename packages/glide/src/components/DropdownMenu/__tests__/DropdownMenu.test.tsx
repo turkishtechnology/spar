@@ -14,7 +14,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
-} from '../DropdownMenu';
+} from '../';
 
 describe('DropdownMenu', () => {
   describe('DropdownMenu.Root', () => {
