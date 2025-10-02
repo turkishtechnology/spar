@@ -32,11 +32,15 @@ graph TD
     Z --> AA[Run A11y Tests]
     AA --> BB{A11y Tests Pass?}
     BB --> CC[No] --> DD[Fix A11y Issues] --> AA
-    BB --> EE[Yes] --> FF[Code Review]
-    FF --> GG{Approved?}
-    GG --> HH[Yes] --> II[Merge to Develop]
-    II --> JJ[Component Complete]
-    GG --> KK[No] --> LL[Address Review Comments] --> FF
+    BB --> EE[Yes] --> FF[Generate Documentation with **/generate-component-docs** prompt]
+    FF --> GG[Update LiveCode scope if needed]
+    GG --> HH{Documentation Approved?}
+    HH --> II[No] --> JJ[Fix Documentation] --> HH
+    HH --> KK[Yes] --> LL[Code Review]
+    LL --> MM{Approved?}
+    MM --> NN[Yes] --> OO[Merge to Develop]
+    OO --> PP[Component Complete]
+    MM --> QQ[No] --> RR[Address Review Comments] --> LL
 ```
 
 ## Workflow Steps
@@ -55,21 +59,25 @@ graph TD
 12. If tests pass, generate accessibility tests.
 13. Run accessibility tests.
 14. If accessibility tests fail, fix accessibility issues and re-run until they pass.
-15. If accessibility tests pass, proceed to code review.
-16. If review is approved, merge to the `develop` branch.
-17. Component is complete.
+15. If accessibility tests pass, generate documentation using `/generate-component-docs`.
+16. Update LiveCode scope if needed.
+17. If documentation is not approved, fix documentation and re-run until it is approved.
+18. If documentation is approved, proceed to code review.
+19. If review is approved, merge to the `develop` branch.
+20. Component is complete.
 
 ## Available Prompts
 
-| Prompt                                      | Purpose                      | When to Use               |
-| ------------------------------------------- | ---------------------------- | ------------------------- |
-| `create-component-instructions.prompt.md`   | Component specifications     | New component development |
-| `coding-standards.prompt.md`                | Coding standards application | After code generation     |
-| `review-component-instructions.prompt.md`   | Quality validation           | After spec creation       |
-| `testing-guidelines.instructions.prompt.md` | Test specifications          | Before spec creation      |
-| `generate-component.prompt.md`              | Code implementation          | After approved spec       |
-| `generate-component-tests.prompt.md`        | Test generation              | After approved spec       |
-| `generate-accessibility-tests.prompt.md`    | A11y test generation         | After basic tests pass    |
+| Prompt                                      | Purpose                      | When to Use                    |
+| ------------------------------------------- | ---------------------------- | ------------------------------ |
+| `create-component-instructions.prompt.md`   | Component specifications     | New component development      |
+| `coding-standards.prompt.md`                | Coding standards application | After code generation          |
+| `review-component-instructions.prompt.md`   | Quality validation           | After spec creation            |
+| `testing-guidelines.instructions.prompt.md` | Test specifications          | Before spec creation           |
+| `generate-component.prompt.md`              | Code implementation          | After approved spec            |
+| `generate-component-tests.prompt.md`        | Test generation              | After approved spec            |
+| `generate-accessibility-tests.prompt.md`    | A11y test generation         | After basic tests pass         |
+| `generate-component-docs.prompt.md`         | Documentation generation     | After accessibility tests pass |
 
 ## Chat Prompt Examples
 
@@ -100,6 +108,10 @@ graph TD
 ```
 
 ```
+/generate-component-docs Generate documentation for Button component
+```
+
+```
 /code-refactoring Optimize Button component performance and improve TypeScript usage
 ```
 
@@ -114,6 +126,7 @@ graph TD
 /coding-standards Apply coding standards to generated Button code
 /generate-component-tests Generate tests covering all button states and interactions
 /generate-accessibility-tests Create dedicated accessibility tests for screen reader and keyboard navigation
+/generate-component-docs Generate documentation for Button component
 ```
 
 **Form Input:**
@@ -124,6 +137,7 @@ graph TD
 /coding-standards Apply coding standards to generated Input code
 /generate-component-tests Create tests for input validation, keyboard navigation, and accessibility
 /generate-accessibility-tests Generate dedicated accessibility tests for screen reader announcements and form validation
+/generate-component-docs Generate documentation for Input component
 ```
 
 **Navigation Menu:**
@@ -134,6 +148,7 @@ graph TD
 /generate-component Build Menu with roving focus and proper ARIA attributes
 /coding-standards Apply coding standards to generated Menu code
 /generate-accessibility-tests Generate comprehensive accessibility tests for menu navigation patterns
+/generate-component-docs Generate documentation for Menu component
 ```
 
 ## Key Rules

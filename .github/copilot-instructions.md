@@ -50,10 +50,11 @@ Based on your task, follow these focused guidelines in the .github/instructions 
 
 ## Component Structure
 
+### Simple Components
 ```
 packages/glide/src/components/{Component}/
-├── {Component}.tsx          # Core logic + accessibility
-├── {Component}.types.ts     # TypeScript definitions
+├── {Component}.tsx          # Core component logic + accessibility
+├── types.ts                 # TypeScript definitions (shared across component parts)
 ├── __tests__/
 │   ├── {Component}.test.tsx     # Unit tests
 │   ├── {Component}.a11y.test.tsx # Accessibility tests
@@ -61,12 +62,31 @@ packages/glide/src/components/{Component}/
 └── index.ts                 # Named exports
 ```
 
+### Compound Components
+```
+packages/glide/src/components/{Component}/
+├── {Component}.tsx          # Root component (e.g., Accordion)
+├── {Component}Item.tsx      # Child component parts (e.g., AccordionItem)
+├── {Component}Trigger.tsx   # Interactive parts (e.g., AccordionTrigger)
+├── {Component}Content.tsx   # Content parts (e.g., AccordionContent)
+├── {Component}Header.tsx    # Additional parts as needed
+├── types.ts                 # Shared TypeScript definitions
+├── __tests__/
+│   ├── {Component}.test.tsx     # Unit tests
+│   ├── {Component}.a11y.test.tsx # Accessibility tests
+│   └── {Component}.integration.test.tsx # Integration tests
+└── index.ts                 # Compound exports with dot notation
+```
+
+**Rule**: Each logical component part gets its own file. Never mix multiple component definitions in a single file.
+
 ## Key Commands
 
 - `pnpm install` - Install deps
 - `pnpm test` - Run all tests (only after test files exist)
 - `pnpm build` - Build package
 - `pnpm lint` - Check code quality (run after creating/editing components)
+- `pnpm lint:fix` - Auto-fix linting issues (use when lint errors need fixing)
 - `pnpm check-types` - Verify TypeScript types
 - `pnpm dlx <package>` - Execute package (instead of npx)
 
@@ -80,5 +100,6 @@ packages/glide/src/components/{Component}/
 - ALWAYS read referenced instruction files BEFORE starting
 - ALWAYS keep components UNSTYLED by design
 - ALWAYS run `pnpm lint` after creating/modifying components
+- ALWAYS use `pnpm lint:fix` to auto-fix linting issues when errors occur
 - NEVER introduce styling/opinions; never modify docs unless asked; follow guideline files
 - NEVER run tests during component creation phase (tests are created separately)
