@@ -2,300 +2,691 @@
 
 ## 1. Component Overview
 
-- Purpose: Provide an accessible single-select (future-extensible to multi-select) form control for choosing one option from a finite list with rich customization and full keyboard support. Behavior only; consumer supplies styling and layout.
-- Use cases: Form field selection, filtering, settings pickers, dropdown choices where native `<select>` is insufficient (virtualization, custom rendering, async loading, grouped options).
-- Compound structure (exports):
-  - `SelectRoot` – state + context provider
-  - `SelectTrigger` – interactive element that toggles popup
-  - `SelectValue` – displays currently selected option text or placeholder
-  - `SelectIcon` – optional affordance (purely presentational, aria-hidden)
-  - `SelectPortal` – optional portal mount (implementation detail wrapper)
-  - `SelectContent` – positioned popup container (role=listbox)
-  - `SelectViewport` – scrollable region (optional wrapper for list items)
-  - `SelectGroup` – grouping wrapper
-  - `SelectLabel` – accessible group label
-  - `SelectSeparator` – non-interactive logical separator
-  - `SelectItem` – selectable option (role=option)
-  - `SelectItemText` – textual node used for typeahead string
-  - `SelectItemIndicator` – selected visual marker hook (aria-hidden)
-  - `SelectScrollUpButton` / `SelectScrollDownButton` – optional manual scrolling affordances
-- Key differentiators: Deterministic SSR-safe ID generation, robust cyclic typeahead, granular `data-*` attributes, controlled/uncontrolled parity, form participation via hidden input (only when `name` provided), focus restoration, scroll-into-view with configurable alignment, collision-aware positioning left to consumer (we expose refs & advisory positioning hints only), focus model currently limited to `aria-activedescendant` (future expansion reserved), virtualization-friendly item registry.
-- Non-goals (MVP): Multi-select semantics, internal positioning / collision measurement, virtualization engine, roving tabIndex alternative focus model (reserved for future without breaking changes).
+### Purpose and Use Cases
+The Select component is a headless, fully accessible dropdown UI pattern that allows users to choose a single value from a list of options. It provides a complete implementation of the WAI-ARIA Listbox pattern with combobox trigger behavior.
+
+**Primary Use Cases:**
+- Form field selection (country, category, status)
+- Settings and preferences
+- Filter controls
+- Data table column selectors
+- Navigation options
+
+### Compound Component Structure
+```tsx
+<Select.Root>
+  <Select.Trigger>
+    <Select.Value />
+    <Select.Icon />
+  </Select.Trigger>
+
+  <Select.Portal>
+    <Select.Content>
+      <Select.Viewport>
+        <Select.Group>
+          <Select.Label />
+          <Select.Item>
+            <Select.ItemText />
+            <Select.ItemIndicator />
+          </Select.Item>
+        </Select.Group>
+
+        <Select.Separator />
+        <Select.Arrow />
+      </Select.Viewport>
+    </Select.Content>
+  </Select.Portal>
+</Select.Root>
+```
+
+### Key Differentiators
+- **Zero styling**: Pure behavior implementation
+- **Full keyboard navigation**: Complete ARIA Listbox support
+- **Flexible positioning**: Item-aligned or popper-based
+- **Controlled/Uncontrolled**: Both patterns supported
+- **Type-ahead search**: Built-in character navigation
+- **Form integration**: Native HTML form support
+- **SSR safe**: Deterministic IDs and hydration-safe
 
 ## 2. API
 
-All components are headless and polymorphic via an `as` prop (default intrinsic element indicated). They forward refs to the underlying DOM element. Strict TypeScript (no `any`). No implicit global state.
+### Select.Root
+The main container that manages all select state and behavior.
 
-### Root (SelectRoot)
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| value | string | No | undefined | Controlled selected option value (string-only by design for form compatibility). |
-| defaultValue | string | No | undefined | Uncontrolled initial value. Ignored if `value` provided. |
-| onValueChange | (value: string) => void | No | — | Fired AFTER internal state commits (if uncontrolled) and only when value actually changes (no duplicate events). Synchronous within React event. |
-| open | boolean | No | undefined | Controlled open state. |
-| defaultOpen | boolean | No | false | Uncontrolled initial open state. |
-| onOpenChange | (open: boolean) => void | No | — | Fired after open state is derived (post intent) and only on actual state change. |
-| disabled | boolean | No | false | Disables trigger interaction. Prevents opening. |
-| required | boolean | No | false | Marks hidden input as required (if `name`). |
-| name | string | No | undefined | Hidden input name for form submission. If absent, no hidden input rendered. |
-| id | string | No | auto | Base ID used to derive stable sub-IDs. Duplicate user-provided IDs produce a dev warning (no throw). |
-| loop | boolean | No | true | Whether keyboard navigation wraps at bounds. |
-| typeaheadDebounce | number (ms) | No | 350 | Time window to aggregate multi-char typeahead. |
-| autoFocus | boolean | No | false | If true, focuses trigger on mount (effect). |
-| dir | 'ltr'|'rtl' | No | inherit | Text direction for navigation & typeahead heuristics. |
-| selectionFollowsFocus | boolean | No | false | If true, moving highlight updates selection immediately (no explicit commit). |
-| positioning | { side?: 'top'|'bottom'|'left'|'right'; align?: 'start'|'center'|'end'; overlap?: boolean; collisionPadding?: number; } | No | { side:'bottom', align:'start' } | Advisory metadata only; no DOM measurement or auto-flip performed internally. Provided on `data-side` / `data-align`. |
-| focusStrategy | 'active-descendant' | No | 'active-descendant' | Reserved for expansion; currently only supported value. Passing anything else dev-warns. |
-| scrollAlignment | 'nearest'|'center'|'start'|'end' | No | 'nearest' | How highlighted item is scrolled into view when navigation occurs. |
-| onHighlightChange | (value: string | null) => void | No | — | Fired whenever highlight changes (including null). Deduplicated. |
-| filter | (optionText: string, typed: string) => boolean | No | prefix matcher | Custom typeahead match; should be pure. |
-| disabledValues | string[] | No | [] | Additional option values forced disabled. Merged as: (item.disabled || disabledValues.includes(value)). |
-| multi (roadmap) | boolean | No | false | Ignored in MVP (single-select). Dev warning if true (not implemented). |
+| `value` | `string` | No | - | Controlled selected value |
+| `defaultValue` | `string` | No | - | Uncontrolled initial value |
+| `onValueChange` | `(value: string) => void` | No | - | Callback when selection changes |
+| `open` | `boolean` | No | - | Controlled open state |
+| `defaultOpen` | `boolean` | No | `false` | Uncontrolled initial open state |
+| `onOpenChange` | `(open: boolean) => void` | No | - | Callback when open state changes |
+| `disabled` | `boolean` | No | `false` | Disables the entire select |
+| `required` | `boolean` | No | `false` | Makes the select required for forms |
+| `name` | `string` | No | - | Form field name |
+| `dir` | `'ltr' \| 'rtl'` | No | `'ltr'` | Reading direction |
+| `as` | `ElementType` | No | - | Polymorphic component type |
 
-Notes:
-- Value typing: string-only to preserve straightforward hidden input participation; future enhancement may allow generic mapping while still serializing string value.
-- Hidden input: `value` attribute mirrors current selection; omitted entirely if no `name`.
-- Imperative handle: Attach ref to `SelectRoot` to receive methods (see below). Methods are stable (referentially) and no-op post unmount.
+### Select.Trigger
+The button that toggles the dropdown.
 
-### Trigger (SelectTrigger)
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| as | Polymorphic | No | 'button' | Element to render. Must be focusable. |
-| disabled | boolean | No | inherited | Local override (OR with root disabled). |
-| aria-label | string | No | derived | Needed if no external label association. |
-| preventFocusOnOpen | boolean | No | false | If true, focus stays on trigger (active-descendant model). Otherwise listbox container receives focus. |
+| `as` | `ElementType` | No | `button` | Polymorphic component type |
+| `ref` | `RefObject` | No | - | Forward ref support |
 
-### Value (SelectValue)
+**Data Attributes:**
+- `data-state`: `"open" | "closed"`
+- `data-disabled`: Present when disabled
+- `data-placeholder`: Present when no value selected
+
+### Select.Value
+Displays the selected value or placeholder.
+
 | Prop | Type | Required | Default | Description |
-| placeholder | string | No | '' | Placeholder text when no selection. |
-| as | Polymorphic | No | 'span' | Wrapper element. |
+|------|------|----------|---------|-------------|
+| `placeholder` | `ReactNode` | No | - | Text shown when no value selected |
+| `as` | `ElementType` | No | `span` | Polymorphic component type |
 
-### Content (SelectContent)
+### Select.Icon
+Optional visual indicator (chevron, arrow).
+
 | Prop | Type | Required | Default | Description |
-| as | Polymorphic | No | 'div' | Container element (role=listbox applied to itself). |
-| collisionPadding | number | No | 8 | Advisory padding forwarded via positioning metadata. |
-| aria-label | string | No | — | Label if no external label; else `aria-labelledby` used. |
-| inertFocusGuards | boolean | No | true | Inserts focus guards before/after when portal-ed. |
+|------|------|----------|---------|-------------|
+| `as` | `ElementType` | No | `span` | Polymorphic component type |
 
-### Viewport (SelectViewport)
+### Select.Portal
+Portal container for dropdown rendering.
+
 | Prop | Type | Required | Default | Description |
-| as | Polymorphic | No | 'div' | Scroll container. |
-| overscan | number | No | 2 | Advisory overscan count for virtualization. |
+|------|------|----------|---------|-------------|
+| `container` | `HTMLElement` | No | `document.body` | Portal target element |
+| `forceMount` | `boolean` | No | `false` | Force mount for animation control |
 
-### Group (SelectGroup)
+### Select.Content
+The dropdown container that appears when open.
+
 | Prop | Type | Required | Default | Description |
-| as | Polymorphic | No | 'div' | Group wrapper (role=group). |
-| labelId | string | No | auto | ID referenced by `aria-labelledby` on group. |
+|------|------|----------|---------|-------------|
+| `position` | `'item-aligned' \| 'popper'` | No | `'item-aligned'` | Positioning strategy |
+| `side` | `'top' \| 'right' \| 'bottom' \| 'left'` | No | `'bottom'` | Preferred placement side (popper only) |
+| `sideOffset` | `number` | No | `0` | Distance from trigger (popper only) |
+| `align` | `'start' \| 'center' \| 'end'` | No | `'start'` | Alignment relative to trigger |
+| `alignOffset` | `number` | No | `0` | Alignment offset in pixels |
+| `avoidCollisions` | `boolean` | No | `true` | Adjust position to avoid viewport edges |
+| `collisionBoundary` | `Element \| Element[]` | No | `[]` | Boundaries for collision detection |
+| `collisionPadding` | `number \| Padding` | No | `10` | Padding for collision detection |
+| `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Escape key handler |
+| `onPointerDownOutside` | `(event: PointerEvent) => void` | No | - | Outside click handler |
+| `onCloseAutoFocus` | `(event: FocusEvent) => void` | No | - | Focus handler on close |
+| `as` | `ElementType` | No | `div` | Polymorphic component type |
+| `ref` | `RefObject` | No | - | Forward ref support |
 
-### Label (SelectLabel)
+**Data Attributes:**
+- `data-state`: `"open" | "closed"`
+- `data-side`: `"top" | "right" | "bottom" | "left"`
+- `data-align`: `"start" | "center" | "end"`
+
+**CSS Variables (popper mode):**
+- `--select-content-transform-origin`: Transform origin for animations
+- `--select-content-available-width`: Available width
+- `--select-content-available-height`: Available height
+- `--select-trigger-width`: Trigger element width
+- `--select-trigger-height`: Trigger element height
+
+### Select.Viewport
+Scrollable container for select items.
+
 | Prop | Type | Required | Default | Description |
-| as | Polymorphic | No | 'div' | Non-interactive label element. Must mount before associated items for ideal AT reading order. |
+|------|------|----------|---------|-------------|
+| `as` | `ElementType` | No | `div` | Polymorphic component type |
 
-### Separator (SelectSeparator)
+### Select.Item
+Individual selectable option.
+
 | Prop | Type | Required | Default | Description |
-| as | Polymorphic | No | 'div' | Structural separator (role=presentation). |
+|------|------|----------|---------|-------------|
+| `value` | `string` | Yes | - | Option value |
+| `disabled` | `boolean` | No | `false` | Disables the option |
+| `textValue` | `string` | No | - | Text for type-ahead (auto-detected if not provided) |
+| `as` | `ElementType` | No | `div` | Polymorphic component type |
+| `ref` | `RefObject` | No | - | Forward ref support |
 
-### Item (SelectItem)
+**Data Attributes:**
+- `data-state`: `"checked" | "unchecked"`
+- `data-disabled`: Present when disabled
+- `data-highlighted`: Present when keyboard focused
+
+### Select.ItemText
+The text content of an item.
+
 | Prop | Type | Required | Default | Description |
-| value | string | Yes | — | Unique option value (dev warning on duplicate). |
-| disabled | boolean | No | false | Non-interactive state. |
-| textValue | string | No | derived from ItemText | Explicit string for typeahead if children complex. |
-| as | Polymorphic | No | 'div' | Option container (role=option). |
+|------|------|----------|---------|-------------|
+| `as` | `ElementType` | No | `span` | Polymorphic component type |
 
-### ItemText (SelectItemText)
+### Select.ItemIndicator
+Visual indicator for selected state (checkmark, etc).
+
 | Prop | Type | Required | Default | Description |
-| as | Polymorphic | No | 'span' | Text source node. |
+|------|------|----------|---------|-------------|
+| `forceMount` | `boolean` | No | `false` | Force mount for animation |
+| `as` | `ElementType` | No | `span` | Polymorphic component type |
 
-### ItemIndicator (SelectItemIndicator)
+### Select.Group
+Groups related items together.
+
 | Prop | Type | Required | Default | Description |
-| as | Polymorphic | No | 'span' | Visual marker region (aria-hidden). |
+|------|------|----------|---------|-------------|
+| `as` | `ElementType` | No | `div` | Polymorphic component type |
 
-### Scroll Buttons (SelectScrollUpButton / SelectScrollDownButton)
+### Select.Label
+Label for a group of items.
+
 | Prop | Type | Required | Default | Description |
-| as | Polymorphic | No | 'div' | If interactive scrolling is provided, implement with role=button & appropriate `aria-label`. Otherwise mark aria-hidden. |
+|------|------|----------|---------|-------------|
+| `as` | `ElementType` | No | `div` | Polymorphic component type |
 
-### Imperative Handle
-`ref` to `SelectRoot` exposes: `{ open(), close(), toggle(), focus(), highlight(value: string | null), select(value: string) }`.
-- `highlight(null)` clears highlight.
-- All methods no-op if already in target state.
+### Select.Separator
+Visual separator between items or groups.
+
+| Prop | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+| `as` | `ElementType` | No | `div` | Polymorphic component type |
+
+### Select.Arrow
+Optional arrow pointing to trigger.
+
+| Prop | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+| `width` | `number` | No | `10` | Arrow width |
+| `height` | `number` | No | `5` | Arrow height |
+| `as` | `ElementType` | No | `svg` | Polymorphic component type |
 
 ## 3. Behavior Matrix
 
-| State | Trigger / Interaction | Result | ARIA / DOM Update |
-|-------|-----------------------|--------|-------------------|
-| Closed (default) | Click / Space / Enter on trigger | Opens listbox, highlights selected or first enabled | `aria-expanded=true`; content mounted with `role=listbox`; `aria-controls` references content id |
-| Closed | ArrowDown on trigger | Open + highlight first enabled (or next after current selection) | Same as above |
-| Closed | ArrowUp on trigger | Open + highlight last enabled | Same as above |
-| Closed | Type character(s) | Open + highlight first matching item | `aria-expanded=true`; `aria-activedescendant` set |
-| Closed | Trigger disabled activation | No action | No change |
-| Open | Escape | Close & restore focus (unless user moved focus) | `aria-expanded=false`; content unmounted |
-| Open | Tab | Close then allow normal tab forward | Same as close |
-| Open | Shift+Tab | Close then move focus backward | Same as close |
-| Open | Click outside / focus outside | Close & restore trigger focus (if focus still within select tree) | Same as close |
-| Open | Enter / Space on trigger (no typeahead pending) | Close (commit selection unchanged) | `aria-expanded=false` |
-| Open | ArrowDown (no highlight) | Highlight first enabled | `aria-activedescendant` updated |
-| Open | ArrowUp (no highlight) | Highlight last enabled | `aria-activedescendant` updated |
-| Open | ArrowDown | Move highlight to next enabled (wrap if `loop`) | `aria-activedescendant` updated |
-| Open | ArrowUp | Move highlight to prev enabled (wrap if `loop`) | `aria-activedescendant` updated |
-| Open | Home | Highlight first enabled | `aria-activedescendant` updated |
-| Open | End | Highlight last enabled | `aria-activedescendant` updated |
-| Open | Type character(s) | Move highlight to next matching item (cyclic) | `aria-activedescendant` updated |
-| Open (highlighted) | Enter / Space | Commit selection; close unless `selectionFollowsFocus` true | `aria-selected` on item; hidden input value updated |
-| Open (`selectionFollowsFocus=true`) | Arrow nav | Selection updates with highlight (list remains open until Escape/blur) | `aria-selected` transitions each move |
-| Open | Pointer hover item | (Optional) Does NOT change highlight automatically (keyboard-driven highlight). Consumer may opt-in separately. | No mandated change |
-| Open | Click on item (enabled) | Commit selection & close | Same as selection commit |
-| Open | Click on highlighted selected item | Close (selection unchanged) | `aria-expanded=false` |
-| Any | Disabled item navigation attempt | Skips item | `aria-disabled=true` present |
-| Any | disabledValues contains item value | Item treated disabled | `aria-disabled=true` |
-| Form submit | Native submission | Selected value included if `name` set | Hidden input present |
-| Scroll Buttons active | Press / hold | Scroll viewport | No ARIA change |
-| Open | highlight cleared (programmatic) | No selection change | `aria-activedescendant` removed (if focus model requires) |
-
-Notes:
-- Highlight is independent of selection unless `selectionFollowsFocus`.
-- Typeahead reset occurs after debounce window or open state close.
+| State | Trigger | Result | ARIA/DOM Update |
+|-------|---------|--------|-----------------|
+| Closed, Trigger focused | `Space` / `Enter` | Opens dropdown, focuses selected item (or first if none) | `aria-expanded="true"`, `data-state="open"` |
+| Closed, Trigger focused | `ArrowDown` / `ArrowUp` | Opens dropdown, focuses selected/first item | `aria-expanded="true"`, `data-state="open"` |
+| Open | `Escape` | Closes dropdown, returns focus to trigger | `aria-expanded="false"`, `data-state="closed"` |
+| Open, item focused | `Enter` / `Space` | Selects focused item, closes dropdown | `value` updates, `aria-expanded="false"`, fires `onValueChange` |
+| Open, item focused | `ArrowDown` | Moves focus to next non-disabled item | `aria-activedescendant` updates |
+| Open, item focused | `ArrowUp` | Moves focus to previous non-disabled item | `aria-activedescendant` updates |
+| Open, item focused | `Home` / `PageUp` | Moves focus to first non-disabled item | `aria-activedescendant` updates |
+| Open, item focused | `End` / `PageDown` | Moves focus to last non-disabled item | `aria-activedescendant` updates |
+| Open, item focused | `A-Z` or `a-z` | Type-ahead: finds and focuses matching item | `aria-activedescendant` updates |
+| Open | Click outside | Closes dropdown without selection | `aria-expanded="false"`, `data-state="closed"` |
+| Any | Trigger loses focus | If `onBlur` provided, fires callback | No state change unless controlled |
+| Disabled | Any interaction | No action | No updates |
+| Selected item | Render | Item marked with indicator | `data-state="checked"`, `aria-selected="true"` |
 
 ## 4. Accessibility
 
-- Roles: Trigger (`button[aria-haspopup="listbox"]`), Content (`div[role=listbox]`), Item (`div[role=option]`), Group (`div[role=group]`), Separator (`div role=presentation`).
-- States / Props: `aria-expanded`, `aria-controls` (always on trigger referencing stable content id; safe even when closed), `aria-activedescendant` (on listbox or trigger depending on focus retention), `aria-selected`, `aria-disabled`, `aria-labelledby`, `aria-label`, future `aria-multiselectable` (not emitted until multi supported). No live region by default (developer can add externally if asynchronous loading announcements needed).
-- Keyboard:
-  - Trigger focused: Enter / Space / ArrowDown / ArrowUp open (see behavior matrix). Typeahead while closed opens & highlights.
-  - Listbox focused or active-descendant model: ArrowUp/Down navigate; Home/End jump; Typeahead cycles; Enter/Space commit; Escape close; Tab / Shift+Tab close then move focus.
-  - Prevent default on Space when it would scroll page.
-- Focus management:
-  - If `preventFocusOnOpen=true`, trigger retains focus; `aria-activedescendant` points at highlighted item id.
-  - Else listbox container gets focus and items are not directly tab-focusable (managed active descendant or roving future strategy).
-  - On close: focus returns to trigger only if focus is still within select subtree or trigger; if user moved focus elsewhere intentionally we do not steal focus.
-- Highlight vs Selection: Distinct semantics surfaced through separate data attributes and ARIA (`aria-selected` only on selected). Highlight alone does not assert `aria-selected`.
-- Disabled semantics: Use native `disabled` attribute when trigger is a native button; items use `aria-disabled=true`.
-- Labeling:
-  - External label: `<label for={triggerId}>` or `aria-labelledby` chain (trigger + external id(s)).
-  - If none available, developer must provide `aria-label`.
-- Groups: Each group sets `role=group` and `aria-labelledby=groupLabelId` referencing an internal or external `SelectLabel` element that appears before its items in DOM.
-- Scroll management: Highlight change ensures item is visible via `scrollIntoView` with the configured alignment (layout effect, guards for SSR).
-- RTL: ArrowLeft/ArrowRight currently ignored (future horizontal variant); Up/Down remain semantic vertical navigation; `dir` influences typeahead collations only if locale-specific ordering needed (developer-provided filter handles this).
+### Roles
+- **Trigger**: `role="combobox"` or `button` with `aria-haspopup="listbox"`
+- **Content**: `role="listbox"`
+- **Item**: `role="option"`
+- **Group**: `role="group"`
+- **Label**: No role (uses `aria-labelledby` on group)
+
+### Keyboard Navigation
+Following WAI-ARIA Listbox pattern:
+
+**When Trigger has focus:**
+- `Space` / `Enter` → Open dropdown, focus selected/first item
+- `ArrowDown` / `ArrowUp` → Open dropdown, focus selected/first item
+
+**When dropdown is open:**
+- `Escape` → Close dropdown, return focus to trigger
+- `Enter` / `Space` → Select focused item, close dropdown
+- `ArrowDown` → Focus next item (wrap to first)
+- `ArrowUp` → Focus previous item (wrap to last)
+- `Home` / `PageUp` → Focus first item
+- `End` / `PageDown` → Focus last item
+- `A-Z` / `a-z` → Type-ahead search (focus matching item)
+- `Tab` → Close dropdown, move focus to next tabbable element
+
+### Focus Management
+1. **Initial focus**: When opened, focus moves to selected item (or first item if none selected)
+2. **Focus trap**: While open, focus remains within dropdown (or on trigger via aria-activedescendant)
+3. **Focus restoration**: On close (Escape, selection, outside click), focus returns to trigger
+4. **Visual indicator**: Focus must have visible outline (WCAG 2.4.7)
+5. **Focus not obscured**: Focused item must be visible (WCAG 2.4.11 - new in 2.2)
+
+### Screen Reader Announcements
+- Trigger announces: "Select [label], [current value or placeholder], collapsed/expanded"
+- Items announce: "[Option text], [X of Y], selected/not selected"
+- On selection: "[Option text] selected"
+- Group labels announce context: "[Group label], group"
+
+### Name/Role/Value Exposure
+- **Name**: Via `aria-label`, `aria-labelledby`, or associated `<label>`
+- **Role**: `combobox` on trigger, `listbox` on content, `option` on items
+- **Value**: Current selection exposed via `aria-valuenow` or trigger text content
+- **State**: `aria-expanded`, `aria-selected`, `aria-disabled`, `aria-activedescendant`
+
+### WCAG 2.2 AA Compliance
+- ✅ **1.4.13 Content on Hover or Focus**: Dismissable, hoverable, persistent
+- ✅ **2.4.7 Focus Visible**: Clear focus indicators on all interactive elements
+- ✅ **2.4.11 Focus Not Obscured (Minimum)**: Focused items scroll into view
+- ✅ **2.5.8 Target Size (Minimum)**: Interactive targets minimum 24x24px
+- ✅ **4.1.2 Name, Role, Value**: All states exposed to assistive tech
+
+### Additional Accessibility Requirements
+- Disabled items are not focusable, use `aria-disabled="true"`
+- Empty groups are skipped in navigation
+- Type-ahead timeout: 1000ms between character inputs
+- Required fields must have `aria-required="true"` or `required` attribute
+- Error states should use `aria-invalid="true"` and `aria-errormessage`
 
 ## 5. Implementation Architecture
 
-- State Hook: `useSelectState` maintains: open, value, highlight, typeahead buffer, items registry (ordered), disabled set (merged from per-item + `disabledValues`). Controlled/uncontrolled pattern: if prop is defined, internal state reads from prop; internal updates call callback but do not set state.
-- Registry: Items register with value, disabled flag, textValue getter/ref. Order is mount order (React tree order). Duplicate value triggers dev warning and last registration wins.
-- Contexts: Split contexts (StateContext / DispatchContext) to reduce re-renders; selectors may be provided in hooks for performance.
-- Reducer Actions: OPEN, CLOSE, TOGGLE, REGISTER_ITEM, UNREGISTER_ITEM, HIGHLIGHT, SELECT, TYPEAHEAD_APPEND, TYPEAHEAD_CLEAR, UPDATE_DISABLED_SET.
-- Side Effects: Performed in layout effects: focus shifts, scroll alignment, typeahead buffer clearing timer; all timers cleared on unmount.
-- IDs: `baseId` stable (from prop or internal deterministic factory). Item id = `${baseId}-option-${index}` (index derived from current registry ordering). Stable so long as ordering consistent; virtualization changes must maintain ordering expectations.
-- Focus Model: Only active-descendant for MVP; future addition (e.g., roving `tabIndex`) can expand `focusStrategy` without breaking existing usage because unsupported strategies currently warn and fallback.
-- Typeahead: Buffer appended with printable chars; search begins at item AFTER current highlight; wraps; filter must be pure; resetting done via debounce timer or open->close.
-- Positioning: Library does not measure or reposition; `positioning` prop only outputs advisory `data-side` / `data-align` & raw preferences to consumer via context/hook for integration with e.g. floating-ui.
-- Virtualization: Not implemented. If consumer renders subset, they can opt to provide `aria-setsize` / `aria-posinset` via extended Item props (future). MVP leaves these off to avoid incorrect semantics.
-- Dev Warnings: Duplicate item values, using `multi`=true, unsupported `focusStrategy`, missing `value` prop on item, trigger element not focusable.
-- Error Handling: Silent no-ops for invalid highlight/select calls (value not registered).
+### State Management
+```tsx
+interface SelectState {
+  // Open state
+  open: boolean;
+  setOpen: (open: boolean) => void;
+
+  // Value state
+  value: string | undefined;
+  setValue: (value: string) => void;
+
+  // Focus management
+  activeIndex: number;
+  setActiveIndex: (index: number) => void;
+
+  // Type-ahead
+  searchString: string;
+  searchTimeout: NodeJS.Timeout | null;
+}
+
+// Hook: useSelectState
+const useSelectState = (props: SelectRootProps) => {
+  const [open, setOpen] = useControlledState(props.open, props.defaultOpen, props.onOpenChange);
+  const [value, setValue] = useControlledState(props.value, props.defaultValue, props.onValueChange);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [searchString, setSearchString] = useState('');
+
+  // ... implementation
+
+  return { open, setOpen, value, setValue, activeIndex, setActiveIndex };
+};
+```
+
+### Context Requirements
+```tsx
+interface SelectContextValue {
+  // State
+  open: boolean;
+  value: string | undefined;
+  disabled: boolean;
+  required: boolean;
+  dir: 'ltr' | 'rtl';
+
+  // Actions
+  onValueChange: (value: string) => void;
+  onOpenChange: (open: boolean) => void;
+
+  // Refs
+  triggerRef: RefObject<HTMLElement>;
+  contentRef: RefObject<HTMLElement>;
+  valueRef: RefObject<HTMLElement>;
+
+  // IDs
+  triggerId: string;
+  contentId: string;
+  valueId: string;
+
+  // Collections
+  items: Map<string, SelectItemData>;
+  registerItem: (value: string, data: SelectItemData) => void;
+  unregisterItem: (value: string) => void;
+}
+
+// Provider
+<SelectContext.Provider value={contextValue}>
+  {children}
+</SelectContext.Provider>
+```
+
+### Ref Forwarding Strategy
+All interactive components support ref forwarding:
+```tsx
+const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>((props, forwardedRef) => {
+  const context = useSelectContext();
+  const ref = useComposedRefs(forwardedRef, context.triggerRef);
+
+  return <Primitive.button ref={ref} {...props} />;
+});
+```
+
+### Event System
+```tsx
+// Keyboard event delegation
+const handleKeyDown = (event: KeyboardEvent) => {
+  switch (event.key) {
+    case 'Enter':
+    case ' ':
+      // Handle selection
+      break;
+    case 'ArrowDown':
+      // Move focus down
+      break;
+    case 'ArrowUp':
+      // Move focus up
+      break;
+    case 'Home':
+    case 'PageUp':
+      // Focus first
+      break;
+    case 'End':
+    case 'PageDown':
+      // Focus last
+      break;
+    case 'Escape':
+      // Close
+      break;
+    default:
+      // Type-ahead
+      if (event.key.length === 1) {
+        handleTypeAhead(event.key);
+      }
+  }
+};
+
+// Type-ahead implementation
+const handleTypeAhead = (char: string) => {
+  clearTimeout(searchTimeout);
+  const newSearch = searchString + char;
+  const match = findMatchingItem(newSearch);
+
+  if (match) {
+    focusItem(match.index);
+  }
+
+  setSearchString(newSearch);
+  setSearchTimeout(setTimeout(() => setSearchString(''), 1000));
+};
+```
+
+### SSR/CSR Safety
+```tsx
+// Deterministic ID generation
+const useId = (id?: string) => {
+  const [generatedId] = useState(() => id || `select-${generateUniqueId()}`);
+  return id || generatedId;
+};
+
+// Hydration-safe rendering
+const [isMounted, setIsMounted] = useState(false);
+
+useEffect(() => {
+  setIsMounted(true);
+}, []);
+
+if (!isMounted) {
+  return null; // Prevent hydration mismatch for portaled content
+}
+```
 
 ## 6. Styling & Data Attributes
 
-Expose only stateful hooks (no classes, no styles):
-- Root: `data-select-root`, `data-state="open|closed"`, `data-disabled` (present when disabled)
-- Trigger: `data-select-trigger`, `data-state`, `data-disabled`
-- Content: `data-select-content`, `data-state`, `data-side`, `data-align`
-- Viewport: `data-select-viewport`
-- Group: `data-select-group`
-- Label: `data-select-label`
-- Separator: `data-select-separator`
-- Item: `data-select-item`, `data-value="<value>"`, `data-disabled`, `data-highlighted`, `data-selected`
-- ItemIndicator: `data-select-item-indicator`
-- Scroll Buttons: `data-select-scroll-button`, `data-direction="up|down"`
+### Required Data Attributes
 
-Notes:
-- Attributes only exist while nodes are mounted (content & items unmount on close removal).
-- Consumers can differentiate highlight vs selection: `[data-select-item][data-highlighted]` vs `[data-select-item][data-selected]`.
+**Select.Root**
+- No visual attributes (non-rendering)
+
+**Select.Trigger**
+- `data-state`: `"open" | "closed"` - Dropdown open state
+- `data-disabled`: Present when `disabled={true}`
+- `data-placeholder`: Present when no value selected
+
+**Select.Content**
+- `data-state`: `"open" | "closed"` - Dropdown open state
+- `data-side`: `"top" | "right" | "bottom" | "left"` - Placement side (popper mode)
+- `data-align`: `"start" | "center" | "end"` - Alignment (popper mode)
+
+**Select.Item**
+- `data-state`: `"checked" | "unchecked"` - Selection state
+- `data-disabled`: Present when `disabled={true}`
+- `data-highlighted`: Present when focused via keyboard
+
+**Select.ItemIndicator**
+- Renders only when item is selected (`data-state="checked"`)
+
+### Variants & Sizes
+No built-in variants. Apply via data attributes:
+```tsx
+<Select.Trigger data-variant="outline" data-size="md">
+```
+
+Consumers define styling:
+```css
+[data-variant="outline"] {
+  border: 1px solid var(--border-color);
+}
+
+[data-size="sm"] {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+```
+
+### State-Based Styling
+```css
+/* Open state */
+[data-state="open"] {
+  /* Styles for open dropdown */
+}
+
+/* Selected item */
+[data-state="checked"] {
+  font-weight: 600;
+}
+
+/* Highlighted item */
+[data-highlighted] {
+  background: var(--highlight-bg);
+}
+
+/* Disabled */
+[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Placeholder */
+[data-placeholder] {
+  color: var(--placeholder-color);
+}
+```
 
 ## 7. Test Coverage Plan
 
-Unit Tests:
-- State transitions: open/close/toggle, selection commit, highlight wrap respecting `loop`.
-- Controlled vs uncontrolled (value & open): internal state not mutated when controlled, callbacks fire correctly.
-- `selectionFollowsFocus` immediate selection updates.
-- Typeahead: single & multi-char, cyclic search, debounce clearing, custom `filter` invocation.
-- Disabled navigation: skip disabled & `disabledValues` entries; merging precedence.
-- Highlight clearing: `highlight(null)` behavior.
-- Imperative handle: open/close/toggle/focus/highlight/select idempotency & no-ops after unmount.
-- Scroll alignment: ensure scroll called with expected alignment (mock scrollIntoView).
-- Prevent duplicate `onValueChange` for same value.
+### Unit Tests
+- ✅ Renders with correct structure
+- ✅ Controlled value updates
+- ✅ Uncontrolled value updates
+- ✅ Controlled open state
+- ✅ Uncontrolled open state
+- ✅ Disabled state prevents interaction
+- ✅ Form integration (name attribute)
+- ✅ Default value initialization
+- ✅ Value change callback fires
+- ✅ Open change callback fires
+- ✅ Portal rendering
+- ✅ Type-ahead search
+- ✅ RTL support
 
-Accessibility Tests:
-- Roles & attributes: trigger `aria-haspopup=listbox`, `aria-expanded` toggling, `aria-controls` stable id.
-- `aria-activedescendant` updates with navigation.
-- `aria-selected` only on chosen item; not on mere highlight.
-- Keyboard flows: opening via Enter/Space/Arrows, navigation, Home/End, Escape, Tab / Shift+Tab closure, typeahead open-from-closed.
-- Focus management: focus retention vs listbox focus; restoration on close; no focus theft when user moves focus.
-- Disabled semantics: trigger disabled prevents open; item `aria-disabled=true`.
-- Group labeling: `role=group` + `aria-labelledby` referencing label element.
-- No duplicate IDs across multiple instances.
+### Accessibility Tests
+Using `jest-axe`:
+- ✅ No accessibility violations (axe-core)
+- ✅ Correct ARIA roles applied
+- ✅ `aria-expanded` updates on open/close
+- ✅ `aria-selected` on selected item
+- ✅ `aria-disabled` on disabled items
+- ✅ `aria-activedescendant` updates on navigation
+- ✅ `aria-labelledby` connects trigger to label
+- ✅ Focus visible indicators present
+- ✅ Focus restoration on close
+- ✅ Screen reader announcements (using @testing-library/user-event)
 
-Integration Tests:
-- Multiple Select instances isolation (independent highlights & selections).
-- Form submission includes hidden input when `name` present; absence when `name` missing.
-- Required + no selection triggers native validity message on form submit (where supported).
-- Portal usage (if `SelectPortal`) preserves accessibility relationships & focus guards function.
-- `preventFocusOnOpen` keeps focus on trigger & uses `aria-activedescendant`.
-- Click outside & focus outside closing behavior.
-- RTL: navigation still vertical; no horizontal conflict.
-- Scroll buttons (if rendered) performing scroll without altering selection.
+### Keyboard Navigation Tests
+- ✅ `Space` opens dropdown
+- ✅ `Enter` opens dropdown
+- ✅ `ArrowDown` opens and navigates
+- ✅ `ArrowUp` opens and navigates
+- ✅ `Escape` closes dropdown
+- ✅ `Home`/`PageUp` focuses first item
+- ✅ `End`/`PageDown` focuses last item
+- ✅ Type-ahead focuses matching items
+- ✅ `Tab` closes and moves focus
+- ✅ Disabled items are skipped
 
-Negative / Warning Tests:
-- Duplicate item value emits dev warning once.
-- Using `multi` prop emits dev warning.
-- Unsupported `focusStrategy` emits dev warning & falls back.
+### Integration Tests
+- ✅ Works within forms (submission)
+- ✅ Works with validation libraries
+- ✅ Multiple selects on same page
+- ✅ Dynamic items (add/remove)
+- ✅ Async loading states
+- ✅ Collision detection (viewport boundaries)
+- ✅ Popper vs item-aligned positioning
+- ✅ Portal container customization
+- ✅ SSR/CSR hydration
 
 ## 8. Constraints
 
-- Zero styling or class names (only `data-*`).
-- Headless: no DOM measurement for positioning (advisory only).
-- Tree-shakeable named exports; no side effects at module top-level (except harmless id factory constants).
-- TypeScript strict mode; no `any`; explicit public types exported.
-- WCAG 2.2 AA alignment (keyboard operability, focus visibility left to consumer styling, semantic roles).
-- Controlled & uncontrolled parity; no mixed mode anomalies.
-- SSR deterministic IDs; avoid accessing window/document during render.
-- Timers limited to typeahead debounce; all cleared on unmount.
-- No lingering global listeners; all event listeners cleaned.
-- Dev warnings only in non-production builds (guarded by NODE_ENV checks).
+### Zero Styling (Behavior Only)
+- No CSS classes applied by component
+- No inline styles except positioning (popper mode)
+- All visual design via consumer-provided styles
+- Data attributes expose all necessary states
+
+### Styling via Data Attributes
+- All component states exposed as `data-*` attributes
+- Variants, sizes, themes applied by consumers
+- Animations/transitions handled externally
+- CSS variables for dynamic values (popper mode)
+
+### Tree-Shakeable Exports
+```tsx
+// Named exports for optimal tree-shaking
+export { SelectRoot as Root } from './SelectRoot';
+export { SelectTrigger as Trigger } from './SelectTrigger';
+export { SelectValue as Value } from './SelectValue';
+// ... etc
+
+// Namespace export for convenience
+export * as Select from './index';
+```
+
+### TypeScript Strict Mode
+- Full type safety for all props
+- Generic type support for value types
+- Discriminated unions for polymorphic `as` prop
+- Exported types for consumers
+
+### WCAG 2.2 AA Compliant
+- All success criteria met (see Accessibility section)
+- Tested with screen readers (NVDA, JAWS, VoiceOver)
+- Keyboard-only navigation fully supported
+- Color contrast requirements enforced by consumer
+
+### Controlled/Uncontrolled Support
+- Both patterns fully supported
+- `defaultValue` / `defaultOpen` for uncontrolled
+- `value` / `open` + callbacks for controlled
+- Internal state management when uncontrolled
 
 ## 9. Migration & Implementation Checklist
 
-### Implementation Steps
-1. Implement `useControllableState` helper (if not existing) for value & open.
-2. Build `useSelectState` reducer + actions (OPEN, CLOSE, TOGGLE, REGISTER_ITEM, UNREGISTER_ITEM, HIGHLIGHT, SELECT, TYPEAHEAD_APPEND, TYPEAHEAD_CLEAR, UPDATE_DISABLED_SET).
-3. Create contexts (state / dispatch); expose hooks `useSelectContextState`, `useSelectContextDispatch`.
-4. Implement `SelectRoot`: initialize state, ids, hidden input (if `name`), imperative handle, context providers, dev warnings.
-5. Implement `SelectTrigger`: semantics, key handlers (Enter/Space/Arrows/typeahead), pointer click toggle, disabled gating, `aria-*` attributes.
-6. Implement `SelectContent`: mount/unmount lifecycles, outside/focus-out listeners, escape handling, focus guards (if portal), listbox role assignment.
-7. Implement item registration & cleanup; store textValue; compute highlight and selection states.
-8. Implement navigation & typeahead logic (cyclic, skip disabled, debounce clearing timer, custom `filter`).
-9. Implement selection commit logic respecting `selectionFollowsFocus`; ensure single `onValueChange` dispatch.
-10. Implement scroll-into-view alignment strategy; guard for SSR.
-11. Add data attributes across parts; ensure minimal re-renders (memo or stable selectors where needed).
-12. Add dev warnings and ensure they are stripped / disabled in production builds.
+### Migration from Other Libraries
 
-### Quality Checklist
-- No `any` types; public types exported from component index.
-- `onValueChange` / `onOpenChange` not called redundantly.
-- `aria-activedescendant` points to existing element id or is removed when highlight null.
-- All timers cleared; no memory leaks after unmount (verified via test or inspection).
-- Duplicate item values warn once.
-- Hidden input absent when `name` undefined.
-- Disabled items never focusable / selectable.
-- No layout shift due to internal styles (none provided).
+**From Radix Select:**
+- ✅ API is similar, minimal changes needed
+- ✅ `Select.Root` replaces `Select`
+- ✅ `Select.Trigger` same
+- ✅ `Select.Content` same (check positioning props)
+- ✅ `Select.Item` same
+- ✅ `Select.Value` same
+- ✅ Groups and labels work identically
 
-### Consumer Integration Checklist
-- Provide external label (native <label> or `aria-label`).
-- Style exclusively via `data-*` attributes (avoid relying on DOM shape).
-- Integrate custom positioning (e.g. floating-ui) using trigger & content refs and advisory `positioning` prop.
-- Ensure visible focus ring styling for trigger & optionally highlighted item.
-- For async options: render loading state outside listbox or add custom live region (library does not announce automatically).
+**From Headless UI Listbox:**
+- ⚠️ Different component structure (compound vs single)
+- ⚠️ `Listbox` → `Select.Root`
+- ⚠️ `Listbox.Button` → `Select.Trigger` + `Select.Value`
+- ⚠️ `Listbox.Options` → `Select.Content` + `Select.Viewport`
+- ⚠️ `Listbox.Option` → `Select.Item`
+- ✅ `value` and `onChange` props map directly
 
-### Migration / Future Expansion Notes
-- Multi-select: Introduce `multi` enabling set-based selection, add `aria-multiselectable`, change `onValueChange` signature or add `onValuesChange` (breaking → plan major version); maintain backward-compatible single value API under feature flag initially.
-- Additional focus strategies: Add `'roving-tabindex'` and `'item'` strategies; ensure current prop gracefully handles new enums.
-- Generic value typing: Add prop `getOptionValue?: (raw: T) => string` while maintaining serialized string for forms.
-- Virtualization: Provide optional context API for total count & visible indices to allow automatic `aria-setsize` / `aria-posinset`.
+**From React Aria Select:**
+- ⚠️ Less boilerplate (no separate hooks)
+- ⚠️ `useSelectState` → internal state in `Select.Root`
+- ⚠️ `useSelect` → internal in `Select.Trigger`
+- ⚠️ `useListBox` → internal in `Select.Content`
+- ✅ Same keyboard interactions
+- ✅ Same ARIA implementation
 
+### Implementation Checklist
+
+**Phase 1: Core Structure** (Week 1)
+- [ ] Implement `Select.Root` with context provider
+- [ ] Implement `Select.Trigger` with ARIA attributes
+- [ ] Implement `Select.Value` with placeholder support
+- [ ] Implement `Select.Icon` (optional)
+- [ ] Create internal state management hooks
+- [ ] Implement controlled/uncontrolled patterns
+- [ ] Add ref forwarding to all components
+- [ ] Unit tests for core components
+
+**Phase 2: Dropdown & Items** (Week 2)
+- [ ] Implement `Select.Portal` with container support
+- [ ] Implement `Select.Content` with positioning
+- [ ] Implement `Select.Viewport` (scrollable container)
+- [ ] Implement `Select.Item` with selection logic
+- [ ] Implement `Select.ItemText` and `Select.ItemIndicator`
+- [ ] Add keyboard navigation (arrows, home/end)
+- [ ] Add type-ahead search functionality
+- [ ] Implement focus management
+- [ ] Unit tests for dropdown behavior
+
+**Phase 3: Advanced Features** (Week 3)
+- [ ] Implement `Select.Group` and `Select.Label`
+- [ ] Implement `Select.Separator`
+- [ ] Implement `Select.Arrow` (optional)
+- [ ] Add collision detection (viewport boundaries)
+- [ ] Add popper positioning mode
+- [ ] Implement RTL support
+- [ ] Add form integration (hidden input)
+- [ ] Integration tests
+
+**Phase 4: Accessibility & Polish** (Week 4)
+- [ ] Complete ARIA implementation
+- [ ] Add screen reader announcements
+- [ ] Ensure focus visible indicators
+- [ ] Test with keyboard only
+- [ ] Test with screen readers (NVDA, JAWS, VoiceOver)
+- [ ] Run `jest-axe` validation
+- [ ] Fix any accessibility violations
+- [ ] Performance optimization (memo, useCallback)
+- [ ] SSR/CSR safety validation
+
+**Phase 5: Documentation & Examples** (Week 5)
+- [ ] API documentation
+- [ ] Usage examples (basic, advanced)
+- [ ] Migration guides
+- [ ] Accessibility documentation
+- [ ] Storybook stories
+- [ ] TypeScript examples
+- [ ] Common patterns and recipes
+- [ ] Troubleshooting guide
+
+### Key Technical Decisions
+1. **Positioning Strategy**: Item-aligned by default, popper optional (matches Radix approach)
+2. **Focus Management**: Use `aria-activedescendant` for virtual focus (better screen reader support)
+3. **Type-Ahead**: 1000ms timeout, matches ARIA APG recommendations
+4. **Form Integration**: Hidden input approach for native form submission
+5. **Portal**: Optional, defaults to `document.body` for z-index control
+6. **Item Registration**: Use collection pattern (context-based) for dynamic items
+7. **SSR**: Deterministic IDs with fallback generation, hydration-safe portals
