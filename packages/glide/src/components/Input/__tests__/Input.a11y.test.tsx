@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { Input } from '../Input';
+import { Input } from '../index';
 
 expect.extend(toHaveNoViolations);
 

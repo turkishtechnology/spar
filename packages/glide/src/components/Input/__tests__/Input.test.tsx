@@ -1,10 +1,59 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Input } from '../Input';
+import { Input } from '../index';
 
 describe('Input', () => {
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('Simple Usage (Default Behavior)', () => {
+    it('renders as simple input with default behavior', () => {
+      render(<Input placeholder='Enter text' />);
+
+      const input = screen.getByRole('textbox');
+      expect(input).toBeInTheDocument();
+      expect(input).toHaveAttribute('placeholder', 'Enter text');
+    });
+
+    it('renders as simple textarea when as="textarea"', () => {
+      render(<Input as='textarea' placeholder='Enter message' />);
+
+      const textarea = screen.getByRole('textbox');
+      expect(textarea).toBeInTheDocument();
+      expect(textarea.tagName).toBe('TEXTAREA');
+      expect(textarea).toHaveAttribute('placeholder', 'Enter message');
+    });
+
+    it('handles simple input interactions', async () => {
+      const user = userEvent.setup();
+      const onChange = jest.fn();
+
+      render(<Input placeholder='Enter text' onChange={onChange} />);
+
+      const input = screen.getByRole('textbox');
+
+      await user.type(input, 'Hello');
+
+      expect(onChange).toHaveBeenCalled();
+      expect(input).toHaveValue('Hello');
+    });
+
+    it('renders simple input without wrapper div', () => {
+      render(<Input data-testid='simple-input' />);
+
+      const input = screen.getByTestId('simple-input');
+
+      // Should have glide data attribute directly on input (no wrapper)
+      expect(input).toHaveAttribute('data-glide-input');
+
+      // Should NOT have any wrapper with data-glide-input
+      const wrapperDiv = input.closest('[data-glide-input]');
+      expect(wrapperDiv).toBe(input); // The input itself should be the glide element
+
+      // Should NOT have context-specific ID (standalone mode)
+      expect(input).not.toHaveAttribute('id');
+    });
   });
 
   describe('Input.Root', () => {
@@ -209,14 +258,18 @@ describe('Input', () => {
       expect(field).toHaveAttribute('data-glide-input-field');
     });
 
-    it('throws error when used outside Input.Root', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {});
+    it('renders as standalone input when used outside Input.Root', () => {
+      render(<Input.Field data-testid='standalone-field' />);
 
-      expect(() => {
-        render(<Input.Field />);
-      }).toThrow('Input compound components must be used within Input.Root');
+      const field = screen.getByTestId('standalone-field');
 
-      jest.restoreAllMocks();
+      // Should render without errors (no context required)
+      expect(field).toBeInTheDocument();
+      expect(field).toHaveAttribute('data-glide-input');
+
+      // Should not have context-specific attributes
+      expect(field).not.toHaveAttribute('aria-labelledby');
+      expect(field).not.toHaveAttribute('aria-describedby');
     });
   });
 

@@ -1,7 +1,7 @@
 import type { ElementType, ReactNode } from 'react';
 
 /**
- * Input context state and methods
+ * Input context state
  */
 export interface InputContextValue {
   fieldId: string;
@@ -11,9 +11,6 @@ export interface InputContextValue {
   isInvalid: boolean;
   isDisabled: boolean;
   isRequired: boolean;
-  setInvalid: (invalid: boolean) => void;
-  setDisabled: (disabled: boolean) => void;
-  setRequired: (required: boolean) => void;
 }
 
 /**
