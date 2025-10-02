@@ -15,8 +15,39 @@ A headless input component providing accessible form input primitives with compo
 
 ## Live Demo
 
+### Simple Usage (Most Common)
+
 <LiveCode 
-  code={`function BasicInputExample() {
+  code={`function SimpleInputExample() {
+  const [value, setValue] = React.useState('');
+  
+  return (
+    <div style={{ padding: '16px' }}>
+      <Input 
+        placeholder="Enter your username"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        style={{ 
+          width: '100%', 
+          padding: '12px', 
+          border: '2px solid #e2e8f0', 
+          borderRadius: '6px',
+          fontSize: '16px',
+          outline: 'none',
+          transition: 'border-color 0.2s'
+        }}
+        onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
+        onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+      />
+    </div>
+  );
+}`}
+/>
+
+### Compound Pattern (Advanced)
+
+<LiveCode 
+  code={`function CompoundInputExample() {
   const [value, setValue] = React.useState('');
   
   return (
@@ -51,7 +82,17 @@ A headless input component providing accessible form input primitives with compo
 ## Installation
 
 ```tsx
+// Compound component (dot notation)
 import { Input } from '@turkish-technology/glide'
+
+// Named imports (tree-shakeable)
+import { 
+  InputRoot, 
+  InputField, 
+  InputLabel, 
+  InputDescription, 
+  InputErrorMessage 
+} from '@turkish-technology/glide'
 ```
 
 ## Anatomy
@@ -370,7 +411,65 @@ Complete form example with validation, submission, and error handling.
 }`}
 />
 
+### Tree-shakeable Import Example
+
+Using named imports for better bundle optimization:
+
+```tsx
+import { 
+  InputRoot, 
+  InputField, 
+  InputLabel, 
+  InputDescription, 
+  InputErrorMessage 
+} from '@turkish-technology/glide';
+
+function TreeShakeableInput() {
+  const [value, setValue] = useState('');
+  
+  return (
+    <InputRoot>
+      <InputLabel>Username</InputLabel>
+      <InputField 
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="Enter username"
+      />
+      <InputDescription>
+        Choose a unique username
+      </InputDescription>
+    </InputRoot>
+  );
+}
+```
+
 ## API Reference
+
+### Input (Simple Usage)
+
+Direct input component function that returns an `InputField` without wrapper. Designed for simple form inputs where compound features aren't needed. No context provider overhead, optimal for basic use cases.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'input'` | Element type for polymorphic rendering |
+| `ref?` | `React.ComponentPropsWithRef<T>['ref']` | `undefined` | Ref for the input element |
+| `type?` | `string` | `'text'` | Input type attribute |
+| `placeholder?` | `string` | `undefined` | Input placeholder text |
+| `value?` | `string` | `undefined` | Controlled input value |
+| `onChange?` | `(event: React.ChangeEvent<HTMLElement>) => void` | `undefined` | Input change handler |
+| `onFocus?` | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Focus event handler |
+| `onBlur?` | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Blur event handler |
+| `...props` | `React.ComponentProps<T>` | - | All standard HTML input/textarea attributes |
+
+**Usage Notes**
+
+- Returns a single `<input>` or `<textarea>` element (based on `as` prop)
+- No wrapper `<div>` element created
+- Context-independent, doesn't support compound features
+- Ideal for simple forms, search inputs, or single-field components
+- Use compound pattern (`Input.Root` + `Input.Field`) when needing labels, descriptions, or validation messages
 
 ### Input.Root
 
