@@ -2,24 +2,21 @@ import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { themes } from 'prism-react-renderer';
-import {
-  SelectRoot,
-  SelectTrigger,
-  SelectValue,
-  SelectIcon,
-  SelectContent,
-  SelectViewport,
-  SelectGroup,
-  SelectLabel,
-  SelectSeparator,
-  SelectItem,
-  SelectItemText,
-  SelectItemIndicator,
-  SelectScrollUpButton,
-  SelectScrollDownButton,
-  SelectPortal,
-} from '@turkish-technology/glide';
 
+import {
+  Accordion,
+  AccordionItem,
+  AccordionHeader,
+  AccordionTrigger,
+  AccordionContent,
+  Button,
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+  Radio,
+  RadioGroup,
+  RadioItem,
+} from '@turkish-technology/glide';
 interface LiveCodeProps {
   title?: string;
   code?: string;
@@ -69,22 +66,22 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
-    // Glide components
-    SelectRoot,
-    SelectTrigger,
-    SelectValue,
-    SelectIcon,
-    SelectContent,
-    SelectViewport,
-    SelectGroup,
-    SelectLabel,
-    SelectSeparator,
-    SelectItem,
-    SelectItemText,
-    SelectItemIndicator,
-    SelectScrollUpButton,
-    SelectScrollDownButton,
-    SelectPortal,
+    // Accordion components
+    Accordion,
+    AccordionItem,
+    AccordionHeader,
+    AccordionTrigger,
+    AccordionContent,
+    // Button component
+    Button,
+    // Collapsible components
+    Collapsible,
+    CollapsibleTrigger,
+    CollapsibleContent,
+    // Radio components
+    Radio,
+    RadioGroup,
+    RadioItem,
   };
 
   const [copied, setCopied] = useState(false);
