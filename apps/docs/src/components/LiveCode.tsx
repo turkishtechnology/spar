@@ -16,6 +16,7 @@ import {
   Radio,
   RadioGroup,
   RadioItem,
+  Select,
 } from '@turkish-technology/glide';
 interface LiveCodeProps {
   title?: string;
@@ -82,6 +83,8 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Radio,
     RadioGroup,
     RadioItem,
+    // Select component
+    Select,
   };
 
   const [copied, setCopied] = useState(false);

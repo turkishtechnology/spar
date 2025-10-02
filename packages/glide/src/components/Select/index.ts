@@ -1,86 +1,94 @@
-import {
-  SelectRoot,
-  SelectTrigger,
-  SelectValue,
-  SelectIcon,
-  SelectContent,
-  SelectViewport,
-  SelectGroup,
-  SelectLabel,
-  SelectSeparator,
-  SelectItem,
-  SelectItemText,
-  SelectItemIndicator,
-  SelectScrollUpButton,
-  SelectScrollDownButton,
-  SelectPortal,
-} from './Select';
+import { SelectRoot } from './SelectRoot';
+import { SelectTrigger } from './SelectTrigger';
+import { SelectValue } from './SelectValue';
+import { SelectIcon } from './SelectIcon';
+import { SelectPortal } from './SelectPortal';
+import { SelectContent } from './SelectContent';
+import { SelectViewport } from './SelectViewport';
+import { SelectItem } from './SelectItem';
+import { SelectItemText } from './SelectItemText';
+import { SelectItemIndicator } from './SelectItemIndicator';
+import { SelectGroup } from './SelectGroup';
+import { SelectLabel } from './SelectLabel';
+import { SelectSeparator } from './SelectSeparator';
+import { SelectArrow } from './SelectArrow';
 
-// Aliases for grouped pattern
-const Root = SelectRoot;
-const Trigger = SelectTrigger;
-const Value = SelectValue;
-const Icon = SelectIcon;
-const Content = SelectContent;
-const Viewport = SelectViewport;
-const Group = SelectGroup;
-const Label = SelectLabel;
-const Separator = SelectSeparator;
-const Item = SelectItem;
-const ItemText = SelectItemText;
-const ItemIndicator = SelectItemIndicator;
-const ScrollUpButton = SelectScrollUpButton;
-const ScrollDownButton = SelectScrollDownButton;
-const Portal = SelectPortal;
-
-export {
-  SelectRoot,
-  SelectTrigger,
-  SelectValue,
-  SelectIcon,
-  SelectContent,
-  SelectViewport,
-  SelectGroup,
-  SelectLabel,
-  SelectSeparator,
-  SelectItem,
-  SelectItemText,
-  SelectItemIndicator,
-  SelectScrollUpButton,
-  SelectScrollDownButton,
-  SelectPortal,
-  // Aliases
-  Root,
-  Trigger,
-  Value,
-  Icon,
-  Content,
-  Viewport,
-  Group,
-  Label,
-  Separator,
-  Item,
-  ItemText,
-  ItemIndicator,
-  ScrollUpButton,
-  ScrollDownButton,
-  Portal,
+// Create compound component with dot notation support
+const Select = SelectRoot as typeof SelectRoot & {
+  Root: typeof SelectRoot;
+  Trigger: typeof SelectTrigger;
+  Value: typeof SelectValue;
+  Icon: typeof SelectIcon;
+  Portal: typeof SelectPortal;
+  Content: typeof SelectContent;
+  Viewport: typeof SelectViewport;
+  Item: typeof SelectItem;
+  ItemText: typeof SelectItemText;
+  ItemIndicator: typeof SelectItemIndicator;
+  Group: typeof SelectGroup;
+  Label: typeof SelectLabel;
+  Separator: typeof SelectSeparator;
+  Arrow: typeof SelectArrow;
 };
 
+Select.Root = SelectRoot;
+Select.Trigger = SelectTrigger;
+Select.Value = SelectValue;
+Select.Icon = SelectIcon;
+Select.Portal = SelectPortal;
+Select.Content = SelectContent;
+Select.Viewport = SelectViewport;
+Select.Item = SelectItem;
+Select.ItemText = SelectItemText;
+Select.ItemIndicator = SelectItemIndicator;
+Select.Group = SelectGroup;
+Select.Label = SelectLabel;
+Select.Separator = SelectSeparator;
+Select.Arrow = SelectArrow;
+
+// Export both patterns
+export {
+  // Compound component (with dot notation)
+  Select,
+
+  // Named exports (tree-shakeable)
+  SelectTrigger,
+  SelectValue,
+  SelectIcon,
+  SelectPortal,
+  SelectContent,
+  SelectViewport,
+  SelectItem,
+  SelectItemText,
+  SelectItemIndicator,
+  SelectGroup,
+  SelectLabel,
+  SelectSeparator,
+  SelectArrow,
+
+  // Root alias for explicit usage
+  SelectRoot,
+};
+
+// Export types
 export type {
   SelectRootProps,
   SelectTriggerProps,
   SelectValueProps,
+  SelectIconProps,
+  SelectPortalProps,
   SelectContentProps,
   SelectViewportProps,
-  SelectGroupProps,
-  SelectLabelProps,
-  SelectSeparatorProps,
   SelectItemProps,
   SelectItemTextProps,
   SelectItemIndicatorProps,
-  SelectScrollButtonProps,
-  SelectIconProps,
-  SelectPortalProps,
-  SelectImperativeHandle,
+  SelectGroupProps,
+  SelectLabelProps,
+  SelectSeparatorProps,
+  SelectArrowProps,
+  SelectDirection,
+  SelectPosition,
+  SelectSide,
+  SelectAlign,
+  Padding,
 } from './types';
