@@ -265,6 +265,10 @@ export interface TooltipContextValue {
   placement: Side;
   setPlacement: (placement: Side) => void;
   isDisabled: boolean;
+  // Floating UI refs
+  triggerRef: React.RefObject<HTMLElement | null>;
+  contentRef: React.RefObject<HTMLElement | null>;
+  arrowRef: React.RefObject<HTMLElement | SVGSVGElement | null>;
 }
 
 export interface TooltipProviderContextValue {

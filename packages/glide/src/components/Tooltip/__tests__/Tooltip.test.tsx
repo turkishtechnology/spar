@@ -355,7 +355,8 @@ describe('TooltipContent', () => {
     );
 
     const tooltip = screen.getByRole('tooltip');
-    expect(tooltip).toHaveAttribute('data-placement', 'bottom');
+    // Floating UI includes alignment in placement (e.g., 'bottom-start')
+    expect(tooltip).toHaveAttribute('data-placement', 'bottom-start');
   });
 
   it('forwards className and style props', () => {
