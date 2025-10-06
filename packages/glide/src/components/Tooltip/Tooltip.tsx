@@ -1,5 +1,17 @@
 import React, { createContext, useContext, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import {
+  useFloating,
+  autoUpdate,
+  offset,
+  flip,
+  shift,
+  arrow,
+  hide,
+  size,
+  type Placement,
+  type Middleware,
+} from '@floating-ui/react-dom';
 import type {
   TooltipProviderProps,
   TooltipRootProps,
@@ -10,6 +22,7 @@ import type {
   TooltipContextValue,
   TooltipProviderContextValue,
   Side,
+  Align,
 } from './types';
 
 // Provider Context
@@ -89,6 +102,11 @@ export const TooltipRoot = ({
   const [placement, setPlacement] = useState<Side>('top');
   const [asLabel] = useState(false);
 
+  // Floating UI refs
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const contentRef = useRef<HTMLElement | null>(null);
+  const arrowRef = useRef<HTMLElement | SVGSVGElement | null>(null);
+
   // Get delay values from provider or props
   const effectiveDelay = delay ?? provider?.delayDuration ?? 700;
   const effectiveHideDelay = hideDelay;
@@ -120,6 +138,9 @@ export const TooltipRoot = ({
     placement,
     setPlacement,
     isDisabled,
+    triggerRef,
+    contentRef,
+    arrowRef,
   };
 
   return <TooltipContext.Provider value={contextValue}>{children}</TooltipContext.Provider>;
@@ -138,7 +159,6 @@ export const TooltipTrigger = ({
 }: TooltipTriggerProps) => {
   const context = useTooltip();
   const provider = useTooltipProvider();
-  const triggerRef = useRef<HTMLElement>(null);
   const showTimeoutRef = useRef<number | null>(null);
   const hideTimeoutRef = useRef<number | null>(null);
 
@@ -206,7 +226,7 @@ export const TooltipTrigger = ({
       event.stopPropagation();
       hideTooltip(true);
       // Keep focus on trigger
-      triggerRef.current?.focus();
+      context.triggerRef.current?.focus();
     }
   };
 
@@ -229,7 +249,7 @@ export const TooltipTrigger = ({
         event.stopPropagation();
         context.onOpenChange(false);
         // Refocus trigger
-        triggerRef.current?.focus();
+        context.triggerRef.current?.focus();
       }
     };
 
@@ -246,9 +266,14 @@ export const TooltipTrigger = ({
     };
   }, []);
 
+  // Ref callback to merge refs
+  const refCallback = (node: HTMLElement | null) => {
+    context.triggerRef.current = node;
+  };
+
   // Props to spread to trigger element
   const triggerProps = {
-    ref: triggerRef,
+    ref: refCallback,
     id: context.triggerId,
     ...(context.isOpen &&
       !context.isDisabled &&
@@ -276,6 +301,14 @@ export const TooltipTrigger = ({
 
 TooltipTrigger.displayName = 'TooltipTrigger';
 
+// Helper to convert Side + Align to Placement
+const toPlacement = (side: Side, align?: Align): Placement => {
+  if (!align || align === 'center') {
+    return side;
+  }
+  return `${side}-${align}` as Placement;
+};
+
 // Content Component
 /**
  * The content that displays in the tooltip popup
@@ -288,16 +321,94 @@ export const TooltipContent = ({
   asLabel = false,
   side = 'top',
   sideOffset = 8,
+  align = 'center',
+  alignOffset = 0,
+  avoidCollisions = true,
+  collisionBoundary,
+  collisionPadding = 10,
+  hideWhenDetached = false,
   onEscapeKeyDown,
   ...props
 }: TooltipContentProps) => {
   const context = useTooltip();
-  const contentRef = useRef<HTMLElement>(null);
 
   // Update placement
   useEffect(() => {
     context.setPlacement(side);
   }, [side, context]);
+
+  // Build middleware array
+  const middleware: Middleware[] = [offset(sideOffset + alignOffset)];
+
+  if (context.arrowRef.current) {
+    middleware.push(
+      arrow({
+        element: context.arrowRef.current,
+      }),
+    );
+  }
+
+  if (avoidCollisions) {
+    const flipOptions: Parameters<typeof flip>[0] = {
+      padding: collisionPadding,
+    };
+    if (collisionBoundary !== undefined) {
+      flipOptions.boundary = collisionBoundary;
+    }
+
+    const shiftOptions: Parameters<typeof shift>[0] = {
+      padding: collisionPadding,
+    };
+    if (collisionBoundary !== undefined) {
+      shiftOptions.boundary = collisionBoundary;
+    }
+
+    middleware.push(flip(flipOptions));
+    middleware.push(shift(shiftOptions));
+  }
+
+  if (hideWhenDetached) {
+    middleware.push(hide());
+  }
+
+  // Size constraint middleware
+  middleware.push(
+    size({
+      apply({ availableWidth, availableHeight, elements }) {
+        Object.assign(elements.floating.style, {
+          maxWidth: `${availableWidth}px`,
+          maxHeight: `${availableHeight}px`,
+        });
+      },
+      padding: typeof collisionPadding === 'number' ? collisionPadding : 10,
+    }),
+  );
+
+  // Floating UI positioning
+  const {
+    x,
+    y,
+    strategy,
+    refs,
+    middlewareData,
+    placement: actualPlacement,
+  } = useFloating({
+    placement: toPlacement(side, align),
+    middleware,
+    whileElementsMounted: autoUpdate,
+  });
+
+  // Update refs from context
+  useEffect(() => {
+    refs.setReference(context.triggerRef.current);
+    refs.setFloating(context.contentRef.current);
+  }, [refs, context.triggerRef, context.contentRef]);
+
+  // Update actual placement in context
+  useEffect(() => {
+    const [placementSide] = actualPlacement.split('-') as [Side, Align?];
+    context.setPlacement(placementSide);
+  }, [actualPlacement, context]);
 
   // Handle escape key
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -319,7 +430,7 @@ export const TooltipContent = ({
     const handleNativeKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         const target = event.target as HTMLElement;
-        const contentElement = contentRef.current;
+        const contentElement = context.contentRef.current;
 
         // Only handle if the event originated from this tooltip content
         if (contentElement && (target === contentElement || contentElement.contains(target))) {
@@ -338,7 +449,7 @@ export const TooltipContent = ({
     return () => {
       document.removeEventListener('keydown', handleNativeKeyDown, true);
     };
-  }, [context.isOpen, context.contentId, context.triggerId, onEscapeKeyDown]);
+  }, [context.isOpen, context.contentId, context.triggerId, onEscapeKeyDown, context]);
 
   // Handle mouse enter/leave for hoverable content
   const handleMouseEnter = () => {
@@ -356,19 +467,37 @@ export const TooltipContent = ({
     return null;
   }
 
+  // Check if hidden by middleware
+  const isHidden = hideWhenDetached && middlewareData.hide?.referenceHidden;
+  if (isHidden) {
+    return null;
+  }
+
+  // Ref callback
+  const refCallback = (node: HTMLElement | null) => {
+    context.contentRef.current = node;
+    refs.setFloating(node);
+  };
+
+  // Get arrow data
+  const arrowX = middlewareData.arrow?.x;
+  const arrowY = middlewareData.arrow?.y;
+
   const contentProps = {
-    ref: contentRef,
+    ref: refCallback,
     id: context.contentId,
     role: 'tooltip',
     className,
     style: {
       ...style,
-      '--tooltip-x': '0px',
-      '--tooltip-y': '0px',
-      '--tooltip-offset': `${sideOffset}px`,
+      position: strategy as React.CSSProperties['position'],
+      top: y ?? 0,
+      left: x ?? 0,
+      '--tooltip-arrow-x': arrowX !== undefined ? `${arrowX}px` : undefined,
+      '--tooltip-arrow-y': arrowY !== undefined ? `${arrowY}px` : undefined,
     } as React.CSSProperties,
     'data-state': context.isOpen ? 'open' : 'closed',
-    'data-placement': side,
+    'data-placement': actualPlacement,
     'data-as-label': asLabel ? 'true' : 'false',
     onKeyDown: handleKeyDown,
     onMouseEnter: handleMouseEnter,
@@ -423,15 +552,20 @@ export const TooltipArrow = ({
 }: TooltipArrowProps) => {
   const context = useTooltip();
 
+  // Ref callback to attach arrow ref
+  const refCallback = (node: HTMLElement | SVGSVGElement | null) => {
+    context.arrowRef.current = node;
+  };
+
   const arrowStyle = {
     ...style,
-    '--tooltip-arrow-x': '0px',
-    '--tooltip-arrow-y': '0px',
+    position: 'absolute' as const,
   } as React.CSSProperties;
 
   if (Component === 'svg') {
     return (
       <svg
+        ref={refCallback as React.Ref<SVGSVGElement>}
         width={width}
         height={height}
         className={className}
@@ -445,6 +579,7 @@ export const TooltipArrow = ({
   }
 
   const arrowProps = {
+    ref: refCallback,
     width,
     height,
     className,

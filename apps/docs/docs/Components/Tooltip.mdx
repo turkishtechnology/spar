@@ -1,119 +1,150 @@
 ---
-sidebar_position: 1
+sidebar_position: 5
 title: Tooltip
-description: A popup that displays supplementary information when an element receives focus or hover, providing clarification without cluttering the interface.
+description: A headless tooltip component that displays informative text when users hover over or focus on an element, with full WCAG 2.2 AA compliance.
 ---
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { TooltipProvider, TooltipRoot, TooltipTrigger, TooltipContent, TooltipPortal, TooltipArrow } from '@turkish-technology/glide';
 
 # Tooltip
 
-A popup that displays supplementary information when an element receives focus or hover, providing clarification without cluttering the interface.
+A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.
 
-![Accessibility Badge](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-Yes-green) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-Strict-blue)
+![Accessibility Badge](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-Yes-blue) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-Strict-blue)
 
 ## Live Demo
 
-<LiveCode 
-  code={`function BasicTooltipExample() {
-  const containerRef = React.useRef(null);
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => { setMounted(true); }, []);
+<LiveCode
+  title="Basic Tooltip Example"
+  code={`
+function Example() {
   return (
-    <div ref={containerRef} style={{ padding: '50px', textAlign: 'center', position: 'relative' }}>
-      <TooltipProvider>
-        <TooltipRoot>
-          <TooltipTrigger asChild>
-            <button 
-              style={{ 
-                padding: '8px 16px', 
-                border: '1px solid #ccc', 
-                borderRadius: '4px',
-                cursor: 'pointer'
-              }}
-            >
-              Hover me
-            </button>
-          </TooltipTrigger>
-          {mounted && (
-            <TooltipPortal container={containerRef.current}>
-              <TooltipContent
-                style={{
-                  position: 'absolute',
-                  left: '50%',
-                  bottom: '70%',
-                  transform: 'translateX(-50%)',
-                  zIndex: 1000,
-                  backgroundColor: '#333',
-                  color: 'white',
-                  padding: '8px 12px',
-                  borderRadius: '4px',
-                }}
-                data-state-open={true}
-                data-placement="top"
-              >
-                <TooltipArrow
-                  style={{
-                    position: 'absolute',
-                    left: '50%',
-                    top: '100%',
-                    transform: 'translateX(-50%) rotate(180deg)',
-                    zIndex: 1000,
-                    fill: '#333',
-                  }}
-                />
-                This is helpful tooltip information!
-              </TooltipContent>
-            </TooltipPortal>
-          )}
-        </TooltipRoot>
-      </TooltipProvider>
-    </div>
+    <TooltipProvider>
+      <TooltipRoot>
+        <TooltipTrigger asChild>
+          <button style={{
+            padding: '12px 24px',
+            border: '1px solid #ccc',
+            background: '#fff',
+            cursor: 'pointer'
+          }}>
+            Hover or Focus Me
+          </button>
+        </TooltipTrigger>
+        <TooltipPortal>
+          <TooltipContent style={{
+            background: '#333',
+            color: '#fff',
+            padding: '8px 12px',
+            borderRadius: '4px',
+            fontSize: '14px',
+          }}>
+            This is a helpful tooltip message!
+            <TooltipArrow style={{ fill: '#333' }} />
+          </TooltipContent>
+        </TooltipPortal>
+      </TooltipRoot>
+    </TooltipProvider>
   );
-}`}
+}
+  `}
 />
+
+---
 
 ## Features
 
-- ✅ Keyboard navigation and focus management
-- ✅ Screen reader compatible with proper ARIA relationships  
-- ✅ WCAG 2.2 AA compliant (dismissible, hoverable, persistent)
-- ✅ Touch device accessibility considerations
+- ✅ Keyboard and mouse support with optimized delay timing
+- ✅ Smart positioning with automatic collision detection via Floating UI
+- ✅ Hoverable content for interactive tooltips (WCAG 1.4.13)
 - ✅ Controlled and uncontrolled state management
-- ✅ Provider context for managing multiple tooltips
-- ✅ Collision detection and smart positioning
-- ✅ Customizable delays and timing
-- ✅ Portal rendering for z-index independence
-- ✅ TypeScript strict mode with comprehensive type definitions
+- ✅ Optional tooltip provider for shared configuration
+- ✅ Portal rendering to avoid z-index issues
+- ✅ Optional arrow pointing to trigger element
+- ✅ Touch device detection with appropriate behavior
+- ✅ Escape key support to dismiss tooltip
+- ✅ Skip delay for quick navigation between tooltips
+- ✅ Can act as label or description for accessibility
 
 ## Installation
 
-```tsx
-import { 
+```sh
+pnpm install @turkish-technology/glide
+```
+
+```ts
+import {
   TooltipProvider,
-  TooltipRoot, 
-  TooltipTrigger, 
+  TooltipRoot,
+  TooltipTrigger,
   TooltipContent,
   TooltipPortal,
-  TooltipArrow 
-} from '@turkish-technology/glide'
+  TooltipArrow,
+} from '@turkish-technology/glide';
 ```
+
+---
 
 ## Anatomy
 
-The Tooltip component follows a compound component pattern with clear hierarchy and data flow:
+The Tooltip component is built as a compound component with multiple parts:
+
+<AnatomyViewer
+  parts={[
+    { name: 'provider', label: 'TooltipProvider', description: 'Optional shared configuration provider' },
+    { name: 'root', label: 'TooltipRoot', description: 'State management context' },
+    { name: 'trigger', label: 'TooltipTrigger', description: 'Element that triggers tooltip' },
+    { name: 'portal', label: 'TooltipPortal', description: 'Renders content in portal' },
+    { name: 'content', label: 'TooltipContent', description: 'Tooltip popup content' },
+    { name: 'arrow', label: 'TooltipArrow', description: 'Optional arrow element' },
+  ]}
+>
+  <div data-glide-part="provider">
+    <TooltipProvider>
+      <TooltipRoot data-glide-part="root">
+        <TooltipTrigger data-glide-part="trigger">
+          <button style={{
+            padding: '12px 24px',
+            border: '1px solid #ccc',
+            background: '#fff',
+            cursor: 'pointer'
+          }}>
+            Hover or Focus Me
+          </button>
+        </TooltipTrigger>
+        <TooltipPortal data-glide-part="portal">
+          <TooltipContent
+            data-glide-part="content"
+            style={{
+              background: '#333',
+              color: '#fff',
+              padding: '8px 12px',
+              borderRadius: '4px',
+              fontSize: '14px',
+            }}
+          >
+            This is a helpful tooltip message!
+            <TooltipArrow data-glide-part="arrow" style={{ fill: '#333' }} />
+          </TooltipContent>
+        </TooltipPortal>
+      </TooltipRoot>
+    </TooltipProvider>
+  </div>
+</AnatomyViewer>
+
+### Structure
 
 ```tsx
-<TooltipProvider>          {/* Optional: Shared config for multiple tooltips */}
-  <TooltipRoot>            {/* State management and context */}
-    <TooltipTrigger>       {/* Element that triggers tooltip */}
-      <button>Click me</button>
-    </TooltipTrigger>
-    <TooltipPortal>        {/* Portal for z-index independence */}
-      <TooltipContent>     {/* Tooltip popup content */}
-        Tooltip text
-        <TooltipArrow />   {/* Optional: Visual arrow */}
+<TooltipProvider>
+  <TooltipRoot>
+    <TooltipTrigger>...</TooltipTrigger>
+    <TooltipPortal>
+      <TooltipContent>
+        ...
+        <TooltipArrow />
       </TooltipContent>
     </TooltipPortal>
   </TooltipRoot>
@@ -121,28 +152,32 @@ The Tooltip component follows a compound component pattern with clear hierarchy 
 ```
 
 **Data Flow:**
-- User interaction (hover/focus) on trigger element
-- Tooltip state management and positioning calculation  
-- Portal-based tooltip rendering with proper ARIA association
-- Cleanup on interaction end or escape key
+- `TooltipProvider`: Optional provider for sharing configuration across multiple tooltips
+- `TooltipRoot`: Manages tooltip state and provides context to child components
+- `TooltipTrigger`: Element that shows/hides tooltip on hover or focus
+- `TooltipPortal`: Renders tooltip content outside normal DOM tree to avoid z-index issues
+- `TooltipContent`: The actual tooltip popup with smart positioning via Floating UI
+- `TooltipArrow`: Optional arrow element pointing to the trigger
+
+---
 
 ## Code Examples
 
-### Basic Usage
+### Basic Tooltip
 
-Basic tooltip with auxiliary description:
+Simplest tooltip with default configuration:
 
 ```tsx
-function BasicTooltip() {
+export function BasicTooltip() {
   return (
     <TooltipProvider>
       <TooltipRoot>
-        <TooltipTrigger asChild>
-          <button>Save Document</button>
+        <TooltipTrigger>
+          <button>Hover me</button>
         </TooltipTrigger>
         <TooltipPortal>
           <TooltipContent>
-            Save your changes to local storage
+            Helpful information
           </TooltipContent>
         </TooltipPortal>
       </TooltipRoot>
@@ -151,208 +186,231 @@ function BasicTooltip() {
 }
 ```
 
-### Controlled Tooltip
+### Tooltip with Custom Positioning
 
-Programmatic control over tooltip visibility:
+Control tooltip placement and alignment:
+
+```tsx
+<TooltipRoot>
+  <TooltipTrigger>
+    <button>Right aligned tooltip</button>
+  </TooltipTrigger>
+  <TooltipPortal>
+    <TooltipContent
+      side="right"
+      align="start"
+      sideOffset={12}
+      alignOffset={4}
+    >
+      Appears on the right side
+    </TooltipContent>
+  </TooltipPortal>
+</TooltipRoot>
+```
+
+### Tooltip with Arrow
+
+Add an arrow pointing to the trigger element:
+
+```tsx
+<TooltipRoot>
+  <TooltipTrigger>
+    <button>Tooltip with arrow</button>
+  </TooltipTrigger>
+  <TooltipPortal>
+    <TooltipContent>
+      Content with arrow
+      <TooltipArrow width={12} height={6} />
+    </TooltipContent>
+  </TooltipPortal>
+</TooltipRoot>
+```
+
+### Controlled Tooltip State
+
+Manage tooltip visibility programmatically:
 
 ```tsx
 function ControlledTooltip() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   return (
-    <TooltipProvider>
-      <TooltipRoot isOpen={isOpen} onOpenChange={setIsOpen}>
-        <TooltipTrigger asChild>
-          <button>Controlled Trigger</button>
+    <TooltipRoot isOpen={open} onOpenChange={setOpen}>
+      <TooltipTrigger>
+        <button>Controlled tooltip</button>
+      </TooltipTrigger>
+      <TooltipPortal>
+        <TooltipContent>
+          Controlled by external state
+        </TooltipContent>
+      </TooltipPortal>
+    </TooltipRoot>
+  );
+}
+```
+
+### Tooltip as Label
+
+Use tooltip to provide primary label instead of description:
+
+```tsx
+<TooltipRoot>
+  <TooltipTrigger>
+    <button aria-label="Close">
+      ✕
+    </button>
+  </TooltipTrigger>
+  <TooltipPortal>
+    <TooltipContent asLabel={true}>
+      Close dialog
+    </TooltipContent>
+  </TooltipPortal>
+</TooltipRoot>
+```
+
+### Multiple Tooltips with Shared Provider
+
+Share configuration across multiple tooltips:
+
+```tsx
+<TooltipProvider delayDuration={500} skipDelayDuration={200}>
+  <TooltipRoot>
+    <TooltipTrigger>
+      <button>First tooltip</button>
+    </TooltipTrigger>
+    <TooltipPortal>
+      <TooltipContent>First tooltip content</TooltipContent>
+    </TooltipPortal>
+  </TooltipRoot>
+
+  <TooltipRoot>
+    <TooltipTrigger>
+      <button>Second tooltip</button>
+    </TooltipTrigger>
+    <TooltipPortal>
+      <TooltipContent>Second tooltip content</TooltipContent>
+    </TooltipPortal>
+  </TooltipRoot>
+</TooltipProvider>
+```
+
+### Tooltip with Custom Delays
+
+Override default delay timing for specific tooltip:
+
+```tsx
+<TooltipRoot delay={300} hideDelay={100}>
+  <TooltipTrigger>
+    <button>Quick tooltip</button>
+  </TooltipTrigger>
+  <TooltipPortal>
+    <TooltipContent>
+      Shows quickly with custom timing
+    </TooltipContent>
+  </TooltipPortal>
+</TooltipRoot>
+```
+
+### Disabled Tooltip
+
+Conditionally disable tooltip:
+
+```tsx
+function DisabledExample() {
+  const [disabled, setDisabled] = React.useState(false);
+
+  return (
+    <TooltipRoot isDisabled={disabled}>
+      <TooltipTrigger>
+        <button>Toggle disabled: {disabled ? 'Yes' : 'No'}</button>
+      </TooltipTrigger>
+      <TooltipPortal>
+        <TooltipContent>
+          This tooltip can be disabled
+        </TooltipContent>
+      </TooltipPortal>
+    </TooltipRoot>
+  );
+}
+```
+
+### Tooltip with Collision Handling
+
+Configure collision detection and boundaries:
+
+```tsx
+<TooltipRoot>
+  <TooltipTrigger>
+    <button>Smart positioning</button>
+  </TooltipTrigger>
+  <TooltipPortal>
+    <TooltipContent
+      avoidCollisions={true}
+      collisionPadding={20}
+      hideWhenDetached={true}
+    >
+      Automatically avoids viewport edges
+    </TooltipContent>
+  </TooltipPortal>
+</TooltipRoot>
+```
+
+### Tooltip with Custom Container
+
+Render tooltip in custom portal container:
+
+```tsx
+function CustomContainerTooltip() {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  return (
+    <div>
+      <div ref={containerRef} style={{ position: 'relative' }} />
+      
+      <TooltipRoot>
+        <TooltipTrigger>
+          <button>Custom container</button>
         </TooltipTrigger>
-        <TooltipPortal>
+        <TooltipPortal container={containerRef.current || undefined}>
           <TooltipContent>
-            This tooltip is controlled externally
+            Rendered in custom container
           </TooltipContent>
         </TooltipPortal>
       </TooltipRoot>
-    </TooltipProvider>
+    </div>
   );
 }
 ```
 
-### Form Field with Validation Tooltip
-
-Tooltip providing help text for form inputs:
-
-```tsx
-function FormWithTooltips() {
-  const [email, setEmail] = React.useState('');
-  const isValid = email.includes('@');
-
-  return (
-    <TooltipProvider>
-      <div>
-        <label htmlFor="email">Email Address</label>
-        <TooltipRoot>
-          <TooltipTrigger asChild>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              aria-invalid={!isValid}
-            />
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent>
-              {isValid ? 
-                'Valid email format' : 
-                'Please enter a valid email address with @ symbol'
-              }
-            </TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
-      </div>
-    </TooltipProvider>
-  );
-}
-```
-
-### Icon Button with Label
-
-Using tooltip as primary label for icon-only buttons:
-
-```tsx
-function IconButtonWithLabel() {
-  return (
-    <TooltipProvider>
-      <TooltipRoot>
-        <TooltipTrigger asChild>
-          <button aria-label="Close dialog">
-            <CloseIcon />
-          </button>
-        </TooltipTrigger>
-        <TooltipPortal>
-          <TooltipContent asLabel={true}>
-            Close dialog
-          </TooltipContent>
-        </TooltipPortal>
-      </TooltipRoot>
-    </TooltipProvider>
-  );
-}
-```
-
-### Custom Positioning and Arrow
-
-Advanced positioning with arrow indicator:
-
-```tsx
-function CustomTooltip() {
-  return (
-    <TooltipProvider>
-      <TooltipRoot>
-        <TooltipTrigger asChild>
-          <button>Advanced Example</button>
-        </TooltipTrigger>
-        <TooltipPortal>
-          <TooltipContent 
-            side="bottom" 
-            align="start"
-            sideOffset={10}
-          >
-            <TooltipArrow />
-            Custom positioned tooltip with arrow
-          </TooltipContent>
-        </TooltipPortal>
-      </TooltipRoot>
-    </TooltipProvider>
-  );
-}
-```
-
-### Multiple Tooltips with Provider
-
-Optimized timing for multiple tooltips:
-
-```tsx
-function PlacementExample() {
-  return (
-    <TooltipProvider delayDuration={500} skipDelayDuration={200}>
-      <div style={{ display: 'flex', gap: '16px' }}>
-        <TooltipRoot>
-          <TooltipTrigger asChild>
-            <button>First</button>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent side="top">
-              First tooltip
-            </TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
-
-        <TooltipRoot>
-          <TooltipTrigger asChild>
-            <button>Second</button>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent side="bottom">
-              Second tooltip
-            </TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
-      </div>
-    </TooltipProvider>
-  );
-}
-```
-
-### Conditional Tooltip
-
-Tooltip that only appears under certain conditions:
-
-```tsx
-function ConditionalTooltip() {
-  const [showHelp, setShowHelp] = React.useState(false);
-
-  return (
-    <TooltipProvider>
-      <div>
-        <label>
-          <input 
-            type="checkbox" 
-            checked={showHelp}
-            onChange={(e) => setShowHelp(e.target.checked)}
-          />
-          Show help tooltips
-        </label>
-        
-        <TooltipRoot isDisabled={!showHelp}>
-          <TooltipTrigger asChild>
-            <button>Submit Form</button>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent>
-              Help is {showHelp ? 'enabled' : 'disabled'}
-            </TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
-      </div>
-    </TooltipProvider>
-  );
-}
-```
+---
 
 ## API Reference
 
 ### TooltipProvider
 
-Provides shared configuration for multiple tooltip instances. Optional wrapper for performance optimization.
+Optional provider for sharing configuration across multiple tooltip instances.
 
 **Props**
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode` | - | Tooltip components to share provider context |
-| `delayDuration?` | `number` | `700` | Global delay duration for all tooltips (ms) |
-| `skipDelayDuration?` | `number` | `300` | Duration to skip delay when moving between tooltips (ms) |
-| `disableHoverableContent?` | `boolean` | `false` | Disable hoverable content globally |
+| Name                       | Type              | Default | Description                                        |
+| -------------------------- | ----------------- | ------- | -------------------------------------------------- |
+| `children`                 | `React.ReactNode` | -       | Tooltip components to share provider context       |
+| `delayDuration?`           | `number`          | `700`   | Global delay duration for all tooltips (ms)        |
+| `skipDelayDuration?`       | `number`          | `300`   | Duration to skip delay when moving between (ms)    |
+| `disableHoverableContent?` | `boolean`         | `false` | Disable hoverable content globally                 |
+
+**Events**
+
+| Name | Parameters | Description                      | When Triggered |
+| ---- | ---------- | -------------------------------- | -------------- |
+| None | -          | Provider manages internal timers | -              |
+
+**ARIA Attributes**
+
+| Attribute            | Value     | Purpose                       | Applied To            |
+| -------------------- | --------- | ----------------------------- | --------------------- |
+| `data-tooltip-provider` | `""`    | Identifies provider wrapper   | Provider container    |
+| `data-skip-delay`    | `boolean` | Indicates skip delay mode     | Provider container    |
 
 ### TooltipRoot
 
@@ -360,115 +418,191 @@ Root component that manages tooltip state and provides context to child componen
 
 **Props**
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode` | - | Tooltip trigger and content components |
-| `isOpen?` | `boolean` | `undefined` | Controlled state for tooltip visibility |
-| `defaultOpen?` | `boolean` | `false` | Default open state for uncontrolled tooltip |
-| `onOpenChange?` | `(open: boolean) => void` | `undefined` | Callback when tooltip open state changes |
-| `delay?` | `number` | `undefined` | Override provider delay for this tooltip (ms) |
-| `hideDelay?` | `number` | `0` | Override provider hide delay for this tooltip (ms) |
-| `isDisabled?` | `boolean` | `false` | Whether tooltip is disabled |
+| Name              | Type                      | Default | Description                                |
+| ----------------- | ------------------------- | ------- | ------------------------------------------ |
+| `children`        | `React.ReactNode`         | -       | Tooltip trigger and content components     |
+| `isOpen?`         | `boolean`                 | -       | Controlled state for tooltip visibility    |
+| `defaultOpen?`    | `boolean`                 | `false` | Default open state for uncontrolled mode   |
+| `onOpenChange?`   | `(open: boolean) => void` | -       | Callback when tooltip open state changes   |
+| `delay?`          | `number`                  | `700`   | Override provider delay for this tooltip   |
+| `hideDelay?`      | `number`                  | `0`     | Override provider hide delay               |
+| `isDisabled?`     | `boolean`                 | `false` | Whether tooltip is disabled                |
 
 **Events**
 
-| Name | Parameters | Description | When Triggered |
-|------|------------|-------------|----------------|
-| `onOpenChange` | `(open: boolean)` | Open state changes | User interaction or programmatic change |
+| Name           | Parameters         | Description                 | When Triggered              |
+| -------------- | ------------------ | --------------------------- | --------------------------- |
+| `onOpenChange` | `(open: boolean)`  | Tooltip visibility changes  | User interaction or control |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose                       | Applied To    |
+| --------- | ----- | ----------------------------- | ------------- |
+| None      | -     | Root manages context only     | Context only  |
 
 ### TooltipTrigger
 
-The trigger element that shows/hides the tooltip on hover or focus. Must contain exactly one focusable child element.
+The trigger element that shows/hides the tooltip on hover or focus.
 
 **Props**
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactElement` | - | The trigger element (must be single focusable element) |
-| `asChild?` | `boolean` | `false` | Compose with child element instead of rendering button |
-| `as?` | `React.ElementType` | `'button'` | Element type when not using asChild |
-
-### TooltipContent
-
-The content that displays in the tooltip popup. Includes comprehensive positioning and accessibility options.
-
-**Props**
-
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode` | - | Content to display in tooltip |
-| `className?` | `string` | `undefined` | CSS class names for styling |
-| `style?` | `React.CSSProperties` | `undefined` | Inline styles |
-| `as?` | `React.ElementType` | `'div'` | Element type for tooltip content container |
-| `asLabel?` | `boolean` | `false` | Whether tooltip provides primary label or auxiliary description |
-| `side?` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` | Preferred placement relative to trigger |
-| `sideOffset?` | `number` | `8` | Distance in pixels from the trigger |
-| `align?` | `'start' \| 'center' \| 'end'` | `'center'` | Alignment relative to trigger |
-| `alignOffset?` | `number` | `0` | Offset for alignment |
-| `avoidCollisions?` | `boolean` | `true` | Whether to avoid viewport collisions |
-| `collisionBoundary?` | `Element \| Element[]` | `undefined` | Collision boundary elements |
-| `collisionPadding?` | `number \| Partial<Record<Side, number>>` | `10` | Padding for collision detection |
-| `sticky?` | `'partial' \| 'always'` | `'partial'` | Sticky behavior during scroll |
-| `hideWhenDetached?` | `boolean` | `false` | Hide when trigger becomes detached |
+| Name       | Type                  | Default    | Description                                      |
+| ---------- | --------------------- | ---------- | ------------------------------------------------ |
+| `children` | `React.ReactElement`  | -          | The trigger element (must be single element)     |
+| `asChild?` | `boolean`             | `false`    | Compose with child element instead of button     |
+| `as?`      | `React.ElementType`   | `"button"` | Element type when not using asChild              |
 
 **Events**
 
-| Name | Parameters | Description | When Triggered |
-|------|------------|-------------|----------------|
-| `onEscapeKeyDown` | `(event: KeyboardEvent)` | Escape key pressed | User presses Escape key |
-| `onPointerDownOutside` | `(event: PointerEvent)` | Pointer down outside tooltip | User clicks outside tooltip |
-| `onOpenAutoFocus` | `(event: Event)` | Called when auto-focusing on open | Tooltip opens |
-| `onCloseAutoFocus` | `(event: Event)` | Called when auto-focusing on close | Tooltip closes |
+| Name           | Parameters                     | Description                 | When Triggered             |
+| -------------- | ------------------------------ | --------------------------- | -------------------------- |
+| `onMouseEnter` | -                              | Mouse enters trigger        | Mouse hover                |
+| `onMouseLeave` | -                              | Mouse leaves trigger        | Mouse exit                 |
+| `onFocus`      | -                              | Trigger receives focus      | Keyboard focus             |
+| `onBlur`       | -                              | Trigger loses focus         | Focus removed              |
+| `onKeyDown`    | `(event: React.KeyboardEvent)` | Key pressed on trigger      | Keyboard interaction       |
 
-**ARIA**
+**ARIA Attributes**
 
-| Attribute | Value | Purpose | Applied To |
-|-----------|--------|---------|------------|
-| `role` | `"tooltip"` | Identifies the tooltip element | Content element |
-| `aria-describedby` | `contentId` | Associates tooltip with trigger (description mode) | Trigger element |
-| `aria-labelledby` | `contentId` | Associates tooltip with trigger (label mode) | Trigger element |
-| `data-state` | `"open" \| "closed"` | Indicates tooltip visibility state | Content element |
-| `data-placement` | `Side` | Actual placement after collision detection | Content element |
-| `data-as-label` | `"true" \| "false"` | Indicates if tooltip is primary label | Content element |
+| Attribute          | Value                | Purpose                           | Applied To       |
+| ------------------ | -------------------- | --------------------------------- | ---------------- |
+| `id`               | `string`             | Unique identifier for trigger     | Trigger element  |
+| `aria-describedby` | `string`             | References tooltip content ID     | When not label   |
+| `aria-labelledby`  | `string`             | References tooltip as label       | When asLabel     |
+| `data-state`       | `"open" \| "closed"` | Indicates tooltip state           | Trigger element  |
+| `data-placement`   | `Side`               | Indicates tooltip placement       | Trigger element  |
+| `data-disabled`    | `boolean`            | Indicates disabled state          | Trigger element  |
 
 ### TooltipPortal
 
-Portal component for rendering tooltip outside normal DOM tree, ensuring proper z-index layering.
+Portal component for rendering tooltip outside normal DOM tree.
 
 **Props**
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode` | - | Content to render in portal |
-| `container?` | `HTMLElement` | `document.body` | Portal container element |
-| `forceMount?` | `boolean` | `false` | Force mount regardless of open state |
+| Name          | Type              | Default         | Description                                |
+| ------------- | ----------------- | --------------- | ------------------------------------------ |
+| `children`    | `React.ReactNode` | -               | Content to render in portal                |
+| `container?`  | `HTMLElement`     | `document.body` | Portal container element                   |
+| `forceMount?` | `boolean`         | `false`         | Force mount regardless of open state       |
+
+**Events**
+
+| Name | Parameters | Description                    | When Triggered |
+| ---- | ---------- | ------------------------------ | -------------- |
+| None | -          | Portal manages rendering only  | -              |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose                       | Applied To    |
+| --------- | ----- | ----------------------------- | ------------- |
+| None      | -     | Portal is transparent wrapper | Container     |
+
+### TooltipContent
+
+The content that displays in the tooltip popup with smart positioning.
+
+**Props**
+
+| Name                     | Type                                           | Default    | Description                                         |
+| ------------------------ | ---------------------------------------------- | ---------- | --------------------------------------------------- |
+| `children`               | `React.ReactNode`                              | -          | Content to display in tooltip                       |
+| `as?`                    | `React.ElementType`                            | `"div"`    | Element type for tooltip content container          |
+| `asLabel?`               | `boolean`                                      | `false`    | Whether tooltip is primary label vs description     |
+| `side?`                  | `"top" \| "bottom" \| "left" \| "right"`       | `"top"`    | Preferred placement relative to trigger             |
+| `sideOffset?`            | `number`                                       | `8`        | Distance in pixels from the trigger                 |
+| `align?`                 | `"start" \| "center" \| "end"`                 | `"center"` | Alignment relative to trigger                       |
+| `alignOffset?`           | `number`                                       | `0`        | Offset for alignment                                |
+| `avoidCollisions?`       | `boolean`                                      | `true`     | Whether to avoid viewport collisions                |
+| `collisionBoundary?`     | `Element \| Element[]`                         | -          | Collision boundary elements                         |
+| `collisionPadding?`      | `number \| Partial<Record<Side, number>>`      | `10`       | Padding for collision detection                     |
+| `sticky?`                | `"partial" \| "always"`                        | `"partial"`| Sticky behavior during scroll                       |
+| `hideWhenDetached?`      | `boolean`                                      | `false`    | Hide when trigger becomes detached                  |
+| `onEscapeKeyDown?`       | `(event: KeyboardEvent) => void`               | -          | Escape key handler                                  |
+| `onPointerDownOutside?`  | `(event: PointerEvent) => void`                | -          | Outside pointer down handler                        |
+| `onOpenAutoFocus?`       | `(event: Event) => void`                       | -          | Called when auto-focusing on open                   |
+| `onCloseAutoFocus?`      | `(event: Event) => void`                       | -          | Called when auto-focusing on close                  |
+
+**Events**
+
+| Name                    | Parameters             | Description                     | When Triggered              |
+| ----------------------- | ---------------------- | ------------------------------- | --------------------------- |
+| `onEscapeKeyDown`       | `(event: KeyboardEvent)` | Escape key pressed            | User presses Escape         |
+| `onPointerDownOutside`  | `(event: PointerEvent)`  | Click outside tooltip         | Click outside content       |
+| `onMouseEnter`          | -                      | Mouse enters content            | Mouse hover on tooltip      |
+| `onMouseLeave`          | -                      | Mouse leaves content            | Mouse exits tooltip         |
+| `onKeyDown`             | `(event: React.KeyboardEvent)` | Key pressed in content  | Keyboard interaction        |
+
+**ARIA Attributes**
+
+| Attribute        | Value      | Purpose                           | Applied To       |
+| ---------------- | ---------- | --------------------------------- | ---------------- |
+| `id`             | `string`   | Unique identifier for content     | Content element  |
+| `role`           | `"tooltip"`| Identifies as tooltip             | Content element  |
+| `data-state`     | `"open" \| "closed"` | Indicates visibility state | Content element  |
+| `data-placement` | `Placement`| Indicates actual placement        | Content element  |
+| `data-as-label`  | `boolean`  | Indicates label vs description    | Content element  |
 
 ### TooltipArrow
 
-Optional arrow pointing to the trigger element. Provides visual connection between trigger and tooltip.
+Optional arrow pointing to the trigger element.
 
 **Props**
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `width?` | `number` | `10` | Arrow width in pixels |
-| `height?` | `number` | `5` | Arrow height in pixels |
-| `as?` | `React.ElementType` | `'svg'` | Element type for arrow |
-| `className?` | `string` | `undefined` | CSS class names for styling |
-| `style?` | `React.CSSProperties` | `undefined` | Inline styles |
+| Name        | Type                  | Default | Description                       |
+| ----------- | --------------------- | ------- | --------------------------------- |
+| `width?`    | `number`              | `10`    | Arrow width in pixels             |
+| `height?`   | `number`              | `5`     | Arrow height in pixels            |
+| `as?`       | `React.ElementType`   | `"svg"` | Element type for arrow            |
+| `className?`| `string`              | -       | CSS class names for styling       |
+| `style?`    | `React.CSSProperties` | -       | Inline styles                     |
+
+**Events**
+
+| Name | Parameters | Description               | When Triggered |
+| ---- | ---------- | ------------------------- | -------------- |
+| None | -          | Arrow is purely visual    | -              |
+
+**ARIA Attributes**
+
+| Attribute        | Value | Purpose                   | Applied To    |
+| ---------------- | ----- | ------------------------- | ------------- |
+| `data-placement` | `Side`| Indicates placement side  | Arrow element |
+
+---
 
 ## Keyboard Interactions
 
-| Key | Action | Context | Notes |
-|-----|--------|---------|-------|
-| `Tab` | Move focus to/from trigger | Global navigation | Tooltip shows on trigger focus |
-| `Shift + Tab` | Move focus to/from trigger (reverse) | Global navigation | Tooltip shows on trigger focus |
-| `Escape` | Close tooltip | When tooltip is open | Focus remains on trigger |
-| `Enter`/`Space` | Activate trigger (if button) | When trigger focused | Follows trigger element semantics |
+Complete keyboard behavior for the tooltip component:
 
-**Focus Management:**
-- Tooltip never receives focus directly
-- Focus always remains on trigger element
-- Clear focus indicators provided on trigger
-- No focus trapping (tooltip is non-modal)
-- Supports keyboard-only navigation patterns
+| Key           | Action                | Context          | Notes                                              |
+| ------------- | --------------------- | ---------------- | -------------------------------------------------- |
+| `Tab`         | Focus trigger         | Any context      | Shows tooltip immediately on focus                 |
+| `Escape`      | Close tooltip         | Focused trigger  | Closes tooltip and keeps focus on trigger          |
+| `Escape`      | Close tooltip         | Focused content  | Closes tooltip and returns focus to trigger        |
+| `Mouse hover` | Show tooltip          | Trigger          | Shows tooltip after delay duration                 |
+| `Mouse leave` | Hide tooltip          | Trigger          | Hides tooltip after hide delay                     |
+
+---
+
+## Accessibility Features
+
+The Tooltip component is designed with accessibility as a priority:
+
+- **WCAG 2.2 AA Compliant**: Follows all relevant success criteria
+- **Screen Reader Support**: Proper ARIA attributes for assistive technologies
+- **Keyboard Navigation**: Full keyboard support with Escape key handling
+- **Focus Management**: Proper focus handling on show/hide
+- **Hoverable Content**: Content remains visible when mouse moves to it (WCAG 1.4.13)
+- **Touch Support**: Appropriate behavior on touch devices
+- **High Contrast**: Works with high contrast modes
+- **Reduced Motion**: Respects `prefers-reduced-motion` preference
+
+### Best Practices
+
+1. **Keep Content Brief**: Tooltips should provide concise, helpful information
+2. **Use for Supplementary Info**: Don't hide critical information in tooltips
+3. **Avoid Interactive Content**: Tooltips are not for complex interactions
+4. **Label vs Description**: Use `asLabel={true}` only when tooltip provides the primary label
+5. **Touch Considerations**: Consider alternative patterns for touch-only devices
+6. **Timing**: Default delays work well; adjust only if needed for specific UX
+7. **Positioning**: Use `side` and `align` props to ensure tooltip doesn't cover important content
