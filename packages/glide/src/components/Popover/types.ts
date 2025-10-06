@@ -70,6 +70,11 @@ export interface PopoverTriggerProps extends React.ButtonHTMLAttributes<HTMLButt
    * @defaultValue false
    */
   isDisabled?: boolean;
+
+  /**
+   * Ref to the trigger element
+   */
+  ref?: React.Ref<HTMLButtonElement>;
 }
 
 /**
@@ -153,6 +158,11 @@ export interface PopoverContentProps extends React.HTMLAttributes<HTMLDivElement
    * @defaultValue false
    */
   trapFocus?: boolean;
+
+  /**
+   * Ref to the content element
+   */
+  ref?: React.Ref<HTMLDivElement>;
 }
 
 /**
@@ -194,6 +204,11 @@ export interface PopoverAnchorProps extends React.HTMLAttributes<HTMLDivElement>
    * @defaultValue false
    */
   asChild?: boolean;
+
+  /**
+   * Ref to the anchor element
+   */
+  ref?: React.Ref<HTMLDivElement>;
 }
 
 /**
@@ -223,6 +238,11 @@ export interface PopoverCloseProps extends React.ButtonHTMLAttributes<HTMLButton
    * @defaultValue false
    */
   asChild?: boolean;
+
+  /**
+   * Ref to the close element
+   */
+  ref?: React.Ref<HTMLButtonElement>;
 }
 
 /**

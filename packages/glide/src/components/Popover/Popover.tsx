@@ -8,7 +8,6 @@ import React, {
   useEffect,
   cloneElement,
   isValidElement,
-  forwardRef,
 } from 'react';
 import { createPortal } from 'react-dom';
 import type {
@@ -261,337 +260,339 @@ export const PopoverRoot = ({ children, ...props }: PopoverRootProps) => {
 /**
  * Trigger element that opens/closes the popover
  */
-export const PopoverTrigger = forwardRef<HTMLButtonElement, PopoverTriggerProps>(
-  ({ asChild = false, children, isDisabled = false, onClick, onKeyDown, ...props }, ref) => {
-    const { state, triggerRef, togglePopover, openPopover } = usePopoverContext();
+export const PopoverTrigger = ({
+  asChild = false,
+  children,
+  isDisabled = false,
+  onClick,
+  onKeyDown,
+  ref,
+  ...props
+}: PopoverTriggerProps) => {
+  const { state, triggerRef, togglePopover, openPopover } = usePopoverContext();
 
-    const handleClick = useCallback(
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        if (isDisabled) return;
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (isDisabled) return;
 
+      event.preventDefault();
+      togglePopover();
+      onClick?.(event);
+    },
+    [isDisabled, togglePopover, onClick],
+  );
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLButtonElement>) => {
+      if (isDisabled) return;
+
+      switch (event.key) {
+        case 'Enter':
+        case ' ':
+          event.preventDefault();
+          togglePopover();
+          break;
+        case 'ArrowDown':
+          event.preventDefault();
+          if (!state.isOpen) {
+            openPopover();
+          }
+          break;
+      }
+      onKeyDown?.(event);
+    },
+    [isDisabled, state.isOpen, togglePopover, openPopover, onKeyDown],
+  );
+
+  const triggerProps = {
+    ref: (element: HTMLButtonElement | null) => {
+      triggerRef.current = element;
+      if (typeof ref === 'function') {
+        ref(element);
+      } else if (ref) {
+        ref.current = element;
+      }
+    },
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    'aria-expanded': state.isOpen,
+    'aria-controls': state.isOpen ? state.contentId : undefined,
+    'aria-haspopup': 'dialog' as const,
+    disabled: isDisabled,
+    'data-state': state.isOpen ? 'open' : 'closed',
+    'data-disabled': isDisabled ? '' : undefined,
+    ...props,
+  };
+
+  if (asChild && isValidElement(children)) {
+    return cloneElement(children, triggerProps);
+  }
+
+  return (
+    <button type='button' {...triggerProps}>
+      {children}
+    </button>
+  );
+};
+
+/**
+ * Content container that holds the popover content
+ */
+export const PopoverContent = ({
+  side = 'bottom',
+  align = 'center',
+  sideOffset = 8,
+  alignOffset = 0,
+  avoidCollisions = true,
+  collisionBoundary,
+  hideWhenDetached = false,
+  onOpenAutoFocus,
+  onCloseAutoFocus,
+  onEscapeKeyDown,
+  onPointerDownOutside,
+  onFocusOutside,
+  onInteractOutside,
+  trapFocus = false,
+  children,
+  style,
+  onKeyDown,
+  ref,
+  ...props
+}: PopoverContentProps) => {
+  // Unused props for future implementation
+  void alignOffset;
+  void collisionBoundary;
+  void hideWhenDetached;
+
+  const { state, triggerRef, contentRef, modal, closePopover } = usePopoverContext();
+
+  const [position, setPosition] = useState<PopoverPosition>({
+    x: 0,
+    y: 0,
+    side,
+    align,
+    transformOrigin: '50% 0%',
+  });
+  const [isMounted, setIsMounted] = useState(false);
+
+  // SSR safety
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Position calculation
+  useEffect(() => {
+    if (!state.isOpen || !triggerRef.current || !contentRef.current) return;
+
+    const updatePosition = () => {
+      const triggerRect = triggerRef.current!.getBoundingClientRect();
+      const newPosition = calculatePosition(
+        triggerRect,
+        contentRef.current!,
+        side,
+        align,
+        sideOffset,
+        avoidCollisions,
+      );
+      setPosition(newPosition);
+    };
+
+    updatePosition();
+
+    const handleResize = () => updatePosition();
+    const handleScroll = () => updatePosition();
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleScroll, true);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll, true);
+    };
+  }, [state.isOpen, side, align, sideOffset, avoidCollisions]);
+
+  // Focus management
+  useEffect(() => {
+    if (!state.isOpen || !contentRef.current) return;
+
+    const contentElement = contentRef.current;
+
+    // Focus first focusable element when opening
+    const focusableElements = getFocusableElements(contentElement);
+    if (focusableElements.length > 0) {
+      focusableElements[0]?.focus();
+    } else {
+      contentElement.focus();
+    }
+
+    onOpenAutoFocus?.(new Event('openautofocus'));
+
+    return () => {
+      // Return focus to trigger when closing
+      if (triggerRef.current) {
+        triggerRef.current.focus();
+        onCloseAutoFocus?.(new Event('closeautofocus'));
+      }
+    };
+  }, [state.isOpen, onOpenAutoFocus, onCloseAutoFocus]);
+
+  // Escape key handling
+  useEffect(() => {
+    if (!state.isOpen) return;
+
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
         event.preventDefault();
-        togglePopover();
-        onClick?.(event);
-      },
-      [isDisabled, togglePopover, onClick],
-    );
+        closePopover();
+        onEscapeKeyDown?.(event);
+      }
+    };
 
-    const handleKeyDown = useCallback(
-      (event: React.KeyboardEvent<HTMLButtonElement>) => {
-        if (isDisabled) return;
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => document.removeEventListener('keydown', handleEscapeKey);
+  }, [state.isOpen, closePopover, onEscapeKeyDown]);
 
-        switch (event.key) {
-          case 'Enter':
-          case ' ':
-            event.preventDefault();
-            togglePopover();
-            break;
-          case 'ArrowDown':
-            event.preventDefault();
-            if (!state.isOpen) {
-              openPopover();
-            }
-            break;
+  // Outside interaction handling
+  useEffect(() => {
+    if (!state.isOpen) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node;
+      if (
+        contentRef.current &&
+        !contentRef.current.contains(target) &&
+        triggerRef.current &&
+        !triggerRef.current.contains(target)
+      ) {
+        closePopover();
+        onPointerDownOutside?.(event);
+        onInteractOutside?.(event);
+      }
+    };
+
+    const handleFocusOutside = (event: FocusEvent) => {
+      if (trapFocus) return; // Don't close if focus is trapped
+
+      const target = event.target as Node;
+      if (
+        contentRef.current &&
+        !contentRef.current.contains(target) &&
+        triggerRef.current &&
+        !triggerRef.current.contains(target)
+      ) {
+        closePopover();
+        onFocusOutside?.(event);
+        onInteractOutside?.(event);
+      }
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('focusin', handleFocusOutside);
+
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('focusin', handleFocusOutside);
+    };
+  }, [
+    state.isOpen,
+    trapFocus,
+    closePopover,
+    onPointerDownOutside,
+    onFocusOutside,
+    onInteractOutside,
+  ]);
+
+  // Focus trapping
+  useEffect(() => {
+    if (!state.isOpen || !trapFocus || !contentRef.current) return;
+
+    const contentElement = contentRef.current;
+    const focusableElements = getFocusableElements(contentElement);
+
+    if (focusableElements.length === 0) return;
+
+    const firstFocusable = focusableElements[0];
+    const lastFocusable = focusableElements[focusableElements.length - 1];
+
+    const handleTabKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+
+      if (event.shiftKey) {
+        if (document.activeElement === firstFocusable) {
+          event.preventDefault();
+          lastFocusable?.focus();
         }
-        onKeyDown?.(event);
-      },
-      [isDisabled, state.isOpen, togglePopover, openPopover, onKeyDown],
-    );
+      } else {
+        if (document.activeElement === lastFocusable) {
+          event.preventDefault();
+          firstFocusable?.focus();
+        }
+      }
+    };
 
-    const triggerProps = {
-      ref: (element: HTMLButtonElement | null) => {
-        triggerRef.current = element;
+    contentElement.addEventListener('keydown', handleTabKey);
+    return () => contentElement.removeEventListener('keydown', handleTabKey);
+  }, [state.isOpen, trapFocus]);
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      // Handle Home/End keys within content
+      if (event.key === 'Home' || event.key === 'End') {
+        const focusableElements = getFocusableElements(event.currentTarget);
+        if (focusableElements.length > 0) {
+          event.preventDefault();
+          const targetElement =
+            event.key === 'Home'
+              ? focusableElements[0]
+              : focusableElements[focusableElements.length - 1];
+          targetElement?.focus();
+        }
+      }
+      onKeyDown?.(event);
+    },
+    [onKeyDown],
+  );
+
+  if (!state.isOpen || !isMounted) return null;
+
+  const contentElement = (
+    <div
+      ref={(element: HTMLDivElement | null) => {
+        contentRef.current = element;
         if (typeof ref === 'function') {
           ref(element);
         } else if (ref) {
           ref.current = element;
         }
-      },
-      onClick: handleClick,
-      onKeyDown: handleKeyDown,
-      'aria-expanded': state.isOpen,
-      'aria-controls': state.isOpen ? state.contentId : undefined,
-      'aria-haspopup': 'dialog' as const,
-      disabled: isDisabled,
-      'data-state': state.isOpen ? 'open' : 'closed',
-      'data-disabled': isDisabled ? '' : undefined,
-      ...props,
-    };
-
-    if (asChild && isValidElement(children)) {
-      return cloneElement(children, triggerProps);
-    }
-
-    return (
-      <button type='button' {...triggerProps}>
-        {children}
-      </button>
-    );
-  },
-);
-
-/**
- * Content container that holds the popover content
- */
-export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
-  (
-    {
-      side = 'bottom',
-      align = 'center',
-      sideOffset = 8,
-      alignOffset = 0,
-      avoidCollisions = true,
-      collisionBoundary,
-      hideWhenDetached = false,
-      onOpenAutoFocus,
-      onCloseAutoFocus,
-      onEscapeKeyDown,
-      onPointerDownOutside,
-      onFocusOutside,
-      onInteractOutside,
-      trapFocus = false,
-      children,
-      style,
-      onKeyDown,
-      ...props
-    },
-    ref,
-  ) => {
-    // Unused props for future implementation
-    void alignOffset;
-    void collisionBoundary;
-    void hideWhenDetached;
-
-    const { state, triggerRef, contentRef, modal, closePopover } = usePopoverContext();
-
-    const [position, setPosition] = useState<PopoverPosition>({
-      x: 0,
-      y: 0,
-      side,
-      align,
-      transformOrigin: '50% 0%',
-    });
-    const [isMounted, setIsMounted] = useState(false);
-
-    // SSR safety
-    useEffect(() => {
-      setIsMounted(true);
-    }, []);
-
-    // Position calculation
-    useEffect(() => {
-      if (!state.isOpen || !triggerRef.current || !contentRef.current) return;
-
-      const updatePosition = () => {
-        const triggerRect = triggerRef.current!.getBoundingClientRect();
-        const newPosition = calculatePosition(
-          triggerRect,
-          contentRef.current!,
-          side,
-          align,
-          sideOffset,
-          avoidCollisions,
-        );
-        setPosition(newPosition);
-      };
-
-      updatePosition();
-
-      const handleResize = () => updatePosition();
-      const handleScroll = () => updatePosition();
-
-      window.addEventListener('resize', handleResize);
-      window.addEventListener('scroll', handleScroll, true);
-
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        window.removeEventListener('scroll', handleScroll, true);
-      };
-    }, [state.isOpen, side, align, sideOffset, avoidCollisions]);
-
-    // Focus management
-    useEffect(() => {
-      if (!state.isOpen || !contentRef.current) return;
-
-      const contentElement = contentRef.current;
-
-      // Focus first focusable element when opening
-      const focusableElements = getFocusableElements(contentElement);
-      if (focusableElements.length > 0) {
-        focusableElements[0]?.focus();
-      } else {
-        contentElement.focus();
+      }}
+      id={state.contentId}
+      role={modal ? 'dialog' : undefined}
+      aria-modal={modal ? 'true' : undefined}
+      tabIndex={-1}
+      data-state='open'
+      data-side={position.side}
+      data-align={position.align}
+      style={
+        {
+          position: 'absolute',
+          left: position.x,
+          top: position.y,
+          '--popover-content-transform-origin': position.transformOrigin,
+          '--popover-content-available-width': `${window.innerWidth - position.x - 16}px`,
+          '--popover-content-available-height': `${window.innerHeight - position.y - 16}px`,
+          zIndex: 50,
+          ...style,
+        } as React.CSSProperties
       }
+      onKeyDown={handleKeyDown}
+      {...props}
+    >
+      {children}
+    </div>
+  );
 
-      onOpenAutoFocus?.(new Event('openautofocus'));
-
-      return () => {
-        // Return focus to trigger when closing
-        if (triggerRef.current) {
-          triggerRef.current.focus();
-          onCloseAutoFocus?.(new Event('closeautofocus'));
-        }
-      };
-    }, [state.isOpen, onOpenAutoFocus, onCloseAutoFocus]);
-
-    // Escape key handling
-    useEffect(() => {
-      if (!state.isOpen) return;
-
-      const handleEscapeKey = (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
-          event.preventDefault();
-          closePopover();
-          onEscapeKeyDown?.(event);
-        }
-      };
-
-      document.addEventListener('keydown', handleEscapeKey);
-      return () => document.removeEventListener('keydown', handleEscapeKey);
-    }, [state.isOpen, closePopover, onEscapeKeyDown]);
-
-    // Outside interaction handling
-    useEffect(() => {
-      if (!state.isOpen) return;
-
-      const handlePointerDown = (event: PointerEvent) => {
-        const target = event.target as Node;
-        if (
-          contentRef.current &&
-          !contentRef.current.contains(target) &&
-          triggerRef.current &&
-          !triggerRef.current.contains(target)
-        ) {
-          closePopover();
-          onPointerDownOutside?.(event);
-          onInteractOutside?.(event);
-        }
-      };
-
-      const handleFocusOutside = (event: FocusEvent) => {
-        if (trapFocus) return; // Don't close if focus is trapped
-
-        const target = event.target as Node;
-        if (
-          contentRef.current &&
-          !contentRef.current.contains(target) &&
-          triggerRef.current &&
-          !triggerRef.current.contains(target)
-        ) {
-          closePopover();
-          onFocusOutside?.(event);
-          onInteractOutside?.(event);
-        }
-      };
-
-      document.addEventListener('pointerdown', handlePointerDown);
-      document.addEventListener('focusin', handleFocusOutside);
-
-      return () => {
-        document.removeEventListener('pointerdown', handlePointerDown);
-        document.removeEventListener('focusin', handleFocusOutside);
-      };
-    }, [
-      state.isOpen,
-      trapFocus,
-      closePopover,
-      onPointerDownOutside,
-      onFocusOutside,
-      onInteractOutside,
-    ]);
-
-    // Focus trapping
-    useEffect(() => {
-      if (!state.isOpen || !trapFocus || !contentRef.current) return;
-
-      const contentElement = contentRef.current;
-      const focusableElements = getFocusableElements(contentElement);
-
-      if (focusableElements.length === 0) return;
-
-      const firstFocusable = focusableElements[0];
-      const lastFocusable = focusableElements[focusableElements.length - 1];
-
-      const handleTabKey = (event: KeyboardEvent) => {
-        if (event.key !== 'Tab') return;
-
-        if (event.shiftKey) {
-          if (document.activeElement === firstFocusable) {
-            event.preventDefault();
-            lastFocusable?.focus();
-          }
-        } else {
-          if (document.activeElement === lastFocusable) {
-            event.preventDefault();
-            firstFocusable?.focus();
-          }
-        }
-      };
-
-      contentElement.addEventListener('keydown', handleTabKey);
-      return () => contentElement.removeEventListener('keydown', handleTabKey);
-    }, [state.isOpen, trapFocus]);
-
-    const handleKeyDown = useCallback(
-      (event: React.KeyboardEvent<HTMLDivElement>) => {
-        // Handle Home/End keys within content
-        if (event.key === 'Home' || event.key === 'End') {
-          const focusableElements = getFocusableElements(event.currentTarget);
-          if (focusableElements.length > 0) {
-            event.preventDefault();
-            const targetElement =
-              event.key === 'Home'
-                ? focusableElements[0]
-                : focusableElements[focusableElements.length - 1];
-            targetElement?.focus();
-          }
-        }
-        onKeyDown?.(event);
-      },
-      [onKeyDown],
-    );
-
-    if (!state.isOpen || !isMounted) return null;
-
-    const contentElement = (
-      <div
-        ref={(element: HTMLDivElement | null) => {
-          contentRef.current = element;
-          if (typeof ref === 'function') {
-            ref(element);
-          } else if (ref) {
-            ref.current = element;
-          }
-        }}
-        id={state.contentId}
-        role={modal ? 'dialog' : undefined}
-        aria-modal={modal ? 'true' : undefined}
-        tabIndex={-1}
-        data-state='open'
-        data-side={position.side}
-        data-align={position.align}
-        style={
-          {
-            position: 'absolute',
-            left: position.x,
-            top: position.y,
-            '--popover-content-transform-origin': position.transformOrigin,
-            '--popover-content-available-width': `${window.innerWidth - position.x - 16}px`,
-            '--popover-content-available-height': `${window.innerHeight - position.y - 16}px`,
-            zIndex: 50,
-            ...style,
-          } as React.CSSProperties
-        }
-        onKeyDown={handleKeyDown}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-
-    return createPortal(contentElement, document.body);
-  },
-);
+  return createPortal(contentElement, document.body);
+};
 
 /**
  * Portal component for rendering content in a different DOM location
@@ -611,93 +612,100 @@ export const PopoverPortal = ({ children, container }: PopoverPortalProps) => {
 /**
  * Anchor component for custom positioning reference
  */
-export const PopoverAnchor = forwardRef<HTMLDivElement, PopoverAnchorProps>(
-  ({ asChild = false, children, ...props }, ref) => {
-    const { anchorRef } = usePopoverContext();
+export const PopoverAnchor = ({ asChild = false, children, ref, ...props }: PopoverAnchorProps) => {
+  const { anchorRef } = usePopoverContext();
 
-    const anchorProps = {
-      ref: (element: HTMLDivElement | null) => {
-        anchorRef.current = element;
-        if (typeof ref === 'function') {
-          ref(element);
-        } else if (ref) {
-          ref.current = element;
-        }
-      },
-      'data-popover-anchor': '',
-      ...props,
-    };
+  const anchorProps = {
+    ref: (element: HTMLDivElement | null) => {
+      anchorRef.current = element;
+      if (typeof ref === 'function') {
+        ref(element);
+      } else if (ref) {
+        ref.current = element;
+      }
+    },
+    'data-popover-anchor': '',
+    ...props,
+  };
 
-    if (asChild && isValidElement(children)) {
-      return cloneElement(children, anchorProps);
-    }
+  if (asChild && isValidElement(children)) {
+    return cloneElement(children, anchorProps);
+  }
 
-    return <div {...anchorProps}>{children}</div>;
-  },
-);
+  return <div {...anchorProps}>{children}</div>;
+};
 
 /**
  * Close button component that automatically closes the popover
  */
-export const PopoverClose = forwardRef<HTMLButtonElement, PopoverCloseProps>(
-  ({ asChild = false, children, onClick, ...props }, ref) => {
-    const { closePopover } = usePopoverContext();
+export const PopoverClose = ({
+  asChild = false,
+  children,
+  onClick,
+  ref,
+  ...props
+}: PopoverCloseProps) => {
+  const { closePopover } = usePopoverContext();
 
-    const handleClick = useCallback(
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        closePopover();
-        onClick?.(event);
-      },
-      [closePopover, onClick],
-    );
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      closePopover();
+      onClick?.(event);
+    },
+    [closePopover, onClick],
+  );
 
-    const closeProps = {
-      ref,
-      onClick: handleClick,
-      'data-popover-close': '',
-      ...props,
-    };
+  const closeProps = {
+    ref,
+    onClick: handleClick,
+    'data-popover-close': '',
+    ...props,
+  };
 
-    if (asChild && isValidElement(children)) {
-      return cloneElement(children, closeProps);
-    }
+  if (asChild && isValidElement(children)) {
+    return cloneElement(children, closeProps);
+  }
 
-    return (
-      <button type='button' {...closeProps}>
-        {children}
-      </button>
-    );
-  },
-);
+  return (
+    <button type='button' {...closeProps}>
+      {children}
+    </button>
+  );
+};
 
 /**
  * Optional arrow element for popover visual enhancement
  */
-export const PopoverArrow = forwardRef<HTMLDivElement, PopoverArrowProps>(
-  ({ width = 10, height = 5, offset = 0, style, ...props }, ref) => {
-    const { state } = usePopoverContext();
+export const PopoverArrow = ({
+  width = 10,
+  height = 5,
+  offset = 0,
+  style,
+  ref,
+  ...props
+}: PopoverArrowProps) => {
+  const { state } = usePopoverContext();
 
-    if (!state.isOpen) return null;
+  if (!state.isOpen) return null;
 
-    return (
-      <div
-        ref={ref}
-        role='presentation'
-        data-side={state.actualSide}
-        style={
-          {
-            position: 'absolute',
-            width,
-            height,
-            '--popover-arrow-offset': `${offset}px`,
-            ...style,
-          } as React.CSSProperties
-        }
-        {...props}
-      />
-    );
-  },
-);
+  return (
+    <div
+      ref={ref}
+      role='presentation'
+      data-side={state.actualSide}
+      style={
+        {
+          position: 'absolute',
+          width,
+          height,
+          '--popover-arrow-offset': `${offset}px`,
+          ...style,
+        } as React.CSSProperties
+      }
+      {...props}
+    />
+  );
+};
 
 // Set display names for better debugging
 PopoverRoot.displayName = 'PopoverRoot';
