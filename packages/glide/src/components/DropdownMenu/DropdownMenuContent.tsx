@@ -8,7 +8,17 @@ import {
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
-import type { DropdownMenuContentProps } from './types';
+import {
+  useFloating,
+  autoUpdate,
+  offset,
+  flip,
+  shift,
+  limitShift,
+  type Placement,
+  type Middleware,
+} from '@floating-ui/react-dom';
+import type { DropdownMenuContentProps, Side, Align } from './types';
 import {
   useMenuScope,
   DropdownMenuSubContext,
@@ -18,14 +28,32 @@ import {
 } from './contexts';
 import { composeRefs, isCharacterKey, getCloseKey, TYPEAHEAD_TIMEOUT } from './utils';
 
+/**
+ * Convert side and align to Floating UI placement
+ */
+const getPlacement = (side: Side, align: Align): Placement => {
+  if (side === 'top' || side === 'bottom') {
+    if (align === 'start') return `${side}-start`;
+    if (align === 'end') return `${side}-end`;
+    return side;
+  }
+  if (side === 'left' || side === 'right') {
+    if (align === 'start') return `${side}-start`;
+    if (align === 'end') return `${side}-end`;
+    return side;
+  }
+  return 'bottom';
+};
+
 export const DropdownMenuContent = ({
   as: Component = 'div',
   side: sideProp,
   align = 'start',
-  sideOffset: _sideOffset = 0,
-  alignOffset: _alignOffset = 0,
-  avoidCollisions: _avoidCollisions = true,
-  collisionBoundary: _collisionBoundary = null,
+  sideOffset = 0,
+  alignOffset = 0,
+  avoidCollisions = true,
+  collisionBoundary = null,
+  collisionPadding = 8,
   loop = false,
   onEscapeKeyDown,
   onPointerDownOutside,
@@ -40,8 +68,63 @@ export const DropdownMenuContent = ({
   // Auto-determine side based on menu type
   const side = sideProp ?? (isSubmenu ? 'right' : 'bottom');
   const contentRef = useRef<HTMLElement | null>(null);
+
+  // Configure Floating UI middleware
+  const middleware: Middleware[] = useMemo(() => {
+    const result: Middleware[] = [offset({ mainAxis: sideOffset, alignmentAxis: alignOffset })];
+
+    if (avoidCollisions) {
+      const boundaryValue = collisionBoundary
+        ? Array.isArray(collisionBoundary)
+          ? collisionBoundary
+          : [collisionBoundary]
+        : undefined;
+
+      result.push(
+        flip({
+          ...(boundaryValue && { boundary: boundaryValue }),
+          padding: collisionPadding,
+        }),
+      );
+      result.push(
+        shift({
+          ...(boundaryValue && { boundary: boundaryValue }),
+          padding: collisionPadding,
+          limiter: limitShift(),
+        }),
+      );
+    }
+
+    return result;
+  }, [sideOffset, alignOffset, avoidCollisions, collisionBoundary, collisionPadding]);
+
+  // Floating UI setup
+  const { x, y, strategy, refs, placement } = useFloating({
+    placement: getPlacement(side, align),
+    middleware,
+    whileElementsMounted: autoUpdate,
+  });
+
+  // Set trigger ref from context
+  useLayoutEffect(() => {
+    if (menu.triggerRef.current) {
+      refs.setReference(menu.triggerRef.current);
+    }
+  }, [menu.triggerRef, refs]);
+
+  // Set floating ref
+  useLayoutEffect(() => {
+    if (contentRef.current) {
+      refs.setFloating(contentRef.current);
+    }
+  }, [refs]);
+
+  // Compose refs
   const composedRefs = composeRefs<HTMLElement | null>(ref, (node: HTMLElement | null) => {
     contentRef.current = node;
+    if (node) {
+      refs.setFloating(node);
+    }
   });
 
   const [items, setItems] = useState<MenuCollectionItem[]>([]);
@@ -396,152 +479,18 @@ export const DropdownMenuContent = ({
     ],
   );
 
-  // Positioning logic - calculate and apply position relative to trigger
-  const updatePosition = useCallback(() => {
-    if (!menu.open || !contentRef.current || !menu.triggerRef.current) {
-      return;
-    }
-
-    const triggerElement = menu.triggerRef.current;
-    const contentElement = contentRef.current;
-    const triggerRect = triggerElement.getBoundingClientRect();
-    const contentRect = contentElement.getBoundingClientRect();
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-
-    let finalSide = side;
-    const finalAlign = align;
-
-    // Auto-position based on available space
-    if (_avoidCollisions) {
-      const spaceBelow = viewportHeight - triggerRect.bottom;
-      const spaceAbove = triggerRect.top;
-      const spaceRight = viewportWidth - triggerRect.right;
-      const spaceLeft = triggerRect.left;
-
-      // Determine best side
-      if (side === 'bottom' && spaceBelow < contentRect.height && spaceAbove > spaceBelow) {
-        finalSide = 'top';
-      } else if (side === 'top' && spaceAbove < contentRect.height && spaceBelow > spaceAbove) {
-        finalSide = 'bottom';
-      } else if (side === 'right' && spaceRight < contentRect.width && spaceLeft > spaceRight) {
-        finalSide = 'left';
-      } else if (side === 'left' && spaceLeft < contentRect.width && spaceRight > spaceLeft) {
-        finalSide = 'right';
-      }
-    }
-
-    // Calculate position
-    let top = 0;
-    let left = 0;
-
-    switch (finalSide) {
-      case 'top':
-        top = triggerRect.top - contentRect.height - _sideOffset;
-        break;
-      case 'bottom':
-        top = triggerRect.bottom + _sideOffset;
-        break;
-      case 'left':
-        left = triggerRect.left - contentRect.width - _sideOffset;
-        break;
-      case 'right':
-        left = triggerRect.right + _sideOffset;
-        break;
-    }
-
-    // Calculate alignment for vertical sides (top/bottom)
-    if (finalSide === 'top' || finalSide === 'bottom') {
-      switch (finalAlign) {
-        case 'start':
-          left = triggerRect.left + _alignOffset;
-          break;
-        case 'center':
-          left = triggerRect.left + triggerRect.width / 2 - contentRect.width / 2 + _alignOffset;
-          break;
-        case 'end':
-          left = triggerRect.right - contentRect.width + _alignOffset;
-          break;
-      }
-    }
-
-    // Calculate alignment for horizontal sides (left/right)
-    if (finalSide === 'left' || finalSide === 'right') {
-      switch (finalAlign) {
-        case 'start':
-          top = triggerRect.top + _alignOffset;
-          break;
-        case 'center':
-          top = triggerRect.top + triggerRect.height / 2 - contentRect.height / 2 + _alignOffset;
-          break;
-        case 'end':
-          top = triggerRect.bottom - contentRect.height + _alignOffset;
-          break;
-      }
-    }
-
-    // Ensure content stays within viewport bounds
-    if (_avoidCollisions) {
-      left = Math.max(8, Math.min(left, viewportWidth - contentRect.width - 8));
-      top = Math.max(8, Math.min(top, viewportHeight - contentRect.height - 8));
-    }
-
-    // Apply positioning
-    contentElement.style.position = 'fixed';
-    contentElement.style.top = `${top}px`;
-    contentElement.style.left = `${left}px`;
-    contentElement.style.zIndex = '9999';
-    contentElement.style.opacity = '1';
-
-    // Update data attributes for styling
-    contentElement.setAttribute('data-side', finalSide);
-    contentElement.setAttribute('data-align', finalAlign);
-  }, [menu.open, side, align, _sideOffset, _alignOffset, _avoidCollisions, menu.triggerRef]);
-
-  useLayoutEffect(() => {
-    if (!menu.open) return;
-
-    if (contentRef.current) {
-      contentRef.current.style.opacity = '0';
-    }
-
-    updatePosition();
-
-    const rafId = requestAnimationFrame(() => {
-      updatePosition();
-    });
-
-    return () => {
-      cancelAnimationFrame(rafId);
-    };
-  }, [updatePosition, menu.open]);
-
-  useEffect(() => {
-    if (!menu.open) {
-      return;
-    }
-
-    const handleScroll = () => {
-      updatePosition();
-    };
-
-    const handleResize = () => {
-      updatePosition();
-    };
-
-    // Listen to scroll events on window and all scrollable parents
-    window.addEventListener('scroll', handleScroll, true);
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll, true);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [menu.open, updatePosition]);
+  // Extract placement information for data attributes
+  const [currentSide, currentAlign] = useMemo(() => {
+    const parts = placement.split('-');
+    const placementSide = parts[0] as Side;
+    const placementAlign = parts[1] ? (parts[1] as Align) : 'center';
+    return [placementSide, placementAlign];
+  }, [placement]);
 
   if (!menu.open) {
     return null;
   }
+
   return (
     <DropdownMenuCollectionContext.Provider value={collectionValue}>
       <Component
@@ -551,11 +500,17 @@ export const DropdownMenuContent = ({
         role='menu'
         aria-labelledby={menu.triggerId}
         data-state='open'
-        data-side={side}
-        data-align={align}
-        hidden={false}
+        data-side={currentSide}
+        data-align={currentAlign}
         tabIndex={-1}
         onKeyDown={handleKeyDownInternal}
+        style={{
+          position: strategy,
+          top: y ?? 0,
+          left: x ?? 0,
+          zIndex: 9999,
+          ...props.style,
+        }}
       />
     </DropdownMenuCollectionContext.Provider>
   );

@@ -104,27 +104,34 @@ export interface DropdownMenuContentProps extends HTMLAttributes<HTMLElement> {
   align?: Align;
 
   /**
-   * Offset from trigger
+   * Offset from trigger (in pixels)
    * @defaultValue 0
    */
   sideOffset?: number;
 
   /**
-   * Alignment offset
+   * Alignment offset (in pixels)
    * @defaultValue 0
    */
   alignOffset?: number;
 
   /**
-   * Automatically adjust position
+   * Automatically adjust position to avoid collisions
    * @defaultValue true
    */
   avoidCollisions?: boolean;
 
   /**
-   * Boundary for collision detection
+   * Boundary element for collision detection
+   * @defaultValue clippingAncestors
    */
-  collisionBoundary?: Element | null;
+  collisionBoundary?: Element | Element[] | null;
+
+  /**
+   * Padding from boundary edges (in pixels)
+   * @defaultValue 8
+   */
+  collisionPadding?: number;
 
   /**
    * Allow focus to loop through items
