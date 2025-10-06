@@ -264,17 +264,6 @@ export interface PopoverState {
 }
 
 /**
- * Position information for popover content
- */
-export interface PopoverPosition {
-  x: number;
-  y: number;
-  side: PopoverSide;
-  align: PopoverAlign;
-  transformOrigin: string;
-}
-
-/**
  * Context value for sharing popover state between components
  */
 export interface PopoverContextValue {
@@ -282,6 +271,8 @@ export interface PopoverContextValue {
   triggerRef: React.RefObject<HTMLElement | null>;
   contentRef: React.RefObject<HTMLDivElement | null>;
   anchorRef: React.RefObject<HTMLElement | null>;
+  arrowRef: React.RefObject<HTMLDivElement | null>;
+  floatingStyles: React.CSSProperties;
   modal: boolean;
   side: PopoverSide;
   align: PopoverAlign;

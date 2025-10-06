@@ -10,11 +10,22 @@ import React, {
   isValidElement,
 } from 'react';
 import { createPortal } from 'react-dom';
+import {
+  useFloating,
+  autoUpdate,
+  offset,
+  flip,
+  shift,
+  arrow,
+  size,
+  hide,
+  type Placement,
+  type Strategy,
+} from '@floating-ui/react-dom';
 import type {
   PopoverRootProps,
   PopoverContextValue,
   PopoverState,
-  PopoverPosition,
   PopoverSide,
   PopoverAlign,
   PopoverTriggerProps,
@@ -40,7 +51,7 @@ const usePopoverContext = () => {
 };
 
 /**
- * Custom hook for popover state management
+ * Custom hook for popover state management with Floating UI
  */
 const usePopover = (props: Omit<PopoverRootProps, 'children'>) => {
   const {
@@ -60,6 +71,60 @@ const usePopover = (props: Omit<PopoverRootProps, 'children'>) => {
   const isControlled = controlledOpen !== undefined;
   const isOpen = isControlled ? controlledOpen : internalOpen;
 
+  const arrowRef = useRef<HTMLDivElement | null>(null);
+  const anchorRef = useRef<HTMLElement | null>(null);
+
+  // Floating UI setup
+  const placement = getPlacement(side, align);
+  const {
+    x,
+    y,
+    strategy,
+    refs,
+    update,
+    placement: actualPlacement,
+  } = useFloating({
+    placement,
+    open: isOpen,
+    middleware: [
+      offset(sideOffset),
+      flip({
+        fallbackAxisSideDirection: 'start',
+      }),
+      shift({
+        padding: 8,
+      }),
+      arrow({
+        element: arrowRef,
+      }),
+      size({
+        apply({ availableWidth, availableHeight, elements }) {
+          Object.assign(elements.floating.style, {
+            maxWidth: `${availableWidth}px`,
+            maxHeight: `${availableHeight}px`,
+          });
+        },
+      }),
+      hide(),
+    ],
+    strategy: 'absolute' as Strategy,
+  });
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  // SSR safety
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Auto-update position
+  useEffect(() => {
+    if (!isOpen || !refs.reference.current || !refs.floating.current) return;
+
+    const cleanup = autoUpdate(refs.reference.current, refs.floating.current, update);
+    return cleanup;
+  }, [isOpen, refs.reference, refs.floating, update]);
+
   const [state, setState] = useState<PopoverState>({
     isOpen,
     triggerRect: null,
@@ -75,20 +140,25 @@ const usePopover = (props: Omit<PopoverRootProps, 'children'>) => {
     contentId,
   });
 
-  const triggerRef = useRef<HTMLElement | null>(null);
-  const contentRef = useRef<HTMLDivElement | null>(null);
-  const anchorRef = useRef<HTMLElement | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
-
-  // SSR safety - only create portal after mount
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // Update state when controlled prop changes
+  // Update state when open changes
   useEffect(() => {
     setState((prev) => ({ ...prev, isOpen }));
   }, [isOpen]);
+
+  // Update actual placement in state
+  useEffect(() => {
+    if (actualPlacement) {
+      const [actualSide, actualAlign] = actualPlacement.split('-') as [
+        PopoverSide,
+        PopoverAlign | undefined,
+      ];
+      setState((prev) => ({
+        ...prev,
+        actualSide,
+        actualAlign: actualAlign || 'center',
+      }));
+    }
+  }, [actualPlacement]);
 
   const openPopover = useCallback(() => {
     const newOpen = true;
@@ -119,9 +189,15 @@ const usePopover = (props: Omit<PopoverRootProps, 'children'>) => {
   return {
     state,
     setState,
-    triggerRef,
-    contentRef,
+    triggerRef: refs.reference,
+    contentRef: refs.floating,
     anchorRef,
+    arrowRef,
+    floatingStyles: {
+      position: strategy,
+      top: y ?? 0,
+      left: x ?? 0,
+    },
     modal,
     side,
     align,
@@ -135,81 +211,13 @@ const usePopover = (props: Omit<PopoverRootProps, 'children'>) => {
 };
 
 /**
- * Utility function to calculate popover position
+ * Utility function to convert side + align to Floating UI placement
  */
-const calculatePosition = (
-  triggerRect: DOMRect,
-  contentElement: HTMLElement,
-  side: PopoverSide,
-  align: PopoverAlign,
-  offset: number,
-  avoidCollisions: boolean = true,
-): PopoverPosition => {
-  const contentRect = contentElement.getBoundingClientRect();
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
-
-  let x = 0;
-  let y = 0;
-
-  // Calculate base position
-  switch (side) {
-    case 'top':
-      y = triggerRect.top - contentRect.height - offset;
-      break;
-    case 'bottom':
-      y = triggerRect.bottom + offset;
-      break;
-    case 'left':
-      x = triggerRect.left - contentRect.width - offset;
-      break;
-    case 'right':
-      x = triggerRect.right + offset;
-      break;
+const getPlacement = (side: PopoverSide, align: PopoverAlign): Placement => {
+  if (align === 'center') {
+    return side as Placement;
   }
-
-  // Calculate alignment
-  if (side === 'top' || side === 'bottom') {
-    switch (align) {
-      case 'start':
-        x = triggerRect.left;
-        break;
-      case 'center':
-        x = triggerRect.left + triggerRect.width / 2 - contentRect.width / 2;
-        break;
-      case 'end':
-        x = triggerRect.right - contentRect.width;
-        break;
-    }
-  } else {
-    switch (align) {
-      case 'start':
-        y = triggerRect.top;
-        break;
-      case 'center':
-        y = triggerRect.top + triggerRect.height / 2 - contentRect.height / 2;
-        break;
-      case 'end':
-        y = triggerRect.bottom - contentRect.height;
-        break;
-    }
-  }
-
-  // Collision detection and adjustment
-  if (avoidCollisions) {
-    // Adjust for viewport boundaries
-    if (x < 0) x = 8;
-    if (y < 0) y = 8;
-    if (x + contentRect.width > viewportWidth) x = viewportWidth - contentRect.width - 8;
-    if (y + contentRect.height > viewportHeight) y = viewportHeight - contentRect.height - 8;
-  }
-
-  // Calculate transform origin for animations
-  const originX = side === 'left' ? '100%' : side === 'right' ? '0%' : '50%';
-  const originY = side === 'top' ? '100%' : side === 'bottom' ? '0%' : '50%';
-  const transformOrigin = `${originX} ${originY}`;
-
-  return { x, y, side, align, transformOrigin };
+  return `${side}-${align}` as Placement;
 };
 
 /**
@@ -237,9 +245,11 @@ export const PopoverRoot = ({ children, ...props }: PopoverRootProps) => {
 
   const contextValue: PopoverContextValue = {
     state: popoverState.state,
-    triggerRef: popoverState.triggerRef,
-    contentRef: popoverState.contentRef,
+    triggerRef: popoverState.triggerRef as React.RefObject<HTMLElement | null>,
+    contentRef: popoverState.contentRef as React.RefObject<HTMLDivElement | null>,
     anchorRef: popoverState.anchorRef,
+    arrowRef: popoverState.arrowRef,
+    floatingStyles: popoverState.floatingStyles,
     modal: popoverState.modal,
     side: popoverState.side,
     align: popoverState.align,
@@ -306,7 +316,7 @@ export const PopoverTrigger = ({
 
   const triggerProps = {
     ref: (element: HTMLButtonElement | null) => {
-      triggerRef.current = element;
+      (triggerRef as React.MutableRefObject<HTMLButtonElement | null>).current = element;
       if (typeof ref === 'function') {
         ref(element);
       } else if (ref) {
@@ -360,56 +370,23 @@ export const PopoverContent = ({
   ...props
 }: PopoverContentProps) => {
   // Unused props for future implementation
+  void side;
+  void align;
+  void sideOffset;
   void alignOffset;
   void collisionBoundary;
   void hideWhenDetached;
+  void avoidCollisions;
 
-  const { state, triggerRef, contentRef, modal, closePopover } = usePopoverContext();
+  const { state, triggerRef, contentRef, floatingStyles, modal, closePopover } =
+    usePopoverContext();
 
-  const [position, setPosition] = useState<PopoverPosition>({
-    x: 0,
-    y: 0,
-    side,
-    align,
-    transformOrigin: '50% 0%',
-  });
   const [isMounted, setIsMounted] = useState(false);
 
   // SSR safety
   useEffect(() => {
     setIsMounted(true);
   }, []);
-
-  // Position calculation
-  useEffect(() => {
-    if (!state.isOpen || !triggerRef.current || !contentRef.current) return;
-
-    const updatePosition = () => {
-      const triggerRect = triggerRef.current!.getBoundingClientRect();
-      const newPosition = calculatePosition(
-        triggerRect,
-        contentRef.current!,
-        side,
-        align,
-        sideOffset,
-        avoidCollisions,
-      );
-      setPosition(newPosition);
-    };
-
-    updatePosition();
-
-    const handleResize = () => updatePosition();
-    const handleScroll = () => updatePosition();
-
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('scroll', handleScroll, true);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleScroll, true);
-    };
-  }, [state.isOpen, side, align, sideOffset, avoidCollisions]);
 
   // Focus management
   useEffect(() => {
@@ -430,11 +407,11 @@ export const PopoverContent = ({
     return () => {
       // Return focus to trigger when closing
       if (triggerRef.current) {
-        triggerRef.current.focus();
+        (triggerRef.current as HTMLElement).focus();
         onCloseAutoFocus?.(new Event('closeautofocus'));
       }
     };
-  }, [state.isOpen, onOpenAutoFocus, onCloseAutoFocus]);
+  }, [state.isOpen, onOpenAutoFocus, onCloseAutoFocus, contentRef, triggerRef]);
 
   // Escape key handling
   useEffect(() => {
@@ -500,6 +477,8 @@ export const PopoverContent = ({
     onPointerDownOutside,
     onFocusOutside,
     onInteractOutside,
+    contentRef,
+    triggerRef,
   ]);
 
   // Focus trapping
@@ -532,7 +511,7 @@ export const PopoverContent = ({
 
     contentElement.addEventListener('keydown', handleTabKey);
     return () => contentElement.removeEventListener('keydown', handleTabKey);
-  }, [state.isOpen, trapFocus]);
+  }, [state.isOpen, trapFocus, contentRef]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -558,7 +537,7 @@ export const PopoverContent = ({
   const contentElement = (
     <div
       ref={(element: HTMLDivElement | null) => {
-        contentRef.current = element;
+        (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = element;
         if (typeof ref === 'function') {
           ref(element);
         } else if (ref) {
@@ -570,20 +549,13 @@ export const PopoverContent = ({
       aria-modal={modal ? 'true' : undefined}
       tabIndex={-1}
       data-state='open'
-      data-side={position.side}
-      data-align={position.align}
-      style={
-        {
-          position: 'absolute',
-          left: position.x,
-          top: position.y,
-          '--popover-content-transform-origin': position.transformOrigin,
-          '--popover-content-available-width': `${window.innerWidth - position.x - 16}px`,
-          '--popover-content-available-height': `${window.innerHeight - position.y - 16}px`,
-          zIndex: 50,
-          ...style,
-        } as React.CSSProperties
-      }
+      data-side={state.actualSide}
+      data-align={state.actualAlign}
+      style={{
+        ...floatingStyles,
+        zIndex: 50,
+        ...style,
+      }}
       onKeyDown={handleKeyDown}
       {...props}
     >
@@ -617,7 +589,7 @@ export const PopoverAnchor = ({ asChild = false, children, ref, ...props }: Popo
 
   const anchorProps = {
     ref: (element: HTMLDivElement | null) => {
-      anchorRef.current = element;
+      (anchorRef as React.MutableRefObject<HTMLDivElement | null>).current = element;
       if (typeof ref === 'function') {
         ref(element);
       } else if (ref) {
@@ -684,13 +656,23 @@ export const PopoverArrow = ({
   ref,
   ...props
 }: PopoverArrowProps) => {
-  const { state } = usePopoverContext();
+  const { state, arrowRef } = usePopoverContext();
+
+  // Unused prop for future implementation
+  void offset;
 
   if (!state.isOpen) return null;
 
   return (
     <div
-      ref={ref}
+      ref={(element: HTMLDivElement | null) => {
+        (arrowRef as React.MutableRefObject<HTMLDivElement | null>).current = element;
+        if (typeof ref === 'function') {
+          ref(element);
+        } else if (ref) {
+          ref.current = element;
+        }
+      }}
       role='presentation'
       data-side={state.actualSide}
       style={
@@ -698,7 +680,6 @@ export const PopoverArrow = ({
           position: 'absolute',
           width,
           height,
-          '--popover-arrow-offset': `${offset}px`,
           ...style,
         } as React.CSSProperties
       }
