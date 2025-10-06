@@ -6,6 +6,8 @@ description: Accessible radio group component for mutually exclusive selections 
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Radio, RadioGroup, RadioItem } from '@turkish-technology/glide';
 
 # Radio
 
@@ -73,6 +75,44 @@ import { RadioGroup, RadioItem } from '@turkish-technology/glide'
 ## Anatomy
 
 The Radio component is built as a compound component with two main parts:
+
+<AnatomyViewer
+  parts={[
+    { name: 'group', label: 'Radio.Group', description: 'Context and state provider' },
+    { name: 'item', label: 'Radio.Item', description: 'Individual radio option' },
+  ]}
+>
+  <Radio.Group
+    data-glide-part="group"
+    defaultValue="option1"
+    aria-label="Basic radio group"
+    style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '16px', border: '1px solid #ccc' }}
+  >
+    <Radio.Item
+      data-glide-part="item"
+      value="option1"
+      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
+    >
+      Option 1
+    </Radio.Item>
+    <Radio.Item
+      data-glide-part="item"
+      value="option2"
+      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
+    >
+      Option 2
+    </Radio.Item>
+    <Radio.Item
+      data-glide-part="item"
+      value="option3"
+      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
+    >
+      Option 3
+    </Radio.Item>
+  </Radio.Group>
+</AnatomyViewer>
+
+### Structure
 
 ```tsx
 <Radio.Group>
