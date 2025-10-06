@@ -6,6 +6,8 @@ description: A headless accordion component that supports single and multiple pa
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Accordion, AccordionItem, AccordionHeader, AccordionTrigger, AccordionContent } from '@turkish-technology/glide';
 
 # Accordion
 
@@ -119,7 +121,75 @@ import {
 
 ## Anatomy
 
-```jsx
+The Accordion component is built as a compound component with multiple parts:
+
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'Accordion', description: 'Root context provider' },
+    { name: 'item', label: 'AccordionItem', description: 'Single collapsible section' },
+    { name: 'header', label: 'AccordionHeader', description: 'Semantic heading wrapper' },
+    { name: 'trigger', label: 'AccordionTrigger', description: 'Toggle button' },
+    { name: 'content', label: 'AccordionContent', description: 'Collapsible content panel' },
+  ]}
+>
+  <div style={{ width: '500px' }} data-glide-part="root">
+    <Accordion isCollapsible={true} style={{ padding: '12px' }}>
+      <AccordionItem value="item1" data-glide-part="item">
+        <AccordionHeader data-glide-part="header">
+          <AccordionTrigger
+            data-glide-part="trigger"
+            style={{
+              width: '100%',
+              padding: '12px',
+              border: '1px solid #ccc',
+            }}
+          >
+            What is Glide Accordion?
+          </AccordionTrigger>
+        </AccordionHeader>
+        <AccordionContent
+          data-glide-part="content"
+          style={{
+            padding: '12px',
+            margin: '12px 0',
+            border: '1px solid #ccc',
+          }}
+        >
+          Glide Accordion is a headless, accessible React component with no default styling.
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem value="item2" data-glide-part="item">
+        <AccordionHeader data-glide-part="header">
+          <AccordionTrigger
+            data-glide-part="trigger"
+            style={{
+              width: '100%',
+              padding: '12px',
+              border: '1px solid #ccc',
+            }}
+          >
+            How to use it?
+          </AccordionTrigger>
+        </AccordionHeader>
+        <AccordionContent
+          data-glide-part="content"
+          style={{
+            padding: '12px',
+            margin: '12px 0',
+            border: '1px solid #ccc',
+          }}
+        >
+          Simply import the components and compose them together. Add your own CSS for styling.
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  </div>
+</AnatomyViewer>
+
+### Structure
+
+```tsx
 <Accordion>
   <AccordionItem value="item-1">
     <AccordionHeader>
@@ -127,11 +197,11 @@ import {
     </AccordionHeader>
     <AccordionContent>...</AccordionContent>
   </AccordionItem>
-  ...
 </Accordion>
 ```
 
-- `Accordion`: Root context provider
+**Data Flow:**
+- `Accordion`: Root context provider that manages state
 - `AccordionItem`: Represents a single collapsible section
 - `AccordionHeader`: Semantic heading wrapper for proper document structure
 - `AccordionTrigger`: Button to toggle the item
