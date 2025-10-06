@@ -6,6 +6,8 @@ description: A headless collapsible component that manages the visibility of con
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/glide';
 
 # Collapsible
 
@@ -62,17 +64,48 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-te
 
 ## Anatomy
 
-```
-CollapsibleRoot
-├── CollapsibleTrigger    // Button that toggles visibility
-└── CollapsibleContent    // Container for collapsible content
-```
-
 The Collapsible component consists of three main parts:
 
-- **Root**: Provides context and state management for the collapsible
-- **Trigger**: Interactive element that toggles the content visibility
-- **Content**: Container that shows/hides based on the collapsible state
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'Collapsible', description: 'Context and state provider' },
+    { name: 'trigger', label: 'CollapsibleTrigger', description: 'Toggle button' },
+    { name: 'content', label: 'CollapsibleContent', description: 'Collapsible content container' },
+  ]}
+>
+  <Collapsible data-glide-part="root">
+    <CollapsibleTrigger
+      data-glide-part="trigger"
+      style={{
+        padding: '8px 12px',
+        background: '#f0f0f0',
+        border: 'none',
+      }}
+    >
+      Show Content
+    </CollapsibleTrigger>
+    <CollapsibleContent
+      data-glide-part="content"
+      style={{ marginTop: '8px', padding: '8px' }}
+    >
+      <p>This content can be collapsed and expanded.</p>
+    </CollapsibleContent>
+  </Collapsible>
+</AnatomyViewer>
+
+### Structure
+
+```tsx
+<Collapsible>
+  <CollapsibleTrigger />
+  <CollapsibleContent />
+</Collapsible>
+```
+
+**Data Flow:**
+- `Collapsible`: Provides context and state management for the collapsible
+- `CollapsibleTrigger`: Interactive element that toggles the content visibility
+- `CollapsibleContent`: Container that shows/hides based on the collapsible state
 
 ## Code Examples
 
