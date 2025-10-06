@@ -3,6 +3,15 @@ import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { themes } from 'prism-react-renderer';
 import {
+  Accordion,
+  AccordionItem,
+  AccordionHeader,
+  AccordionTrigger,
+  AccordionContent,
+  Button,
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
   PopoverRoot,
   PopoverTrigger,
   PopoverContent,
@@ -10,8 +19,10 @@ import {
   PopoverPortal,
   PopoverAnchor,
   PopoverClose,
+  Radio,
+  RadioGroup,
+  RadioItem,
 } from '@turkish-technology/glide';
-
 interface LiveCodeProps {
   title?: string;
   code?: string;
@@ -68,7 +79,22 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     PopoverPortal,
     PopoverAnchor,
     PopoverClose,
-    // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
+    // Accordion components
+    Accordion,
+    AccordionItem,
+    AccordionHeader,
+    AccordionTrigger,
+    AccordionContent,
+    // Button component
+    Button,
+    // Collapsible components
+    Collapsible,
+    CollapsibleTrigger,
+    CollapsibleContent,
+    // Radio components
+    Radio,
+    RadioGroup,
+    RadioItem,
   };
 
   const [copied, setCopied] = useState(false);
