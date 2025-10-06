@@ -2,7 +2,20 @@ import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { themes } from 'prism-react-renderer';
+
 import {
+  Accordion,
+  AccordionItem,
+  AccordionHeader,
+  AccordionTrigger,
+  AccordionContent,
+  Button,
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+  Radio,
+  RadioGroup,
+  RadioItem,
   TooltipProvider,
   TooltipRoot,
   TooltipTrigger,
@@ -10,7 +23,6 @@ import {
   TooltipPortal,
   TooltipArrow,
 } from '@turkish-technology/glide';
-
 interface LiveCodeProps {
   title?: string;
   code?: string;
@@ -60,6 +72,22 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
+    // Accordion components
+    Accordion,
+    AccordionItem,
+    AccordionHeader,
+    AccordionTrigger,
+    AccordionContent,
+    // Button component
+    Button,
+    // Collapsible components
+    Collapsible,
+    CollapsibleTrigger,
+    CollapsibleContent,
+    // Radio components
+    Radio,
+    RadioGroup,
+    RadioItem,
     // Glide Tooltip components
     TooltipProvider,
     TooltipRoot,
