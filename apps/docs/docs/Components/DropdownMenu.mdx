@@ -508,7 +508,8 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 | `sideOffset?` | `number` | `0` | Distance in pixels from trigger |
 | `alignOffset?` | `number` | `0` | Offset along alignment axis |
 | `avoidCollisions?` | `boolean` | `true` | Automatically adjust position to avoid viewport edges |
-| `collisionBoundary?` | `Element \| null` | `null` | Boundary element for collision detection |
+| `collisionBoundary?` | `Element \| Element[] \| null` | `null` | Boundary element(s) for collision detection |
+| `collisionPadding?` | `number` | `8` | Padding from boundary edges in pixels |
 | `loop?` | `boolean` | `false` | Whether keyboard navigation loops through items |
 | `onEscapeKeyDown?` | `(event: KeyboardEvent) => void` | `undefined` | Escape key handler |
 | `onPointerDownOutside?` | `(event: PointerEvent) => void` | `undefined` | Outside click handler |

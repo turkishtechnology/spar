@@ -508,7 +508,6 @@ export const DropdownMenuContent = ({
           position: strategy,
           top: y ?? 0,
           left: x ?? 0,
-          zIndex: 9999,
           ...props.style,
         }}
       />
