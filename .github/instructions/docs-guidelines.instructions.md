@@ -32,7 +32,7 @@ Every component documentation page MUST follow this exact structure:
 
 #### DON'T
 - ❌ Keyboard navigation
-- ❌ Accecbility features
+- ❌ Accessibility features
 - ❌ Aria and Data attributes
 - ❌ Zero styling and styling hooks
 - ❌ Compound component
@@ -40,11 +40,12 @@ Every component documentation page MUST follow this exact structure:
 ### 4. Installation
 - Import statements
 
-### 5. Anatomy Diagram
-- Visual component tree structure
-- Shows all compound component parts
-- Hierarchical relationship diagram
-- Data flow indicators where relevant
+### 5. Anatomy Viewer
+- Interactive component anatomy using `AnatomyViewer` component
+- Shows all compound component parts with hover highlighting
+- Parts list with descriptions
+- Live demo with `data-glide-part` attributes
+- Data flow explanation after the viewer
 
 ### 6. Code Examples
 - Multiple progressive examples without `LiveCode` component
@@ -156,6 +157,61 @@ const scope = {
   // etc.
 };
 ```
+
+## AnatomyViewer Component Integration
+
+### AnatomyViewer Props
+- `parts`: Array of anatomy parts with name, label, and optional description
+- `children`: Demo component with data-glide-part attributes
+
+**IMPORTANT**: Use the same demo code from LiveCode section, only add `data-glide-part` attributes to each compound part.
+
+### AnatomyViewer Usage Pattern
+
+```tsx
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'Root', description: 'Container managing state' },
+    { name: 'trigger', label: 'Trigger', description: 'Interactive element' },
+    { name: 'content', label: 'Content', description: 'Content container' },
+  ]}
+>
+  <ComponentName.Root data-glide-part="root">
+    <ComponentName.Trigger
+      data-glide-part="trigger"
+      style={{ padding: '8px 16px', border: '1px solid #ccc' }}
+    >
+      Trigger
+    </ComponentName.Trigger>
+    <ComponentName.Content
+      data-glide-part="content"
+      style={{ border: '1px solid #ccc', padding: '8px' }}
+    >
+      Content
+    </ComponentName.Content>
+  </ComponentName.Root>
+</AnatomyViewer>
+```
+
+### AnatomyViewer Best Practices
+
+#### DO
+- ✅ Use the exact same demo code from LiveCode section
+- ✅ Add data-glide-part attribute to every compound part
+- ✅ Use basic inline styles for visibility (same as LiveCode)
+- ✅ Include all compound parts in the parts array
+- ✅ Provide clear, concise descriptions for each part
+- ✅ Follow with a Structure code block showing the hierarchy
+- ✅ Add Data Flow explanation after the viewer
+
+#### DON'T
+- ❌ Create a different demo than LiveCode
+- ❌ Skip any compound parts
+- ❌ Use complex or styled demos
+- ❌ Forget data-glide-part attributes
+- ❌ Omit descriptions from parts array
+- ❌ Include non-interactive or non-compound components
+
 ## Code Examples Integration
 
 ### Code Examples Usage Pattern
@@ -223,6 +279,8 @@ description: [Brief description for SEO]
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { [ComponentName] } from '@turkish-technology/glide';
  
 # [ComponentName]
  
@@ -260,9 +318,46 @@ import { [ComponentName] } from '@turkish-technology/glide'
 ```
  
 ## Anatomy
- 
-[Component hierarchy diagram]
- 
+
+The [ComponentName] component is built as a compound component with multiple parts:
+
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'Root', description: 'Container managing state' },
+    { name: 'trigger', label: 'Trigger', description: 'Interactive trigger element' },
+    { name: 'content', label: 'Content', description: 'Content container' },
+    // Add all compound parts with their descriptions
+  ]}
+>
+  <ComponentName.Root data-glide-part="root">
+    <ComponentName.Trigger
+      data-glide-part="trigger"
+      style={{
+        padding: '8px 16px',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        background: 'white',
+        cursor: 'pointer',
+      }}
+    >
+      Trigger Text
+    </ComponentName.Trigger>
+    <ComponentName.Content
+      data-glide-part="content"
+      style={{
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        background: 'white',
+        padding: '8px',
+      }}
+    >
+      Content here
+    </ComponentName.Content>
+  </ComponentName.Root>
+</AnatomyViewer>
+
+### Structure
+
 ```tsx
 <ComponentName.Root>
   <ComponentName.Trigger />
@@ -271,6 +366,12 @@ import { [ComponentName] } from '@turkish-technology/glide'
   </ComponentName.Content>
 </ComponentName.Root>
 ```
+
+**Data Flow:**
+- `ComponentName.Root` manages state and provides context
+- `ComponentName.Trigger` controls visibility and manages focus
+- `ComponentName.Content` handles positioning and behavior
+- [Add relevant data flow explanation]
 
 ## Code Examples
 

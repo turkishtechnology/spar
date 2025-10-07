@@ -53,6 +53,58 @@ useEffect(() => {
 }, [dependency]); // Clear why dependency is needed
 ```
 
+## ARIA Attributes Standards
+
+### Type Safety for ARIA Properties
+
+```typescript
+// ALWAYS: Use React.AriaAttributes for aria-* props when available
+interface ComponentProps extends React.HTMLAttributes<HTMLElement> {
+  /**
+   * EXAMPLE: Use React's typed ARIA attributes
+   */
+  'aria-label'?: React.AriaAttributes['aria-label'];
+  'aria-describedby'?: React.AriaAttributes['aria-describedby'];
+  
+  /**
+   * Role with React's predefined types
+   */
+  role?: React.AriaRole;
+}
+
+// NEVER: Generic string for standard ARIA attributes
+interface BadProps {
+  'aria-label'?: string; // Should use React.AriaAttributes['aria-label']
+}
+```
+
+### ARIA Implementation Priority
+
+1. **First Priority**: Use `React.AriaAttributes['aria-*']` if available
+2. **Fallback**: Use `string` only for truly custom attributes
+
+## File Organization Standards
+
+### File Separation Rule
+**ALWAYS**: Each logical component gets its own file. Never mix multiple component definitions in a single file.
+
+**Simple Component Example:**
+```
+Button/
+└── Button.tsx    # Single component
+```
+
+**Compound Component Example:**
+```
+Accordion/
+├── Accordion.tsx        # Root component
+├── AccordionItem.tsx    # Item component
+├── AccordionTrigger.tsx # Trigger component
+└── AccordionContent.tsx # Content component
+```
+
+
+
 ## Component Architecture
 
 ### Component Template
@@ -137,6 +189,9 @@ const [requestState, setRequestState] = useState<RequestState>({
 
 ### Module Exports
 
+**Important: Avoid Generic Aliases**
+Never export generic names like `Root`, `Item`, `Trigger` from component index files as they cause naming conflicts when multiple components have the same part names. Always use component-specific names or dot notation patterns.
+
 #### Simple Components
 
 ```typescript
@@ -155,28 +210,34 @@ import { AccordionHeader } from './AccordionHeader';
 import { AccordionTrigger } from './AccordionTrigger';
 import { AccordionContent } from './AccordionContent';
 
-// Aliased exports for grouped usage
-const Root = Accordion;
-const Item = AccordionItem;
-const Header = AccordionHeader;
-const Trigger = AccordionTrigger;
-const Content = AccordionContent;
+// Create compound component with dot notation support
+const AccordionCompound = Accordion as typeof Accordion & {
+  Root: typeof Accordion;
+  Item: typeof AccordionItem;
+  Header: typeof AccordionHeader;
+  Trigger: typeof AccordionTrigger;
+  Content: typeof AccordionContent;
+};
 
-// Export both named components AND aliases
+AccordionCompound.Root = Accordion;
+AccordionCompound.Item = AccordionItem;
+AccordionCompound.Header = AccordionHeader;
+AccordionCompound.Trigger = AccordionTrigger;
+AccordionCompound.Content = AccordionContent;
+
+// Export both patterns
 export {
-  // Named exports (for direct imports)
-  Accordion,
+  // Compound component (with dot notation)
+  Accordion: AccordionCompound,
+
+  // Named exports (tree-shakeable)
   AccordionItem,
   AccordionHeader,
   AccordionTrigger,
   AccordionContent,
 
-  // Aliased exports (for grouped pattern)
-  Root,
-  Item,
-  Header,
-  Trigger,
-  Content,
+  // Root alias for explicit usage
+  AccordionRoot: Accordion,
 };
 
 // Export types
@@ -189,8 +250,13 @@ export type {
 } from './types';
 
 // Usage examples:
-// Direct import: import { AccordionTrigger } from '@glide/components';
-// Grouped import: import { Root, Trigger, Content } from '@glide/components/Accordion';
+// 1. Dot notation (compound): 
+//    import { Accordion } from '@glide/components';
+//    <Accordion.Root><Accordion.Trigger /></Accordion.Root>
+// 
+// 2. Named imports (tree-shakeable): 
+//    import { AccordionRoot, AccordionTrigger } from '@glide/components';
+//    <AccordionRoot><AccordionTrigger /></AccordionRoot>
 ```
 
 #### Root Index Exports
