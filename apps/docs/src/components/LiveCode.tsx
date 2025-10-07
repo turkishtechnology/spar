@@ -16,6 +16,7 @@ import {
   Radio,
   RadioGroup,
   RadioItem,
+  Checkbox,
 } from '@turkish-technology/glide';
 interface LiveCodeProps {
   title?: string;
@@ -66,6 +67,7 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
+    // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
     // Accordion components
     Accordion,
     AccordionItem,
@@ -82,6 +84,8 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Radio,
     RadioGroup,
     RadioItem,
+    // Checkbox component
+    Checkbox,
   };
 
   const [copied, setCopied] = useState(false);
