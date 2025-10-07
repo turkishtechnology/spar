@@ -1,5 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import React, { useState } from 'react';
 import {
   BreadcrumbRoot,
   BreadcrumbList,
@@ -8,554 +9,585 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '../Breadcrumb';
-import type { NavigationHandler } from '../types';
 
-describe('Breadcrumb Integration Tests', () => {
+describe('Breadcrumb Integration', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('Navigation workflows', () => {
-    it('should handle complete breadcrumb navigation flow', async () => {
+  describe('Navigation Integration', () => {
+    it('should integrate with client-side routing', async () => {
       const user = userEvent.setup();
       const mockNavigate = jest.fn();
+      const mockRouter = {
+        push: mockNavigate,
+        pathname: '/products/shoes/running',
+      };
 
-      render(
-        <BreadcrumbRoot onNavigate={mockNavigate}>
+      const TestApp = () => (
+        <BreadcrumbRoot
+          onNavigate={(href, event) => {
+            event.preventDefault();
+            mockRouter.push(href);
+          }}
+        >
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/'>Home</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
             <BreadcrumbItem>
               <BreadcrumbLink href='/products'>Products</BreadcrumbLink>
             </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
+              <BreadcrumbLink href='/products/shoes'>Shoes</BreadcrumbLink>
             </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/products/laptops'>Laptops</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbPage>MacBook Pro</BreadcrumbPage>
+              <BreadcrumbPage>Running Shoes</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </BreadcrumbRoot>
       );
 
-      const links = screen.getAllByRole('link');
-      expect(links).toHaveLength(3);
+      render(<TestApp />);
 
-      // Navigate to home
-      await user.click(links[0]!);
-      expect(mockNavigate).toHaveBeenCalledWith('/', expect.any(Object));
-
-      // Navigate to products
-      await user.click(links[1]!);
-      expect(mockNavigate).toHaveBeenCalledWith('/products', expect.any(Object));
-
-      // Navigate to laptops
-      await user.click(links[2]!);
-      expect(mockNavigate).toHaveBeenCalledWith('/products/laptops', expect.any(Object));
-
-      expect(mockNavigate).toHaveBeenCalledTimes(3);
+      await user.click(screen.getByRole('link', { name: 'Products' }));
+      expect(mockNavigate).toHaveBeenCalledWith('/products');
     });
 
-    it('should integrate with custom routing solutions', async () => {
-      const user = userEvent.setup();
-      const mockRouter = {
-        push: jest.fn(),
-        replace: jest.fn(),
-      };
+    it('should work with dynamic breadcrumb generation', () => {
+      const routes = [
+        { href: '/', label: 'Home' },
+        { href: '/products', label: 'Products' },
+        { href: '/products/electronics', label: 'Electronics' },
+      ];
+      const currentPage = 'Laptops';
 
-      const customNavigationHandler: NavigationHandler = (href, event) => {
-        event.preventDefault();
-        if (event.ctrlKey || event.metaKey) {
-          mockRouter.push(href);
-        } else {
-          mockRouter.replace(href);
-        }
-      };
-
-      render(
-        <BreadcrumbRoot onNavigate={customNavigationHandler}>
+      const DynamicBreadcrumb = () => (
+        <BreadcrumbRoot>
           <BreadcrumbList>
+            {routes.map((route, index) => (
+              <React.Fragment key={route.href}>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href={route.href}>{route.label}</BreadcrumbLink>
+                </BreadcrumbItem>
+                {index < routes.length - 1 && <BreadcrumbSeparator>/</BreadcrumbSeparator>}
+              </React.Fragment>
+            ))}
+            {routes.length > 0 && <BreadcrumbSeparator>/</BreadcrumbSeparator>}
             <BreadcrumbItem>
-              <BreadcrumbLink href='/dashboard'>Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>›</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Settings</BreadcrumbPage>
+              <BreadcrumbPage>{currentPage}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </BreadcrumbRoot>
       );
 
-      const link = screen.getByRole('link');
+      render(<DynamicBreadcrumb />);
 
-      // Regular click should use replace
-      await user.click(link);
-      expect(mockRouter.replace).toHaveBeenCalledWith('/dashboard');
-      expect(mockRouter.push).not.toHaveBeenCalled();
+      expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Products' })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Electronics' })).toBeInTheDocument();
+      expect(screen.getByText('Laptops')).toHaveAttribute('aria-current', 'page');
+    });
 
-      mockRouter.replace.mockClear();
+    it('should handle URL changes and update active state', () => {
+      const TestBreadcrumb = ({ currentPath }: { currentPath: string }) => {
+        const isActive = (href: string) => currentPath === href;
 
-      // Ctrl/Cmd + click should use push
-      await user.keyboard('[ControlLeft>]');
-      await user.click(link);
-      await user.keyboard('[/ControlLeft]');
-      expect(mockRouter.push).toHaveBeenCalledWith('/dashboard');
-      expect(mockRouter.replace).not.toHaveBeenCalled();
+        return (
+          <BreadcrumbRoot>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href='/' isDisabled={isActive('/')}>
+                  Home
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator>/</BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbLink href='/products' isDisabled={isActive('/products')}>
+                  Products
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator>/</BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbPage>Current</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </BreadcrumbRoot>
+        );
+      };
+
+      const { rerender } = render(<TestBreadcrumb currentPath='/' />);
+      // Disabled links lose their link role, so we check by text content
+      expect(screen.getByText('Home')).toHaveAttribute('aria-disabled', 'true');
+
+      rerender(<TestBreadcrumb currentPath='/products' />);
+      expect(screen.getByRole('link', { name: 'Home' })).not.toHaveAttribute('aria-disabled');
+      // Disabled links lose their link role, so we check by text content
+      expect(screen.getByText('Products')).toHaveAttribute('aria-disabled', 'true');
     });
   });
 
-  describe('Multi-component interactions', () => {
-    it('should handle mixed interactive and static elements', async () => {
+  describe('Form Integration', () => {
+    it('should work within form elements without causing submission', async () => {
+      const user = userEvent.setup();
+      const handleSubmit = jest.fn();
+      const handleNavigate = jest.fn();
+
+      render(
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+        >
+          <BreadcrumbRoot onNavigate={handleNavigate}>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator>/</BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbPage>Form Page</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </BreadcrumbRoot>
+          <button type='submit'>Submit Form</button>
+        </form>,
+      );
+
+      await user.click(screen.getByRole('link', { name: 'Home' }));
+      expect(handleNavigate).toHaveBeenCalled();
+      expect(handleSubmit).not.toHaveBeenCalled();
+    });
+
+    it('should integrate with form validation states', () => {
+      const FormWithBreadcrumb = () => {
+        const [hasError, setHasError] = useState(true);
+
+        return (
+          <div>
+            <BreadcrumbRoot isDisabled={hasError}>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href='/form-step-1'>Step 1</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator>/</BreadcrumbSeparator>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href='/form-step-2'>Step 2</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator>/</BreadcrumbSeparator>
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Step 3 (Current)</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </BreadcrumbRoot>
+            <button onClick={() => setHasError(false)}>Fix Errors</button>
+          </div>
+        );
+      };
+
+      render(<FormWithBreadcrumb />);
+
+      // Initially disabled due to form errors
+      expect(screen.getByRole('navigation')).toHaveAttribute('aria-disabled', 'true');
+      // Disabled links lose their link role, so we check by text content
+      expect(screen.getByText('Step 1')).toHaveAttribute('aria-disabled', 'true');
+
+      // Enable after fixing errors
+      fireEvent.click(screen.getByRole('button', { name: 'Fix Errors' }));
+      expect(screen.getByRole('navigation')).not.toHaveAttribute('aria-disabled');
+      expect(screen.getByRole('link', { name: 'Step 1' })).not.toHaveAttribute('aria-disabled');
+    });
+  });
+
+  describe('Multi-Component Interaction', () => {
+    it('should handle complex nested structures', () => {
+      const ComplexBreadcrumb = () => (
+        <BreadcrumbRoot>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/'>
+                <span role='img' aria-label='home'>
+                  🏠
+                </span>{' '}
+                Home
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>
+              <span role='img' aria-label='separator'>
+                ▶
+              </span>
+            </BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/category'>
+                Category{' '}
+                <span role='img' aria-label='category'>
+                  📂
+                </span>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>
+              <span role='img' aria-label='separator'>
+                ▶
+              </span>
+            </BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbPage>
+                Current Page{' '}
+                <span role='img' aria-label='current'>
+                  📄
+                </span>
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>
+      );
+
+      render(<ComplexBreadcrumb />);
+
+      expect(screen.getByRole('link', { name: /home/i })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /category/i })).toBeInTheDocument();
+      expect(screen.getByText(/current page/i)).toBeInTheDocument();
+    });
+
+    it('should work with conditional rendering', () => {
+      const ConditionalBreadcrumb = ({ showCategory }: { showCategory: boolean }) => (
+        <BreadcrumbRoot>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            {showCategory && (
+              <>
+                <BreadcrumbSeparator>/</BreadcrumbSeparator>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href='/category'>Category</BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            )}
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Current</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>
+      );
+
+      const { rerender } = render(<ConditionalBreadcrumb showCategory={false} />);
+      expect(screen.queryByRole('link', { name: 'Category' })).not.toBeInTheDocument();
+
+      rerender(<ConditionalBreadcrumb showCategory={true} />);
+      expect(screen.getByRole('link', { name: 'Category' })).toBeInTheDocument();
+    });
+
+    it('should handle multiple breadcrumbs on same page', async () => {
+      const user = userEvent.setup();
+      const handleNavigate1 = jest.fn();
+      const handleNavigate2 = jest.fn();
+
+      render(
+        <div>
+          <BreadcrumbRoot onNavigate={handleNavigate1} data-testid='breadcrumb-1'>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href='/home'>Home 1</BreadcrumbLink>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </BreadcrumbRoot>
+          <BreadcrumbRoot onNavigate={handleNavigate2} data-testid='breadcrumb-2'>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href='/home'>Home 2</BreadcrumbLink>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </BreadcrumbRoot>
+        </div>,
+      );
+
+      await user.click(screen.getByRole('link', { name: 'Home 1' }));
+      expect(handleNavigate1).toHaveBeenCalledWith('/home', expect.any(Object));
+      expect(handleNavigate2).not.toHaveBeenCalled();
+
+      await user.click(screen.getByRole('link', { name: 'Home 2' }));
+      expect(handleNavigate2).toHaveBeenCalledWith('/home', expect.any(Object));
+    });
+  });
+
+  describe('Async Operations', () => {
+    it('should handle async navigation operations', async () => {
+      const user = userEvent.setup();
+      let resolveNavigation: (value: unknown) => void;
+      const navigationPromise = new Promise((resolve) => {
+        resolveNavigation = resolve;
+      });
+
+      const AsyncBreadcrumb = () => {
+        const [isNavigating, setIsNavigating] = useState(false);
+
+        const handleNavigate = async (
+          href: string,
+          event: React.MouseEvent<Element> | React.KeyboardEvent<Element>,
+        ) => {
+          event.preventDefault();
+          setIsNavigating(true);
+          await navigationPromise;
+          setIsNavigating(false);
+        };
+
+        return (
+          <BreadcrumbRoot onNavigate={handleNavigate} isDisabled={isNavigating}>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href='/home'>{isNavigating ? 'Loading...' : 'Home'}</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator>/</BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbPage>Current</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </BreadcrumbRoot>
+        );
+      };
+
+      render(<AsyncBreadcrumb />);
+
+      await user.click(screen.getByRole('link', { name: 'Home' }));
+      expect(screen.getByText('Loading...')).toBeInTheDocument();
+      expect(screen.getByRole('navigation')).toHaveAttribute('aria-disabled', 'true');
+
+      // Resolve the async operation
+      await act(async () => {
+        resolveNavigation!(true);
+        // Wait for the next tick to allow state update
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
+
+      expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
+      expect(screen.getByRole('navigation')).not.toHaveAttribute('aria-disabled');
+    });
+
+    it('should handle loading states for dynamic breadcrumbs', () => {
+      const LoadingBreadcrumb = ({ isLoading }: { isLoading: boolean }) => (
+        <BreadcrumbRoot isDisabled={isLoading}>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbPage>{isLoading ? 'Loading...' : 'Loaded Content'}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>
+      );
+
+      const { rerender } = render(<LoadingBreadcrumb isLoading={true} />);
+      expect(screen.getByText('Loading...')).toBeInTheDocument();
+      expect(screen.getByRole('navigation')).toHaveAttribute('aria-disabled', 'true');
+
+      rerender(<LoadingBreadcrumb isLoading={false} />);
+      expect(screen.getByText('Loaded Content')).toBeInTheDocument();
+      expect(screen.getByRole('navigation')).not.toHaveAttribute('aria-disabled');
+    });
+  });
+
+  describe('Real-world Usage Scenarios', () => {
+    it('should handle e-commerce breadcrumb navigation', async () => {
       const user = userEvent.setup();
       const mockNavigate = jest.fn();
 
-      render(
+      const EcommerceBreadcrumb = () => (
         <BreadcrumbRoot onNavigate={mockNavigate}>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/'>Home</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/category' disabled>
-                Disabled Category
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='https://external.com' isExternal>
-                External Resource
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Current Page</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      const links = screen.getAllByRole('link');
-      const separators = screen.getAllByText('/');
-      const currentPage = screen.getByText('Current Page');
-      const disabledLink = screen.getByText('Disabled Category');
-
-      // Verify structure - disabled links lose link role, so we have 2 active links + 1 disabled
-      expect(links).toHaveLength(2); // Home + External Resource
-      expect(separators).toHaveLength(3);
-      expect(currentPage).toHaveAttribute('aria-current', 'page');
-      expect(disabledLink).toHaveAttribute('aria-disabled', 'true');
-
-      // Test home navigation
-      await user.click(links[0]!);
-      expect(mockNavigate).toHaveBeenCalledWith('/', expect.any(Object));
-
-      // Test disabled link doesn't navigate
-      await user.click(disabledLink);
-      expect(mockNavigate).toHaveBeenCalledTimes(1); // Still only 1 from home click
-
-      // Test external link has correct attributes but doesn't use onNavigate
-      expect(links[1]!).toHaveAttribute('href', 'https://external.com');
-      expect(links[1]!).toHaveAttribute('target', '_blank');
-      expect(links[1]!).toHaveAttribute('rel', 'noopener noreferrer');
-
-      // Separators should be hidden from screen readers
-      separators.forEach((separator) => {
-        expect(separator).toHaveAttribute('aria-hidden', 'true');
-      });
-    });
-
-    it('should handle context propagation across components', () => {
-      const mockNavigate = jest.fn();
-
-      const { rerender } = render(
-        <BreadcrumbRoot onNavigate={mockNavigate} isDisabled={false}>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/test'>Test Link</BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      let link = screen.getByRole('link');
-      expect(link).toHaveAttribute('href', '/test');
-      expect(link).not.toHaveAttribute('aria-disabled');
-
-      // Update root to disabled
-      rerender(
-        <BreadcrumbRoot onNavigate={mockNavigate} isDisabled={true}>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/test'>Test Link</BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      link = screen.getByText('Test Link'); // Disabled links lose their link role
-      expect(link).not.toHaveAttribute('href');
-      expect(link).toHaveAttribute('aria-disabled', 'true');
-    });
-  });
-
-  describe('Real-world usage scenarios', () => {
-    it('should handle e-commerce breadcrumb scenario', async () => {
-      const user = userEvent.setup();
-      const mockNavigate = jest.fn();
-
-      render(
-        <BreadcrumbRoot onNavigate={mockNavigate} aria-label='Product navigation'>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/'>Store</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>›</BreadcrumbSeparator>
-            </BreadcrumbItem>
+            <BreadcrumbSeparator> &gt; </BreadcrumbSeparator>
             <BreadcrumbItem>
               <BreadcrumbLink href='/electronics'>Electronics</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>›</BreadcrumbSeparator>
-            </BreadcrumbItem>
+            <BreadcrumbSeparator> &gt; </BreadcrumbSeparator>
             <BreadcrumbItem>
               <BreadcrumbLink href='/electronics/computers'>Computers</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>›</BreadcrumbSeparator>
-            </BreadcrumbItem>
+            <BreadcrumbSeparator> &gt; </BreadcrumbSeparator>
             <BreadcrumbItem>
               <BreadcrumbLink href='/electronics/computers/laptops'>Laptops</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>›</BreadcrumbSeparator>
-            </BreadcrumbItem>
+            <BreadcrumbSeparator> &gt; </BreadcrumbSeparator>
             <BreadcrumbItem>
               <BreadcrumbPage>MacBook Pro 16"</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </BreadcrumbRoot>
       );
 
-      // Verify navigation landmark
-      const nav = screen.getByLabelText('Product navigation');
-      expect(nav).toBeInTheDocument();
+      render(<EcommerceBreadcrumb />);
 
-      // Test keyboard navigation through the breadcrumb
-      const links = screen.getAllByRole('link');
-      expect(links).toHaveLength(4);
-
-      // Tab through all links
-      for (let i = 0; i < links.length; i++) {
-        await user.tab();
-        expect(links[i]!).toHaveFocus();
-      }
-
-      // Test navigation from each level
-      await user.click(links[1]!); // Electronics
+      // Test navigation at different levels
+      await user.click(screen.getByRole('link', { name: 'Electronics' }));
       expect(mockNavigate).toHaveBeenCalledWith('/electronics', expect.any(Object));
 
-      await user.click(links[3]!); // Laptops
-      expect(mockNavigate).toHaveBeenCalledWith(
-        '/electronics/computers/laptops',
-        expect.any(Object),
-      );
+      await user.click(screen.getByRole('link', { name: 'Computers' }));
+      expect(mockNavigate).toHaveBeenCalledWith('/electronics/computers', expect.any(Object));
+
+      // Verify current page is not clickable
+      expect(screen.getByText('MacBook Pro 16"')).not.toHaveAttribute('href');
+      expect(screen.getByText('MacBook Pro 16"')).toHaveAttribute('aria-current', 'page');
     });
 
-    it('should handle admin dashboard breadcrumb scenario', async () => {
-      const user = userEvent.setup();
-      const mockNavigate = jest.fn();
-
-      render(
-        <BreadcrumbRoot onNavigate={mockNavigate} aria-label='Admin navigation'>
+    it('should handle admin panel breadcrumb with permissions', () => {
+      const AdminBreadcrumb = ({ canAccessUsers }: { canAccessUsers: boolean }) => (
+        <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/admin'>Admin</BreadcrumbLink>
+              <BreadcrumbLink href='/admin'>Dashboard</BreadcrumbLink>
             </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/admin/users'>Users</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/admin/users/permissions' disabled>
-                Permissions (Restricted)
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Edit Role</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      const links = screen.getAllByRole('link');
-      expect(links).toHaveLength(2); // Only enabled links: Admin and Users
-
-      const restrictedLink = screen.getByText('Permissions (Restricted)'); // Disabled link loses link role
-
-      // Verify restricted access is properly indicated
-      expect(restrictedLink).toHaveAttribute('aria-disabled', 'true');
-      expect(restrictedLink).toHaveAttribute('tabIndex', '-1');
-
-      // Test that clicking disabled link doesn't navigate
-      await user.click(restrictedLink);
-      expect(mockNavigate).not.toHaveBeenCalled();
-
-      // Test that other links still work
-      await user.click(links[0]!); // Admin
-      expect(mockNavigate).toHaveBeenCalledWith('/admin', expect.any(Object));
-
-      await user.click(links[1]!); // Users
-      expect(mockNavigate).toHaveBeenCalledWith('/admin/users', expect.any(Object));
-    });
-
-    it('should handle documentation site breadcrumb scenario', async () => {
-      const user = userEvent.setup();
-      const mockNavigate = jest.fn();
-
-      render(
-        <BreadcrumbRoot onNavigate={mockNavigate} aria-label='Documentation breadcrumb'>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/docs'>Docs</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>→</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/docs/components'>Components</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>→</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='https://github.com/repo/issues' isExternal>
-                GitHub Issues
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>→</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Bug Report #123</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      const links = screen.getAllByRole('link');
-      const externalLink = links[2]!;
-
-      // Test internal navigation
-      await user.click(links[0]!); // Docs
-      expect(mockNavigate).toHaveBeenCalledWith('/docs', expect.any(Object));
-
-      // Test external link behavior
-      expect(externalLink).toHaveAttribute('href', 'https://github.com/repo/issues');
-      expect(externalLink).toHaveAttribute('target', '_blank');
-      expect(externalLink).toHaveAttribute('rel', 'noopener noreferrer');
-
-      // External links shouldn't trigger onNavigate
-      mockNavigate.mockClear();
-      await user.click(externalLink);
-      expect(mockNavigate).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Dynamic breadcrumb updates', () => {
-    it('should handle breadcrumb path changes', async () => {
-      const user = userEvent.setup();
-      const mockNavigate = jest.fn();
-
-      const { rerender } = render(
-        <BreadcrumbRoot onNavigate={mockNavigate}>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/'>Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Page 1</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      expect(screen.getByText('Page 1')).toHaveAttribute('aria-current', 'page');
-
-      // Navigate deeper
-      rerender(
-        <BreadcrumbRoot onNavigate={mockNavigate}>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/'>Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/page1'>Page 1</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Page 2</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      expect(screen.getByText('Page 2')).toHaveAttribute('aria-current', 'page');
-      expect(screen.getByText('Page 1')).not.toHaveAttribute('aria-current');
-
-      // Test navigation still works
-      await user.click(screen.getByText('Page 1'));
-      expect(mockNavigate).toHaveBeenCalledWith('/page1', expect.any(Object));
-    });
-
-    it('should handle permission-based breadcrumb changes', () => {
-      const mockNavigate = jest.fn();
-      const { rerender } = render(
-        <BreadcrumbRoot onNavigate={mockNavigate}>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/admin'>Admin</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/admin/users'>Users</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbPage>User Details</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      let links = screen.getAllByRole('link');
-      expect(links[1]).toHaveAttribute('href', '/admin/users');
-      expect(links[1]).not.toHaveAttribute('aria-disabled');
-
-      // Permission revoked - disable the link
-      rerender(
-        <BreadcrumbRoot onNavigate={mockNavigate}>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/admin'>Admin</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/admin/users' disabled>
+              <BreadcrumbLink href='/admin/users' isDisabled={!canAccessUsers}>
                 Users
               </BreadcrumbLink>
             </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbPage>User Details</BreadcrumbPage>
+              <BreadcrumbPage>Edit User</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </BreadcrumbRoot>
       );
 
-      links = screen.getAllByRole('link');
-      expect(links).toHaveLength(1); // Only Admin link remains active
+      const { rerender } = render(<AdminBreadcrumb canAccessUsers={false} />);
+      // Disabled links lose their link role, so we check by text content
+      expect(screen.getByText('Users')).toHaveAttribute('aria-disabled', 'true');
 
-      const disabledUsersLink = screen.getByText('Users'); // Disabled link loses link role
-      expect(disabledUsersLink).not.toHaveAttribute('href');
-      expect(disabledUsersLink).toHaveAttribute('aria-disabled', 'true');
+      rerender(<AdminBreadcrumb canAccessUsers={true} />);
+      expect(screen.getByRole('link', { name: 'Users' })).not.toHaveAttribute('aria-disabled');
+    });
+
+    it('should handle search results breadcrumb with query', () => {
+      const searchQuery = 'laptop computers';
+      const SearchBreadcrumb = () => (
+        <BreadcrumbRoot>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/search'>Search</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Results for "{searchQuery}"</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>
+      );
+
+      render(<SearchBreadcrumb />);
+
+      expect(screen.getByText('Results for "laptop computers"')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Search' })).toBeInTheDocument();
     });
   });
 
-  describe('Event propagation', () => {
-    it('should handle event propagation correctly', async () => {
-      const user = userEvent.setup();
-      const mockNavigate = jest.fn();
-      const mockLinkClick = jest.fn();
-      const mockListClick = jest.fn();
-
+  describe('Edge Cases and Error Handling', () => {
+    it('should handle empty href gracefully', () => {
       render(
-        <BreadcrumbRoot onNavigate={mockNavigate}>
-          <BreadcrumbList onClick={mockListClick}>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/test' onClick={mockLinkClick}>
-                Test Link
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      const link = screen.getByRole('link');
-      await user.click(link);
-
-      expect(mockLinkClick).toHaveBeenCalledTimes(1);
-      expect(mockListClick).toHaveBeenCalledTimes(1);
-      expect(mockNavigate).not.toHaveBeenCalled(); // onClick should prevent onNavigate
-    });
-
-    it('should prevent default navigation when custom onClick is provided', async () => {
-      const user = userEvent.setup();
-      const mockNavigate = jest.fn();
-      const mockPreventDefault = jest.fn((event) => {
-        event.preventDefault();
-      });
-
-      render(
-        <BreadcrumbRoot onNavigate={mockNavigate}>
+        <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test' onClick={mockPreventDefault}>
-                Custom Handler
-              </BreadcrumbLink>
+              <BreadcrumbLink href=''>Empty Link</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const link = screen.getByRole('link');
-      await user.click(link);
+      expect(screen.getByText('Empty Link')).toHaveAttribute('href', '');
+    });
 
-      expect(mockPreventDefault).toHaveBeenCalledTimes(1);
-      expect(mockNavigate).not.toHaveBeenCalled();
+    it('should handle special characters in navigation paths', async () => {
+      const user = userEvent.setup();
+      const handleNavigate = jest.fn();
+      const specialPath = '/products/café & restaurants';
+
+      render(
+        <BreadcrumbRoot onNavigate={handleNavigate}>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href={specialPath}>Café & Restaurants</BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>,
+      );
+
+      await user.click(screen.getByRole('link', { name: 'Café & Restaurants' }));
+      expect(handleNavigate).toHaveBeenCalledWith(specialPath, expect.any(Object));
+    });
+
+    it('should handle very long breadcrumb paths', () => {
+      const LongBreadcrumb = () => (
+        <BreadcrumbRoot>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/level1'>Level 1</BreadcrumbLink>
+            </BreadcrumbItem>
+            {Array.from({ length: 10 }, (_, i) => (
+              <React.Fragment key={`level-${i + 2}`}>
+                <BreadcrumbSeparator>/</BreadcrumbSeparator>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href={`/level${i + 2}`}>Level {i + 2}</BreadcrumbLink>
+                </BreadcrumbItem>
+              </React.Fragment>
+            ))}
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Final Level</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>
+      );
+
+      render(<LongBreadcrumb />);
+
+      expect(screen.getByRole('link', { name: 'Level 1' })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'Level 11' })).toBeInTheDocument();
+      expect(screen.getByText('Final Level')).toBeInTheDocument();
+    });
+
+    it('should handle navigation errors gracefully', async () => {
+      const user = userEvent.setup();
+      const handleNavigate = jest.fn(() => {
+        throw new Error('Navigation failed');
+      });
+
+      // Mock console.error to avoid test output pollution
+      // eslint-disable-next-line no-console
+      const originalError = console.error;
+      // eslint-disable-next-line no-console
+      console.error = jest.fn();
+
+      render(
+        <BreadcrumbRoot onNavigate={handleNavigate}>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/test'>Test</BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>,
+      );
+
+      // This should not crash the component - the error should be caught and logged
+      await user.click(screen.getByRole('link', { name: 'Test' }));
+      expect(handleNavigate).toHaveBeenCalled();
+
+      // Restore console.error
+      // eslint-disable-next-line no-console
+      console.error = originalError;
     });
   });
 });

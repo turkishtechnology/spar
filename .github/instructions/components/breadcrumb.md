@@ -121,6 +121,8 @@ The Breadcrumb component provides a navigation trail showing the hierarchical pa
 
 **Ref Forwarding**: All components forward refs to their underlying DOM elements.
 
+**Prop Forwarding**: All components extend their base element props and automatically forward `className`, `style`, `data-*`, and `aria-*` attributes.
+
 **Controlled/Uncontrolled**: Breadcrumb is stateless - no controlled/uncontrolled modes.
 
 **TypeScript Definitions**: 

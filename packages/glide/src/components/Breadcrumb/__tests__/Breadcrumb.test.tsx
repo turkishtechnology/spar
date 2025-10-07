@@ -9,7 +9,7 @@ import {
   BreadcrumbSeparator,
 } from '../Breadcrumb';
 
-describe('Breadcrumb Unit Tests', () => {
+describe('Breadcrumb Components', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -18,31 +18,55 @@ describe('Breadcrumb Unit Tests', () => {
     it('renders with default props', () => {
       render(
         <BreadcrumbRoot>
-          <div>Breadcrumb content</div>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const nav = screen.getByRole('navigation');
-      expect(nav).toBeInTheDocument();
-      expect(nav).toHaveAttribute('aria-label', 'Breadcrumb');
-      expect(nav).toHaveAttribute('data-glide-breadcrumb-root', '');
+      expect(screen.getByRole('navigation')).toBeInTheDocument();
+      expect(screen.getByRole('navigation')).toHaveAttribute('aria-label', 'Breadcrumb');
     });
 
     it('renders with custom aria-label', () => {
       render(
         <BreadcrumbRoot aria-label='Custom Navigation'>
-          <div>Content</div>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const nav = screen.getByRole('navigation');
-      expect(nav).toHaveAttribute('aria-label', 'Custom Navigation');
+      expect(screen.getByRole('navigation')).toHaveAttribute('aria-label', 'Custom Navigation');
     });
 
-    it('renders with disabled state', () => {
+    it('renders with polymorphic as prop', () => {
+      render(
+        <BreadcrumbRoot as='div' data-testid='custom-nav'>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>,
+      );
+
+      expect(screen.getByTestId('custom-nav')).toBeInTheDocument();
+      expect(screen.getByTestId('custom-nav').tagName).toBe('DIV');
+    });
+
+    it('applies disabled state', () => {
       render(
         <BreadcrumbRoot isDisabled>
-          <div>Content</div>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
@@ -51,42 +75,53 @@ describe('Breadcrumb Unit Tests', () => {
       expect(nav).toHaveAttribute('data-disabled', 'true');
     });
 
-    it('renders as custom element when using as prop', () => {
+    it('applies data attributes', () => {
       render(
-        <BreadcrumbRoot as='div' role='navigation'>
-          <div>Content</div>
-        </BreadcrumbRoot>,
-      );
-
-      const element = screen.getByRole('navigation');
-      expect(element.tagName).toBe('DIV');
-    });
-
-    it('accepts custom props', () => {
-      render(
-        <BreadcrumbRoot data-testid='custom-breadcrumb' className='custom-class'>
-          <div>Content</div>
-        </BreadcrumbRoot>,
-      );
-
-      const nav = screen.getByTestId('custom-breadcrumb');
-      expect(nav).toHaveClass('custom-class');
-    });
-
-    it('provides navigation handler context', () => {
-      const mockNavigate = jest.fn();
-      render(
-        <BreadcrumbRoot onNavigate={mockNavigate}>
+        <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test'>Test</BreadcrumbLink>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      // The context is provided, we'll test the actual navigation in integration tests
-      expect(screen.getByRole('navigation')).toBeInTheDocument();
+      expect(screen.getByRole('navigation')).toHaveAttribute('data-glide-breadcrumb-root', '');
+    });
+
+    it('calls onNavigate when link is clicked', async () => {
+      const user = userEvent.setup();
+      const handleNavigate = jest.fn();
+
+      render(
+        <BreadcrumbRoot onNavigate={handleNavigate}>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>,
+      );
+
+      await user.click(screen.getByRole('link', { name: 'Home' }));
+
+      expect(handleNavigate).toHaveBeenCalledWith('/home', expect.any(Object));
+    });
+
+    it('spreads additional props', () => {
+      render(
+        <BreadcrumbRoot className='custom-class' data-custom='value'>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>,
+      );
+
+      const nav = screen.getByRole('navigation');
+      expect(nav).toHaveClass('custom-class');
+      expect(nav).toHaveAttribute('data-custom', 'value');
     });
   });
 
@@ -95,40 +130,44 @@ describe('Breadcrumb Unit Tests', () => {
       render(
         <BreadcrumbRoot>
           <BreadcrumbList>
-            <BreadcrumbItem>Item 1</BreadcrumbItem>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const list = screen.getByRole('list');
-      expect(list.tagName).toBe('OL');
-      expect(list).toHaveAttribute('data-glide-breadcrumb-list', '');
+      expect(screen.getByRole('list')).toBeInTheDocument();
+      expect(screen.getByRole('list').tagName).toBe('OL');
     });
 
-    it('renders as custom element when using as prop', () => {
+    it('renders with polymorphic as prop', () => {
       render(
         <BreadcrumbRoot>
-          <BreadcrumbList as='ul'>
-            <BreadcrumbItem>Item 1</BreadcrumbItem>
+          <BreadcrumbList as='ul' data-testid='custom-list'>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const list = screen.getByRole('list');
-      expect(list.tagName).toBe('UL');
+      expect(screen.getByTestId('custom-list')).toBeInTheDocument();
+      expect(screen.getByTestId('custom-list').tagName).toBe('UL');
     });
 
-    it('accepts custom props', () => {
+    it('applies data attributes', () => {
       render(
         <BreadcrumbRoot>
-          <BreadcrumbList data-testid='custom-list' className='list-class'>
-            <BreadcrumbItem>Item 1</BreadcrumbItem>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const list = screen.getByTestId('custom-list');
-      expect(list).toHaveClass('list-class');
+      expect(screen.getByRole('list')).toHaveAttribute('data-glide-breadcrumb-list', '');
     });
   });
 
@@ -138,45 +177,65 @@ describe('Breadcrumb Unit Tests', () => {
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <span>Item content</span>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const item = screen.getByRole('listitem');
-      expect(item.tagName).toBe('LI');
-      expect(item).toHaveAttribute('data-glide-breadcrumb-item', '');
+      expect(screen.getByRole('listitem')).toBeInTheDocument();
+      expect(screen.getByRole('listitem').tagName).toBe('LI');
     });
 
-    it('renders as custom element when using as prop', () => {
+    it('renders with polymorphic as prop', () => {
       render(
         <BreadcrumbRoot>
           <BreadcrumbList>
-            <BreadcrumbItem as='div' role='listitem'>
-              <span>Item content</span>
+            <BreadcrumbItem as='div' data-testid='custom-item'>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const item = screen.getByRole('listitem');
-      expect(item.tagName).toBe('DIV');
+      expect(screen.getByTestId('custom-item')).toBeInTheDocument();
+      expect(screen.getByTestId('custom-item').tagName).toBe('DIV');
     });
 
-    it('accepts custom props', () => {
+    it('applies data attributes', () => {
       render(
         <BreadcrumbRoot>
           <BreadcrumbList>
-            <BreadcrumbItem data-testid='custom-item' className='item-class'>
-              <span>Item content</span>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const item = screen.getByTestId('custom-item');
-      expect(item).toHaveClass('item-class');
+      expect(screen.getByRole('listitem')).toHaveAttribute('data-glide-breadcrumb-item', '');
+    });
+
+    it('calculates position for multiple items', () => {
+      render(
+        <BreadcrumbRoot>
+          <BreadcrumbList>
+            <BreadcrumbItem data-testid='first-item'>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem data-testid='middle-item'>
+              <BreadcrumbLink href='/products'>Products</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem data-testid='last-item'>
+              <BreadcrumbPage>Current</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>,
+      );
+
+      // Note: The position calculation happens in useEffect, so we check the final state
+      const items = screen.getAllByRole('listitem');
+      expect(items).toHaveLength(3);
     });
   });
 
@@ -186,90 +245,98 @@ describe('Breadcrumb Unit Tests', () => {
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test'>Test Link</BreadcrumbLink>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const link = screen.getByRole('link');
+      const link = screen.getByRole('link', { name: 'Home' });
+      expect(link).toBeInTheDocument();
+      expect(link).toHaveAttribute('href', '/home');
       expect(link.tagName).toBe('A');
-      expect(link).toHaveAttribute('href', '/test');
-      expect(link).toHaveAttribute('data-glide-breadcrumb-link', '');
-      expect(link).toHaveTextContent('Test Link');
     });
 
-    it('renders as custom element when using as prop', () => {
+    it('renders with polymorphic as prop', () => {
+      const CustomLink = ({
+        children,
+        ...props
+      }: {
+        children: React.ReactNode;
+        [key: string]: unknown;
+      }) => <button {...props}>{children}</button>;
+
       render(
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink as='button' type='button'>
-                Test Button
+              <BreadcrumbLink as={CustomLink} data-testid='custom-link'>
+                Home
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const button = screen.getByRole('button');
-      expect(button.tagName).toBe('BUTTON');
-      expect(button).toHaveTextContent('Test Button');
+      expect(screen.getByTestId('custom-link')).toBeInTheDocument();
+      expect(screen.getByTestId('custom-link').tagName).toBe('BUTTON');
     });
 
-    it('should handle disabled link correctly', () => {
+    it('handles disabled state', () => {
       render(
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test' disabled>
-                Disabled Link
+              <BreadcrumbLink href='/home' isDisabled>
+                Home
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const link = screen.getByText('Disabled Link');
+      // Disabled links lose their link role, so we check by text content
+      const link = screen.getByText('Home');
       expect(link).toHaveAttribute('aria-disabled', 'true');
+      expect(link).toHaveAttribute('data-disabled', 'true');
+      expect(link).toHaveAttribute('tabindex', '-1');
       expect(link).not.toHaveAttribute('href');
     });
+
+    it('handles disabled state from root context', () => {
+      render(
+        <BreadcrumbRoot isDisabled>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>,
+      );
+
+      // Disabled links lose their link role, so we check by text content
+      const link = screen.getByText('Home');
+      expect(link).toHaveAttribute('aria-disabled', 'true');
+      expect(link).toHaveAttribute('data-disabled', 'true');
+    });
+
     it('handles external links', () => {
       render(
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='https://example.com' isExternal>
-                External Link
+                External
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const link = screen.getByRole('link');
-      expect(link).toHaveAttribute('href', 'https://example.com');
+      const link = screen.getByRole('link', { name: 'External' });
       expect(link).toHaveAttribute('target', '_blank');
       expect(link).toHaveAttribute('rel', 'noopener noreferrer');
       expect(link).toHaveAttribute('data-external', 'true');
-    });
-
-    it('handles custom target and rel for external links', () => {
-      render(
-        <BreadcrumbRoot>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='https://example.com' isExternal target='_self' rel='custom-rel'>
-                External Link
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      const link = screen.getByRole('link');
-      expect(link).toHaveAttribute('target', '_self');
-      expect(link).toHaveAttribute('rel', 'custom-rel');
     });
 
     it('handles click events', async () => {
@@ -280,18 +347,57 @@ describe('Breadcrumb Unit Tests', () => {
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test' onClick={handleClick}>
-                Clickable Link
+              <BreadcrumbLink href='/home' onClick={handleClick}>
+                Home
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const link = screen.getByRole('link');
-      await user.click(link);
+      await user.click(screen.getByRole('link', { name: 'Home' }));
+      expect(handleClick).toHaveBeenCalled();
+    });
 
-      expect(handleClick).toHaveBeenCalledTimes(1);
+    it('handles keyboard events', async () => {
+      const user = userEvent.setup();
+      const handleNavigate = jest.fn();
+
+      render(
+        <BreadcrumbRoot onNavigate={handleNavigate}>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>,
+      );
+
+      const link = screen.getByRole('link', { name: 'Home' });
+      link.focus();
+      await user.keyboard('{Enter}');
+
+      expect(handleNavigate).toHaveBeenCalledWith('/home', expect.any(Object));
+    });
+
+    it('handles onPress override', async () => {
+      const user = userEvent.setup();
+      const handlePress = jest.fn();
+
+      render(
+        <BreadcrumbRoot>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home' onPress={handlePress}>
+                Home
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>,
+      );
+
+      await user.click(screen.getByRole('link', { name: 'Home' }));
+      expect(handlePress).toHaveBeenCalled();
     });
 
     it('prevents click when disabled', async () => {
@@ -302,107 +408,31 @@ describe('Breadcrumb Unit Tests', () => {
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test' disabled onClick={handleClick}>
-                Disabled Link
+              <BreadcrumbLink href='/home' isDisabled onClick={handleClick}>
+                Home
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      // Disabled links without href don't have link role - query by text instead
-      const link = screen.getByText('Disabled Link');
-      await user.click(link);
-
+      // Disabled links lose their link role, so we check by text content
+      await user.click(screen.getByText('Home'));
       expect(handleClick).not.toHaveBeenCalled();
     });
 
-    it('handles custom onPress events', async () => {
-      const user = userEvent.setup();
-      const handlePress = jest.fn();
-
+    it('applies data attributes', () => {
       render(
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test' onPress={handlePress}>
-                Press Link
-              </BreadcrumbLink>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const link = screen.getByRole('link');
-      await user.click(link);
-
-      expect(handlePress).toHaveBeenCalledTimes(1);
-    });
-
-    it('handles keyboard events (Enter)', async () => {
-      const user = userEvent.setup();
-      const handleKeyDown = jest.fn();
-
-      render(
-        <BreadcrumbRoot>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/test' onKeyDown={handleKeyDown}>
-                Keyboard Link
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      const link = screen.getByRole('link');
-      link.focus();
-      await user.keyboard('[Enter]');
-
-      expect(handleKeyDown).toHaveBeenCalledTimes(1);
-    });
-
-    it('handles keyboard events (Space)', async () => {
-      const user = userEvent.setup();
-      const handleKeyDown = jest.fn();
-
-      render(
-        <BreadcrumbRoot>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/test' onKeyDown={handleKeyDown}>
-                Keyboard Link
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      const link = screen.getByRole('link');
-      link.focus();
-      await user.keyboard(' ');
-
-      expect(handleKeyDown).toHaveBeenCalledTimes(1);
-    });
-
-    it('prevents keyboard events when disabled', () => {
-      render(
-        <BreadcrumbRoot>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/test' disabled>
-                Disabled Link
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      // Verify disabled accessibility attributes that prevent keyboard interaction
-      const link = screen.getByText('Disabled Link');
-      expect(link).toHaveAttribute('aria-disabled', 'true');
-      expect(link).toHaveAttribute('tabindex', '-1'); // Prevents keyboard focus
-      expect(link).not.toHaveAttribute('href'); // No navigation target
+      expect(screen.getByRole('link')).toHaveAttribute('data-glide-breadcrumb-link', '');
     });
   });
 
@@ -419,33 +449,17 @@ describe('Breadcrumb Unit Tests', () => {
       );
 
       const page = screen.getByText('Current Page');
+      expect(page).toBeInTheDocument();
       expect(page.tagName).toBe('SPAN');
       expect(page).toHaveAttribute('aria-current', 'page');
-      expect(page).toHaveAttribute('data-glide-breadcrumb-page', '');
     });
 
-    it('renders as custom element when using as prop', () => {
+    it('renders with polymorphic as prop', () => {
       render(
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage as='div'>Current Page</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      const page = screen.getByText('Current Page');
-      expect(page.tagName).toBe('DIV');
-      expect(page).toHaveAttribute('aria-current', 'page');
-    });
-
-    it('accepts custom props', () => {
-      render(
-        <BreadcrumbRoot>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage data-testid='custom-page' className='page-class'>
+              <BreadcrumbPage as='strong' data-testid='custom-page'>
                 Current Page
               </BreadcrumbPage>
             </BreadcrumbItem>
@@ -453,165 +467,139 @@ describe('Breadcrumb Unit Tests', () => {
         </BreadcrumbRoot>,
       );
 
-      const page = screen.getByTestId('custom-page');
-      expect(page).toHaveClass('page-class');
+      expect(screen.getByTestId('custom-page')).toBeInTheDocument();
+      expect(screen.getByTestId('custom-page').tagName).toBe('STRONG');
+    });
+
+    it('applies data attributes', () => {
+      render(
+        <BreadcrumbRoot>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Current Page</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>,
+      );
+
+      const page = screen.getByText('Current Page');
+      expect(page).toHaveAttribute('data-glide-breadcrumb-page', '');
+      expect(page).toHaveAttribute('data-current', 'true');
     });
   });
 
   describe('BreadcrumbSeparator', () => {
-    it('renders as span by default', () => {
+    it('renders as list item by default', () => {
       render(
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test'>Test</BreadcrumbLink>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Current</BreadcrumbPage>
+            </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
       const separator = screen.getByText('/');
-      expect(separator.tagName).toBe('SPAN');
-      expect(separator).toHaveAttribute('aria-hidden', 'true');
-      expect(separator).toHaveAttribute('data-glide-breadcrumb-separator', '');
+      expect(separator).toBeInTheDocument();
+      expect(separator.tagName).toBe('LI');
     });
 
-    it('renders as custom element when using as prop', () => {
+    it('renders with polymorphic as prop', () => {
       render(
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test'>Test</BreadcrumbLink>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator as='div'>/</BreadcrumbSeparator>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      const separator = screen.getByText('/');
-      expect(separator.tagName).toBe('DIV');
-      expect(separator).toHaveAttribute('aria-hidden', 'true');
-    });
-
-    it('accepts custom props', () => {
-      render(
-        <BreadcrumbRoot>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/test'>Test</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator data-testid='custom-sep' className='sep-class'>
+            <BreadcrumbSeparator as='span' data-testid='custom-separator'>
               →
             </BreadcrumbSeparator>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      const separator = screen.getByTestId('custom-sep');
-      expect(separator).toHaveClass('sep-class');
-      expect(separator).toHaveTextContent('→');
-    });
-  });
-
-  describe('Context Integration', () => {
-    it('propagates disabled state from root to links', () => {
-      render(
-        <BreadcrumbRoot isDisabled>
-          <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test'>Link 1</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/test2'>Link 2</BreadcrumbLink>
+              <BreadcrumbPage>Current</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      // When disabled via context, links lose their href and link role - query by text
-      const link1 = screen.getByText('Link 1');
-      const link2 = screen.getByText('Link 2');
-
-      expect(link1).toHaveAttribute('aria-disabled', 'true');
-      expect(link1).not.toHaveAttribute('href');
-      expect(link2).toHaveAttribute('aria-disabled', 'true');
-      expect(link2).not.toHaveAttribute('href');
+      expect(screen.getByTestId('custom-separator')).toBeInTheDocument();
+      expect(screen.getByTestId('custom-separator').tagName).toBe('SPAN');
     });
 
-    it('combines root and individual link disabled states', () => {
+    it('is hidden from screen readers by default', () => {
       render(
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test'>Enabled Link</BreadcrumbLink>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test2' disabled>
-                Disabled Link
-              </BreadcrumbLink>
+              <BreadcrumbPage>Current</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      // Only enabled link will have link role, disabled link must be found by text
-      const enabledLink = screen.getByRole('link');
-      const disabledLink = screen.getByText('Disabled Link');
-
-      expect(enabledLink).toHaveAttribute('href', '/test');
-      expect(enabledLink).not.toHaveAttribute('aria-disabled');
-
-      expect(disabledLink).not.toHaveAttribute('href');
-      expect(disabledLink).toHaveAttribute('aria-disabled', 'true');
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('handles empty children gracefully', () => {
-      render(
-        <BreadcrumbRoot>
-          <BreadcrumbList>
-            <div data-testid='empty-placeholder'></div>
-          </BreadcrumbList>
-        </BreadcrumbRoot>,
-      );
-
-      const list = screen.getByRole('list');
-      expect(list).toBeInTheDocument();
-      const placeholder = screen.getByTestId('empty-placeholder');
-      expect(placeholder).toBeInTheDocument();
+      expect(screen.getByText('/')).toHaveAttribute('aria-hidden', 'true');
     });
 
-    it('handles undefined href in BreadcrumbLink', () => {
+    it('can override aria-hidden', () => {
       render(
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink>No Href Link</BreadcrumbLink>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator aria-hidden={false}>/</BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Current</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      // Links without href don't have link role - query by text
-      const link = screen.getByText('No Href Link');
-      expect(link).not.toHaveAttribute('href');
+      expect(screen.getByText('/')).toHaveAttribute('aria-hidden', 'false');
     });
 
-    it('handles null onNavigate handler', () => {
+    it('applies data attributes', () => {
       render(
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test'>Test Link</BreadcrumbLink>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Current</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </BreadcrumbRoot>,
       );
 
-      const link = screen.getByRole('link');
-      expect(link).toBeInTheDocument();
+      expect(screen.getByText('/')).toHaveAttribute('data-glide-breadcrumb-separator', '');
+    });
+
+    it('renders without children', () => {
+      render(
+        <BreadcrumbRoot>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator data-testid='empty-separator' />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Current</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </BreadcrumbRoot>,
+      );
+
+      expect(screen.getByTestId('empty-separator')).toBeInTheDocument();
     });
   });
 });

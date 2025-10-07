@@ -43,7 +43,7 @@ export type {
   BreadcrumbPageProps,
   BreadcrumbSeparatorProps,
   BreadcrumbContextValue,
+  BreadcrumbPosition,
   NavigationHandler,
   PressEvent,
-  ItemPosition,
 } from './types';
