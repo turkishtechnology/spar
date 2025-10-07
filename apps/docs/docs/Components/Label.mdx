@@ -6,6 +6,7 @@ description: A headless, accessible label component for form controls that estab
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
 import { Label } from '@turkish-technology/glide';
 
 # Label
@@ -48,6 +49,47 @@ A headless, accessible label component for form controls that establishes progra
 ```tsx
 import { Label } from '@turkish-technology/glide'
 ```
+
+## Anatomy
+
+The Label component is a simple, single-element component that provides accessible labeling for form controls:
+
+<AnatomyViewer
+  parts={[
+    { name: 'label', label: 'Label', description: 'The label element that associates with a form control' },
+  ]}
+>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <Label 
+      htmlFor="username" 
+      isRequired
+      data-glide-part="label"
+      style={{ fontWeight: 'bold' }}
+    >
+      Username
+    </Label>
+    <input 
+      id="username" 
+      type="text" 
+      placeholder="Enter your username"
+      style={{ padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
+    />
+  </div>
+</AnatomyViewer>
+
+### Structure
+
+```tsx
+<Label htmlFor="input-id">
+  Label Text
+</Label>
+```
+
+**Data Flow:**
+- `Label` creates a semantic association with the form control via `htmlFor` attribute
+- Clicking the label automatically focuses the associated input
+- Screen readers announce the label text when the control receives focus
+- State indicators (`isRequired`, `isOptional`, `isDisabled`) are exposed as data attributes for styling
 
 ## Code Examples
 
