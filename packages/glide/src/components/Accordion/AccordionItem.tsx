@@ -49,7 +49,7 @@ export const AccordionItem = ({
     if (!isDisabled) {
       accordionContext.onItemToggle(value);
     }
-  }, [isDisabled, value]);
+  }, [isDisabled, value, accordionContext.onItemToggle]);
 
   const itemContextValue = useMemo<AccordionItemContextValue>(
     () => ({
