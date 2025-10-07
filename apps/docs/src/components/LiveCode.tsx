@@ -16,8 +16,10 @@ import {
   Radio,
   RadioGroup,
   RadioItem,
+  Checkbox,
   Switch,
 } from '@turkish-technology/glide';
+
 interface LiveCodeProps {
   title?: string;
   code?: string;
@@ -84,6 +86,8 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Radio,
     RadioGroup,
     RadioItem,
+    // Checkbox component
+    Checkbox,
     // Switch component
     Switch,
   };
