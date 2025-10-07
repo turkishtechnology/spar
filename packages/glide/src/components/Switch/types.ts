@@ -1,4 +1,5 @@
 import type { ElementType, ButtonHTMLAttributes } from 'react';
+import type * as React from 'react';
 
 /**
  * Props for Switch component
@@ -74,17 +75,17 @@ export interface SwitchProps
    * Accessible name for the switch
    * @remarks Required when switch has no visible label
    */
-  'aria-label'?: string;
+  'aria-label'?: React.AriaAttributes['aria-label'];
 
   /**
    * ID of element that labels the switch
    */
-  'aria-labelledby'?: string;
+  'aria-labelledby'?: React.AriaAttributes['aria-labelledby'];
 
   /**
    * ID of element that describes the switch
    */
-  'aria-describedby'?: string;
+  'aria-describedby'?: React.AriaAttributes['aria-describedby'];
 }
 
 /**
@@ -115,6 +116,9 @@ export interface UseSwitchReturn {
     'data-checked'?: '';
     'data-disabled'?: '';
     'data-readonly'?: '';
+    'data-focus'?: '';
+    'data-hover'?: '';
+    'data-active'?: '';
     tabIndex: number;
     onKeyDown: (event: React.KeyboardEvent) => void;
     onClick: (event: React.MouseEvent) => void;

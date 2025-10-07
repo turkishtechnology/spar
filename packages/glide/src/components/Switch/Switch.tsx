@@ -155,8 +155,7 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
 };
 
 /**
- * Switch component provides a headless boolean toggle control for on/off states.
- * Offers switch-specific ARIA semantics and behavior with comprehensive form integration.
+ * Headless switch component for boolean toggle controls. Provides accessible switch semantics with form integration.
  */
 export const Switch = ({
   as: Component = 'button',
