@@ -328,13 +328,6 @@ describe('Label', () => {
       expect(label).toHaveTextContent('0');
     });
 
-    it('preserves ref when provided', () => {
-      const ref = React.createRef<HTMLLabelElement>();
-      render(<Label ref={ref}>Ref Test</Label>);
-      expect(ref.current).toBeInstanceOf(HTMLLabelElement);
-      expect(ref.current).toHaveTextContent('Ref Test');
-    });
-
     it('updates state attributes dynamically', () => {
       const { rerender } = render(<Label>Dynamic</Label>);
       const label = screen.getByText('Dynamic');

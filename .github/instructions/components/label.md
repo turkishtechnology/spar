@@ -42,15 +42,13 @@ Single component pattern - Label is a simple primitive that wraps label content 
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `htmlFor` | `string` | No | `undefined` | ID of the associated form control (explicit association) |
 | `isRequired` | `boolean` | No | `false` | Marks label for a required field (exposed via data attribute) |
 | `isOptional` | `boolean` | No | `false` | Marks label for an optional field (exposed via data attribute) |
 | `isDisabled` | `boolean` | No | `false` | Marks label for a disabled field (exposed via data attribute) |
 | `as` | `React.ElementType` | No | `'label'` | Polymorphic element type |
 | `children` | `React.ReactNode` | Yes | — | Label content (text, icons, form controls) |
-| `className` | `string` | No | `undefined` | CSS class names |
-| `style` | `React.CSSProperties` | No | `undefined` | Inline styles |
-| `...rest` | `React.LabelHTMLAttributes` | No | — | All native label attributes |
+
+**Note**: All standard HTML label attributes (`htmlFor`, `className`, `style`, `ref`, etc.) are inherited from `React.LabelHTMLAttributes<HTMLLabelElement>`.
 
 **⚠️ Important Notes:**
 - `isRequired`, `isOptional`, and `isDisabled` are for **styling purposes only**. Always set `required`, `aria-required`, and `disabled` attributes on the **form control itself** for proper functionality.
