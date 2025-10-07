@@ -6,6 +6,8 @@ description: A headless, accessible button component with complete keyboard supp
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Button } from '@turkish-technology/glide';
 
 # Button
 
@@ -59,9 +61,40 @@ import { Button } from '@turkish-technology/glide';
 
 The Button is a single component that can be configured for different use cases:
 
+<AnatomyViewer
+  parts={[
+    { name: 'button', label: 'Button', description: 'Interactive button element' },
+  ]}
+>
+  <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
+    <Button
+      data-glide-part="button"
+      onClick={() => {}}
+      style={{ padding: '8px 16px', marginRight: '8px' }}
+    >
+      Click me
+    </Button>
+
+    <Button
+      data-glide-part="button"
+      isDisabled
+      style={{ padding: '8px 16px' }}
+    >
+      Disabled Button
+    </Button>
+  </div>
+</AnatomyViewer>
+
+### Structure
+
 ```tsx
 <Button>Button content</Button>
 ```
+
+**Data Flow:**
+- Single component with complete keyboard support and toggle functionality
+- Manages its own state or accepts controlled props
+- Provides comprehensive accessibility features
 
 ## Code Examples
 
