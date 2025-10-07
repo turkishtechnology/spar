@@ -20,7 +20,8 @@ export const SelectValue = ({
 
   // Get the selected item's text
   const selectedItem = context.value ? context.items.get(context.value) : undefined;
-  const displayValue = selectedItem ? selectedItem.textValue : placeholder;
+  // Use textValue if available and not empty, otherwise fall back to placeholder
+  const displayValue = selectedItem?.textValue ? selectedItem.textValue : placeholder;
 
   return (
     <Component ref={context.valueNodeRef} id={context.valueId} {...props}>

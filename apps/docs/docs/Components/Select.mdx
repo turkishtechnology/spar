@@ -6,6 +6,8 @@ description: Fully accessible, headless dropdown component for single-value sele
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Select } from '@turkish-technology/glide';
 
 # Select
 
@@ -20,35 +22,33 @@ A headless, fully accessible dropdown component that allows users to choose a si
   const [value, setValue] = React.useState('apple');
 
   return (
-    <div style={{ position: 'relative' }}>
-      <Select.Root value={value} onValueChange={setValue}>
-        <Select.Trigger
-          style={{
-            padding: '8px 12px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            background: 'white',
-            cursor: 'pointer',
-            minWidth: '200px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}
-        >
-          <Select.Value placeholder="Select a fruit..." />
-          <Select.Icon>▼</Select.Icon>
-        </Select.Trigger>
+    <Select.Root value={value} onValueChange={setValue}>
+      <Select.Trigger
+        style={{
+          padding: '8px 12px',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          background: 'white',
+          cursor: 'pointer',
+          minWidth: '200px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}
+      >
+        <Select.Value placeholder="Select a fruit..." />
+        <Select.Icon>▼</Select.Icon>
+      </Select.Trigger>
 
+      <Select.Portal>
         <Select.Content
+          placement="bottom-start"
+          offset={5}
           style={{
-            position: 'absolute',
-            top: 'calc(100% + 2px)',
-            left: 0,
             background: 'white',
             border: '1px solid #ccc',
             borderRadius: '4px',
             padding: '4px',
-            minWidth: '200px',
             zIndex: 1000
           }}
         >
@@ -76,8 +76,8 @@ A headless, fully accessible dropdown component that allows users to choose a si
             </Select.Item>
           </Select.Viewport>
         </Select.Content>
-      </Select.Root>
-    </div>
+      </Select.Portal>
+    </Select.Root>
   );
 }`}
 />
@@ -87,12 +87,15 @@ A headless, fully accessible dropdown component that allows users to choose a si
 - ✅ Single value selection from dropdown list
 - ✅ Controlled and uncontrolled state management
 - ✅ Type-ahead search with character navigation
-- ✅ Flexible positioning strategies (item-aligned or popper-based)
+- ✅ Advanced positioning with Floating UI integration
+- ✅ Automatic collision detection and viewport boundary awareness
+- ✅ Flexible placement options (12 standard placements)
+- ✅ Smart flipping and shifting to stay in view
+- ✅ Automatic size constraints based on available space
 - ✅ Form integration with native HTML support
 - ✅ Portal rendering for z-index control
-- ✅ Collision detection and viewport boundary awareness
 - ✅ Grouped items with labels and separators
-- ✅ Optional visual arrow indicator
+- ✅ Optional visual arrow indicator with automatic positioning
 - ✅ Disabled state for items and entire select
 - ✅ RTL (right-to-left) language support
 - ✅ SSR safe with deterministic IDs
@@ -124,7 +127,127 @@ import {
 
 ## Anatomy
 
-The Select component is built as a compound component with multiple interconnected parts:
+The Select component is built as a compound component with multiple parts:
+
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'Root', description: 'Main container managing state and context' },
+    { name: 'trigger', label: 'Trigger', description: 'Button that toggles dropdown visibility' },
+    { name: 'value', label: 'Value', description: 'Displays selected value or placeholder' },
+    { name: 'icon', label: 'Icon', description: 'Visual indicator (chevron/arrow)' },
+    { name: 'portal', label: 'Portal', description: 'Portal container for dropdown rendering' },
+    { name: 'content', label: 'Content', description: 'Dropdown container with Floating UI positioning' },
+    { name: 'viewport', label: 'Viewport', description: 'Scrollable container for items' },
+    { name: 'group', label: 'Group', description: 'Groups related items together' },
+    { name: 'label', label: 'Label', description: 'Label for item groups' },
+    { name: 'item', label: 'Item', description: 'Individual selectable option' },
+    { name: 'itemText', label: 'ItemText', description: 'Text content of an item' },
+    { name: 'itemIndicator', label: 'ItemIndicator', description: 'Visual indicator for selected state' },
+    { name: 'separator', label: 'Separator', description: 'Visual separator between items/groups' },
+    { name: 'arrow', label: 'Arrow', description: 'Optional arrow pointing to trigger' },
+  ]}
+>
+  <Select.Root data-glide-part="root" value="apple">
+    <Select.Trigger
+      data-glide-part="trigger"
+      style={{
+        padding: '8px 12px',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        background: 'white',
+        cursor: 'pointer',
+        minWidth: '200px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: '8px',
+      }}
+    >
+      <Select.Value
+        data-glide-part="value"
+        placeholder="Select a fruit..."
+      />
+      <Select.Icon data-glide-part="icon">▼</Select.Icon>
+    </Select.Trigger>
+
+    <Select.Portal data-glide-part="portal">
+      <Select.Content
+        data-glide-part="content"
+        placement="bottom-start"
+        offset={5}
+        style={{
+          background: 'white',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          padding: '4px',
+          zIndex: 1000,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+        }}
+      >
+        <Select.Viewport data-glide-part="viewport">
+          <Select.Group data-glide-part="group">
+            <Select.Label
+              data-glide-part="label"
+              style={{
+                padding: '4px 8px',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                color: '#666',
+              }}
+            >
+              Fruits
+            </Select.Label>
+            <Select.Item
+              data-glide-part="item"
+              value="apple"
+              style={{
+                padding: '8px 12px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <Select.ItemText data-glide-part="itemText">Apple</Select.ItemText>
+              <Select.ItemIndicator data-glide-part="itemIndicator">✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item
+              data-glide-part="item"
+              value="banana"
+              style={{
+                padding: '8px 12px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <Select.ItemText data-glide-part="itemText">Banana</Select.ItemText>
+              <Select.ItemIndicator data-glide-part="itemIndicator">✓</Select.ItemIndicator>
+            </Select.Item>
+          </Select.Group>
+
+          <Select.Separator
+            data-glide-part="separator"
+            style={{
+              height: '1px',
+              background: '#e0e0e0',
+              margin: '4px 0',
+            }}
+          />
+
+          <Select.Arrow
+            data-glide-part="arrow"
+            width={10}
+            height={5}
+          />
+        </Select.Viewport>
+      </Select.Content>
+    </Select.Portal>
+  </Select.Root>
+</AnatomyViewer>
+
+### Structure
 
 ```tsx
 <Select.Root>
@@ -152,6 +275,22 @@ The Select component is built as a compound component with multiple interconnect
 </Select.Root>
 ```
 
+**Data Flow:**
+- `Select.Root` manages state (open/value) and provides context to all child components
+- `Select.Trigger` toggles dropdown open/closed state and displays current selection
+- `Select.Value` displays the selected item's text or placeholder when nothing is selected
+- `Select.Icon` provides visual feedback for the dropdown state (optional)
+- `Select.Portal` renders content outside DOM hierarchy for proper z-index stacking
+- `Select.Content` uses Floating UI for intelligent positioning relative to trigger
+- `Select.Viewport` provides scrollable container when items exceed available space
+- `Select.Group` organizes related items and associates them with labels
+- `Select.Label` provides semantic grouping labels for screen readers
+- `Select.Item` registers with root context and handles selection on click/keyboard
+- `Select.ItemText` provides the text value for type-ahead search and display
+- `Select.ItemIndicator` shows selected state visually (checkmark, icon, etc.)
+- `Select.Separator` provides visual separation between groups or items
+- `Select.Arrow` points to trigger when using Floating UI arrow middleware (optional)
+
 **Alternative: Tree-shakeable named imports**
 ```tsx
 import { SelectRoot, SelectTrigger, SelectValue } from '@turkish-technology/glide'
@@ -163,14 +302,6 @@ import { SelectRoot, SelectTrigger, SelectValue } from '@turkish-technology/glid
   {/* ... */}
 </SelectRoot>
 ```
-
-**Data Flow:**
-- `Select.Root` provides context and manages overall state
-- `Select.Trigger` toggles dropdown open/closed state
-- `Select.Value` displays current selection or placeholder
-- `Select.Content` handles positioning and renders dropdown
-- `Select.Item` components register with root and handle selection
-- Focus management ensures keyboard navigation follows ARIA patterns
 
 ## Code Examples
 
@@ -402,13 +533,14 @@ function SelectInForm() {
 }
 ```
 
-### Popper Positioning
+### Advanced Positioning with Floating UI
 
-Use popper positioning for advanced placement control.
+Use Floating UI's powerful positioning features for advanced placement control.
 
 ```tsx
-function PopperSelect() {
+function AdvancedPositioningSelect() {
   const [value, setValue] = React.useState('');
+  const arrowRef = React.useRef<SVGSVGElement>(null);
 
   return (
     <Select.Root value={value} onValueChange={setValue}>
@@ -419,13 +551,15 @@ function PopperSelect() {
 
       <Select.Portal>
         <Select.Content
-          position="popper"
-          side="bottom"
-          sideOffset={5}
-          align="start"
-          avoidCollisions={true}
+          placement="bottom-start"
+          offset={10}
+          shift={true}
+          shiftPadding={5}
+          flip={true}
+          size={true}
+          arrowRef={arrowRef}
         >
-          <Select.Arrow />
+          <Select.Arrow ref={arrowRef} />
           <Select.Viewport>
             <Select.Item value="option1">
               <Select.ItemText>Option 1</Select.ItemText>
@@ -617,20 +751,22 @@ No ARIA attributes - rendering mechanism only.
 
 ### Select.Content
 
-The dropdown container that appears when select is open.
+The dropdown container that appears when select is open. Uses Floating UI for intelligent positioning.
 
 **Props**
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `position?` | `'item-aligned' \| 'popper'` | `'item-aligned'` | Positioning strategy |
-| `side?` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` | Preferred placement side (popper only) |
-| `sideOffset?` | `number` | `0` | Distance from trigger in pixels (popper only) |
-| `align?` | `'start' \| 'center' \| 'end'` | `'start'` | Alignment relative to trigger |
-| `alignOffset?` | `number` | `0` | Alignment offset in pixels |
-| `avoidCollisions?` | `boolean` | `true` | Adjust position to avoid viewport edges |
-| `collisionBoundary?` | `Element \| Element[]` | `[]` | Boundaries for collision detection |
-| `collisionPadding?` | `number \| Padding` | `10` | Padding for collision detection |
+| `placement?` | `Placement` | `'bottom-start'` | Placement relative to trigger. Supports 12 positions: `'top'`, `'top-start'`, `'top-end'`, `'right'`, `'right-start'`, `'right-end'`, `'bottom'`, `'bottom-start'`, `'bottom-end'`, `'left'`, `'left-start'`, `'left-end'` |
+| `strategy?` | `'absolute' \| 'fixed'` | `'absolute'` | CSS positioning strategy |
+| `middleware?` | `Middleware[]` | `undefined` | Custom Floating UI middleware array for advanced positioning control |
+| `offset?` | `number` | `5` | Distance from trigger in pixels |
+| `shift?` | `boolean` | `true` | Whether to shift the content to stay in viewport |
+| `shiftPadding?` | `number` | `5` | Padding for shift calculations |
+| `flip?` | `boolean` | `true` | Whether to flip to opposite side when no space |
+| `hide?` | `boolean` | `false` | Whether to hide when trigger is fully scrolled out of view |
+| `size?` | `boolean` | `true` | Whether to constrain size to available space |
+| `arrowRef?` | `RefObject<HTMLElement \| SVGSVGElement>` | `undefined` | Arrow element ref for arrow positioning |
 | `as?` | `ElementType` | `'div'` | Polymorphic component type |
 | `ref?` | `RefObject` | `undefined` | Forward ref support |
 | `children` | `ReactNode` | - | Content children |
@@ -654,16 +790,20 @@ The dropdown container that appears when select is open.
 **Data Attributes**
 
 - `data-state`: `"open" | "closed"` - Dropdown open state
-- `data-side`: `"top" | "right" | "bottom" | "left"` - Placement side (popper mode)
-- `data-align`: `"start" | "center" | "end"` - Alignment (popper mode)
+- `data-placement`: Floating UI computed placement (e.g., `"bottom-start"`, `"top-end"`)
 
-**CSS Variables (popper mode)**
+**Positioning**
 
-- `--select-content-transform-origin`: Transform origin for animations
-- `--select-content-available-width`: Available width in viewport
-- `--select-content-available-height`: Available height in viewport
-- `--select-trigger-width`: Trigger element width
-- `--select-trigger-height`: Trigger element height
+SelectContent uses Floating UI for advanced positioning. The component automatically:
+- Positions relative to the trigger using the specified `placement`
+- Applies `offset` distance from the trigger
+- Shifts content to stay within the viewport when `shift={true}`
+- Flips to the opposite side when there's no space and `flip={true}`
+- Constrains content height to available space when `size={true}`
+- Updates position automatically on scroll, resize, and layout changes
+- Matches trigger width as minimum width
+
+For arrow positioning, pass an `arrowRef` to both `SelectContent` and `SelectArrow` components.
 
 ### Select.Viewport
 
@@ -831,7 +971,7 @@ No specific events.
 
 ### Select.Arrow
 
-Optional arrow element pointing to the trigger.
+Optional arrow element pointing to the trigger. Automatically positioned by Floating UI when used with `arrowRef`.
 
 **Props**
 
@@ -839,6 +979,7 @@ Optional arrow element pointing to the trigger.
 |------|------|---------|-------------|
 | `width?` | `number` | `10` | Arrow width in pixels |
 | `height?` | `number` | `5` | Arrow height in pixels |
+| `ref?` | `RefObject<SVGSVGElement>` | `undefined` | Forward ref support (required for arrow positioning) |
 | `as?` | `ElementType` | `'svg'` | Polymorphic component type |
 | `children?` | `ReactNode` | `undefined` | Optional children (custom arrow shape) |
 
@@ -851,6 +992,16 @@ No specific events.
 | Attribute | Value | Purpose | Applied To |
 |-----------|-------|---------|------------|
 | `aria-hidden` | `"true"` | Hides decorative arrow from screen readers | Arrow element |
+
+**Arrow Positioning**
+
+To enable automatic arrow positioning with Floating UI:
+
+1. Create a ref for the arrow: `const arrowRef = React.useRef<SVGSVGElement>(null)`
+2. Pass the ref to SelectArrow: `<Select.Arrow ref={arrowRef} />`
+3. Pass the same ref to SelectContent: `<Select.Content arrowRef={arrowRef}>`
+
+The arrow will automatically position itself to point at the trigger, accounting for the content's placement.
 
 ## Keyboard Interactions
 

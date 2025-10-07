@@ -59,9 +59,9 @@ export const SelectItem = ({
       ref: itemRef,
     });
 
-    return () => {
-      context.unregisterItem(value);
-    };
+    // Note: We intentionally do NOT unregister on unmount
+    // This keeps the textValue cached so SelectValue can display it
+    // even when the dropdown is closed and items are unmounted
   }, [context, value, textValue, isDisabled]);
 
   // Determine if this item is selected
@@ -75,7 +75,7 @@ export const SelectItem = ({
   // Scroll into view when highlighted
   useEffect(() => {
     if (isHighlighted && itemRef.current) {
-      itemRef.current.scrollIntoView({ block: 'nearest' });
+      itemRef.current.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     }
   }, [isHighlighted]);
 
