@@ -85,9 +85,28 @@ The Checkbox component is a single, self-contained element that manages its own 
 ```tsx
 function BasicCheckbox() {
   return (
-    <Checkbox>
-      Accept terms
-    </Checkbox>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '16px' }}>
+      <Checkbox
+        style={{
+          width: '16px',
+          height: '16px',
+          border: '1px solid #999',
+          borderRadius: '2px',
+          backgroundColor: 'white',
+          cursor: 'pointer',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        {({ checked }) => checked && (
+          <span style={{ color: '#000', fontSize: '10px', lineHeight: 1 }}>✓</span>
+        )}
+      </Checkbox>
+      <label style={{ cursor: 'pointer', userSelect: 'none' }}>
+        Accept terms
+      </label>
+    </div>
   );
 }
 ```
@@ -99,12 +118,33 @@ function ControlledCheckbox() {
   const [isChecked, setIsChecked] = useState<boolean>(false);
   
   return (
-    <Checkbox 
-      checked={isChecked}
-      onChange={setIsChecked}
-    >
-      Subscribe to newsletter
-    </Checkbox>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '16px' }}>
+      <Checkbox 
+        checked={isChecked}
+        onChange={setIsChecked}
+        style={{
+          width: '16px',
+          height: '16px',
+          border: '2px solid #007acc',
+          borderRadius: '2px',
+          backgroundColor: isChecked ? '#007acc' : 'transparent',
+          cursor: 'pointer',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        {isChecked && (
+          <span style={{ color: 'white', fontSize: '12px', lineHeight: 1 }}>✓</span>
+        )}
+      </Checkbox>
+      <label 
+        style={{ cursor: 'pointer', userSelect: 'none' }}
+        onClick={() => setIsChecked(!isChecked)}
+      >
+        Subscribe to newsletter
+      </label>
+    </div>
   );
 }
 ```
@@ -113,9 +153,9 @@ function ControlledCheckbox() {
 
 ```tsx
 function IndeterminateCheckbox() {
-  const [checked, setChecked] = useState<CheckedState>('indeterminate');
+  const [checked, setChecked] = useState('indeterminate');
   
-  const handleChange = (newChecked: CheckedState) => {
+  const handleChange = (newChecked) => {
     // Cycle: indeterminate → true → false → indeterminate
     if (newChecked === true) {
       setChecked(false);
@@ -126,13 +166,40 @@ function IndeterminateCheckbox() {
     }
   };
   
+  const getIcon = () => {
+    if (checked === true) return '✓';
+    if (checked === 'indeterminate') return '−';
+    return '';
+  };
+  
   return (
-    <Checkbox 
-      checked={checked}
-      onChange={handleChange}
-    >
-      Select all items
-    </Checkbox>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '16px' }}>
+      <Checkbox 
+        checked={checked}
+        onChange={handleChange}
+        style={{
+          width: '16px',
+          height: '16px',
+          border: '2px solid #007acc',
+          borderRadius: '2px',
+          backgroundColor: checked === false ? 'transparent' : '#007acc',
+          cursor: 'pointer',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <span style={{ color: 'white', fontSize: '12px', lineHeight: 1 }}>
+          {getIcon()}
+        </span>
+      </Checkbox>
+      <label 
+        style={{ cursor: 'pointer', userSelect: 'none' }}
+        onClick={() => handleChange(checked)}
+      >
+        Select all items (Click to cycle states)
+      </label>
+    </div>
   );
 }
 ```
@@ -141,25 +208,68 @@ function IndeterminateCheckbox() {
 
 ```tsx
 function FormCheckbox() {
+  const checkboxStyle = {
+    width: '16px',
+    height: '16px',
+    border: '2px solid #007acc',
+    borderRadius: '2px',
+    cursor: 'pointer',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  };
+  
   return (
-    <form>
-      <Checkbox 
-        name="terms"
-        value="accepted"
-        isRequired
-      >
-        I agree to the terms of service
-      </Checkbox>
-      
-      <Checkbox 
-        name="newsletter"
-        value="subscribed"
-        defaultChecked={true}
-      >
-        Subscribe to newsletter
-      </Checkbox>
-      
-      <button type="submit">Submit</button>
+    <form style={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Checkbox 
+            name="terms"
+            value="accepted"
+            isRequired
+            style={checkboxStyle}
+          >
+            {({ checked }) => checked && (
+              <span style={{ color: '#007acc', fontSize: '12px', lineHeight: 1 }}>✓</span>
+            )}
+          </Checkbox>
+          <label style={{ userSelect: 'none' }}>
+            I agree to the terms of service *
+          </label>
+        </div>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Checkbox 
+            name="newsletter"
+            value="subscribed"
+            defaultChecked={true}
+            style={{
+              ...checkboxStyle,
+              backgroundColor: '#007acc'
+            }}
+          >
+            <span style={{ color: 'white', fontSize: '12px', lineHeight: 1 }}>✓</span>
+          </Checkbox>
+          <label style={{ userSelect: 'none' }}>
+            Subscribe to newsletter
+          </label>
+        </div>
+        
+        <button 
+          type="submit"
+          style={{
+            marginTop: '8px',
+            padding: '8px 16px',
+            backgroundColor: '#007acc',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
+          Submit
+        </button>
+      </div>
     </form>
   );
 }
@@ -170,16 +280,51 @@ function FormCheckbox() {
 ```tsx
 function RenderPropsCheckbox() {
   return (
-    <Checkbox defaultChecked={false}>
-      {({ checked, isDisabled, isFocused, isHovered, isPressed }) => (
-        <div>
-          <span>Status: {checked ? 'Checked' : 'Unchecked'}</span>
-          <span>Focused: {isFocused ? 'Yes' : 'No'}</span>
-          <span>Hovered: {isHovered ? 'Yes' : 'No'}</span>
-          <span>Pressed: {isPressed ? 'Yes' : 'No'}</span>
-        </div>
-      )}
-    </Checkbox>
+    <div style={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px' }}>
+      <Checkbox 
+        defaultChecked={false}
+        style={{
+          padding: '16px',
+          border: '2px solid #007acc',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          backgroundColor: '#f9f9f9'
+        }}
+      >
+        {({ checked, isDisabled, isFocused, isHovered, isPressed }) => (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px',
+              fontWeight: 'bold'
+            }}>
+              <span style={{
+                width: '16px',
+                height: '16px',
+                border: '2px solid #007acc',
+                borderRadius: '2px',
+                backgroundColor: checked ? '#007acc' : 'transparent',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                {checked && (
+                  <span style={{ color: 'white', fontSize: '12px' }}>✓</span>
+                )}
+              </span>
+              Interactive Checkbox
+            </div>
+            <div style={{ fontSize: '14px', color: '#666' }}>
+              <div>Status: <strong>{checked ? 'Checked' : 'Unchecked'}</strong></div>
+              <div>Focused: <strong style={{ color: isFocused ? 'green' : 'gray' }}>{isFocused ? 'Yes' : 'No'}</strong></div>
+              <div>Hovered: <strong style={{ color: isHovered ? 'blue' : 'gray' }}>{isHovered ? 'Yes' : 'No'}</strong></div>
+              <div>Pressed: <strong style={{ color: isPressed ? 'red' : 'gray' }}>{isPressed ? 'Yes' : 'No'}</strong></div>
+            </div>
+          </div>
+        )}
+      </Checkbox>
+    </div>
   );
 }
 ```
@@ -188,19 +333,65 @@ function RenderPropsCheckbox() {
 
 ```tsx
 function DisabledCheckbox() {
+  const disabledStyle = {
+    width: '16px',
+    height: '16px',
+    border: '2px solid #ccc',
+    borderRadius: '2px',
+    cursor: 'not-allowed',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    opacity: 0.5
+  };
+  
   return (
-    <div>
-      <Checkbox isDisabled>
-        Disabled unchecked
-      </Checkbox>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <Checkbox 
+          isDisabled
+          style={disabledStyle}
+        >
+          {({ checked }) => checked && (
+            <span style={{ color: '#ccc', fontSize: '12px', lineHeight: 1 }}>✓</span>
+          )}
+        </Checkbox>
+        <label style={{ color: '#999', userSelect: 'none' }}>
+          Disabled unchecked
+        </label>
+      </div>
       
-      <Checkbox isDisabled defaultChecked={true}>
-        Disabled checked
-      </Checkbox>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <Checkbox 
+          isDisabled 
+          defaultChecked={true}
+          style={{
+            ...disabledStyle,
+            backgroundColor: '#ccc'
+          }}
+        >
+          <span style={{ color: 'white', fontSize: '12px', lineHeight: 1 }}>✓</span>
+        </Checkbox>
+        <label style={{ color: '#999', userSelect: 'none' }}>
+          Disabled checked
+        </label>
+      </div>
       
-      <Checkbox isDisabled checked="indeterminate">
-        Disabled indeterminate
-      </Checkbox>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <Checkbox 
+          isDisabled 
+          checked="indeterminate"
+          style={{
+            ...disabledStyle,
+            backgroundColor: '#ccc'
+          }}
+        >
+          <span style={{ color: 'white', fontSize: '12px', lineHeight: 1 }}>−</span>
+        </Checkbox>
+        <label style={{ color: '#999', userSelect: 'none' }}>
+          Disabled indeterminate
+        </label>
+      </div>
     </div>
   );
 }
@@ -211,9 +402,43 @@ function DisabledCheckbox() {
 ```tsx
 function CustomElementCheckbox() {
   return (
-    <Checkbox as="button" className="custom-checkbox">
-      Custom button checkbox
-    </Checkbox>
+    <div style={{ padding: '16px' }}>
+      <Checkbox 
+        as="button" 
+        style={{
+          padding: '12px 24px',
+          border: '2px solid #007acc',
+          borderRadius: '4px',
+          backgroundColor: 'transparent',
+          cursor: 'pointer',
+          fontSize: '14px',
+          color: '#007acc',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}
+      >
+        {({ checked }) => (
+          <>
+            <span style={{
+              width: '16px',
+              height: '16px',
+              border: '2px solid #007acc',
+              borderRadius: '2px',
+              backgroundColor: checked ? '#007acc' : 'transparent',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              {checked && (
+                <span style={{ color: 'white', fontSize: '12px' }}>✓</span>
+              )}
+            </span>
+            Custom button checkbox
+          </>
+        )}
+      </Checkbox>
+    </div>
   );
 }
 ```
@@ -225,21 +450,54 @@ function AccessibleCheckbox() {
   const [hasError, setHasError] = useState(false);
   
   return (
-    <div>
-      <Checkbox 
-        isRequired
-        aria-describedby={hasError ? "error-message" : undefined}
-        aria-invalid={hasError}
-        onChange={(checked) => {
-          setHasError(!checked);
-        }}
-      >
-        Required field
-      </Checkbox>
+    <div style={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+        <Checkbox 
+          isRequired
+          aria-describedby={hasError ? "error-message" : undefined}
+          aria-invalid={hasError}
+          onChange={(checked) => {
+            setHasError(!checked);
+          }}
+          style={{
+            width: '16px',
+            height: '16px',
+            border: `2px solid ${hasError ? '#dc3545' : '#007acc'}`,
+            borderRadius: '2px',
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          {({ checked }) => checked && (
+            <span style={{ 
+              color: hasError ? '#dc3545' : '#007acc', 
+              fontSize: '12px', 
+              lineHeight: 1 
+            }}>✓</span>
+          )}
+        </Checkbox>
+        <label style={{ 
+          userSelect: 'none',
+          color: hasError ? '#dc3545' : 'inherit'
+        }}>
+          Required field *
+        </label>
+      </div>
       
       {hasError && (
-        <div id="error-message" role="alert">
-          This field is required
+        <div 
+          id="error-message" 
+          role="alert"
+          style={{
+            color: '#dc3545',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            marginTop: '4px'
+          }}
+        >
+          ⚠️ This field is required
         </div>
       )}
     </div>
