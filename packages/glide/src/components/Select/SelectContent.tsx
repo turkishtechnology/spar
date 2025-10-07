@@ -1,30 +1,116 @@
 import React, { useCallback, useEffect, useRef } from 'react';
+import {
+  useFloating,
+  offset as offsetMiddleware,
+  flip as flipMiddleware,
+  shift as shiftMiddleware,
+  size as sizeMiddleware,
+  hide as hideMiddleware,
+  arrow as arrowMiddleware,
+  autoUpdate,
+} from '@floating-ui/react-dom';
 import type { SelectContentProps } from './types';
 import { useSelectContext } from './SelectRoot';
 
 /**
- * Dropdown container that appears when select is open. Handles keyboard navigation, focus management, and outside click detection.
+ * Dropdown container that appears when select is open. Handles keyboard navigation, focus management, and outside click detection. Positioned using Floating UI.
  */
 export const SelectContent = ({
   ref,
-  position: _position = 'item-aligned',
-  side = 'bottom',
-  sideOffset: _sideOffset = 0,
-  align = 'start',
-  alignOffset: _alignOffset = 0,
-  avoidCollisions: _avoidCollisions = true,
-  collisionBoundary: _collisionBoundary = [],
-  collisionPadding: _collisionPadding = 10,
+  placement = 'bottom-start',
+  strategy = 'absolute',
+  middleware: customMiddleware,
+  offset = 5,
+  shift = true,
+  shiftPadding = 5,
+  flip = true,
+  hide = false,
+  size = true,
+  arrowRef,
   onEscapeKeyDown,
   onPointerDownOutside,
   onCloseAutoFocus: _onCloseAutoFocus,
   as: Component = 'div',
   onKeyDown,
+  style,
   children,
   ...props
 }: SelectContentProps) => {
   const context = useSelectContext();
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Build middleware array
+  const middleware = React.useMemo(() => {
+    if (customMiddleware) {
+      return customMiddleware;
+    }
+
+    const middlewares = [];
+
+    // Offset from trigger
+    middlewares.push(offsetMiddleware(offset));
+
+    // Flip to opposite side when no space
+    if (flip) {
+      middlewares.push(flipMiddleware());
+    }
+
+    // Shift to stay in view
+    if (shift) {
+      middlewares.push(shiftMiddleware({ padding: shiftPadding }));
+    }
+
+    // Size to fit available space
+    if (size) {
+      middlewares.push(
+        sizeMiddleware({
+          apply({ availableHeight, elements }) {
+            Object.assign(elements.floating.style, {
+              maxHeight: `${availableHeight}px`,
+            });
+          },
+          padding: 10,
+        }),
+      );
+    }
+
+    // Hide when reference is scrolled out of view
+    if (hide) {
+      middlewares.push(hideMiddleware());
+    }
+
+    // Arrow positioning
+    if (arrowRef?.current) {
+      middlewares.push(arrowMiddleware({ element: arrowRef.current }));
+    }
+
+    return middlewares;
+  }, [customMiddleware, offset, flip, shift, shiftPadding, size, hide, arrowRef]);
+
+  // Use Floating UI hook for positioning
+  const {
+    x,
+    y,
+    strategy: floatingStrategy,
+    refs,
+    placement: finalPlacement,
+  } = useFloating({
+    placement,
+    strategy,
+    middleware,
+    whileElementsMounted: autoUpdate,
+  });
+
+  // Merge internal refs with Floating UI refs
+  useEffect(() => {
+    refs.setReference(context.triggerRef.current);
+  }, [refs, context.triggerRef]);
+
+  useEffect(() => {
+    if (context.contentRef.current) {
+      refs.setFloating(context.contentRef.current);
+    }
+  }, [refs, context.contentRef]);
 
   // Merge external ref with internal ref
   useEffect(() => {
@@ -38,58 +124,11 @@ export const SelectContent = ({
     }
   }, [ref, context.contentRef]);
 
-  // Positioning - calculate position relative to trigger (only if using portal/fixed positioning)
-  useEffect(() => {
-    if (!context.open || !context.contentRef.current || !context.triggerRef.current) {
-      return;
-    }
-
-    const content = context.contentRef.current;
-    const trigger = context.triggerRef.current;
-
-    // Check if content already has inline positioning (user-provided)
-    // If so, skip automatic positioning
-    const hasInlinePosition = props.style && 'position' in (props.style as Record<string, unknown>);
-    if (hasInlinePosition) {
-      return;
-    }
-
-    const updatePosition = () => {
-      if (!content || !trigger) return;
-
-      const triggerRect = trigger.getBoundingClientRect();
-
-      // Basic positioning logic
-      if (side === 'bottom') {
-        content.style.position = 'fixed';
-        content.style.left = `${triggerRect.left}px`;
-        content.style.top = `${triggerRect.bottom + _sideOffset}px`;
-        content.style.minWidth = `${triggerRect.width}px`;
-      } else if (side === 'top') {
-        content.style.position = 'fixed';
-        content.style.left = `${triggerRect.left}px`;
-        content.style.bottom = `${window.innerHeight - triggerRect.top + _sideOffset}px`;
-        content.style.minWidth = `${triggerRect.width}px`;
-      }
-    };
-
-    // Initial positioning
-    updatePosition();
-
-    // Update on scroll or resize
-    window.addEventListener('scroll', updatePosition, true);
-    window.addEventListener('resize', updatePosition);
-
-    return () => {
-      window.removeEventListener('scroll', updatePosition, true);
-      window.removeEventListener('resize', updatePosition);
-    };
-  }, [context.open, context.contentRef, context.triggerRef, side, _sideOffset, props.style]);
-
   // Focus management - focus content when opened
   useEffect(() => {
     if (context.open && context.contentRef.current) {
-      context.contentRef.current.focus();
+      // Use preventScroll to avoid scrolling the page when focusing
+      context.contentRef.current.focus({ preventScroll: true });
     }
   }, [context.open, context.contentRef]);
 
@@ -242,6 +281,15 @@ export const SelectContent = ({
     return null;
   }
 
+  // Combine Floating UI styles with user styles
+  const floatingStyles: React.CSSProperties = {
+    position: floatingStrategy,
+    top: y ?? 0,
+    left: x ?? 0,
+    minWidth: context.triggerRef.current?.offsetWidth ?? undefined,
+    ...style,
+  };
+
   return (
     <Component
       ref={context.contentRef}
@@ -249,9 +297,9 @@ export const SelectContent = ({
       role='listbox'
       tabIndex={-1}
       data-state={context.open ? 'open' : 'closed'}
-      data-side={side}
-      data-align={align}
+      data-placement={finalPlacement}
       onKeyDown={handleKeyDown}
+      style={floatingStyles}
       {...props}
     >
       {children}

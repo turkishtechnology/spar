@@ -87,8 +87,8 @@ export type {
   SelectSeparatorProps,
   SelectArrowProps,
   SelectDirection,
-  SelectPosition,
-  SelectSide,
-  SelectAlign,
+  Placement,
+  Strategy,
+  Middleware,
   Padding,
 } from './types';

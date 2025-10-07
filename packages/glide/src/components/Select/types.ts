@@ -1,9 +1,10 @@
 import type React from 'react';
+import type { Placement, Strategy, Middleware, VirtualElement } from '@floating-ui/react-dom';
 
 export type SelectDirection = 'ltr' | 'rtl';
-export type SelectPosition = 'item-aligned' | 'popper';
-export type SelectSide = 'top' | 'right' | 'bottom' | 'left';
-export type SelectAlign = 'start' | 'center' | 'end';
+
+// Re-export Floating UI types for public API
+export type { Placement, Strategy, Middleware, VirtualElement };
 
 export interface Padding {
   top?: number;
@@ -173,52 +174,62 @@ export interface SelectPortalProps {
  */
 export interface SelectContentProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
-   * Positioning strategy
-   * @defaultValue 'item-aligned'
+   * Placement of the floating content relative to the trigger
+   * @defaultValue 'bottom-start'
    */
-  position?: SelectPosition;
+  placement?: Placement;
 
   /**
-   * Preferred placement side (popper only)
-   * @defaultValue 'bottom'
+   * Positioning strategy (absolute or fixed)
+   * @defaultValue 'absolute'
    */
-  side?: SelectSide;
+  strategy?: Strategy;
 
   /**
-   * Distance from trigger (popper only)
-   * @defaultValue 0
+   * Custom middleware array for advanced positioning control
    */
-  sideOffset?: number;
+  middleware?: Middleware[];
 
   /**
-   * Alignment relative to trigger
-   * @defaultValue 'start'
+   * Distance from trigger in pixels
+   * @defaultValue 5
    */
-  align?: SelectAlign;
+  offset?: number;
 
   /**
-   * Alignment offset in pixels
-   * @defaultValue 0
-   */
-  alignOffset?: number;
-
-  /**
-   * Adjust position to avoid viewport edges
+   * Whether to shift the content to stay in view
    * @defaultValue true
    */
-  avoidCollisions?: boolean;
+  shift?: boolean;
 
   /**
-   * Boundaries for collision detection
-   * @defaultValue []
+   * Padding for shift calculations
+   * @defaultValue 5
    */
-  collisionBoundary?: Element | Element[];
+  shiftPadding?: number;
 
   /**
-   * Padding for collision detection
-   * @defaultValue 10
+   * Whether to flip to opposite side when no space
+   * @defaultValue true
    */
-  collisionPadding?: number | Padding;
+  flip?: boolean;
+
+  /**
+   * Whether to hide when trigger is fully scrolled out of view
+   * @defaultValue false
+   */
+  hide?: boolean;
+
+  /**
+   * Whether to constrain size to available space
+   * @defaultValue true
+   */
+  size?: boolean;
+
+  /**
+   * Arrow element ref for arrow positioning
+   */
+  arrowRef?: React.RefObject<HTMLElement | SVGSVGElement>;
 
   /**
    * Escape key handler
@@ -420,6 +431,11 @@ export interface SelectArrowProps extends React.SVGAttributes<SVGSVGElement> {
    * @defaultValue 'svg'
    */
   as?: React.ElementType;
+
+  /**
+   * Forward ref support
+   */
+  ref?: React.Ref<SVGSVGElement>;
 
   /**
    * Optional children (custom arrow shape)
