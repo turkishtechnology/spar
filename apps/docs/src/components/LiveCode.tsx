@@ -19,6 +19,7 @@ import {
   RadioItem,
   Checkbox,
   Switch,
+  Label,
 } from '@turkish-technology/glide';
 
 interface LiveCodeProps {
@@ -93,6 +94,8 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Checkbox,
     // Switch component
     Switch,
+    // Label component
+    Label,
   };
 
   const [copied, setCopied] = useState(false);
