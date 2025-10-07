@@ -12,6 +12,7 @@ import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
+  Input,
   PopoverRoot,
   PopoverTrigger,
   PopoverContent,
@@ -22,7 +23,11 @@ import {
   Radio,
   RadioGroup,
   RadioItem,
+  Checkbox,
+  Switch,
+  Label,
 } from '@turkish-technology/glide';
+
 interface LiveCodeProps {
   title?: string;
   code?: string;
@@ -72,6 +77,7 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
+    // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
     PopoverRoot,
     PopoverTrigger,
     PopoverContent,
@@ -95,6 +101,14 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Radio,
     RadioGroup,
     RadioItem,
+    // Input components
+    Input,
+    // Checkbox component
+    Checkbox,
+    // Switch component
+    Switch,
+    // Label component
+    Label,
   };
 
   const [copied, setCopied] = useState(false);
