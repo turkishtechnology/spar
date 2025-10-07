@@ -20,12 +20,26 @@ Generate ONLY the component implementation. DO NOT run tests or create test file
 
 ### Files to Create
 
+**For Simple Components:**
 ```
 packages/glide/src/components/${ComponentName}/
 ├── ${ComponentName}.tsx    # Core component logic
 ├── types.ts                # TypeScript interfaces
 └── index.ts                # Barrel exports
 ```
+
+**For Compound Components:**
+```
+packages/glide/src/components/${ComponentName}/
+├── ${ComponentName}.tsx        # Root component
+├── ${ComponentName}Item.tsx    # Child parts (if applicable)
+├── ${ComponentName}Trigger.tsx # Interactive parts (if applicable)
+├── ${ComponentName}Content.tsx # Content parts (if applicable)
+├── types.ts                    # Shared TypeScript interfaces
+└── index.ts                    # Compound exports with dot notation
+```
+
+**CRITICAL**: Each logical component part MUST be in its own file for maintainability, tree-shaking, and consistency.
 
 ### Implementation Requirements
 
