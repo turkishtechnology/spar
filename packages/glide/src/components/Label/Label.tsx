@@ -6,14 +6,10 @@ import type { LabelProps } from './types';
  */
 export const Label = ({
   as: Element = 'label',
-  htmlFor,
   isRequired = false,
   isOptional = false,
   isDisabled = false,
   children,
-  className,
-  style,
-  ref,
   ...htmlProps
 }: LabelProps) => {
   // Memoize data attributes to prevent object recreation
@@ -27,14 +23,7 @@ export const Label = ({
   );
 
   return (
-    <Element
-      ref={ref}
-      htmlFor={htmlFor}
-      className={className}
-      style={style}
-      {...dataAttributes}
-      {...htmlProps}
-    >
+    <Element {...htmlProps} {...dataAttributes}>
       {children}
     </Element>
   );

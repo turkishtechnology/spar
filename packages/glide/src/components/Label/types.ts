@@ -6,12 +6,6 @@ import type { ElementType } from 'react';
  */
 export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
   /**
-   * ID of the associated form control (explicit association)
-   * @remarks Creates programmatic relationship via native `for` attribute
-   */
-  htmlFor?: string;
-
-  /**
    * Marks label for a required field (exposed via data attribute for styling)
    * @remarks Does NOT add required functionality - set `required` on the control itself
    * @defaultValue false
@@ -37,24 +31,4 @@ export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> 
    * @defaultValue 'label'
    */
   as?: ElementType;
-
-  /**
-   * Label content (text, icons, or form controls for implicit association)
-   */
-  children?: React.ReactNode;
-
-  /**
-   * CSS class names
-   */
-  className?: string;
-
-  /**
-   * Inline styles
-   */
-  style?: React.CSSProperties;
-
-  /**
-   * Ref forwarded to root element
-   */
-  ref?: React.Ref<HTMLLabelElement>;
 }
