@@ -13,6 +13,7 @@ import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
+  Input,
   Radio,
   RadioGroup,
   RadioItem,
@@ -84,6 +85,8 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Radio,
     RadioGroup,
     RadioItem,
+    // Input components
+    Input,
     // Checkbox component
     Checkbox,
   };
