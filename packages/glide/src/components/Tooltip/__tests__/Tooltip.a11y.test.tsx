@@ -9,7 +9,7 @@ import {
   TooltipContent,
   TooltipPortal,
   TooltipArrow,
-} from '../Tooltip';
+} from '../index';
 
 expect.extend(toHaveNoViolations);
 

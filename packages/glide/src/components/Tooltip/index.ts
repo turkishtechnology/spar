@@ -1,22 +1,31 @@
-import {
-  TooltipProvider,
-  TooltipRoot,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipPortal,
-  TooltipArrow,
-} from './Tooltip';
+import { TooltipProvider } from './TooltipProvider';
+import { TooltipRoot } from './TooltipRoot';
+import { TooltipTrigger } from './TooltipTrigger';
+import { TooltipContent } from './TooltipContent';
+import { TooltipPortal } from './TooltipPortal';
+import { TooltipArrow } from './TooltipArrow';
 
-// Create aliases for grouped pattern
-const Provider = TooltipProvider;
-const Root = TooltipRoot;
-const Trigger = TooltipTrigger;
-const Content = TooltipContent;
-const Portal = TooltipPortal;
-const Arrow = TooltipArrow;
+// Create compound component with dot notation support
+const TooltipCompound = TooltipRoot as typeof TooltipRoot & {
+  Root: typeof TooltipRoot;
+  Trigger: typeof TooltipTrigger;
+  Content: typeof TooltipContent;
+  Portal: typeof TooltipPortal;
+  Arrow: typeof TooltipArrow;
+  Provider: typeof TooltipProvider;
+};
+
+TooltipCompound.Root = TooltipRoot;
+TooltipCompound.Trigger = TooltipTrigger;
+TooltipCompound.Content = TooltipContent;
+TooltipCompound.Portal = TooltipPortal;
+TooltipCompound.Arrow = TooltipArrow;
+TooltipCompound.Provider = TooltipProvider;
 
 // Export both patterns
 export {
+  // Compound component (with dot notation)
+  TooltipCompound as Tooltip,
   // Named exports (tree-shakeable)
   TooltipProvider,
   TooltipRoot,
@@ -24,14 +33,6 @@ export {
   TooltipContent,
   TooltipPortal,
   TooltipArrow,
-
-  // Aliased exports (for grouped usage)
-  Provider,
-  Root,
-  Trigger,
-  Content,
-  Portal,
-  Arrow,
 };
 
 // Export types

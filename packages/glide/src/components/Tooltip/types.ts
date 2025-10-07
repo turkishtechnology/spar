@@ -79,7 +79,7 @@ export interface TooltipRootProps {
  * Props for TooltipTrigger
  * @remarks The trigger element that shows/hides the tooltip
  */
-export interface TooltipTriggerProps {
+export interface TooltipTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * The trigger element (must be single focusable element)
    */
@@ -221,7 +221,7 @@ export interface TooltipPortalProps {
  * Props for TooltipArrow
  * @remarks Optional arrow pointing to the trigger element
  */
-export interface TooltipArrowProps {
+export interface TooltipArrowProps extends React.SVGProps<SVGSVGElement> {
   /**
    * Arrow width in pixels
    * @defaultValue 10
@@ -239,16 +239,6 @@ export interface TooltipArrowProps {
    * @defaultValue 'svg'
    */
   as?: React.ElementType;
-
-  /**
-   * CSS class names for styling
-   */
-  className?: string;
-
-  /**
-   * Inline styles
-   */
-  style?: React.CSSProperties;
 }
 
 // Internal context types

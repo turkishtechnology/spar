@@ -8,7 +8,7 @@ import {
   TooltipContent,
   TooltipPortal,
   TooltipArrow,
-} from '../Tooltip';
+} from '../index';
 
 // Mock timer functions
 jest.useFakeTimers();
