@@ -1,21 +1,20 @@
-export {
-  PopoverRoot,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverAnchor,
-  PopoverPortal,
-  PopoverClose,
-} from './Popover';
+// Export components from their separate files
+export { PopoverRoot } from './Popover';
+export { PopoverTrigger } from './PopoverTrigger';
+export { PopoverContent } from './PopoverContent';
+export { PopoverArrow } from './PopoverArrow';
+export { PopoverAnchor } from './PopoverAnchor';
+export { PopoverPortal } from './PopoverPortal';
+export { PopoverClose } from './PopoverClose';
 
 // Create aliases for grouped pattern
 export { PopoverRoot as Root } from './Popover';
-export { PopoverTrigger as Trigger } from './Popover';
-export { PopoverContent as Content } from './Popover';
-export { PopoverArrow as Arrow } from './Popover';
-export { PopoverAnchor as Anchor } from './Popover';
-export { PopoverPortal as Portal } from './Popover';
-export { PopoverClose as Close } from './Popover';
+export { PopoverTrigger as Trigger } from './PopoverTrigger';
+export { PopoverContent as Content } from './PopoverContent';
+export { PopoverArrow as Arrow } from './PopoverArrow';
+export { PopoverAnchor as Anchor } from './PopoverAnchor';
+export { PopoverPortal as Portal } from './PopoverPortal';
+export { PopoverClose as Close } from './PopoverClose';
 
 // Export types
 export type {

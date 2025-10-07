@@ -1,14 +1,12 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import {
-  PopoverRoot,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverAnchor,
-  PopoverClose,
-} from '../Popover';
+import { PopoverRoot } from '../Popover';
+import { PopoverTrigger } from '../PopoverTrigger';
+import { PopoverContent } from '../PopoverContent';
+import { PopoverArrow } from '../PopoverArrow';
+import { PopoverAnchor } from '../PopoverAnchor';
+import { PopoverClose } from '../PopoverClose';
 
 expect.extend(toHaveNoViolations);
 
