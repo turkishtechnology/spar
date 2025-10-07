@@ -1,5 +1,12 @@
-import type { ElementType, ButtonHTMLAttributes } from 'react';
-import type * as React from 'react';
+import type {
+  ElementType,
+  ButtonHTMLAttributes,
+  AriaAttributes,
+  KeyboardEvent,
+  MouseEvent,
+  FocusEvent,
+  CSSProperties,
+} from 'react';
 
 /**
  * Props for Switch component
@@ -75,17 +82,17 @@ export interface SwitchProps
    * Accessible name for the switch
    * @remarks Required when switch has no visible label
    */
-  'aria-label'?: React.AriaAttributes['aria-label'];
+  'aria-label'?: AriaAttributes['aria-label'];
 
   /**
    * ID of element that labels the switch
    */
-  'aria-labelledby'?: React.AriaAttributes['aria-labelledby'];
+  'aria-labelledby'?: AriaAttributes['aria-labelledby'];
 
   /**
    * ID of element that describes the switch
    */
-  'aria-describedby'?: React.AriaAttributes['aria-describedby'];
+  'aria-describedby'?: AriaAttributes['aria-describedby'];
 }
 
 /**
@@ -120,14 +127,14 @@ export interface UseSwitchReturn {
     'data-hover'?: '';
     'data-active'?: '';
     tabIndex: number;
-    onKeyDown: (event: React.KeyboardEvent) => void;
-    onClick: (event: React.MouseEvent) => void;
-    onFocus: (event: React.FocusEvent) => void;
-    onBlur: (event: React.FocusEvent) => void;
-    onMouseEnter: (event: React.MouseEvent) => void;
-    onMouseLeave: (event: React.MouseEvent) => void;
-    onMouseDown: (event: React.MouseEvent) => void;
-    onMouseUp: (event: React.MouseEvent) => void;
+    onKeyDown: (event: KeyboardEvent) => void;
+    onClick: (event: MouseEvent) => void;
+    onFocus: (event: FocusEvent) => void;
+    onBlur: (event: FocusEvent) => void;
+    onMouseEnter: (event: MouseEvent) => void;
+    onMouseLeave: (event: MouseEvent) => void;
+    onMouseDown: (event: MouseEvent) => void;
+    onMouseUp: (event: MouseEvent) => void;
   };
   hiddenInputProps: {
     type: 'checkbox';
@@ -135,6 +142,6 @@ export interface UseSwitchReturn {
     onChange: () => void;
     tabIndex: -1;
     'aria-hidden': true;
-    style: React.CSSProperties;
+    style: CSSProperties;
   };
 }
