@@ -13,9 +13,11 @@ import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
+  Input,
   Radio,
   RadioGroup,
   RadioItem,
+  Checkbox,
   Label,
 } from '@turkish-technology/glide';
 interface LiveCodeProps {
@@ -67,6 +69,7 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
+    // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
     // Accordion components
     Accordion,
     AccordionItem,
@@ -83,6 +86,10 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Radio,
     RadioGroup,
     RadioItem,
+    // Input components
+    Input,
+    // Checkbox component
+    Checkbox,
     // Label component
     Label,
   };
