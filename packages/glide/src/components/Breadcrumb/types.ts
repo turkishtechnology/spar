@@ -1,176 +1,175 @@
-import { ElementType, ReactNode, MouseEvent, KeyboardEvent, ComponentPropsWithoutRef } from 'react';
+import type {
+  ElementType,
+  MouseEvent,
+  KeyboardEvent,
+  ReactNode,
+  HTMLAttributes,
+  AnchorHTMLAttributes,
+  LiHTMLAttributes,
+  OlHTMLAttributes,
+} from 'react';
 
-// Event handler types
+/**
+ * Event handler types for breadcrumb navigation
+ */
 export type NavigationHandler = (href: string, event: MouseEvent | KeyboardEvent) => void;
 export type PressEvent = MouseEvent | KeyboardEvent;
 
-// Position type for item positioning
-export type ItemPosition = 'first' | 'middle' | 'last';
+/**
+ * Position of breadcrumb item in the trail
+ */
+export type BreadcrumbPosition = 'first' | 'middle' | 'last';
 
-// Context value type
+/**
+ * Context value for breadcrumb component communication
+ */
 export interface BreadcrumbContextValue {
   isDisabled?: boolean;
   onNavigate?: NavigationHandler;
-  currentPath?: string;
-  separator?: ReactNode;
-  itemCount?: number;
   registerItem?: (id: string) => void;
   unregisterItem?: (id: string) => void;
+  itemCount?: number;
 }
 
 /**
- * Props for Breadcrumb.Root component
- * @remarks Navigation landmark for breadcrumb trail
+ * Props for Breadcrumb.Root
+ * @remarks Navigation landmark container for breadcrumb trail
  */
-export type BreadcrumbRootProps<T extends ElementType = 'nav'> = {
+export interface BreadcrumbRootProps extends HTMLAttributes<HTMLElement> {
   /**
    * Polymorphic element type
    * @defaultValue 'nav'
    */
-  as?: T;
-
+  as?: ElementType;
+  /**
+   * Breadcrumb content
+   */
+  children: ReactNode;
   /**
    * Accessible name for navigation landmark
    * @defaultValue 'Breadcrumb'
    */
   'aria-label'?: string;
-
   /**
    * Navigation event handler for routing integration
    */
   onNavigate?: NavigationHandler;
-
   /**
-   * Disable link interaction
+   * Disable all breadcrumb navigation
    * @defaultValue false
    */
   isDisabled?: boolean;
-
-  /**
-   * Breadcrumb content
-   */
-  children: ReactNode;
-} & ComponentPropsWithoutRef<T>;
+}
 
 /**
- * Props for Breadcrumb.List component
+ * Props for Breadcrumb.List
  * @remarks Ordered list container for breadcrumb items
  */
-export type BreadcrumbListProps<T extends ElementType = 'ol'> = {
+export interface BreadcrumbListProps extends OlHTMLAttributes<HTMLOListElement> {
   /**
    * Polymorphic element type
    * @defaultValue 'ol'
    */
-  as?: T;
-
+  as?: ElementType;
   /**
    * List items content
    */
   children: ReactNode;
-} & ComponentPropsWithoutRef<T>;
+}
 
 /**
- * Props for Breadcrumb.Item component
- * @remarks Individual breadcrumb item container
+ * Props for Breadcrumb.Item
+ * @remarks List item wrapper for breadcrumb content
  */
-export type BreadcrumbItemProps<T extends ElementType = 'li'> = {
+export interface BreadcrumbItemProps extends LiHTMLAttributes<HTMLLIElement> {
   /**
    * Polymorphic element type
    * @defaultValue 'li'
    */
-  as?: T;
-
+  as?: ElementType;
   /**
    * Item content (Link or Page)
    */
   children: ReactNode;
-} & ComponentPropsWithoutRef<T>;
+  /**
+   * Position of this item in the breadcrumb trail
+   * @internal Automatically calculated by BreadcrumbList
+   */
+  position?: BreadcrumbPosition;
+  /**
+   * Whether this is the current page (last item)
+   * @internal Automatically calculated by BreadcrumbList
+   */
+  isCurrent?: boolean;
+}
 
 /**
- * Props for Breadcrumb.Link component
- * @remarks Interactive breadcrumb link
+ * Props for Breadcrumb.Link
+ * @remarks Interactive link for navigation
  */
-export type BreadcrumbLinkProps<T extends ElementType = 'a'> = {
+export interface BreadcrumbLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /**
    * Polymorphic element type
    * @defaultValue 'a'
    */
-  as?: T;
-
+  as?: ElementType;
   /**
    * Link destination
    */
   href?: string;
-
+  /**
+   * Link text content
+   */
+  children: ReactNode;
   /**
    * Disable this specific link
    * @defaultValue false
    */
-  disabled?: boolean;
-
+  isDisabled?: boolean;
   /**
    * Indicates external link (adds security attributes)
    * @defaultValue false
    */
   isExternal?: boolean;
-
-  /**
-   * Link target attribute
-   */
-  target?: string;
-
-  /**
-   * Link relationship attribute
-   */
-  rel?: string;
-
   /**
    * Press event handler (overrides default navigation)
    */
   onPress?: (event: PressEvent) => void;
-
-  /**
-   * Link text content
-   */
-  children: ReactNode;
-} & ComponentPropsWithoutRef<T>;
+}
 
 /**
- * Props for Breadcrumb.Page component
+ * Props for Breadcrumb.Page
  * @remarks Current page indicator (non-interactive)
  */
-export type BreadcrumbPageProps<T extends ElementType = 'span'> = {
+export interface BreadcrumbPageProps extends HTMLAttributes<HTMLElement> {
   /**
    * Polymorphic element type
    * @defaultValue 'span'
    */
-  as?: T;
-
+  as?: ElementType;
   /**
    * Current page name
    */
   children: ReactNode;
-} & ComponentPropsWithoutRef<T>;
+}
 
 /**
- * Props for Breadcrumb.Separator component
+ * Props for Breadcrumb.Separator
  * @remarks Visual separator between breadcrumb items
  */
-export type BreadcrumbSeparatorProps<T extends ElementType = 'span'> = {
+export interface BreadcrumbSeparatorProps extends LiHTMLAttributes<HTMLLIElement> {
   /**
    * Polymorphic element type
    * @defaultValue 'li'
    */
-  as?: T;
-
+  as?: ElementType;
   /**
    * Custom separator content
    */
   children?: ReactNode;
-
   /**
    * Hide from screen readers
    * @defaultValue true
    */
   'aria-hidden'?: boolean;
-} & ComponentPropsWithoutRef<T>;
+}
