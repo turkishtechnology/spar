@@ -4,6 +4,7 @@ import type {
   AriaAttributes,
   KeyboardEvent,
   MouseEvent,
+  PointerEvent,
   FocusEvent,
   CSSProperties,
 } from 'react';
@@ -131,10 +132,11 @@ export interface UseSwitchReturn {
     onClick: (event: MouseEvent) => void;
     onFocus: (event: FocusEvent) => void;
     onBlur: (event: FocusEvent) => void;
-    onMouseEnter: (event: MouseEvent) => void;
-    onMouseLeave: (event: MouseEvent) => void;
-    onMouseDown: (event: MouseEvent) => void;
-    onMouseUp: (event: MouseEvent) => void;
+    onPointerEnter: (event: PointerEvent) => void;
+    onPointerLeave: (event: PointerEvent) => void;
+    onPointerDown: (event: PointerEvent) => void;
+    onPointerUp: (event: PointerEvent) => void;
+    onPointerCancel: (event: PointerEvent) => void;
   };
   hiddenInputProps: {
     type: 'checkbox';
