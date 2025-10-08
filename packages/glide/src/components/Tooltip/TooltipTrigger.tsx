@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import type { TooltipTriggerProps } from './types';
 import { useTooltip } from './useTooltip';
 import { useTooltipProvider } from './useTooltipProvider';
@@ -26,7 +26,7 @@ export const TooltipTrigger = ({
   const isTouch = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches;
 
   // Clear timeouts
-  const clearTimeouts = () => {
+  const clearTimeouts = useCallback(() => {
     if (showTimeoutRef.current) {
       clearTimeout(showTimeoutRef.current);
       showTimeoutRef.current = null;
@@ -35,67 +35,88 @@ export const TooltipTrigger = ({
       clearTimeout(hideTimeoutRef.current);
       hideTimeoutRef.current = null;
     }
-  };
+  }, []);
 
   // Show tooltip with delay
-  const showTooltip = (immediate = false) => {
-    clearTimeouts();
+  const showTooltip = useCallback(
+    (immediate = false) => {
+      clearTimeouts();
 
-    const delay = immediate || provider?.isOpenDelayed ? 0 : context.delay;
+      const delay = immediate || provider?.isOpenDelayed ? 0 : context.delay;
 
-    showTimeoutRef.current = window.setTimeout(() => {
-      context.onOpenChange(true);
-      provider?.setIsOpenDelayed?.(true);
-    }, delay);
-  };
+      showTimeoutRef.current = window.setTimeout(() => {
+        context.onOpenChange(true);
+        provider?.setIsOpenDelayed?.(true);
+      }, delay);
+    },
+    [clearTimeouts, provider, context],
+  );
 
   // Hide tooltip with delay
-  const hideTooltip = (immediate = false) => {
-    clearTimeouts();
+  const hideTooltip = useCallback(
+    (immediate = false) => {
+      clearTimeouts();
 
-    const delay = immediate ? 0 : context.hideDelay;
+      const delay = immediate ? 0 : context.hideDelay;
 
-    hideTimeoutRef.current = window.setTimeout(() => {
-      context.onOpenChange(false);
-      provider?.setIsOpenDelayed?.(false);
-    }, delay);
-  };
+      hideTimeoutRef.current = window.setTimeout(() => {
+        context.onOpenChange(false);
+        provider?.setIsOpenDelayed?.(false);
+      }, delay);
+    },
+    [clearTimeouts, context, provider],
+  );
 
   // Event handlers
-  const handleMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
-    if (!isTouch) {
-      showTooltip();
-    }
-    onMouseEnter?.(event as React.MouseEvent<HTMLButtonElement>);
-  };
+  const handleMouseEnter = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      if (!isTouch) {
+        showTooltip();
+      }
+      onMouseEnter?.(event as React.MouseEvent<HTMLButtonElement>);
+    },
+    [isTouch, showTooltip, onMouseEnter],
+  );
 
-  const handleMouseLeave = (event: React.MouseEvent<HTMLElement>) => {
-    if (!isTouch) {
-      hideTooltip();
-    }
-    onMouseLeave?.(event as React.MouseEvent<HTMLButtonElement>);
-  };
+  const handleMouseLeave = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      if (!isTouch) {
+        hideTooltip();
+      }
+      onMouseLeave?.(event as React.MouseEvent<HTMLButtonElement>);
+    },
+    [isTouch, hideTooltip, onMouseLeave],
+  );
 
-  const handleFocus = (event: React.FocusEvent<HTMLElement>) => {
-    showTooltip(true); // Immediate on focus
-    onFocus?.(event as React.FocusEvent<HTMLButtonElement>);
-  };
+  const handleFocus = useCallback(
+    (event: React.FocusEvent<HTMLElement>) => {
+      showTooltip(true); // Immediate on focus
+      onFocus?.(event as React.FocusEvent<HTMLButtonElement>);
+    },
+    [showTooltip, onFocus],
+  );
 
-  const handleBlur = (event: React.FocusEvent<HTMLElement>) => {
-    hideTooltip(true); // Immediate on blur
-    onBlur?.(event as React.FocusEvent<HTMLButtonElement>);
-  };
+  const handleBlur = useCallback(
+    (event: React.FocusEvent<HTMLElement>) => {
+      hideTooltip(true); // Immediate on blur
+      onBlur?.(event as React.FocusEvent<HTMLButtonElement>);
+    },
+    [hideTooltip, onBlur],
+  );
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
-    if (event.key === 'Escape' && context.isOpen) {
-      event.preventDefault();
-      event.stopPropagation();
-      hideTooltip(true);
-      // Keep focus on trigger
-      context.triggerRef.current?.focus();
-    }
-    onKeyDown?.(event as React.KeyboardEvent<HTMLButtonElement>);
-  };
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLElement>) => {
+      if (event.key === 'Escape' && context.isOpen) {
+        event.preventDefault();
+        event.stopPropagation();
+        hideTooltip(true);
+        // Keep focus on trigger
+        context.triggerRef.current?.focus();
+      }
+      onKeyDown?.(event as React.KeyboardEvent<HTMLButtonElement>);
+    },
+    [context.isOpen, context.triggerRef, hideTooltip, onKeyDown],
+  );
 
   // Global escape key handler for better accessibility
   useEffect(() => {

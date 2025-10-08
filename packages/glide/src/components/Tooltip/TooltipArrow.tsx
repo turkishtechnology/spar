@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import type { TooltipArrowProps } from './types';
 import { useTooltip } from './useTooltip';
 
@@ -15,9 +15,12 @@ export const TooltipArrow = ({
   const context = useTooltip();
 
   // Ref callback to attach arrow ref
-  const refCallback = (node: HTMLElement | SVGSVGElement | null) => {
-    context.arrowRef.current = node;
-  };
+  const refCallback = useCallback(
+    (node: HTMLElement | SVGSVGElement | null) => {
+      context.arrowRef.current = node;
+    },
+    [context.arrowRef],
+  );
 
   const arrowStyle = {
     ...style,

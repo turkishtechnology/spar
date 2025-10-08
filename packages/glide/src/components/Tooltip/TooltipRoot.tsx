@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from 'react';
+import { useId, useMemo, useRef, useState } from 'react';
 import type { TooltipRootProps, TooltipContextValue, Side } from './types';
 import { TooltipContext } from './TooltipContext';
 import { useTooltipProvider } from './useTooltipProvider';
@@ -50,23 +50,42 @@ export const TooltipRoot = ({
   };
 
   // Context value
-  const contextValue: TooltipContextValue = {
-    isOpen,
-    onOpenChange: handleOpenChange,
-    delay: effectiveDelay,
-    hideDelay: effectiveHideDelay,
-    skipDelayDuration: effectiveSkipDelay,
-    disableHoverableContent: effectiveDisableHover,
-    triggerId,
-    contentId,
-    asLabel,
-    placement,
-    setPlacement,
-    isDisabled,
-    triggerRef,
-    contentRef,
-    arrowRef,
-  };
+  const contextValue: TooltipContextValue = useMemo(
+    () => ({
+      isOpen,
+      onOpenChange: handleOpenChange,
+      delay: effectiveDelay,
+      hideDelay: effectiveHideDelay,
+      skipDelayDuration: effectiveSkipDelay,
+      disableHoverableContent: effectiveDisableHover,
+      triggerId,
+      contentId,
+      asLabel,
+      placement,
+      setPlacement,
+      isDisabled,
+      triggerRef,
+      contentRef,
+      arrowRef,
+    }),
+    [
+      isOpen,
+      handleOpenChange,
+      effectiveDelay,
+      effectiveHideDelay,
+      effectiveSkipDelay,
+      effectiveDisableHover,
+      triggerId,
+      contentId,
+      asLabel,
+      placement,
+      setPlacement,
+      isDisabled,
+      triggerRef,
+      contentRef,
+      arrowRef,
+    ],
+  );
 
   return <TooltipContext.Provider value={contextValue}>{children}</TooltipContext.Provider>;
 };
