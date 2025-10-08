@@ -57,14 +57,14 @@ function Example() {
 
 ## Features
 
-- ✅ Keyboard and mouse support with optimized delay timing
+- ✅ Unified pointer events for mouse and touch support with optimized delay timing
 - ✅ Smart positioning with automatic collision detection via Floating UI
 - ✅ Hoverable content for interactive tooltips (WCAG 1.4.13)
 - ✅ Controlled and uncontrolled state management
 - ✅ Optional tooltip provider for shared configuration
 - ✅ Portal rendering to avoid z-index issues
 - ✅ Optional arrow pointing to trigger element
-- ✅ Touch device detection with appropriate behavior
+- ✅ Native touch and mobile device support via Pointer Events API
 - ✅ Escape key support to dismiss tooltip
 - ✅ Skip delay for quick navigation between tooltips
 - ✅ Can act as label or description for accessibility
@@ -454,13 +454,13 @@ The trigger element that shows/hides the tooltip on hover or focus.
 
 **Events**
 
-| Name           | Parameters                     | Description                 | When Triggered             |
-| -------------- | ------------------------------ | --------------------------- | -------------------------- |
-| `onMouseEnter` | -                              | Mouse enters trigger        | Mouse hover                |
-| `onMouseLeave` | -                              | Mouse leaves trigger        | Mouse exit                 |
-| `onFocus`      | -                              | Trigger receives focus      | Keyboard focus             |
-| `onBlur`       | -                              | Trigger loses focus         | Focus removed              |
-| `onKeyDown`    | `(event: React.KeyboardEvent)` | Key pressed on trigger      | Keyboard interaction       |
+| Name              | Parameters                        | Description                 | When Triggered                |
+| ----------------- | --------------------------------- | --------------------------- | ----------------------------- |
+| `onPointerEnter`  | `(event: React.PointerEvent)`     | Pointer enters trigger      | Mouse hover or touch start    |
+| `onPointerLeave`  | `(event: React.PointerEvent)`     | Pointer leaves trigger      | Mouse exit or touch end       |
+| `onFocus`         | `(event: React.FocusEvent)`       | Trigger receives focus      | Keyboard focus                |
+| `onBlur`          | `(event: React.FocusEvent)`       | Trigger loses focus         | Focus removed                 |
+| `onKeyDown`       | `(event: React.KeyboardEvent)`    | Key pressed on trigger      | Keyboard interaction          |
 
 **ARIA Attributes**
 
@@ -524,13 +524,13 @@ The content that displays in the tooltip popup with smart positioning.
 
 **Events**
 
-| Name                    | Parameters             | Description                     | When Triggered              |
-| ----------------------- | ---------------------- | ------------------------------- | --------------------------- |
-| `onEscapeKeyDown`       | `(event: KeyboardEvent)` | Escape key pressed            | User presses Escape         |
-| `onPointerDownOutside`  | `(event: PointerEvent)`  | Click outside tooltip         | Click outside content       |
-| `onMouseEnter`          | -                      | Mouse enters content            | Mouse hover on tooltip      |
-| `onMouseLeave`          | -                      | Mouse leaves content            | Mouse exits tooltip         |
-| `onKeyDown`             | `(event: React.KeyboardEvent)` | Key pressed in content  | Keyboard interaction        |
+| Name                    | Parameters                        | Description                     | When Triggered                 |
+| ----------------------- | --------------------------------- | ------------------------------- | ------------------------------ |
+| `onEscapeKeyDown`       | `(event: KeyboardEvent)`          | Escape key pressed              | User presses Escape            |
+| `onPointerDownOutside`  | `(event: PointerEvent)`           | Pointer down outside tooltip    | Click/touch outside content    |
+| `onPointerEnter`        | `(event: React.PointerEvent)`     | Pointer enters content          | Mouse hover or touch on tooltip|
+| `onPointerLeave`        | `(event: React.PointerEvent)`     | Pointer leaves content          | Mouse exit or touch end        |
+| `onKeyDown`             | `(event: React.KeyboardEvent)`    | Key pressed in content          | Keyboard interaction           |
 
 **ARIA Attributes**
 
@@ -574,13 +574,13 @@ Optional arrow pointing to the trigger element.
 
 Complete keyboard behavior for the tooltip component:
 
-| Key           | Action                | Context          | Notes                                              |
-| ------------- | --------------------- | ---------------- | -------------------------------------------------- |
-| `Tab`         | Focus trigger         | Any context      | Shows tooltip immediately on focus                 |
-| `Escape`      | Close tooltip         | Focused trigger  | Closes tooltip and keeps focus on trigger          |
-| `Escape`      | Close tooltip         | Focused content  | Closes tooltip and returns focus to trigger        |
-| `Mouse hover` | Show tooltip          | Trigger          | Shows tooltip after delay duration                 |
-| `Mouse leave` | Hide tooltip          | Trigger          | Hides tooltip after hide delay                     |
+| Key              | Action                | Context          | Notes                                              |
+| ---------------- | --------------------- | ---------------- | -------------------------------------------------- |
+| `Tab`            | Focus trigger         | Any context      | Shows tooltip immediately on focus                 |
+| `Escape`         | Close tooltip         | Focused trigger  | Closes tooltip and keeps focus on trigger          |
+| `Escape`         | Close tooltip         | Focused content  | Closes tooltip and returns focus to trigger        |
+| `Pointer hover`  | Show tooltip          | Trigger          | Shows tooltip after delay duration                 |
+| `Pointer leave`  | Hide tooltip          | Trigger          | Hides tooltip after hide delay                     |
 
 ---
 
@@ -592,8 +592,8 @@ The Tooltip component is designed with accessibility as a priority:
 - **Screen Reader Support**: Proper ARIA attributes for assistive technologies
 - **Keyboard Navigation**: Full keyboard support with Escape key handling
 - **Focus Management**: Proper focus handling on show/hide
-- **Hoverable Content**: Content remains visible when mouse moves to it (WCAG 1.4.13)
-- **Touch Support**: Appropriate behavior on touch devices
+- **Hoverable Content**: Content remains visible when pointer moves to it (WCAG 1.4.13)
+- **Unified Input Support**: Pointer Events API provides consistent behavior across mouse, touch, and pen inputs
 - **High Contrast**: Works with high contrast modes
 - **Reduced Motion**: Respects `prefers-reduced-motion` preference
 
@@ -603,6 +603,6 @@ The Tooltip component is designed with accessibility as a priority:
 2. **Use for Supplementary Info**: Don't hide critical information in tooltips
 3. **Avoid Interactive Content**: Tooltips are not for complex interactions
 4. **Label vs Description**: Use `asLabel={true}` only when tooltip provides the primary label
-5. **Touch Considerations**: Consider alternative patterns for touch-only devices
+5. **Cross-Device Compatibility**: Pointer Events API ensures consistent behavior on desktop, mobile, and tablet devices
 6. **Timing**: Default delays work well; adjust only if needed for specific UX
 7. **Positioning**: Use `side` and `align` props to ensure tooltip doesn't cover important content
