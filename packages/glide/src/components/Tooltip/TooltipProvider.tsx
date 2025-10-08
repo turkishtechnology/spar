@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { TooltipProviderProps, TooltipProviderContextValue } from './types';
 import { TooltipProviderContext } from './TooltipProviderContext';
 
@@ -13,13 +13,16 @@ export const TooltipProvider = ({
 }: TooltipProviderProps) => {
   const [isOpenDelayed, setIsOpenDelayed] = useState(false);
 
-  const contextValue: TooltipProviderContextValue = {
-    delayDuration,
-    skipDelayDuration,
-    disableHoverableContent,
-    isOpenDelayed,
-    setIsOpenDelayed,
-  };
+  const contextValue: TooltipProviderContextValue = useMemo(
+    () => ({
+      delayDuration,
+      skipDelayDuration,
+      disableHoverableContent,
+      isOpenDelayed,
+      setIsOpenDelayed,
+    }),
+    [delayDuration, skipDelayDuration, disableHoverableContent, isOpenDelayed],
+  );
 
   return (
     <TooltipProviderContext.Provider value={contextValue}>

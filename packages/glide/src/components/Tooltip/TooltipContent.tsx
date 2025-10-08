@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   useFloating,
   autoUpdate,
@@ -123,17 +123,20 @@ export const TooltipContent = ({
   }, [actualPlacement, context]);
 
   // Handle escape key
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      event.stopPropagation();
-      onEscapeKeyDown?.(event.nativeEvent);
-      context.onOpenChange(false);
-      // Refocus the trigger after closing
-      const trigger = document.getElementById(context.triggerId);
-      trigger?.focus();
-    }
-  };
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        onEscapeKeyDown?.(event.nativeEvent);
+        context.onOpenChange(false);
+        // Refocus the trigger after closing
+        const trigger = document.getElementById(context.triggerId);
+        trigger?.focus();
+      }
+    },
+    [onEscapeKeyDown, context],
+  );
 
   // Handle native escape key events (for testing and edge cases)
   useEffect(() => {
@@ -164,15 +167,15 @@ export const TooltipContent = ({
   }, [context.isOpen, context.contentId, context.triggerId, onEscapeKeyDown, context]);
 
   // Handle mouse enter/leave for hoverable content
-  const handleMouseEnter = () => {
+  const handleMouseEnter = useCallback(() => {
     // Keep tooltip open when hovering content (WCAG 1.4.13)
-  };
+  }, []);
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     if (!context.disableHoverableContent) {
       context.onOpenChange(false);
     }
-  };
+  }, [context]);
 
   // Don't render if not open or disabled
   if (!context.isOpen || context.isDisabled) {
