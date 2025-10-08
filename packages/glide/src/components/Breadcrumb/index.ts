@@ -1,37 +1,39 @@
-import {
-  BreadcrumbRoot,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from './Breadcrumb';
+import { BreadcrumbRoot as BreadcrumbCompoundRoot } from './BreadcrumbRoot';
+import { BreadcrumbList } from './BreadcrumbList';
+import { BreadcrumbItem } from './BreadcrumbItem';
+import { BreadcrumbLink } from './BreadcrumbLink';
+import { BreadcrumbPage } from './BreadcrumbPage';
+import { BreadcrumbSeparator } from './BreadcrumbSeparator';
 
-// Create aliases for grouped pattern
-const Root = BreadcrumbRoot;
-const List = BreadcrumbList;
-const Item = BreadcrumbItem;
-const Link = BreadcrumbLink;
-const Page = BreadcrumbPage;
-const Separator = BreadcrumbSeparator;
+// Create compound component with dot notation support
+const Breadcrumb = BreadcrumbCompoundRoot as typeof BreadcrumbCompoundRoot & {
+  Root: typeof BreadcrumbCompoundRoot;
+  List: typeof BreadcrumbList;
+  Item: typeof BreadcrumbItem;
+  Link: typeof BreadcrumbLink;
+  Page: typeof BreadcrumbPage;
+  Separator: typeof BreadcrumbSeparator;
+};
+
+Breadcrumb.Root = BreadcrumbCompoundRoot;
+Breadcrumb.List = BreadcrumbList;
+Breadcrumb.Item = BreadcrumbItem;
+Breadcrumb.Link = BreadcrumbLink;
+Breadcrumb.Page = BreadcrumbPage;
+Breadcrumb.Separator = BreadcrumbSeparator;
 
 // Export both patterns
 export {
+  // Compound component (with dot notation)
+  Breadcrumb,
+
   // Named exports (tree-shakeable)
-  BreadcrumbRoot,
   BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbPage,
   BreadcrumbSeparator,
-
-  // Aliased exports (for grouped usage)
-  Root,
-  List,
-  Item,
-  Link,
-  Page,
-  Separator,
+  BreadcrumbCompoundRoot,
 };
 
 // Export types

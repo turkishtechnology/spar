@@ -49,7 +49,7 @@ export interface BreadcrumbRootProps extends HTMLAttributes<HTMLElement> {
    * Accessible name for navigation landmark
    * @defaultValue 'Breadcrumb'
    */
-  'aria-label'?: string;
+  'aria-label'?: React.AriaAttributes['aria-label'];
   /**
    * Navigation event handler for routing integration
    */
@@ -171,5 +171,5 @@ export interface BreadcrumbSeparatorProps extends LiHTMLAttributes<HTMLLIElement
    * Hide from screen readers
    * @defaultValue true
    */
-  'aria-hidden'?: boolean;
+  'aria-hidden'?: React.AriaAttributes['aria-hidden'];
 }

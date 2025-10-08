@@ -34,13 +34,8 @@ export const BreadcrumbLink = ({
     }
 
     if (onNavigate && href) {
-      try {
-        onNavigate(href, event);
-      } catch (error) {
-        // Log the error but don't let it crash the component
-        // eslint-disable-next-line no-console
-        console.error('Navigation error:', error);
-      }
+      event.preventDefault();
+      onNavigate(href, event);
       return;
     }
 
@@ -61,13 +56,7 @@ export const BreadcrumbLink = ({
 
       if (onNavigate && href) {
         event.preventDefault();
-        try {
-          onNavigate(href, event);
-        } catch (error) {
-          // Log the error but don't let it crash the component
-          // eslint-disable-next-line no-console
-          console.error('Navigation error:', error);
-        }
+        onNavigate(href, event);
         return;
       }
     }
