@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect, useId } from 'react';
+import { useState, useRef, useCallback, useEffect, useId, useMemo } from 'react';
 import {
   useFloating,
   autoUpdate,
@@ -149,6 +149,15 @@ export const usePopover = (props: Omit<PopoverRootProps, 'children'>) => {
     }
   }, [isOpen, openPopover, closePopover]);
 
+  const floatingStyles = useMemo(
+    () => ({
+      position: strategy,
+      top: y ?? 0,
+      left: x ?? 0,
+    }),
+    [strategy, y, x],
+  );
+
   return {
     state,
     setState,
@@ -156,11 +165,7 @@ export const usePopover = (props: Omit<PopoverRootProps, 'children'>) => {
     contentRef: refs.floating,
     anchorRef,
     arrowRef,
-    floatingStyles: {
-      position: strategy,
-      top: y ?? 0,
-      left: x ?? 0,
-    },
+    floatingStyles,
     modal,
     side,
     align,

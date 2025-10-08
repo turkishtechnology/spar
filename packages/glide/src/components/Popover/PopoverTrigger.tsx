@@ -1,4 +1,4 @@
-import { cloneElement, isValidElement, useCallback } from 'react';
+import { cloneElement, isValidElement, useCallback, useMemo } from 'react';
 import { PopoverTriggerProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 
@@ -49,27 +49,30 @@ export const PopoverTrigger = ({
     [isDisabled, state.isOpen, togglePopover, openPopover, onKeyDown],
   );
 
-  const triggerProps = {
-    ref: (element: HTMLButtonElement | null) => {
-      if (triggerRef && 'current' in triggerRef) {
-        triggerRef.current = element;
-      }
-      if (typeof ref === 'function') {
-        ref(element);
-      } else if (ref) {
-        ref.current = element;
-      }
-    },
-    onClick: handleClick,
-    onKeyDown: handleKeyDown,
-    'aria-expanded': state.isOpen,
-    'aria-controls': state.isOpen ? state.contentId : undefined,
-    'aria-haspopup': 'dialog' as const,
-    disabled: isDisabled,
-    'data-state': state.isOpen ? 'open' : 'closed',
-    'data-disabled': isDisabled ? '' : undefined,
-    ...props,
-  };
+  const triggerProps = useMemo(
+    () => ({
+      ref: (element: HTMLButtonElement | null) => {
+        if (triggerRef && 'current' in triggerRef) {
+          triggerRef.current = element;
+        }
+        if (typeof ref === 'function') {
+          ref(element);
+        } else if (ref) {
+          ref.current = element;
+        }
+      },
+      onClick: handleClick,
+      onKeyDown: handleKeyDown,
+      'aria-expanded': state.isOpen,
+      'aria-controls': state.isOpen ? state.contentId : undefined,
+      'aria-haspopup': 'dialog' as const,
+      disabled: isDisabled,
+      'data-state': state.isOpen ? 'open' : 'closed',
+      'data-disabled': isDisabled ? '' : undefined,
+      ...props,
+    }),
+    [handleClick, handleKeyDown, state.isOpen, state.contentId, isDisabled, props, triggerRef, ref],
+  );
 
   if (asChild && isValidElement(children)) {
     return cloneElement(children, triggerProps);
