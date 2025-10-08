@@ -6,6 +6,8 @@ description: A headless popover component with intelligent positioning, focus ma
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { PopoverRoot, PopoverTrigger, PopoverContent, PopoverClose } from '@turkish-technology/glide';
 
 # Popover
 
@@ -93,6 +95,61 @@ import {
 
 ## Anatomy
 
+The Popover component is built as a compound component with multiple parts:
+
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'Root', description: 'Container managing popover state and providing context' },
+    { name: 'trigger', label: 'Trigger', description: 'Interactive button that toggles popover visibility' },
+    { name: 'content', label: 'Content', description: 'Floating panel that holds the popover content' },
+    { name: 'close', label: 'Close', description: 'Optional button to close the popover' },
+  ]}
+>
+  <div style={{ padding: '100px', display: 'flex', justifyContent: 'center' }}>
+    <PopoverRoot data-glide-part="root">
+      <PopoverTrigger
+        data-glide-part="trigger"
+        style={{
+          padding: '8px 16px',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          background: 'white'
+        }}
+      >
+        Open Popover
+      </PopoverTrigger>
+      <PopoverContent
+        data-glide-part="content"
+        style={{
+          padding: '16px',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          background: 'white',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          minWidth: '200px'
+        }}
+      >
+        <p style={{ margin: '0 0 12px 0' }}>This is a popover content</p>
+        <PopoverClose
+          data-glide-part="close"
+          style={{
+            padding: '4px 12px',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            background: 'white'
+          }}
+        >
+          Close
+        </PopoverClose>
+      </PopoverContent>
+    </PopoverRoot>
+  </div>
+</AnatomyViewer>
+
+### Structure
+
 ```jsx
 <PopoverRoot>
   <PopoverTrigger>...</PopoverTrigger>
@@ -113,6 +170,15 @@ import {
   </PopoverPortal>
 </PopoverRoot>
 ```
+
+**Data Flow:**
+- `PopoverRoot` manages the open/closed state and provides context to all child components
+- `PopoverTrigger` toggles the popover visibility and maintains ARIA relationship with content
+- `PopoverContent` positions itself intelligently relative to the trigger with collision detection
+- `PopoverClose` provides a way to programmatically close the popover from within the content
+- Optional `PopoverAnchor` allows positioning relative to a different element than the trigger
+- Optional `PopoverPortal` controls where the content is rendered in the DOM
+- Optional `PopoverArrow` adds a decorative visual pointer to the trigger element
 
 - `PopoverRoot`: Root context provider managing popover state
 - `PopoverTrigger`: Button that toggles popover visibility
