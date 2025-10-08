@@ -9,6 +9,12 @@ import {
   AccordionTrigger,
   AccordionContent,
   Button,
+  BreadcrumbRoot,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
@@ -77,7 +83,14 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
-    // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
+    // Breadcrumb components
+    BreadcrumbRoot,
+    BreadcrumbList,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+    // Popover components
     PopoverRoot,
     PopoverTrigger,
     PopoverContent,
