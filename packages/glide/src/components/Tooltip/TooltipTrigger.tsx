@@ -10,8 +10,8 @@ export const TooltipTrigger = ({
   children,
   asChild = false,
   as: Component = 'button',
-  onMouseEnter,
-  onMouseLeave,
+  onPointerEnter,
+  onPointerLeave,
   onFocus,
   onBlur,
   onKeyDown,
@@ -21,9 +21,6 @@ export const TooltipTrigger = ({
   const provider = useTooltipProvider();
   const showTimeoutRef = useRef<number | null>(null);
   const hideTimeoutRef = useRef<number | null>(null);
-
-  // Touch detection
-  const isTouch = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches;
 
   // Clear timeouts
   const clearTimeouts = useCallback(() => {
@@ -68,24 +65,20 @@ export const TooltipTrigger = ({
   );
 
   // Event handlers
-  const handleMouseEnter = useCallback(
-    (event: React.MouseEvent<HTMLElement>) => {
-      if (!isTouch) {
-        showTooltip();
-      }
-      onMouseEnter?.(event as React.MouseEvent<HTMLButtonElement>);
+  const handlePointerEnter = useCallback(
+    (event: React.PointerEvent<HTMLElement>) => {
+      showTooltip();
+      onPointerEnter?.(event as React.PointerEvent<HTMLButtonElement>);
     },
-    [isTouch, showTooltip, onMouseEnter],
+    [showTooltip, onPointerEnter],
   );
 
-  const handleMouseLeave = useCallback(
-    (event: React.MouseEvent<HTMLElement>) => {
-      if (!isTouch) {
-        hideTooltip();
-      }
-      onMouseLeave?.(event as React.MouseEvent<HTMLButtonElement>);
+  const handlePointerLeave = useCallback(
+    (event: React.PointerEvent<HTMLElement>) => {
+      hideTooltip();
+      onPointerLeave?.(event as React.PointerEvent<HTMLButtonElement>);
     },
-    [isTouch, hideTooltip, onMouseLeave],
+    [hideTooltip, onPointerLeave],
   );
 
   const handleFocus = useCallback(
@@ -173,8 +166,8 @@ export const TooltipTrigger = ({
     'data-state': context.isOpen ? 'open' : 'closed',
     'data-placement': context.placement,
     'data-disabled': context.isDisabled ? 'true' : 'false',
-    onMouseEnter: context.isDisabled ? undefined : handleMouseEnter,
-    onMouseLeave: context.isDisabled ? undefined : handleMouseLeave,
+    onPointerEnter: context.isDisabled ? undefined : handlePointerEnter,
+    onPointerLeave: context.isDisabled ? undefined : handlePointerLeave,
     onFocus: context.isDisabled ? undefined : handleFocus,
     onBlur: context.isDisabled ? undefined : handleBlur,
     onKeyDown: context.isDisabled ? undefined : handleKeyDown,
