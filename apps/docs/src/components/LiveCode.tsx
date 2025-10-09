@@ -20,6 +20,10 @@ import {
   Checkbox,
   Switch,
   Label,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
 } from '@turkish-technology/glide';
 
 interface LiveCodeProps {
@@ -96,6 +100,11 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Switch,
     // Label component
     Label,
+    // Tabs components
+    Tabs,
+    TabsList,
+    TabsTrigger,
+    TabsContent,
   };
 
   const [copied, setCopied] = useState(false);

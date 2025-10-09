@@ -1,0 +1,400 @@
+---
+sidebar_position: 9
+title: Tabs
+description: A headless, accessible tabs component with full keyboard navigation and ARIA compliance
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/glide';
+
+# Tabs
+
+A headless, accessible tabs component that provides complete keyboard navigation, orientation support, and ARIA compliance for tabbed interfaces.
+
+![Accessibility Badge](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-✓-green) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-✓-blue)
+
+## Live Demo
+
+<LiveCode
+  code={`function BasicExample() {
+  return (
+    <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
+      <Tabs defaultValue="account">
+        <TabsList style={{ display: 'flex', borderBottom: '1px solid #ddd', marginBottom: '16px' }}>
+          <TabsTrigger 
+            value="account" 
+            style={{ 
+              padding: '8px 16px', 
+              border: 'none', 
+              background: 'none', 
+              cursor: 'pointer',
+              borderBottom: '2px solid transparent'
+            }}
+          >
+            Account
+          </TabsTrigger>
+          <TabsTrigger 
+            value="password" 
+            style={{ 
+              padding: '8px 16px', 
+              border: 'none', 
+              background: 'none', 
+              cursor: 'pointer',
+              borderBottom: '2px solid transparent'
+            }}
+          >
+            Password
+          </TabsTrigger>
+          <TabsTrigger 
+            value="settings" 
+            disabled
+            style={{ 
+              padding: '8px 16px', 
+              border: 'none', 
+              background: 'none', 
+              opacity: 0.5,
+              borderBottom: '2px solid transparent'
+            }}
+          >
+            Settings (Disabled)
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="account">
+          <h3>Account Settings</h3>
+          <p>Manage your account details and preferences.</p>
+        </TabsContent>
+        <TabsContent value="password">
+          <h3>Password Settings</h3>
+          <p>Change your password and security settings.</p>
+        </TabsContent>
+        <TabsContent value="settings">
+          <h3>General Settings</h3>
+          <p>Configure general application settings.</p>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}`}
+/>
+
+## Features
+
+- ✅ Controlled and uncontrolled state management
+- ✅ Horizontal and vertical orientation support
+- ✅ Automatic and manual activation modes
+- ✅ Loop navigation with arrow keys
+- ✅ Lazy content rendering for performance
+- ✅ Force mount option for always-rendered content
+- ✅ Polymorphic rendering with `as` prop
+- ✅ `asChild` pattern for advanced composition
+- ✅ Disabled tab support
+- ✅ RTL (right-to-left) text direction support
+
+## Installation
+
+```tsx
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/glide';
+```
+
+## Anatomy
+
+The Tabs component consists of multiple compound parts that work together:
+
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'Tabs (Root)', description: 'Root container that manages state and provides context' },
+    { name: 'list', label: 'TabsList', description: 'Container for tab triggers with keyboard navigation' },
+    { name: 'trigger', label: 'TabsTrigger', description: 'Clickable tab button that activates content' },
+    { name: 'content', label: 'TabsContent', description: 'Content panel associated with each tab' },
+  ]}
+>
+  <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
+    <Tabs defaultValue="overview" data-glide-part="root">
+      <TabsList data-glide-part="list" style={{ display: 'flex', borderBottom: '1px solid #ddd', marginBottom: '16px' }}>
+        <TabsTrigger 
+          value="overview" 
+          data-glide-part="trigger"
+          style={{ 
+            padding: '8px 16px', 
+            border: 'none', 
+            background: 'none', 
+            cursor: 'pointer',
+            borderBottom: '2px solid transparent'
+          }}
+        >
+          Overview
+        </TabsTrigger>
+        <TabsTrigger 
+          value="details" 
+          data-glide-part="trigger"
+          style={{ 
+            padding: '8px 16px', 
+            border: 'none', 
+            background: 'none', 
+            cursor: 'pointer',
+            borderBottom: '2px solid transparent'
+          }}
+        >
+          Details
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview" data-glide-part="content">
+        <h4>Overview Panel</h4>
+        <p>This is the overview content panel.</p>
+      </TabsContent>
+      <TabsContent value="details" data-glide-part="content">
+        <h4>Details Panel</h4>
+        <p>This is the details content panel.</p>
+      </TabsContent>
+    </Tabs>
+  </div>
+</AnatomyViewer>
+
+```tsx
+<Tabs>
+  <TabsList>
+    <TabsTrigger />
+    <TabsTrigger />
+  </TabsList>
+  <TabsContent />
+  <TabsContent />
+</Tabs>
+```
+
+### Data Flow
+
+1. **Tabs (Root)** manages the selected value state and provides context to all child components
+2. **TabsList** handles keyboard navigation between triggers and focus management
+3. **TabsTrigger** components register themselves with the root and handle activation
+4. **TabsContent** components automatically show/hide based on the selected value
+
+## Code Examples
+
+### Controlled Tabs
+
+```tsx
+function ControlledTabs() {
+  const [activeTab, setActiveTab] = useState('profile');
+
+  return (
+    <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <TabsList>
+        <TabsTrigger value="profile">Profile</TabsTrigger>
+        <TabsTrigger value="settings">Settings</TabsTrigger>
+      </TabsList>
+      <TabsContent value="profile">
+        Profile content here
+      </TabsContent>
+      <TabsContent value="settings">
+        Settings content here
+      </TabsContent>
+    </Tabs>
+  );
+}
+```
+
+### Vertical Orientation
+
+```tsx
+function VerticalTabs() {
+  return (
+    <Tabs orientation="vertical" defaultValue="tab1">
+      <TabsList>
+        <TabsTrigger value="tab1">First Tab</TabsTrigger>
+        <TabsTrigger value="tab2">Second Tab</TabsTrigger>
+        <TabsTrigger value="tab3">Third Tab</TabsTrigger>
+      </TabsList>
+      <TabsContent value="tab1">First content</TabsContent>
+      <TabsContent value="tab2">Second content</TabsContent>
+      <TabsContent value="tab3">Third content</TabsContent>
+    </Tabs>
+  );
+}
+```
+
+### Manual Activation Mode
+
+```tsx
+function ManualActivationTabs() {
+  return (
+    <Tabs activationMode="manual" defaultValue="home">
+      <TabsList>
+        <TabsTrigger value="home">Home</TabsTrigger>
+        <TabsTrigger value="about">About</TabsTrigger>
+        <TabsTrigger value="contact">Contact</TabsTrigger>
+      </TabsList>
+      <TabsContent value="home">Home page content</TabsContent>
+      <TabsContent value="about">About page content</TabsContent>
+      <TabsContent value="contact">Contact page content</TabsContent>
+    </Tabs>
+  );
+}
+```
+
+### AsChild Pattern
+
+```tsx
+function AsChildTabs() {
+  return (
+    <Tabs defaultValue="dashboard">
+      <TabsList>
+        <TabsTrigger value="dashboard" asChild>
+          <button className="custom-tab-button">
+            <DashboardIcon />
+            Dashboard
+          </button>
+        </TabsTrigger>
+        <TabsTrigger value="analytics" asChild>
+          <a href="#analytics" className="custom-tab-link">
+            Analytics
+          </a>
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="dashboard">Dashboard content</TabsContent>
+      <TabsContent value="analytics">Analytics content</TabsContent>
+    </Tabs>
+  );
+}
+```
+
+### Force Mount Content
+
+```tsx
+function ForceMountTabs() {
+  return (
+    <Tabs defaultValue="lazy">
+      <TabsList>
+        <TabsTrigger value="lazy">Lazy Content</TabsTrigger>
+        <TabsTrigger value="eager">Always Mounted</TabsTrigger>
+      </TabsList>
+      <TabsContent value="lazy">
+        This content is only rendered when active
+      </TabsContent>
+      <TabsContent value="eager" forceMount>
+        This content is always in the DOM (useful for forms, videos, etc.)
+      </TabsContent>
+    </Tabs>
+  );
+}
+```
+
+## API Reference
+
+### Tabs (Root)
+
+#### Props
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string \| undefined` | `undefined` | Controlled selected tab value |
+| `defaultValue` | `string \| undefined` | `undefined` | Uncontrolled initial tab selection |
+| `onValueChange` | `(value: string) => void \| undefined` | `undefined` | Callback when tab selection changes |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Tabs orientation affecting keyboard navigation |
+| `dir` | `'ltr' \| 'rtl'` | `'ltr'` | Text direction for arrow key navigation |
+| `activationMode` | `'automatic' \| 'manual'` | `'automatic'` | Whether tabs activate on focus or require explicit activation |
+| `as` | `React.ElementType` | `'div'` | Polymorphic component type |
+| `children` | `React.ReactNode` | — | TabsList and TabsContent components |
+
+#### Events
+
+| Name | Parameters | Description | When Triggered |
+| --- | --- | --- | --- |
+| `onValueChange` | `value: string` | Tab selection changed | User clicks tab or navigates with keyboard |
+
+#### ARIA
+
+| Attribute | Value | Purpose | Applied To |
+| --- | --- | --- | --- |
+| `data-orientation` | `horizontal \| vertical` | Indicates tab orientation | Root element |
+| `data-dir` | `ltr \| rtl` | Indicates text direction | Root element |
+
+### TabsList
+
+#### Props
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `loop` | `boolean` | `true` | Whether arrow key navigation wraps around |
+| `as` | `React.ElementType` | `'div'` | Polymorphic component type |
+| `children` | `React.ReactNode` | — | TabsTrigger components |
+
+#### ARIA
+
+| Attribute | Value | Purpose | Applied To |
+| --- | --- | --- | --- |
+| `role` | `tablist` | Identifies the element as a tab list | TabsList element |
+| `aria-orientation` | `horizontal \| vertical` | Indicates tab list orientation | TabsList element |
+| `data-orientation` | `horizontal \| vertical` | Indicates tab list orientation | TabsList element |
+
+### TabsTrigger
+
+#### Props
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | — | Unique identifier for the tab |
+| `disabled` | `boolean` | `false` | Disables this specific tab |
+| `asChild` | `boolean` | `false` | Render as child element instead of button |
+| `as` | `React.ElementType` | `'button'` | Polymorphic component type |
+| `children` | `React.ReactNode` | — | Tab trigger content (label text) |
+
+#### Events
+
+| Name | Parameters | Description | When Triggered |
+| --- | --- | --- | --- |
+| `onClick` | `event: MouseEvent` | Tab clicked | User clicks the tab trigger |
+| `onFocus` | `event: FocusEvent` | Tab focused | Tab receives focus via keyboard or mouse |
+| `onBlur` | `event: FocusEvent` | Tab blurred | Tab loses focus |
+
+#### ARIA
+
+| Attribute | Value | Purpose | Applied To |
+| --- | --- | --- | --- |
+| `role` | `tab` | Identifies the element as a tab | TabsTrigger element |
+| `aria-selected` | `true \| false` | Indicates if tab is selected | TabsTrigger element |
+| `aria-controls` | `string` | References controlled tabpanel | TabsTrigger element |
+| `aria-disabled` | `true \| false` | Indicates if tab is disabled | TabsTrigger element |
+| `tabindex` | `0 \| -1` | Manages focus in tab list | TabsTrigger element |
+| `data-state` | `active \| inactive` | Indicates tab state | TabsTrigger element |
+| `data-disabled` | `'' \| undefined` | Indicates disabled state | TabsTrigger element |
+| `data-orientation` | `horizontal \| vertical` | Indicates tab orientation | TabsTrigger element |
+| `data-value` | `string` | Tab's unique value | TabsTrigger element |
+
+### TabsContent
+
+#### Props
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | — | Unique identifier matching a TabsTrigger value |
+| `forceMount` | `boolean` | `false` | Force content to remain mounted when not active |
+| `as` | `React.ElementType` | `'div'` | Polymorphic component type |
+| `children` | `React.ReactNode` | — | Tab panel content |
+
+#### ARIA
+
+| Attribute | Value | Purpose | Applied To |
+| --- | --- | --- | --- |
+| `role` | `tabpanel` | Identifies the element as a tab panel | TabsContent element |
+| `aria-labelledby` | `string` | References controlling tab | TabsContent element |
+| `tabindex` | `0` | Makes panel focusable | TabsContent element |
+| `hidden` | `true \| false` | Hides inactive panels | TabsContent element |
+| `data-state` | `active \| inactive` | Indicates panel state | TabsContent element |
+| `data-orientation` | `horizontal \| vertical` | Indicates tab orientation | TabsContent element |
+
+## Keyboard Interactions
+
+| Key | Action | Context | Notes |
+| --- | --- | --- | --- |
+| `Tab` | Move focus to next/previous focusable element | Global | Standard browser behavior |
+| `Enter` or `Space` | Activate focused tab | Tab trigger focused | Changes active panel |
+| `ArrowRight` | Focus next tab | Horizontal orientation | Loops to first if `loop` is true |
+| `ArrowLeft` | Focus previous tab | Horizontal orientation | Loops to last if `loop` is true |
+| `ArrowDown` | Focus next tab | Vertical orientation | Loops to first if `loop` is true |
+| `ArrowUp` | Focus previous tab | Vertical orientation | Loops to last if `loop` is true |
+| `Home` | Focus first tab | Tab list focused | Always moves to first tab |
+| `End` | Focus last tab | Tab list focused | Always moves to last tab |
+
+**Note**: In `automatic` activation mode, arrow keys both focus and activate tabs. In `manual` mode, arrow keys only move focus - you must press Enter or Space to activate.
