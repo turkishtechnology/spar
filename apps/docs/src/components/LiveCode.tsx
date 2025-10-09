@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { themes } from 'prism-react-renderer';
-
 import {
   Accordion,
   AccordionItem,
@@ -20,6 +19,13 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
   Input,
+  PopoverRoot,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverPortal,
+  PopoverAnchor,
+  PopoverClose,
   Radio,
   RadioGroup,
   RadioItem,
@@ -77,12 +83,21 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
+    // Breadcrumb components
     BreadcrumbRoot,
     BreadcrumbList,
     BreadcrumbItem,
     BreadcrumbLink,
     BreadcrumbPage,
     BreadcrumbSeparator,
+    // Popover components
+    PopoverRoot,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverArrow,
+    PopoverPortal,
+    PopoverAnchor,
+    PopoverClose,
     // Accordion components
     Accordion,
     AccordionItem,
