@@ -18,7 +18,8 @@ import {
   type Placement,
   type Middleware,
 } from '@floating-ui/react-dom';
-import type { DropdownMenuContentProps, Side, Align } from './types';
+import type { DropdownMenuContentProps } from './types';
+import type { Side, Align } from '../../types';
 import {
   useMenuScope,
   DropdownMenuSubContext,

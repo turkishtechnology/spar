@@ -1,9 +1,5 @@
 import type { ElementType, ReactNode } from 'react';
-
-/**
- * Possible checked states for the checkbox
- */
-export type CheckedState = boolean | 'indeterminate';
+import type { CheckedState } from '../../types';
 
 /**
  * Render props provided to children function

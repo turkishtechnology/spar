@@ -1,5 +1,5 @@
 import type { Ref, KeyboardEvent as ReactKeyboardEvent } from 'react';
-import type { CheckedState } from './types';
+import type { CheckedState } from '../../types';
 
 export const composeRefs = <T>(...refs: Array<Ref<T> | undefined>) => {
   return (node: T | null) => {

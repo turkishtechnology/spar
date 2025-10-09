@@ -81,7 +81,4 @@ export type {
   DropdownMenuSubProps,
   DropdownMenuSubTriggerProps,
   DropdownMenuSubContentProps,
-  CheckedState,
-  Side,
-  Align,
 } from './types';

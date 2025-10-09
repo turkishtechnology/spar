@@ -1,12 +1,5 @@
 import type { ElementType, ReactNode, HTMLAttributes, Ref, SyntheticEvent, RefObject } from 'react';
-
-export type Orientation = 'vertical' | 'horizontal';
-
-export type Side = 'top' | 'right' | 'bottom' | 'left';
-
-export type Align = 'start' | 'center' | 'end';
-
-export type CheckedState = boolean | 'indeterminate';
+import type { CheckedState, Side, Align } from '../../types';
 
 export type DropdownMenuFocusStrategy = 'first' | 'last' | 'none';
 

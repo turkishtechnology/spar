@@ -1,5 +1,6 @@
 import { useId, useState, useRef, useEffect } from 'react';
-import type { CheckboxProps, CheckedState, CheckboxRenderProps } from './types';
+import type { CheckboxProps, CheckboxRenderProps } from './types';
+import type { CheckedState } from '../../types';
 
 /**
  * Headless checkbox component providing accessibility and behavior without styling.
