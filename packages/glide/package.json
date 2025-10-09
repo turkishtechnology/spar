@@ -84,5 +84,8 @@
     "react",
     "glide",
     "components"
-  ]
+  ],
+  "dependencies": {
+    "@floating-ui/react-dom": "^2.1.6"
+  }
 }
