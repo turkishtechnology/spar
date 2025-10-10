@@ -32,6 +32,17 @@ import {
   Checkbox,
   Switch,
   Label,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  TooltipProvider,
+  TooltipRoot,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipPortal,
+  TooltipArrow,
+  Select,
   DropdownMenu,
 } from '@turkish-technology/glide';
 
@@ -123,6 +134,20 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Switch,
     // Label component
     Label,
+    // Tabs components
+    Tabs,
+    TabsList,
+    TabsTrigger,
+    TabsContent,
+    // Glide Tooltip components
+    TooltipProvider,
+    TooltipRoot,
+    TooltipTrigger,
+    TooltipContent,
+    TooltipPortal,
+    TooltipArrow,
+    // Select component
+    Select,
     // DropdownMenu components
     DropdownMenu,
   };
