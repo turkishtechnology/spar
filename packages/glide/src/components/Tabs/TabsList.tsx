@@ -16,9 +16,14 @@ export const TabsList = ({
   const { orientation, dir, activationMode, tabRefs, onValueChange, focusTab } = context;
 
   const getEnabledTabs = useCallback(() => {
-    const tabs = Array.from(tabRefs.current.entries());
-    return tabs.filter(([, element]) => !element.hasAttribute('disabled')).map(([value]) => value);
-  }, [tabRefs]);
+    const isDisabled = (el: HTMLElement) =>
+      el.hasAttribute('disabled') ||
+      el.getAttribute('aria-disabled') === 'true' ||
+      el.hasAttribute('data-disabled');
+    return Array.from(tabRefs.current.entries())
+      .filter(([, el]) => !isDisabled(el))
+      .map(([value]) => value);
+  }, []);
 
   const getNextTab = useCallback(
     (currentValue: string, direction: 1 | -1) => {
