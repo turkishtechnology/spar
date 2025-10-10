@@ -43,7 +43,5 @@ export type {
   TooltipContentProps,
   TooltipPortalProps,
   TooltipArrowProps,
-  Side,
-  Align,
   Sticky,
 } from './types';

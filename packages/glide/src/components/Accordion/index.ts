@@ -42,5 +42,4 @@ export type {
   AccordionTriggerProps,
   AccordionContentProps,
   AccordionType,
-  AccordionOrientation,
 } from './types';

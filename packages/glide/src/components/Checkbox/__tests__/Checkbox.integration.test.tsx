@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { Checkbox } from '../Checkbox';
-import type { CheckedState } from '../types';
+import type { CheckedState } from '../../../types';
 
 // Integration tests covering user workflows and complex scenarios
 describe('Checkbox Integration Tests', () => {

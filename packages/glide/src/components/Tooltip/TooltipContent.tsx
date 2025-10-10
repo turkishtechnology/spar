@@ -11,7 +11,8 @@ import {
   type Placement,
   type Middleware,
 } from '@floating-ui/react-dom';
-import type { TooltipContentProps, Side, Align } from './types';
+import type { TooltipContentProps } from './types';
+import type { Side, Align } from '../../types';
 import { useTooltip } from './useTooltip';
 
 // Helper to convert Side + Align to Placement
