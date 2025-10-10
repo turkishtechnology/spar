@@ -32,6 +32,10 @@ import {
   Checkbox,
   Switch,
   Label,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
   TooltipProvider,
   TooltipRoot,
   TooltipTrigger,
@@ -128,6 +132,11 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Switch,
     // Label component
     Label,
+    // Tabs components
+    Tabs,
+    TabsList,
+    TabsTrigger,
+    TabsContent,
     // Glide Tooltip components
     TooltipProvider,
     TooltipRoot,
