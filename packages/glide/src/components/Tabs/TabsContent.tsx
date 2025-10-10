@@ -31,10 +31,11 @@ export const TabsContent = ({
       data-state={isSelected ? 'active' : 'inactive'}
       data-orientation={orientation}
       hidden={!isSelected}
-      tabIndex={0}
       {...props}
     >
       {children}
     </Component>
   );
 };
+
+TabsContent.displayName = 'TabsContent';

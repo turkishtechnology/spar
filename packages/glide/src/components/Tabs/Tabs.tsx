@@ -45,6 +45,9 @@ export const Tabs = ({
   // State Management
   // ============================================================================
 
+  // Check if component is in controlled mode
+  const isControlled = controlledValue !== undefined;
+
   // Generate unique IDs for ARIA relationships
   const tabsListId = useId();
 
@@ -69,17 +72,16 @@ export const Tabs = ({
     (value: string, element: HTMLElement): void => {
       tabRefs.current.set(value, element);
 
-      // Auto-select first registered tab if no initial value provided
-      // This ensures server-safe hydration by avoiding selection during render
+      // Only auto-select for uncontrolled mode
       const shouldAutoSelectFirstTab =
-        !selectedValue && !defaultValue && !controlledValue && !hasAutoSelectedRef.current;
+        !isControlled && !selectedValue && !defaultValue && !hasAutoSelectedRef.current;
 
       if (shouldAutoSelectFirstTab) {
         hasAutoSelectedRef.current = true;
         setSelectedValue(value);
       }
     },
-    [selectedValue, defaultValue, controlledValue, setSelectedValue],
+    [isControlled, selectedValue, defaultValue, setSelectedValue],
   );
 
   const unregisterTab = useCallback((value: string): void => {
