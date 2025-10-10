@@ -42,6 +42,7 @@ import {
   TooltipContent,
   TooltipPortal,
   TooltipArrow,
+  Select,
 } from '@turkish-technology/glide';
 
 interface LiveCodeProps {
@@ -144,6 +145,8 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     TooltipContent,
     TooltipPortal,
     TooltipArrow,
+    // Select component
+    Select,
   };
 
   const [copied, setCopied] = useState(false);

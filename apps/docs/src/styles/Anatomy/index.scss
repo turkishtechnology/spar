@@ -10,18 +10,51 @@
   .anatomy-demo {
     flex: 1;
     padding: 2rem;
-    min-height: 300px;
+    min-height: 200px;
+    max-height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #FFFFFF;
     border-radius: 4px;
+    overflow: visible;
+    position: relative;
   }
 
   .anatomy-parts {
     width: 220px;
     border-left: 1px solid #E0E0E0;
     padding-left: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Hide scrollbar by default, show on hover */
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    
+    &:hover {
+      scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+    }
+
+    /* Webkit browsers (Chrome, Safari, Edge) */
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: transparent;
+      border-radius: 3px;
+      transition: background-color 0.2s ease;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
 
     .part-header {
       font-weight: 600;
@@ -95,6 +128,14 @@
 
     .anatomy-parts {
       border-left-color: #2A2D3A;
+
+      &:hover {
+        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+      }
+
+      &:hover::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.3);
+      }
 
       .part-header {
         color: #FFFFFF;

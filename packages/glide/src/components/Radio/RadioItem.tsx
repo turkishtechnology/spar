@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import type { RadioItemProps } from './types';
 import { useRadioGroupContext } from './RadioGroup';
-import { useFocusItem } from '@/hooks';
+import { useFocusItem, useMergedRef } from '@/hooks';
 
 /**
  * RadioItem component representing individual radio options within a RadioGroup.
@@ -76,17 +76,7 @@ export const RadioItem = ({
   }, [isDisabled, setFocusedValue, itemValue]);
 
   // Merge refs
-  const mergedRef = useCallback(
-    (node: HTMLElement | null) => {
-      itemRef.current = node;
-      if (typeof ref === 'function') {
-        ref(node as HTMLLabelElement | null);
-      } else if (ref) {
-        (ref as React.RefObject<HTMLElement | null>).current = node;
-      }
-    },
-    [ref],
-  );
+  const mergedRef = useMergedRef(itemRef, ref);
 
   // Data attributes for styling
   const dataAttributes = {
