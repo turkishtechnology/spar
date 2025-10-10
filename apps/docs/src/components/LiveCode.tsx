@@ -32,6 +32,12 @@ import {
   Checkbox,
   Switch,
   Label,
+  TooltipProvider,
+  TooltipRoot,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipPortal,
+  TooltipArrow,
 } from '@turkish-technology/glide';
 
 interface LiveCodeProps {
@@ -122,6 +128,13 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Switch,
     // Label component
     Label,
+    // Glide Tooltip components
+    TooltipProvider,
+    TooltipRoot,
+    TooltipTrigger,
+    TooltipContent,
+    TooltipPortal,
+    TooltipArrow,
   };
 
   const [copied, setCopied] = useState(false);
