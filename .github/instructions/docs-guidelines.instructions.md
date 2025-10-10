@@ -81,6 +81,7 @@ Every component documentation page MUST follow this exact structure:
 - **TypeScript**: All examples use TypeScript syntax
 - **Headless**: Completely unstyled - no visual styling opinions
 - **Standard Markdown**: Use triple backtick code blocks only
+- **Line Highlighting**: Use Docusaurus syntax to highlight important lines (e.g., `tsx {1,4-6,11}`)
 - **Functional**: Real-world scenarios, not toy examples
 - **Accessible**: Demonstrate ARIA patterns and keyboard navigation
 - **Progressive**: Simple to complex examples
@@ -217,12 +218,14 @@ const scope = {
 ### Code Examples Usage Pattern
 
 #### Standard Markdown Code Blocks
-Use triple backtick syntax for all static code examples:
+Use triple backtick syntax for all static code examples. Use Docusaurus line highlighting to emphasize important lines:
 
-```tsx
+```tsx {2,4-10}
 function codeExample() {
+  const [open, setOpen] = React.useState(false);
+  
   return (
-    <ComponentName.Root>
+    <ComponentName.Root open={open} onOpenChange={setOpen}>
       <ComponentName.Trigger>
         Click me
       </ComponentName.Trigger>
@@ -234,10 +237,17 @@ function codeExample() {
 }
 ```
 
+**Line Highlighting Syntax:**
+- Highlight specific lines: `tsx {1,3,5}` (highlights lines 1, 3, and 5)
+- Highlight line ranges: `tsx {4-8}` (highlights lines 4 through 8)
+- Combine both: `tsx {1,4-6,11}` (highlights line 1, lines 4-6, and line 11)
+- Use to emphasize key parts like state management, event handlers, or accessibility props
+
 ### Code Examples Best Practices
 
 #### DO for Code Examples
 - ✅ Use TypeScript syntax highlighting (`tsx`)
+- ✅ Use line highlighting to emphasize key code sections (e.g. `tsx {1,4-6,11}`)
 - ✅ Show progressive complexity across examples
 - ✅ Include comprehensive accessibility patterns
 - ✅ Demonstrate real-world usage scenarios

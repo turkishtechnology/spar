@@ -167,7 +167,7 @@ The Tooltip component is built as a compound component with multiple parts:
 
 Simplest tooltip with default configuration:
 
-```tsx
+```tsx {3-13}
 export function BasicTooltip() {
   return (
     <TooltipProvider>
@@ -190,7 +190,7 @@ export function BasicTooltip() {
 
 Control tooltip placement and alignment:
 
-```tsx
+```tsx {6-9}
 <TooltipRoot>
   <TooltipTrigger>
     <button>Right aligned tooltip</button>
@@ -212,7 +212,7 @@ Control tooltip placement and alignment:
 
 Add an arrow pointing to the trigger element:
 
-```tsx
+```tsx {8}
 <TooltipRoot>
   <TooltipTrigger>
     <button>Tooltip with arrow</button>
@@ -230,7 +230,7 @@ Add an arrow pointing to the trigger element:
 
 Manage tooltip visibility programmatically:
 
-```tsx
+```tsx {2,5}
 function ControlledTooltip() {
   const [open, setOpen] = React.useState(false);
 
@@ -253,7 +253,7 @@ function ControlledTooltip() {
 
 Use tooltip to provide primary label instead of description:
 
-```tsx
+```tsx {3,8}
 <TooltipRoot>
   <TooltipTrigger>
     <button aria-label="Close">
@@ -272,7 +272,7 @@ Use tooltip to provide primary label instead of description:
 
 Share configuration across multiple tooltips:
 
-```tsx
+```tsx {1}
 <TooltipProvider delayDuration={500} skipDelayDuration={200}>
   <TooltipRoot>
     <TooltipTrigger>
@@ -298,7 +298,7 @@ Share configuration across multiple tooltips:
 
 Override default delay timing for specific tooltip:
 
-```tsx
+```tsx {1}
 <TooltipRoot delay={300} hideDelay={100}>
   <TooltipTrigger>
     <button>Quick tooltip</button>
@@ -315,7 +315,7 @@ Override default delay timing for specific tooltip:
 
 Conditionally disable tooltip:
 
-```tsx
+```tsx {2,5}
 function DisabledExample() {
   const [disabled, setDisabled] = React.useState(false);
 
@@ -338,7 +338,7 @@ function DisabledExample() {
 
 Configure collision detection and boundaries:
 
-```tsx
+```tsx {6-8}
 <TooltipRoot>
   <TooltipTrigger>
     <button>Smart positioning</button>
@@ -359,7 +359,7 @@ Configure collision detection and boundaries:
 
 Render tooltip in custom portal container:
 
-```tsx
+```tsx {2,12}
 function CustomContainerTooltip() {
   const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -386,7 +386,7 @@ function CustomContainerTooltip() {
 
 Interactive tooltip that remains visible when hovering over the content (WCAG 1.4.13 compliant):
 
-```tsx
+```tsx {3-4}
 function HoverableTooltip() {
   return (
     <TooltipProvider disableHoverableContent={false}>
