@@ -82,7 +82,7 @@ export const RadioItem = ({
       if (typeof ref === 'function') {
         ref(node as HTMLLabelElement | null);
       } else if (ref) {
-        (ref as React.MutableRefObject<HTMLElement | null>).current = node;
+        (ref as React.RefObject<HTMLElement | null>).current = node;
       }
     },
     [ref],
