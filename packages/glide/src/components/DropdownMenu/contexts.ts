@@ -61,7 +61,11 @@ export const useDropdownMenuCollectionContext = () => {
 };
 
 export const useDropdownMenuRadioGroupContext = () => {
-  return useContext(DropdownMenuRadioGroupContext);
+  const context = useContext(DropdownMenuRadioGroupContext);
+  if (!context) {
+    throw new Error('DropdownMenu.RadioItem must be used within DropdownMenu.RadioGroup');
+  }
+  return context;
 };
 
 export const useDropdownMenuSubContext = () => {
