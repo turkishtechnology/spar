@@ -382,6 +382,32 @@ function CustomContainerTooltip() {
 }
 ```
 
+### Hoverable Tooltip Content
+
+Interactive tooltip that remains visible when hovering over the content (WCAG 1.4.13 compliant):
+
+```tsx
+function HoverableTooltip() {
+  return (
+    <TooltipProvider disableHoverableContent={false}>
+      <TooltipRoot hideDelay={300}>
+        <TooltipTrigger>
+          <button>Hover to see interactive content</button>
+        </TooltipTrigger>
+        <TooltipPortal>
+          <TooltipContent>
+            <div>
+              <p>You can move your pointer to this content.</p>
+              <p>It stays visible while hovering!</p>
+            </div>
+          </TooltipContent>
+        </TooltipPortal>
+      </TooltipRoot>
+    </TooltipProvider>
+  );
+}
+```
+
 ---
 
 ## API Reference
