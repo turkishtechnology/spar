@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { themes } from 'prism-react-renderer';
-
 import {
   Accordion,
   AccordionItem,
@@ -10,10 +9,23 @@ import {
   AccordionTrigger,
   AccordionContent,
   Button,
+  BreadcrumbRoot,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
   Input,
+  PopoverRoot,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverPortal,
+  PopoverAnchor,
+  PopoverClose,
   Radio,
   RadioGroup,
   RadioItem,
@@ -24,6 +36,12 @@ import {
   TabsList,
   TabsTrigger,
   TabsContent,
+  TooltipProvider,
+  TooltipRoot,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipPortal,
+  TooltipArrow,
 } from '@turkish-technology/glide';
 
 interface LiveCodeProps {
@@ -75,7 +93,21 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
-    // Buraya daha sonra Glide bileşenlerini ekleyebiliriz
+    // Breadcrumb components
+    BreadcrumbRoot,
+    BreadcrumbList,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+    // Popover components
+    PopoverRoot,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverArrow,
+    PopoverPortal,
+    PopoverAnchor,
+    PopoverClose,
     // Accordion components
     Accordion,
     AccordionItem,
@@ -105,6 +137,13 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     TabsList,
     TabsTrigger,
     TabsContent,
+    // Glide Tooltip components
+    TooltipProvider,
+    TooltipRoot,
+    TooltipTrigger,
+    TooltipContent,
+    TooltipPortal,
+    TooltipArrow,
   };
 
   const [copied, setCopied] = useState(false);
