@@ -1,0 +1,1030 @@
+---
+sidebar_position: 4
+title: Select
+description: Fully accessible, headless select component for single-value selection with complete keyboard navigation and ARIA listbox support.
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Select } from '@turkish-technology/glide';
+
+# Select
+
+A headless, fully accessible dropdown component that allows users to choose a single value from a list of options with complete WAI-ARIA Listbox pattern implementation.
+
+![Accessibility Badge](https://img.shields.io/badge/WCAG%202.2%20AA-Compliant-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-Yes-blue) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-Strict-blue)
+
+## Live Demo
+
+<LiveCode
+  code={`function BasicSelectExample() {
+  const [value, setValue] = React.useState('apple');
+
+  return (
+    <Select.Root value={value} onValueChange={setValue}>
+      <Select.Trigger
+        style={{
+          padding: '8px 12px',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          background: 'white',
+          cursor: 'pointer',
+          minWidth: '200px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}
+      >
+        <Select.Value placeholder="Select a fruit..." />
+        <Select.Icon>▼</Select.Icon>
+      </Select.Trigger>
+
+      <Select.Portal>
+        <Select.Content
+          placement="bottom-start"
+          offset={5}
+          style={{
+            background: 'white',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            padding: '4px',
+            zIndex: 1000
+          }}
+        >
+          <Select.Viewport>
+            <Select.Item
+              value="apple"
+              style={{ padding: '8px 12px', cursor: 'pointer' }}
+            >
+              <Select.ItemText>Apple</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item
+              value="banana"
+              style={{ padding: '8px 12px', cursor: 'pointer' }}
+            >
+              <Select.ItemText>Banana</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item
+              value="orange"
+              style={{ padding: '8px 12px', cursor: 'pointer' }}
+            >
+              <Select.ItemText>Orange</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
+  );
+}`}
+/>
+
+## Features
+
+- ✅ Single value selection from dropdown list
+- ✅ Controlled and uncontrolled state management
+- ✅ Type-ahead search with character navigation
+- ✅ Advanced positioning with Floating UI integration
+- ✅ Automatic collision detection and viewport boundary awareness
+- ✅ Flexible placement options (12 standard placements)
+- ✅ Smart flipping and shifting to stay in view
+- ✅ Automatic size constraints based on available space
+- ✅ Form integration with native HTML support
+- ✅ Portal rendering for z-index control
+- ✅ Grouped items with labels and separators
+- ✅ Optional visual arrow indicator with automatic positioning
+- ✅ Disabled state for items and entire select
+- ✅ RTL (right-to-left) language support
+- ✅ SSR safe with deterministic IDs
+
+## Installation
+
+```tsx
+// Compound component (recommended)
+import { Select } from '@turkish-technology/glide'
+
+// Named imports (tree-shakeable)
+import {
+  SelectRoot,
+  SelectTrigger,
+  SelectValue,
+  SelectIcon,
+  SelectPortal,
+  SelectContent,
+  SelectViewport,
+  SelectItem,
+  SelectItemText,
+  SelectItemIndicator,
+  SelectGroup,
+  SelectLabel,
+  SelectSeparator,
+  SelectArrow
+} from '@turkish-technology/glide'
+```
+
+## Anatomy
+
+The Select component is built as a compound component with multiple parts:
+
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'Root', description: 'Main container managing state and context' },
+    { name: 'trigger', label: 'Trigger', description: 'Button that toggles dropdown visibility' },
+    { name: 'value', label: 'Value', description: 'Displays selected value or placeholder' },
+    { name: 'icon', label: 'Icon', description: 'Visual indicator (chevron/arrow)' },
+    { name: 'portal', label: 'Portal', description: 'Portal container for dropdown rendering' },
+    { name: 'content', label: 'Content', description: 'Dropdown container with Floating UI positioning' },
+    { name: 'viewport', label: 'Viewport', description: 'Scrollable container for items' },
+    { name: 'group', label: 'Group', description: 'Groups related items together' },
+    { name: 'label', label: 'Label', description: 'Label for item groups' },
+    { name: 'item', label: 'Item', description: 'Individual selectable option' },
+    { name: 'itemText', label: 'ItemText', description: 'Text content of an item' },
+    { name: 'itemIndicator', label: 'ItemIndicator', description: 'Visual indicator for selected state' },
+    { name: 'separator', label: 'Separator', description: 'Visual separator between items/groups' },
+    { name: 'arrow', label: 'Arrow', description: 'Optional arrow pointing to trigger' },
+  ]}
+>
+  <Select.Root data-glide-part="root" value="apple">
+    <Select.Trigger
+      data-glide-part="trigger"
+      style={{
+        padding: '8px 12px',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        background: 'white',
+        cursor: 'pointer',
+        minWidth: '200px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: '8px',
+      }}
+    >
+      <Select.Value
+        data-glide-part="value"
+        placeholder="Select a fruit..."
+      />
+      <Select.Icon data-glide-part="icon">▼</Select.Icon>
+    </Select.Trigger>
+
+    <Select.Portal data-glide-part="portal">
+      <Select.Content
+        data-glide-part="content"
+        placement="bottom-start"
+        offset={5}
+        style={{
+          background: 'white',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          padding: '4px',
+          zIndex: 1000,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+        }}
+      >
+        <Select.Viewport data-glide-part="viewport">
+          <Select.Group data-glide-part="group">
+            <Select.Label
+              data-glide-part="label"
+              style={{
+                padding: '4px 8px',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                color: '#666',
+              }}
+            >
+              Fruits
+            </Select.Label>
+            <Select.Item
+              data-glide-part="item"
+              value="apple"
+              style={{
+                padding: '8px 12px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <Select.ItemText data-glide-part="itemText">Apple</Select.ItemText>
+              <Select.ItemIndicator data-glide-part="itemIndicator">✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item
+              data-glide-part="item"
+              value="banana"
+              style={{
+                padding: '8px 12px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <Select.ItemText data-glide-part="itemText">Banana</Select.ItemText>
+              <Select.ItemIndicator data-glide-part="itemIndicator">✓</Select.ItemIndicator>
+            </Select.Item>
+          </Select.Group>
+
+          <Select.Separator
+            data-glide-part="separator"
+            style={{
+              height: '1px',
+              background: '#e0e0e0',
+              margin: '4px 0',
+            }}
+          />
+
+          <Select.Arrow
+            data-glide-part="arrow"
+            width={10}
+            height={5}
+          />
+        </Select.Viewport>
+      </Select.Content>
+    </Select.Portal>
+  </Select.Root>
+</AnatomyViewer>
+
+### Structure
+
+```tsx
+<Select.Root>
+  <Select.Trigger>
+    <Select.Value />
+    <Select.Icon />
+  </Select.Trigger>
+
+  <Select.Portal>
+    <Select.Content>
+      <Select.Viewport>
+        <Select.Group>
+          <Select.Label />
+          <Select.Item>
+            <Select.ItemText />
+            <Select.ItemIndicator />
+          </Select.Item>
+        </Select.Group>
+
+        <Select.Separator />
+        <Select.Arrow />
+      </Select.Viewport>
+    </Select.Content>
+  </Select.Portal>
+</Select.Root>
+```
+
+**Data Flow:**
+- `Select.Root` manages state (open/value) and provides context to all child components
+- `Select.Trigger` toggles dropdown open/closed state and displays current selection
+- `Select.Value` displays the selected item's text or placeholder when nothing is selected
+- `Select.Icon` provides visual feedback for the dropdown state (optional)
+- `Select.Portal` renders content outside DOM hierarchy for proper z-index stacking
+- `Select.Content` uses Floating UI for intelligent positioning relative to trigger
+- `Select.Viewport` provides scrollable container when items exceed available space
+- `Select.Group` organizes related items and associates them with labels
+- `Select.Label` provides semantic grouping labels for screen readers
+- `Select.Item` registers with root context and handles selection on click/keyboard
+- `Select.ItemText` provides the text value for type-ahead search and display
+- `Select.ItemIndicator` shows selected state visually (checkmark, icon, etc.)
+- `Select.Separator` provides visual separation between groups or items
+- `Select.Arrow` points to trigger when using Floating UI arrow middleware (optional)
+
+**Alternative: Tree-shakeable named imports**
+```tsx
+import { SelectRoot, SelectTrigger, SelectValue } from '@turkish-technology/glide'
+
+<SelectRoot>
+  <SelectTrigger>
+    <SelectValue />
+  </SelectTrigger>
+  {/* ... */}
+</SelectRoot>
+```
+
+## Code Examples
+
+### Basic Controlled Select
+
+A simple controlled select with value management.
+
+```tsx
+function ControlledSelect() {
+  const [selectedFruit, setSelectedFruit] = React.useState('');
+
+  return (
+    <Select.Root value={selectedFruit} onValueChange={setSelectedFruit}>
+      <Select.Trigger>
+        <Select.Value placeholder="Choose a fruit" />
+        <Select.Icon>▼</Select.Icon>
+      </Select.Trigger>
+
+      <Select.Portal>
+        <Select.Content>
+          <Select.Viewport>
+            <Select.Item value="apple">
+              <Select.ItemText>Apple</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value="banana">
+              <Select.ItemText>Banana</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value="orange">
+              <Select.ItemText>Orange</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
+```
+
+### Uncontrolled Select with Default Value
+
+Select component managing its own state internally.
+
+```tsx
+function UncontrolledSelect() {
+  const handleValueChange = (value: string) => {
+    console.log('Selected value:', value);
+  };
+
+  return (
+    <Select.Root defaultValue="medium" onValueChange={handleValueChange}>
+      <Select.Trigger>
+        <Select.Value placeholder="Select size" />
+      </Select.Trigger>
+
+      <Select.Portal>
+        <Select.Content>
+          <Select.Viewport>
+            <Select.Item value="small">
+              <Select.ItemText>Small</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value="medium">
+              <Select.ItemText>Medium</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value="large">
+              <Select.ItemText>Large</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
+```
+
+### Grouped Items with Labels
+
+Organize related options using groups and labels.
+
+```tsx
+function GroupedSelect() {
+  const [value, setValue] = React.useState('');
+
+  return (
+    <Select.Root value={value} onValueChange={setValue}>
+      <Select.Trigger>
+        <Select.Value placeholder="Select a country" />
+        <Select.Icon>▼</Select.Icon>
+      </Select.Trigger>
+
+      <Select.Portal>
+        <Select.Content>
+          <Select.Viewport>
+            <Select.Group>
+              <Select.Label>North America</Select.Label>
+              <Select.Item value="us">
+                <Select.ItemText>United States</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+              <Select.Item value="ca">
+                <Select.ItemText>Canada</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+              <Select.Item value="mx">
+                <Select.ItemText>Mexico</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+            </Select.Group>
+
+            <Select.Separator />
+
+            <Select.Group>
+              <Select.Label>Europe</Select.Label>
+              <Select.Item value="uk">
+                <Select.ItemText>United Kingdom</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+              <Select.Item value="de">
+                <Select.ItemText>Germany</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+              <Select.Item value="fr">
+                <Select.ItemText>France</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+            </Select.Group>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
+```
+
+### Disabled Items
+
+Prevent selection of specific items while keeping them visible.
+
+```tsx
+function SelectWithDisabledItems() {
+  const [plan, setPlan] = React.useState('free');
+
+  return (
+    <Select.Root value={plan} onValueChange={setPlan}>
+      <Select.Trigger>
+        <Select.Value />
+        <Select.Icon>▼</Select.Icon>
+      </Select.Trigger>
+
+      <Select.Portal>
+        <Select.Content>
+          <Select.Viewport>
+            <Select.Item value="free">
+              <Select.ItemText>Free Plan</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value="basic">
+              <Select.ItemText>Basic Plan - $9/month</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value="premium" isDisabled>
+              <Select.ItemText>Premium Plan - Coming Soon</Select.ItemText>
+            </Select.Item>
+            <Select.Item value="enterprise" isDisabled>
+              <Select.ItemText>Enterprise - Contact Sales</Select.ItemText>
+            </Select.Item>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
+```
+
+### Form Integration
+
+Integrate Select with HTML forms using the name prop.
+
+```tsx
+function SelectInForm() {
+  const [category, setCategory] = React.useState('');
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    console.log('Category:', formData.get('category'));
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="category-select">Product Category</label>
+      <Select.Root
+        name="category"
+        value={category}
+        onValueChange={setCategory}
+        required
+      >
+        <Select.Trigger id="category-select">
+          <Select.Value placeholder="Select category" />
+        </Select.Trigger>
+
+        <Select.Portal>
+          <Select.Content>
+            <Select.Viewport>
+              <Select.Item value="electronics">
+                <Select.ItemText>Electronics</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+              <Select.Item value="clothing">
+                <Select.ItemText>Clothing</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+              <Select.Item value="books">
+                <Select.ItemText>Books</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+            </Select.Viewport>
+          </Select.Content>
+        </Select.Portal>
+      </Select.Root>
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+### Advanced Positioning with Floating UI
+
+Use Floating UI's powerful positioning features for advanced placement control.
+
+```tsx
+function AdvancedPositioningSelect() {
+  const [value, setValue] = React.useState('');
+  const arrowRef = React.useRef<SVGSVGElement>(null);
+
+  return (
+    <Select.Root value={value} onValueChange={setValue}>
+      <Select.Trigger>
+        <Select.Value placeholder="Choose option" />
+        <Select.Icon>▼</Select.Icon>
+      </Select.Trigger>
+
+      <Select.Portal>
+        <Select.Content
+          placement="bottom-start"
+          offset={10}
+          shift={true}
+          shiftPadding={5}
+          flip={true}
+          size={true}
+          arrowRef={arrowRef}
+        >
+          <Select.Arrow ref={arrowRef} />
+          <Select.Viewport>
+            <Select.Item value="option1">
+              <Select.ItemText>Option 1</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value="option2">
+              <Select.ItemText>Option 2</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value="option3">
+              <Select.ItemText>Option 3</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
+```
+
+### RTL Support
+
+Select component with right-to-left text direction.
+
+```tsx
+function RTLSelect() {
+  const [value, setValue] = React.useState('');
+
+  return (
+    <Select.Root value={value} onValueChange={setValue} dir="rtl">
+      <Select.Trigger>
+        <Select.Icon>▼</Select.Icon>
+        <Select.Value placeholder="בחר אפשרות" />
+      </Select.Trigger>
+
+      <Select.Portal>
+        <Select.Content>
+          <Select.Viewport>
+            <Select.Item value="option1">
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+              <Select.ItemText>אפשרות 1</Select.ItemText>
+            </Select.Item>
+            <Select.Item value="option2">
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+              <Select.ItemText>אפשרות 2</Select.ItemText>
+            </Select.Item>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
+```
+
+## API Reference
+
+### Select.Root
+
+The main container that manages all select state and behavior.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `value?` | `string` | `undefined` | Controlled selected value |
+| `defaultValue?` | `string` | `undefined` | Uncontrolled initial value |
+| `onValueChange?` | `(value: string) => void` | `undefined` | Callback when selection changes |
+| `open?` | `boolean` | `undefined` | Controlled open state |
+| `defaultOpen?` | `boolean` | `false` | Uncontrolled initial open state |
+| `onOpenChange?` | `(open: boolean) => void` | `undefined` | Callback when open state changes |
+| `isDisabled?` | `boolean` | `false` | Disables the entire select |
+| `required?` | `boolean` | `false` | Makes the select required for forms |
+| `name?` | `string` | `undefined` | Form field name |
+| `dir?` | `'ltr' \| 'rtl'` | `'ltr'` | Reading direction |
+| `as?` | `ElementType` | `undefined` | Polymorphic component type |
+| `children` | `ReactNode` | - | Select component children |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onValueChange` | `(value: string)` | Selection changes | User selects an item or programmatic change |
+| `onOpenChange` | `(open: boolean)` | Open state changes | User toggles dropdown or programmatic change |
+
+**ARIA Attributes**
+
+No visual rendering - context provider only.
+
+### Select.Trigger
+
+The button that toggles the dropdown open and closed.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'button'` | Polymorphic component type |
+| `ref?` | `RefObject` | `undefined` | Forward ref support |
+| `children` | `ReactNode` | - | Trigger content |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onClick` | `(event: MouseEvent)` | Trigger clicked | Mouse click on trigger |
+| `onKeyDown` | `(event: KeyboardEvent)` | Key pressed on trigger | Space, Enter, or Arrow keys |
+| `onFocus` | `(event: FocusEvent)` | Trigger receives focus | Tab navigation or programmatic focus |
+| `onBlur` | `(event: FocusEvent)` | Trigger loses focus | Focus moves away |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `"combobox"` | Identifies interactive dropdown trigger | Trigger element |
+| `aria-haspopup` | `"listbox"` | Indicates trigger opens a listbox | Trigger element |
+| `aria-expanded` | `boolean` | Current open/closed state | Trigger element |
+| `aria-controls` | `string` | References content element ID | Trigger element |
+| `aria-disabled` | `boolean` | Disabled state | Trigger element (when disabled) |
+
+**Data Attributes**
+
+- `data-state`: `"open" | "closed"` - Dropdown open state
+- `data-disabled`: Present when `isDisabled={true}`
+- `data-placeholder`: Present when no value selected
+
+### Select.Value
+
+Displays the currently selected value or placeholder text.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `placeholder?` | `ReactNode` | `undefined` | Text shown when no value selected |
+| `as?` | `ElementType` | `'span'` | Polymorphic component type |
+| `children?` | `ReactNode` | `undefined` | Optional children (usually not needed) |
+
+**Events**
+
+No specific events.
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `id` | `string` | Identifies value element | Value element |
+
+### Select.Icon
+
+Optional visual indicator element (typically a chevron or arrow).
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'span'` | Polymorphic component type |
+| `children?` | `ReactNode` | `undefined` | Icon content |
+
+**Events**
+
+No specific events.
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `aria-hidden` | `"true"` | Hides decorative icon from screen readers | Icon element |
+
+### Select.Portal
+
+Portal container for rendering dropdown outside DOM hierarchy.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `container?` | `HTMLElement \| null` | `document.body` | Portal target element |
+| `forceMount?` | `boolean` | `false` | Force mount for animation control |
+| `children` | `ReactNode` | - | Portal content |
+
+**Events**
+
+No specific events.
+
+**ARIA Attributes**
+
+No ARIA attributes - rendering mechanism only.
+
+### Select.Content
+
+The dropdown container that appears when select is open. Uses Floating UI for intelligent positioning.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `placement?` | `Placement` | `'bottom-start'` | Placement relative to trigger. Supports 12 positions: `'top'`, `'top-start'`, `'top-end'`, `'right'`, `'right-start'`, `'right-end'`, `'bottom'`, `'bottom-start'`, `'bottom-end'`, `'left'`, `'left-start'`, `'left-end'` |
+| `strategy?` | `'absolute' \| 'fixed'` | `'absolute'` | CSS positioning strategy |
+| `middleware?` | `Middleware[]` | `undefined` | Custom Floating UI middleware array for advanced positioning control |
+| `offset?` | `number` | `5` | Distance from trigger in pixels |
+| `shift?` | `boolean` | `true` | Whether to shift the content to stay in viewport |
+| `shiftPadding?` | `number` | `5` | Padding for shift calculations |
+| `flip?` | `boolean` | `true` | Whether to flip to opposite side when no space |
+| `hide?` | `boolean` | `false` | Whether to hide when trigger is fully scrolled out of view |
+| `size?` | `boolean` | `true` | Whether to constrain size to available space |
+| `arrowRef?` | `RefObject<HTMLElement \| SVGSVGElement>` | `undefined` | Arrow element ref for arrow positioning |
+| `as?` | `ElementType` | `'div'` | Polymorphic component type |
+| `ref?` | `RefObject` | `undefined` | Forward ref support |
+| `children` | `ReactNode` | - | Content children |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onEscapeKeyDown` | `(event: KeyboardEvent)` | Escape key pressed | User presses Escape while dropdown is open |
+| `onPointerDownOutside` | `(event: PointerEvent)` | Click outside content | User clicks outside the dropdown |
+| `onCloseAutoFocus` | `(event: FocusEvent)` | Focus returns on close | Dropdown closes and focus restoration occurs |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `"listbox"` | Identifies as selectable list | Content element |
+| `id` | `string` | Unique content identifier | Content element |
+| `aria-labelledby` | `string` | References trigger for accessible name | Content element |
+
+**Data Attributes**
+
+- `data-state`: `"open" | "closed"` - Dropdown open state
+- `data-placement`: Floating UI computed placement (e.g., `"bottom-start"`, `"top-end"`)
+
+**Positioning**
+
+SelectContent uses Floating UI for advanced positioning. The component automatically:
+- Positions relative to the trigger using the specified `placement`
+- Applies `offset` distance from the trigger
+- Shifts content to stay within the viewport when `shift={true}`
+- Flips to the opposite side when there's no space and `flip={true}`
+- Constrains content height to available space when `size={true}`
+- Updates position automatically on scroll, resize, and layout changes
+- Matches trigger width as minimum width
+
+For arrow positioning, pass an `arrowRef` to both `SelectContent` and `SelectArrow` components.
+
+### Select.Viewport
+
+Scrollable container for select items within the content.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'div'` | Polymorphic component type |
+| `children` | `ReactNode` | - | Viewport children |
+
+**Events**
+
+No specific events.
+
+**ARIA Attributes**
+
+No specific ARIA attributes - scrollable container.
+
+### Select.Item
+
+Individual selectable option within the dropdown.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | - | Option value (required) |
+| `isDisabled?` | `boolean` | `false` | Disables the option |
+| `textValue?` | `string` | `undefined` | Text for type-ahead (auto-detected if not provided) |
+| `as?` | `ElementType` | `'div'` | Polymorphic component type |
+| `ref?` | `RefObject` | `undefined` | Forward ref support |
+| `children` | `ReactNode` | - | Item content |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onClick` | `(event: MouseEvent)` | Item clicked | Mouse click on item |
+| `onPointerMove` | `(event: PointerEvent)` | Pointer moves over item | Mouse/pointer enters item |
+| `onFocus` | `(event: FocusEvent)` | Item receives focus | Keyboard navigation focuses item |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `"option"` | Identifies as selectable option | Item element |
+| `aria-selected` | `boolean` | Indicates selected state | Item element |
+| `aria-disabled` | `boolean` | Indicates disabled state | Item element (when disabled) |
+| `id` | `string` | Unique item identifier | Item element |
+
+**Data Attributes**
+
+- `data-state`: `"checked" | "unchecked"` - Selection state
+- `data-disabled`: Present when `isDisabled={true}`
+- `data-highlighted`: Present when focused via keyboard
+
+### Select.ItemText
+
+The text content of a select item.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'span'` | Polymorphic component type |
+| `children` | `ReactNode` | - | Item text content |
+
+**Events**
+
+No specific events.
+
+**ARIA Attributes**
+
+No specific ARIA attributes - text container.
+
+### Select.ItemIndicator
+
+Visual indicator for selected state (checkmark, icon, etc).
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `forceMount?` | `boolean` | `false` | Force mount for animation |
+| `as?` | `ElementType` | `'span'` | Polymorphic component type |
+| `children?` | `ReactNode` | `undefined` | Indicator content |
+
+**Events**
+
+No specific events.
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `aria-hidden` | `"true"` | Hides decorative indicator from screen readers | Indicator element |
+
+**Note**: Only renders when parent item is selected.
+
+### Select.Group
+
+Groups related select items together.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'div'` | Polymorphic component type |
+| `children` | `ReactNode` | - | Group children |
+
+**Events**
+
+No specific events.
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `"group"` | Groups related elements | Group element |
+| `aria-labelledby` | `string` | References associated label | Group element |
+
+### Select.Label
+
+Label for a group of select items.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'div'` | Polymorphic component type |
+| `children` | `ReactNode` | - | Label content |
+
+**Events**
+
+No specific events.
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `id` | `string` | Unique label identifier | Label element |
+
+### Select.Separator
+
+Visual separator between items or groups.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'div'` | Polymorphic component type |
+| `children?` | `ReactNode` | `undefined` | Optional children |
+
+**Events**
+
+No specific events.
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `"separator"` | Identifies as visual separator | Separator element |
+
+### Select.Arrow
+
+Optional arrow element pointing to the trigger. Automatically positioned by Floating UI when used with `arrowRef`.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `width?` | `number` | `10` | Arrow width in pixels |
+| `height?` | `number` | `5` | Arrow height in pixels |
+| `ref?` | `RefObject<SVGSVGElement>` | `undefined` | Forward ref support (required for arrow positioning) |
+| `as?` | `ElementType` | `'svg'` | Polymorphic component type |
+| `children?` | `ReactNode` | `undefined` | Optional children (custom arrow shape) |
+
+**Events**
+
+No specific events.
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `aria-hidden` | `"true"` | Hides decorative arrow from screen readers | Arrow element |
+
+**Arrow Positioning**
+
+To enable automatic arrow positioning with Floating UI:
+
+1. Create a ref for the arrow: `const arrowRef = React.useRef<SVGSVGElement>(null)`
+2. Pass the ref to SelectArrow: `<Select.Arrow ref={arrowRef} />`
+3. Pass the same ref to SelectContent: `<Select.Content arrowRef={arrowRef}>`
+
+The arrow will automatically position itself to point at the trigger, accounting for the content's placement.
+
+## Keyboard Interactions
+
+Complete keyboard behavior for the Select component following WAI-ARIA Listbox pattern:
+
+| Key | Action | Context | Notes |
+|-----|--------|---------|-------|
+| `Space` | Open dropdown / Select item | Trigger focused / Item focused | Opens to selected or first item |
+| `Enter` | Open dropdown / Select item | Trigger focused / Item focused | Opens to selected or first item |
+| `ArrowDown` | Open dropdown / Navigate down | Trigger focused / Dropdown open | Opens or moves to next item |
+| `ArrowUp` | Open dropdown / Navigate up | Trigger focused / Dropdown open | Opens or moves to previous item |
+| `Home` | Focus first item | Dropdown open | Moves to first non-disabled item |
+| `End` | Focus last item | Dropdown open | Moves to last non-disabled item |
+| `PageUp` | Focus first item | Dropdown open | Same as Home |
+| `PageDown` | Focus last item | Dropdown open | Same as End |
+| `Escape` | Close dropdown | Dropdown open | Returns focus to trigger, no selection |
+| `Tab` | Close dropdown, move focus | Dropdown open | Moves to next tabbable element |
+| `Shift + Tab` | Close dropdown, move focus backward | Dropdown open | Moves to previous tabbable element |
+| `A-Z` / `a-z` | Type-ahead search | Dropdown open | Finds and focuses matching item (1000ms timeout) |
+
+**Type-ahead Behavior:**
+- Single character search focuses next matching item
+- Multiple characters within 1000ms builds search string
+- Search wraps around to beginning if no match found
+- Timer resets to 1000ms after each character input
+- Disabled items are skipped during search
