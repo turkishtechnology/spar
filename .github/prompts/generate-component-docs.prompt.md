@@ -39,6 +39,7 @@ Generate documentation for **${input:ComponentName:Button}** component.
    - Data flow explanation
 6. **Code Examples**
    - Multiple progressive, static TypeScript code blocks (unstyled, headless, accessible, real-world scenarios)
+   - Use Docusaurus line highlighting syntax to emphasize key lines (e.g., `tsx {1,4-6,11}`)
 6. **API Reference Tables**
    - For EACH compound part: Props, Events, ARIA tables (exact TypeScript types, actual defaults, required indicators)
 7. **Keyboard Interactions**
@@ -68,6 +69,8 @@ Create documentation at: `apps/docs/docs/Components/${ComponentName}.mdx`
 - **LiveCode Example**: Only one, minimal, accessibility-focused
 - **AnatomyViewer**: Same demo as LiveCode + data-glide-part attributes + parts array
 - **Code Examples**: Static, progressive, TypeScript, headless, accessible
+  - Use line highlighting for important sections: `tsx {1,4-6,11}`
+  - Highlight state management, event handlers, accessibility props
 - **Table Standards**:
   - Props: Name, Type, Default, Description
   - Events: Name, Parameters, Description, When Triggered

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { themes } from 'prism-react-renderer';
-
 import {
   Accordion,
   AccordionItem,
@@ -10,14 +9,42 @@ import {
   AccordionTrigger,
   AccordionContent,
   Button,
+  BreadcrumbRoot,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
+  Input,
+  PopoverRoot,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverPortal,
+  PopoverAnchor,
+  PopoverClose,
   Radio,
   RadioGroup,
   RadioItem,
+  Checkbox,
+  Switch,
+  Label,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  TooltipProvider,
+  TooltipRoot,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipPortal,
+  TooltipArrow,
   Select,
 } from '@turkish-technology/glide';
+
 interface LiveCodeProps {
   title?: string;
   code?: string;
@@ -67,6 +94,21 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     React,
     useState: React.useState,
     useEffect: React.useEffect,
+    // Breadcrumb components
+    BreadcrumbRoot,
+    BreadcrumbList,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+    // Popover components
+    PopoverRoot,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverArrow,
+    PopoverPortal,
+    PopoverAnchor,
+    PopoverClose,
     // Accordion components
     Accordion,
     AccordionItem,
@@ -83,6 +125,26 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Radio,
     RadioGroup,
     RadioItem,
+    // Input components
+    Input,
+    // Checkbox component
+    Checkbox,
+    // Switch component
+    Switch,
+    // Label component
+    Label,
+    // Tabs components
+    Tabs,
+    TabsList,
+    TabsTrigger,
+    TabsContent,
+    // Glide Tooltip components
+    TooltipProvider,
+    TooltipRoot,
+    TooltipTrigger,
+    TooltipContent,
+    TooltipPortal,
+    TooltipArrow,
     // Select component
     Select,
   };
