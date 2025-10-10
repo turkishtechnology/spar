@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import type { SelectItemProps, SelectItemContextValue } from './types';
 import { useSelectContext } from './SelectRoot';
+import { useMergedRef } from '@/hooks';
 
 const SelectItemContext = createContext<SelectItemContextValue | null>(null);
 
@@ -39,16 +40,7 @@ export const SelectItem = ({
   const [textValue, setTextValue] = useState(providedTextValue || '');
 
   // Merge external ref with internal ref
-  useEffect(() => {
-    if (ref) {
-      if (typeof ref === 'function') {
-        ref(itemRef.current);
-      } else if (ref) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (ref as any).current = itemRef.current;
-      }
-    }
-  }, [ref]);
+  const mergedRef = useMergedRef(itemRef, ref);
 
   // Register/unregister item
   useEffect(() => {
@@ -129,7 +121,7 @@ export const SelectItem = ({
   return (
     <SelectItemContext.Provider value={itemContextValue}>
       <Component
-        ref={itemRef}
+        ref={mergedRef}
         role='option'
         aria-selected={isSelected}
         aria-disabled={isDisabled || undefined}
