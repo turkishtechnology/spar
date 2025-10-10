@@ -20,7 +20,6 @@ export const TooltipTrigger = ({
   const context = useTooltip();
   const provider = useTooltipProvider();
   const showTimeoutRef = useRef<number | null>(null);
-  const hideTimeoutRef = useRef<number | null>(null);
 
   // Clear timeouts
   const clearTimeouts = useCallback(() => {
@@ -28,11 +27,8 @@ export const TooltipTrigger = ({
       clearTimeout(showTimeoutRef.current);
       showTimeoutRef.current = null;
     }
-    if (hideTimeoutRef.current) {
-      clearTimeout(hideTimeoutRef.current);
-      hideTimeoutRef.current = null;
-    }
-  }, []);
+    context.clearHideTimeout();
+  }, [context]);
 
   // Show tooltip with delay
   const showTooltip = useCallback(
@@ -56,10 +52,13 @@ export const TooltipTrigger = ({
 
       const delay = immediate ? 0 : context.hideDelay;
 
-      hideTimeoutRef.current = window.setTimeout(() => {
+      const hideTimeoutId = window.setTimeout(() => {
         context.onOpenChange(false);
         provider?.setIsOpenDelayed?.(false);
       }, delay);
+
+      // Store timeout ID in context ref so it can be cleared from content
+      context.hideTimeoutRef.current = hideTimeoutId;
     },
     [clearTimeouts, context, provider],
   );
@@ -145,7 +144,7 @@ export const TooltipTrigger = ({
     return () => {
       clearTimeouts();
     };
-  }, []);
+  }, [clearTimeouts]);
 
   // Ref callback to merge refs
   const refCallback = (node: HTMLElement | null) => {

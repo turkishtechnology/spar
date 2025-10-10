@@ -259,6 +259,9 @@ export interface TooltipContextValue {
   triggerRef: React.RefObject<HTMLElement | null>;
   contentRef: React.RefObject<HTMLElement | null>;
   arrowRef: React.RefObject<HTMLElement | SVGSVGElement | null>;
+  // Timeout control for hoverable content
+  hideTimeoutRef: React.RefObject<number | null>;
+  clearHideTimeout: () => void;
 }
 
 export interface TooltipProviderContextValue {
