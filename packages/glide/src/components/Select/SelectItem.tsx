@@ -74,7 +74,7 @@ export const SelectItem = ({
 
   // Scroll into view when highlighted
   useEffect(() => {
-    if (isHighlighted && itemRef.current) {
+    if (isHighlighted && itemRef.current && itemRef.current.scrollIntoView) {
       itemRef.current.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     }
   }, [isHighlighted]);
