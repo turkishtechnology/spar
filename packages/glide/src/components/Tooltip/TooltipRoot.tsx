@@ -32,6 +32,9 @@ export const TooltipRoot = ({
   const contentRef = useRef<HTMLElement | null>(null);
   const arrowRef = useRef<HTMLElement | SVGSVGElement | null>(null);
 
+  // Timeout refs for external access
+  const hideTimeoutRef = useRef<number | null>(null);
+
   // Get delay values from provider or props
   const effectiveDelay = delay ?? provider?.delayDuration ?? 700;
   const effectiveHideDelay = hideDelay;
@@ -46,6 +49,14 @@ export const TooltipRoot = ({
       onOpenChange?.(open);
     } else {
       setUncontrolledOpen(open);
+    }
+  };
+
+  // Clear hide timeout function
+  const clearHideTimeout = () => {
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+      hideTimeoutRef.current = null;
     }
   };
 
@@ -67,6 +78,8 @@ export const TooltipRoot = ({
       triggerRef,
       contentRef,
       arrowRef,
+      hideTimeoutRef,
+      clearHideTimeout,
     }),
     [
       isOpen,

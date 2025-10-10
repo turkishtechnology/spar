@@ -168,8 +168,12 @@ export const TooltipContent = ({
 
   // Handle mouse enter/leave for hoverable content
   const handleMouseEnter = useCallback(() => {
-    // Keep tooltip open when hovering content (WCAG 1.4.13)
-  }, []);
+    // Cancel any pending hide timeout when hovering over content (WCAG 1.4.13)
+    // Only if hoverable content is not disabled
+    if (!context.disableHoverableContent) {
+      context.clearHideTimeout();
+    }
+  }, [context]);
 
   const handleMouseLeave = useCallback(() => {
     if (!context.disableHoverableContent) {
