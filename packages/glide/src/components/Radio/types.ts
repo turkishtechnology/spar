@@ -1,6 +1,5 @@
 import * as React from 'react';
-
-export type Orientation = 'horizontal' | 'vertical';
+import type { Orientation } from '../../types';
 
 /**
  * Props for RadioGroup component

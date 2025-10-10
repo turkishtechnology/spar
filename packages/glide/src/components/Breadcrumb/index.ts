@@ -1,4 +1,4 @@
-import { BreadcrumbRoot as BreadcrumbCompoundRoot } from './BreadcrumbRoot';
+import { BreadcrumbRoot } from './BreadcrumbRoot';
 import { BreadcrumbList } from './BreadcrumbList';
 import { BreadcrumbItem } from './BreadcrumbItem';
 import { BreadcrumbLink } from './BreadcrumbLink';
@@ -6,8 +6,8 @@ import { BreadcrumbPage } from './BreadcrumbPage';
 import { BreadcrumbSeparator } from './BreadcrumbSeparator';
 
 // Create compound component with dot notation support
-const Breadcrumb = BreadcrumbCompoundRoot as typeof BreadcrumbCompoundRoot & {
-  Root: typeof BreadcrumbCompoundRoot;
+const Breadcrumb = BreadcrumbRoot as typeof BreadcrumbRoot & {
+  Root: typeof BreadcrumbRoot;
   List: typeof BreadcrumbList;
   Item: typeof BreadcrumbItem;
   Link: typeof BreadcrumbLink;
@@ -15,7 +15,7 @@ const Breadcrumb = BreadcrumbCompoundRoot as typeof BreadcrumbCompoundRoot & {
   Separator: typeof BreadcrumbSeparator;
 };
 
-Breadcrumb.Root = BreadcrumbCompoundRoot;
+Breadcrumb.Root = BreadcrumbRoot;
 Breadcrumb.List = BreadcrumbList;
 Breadcrumb.Item = BreadcrumbItem;
 Breadcrumb.Link = BreadcrumbLink;
@@ -28,12 +28,12 @@ export {
   Breadcrumb,
 
   // Named exports (tree-shakeable)
+  BreadcrumbRoot,
   BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbPage,
   BreadcrumbSeparator,
-  BreadcrumbCompoundRoot,
 };
 
 // Export types

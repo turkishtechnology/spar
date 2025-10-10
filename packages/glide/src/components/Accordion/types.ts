@@ -1,7 +1,7 @@
 import type React from 'react';
+import type { Orientation } from '../../types';
 
 export type AccordionType = 'single' | 'multiple';
-export type AccordionOrientation = 'vertical' | 'horizontal';
 
 /**
  * Props for Accordion root component
@@ -45,7 +45,7 @@ export interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
    * Orientation for keyboard navigation
    * @defaultValue 'vertical'
    */
-  orientation?: AccordionOrientation;
+  orientation?: Orientation;
 
   /**
    * Polymorphic component type
@@ -157,7 +157,7 @@ export interface AccordionContextValue {
   value: string | string[];
   onItemToggle: (itemValue: string) => void;
   isDisabled: boolean;
-  orientation: AccordionOrientation;
+  orientation: Orientation;
   registeredItems: Map<string, number>;
   registerItem: (itemValue: string) => void;
   unregisterItem: (itemValue: string) => void;

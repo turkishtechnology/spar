@@ -1,5 +1,5 @@
-export type Side = 'top' | 'bottom' | 'left' | 'right';
-export type Align = 'start' | 'center' | 'end';
+import { Side, Align } from '../../types';
+
 export type Sticky = 'partial' | 'always';
 
 /**

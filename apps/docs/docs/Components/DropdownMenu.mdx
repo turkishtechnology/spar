@@ -1,0 +1,835 @@
+---
+sidebar_position: 4
+title: DropdownMenu
+description: Accessible dropdown menu component with keyboard navigation, typeahead search, nested submenus, and complete ARIA support.
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+
+# DropdownMenu
+
+Accessible dropdown menu component for creating interactive command menus with keyboard navigation, typeahead search, and full ARIA support.
+
+![Accessibility Badge](https://img.shields.io/badge/WCAG%202.2%20AA-Compliant-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-Yes-blue) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-Strict-blue)
+
+## Live Demo
+
+<LiveCode
+  code={`function BasicDropdownExample() {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger
+        style={{
+          padding: '8px 16px',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          background: 'white',
+          cursor: 'pointer'
+        }}
+      >
+        Open Menu
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content
+        style={{
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+          background: 'white',
+          padding: '4px',
+          minWidth: '180px'
+        }}
+      >
+        <DropdownMenu.Item style={{ padding: '8px 12px', cursor: 'pointer' }}>
+          New File
+        </DropdownMenu.Item>
+        <DropdownMenu.Item style={{ padding: '8px 12px', cursor: 'pointer' }}>
+          Save
+        </DropdownMenu.Item>
+        <DropdownMenu.Separator style={{ height: '1px', background: '#e0e0e0', margin: '4px 0' }} />
+        <DropdownMenu.Item style={{ padding: '8px 12px', cursor: 'pointer' }}>
+          Exit
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}`}
+/>
+
+## Features
+
+- ✅ Full keyboard navigation with arrow keys
+- ✅ Typeahead search for quick item selection
+- ✅ Nested submenu support with directional awareness
+- ✅ Checkbox and radio item variants
+- ✅ Controlled and uncontrolled state management
+- ✅ Automatic positioning with collision detection
+- ✅ Modal and non-modal modes
+- ✅ Focus management and restoration
+- ✅ Customizable close behavior per item type
+- ✅ Polymorphic component API
+
+## Installation
+
+```tsx
+// Compound component (recommended)
+import { DropdownMenu } from '@turkish-technology/glide'
+
+// Named imports (tree-shakeable)
+import {
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+  DropdownMenuGroup,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent
+} from '@turkish-technology/glide'
+```
+
+## Anatomy
+
+The DropdownMenu component is built as a compound component with multiple parts:
+
+```tsx
+<DropdownMenu.Root>
+  <DropdownMenu.Trigger />
+  <DropdownMenu.Content>
+    <DropdownMenu.Label />
+    <DropdownMenu.Item />
+    <DropdownMenu.Group>
+      <DropdownMenu.Item />
+    </DropdownMenu.Group>
+    <DropdownMenu.CheckboxItem />
+    <DropdownMenu.RadioGroup>
+      <DropdownMenu.RadioItem />
+    </DropdownMenu.RadioGroup>
+    <DropdownMenu.Sub>
+      <DropdownMenu.SubTrigger />
+      <DropdownMenu.SubContent>
+        <DropdownMenu.Item />
+      </DropdownMenu.SubContent>
+    </DropdownMenu.Sub>
+    <DropdownMenu.Separator />
+  </DropdownMenu.Content>
+</DropdownMenu.Root>
+```
+
+**Alternative: Tree-shakeable named imports**
+```tsx
+import {
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from '@turkish-technology/glide'
+
+<DropdownMenuRoot>
+  <DropdownMenuTrigger />
+  <DropdownMenuContent>
+    <DropdownMenuItem />
+  </DropdownMenuContent>
+</DropdownMenuRoot>
+```
+
+**Data Flow:**
+- `DropdownMenu.Root` manages open/close state and provides context
+- `DropdownMenu.Trigger` controls menu visibility and manages focus
+- `DropdownMenu.Content` handles positioning, keyboard navigation, and item collection
+- Menu items register themselves for keyboard navigation and typeahead
+- Submenus inherit parent context and manage their own open state
+
+## Code Examples
+
+### Basic Dropdown Menu
+
+A simple dropdown menu with standard items.
+
+```tsx
+function BasicMenu() {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        Actions
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item onSelect={() => console.log('Edit')}>
+          Edit
+        </DropdownMenu.Item>
+        <DropdownMenu.Item onSelect={() => console.log('Duplicate')}>
+          Duplicate
+        </DropdownMenu.Item>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item onSelect={() => console.log('Delete')}>
+          Delete
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}
+```
+
+### Controlled Menu State
+
+Control the menu's open state externally.
+
+```tsx
+function ControlledMenu() {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  return (
+    <>
+      <p>Menu is {isOpen ? 'open' : 'closed'}</p>
+      <DropdownMenu.Root open={isOpen} onOpenChange={setIsOpen}>
+        <DropdownMenu.Trigger>
+          Options
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Item>Option 1</DropdownMenu.Item>
+          <DropdownMenu.Item>Option 2</DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    </>
+  );
+}
+```
+
+### Menu with Checkbox Items
+
+Checkbox items for toggleable options.
+
+```tsx
+function MenuWithCheckboxes() {
+  const [showBookmarks, setShowBookmarks] = React.useState(true);
+  const [showHistory, setShowHistory] = React.useState(false);
+
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        View
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Label>Panels</DropdownMenu.Label>
+        <DropdownMenu.CheckboxItem
+          checked={showBookmarks}
+          onCheckedChange={setShowBookmarks}
+        >
+          Show Bookmarks
+        </DropdownMenu.CheckboxItem>
+        <DropdownMenu.CheckboxItem
+          checked={showHistory}
+          onCheckedChange={setShowHistory}
+        >
+          Show History
+        </DropdownMenu.CheckboxItem>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}
+```
+
+### Menu with Radio Group
+
+Radio groups for mutually exclusive selections.
+
+```tsx
+function MenuWithRadioGroup() {
+  const [textAlign, setTextAlign] = React.useState('left');
+
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        Text Align
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.RadioGroup value={textAlign} onValueChange={setTextAlign}>
+          <DropdownMenu.RadioItem value="left">
+            Align Left
+          </DropdownMenu.RadioItem>
+          <DropdownMenu.RadioItem value="center">
+            Align Center
+          </DropdownMenu.RadioItem>
+          <DropdownMenu.RadioItem value="right">
+            Align Right
+          </DropdownMenu.RadioItem>
+        </DropdownMenu.RadioGroup>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}
+```
+
+### Nested Submenus
+
+Create nested menus with directional navigation.
+
+```tsx
+function NestedMenu() {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        File
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item>New File</DropdownMenu.Item>
+        <DropdownMenu.Sub>
+          <DropdownMenu.SubTrigger>
+            Open Recent
+          </DropdownMenu.SubTrigger>
+          <DropdownMenu.SubContent>
+            <DropdownMenu.Item>document.txt</DropdownMenu.Item>
+            <DropdownMenu.Item>project.json</DropdownMenu.Item>
+            <DropdownMenu.Item>notes.md</DropdownMenu.Item>
+          </DropdownMenu.SubContent>
+        </DropdownMenu.Sub>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item>Save</DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}
+```
+
+### Custom Positioning
+
+Control menu positioning and collision behavior.
+
+```tsx
+function CustomPositionMenu() {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        Options
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content
+        side="right"
+        align="start"
+        sideOffset={5}
+        alignOffset={10}
+        avoidCollisions={true}
+      >
+        <DropdownMenu.Item>Option 1</DropdownMenu.Item>
+        <DropdownMenu.Item>Option 2</DropdownMenu.Item>
+        <DropdownMenu.Item>Option 3</DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}
+```
+
+### Grouped Menu Items
+
+Group related items together.
+
+```tsx
+function GroupedMenu() {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        Edit
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Group>
+          <DropdownMenu.Label>Clipboard</DropdownMenu.Label>
+          <DropdownMenu.Item>Cut</DropdownMenu.Item>
+          <DropdownMenu.Item>Copy</DropdownMenu.Item>
+          <DropdownMenu.Item>Paste</DropdownMenu.Item>
+        </DropdownMenu.Group>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Group>
+          <DropdownMenu.Label>Transform</DropdownMenu.Label>
+          <DropdownMenu.Item>Uppercase</DropdownMenu.Item>
+          <DropdownMenu.Item>Lowercase</DropdownMenu.Item>
+        </DropdownMenu.Group>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}
+```
+
+### Disabled Items
+
+Disable specific menu items.
+
+```tsx
+function MenuWithDisabledItems() {
+  const hasSelection = false;
+
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        Edit
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item disabled={!hasSelection}>
+          Cut
+        </DropdownMenu.Item>
+        <DropdownMenu.Item disabled={!hasSelection}>
+          Copy
+        </DropdownMenu.Item>
+        <DropdownMenu.Item>
+          Paste
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}
+```
+
+### Non-Modal Menu
+
+Allow focus to leave the menu without closing.
+
+```tsx
+function NonModalMenu() {
+  return (
+    <DropdownMenu.Root modal={false}>
+      <DropdownMenu.Trigger>
+        Settings
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item>Preferences</DropdownMenu.Item>
+        <DropdownMenu.Item>Extensions</DropdownMenu.Item>
+        <DropdownMenu.Item>Keyboard Shortcuts</DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}
+```
+
+### Custom Close Behavior
+
+Control when the menu closes on selection.
+
+```tsx
+function CustomCloseBehavior() {
+  return (
+    <DropdownMenu.Root closeOnSelect={false}>
+      <DropdownMenu.Trigger>
+        Multi-Select
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.CheckboxItem checked={false}>
+          Option 1
+        </DropdownMenu.CheckboxItem>
+        <DropdownMenu.CheckboxItem checked={false}>
+          Option 2
+        </DropdownMenu.CheckboxItem>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item onSelect={(e) => e.preventDefault()}>
+          Keep Open
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}
+```
+
+## API Reference
+
+### DropdownMenu.Root
+
+The root container that manages the dropdown menu state and provides context to all child components.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `open?` | `boolean` | `undefined` | Controlled open state |
+| `defaultOpen?` | `boolean` | `false` | Initial open state (uncontrolled) |
+| `onOpenChange?` | `(open: boolean) => void` | `undefined` | Callback when open state changes |
+| `modal?` | `boolean` | `true` | Whether menu traps focus (modal) or allows focus to leave |
+| `dir?` | `'ltr' \| 'rtl'` | `'ltr'` | Reading direction for submenu positioning |
+| `closeOnSelect?` | `boolean \| 'auto'` | `'auto'` | Whether to close menu on item selection. 'auto' closes for items, stays open for checkbox/radio |
+| `children?` | `ReactNode` | `undefined` | Menu trigger and content |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onOpenChange` | `(open: boolean)` | Open state change handler | User interaction or programmatic state change |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| N/A | N/A | Root is a context provider with no rendered element | N/A |
+
+### DropdownMenu.Trigger
+
+The button or element that toggles the dropdown menu visibility.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'button'` | Polymorphic element type to render |
+| `asChild?` | `boolean` | `false` | Merge props with child element instead of wrapping |
+| `disabled?` | `boolean` | `false` | Whether the trigger is disabled |
+| `ref?` | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to trigger element |
+| `onClick?` | `(event: MouseEvent) => void` | `undefined` | Click event handler |
+| `onKeyDown?` | `(event: KeyboardEvent) => void` | `undefined` | Keyboard event handler |
+| `children?` | `ReactNode` | `undefined` | Trigger content |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onClick` | `(event: MouseEvent)` | Mouse click handler | User clicks trigger |
+| `onKeyDown` | `(event: KeyboardEvent)` | Keyboard event handler | User presses key while focused |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `aria-haspopup` | `'menu'` | Indicates element has a popup menu | Trigger element |
+| `aria-expanded` | `boolean` | Indicates whether menu is expanded | Trigger element |
+| `aria-controls` | `string` | References controlled menu content | Trigger element (when open) |
+| `data-state` | `'open' \| 'closed'` | Current state for styling | Trigger element |
+| `data-disabled` | `''` | Present when disabled | Trigger element (when disabled) |
+| `aria-disabled` | `true` | Indicates disabled state | Trigger element (when disabled) |
+
+### DropdownMenu.Content
+
+The container for menu items with positioning, keyboard navigation, and typeahead support.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'div'` | Polymorphic element type to render |
+| `side?` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'` | Preferred side for positioning |
+| `align?` | `'start' \| 'center' \| 'end'` | `'start'` | Alignment relative to trigger |
+| `sideOffset?` | `number` | `0` | Distance in pixels from trigger |
+| `alignOffset?` | `number` | `0` | Offset along alignment axis |
+| `avoidCollisions?` | `boolean` | `true` | Automatically adjust position to avoid viewport edges |
+| `collisionBoundary?` | `Element \| Element[] \| null` | `null` | Boundary element(s) for collision detection |
+| `collisionPadding?` | `number` | `8` | Padding from boundary edges in pixels |
+| `loop?` | `boolean` | `false` | Whether keyboard navigation loops through items |
+| `onEscapeKeyDown?` | `(event: KeyboardEvent) => void` | `undefined` | Escape key handler |
+| `onPointerDownOutside?` | `(event: PointerEvent) => void` | `undefined` | Outside click handler |
+| `onFocusOutside?` | `(event: FocusEvent) => void` | `undefined` | Outside focus handler |
+| `onKeyDown?` | `(event: KeyboardEvent) => void` | `undefined` | Keyboard event handler |
+| `ref?` | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to content element |
+| `children?` | `ReactNode` | `undefined` | Menu items and groups |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onEscapeKeyDown` | `(event: KeyboardEvent)` | Escape key pressed | User presses Escape while menu is open |
+| `onPointerDownOutside` | `(event: PointerEvent)` | Click outside menu | User clicks outside menu bounds |
+| `onFocusOutside` | `(event: FocusEvent)` | Focus leaves menu | Focus moves outside menu (non-modal mode) |
+| `onKeyDown` | `(event: KeyboardEvent)` | Key pressed in menu | User presses any key while menu is focused |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `'menu'` | Identifies as menu widget | Content element |
+| `aria-labelledby` | `string` | References trigger for accessible name | Content element |
+| `data-state` | `'open'` | Indicates open state | Content element |
+| `data-side` | Side | Current placement side | Content element |
+| `data-align` | Align | Current alignment | Content element |
+| `tabIndex` | `-1` | Manages focus programmatically | Content element |
+
+### DropdownMenu.Item
+
+A selectable menu item.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'div'` | Polymorphic element type to render |
+| `disabled?` | `boolean` | `false` | Whether item is disabled |
+| `onSelect?` | `(event: SyntheticEvent) => void` | `undefined` | Selection handler |
+| `textValue?` | `string` | `undefined` | Text value for typeahead (auto-detected from content if not provided) |
+| `ref?` | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to item element |
+| `children?` | `ReactNode` | `undefined` | Item content |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onSelect` | `(event: SyntheticEvent)` | Item selected | User clicks or activates item with keyboard |
+| `onClick` | `(event: MouseEvent)` | Mouse click | User clicks item |
+| `onKeyDown` | `(event: KeyboardEvent)` | Key pressed | User presses key while item focused |
+| `onPointerMove` | `(event: PointerEvent)` | Pointer movement | Pointer moves over item |
+| `onFocus` | `(event: FocusEvent)` | Item receives focus | Item gains focus |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `'menuitem'` | Identifies as menu item | Item element |
+| `tabIndex` | `0 \| -1` | Controls keyboard focus (0 when highlighted, -1 otherwise) | Item element |
+| `aria-disabled` | `true` | Indicates disabled state | Item element (when disabled) |
+| `data-disabled` | `''` | Present when disabled | Item element (when disabled) |
+| `data-highlighted` | `''` | Present when highlighted | Item element (when highlighted) |
+
+### DropdownMenu.CheckboxItem
+
+A menu item with checkbox functionality for toggleable options.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'div'` | Polymorphic element type to render |
+| `checked?` | `boolean \| 'indeterminate'` | `false` | Checked state |
+| `onCheckedChange?` | `(checked: boolean) => void` | `undefined` | Checked state change handler |
+| `disabled?` | `boolean` | `false` | Whether item is disabled |
+| `onSelect?` | `(event: SyntheticEvent) => void` | `undefined` | Selection handler |
+| `textValue?` | `string` | `undefined` | Text value for typeahead |
+| `ref?` | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to item element |
+| `children?` | `ReactNode` | `undefined` | Item content |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onCheckedChange` | `(checked: boolean)` | Checked state changes | User toggles checkbox |
+| `onSelect` | `(event: SyntheticEvent)` | Item selected | User activates item |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `'menuitemcheckbox'` | Identifies as checkbox menu item | Item element |
+| `aria-checked` | `boolean \| 'mixed'` | Indicates checked state ('mixed' for indeterminate) | Item element |
+| `data-checked` | `'true' \| 'false' \| 'indeterminate'` | Current checked state for styling | Item element |
+| `tabIndex` | `0 \| -1` | Controls keyboard focus | Item element |
+
+### DropdownMenu.RadioGroup
+
+Container for radio menu items to manage mutually exclusive selection.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `value?` | `string` | `undefined` | Currently selected value |
+| `onValueChange?` | `(value: string) => void` | `undefined` | Selection change handler |
+| `children?` | `ReactNode` | `undefined` | RadioItem components |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onValueChange` | `(value: string)` | Selected value changes | User selects a radio item |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `'group'` | Groups related radio items | Group element |
+
+### DropdownMenu.RadioItem
+
+A radio menu item for mutually exclusive selections within a RadioGroup.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | **required** | Unique value for this radio item |
+| `as?` | `ElementType` | `'div'` | Polymorphic element type to render |
+| `disabled?` | `boolean` | `false` | Whether item is disabled |
+| `onSelect?` | `(event: SyntheticEvent) => void` | `undefined` | Selection handler |
+| `textValue?` | `string` | `undefined` | Text value for typeahead |
+| `ref?` | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to item element |
+| `children?` | `ReactNode` | `undefined` | Item content |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onSelect` | `(event: SyntheticEvent)` | Item selected | User activates item |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `'menuitemradio'` | Identifies as radio menu item | Item element |
+| `aria-checked` | `boolean` | Indicates selected state | Item element |
+| `data-checked` | `'true' \| 'false'` | Current checked state for styling | Item element |
+| `tabIndex` | `0 \| -1` | Controls keyboard focus | Item element |
+
+### DropdownMenu.Separator
+
+A visual separator between menu sections.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'div'` | Polymorphic element type to render |
+| `ref?` | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to separator element |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| N/A | N/A | No interactive events | Separator is non-interactive |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `'separator'` | Identifies as separator | Separator element |
+| `data-orientation` | `'horizontal'` | Indicates orientation | Separator element |
+
+### DropdownMenu.Label
+
+A non-interactive label for menu sections.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'div'` | Polymorphic element type to render |
+| `ref?` | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to label element |
+| `children?` | `ReactNode` | `undefined` | Label content |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| N/A | N/A | No interactive events | Label is non-interactive |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| N/A | N/A | No specific ARIA attributes | Label element |
+
+### DropdownMenu.Group
+
+A logical grouping container for related menu items.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'div'` | Polymorphic element type to render |
+| `ref?` | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to group element |
+| `children?` | `ReactNode` | `undefined` | Menu items or labels |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| N/A | N/A | No interactive events | Group is non-interactive container |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `'group'` | Groups related menu items | Group element |
+
+### DropdownMenu.Sub
+
+Container for nested submenu functionality.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `open?` | `boolean` | `undefined` | Controlled submenu open state |
+| `defaultOpen?` | `boolean` | `false` | Initial submenu open state (uncontrolled) |
+| `onOpenChange?` | `(open: boolean) => void` | `undefined` | Callback when submenu open state changes |
+| `children?` | `ReactNode` | `undefined` | SubTrigger and SubContent components |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onOpenChange` | `(open: boolean)` | Submenu open state changes | User opens/closes submenu |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| N/A | N/A | Sub is a context provider with no rendered element | N/A |
+
+### DropdownMenu.SubTrigger
+
+A menu item that triggers a nested submenu.
+
+**Props**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `as?` | `ElementType` | `'div'` | Polymorphic element type to render |
+| `disabled?` | `boolean` | `false` | Whether subtrigger is disabled |
+| `onSelect?` | `(event: SyntheticEvent) => void` | `undefined` | Selection handler |
+| `textValue?` | `string` | `undefined` | Text value for typeahead |
+| `ref?` | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to subtrigger element |
+| `children?` | `ReactNode` | `undefined` | Subtrigger content |
+
+**Events**
+
+| Name | Parameters | Description | When Triggered |
+|------|------------|-------------|----------------|
+| `onPointerMove` | `(event: PointerEvent)` | Pointer moves over trigger | Opens submenu on hover |
+| `onKeyDown` | `(event: KeyboardEvent)` | Key pressed | Handles arrow keys for submenu navigation |
+| `onClick` | `(event: MouseEvent)` | Mouse click | Opens submenu |
+
+**ARIA Attributes**
+
+| Attribute | Value | Purpose | Applied To |
+|-----------|-------|---------|------------|
+| `role` | `'menuitem'` | Identifies as menu item | SubTrigger element |
+| `aria-haspopup` | `'menu'` | Indicates submenu presence | SubTrigger element |
+| `aria-expanded` | `boolean` | Indicates submenu expansion state | SubTrigger element |
+| `aria-controls` | `string` | References controlled submenu | SubTrigger element (when open) |
+| `data-state` | `'open' \| 'closed'` | Current state for styling | SubTrigger element |
+| `tabIndex` | `0 \| -1` | Controls keyboard focus | SubTrigger element |
+
+### DropdownMenu.SubContent
+
+The content container for a nested submenu, inheriting most behavior from DropdownMenu.Content.
+
+**Props**
+
+Inherits all props from `DropdownMenu.Content`. Default `side` is `'right'` instead of `'bottom'`.
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| (All Content props) | - | - | Same as DropdownMenu.Content |
+| `side?` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` | Preferred side for positioning (auto-determined based on parent) |
+
+**Events**
+
+Same as `DropdownMenu.Content`.
+
+**ARIA Attributes**
+
+Same as `DropdownMenu.Content`.
+
+## Keyboard Interactions
+
+Complete keyboard behavior for the DropdownMenu component:
+
+| Key | Action | Context | Notes |
+|-----|--------|---------|-------|
+| `Space` | Opens menu / Activates item | Trigger / Menu item | Opens menu from trigger, activates focused item |
+| `Enter` | Opens menu / Activates item | Trigger / Menu item | Opens menu from trigger, activates focused item |
+| `ArrowDown` | Opens menu focusing first / Next item | Trigger / Menu | From trigger opens and focuses first item, in menu moves to next item |
+| `ArrowUp` | Opens menu focusing last / Previous item | Trigger / Menu | From trigger opens and focuses last item, in menu moves to previous item |
+| `ArrowRight` | Opens submenu | Submenu trigger (LTR) | Opens submenu focusing first item (reversed in RTL) |
+| `ArrowLeft` | Closes submenu | Submenu (LTR) | Closes submenu and returns focus to trigger (reversed in RTL) |
+| `Escape` | Closes menu | Menu | Closes menu and restores focus to trigger |
+| `Tab` | Navigate / Close | Menu | In modal mode, moves through items; in non-modal mode, closes menu |
+| `Shift + Tab` | Navigate backward | Menu (modal) | Moves to previous item in modal mode |
+| `Home` | First item | Menu | Moves focus to first item |
+| `End` | Last item | Menu | Moves focus to last item |
+| `Character keys` | Typeahead search | Menu | Focuses first item matching typed characters |
+
+**Note**: All keyboard interactions are implemented with full accessibility support following WAI-ARIA menu design patterns.

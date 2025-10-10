@@ -43,6 +43,7 @@ import {
   TooltipPortal,
   TooltipArrow,
   Select,
+  DropdownMenu,
 } from '@turkish-technology/glide';
 
 interface LiveCodeProps {
@@ -147,6 +148,8 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     TooltipArrow,
     // Select component
     Select,
+    // DropdownMenu components
+    DropdownMenu,
   };
 
   const [copied, setCopied] = useState(false);

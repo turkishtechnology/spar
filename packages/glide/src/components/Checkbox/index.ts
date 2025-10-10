@@ -2,4 +2,4 @@
 export { Checkbox } from './Checkbox';
 
 // Export types
-export type { CheckboxProps, CheckedState, CheckboxRenderProps } from './types';
+export type { CheckboxProps, CheckboxRenderProps } from './types';

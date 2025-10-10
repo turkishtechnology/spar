@@ -1,5 +1,6 @@
 import { useId, useMemo, useRef, useState } from 'react';
-import type { TooltipRootProps, TooltipContextValue, Side } from './types';
+import type { TooltipRootProps, TooltipContextValue } from './types';
+import type { Side } from '../../types';
 import { TooltipContext } from './TooltipContext';
 import { useTooltipProvider } from './useTooltipProvider';
 
