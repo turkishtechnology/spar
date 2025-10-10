@@ -13,7 +13,28 @@ applyTo: '**/components/**/*.tsx'
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   orientation?: Orientation;
 }
+
+// ALWAYS: children is inherited from HTMLAttributes/ButtonHTMLAttributes
+interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
+  value?: string;
+  orientation?: 'horizontal' | 'vertical';
+  // children is already available - no need to declare
+}
+
+// NEVER: Redundant children declaration
+interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
+  value?: string;
+  children: React.ReactNode; // Unnecessary - already in HTMLAttributes
+}
 ```
+
+**Rule:** Never explicitly declare `children: React.ReactNode` when extending:
+- `React.HTMLAttributes<T>`
+- `React.ButtonHTMLAttributes<T>`
+- `React.LabelHTMLAttributes<T>`
+- Any other React HTML element attributes
+
+These interfaces already include `children?: ReactNode`.
 
 ## React Patterns
 
@@ -52,6 +73,10 @@ useEffect(() => {
   };
 }, [dependency]); // Clear why dependency is needed
 ```
+
+### Ref Usage
+
+**Rule:** Always use `RefObject<T>` instead of `MutableRefObject<T>`.
 
 ## ARIA Attributes Standards
 

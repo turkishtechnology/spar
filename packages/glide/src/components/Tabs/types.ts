@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { RefObject } from 'react';
 
 export type TabsOrientation = 'horizontal' | 'vertical';
 export type TabsDirection = 'ltr' | 'rtl';
@@ -47,11 +48,6 @@ export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
    * @defaultValue 'div'
    */
   as?: React.ElementType;
-
-  /**
-   * TabsList and TabsContent components
-   */
-  children: React.ReactNode;
 }
 
 /**
@@ -69,11 +65,6 @@ export interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
    * @defaultValue 'div'
    */
   as?: React.ElementType;
-
-  /**
-   * TabsTrigger components
-   */
-  children: React.ReactNode;
 }
 
 /**
@@ -102,11 +93,6 @@ export interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonE
    * @defaultValue 'button'
    */
   as?: React.ElementType;
-
-  /**
-   * Tab trigger content (label text)
-   */
-  children: React.ReactNode;
 }
 
 /**
@@ -129,11 +115,6 @@ export interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
    * @defaultValue 'div'
    */
   as?: React.ElementType;
-
-  /**
-   * Tab panel content
-   */
-  children: React.ReactNode;
 }
 
 /**
@@ -147,7 +128,7 @@ export interface TabsContextValue {
   activationMode: TabsActivationMode;
   loop: boolean;
   tabsListId: string;
-  tabRefs: React.MutableRefObject<Map<string, HTMLElement>>;
+  tabRefs: RefObject<Map<string, HTMLElement>>;
   registerTab: (value: string, element: HTMLElement) => void;
   unregisterTab: (value: string) => void;
   getTabIndex: (value: string) => number;
