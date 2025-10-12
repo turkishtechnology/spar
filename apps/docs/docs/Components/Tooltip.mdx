@@ -1,5 +1,4 @@
 ---
-sidebar_position: 5
 title: Tooltip
 description: A headless tooltip component that displays informative text when users hover over or focus on an element, with full WCAG 2.2 AA compliance.
 ---
@@ -13,7 +12,9 @@ import { TooltipProvider, TooltipRoot, TooltipTrigger, TooltipContent, TooltipPo
 
 A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.
 
-![Accessibility Badge](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-Yes-blue) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-Strict-blue)
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
 
 ## Live Demo
 
@@ -112,7 +113,7 @@ The Tooltip component is built as a compound component with multiple parts:
             background: '#fff',
             cursor: 'pointer'
           }}>
-            Hover or Focus Me
+            {' Hover or Focus Me '}
           </button>
         </TooltipTrigger>
         <TooltipPortal data-glide-part="portal">
@@ -126,7 +127,7 @@ The Tooltip component is built as a compound component with multiple parts:
               fontSize: '14px',
             }}
           >
-            This is a helpful tooltip message!
+            {' This is a helpful tooltip message! '}
             <TooltipArrow data-glide-part="arrow" style={{ fill: '#333' }} />
           </TooltipContent>
         </TooltipPortal>
