@@ -1,5 +1,4 @@
 ---
-sidebar_position: 2
 title: Collapsible
 description: A headless collapsible component that manages the visibility of content sections with full accessibility support.
 ---
@@ -13,7 +12,9 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-te
 
 A headless collapsible component that manages the visibility of content sections with full accessibility support.
 
-![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green) ![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-✓-success) ![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
 
 ## Live Demo
 
@@ -21,20 +22,37 @@ A headless collapsible component that manages the visibility of content sections
   code={`function BasicExample() {
   const [isOpen, setIsOpen] = React.useState(false);
 
-return (
-<Collapsible>
-<CollapsibleTrigger style={{
-        padding: '8px 12px',
-        background: '#f0f0f0',
-        border: 'none',
-      }}>
-ShowContent
-</CollapsibleTrigger>
-<CollapsibleContent style={{ marginTop: '8px', padding: '8px' }}>
-<p>This content can be collapsed and expanded.</p>
-</CollapsibleContent>
-</Collapsible>
-);
+  return (
+    <Collapsible style={{ width: '100%' }}>
+      <CollapsibleTrigger 
+        style={{
+          padding: '10px 16px',
+          background: '#f5f5f5',
+          border: '1px solid #ddd',
+          borderRadius: '6px',
+          cursor: 'pointer',
+          fontSize: '14px',
+          fontWeight: '500',
+          display: 'block',
+          width: '100%',
+          textAlign: 'left',
+        }}
+      >
+        Show Content
+      </CollapsibleTrigger>
+      <CollapsibleContent 
+        style={{ 
+          marginTop: '8px', 
+          padding: '12px',
+          border: '1px solid #ddd',
+          borderRadius: '6px',
+          background: '#fafafa',
+        }}
+      >
+        This content can be collapsed and expanded.
+      </CollapsibleContent>
+    </Collapsible>
+  );
 }`}
 />
 
@@ -73,22 +91,35 @@ The Collapsible component consists of three main parts:
     { name: 'content', label: 'CollapsibleContent', description: 'Collapsible content container' },
   ]}
 >
-  <Collapsible data-glide-part="root">
+  <Collapsible data-glide-part="root" style={{ width: '100%' }}>
     <CollapsibleTrigger
       data-glide-part="trigger"
       style={{
-        padding: '8px 12px',
-        background: '#f0f0f0',
-        border: 'none',
+        padding: '10px 16px',
+        background: '#f5f5f5',
+        border: '1px solid #ddd',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: '14px',
+        fontWeight: '500',
+        display: 'block',
+        width: '100%',
+        textAlign: 'left',
       }}
     >
-      Show Content
+      {' Show Content '}
     </CollapsibleTrigger>
     <CollapsibleContent
       data-glide-part="content"
-      style={{ marginTop: '8px', padding: '8px' }}
+      style={{ 
+        marginTop: '8px', 
+        padding: '12px',
+        border: '1px solid #ddd',
+        borderRadius: '6px',
+        background: '#fafafa',
+      }}
     >
-      <p>This content can be collapsed and expanded.</p>
+      {' This content can be collapsed and expanded. '}
     </CollapsibleContent>
   </Collapsible>
 </AnatomyViewer>
