@@ -50,10 +50,6 @@ export const Label = ({ ref, ...props }: LabelProps) => {
   return <label ref={ref} {...props} />;
 };
 
-// LEGACY: Only when supporting React 18
-const Label = forwardRef<HTMLLabelElement, LabelProps>((props, ref) => (
-  <label ref={ref} {...props} />
-));
 ```
 
 ### Hooks Usage
@@ -209,6 +205,44 @@ const [requestState, setRequestState] = useState<RequestState>({
   status: 'idle',
 });
 ```
+
+## Item Registry Pattern
+
+**When to use `useItemRegistry`:**
+- Components with keyboard navigation between items
+- Components needing item order tracking or index-based access
+- Dynamic child component registration/unregistration
+
+**When NOT to use:**
+- Static navigation structures
+- Components without keyboard navigation
+- Components where DOM order is sufficient
+
+### Usage Pattern
+
+```typescript
+// Root component
+import { useItemRegistry } from '@/hooks';
+
+// For ID-only tracking
+const { registerItem, unregisterItem, getItemIds } = useItemRegistry<void>();
+const items = getItemIds(); // Returns string[]
+
+// For data tracking
+const { registerItem, unregisterItem, getItemAtIndex } = useItemRegistry<ItemData>();
+```
+
+### Child Component Registration
+
+```typescript
+// Child component
+useEffect(() => {
+  registerItem(id, data); // data optional for ID-only tracking
+  return () => unregisterItem(id);
+}, [id, registerItem, unregisterItem]);
+```
+
+**Critical:** Use `items.size` in dependency arrays, NOT `items` Map directly (prevents infinite loops).
 
 ## Import/Export Standards
 
