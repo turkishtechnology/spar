@@ -18,6 +18,7 @@ import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
+  Dialog,
   Input,
   PopoverRoot,
   PopoverTrigger,
@@ -150,6 +151,8 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     Select,
     // DropdownMenu components
     DropdownMenu,
+    // Dialog components
+    Dialog,
   };
 
   const [copied, setCopied] = useState(false);
