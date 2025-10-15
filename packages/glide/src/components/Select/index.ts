@@ -86,7 +86,6 @@ export type {
   SelectLabelProps,
   SelectSeparatorProps,
   SelectArrowProps,
-  SelectDirection,
   Placement,
   Strategy,
   Middleware,
