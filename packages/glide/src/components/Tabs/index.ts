@@ -37,6 +37,5 @@ export type {
   TabsTriggerProps,
   TabsContentProps,
   TabsOrientation,
-  TabsDirection,
   TabsActivationMode,
 } from './types';
