@@ -1,7 +1,6 @@
 import type React from 'react';
 import type { Placement, Strategy, Middleware, VirtualElement } from '@floating-ui/react-dom';
-
-export type SelectDirection = 'ltr' | 'rtl';
+import type { Direction } from '../../types';
 
 // Re-export Floating UI types for public API
 export type { Placement, Strategy, Middleware, VirtualElement };
@@ -71,7 +70,7 @@ export interface SelectRootProps
    * Reading direction
    * @defaultValue 'ltr'
    */
-  dir?: SelectDirection;
+  dir?: Direction;
 
   /**
    * Polymorphic component type
@@ -458,7 +457,7 @@ export interface SelectContextValue {
   value: string | undefined;
   disabled: boolean;
   required: boolean;
-  dir: SelectDirection;
+  dir: Direction;
 
   // Actions
   onValueChange: (value: string) => void;

@@ -1,5 +1,5 @@
 import type { ElementType, ReactNode, HTMLAttributes, Ref, SyntheticEvent, RefObject } from 'react';
-import type { CheckedState, Side, Align } from '../../types';
+import type { CheckedState, Side, Align, Direction } from '../../types';
 
 export type DropdownMenuFocusStrategy = 'first' | 'last' | 'none';
 
@@ -33,7 +33,7 @@ export interface DropdownMenuProps {
    * Reading direction for positioning
    * @defaultValue 'ltr'
    */
-  dir?: 'ltr' | 'rtl';
+  dir?: Direction;
 
   /**
    * Selection close policy
@@ -319,7 +319,7 @@ export interface DropdownMenuContextValue {
   triggerId: string;
   contentId: string;
   modal: boolean;
-  dir: 'ltr' | 'rtl';
+  dir: Direction;
   closeOnSelect: boolean | 'auto';
   focusStrategy: DropdownMenuFocusStrategy;
   setFocusStrategy: (strategy: DropdownMenuFocusStrategy) => void;
@@ -344,7 +344,7 @@ export interface DropdownMenuSubContextValue {
   triggerId: string;
   contentId: string;
   modal: boolean;
-  dir: 'ltr' | 'rtl';
+  dir: Direction;
   closeOnSelect: boolean | 'auto';
   focusStrategy: DropdownMenuFocusStrategy;
   setFocusStrategy: (strategy: DropdownMenuFocusStrategy) => void;
