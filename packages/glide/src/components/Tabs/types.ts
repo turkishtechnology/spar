@@ -2,7 +2,6 @@ import type React from 'react';
 import type { RefObject } from 'react';
 import type { Direction, Orientation } from '../../types';
 
-export type TabsOrientation = 'horizontal' | 'vertical';
 export type TabsActivationMode = 'automatic' | 'manual';
 
 /**
