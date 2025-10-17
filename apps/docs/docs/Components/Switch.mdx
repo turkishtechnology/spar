@@ -1,17 +1,20 @@
 ---
-sidebar_position: 3
 title: Switch
 description: A headless boolean toggle control for on/off states with comprehensive accessibility support and form integration.
 ---
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Switch } from '@turkish-technology/glide';
 
 # Switch
 
 A headless boolean toggle control that provides switch-specific ARIA semantics and behavior for on/off states.
 
-![Accessibility Badge](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-✅-brightgreen) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-✅-blue)
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
 
 ## Live Demo
 
@@ -59,6 +62,31 @@ import { Switch } from '@turkish-technology/glide'
 
 The Switch component is a single element that handles all switch functionality internally:
 
+<AnatomyViewer
+  parts={[
+    { name: 'switch', label: 'Switch', description: 'Boolean toggle control with state management' },
+  ]}
+>
+  <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
+    <Switch 
+      data-glide-part="switch"
+      defaultChecked={true}
+      style={{ 
+        padding: '8px 16px', 
+        border: '2px solid #007acc',
+        borderRadius: '4px',
+        backgroundColor: '#007acc',
+        color: 'white',
+        cursor: 'pointer'
+      }}
+    >
+      {' ON '}
+    </Switch>
+  </div>
+</AnatomyViewer>
+
+### Structure
+
 ```tsx
 <Switch>
   Toggle Label
@@ -66,8 +94,10 @@ The Switch component is a single element that handles all switch functionality i
 ```
 
 **Data Flow:**
-- User interaction → Internal state management → onChange callback
+- User interaction (click/keyboard) → Internal state management → onChange callback
 - Hidden input synchronizes with switch state for form submission
+- ARIA attributes (role="switch", aria-checked) update automatically
+- Focus and interaction states tracked internally
 
 ## Code Examples
 

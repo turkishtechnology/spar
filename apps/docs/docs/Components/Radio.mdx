@@ -1,5 +1,4 @@
 ---
-sidebar_position: 3
 title: Radio
 description: Accessible radio group component for mutually exclusive selections with full keyboard navigation and ARIA support.
 ---
@@ -13,7 +12,9 @@ import { Radio, RadioGroup, RadioItem } from '@turkish-technology/glide';
 
 Accessible radio group component for creating mutually exclusive selections with full keyboard navigation and ARIA support.
 
-![Accessibility Badge](https://img.shields.io/badge/WCAG%202.2%20AA-Compliant-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-Yes-blue) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-Strict-blue)
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
 
 ## Live Demo
 
@@ -93,21 +94,21 @@ The Radio component is built as a compound component with two main parts:
       value="option1"
       style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
     >
-      Option 1
+      {' Option 1 '}
     </Radio.Item>
     <Radio.Item
       data-glide-part="item"
       value="option2"
       style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
     >
-      Option 2
+      {' Option 2 '}
     </Radio.Item>
     <Radio.Item
       data-glide-part="item"
       value="option3"
       style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
     >
-      Option 3
+      {' Option 3 '}
     </Radio.Item>
   </Radio.Group>
 </AnatomyViewer>
