@@ -30,9 +30,7 @@ export const AccordionTrigger = ({
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       const { key } = event;
-      const currentIndex = accordionContext.getItemIndex(
-        accordionContext.registeredItems.has(itemContext.value) ? itemContext.value : '',
-      );
+      const currentIndex = accordionContext.getItemIndex(itemContext.value);
       const totalItems = accordionContext.itemCount;
 
       switch (key) {
