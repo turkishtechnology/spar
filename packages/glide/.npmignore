@@ -1,0 +1,41 @@
+# Source files
+src/
+**/__tests__/
+**/__mocks__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Config files
+tsconfig.json
+tsconfig.test.json
+jest.config.js
+rspack.config.mjs
+eslint.config.js
+.eslintrc*
+
+# Build artifacts
+coverage/
+.turbo/
+node_modules/
+
+# Development files
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Git
+.git/
+.gitignore
+
+# CI/CD
+.github/
+.husky/
+
+# Documentation (keep only README)
+docs/
+*.md
+!README.md
+!CHANGELOG.md
