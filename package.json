@@ -11,7 +11,10 @@
     "format": "prettier --write \"**/*.{ts,tsx,mdx,json,yml,yaml,css,scss}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx,json,yml,yaml,css,scss}\"",
     "check-types": "turbo run check-types",
-    "prepare": "husky"
+    "prepare": "husky",
+    "version:glide": "pnpm --filter @turkish-technology/glide version",
+    "publish:glide": "pnpm --filter @turkish-technology/glide publish --no-git-checks",
+    "publish:glide:dry": "pnpm --filter @turkish-technology/glide publish --dry-run --no-git-checks"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
