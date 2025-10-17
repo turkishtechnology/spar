@@ -35,8 +35,6 @@
     "dev": "rspack build --watch",
     "prepublishOnly": "pnpm run build && pnpm run check-types && pnpm run lint",
     "prepack": "pnpm run build",
-    "version": "pnpm run build && git add -A dist",
-    "postversion": "git push && git push --tags",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "check-types": "tsc --noEmit",
@@ -68,8 +66,8 @@
     "access": "public"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0"
   },
   "devDependencies": {
     "@rspack/cli": "^1.0.0",
