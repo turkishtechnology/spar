@@ -1,4 +1,4 @@
-import { createElement, useState } from 'react';
+import { createElement } from 'react';
 import { BreadcrumbContext } from './BreadcrumbContext';
 import type { BreadcrumbRootProps, BreadcrumbContextValue } from './types';
 
@@ -14,25 +14,9 @@ export const BreadcrumbRoot = ({
   isDisabled = false,
   ...props
 }: BreadcrumbRootProps) => {
-  const [itemCount, setItemCount] = useState<number>(0);
-  const [registeredItems] = useState<Set<string>>(() => new Set());
-
-  const handleRegisterItem = (id: string) => {
-    registeredItems.add(id);
-    setItemCount(registeredItems.size);
-  };
-
-  const handleUnregisterItem = (id: string) => {
-    registeredItems.delete(id);
-    setItemCount(registeredItems.size);
-  };
-
   const contextValue: BreadcrumbContextValue = {
     ...(isDisabled !== undefined && { isDisabled }),
     ...(onNavigate && { onNavigate }),
-    registerItem: handleRegisterItem,
-    unregisterItem: handleUnregisterItem,
-    itemCount,
   };
 
   return (

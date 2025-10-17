@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useId } from 'react';
-import { useControlledState } from '@/hooks';
+import { useControlledState, useItemRegistry } from '@/hooks';
 import type { RadioGroupProps, RadioGroupContextValue } from './types';
 
 // Context for RadioGroup
@@ -36,24 +36,10 @@ export const RadioGroup = ({
 }: RadioGroupProps) => {
   const [value, setValue] = useControlledState(controlledValue, defaultValue, onValueChange);
   const [focusedValue, setFocusedValue] = useState<string | null>(null);
-  const [items, setItems] = useState<string[]>([]);
+  const { registerItem, unregisterItem, getItemIds } = useItemRegistry<void>();
+  const items = getItemIds(); // Get items as array for navigation
   const generatedId = useId();
   const name = nameProp || `radio-group-${generatedId}`;
-
-  // Register/unregister items
-  const registerItem = useCallback((itemValue: string) => {
-    setItems((prev) => {
-      if (prev.includes(itemValue)) return prev; // Early return if already exists
-      return [...prev, itemValue];
-    });
-  }, []);
-
-  const unregisterItem = useCallback((itemValue: string) => {
-    setItems((prev) => {
-      if (!prev.includes(itemValue)) return prev; // Early return if doesn't exist
-      return prev.filter((v) => v !== itemValue);
-    });
-  }, []);
 
   // Handle value changes
   const handleValueChange = useCallback(

@@ -26,9 +26,6 @@ export type BreadcrumbPosition = 'first' | 'middle' | 'last';
 export interface BreadcrumbContextValue {
   isDisabled?: boolean;
   onNavigate?: NavigationHandler;
-  registerItem?: (id: string) => void;
-  unregisterItem?: (id: string) => void;
-  itemCount?: number;
 }
 
 /**

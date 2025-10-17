@@ -158,7 +158,6 @@ export interface AccordionContextValue {
   onItemToggle: (itemValue: string) => void;
   isDisabled: boolean;
   orientation: Orientation;
-  registeredItems: Map<string, number>;
   registerItem: (itemValue: string) => void;
   unregisterItem: (itemValue: string) => void;
   focusedIndex: number;
