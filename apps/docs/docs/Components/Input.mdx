@@ -1,17 +1,20 @@
 ---
-sidebar_position: 2
 title: Input
 description: A headless input component with compound pattern support, full accessibility features, and validation states for building custom form inputs without styling opinions.
 ---
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Input } from '@turkish-technology/glide';
 
 # Input
 
 A headless input component providing accessible form input primitives with compound pattern support and zero styling opinions.
 
-![Accessibility Badge](https://img.shields.io/badge/Accessibility-AA-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-✓-blue) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-✓-blue)
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
 
 ## Live Demo
 
@@ -99,6 +102,63 @@ import {
 
 The Input component follows a compound component pattern with context-based state management:
 
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'Root', description: 'Context provider for state management' },
+    { name: 'label', label: 'Label', description: 'Associated label with automatic ID linking' },
+    { name: 'field', label: 'Field', description: 'Core input element (input/textarea)' },
+    { name: 'description', label: 'Description', description: 'Helper text for guidance' },
+    { name: 'errorMessage', label: 'ErrorMessage', description: 'Error announcement with role="alert"' },
+  ]}
+>
+  {(() => {
+    const [email, setEmail] = React.useState('invalid-email');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isInvalid = email.length > 0 && !emailRegex.test(email);
+
+    return (
+      <Input.Root 
+        data-glide-part="root" 
+        isInvalid={isInvalid}
+        isRequired
+        style={{ 
+          padding: '12px', 
+          border: `1px solid ${isInvalid ? '#ff6b6b' : '#e5e5e5'}`, 
+          borderRadius: '6px' 
+        }}
+      >
+        <Input.Label data-glide-part="label" style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
+          Email Address
+        </Input.Label>
+        <Input.Field 
+          data-glide-part="field"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          style={{ 
+            width: '100%', 
+            padding: '8px 12px', 
+            border: `1px solid ${isInvalid ? '#ff6b6b' : '#ccc'}`, 
+            borderRadius: '4px', 
+            fontSize: '14px' 
+          }}
+        />
+        <Input.Description data-glide-part="description" style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+          We'll use this to send you important updates
+        </Input.Description>
+        {isInvalid && (
+          <Input.ErrorMessage data-glide-part="errorMessage" style={{ marginTop: '4px', fontSize: '12px', color: '#ff6b6b' }}>
+            Please enter a valid email address
+          </Input.ErrorMessage>
+        )}
+      </Input.Root>
+    );
+  })()}
+</AnatomyViewer>
+
+### Structure
+
 ```tsx
 <Input.Root>
   <Input.Label />
@@ -108,6 +168,7 @@ The Input component follows a compound component pattern with context-based stat
 </Input.Root>
 ```
 
+**Data Flow:**
 - **Input.Root**: Context provider that manages validation, disabled, and required states
 - **Input.Field**: Core input element with polymorphic support (input/textarea)
 - **Input.Label**: Associated label element with automatic ID linking

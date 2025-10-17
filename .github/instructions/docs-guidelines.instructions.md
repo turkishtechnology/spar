@@ -15,7 +15,12 @@ Every component documentation page MUST follow this exact structure:
 ### 1. Component Name & Brief Description
 - Clear, concise component title
 - One-sentence description of the component's purpose
-- Badge indicators (accessibility, tree-shakeable, etc.)
+- Badge indicators in this exact format:
+  ```markdown
+  ![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+  ![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+  ![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
+  ```
  
 ### 2. Live Demo
 - Single interactive example using the `LiveCode` component
@@ -204,6 +209,7 @@ const scope = {
 - ✅ Provide clear, concise descriptions for each part
 - ✅ Follow with a Structure code block showing the hierarchy
 - ✅ Add Data Flow explanation after the viewer
+- ✅ **Wrap all text content in JSX expressions** - Use `{' text '}` syntax to prevent Docusaurus from automatically wrapping text in `<p>` tags
 
 #### DON'T
 - ❌ Create a different demo than LiveCode
@@ -212,6 +218,7 @@ const scope = {
 - ❌ Forget data-glide-part attributes
 - ❌ Omit descriptions from parts array
 - ❌ Include non-interactive or non-compound components
+- ❌ Write plain text directly in component children - Always use JSX expression syntax `{' ... '}` to avoid unwanted paragraph tags
 
 ## Code Examples Integration
 
@@ -282,7 +289,6 @@ apps/docs/docs/Components/{ComponentName}.mdx
  
 ```markdown
 ---
-sidebar_position: [number]
 title: [ComponentName]
 description: [Brief description for SEO]
 ---
@@ -296,7 +302,7 @@ import { [ComponentName] } from '@turkish-technology/glide';
  
 [Brief one-sentence description]
  
-![Accessibility Badge] ![Tree-shakeable Badge] ![TypeScript Badge]
+[Add three badges as specified in section 1]
  
 ## Live Demo
  

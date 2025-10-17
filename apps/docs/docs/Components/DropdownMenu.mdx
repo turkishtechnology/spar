@@ -1,17 +1,20 @@
 ---
-sidebar_position: 4
 title: DropdownMenu
 description: Accessible dropdown menu component with keyboard navigation, typeahead search, nested submenus, and complete ARIA support.
 ---
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { DropdownMenu } from '@turkish-technology/glide';
 
 # DropdownMenu
 
 Accessible dropdown menu component for creating interactive command menus with keyboard navigation, typeahead search, and full ARIA support.
 
-![Accessibility Badge](https://img.shields.io/badge/WCAG%202.2%20AA-Compliant-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-Yes-blue) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-Strict-blue)
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
 
 ## Live Demo
 
@@ -95,6 +98,54 @@ import {
 ## Anatomy
 
 The DropdownMenu component is built as a compound component with multiple parts:
+
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'Root', description: 'Container managing state and context' },
+    { name: 'trigger', label: 'Trigger', description: 'Button that toggles menu visibility' },
+    { name: 'content', label: 'Content', description: 'Menu container with positioning' },
+    { name: 'item', label: 'Item', description: 'Individual selectable menu option' },
+    { name: 'separator', label: 'Separator', description: 'Visual separator between sections' },
+  ]}
+>
+  <DropdownMenu.Root data-glide-part="root">
+    <DropdownMenu.Trigger
+      data-glide-part="trigger"
+      style={{
+        padding: '8px 16px',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        background: 'white',
+        cursor: 'pointer'
+      }}
+    >
+      {' Open Menu '}
+    </DropdownMenu.Trigger>
+    <DropdownMenu.Content
+      data-glide-part="content"
+      style={{
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        background: 'white',
+        padding: '4px',
+        minWidth: '180px'
+      }}
+    >
+      <DropdownMenu.Item data-glide-part="item" style={{ padding: '8px 12px', cursor: 'pointer' }}>
+        {' New File '}
+      </DropdownMenu.Item>
+      <DropdownMenu.Item data-glide-part="item" style={{ padding: '8px 12px', cursor: 'pointer' }}>
+        {' Save '}
+      </DropdownMenu.Item>
+      <DropdownMenu.Separator data-glide-part="separator" style={{ height: '1px', background: '#e0e0e0', margin: '4px 0' }} />
+      <DropdownMenu.Item data-glide-part="item" style={{ padding: '8px 12px', cursor: 'pointer' }}>
+        {' Exit '}
+      </DropdownMenu.Item>
+    </DropdownMenu.Content>
+  </DropdownMenu.Root>
+</AnatomyViewer>
+
+### Structure
 
 ```tsx
 <DropdownMenu.Root>

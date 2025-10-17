@@ -1,5 +1,4 @@
 ---
-sidebar_position: 5
 title: Popover
 description: A headless popover component with intelligent positioning, focus management, and full accessibility support for creating tooltips, dropdowns, and floating panels.
 ---
@@ -13,7 +12,9 @@ import { PopoverRoot, PopoverTrigger, PopoverContent, PopoverClose } from '@turk
 
 A floating panel component anchored to a trigger element with smart positioning, collision detection, and comprehensive accessibility features.
 
-![Accessibility Badge](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-Yes-blue) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-Strict-blue)
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
 
 ## Live Demo
 
@@ -117,7 +118,7 @@ The Popover component is built as a compound component with multiple parts:
           background: 'white'
         }}
       >
-        Open Popover
+        {' Open Popover '}
       </PopoverTrigger>
       <PopoverContent
         data-glide-part="content"
@@ -130,7 +131,9 @@ The Popover component is built as a compound component with multiple parts:
           minWidth: '200px'
         }}
       >
-        <p style={{ margin: '0 0 12px 0' }}>This is a popover content</p>
+        <p style={{ margin: '0 0 12px 0' }}>
+          {' This is a popover content '}
+        </p>
         <PopoverClose
           data-glide-part="close"
           style={{
@@ -141,7 +144,7 @@ The Popover component is built as a compound component with multiple parts:
             background: 'white'
           }}
         >
-          Close
+          {' Close '}
         </PopoverClose>
       </PopoverContent>
     </PopoverRoot>
