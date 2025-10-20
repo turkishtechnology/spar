@@ -133,7 +133,7 @@ The Dialog component is built as a compound component with multiple parts:
         cursor: 'pointer',
       }}
     >
-      Open Dialog
+      { 'Open Dialog' }
     </Dialog.Trigger>
     <Dialog.Portal data-glide-part='portal'>
       <Dialog.Overlay
@@ -162,13 +162,13 @@ The Dialog component is built as a compound component with multiple parts:
           data-glide-part='title'
           style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}
         >
-          Dialog Title
+          { 'Dialog Title' }
         </Dialog.Title>
         <Dialog.Description
           data-glide-part='description'
           style={{ color: '#666', marginBottom: '16px' }}
         >
-          This is a basic dialog example with proper accessibility features.
+          { 'This is a basic dialog example with proper accessibility features.' }
         </Dialog.Description>
         <Dialog.Close
           data-glide-part='close'
@@ -180,7 +180,7 @@ The Dialog component is built as a compound component with multiple parts:
             cursor: 'pointer',
           }}
         >
-          Close
+          { 'Close' }
         </Dialog.Close>
       </Dialog.Content>
     </Dialog.Portal>
