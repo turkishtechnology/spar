@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
+import { useInteractOutside } from '@/hooks';
 import {
   useFloating,
   offset as offsetMiddleware,
@@ -132,29 +133,16 @@ export const SelectContent = ({
     }
   }, [context.open, context.contentRef]);
 
-  // Handle outside clicks
-  useEffect(() => {
-    if (!context.open) return;
-
-    const handlePointerDown = (event: PointerEvent) => {
-      const target = event.target as Node;
-      const isOutside =
-        context.contentRef.current &&
-        context.triggerRef.current &&
-        !context.contentRef.current.contains(target) &&
-        !context.triggerRef.current.contains(target);
-
-      if (isOutside) {
-        onPointerDownOutside?.(event);
-        if (!event.defaultPrevented) {
-          context.onOpenChange(false);
-        }
+  // Handle outside interactions
+  useInteractOutside([context.contentRef, context.triggerRef], {
+    enabled: context.open,
+    onPointerDownOutside: (event) => {
+      onPointerDownOutside?.(event);
+      if (!event.defaultPrevented) {
+        context.onOpenChange(false);
       }
-    };
-
-    document.addEventListener('pointerdown', handlePointerDown);
-    return () => document.removeEventListener('pointerdown', handlePointerDown);
-  }, [context, onPointerDownOutside]);
+    },
+  });
 
   // Get non-disabled items
   const getNonDisabledItems = useCallback(() => {

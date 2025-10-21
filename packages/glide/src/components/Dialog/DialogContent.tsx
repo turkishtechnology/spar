@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useRef } from 'react';
-import { useMergedRef } from '@/hooks';
+import { useMergedRef, useInteractOutside } from '@/hooks';
 import { useDialogContext } from './DialogRoot';
 import type { DialogContentProps } from './types';
 
@@ -146,19 +146,17 @@ export const DialogContent = ({
   );
 
   // Outside interaction handler
-  const handlePointerDown = useCallback(
-    (event: React.PointerEvent<HTMLDivElement>) => {
-      if (event.target === event.currentTarget) {
-        onPointerDownOutside?.(event.nativeEvent);
-        onInteractOutside?.(event.nativeEvent);
+  useInteractOutside([contentRef], {
+    enabled: isOpen && modal,
+    onPointerDownOutside: (event) => {
+      onPointerDownOutside?.(event);
+      onInteractOutside?.(event);
 
-        if (!event.nativeEvent.defaultPrevented && modal) {
-          setIsOpen(false);
-        }
+      if (!event.defaultPrevented) {
+        setIsOpen(false);
       }
     },
-    [onPointerDownOutside, onInteractOutside, modal, setIsOpen],
-  );
+  });
 
   // Don't render if dialog is closed and not force mounted
   if (!isOpen && !forceMount) {
@@ -178,7 +176,6 @@ export const DialogContent = ({
       data-modal={modal ? 'true' : 'false'}
       data-role={role}
       onKeyDown={handleKeyDown}
-      onPointerDown={handlePointerDown}
       {...props}
     >
       {children}
