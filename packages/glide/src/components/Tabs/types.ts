@@ -1,8 +1,7 @@
 import type React from 'react';
 import type { RefObject } from 'react';
+import type { Direction, Orientation } from '../../types';
 
-export type TabsOrientation = 'horizontal' | 'vertical';
-export type TabsDirection = 'ltr' | 'rtl';
 export type TabsActivationMode = 'automatic' | 'manual';
 
 /**
@@ -29,13 +28,13 @@ export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
    * Tabs orientation affecting keyboard navigation
    * @defaultValue 'horizontal'
    */
-  orientation?: TabsOrientation;
+  orientation?: Orientation;
 
   /**
    * Text direction for arrow key navigation
    * @defaultValue 'ltr'
    */
-  dir?: TabsDirection;
+  dir?: Direction;
 
   /**
    * Whether tabs activate on focus or require explicit activation
@@ -123,8 +122,8 @@ export interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
 export interface TabsContextValue {
   selectedValue: string | undefined;
   onValueChange: (value: string) => void;
-  orientation: TabsOrientation;
-  dir: TabsDirection;
+  orientation: Orientation;
+  dir: Direction;
   activationMode: TabsActivationMode;
   loop: boolean;
   tabsListId: string;

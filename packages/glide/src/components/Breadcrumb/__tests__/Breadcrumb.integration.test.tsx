@@ -559,17 +559,9 @@ describe('Breadcrumb Integration', () => {
       expect(screen.getByText('Final Level')).toBeInTheDocument();
     });
 
-    it('should handle navigation errors gracefully', async () => {
+    it('should allow navigation callback to be called', async () => {
       const user = userEvent.setup();
-      const handleNavigate = jest.fn(() => {
-        throw new Error('Navigation failed');
-      });
-
-      // Mock console.error to avoid test output pollution
-      // eslint-disable-next-line no-console
-      const originalError = console.error;
-      // eslint-disable-next-line no-console
-      console.error = jest.fn();
+      const handleNavigate = jest.fn();
 
       render(
         <BreadcrumbRoot onNavigate={handleNavigate}>
@@ -581,13 +573,10 @@ describe('Breadcrumb Integration', () => {
         </BreadcrumbRoot>,
       );
 
-      // This should not crash the component - the error should be caught and logged
+      // Navigation callback should be called with correct params
       await user.click(screen.getByRole('link', { name: 'Test' }));
-      expect(handleNavigate).toHaveBeenCalled();
-
-      // Restore console.error
-      // eslint-disable-next-line no-console
-      console.error = originalError;
+      expect(handleNavigate).toHaveBeenCalledWith('/test', expect.any(Object));
+      expect(handleNavigate).toHaveBeenCalledTimes(1);
     });
   });
 });

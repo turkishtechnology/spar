@@ -1,5 +1,4 @@
 ---
-sidebar_position: 1
 title: Accordion
 description: A headless accordion component that supports single and multiple panel expansion with full keyboard navigation and accessibility.
 ---
@@ -13,7 +12,9 @@ import { Accordion, AccordionItem, AccordionHeader, AccordionTrigger, AccordionC
 
 A collapsible content component that supports single or multiple panel expansion with keyboard navigation and full accessibility support.
 
-![Accessibility Badge](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-Yes-blue) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-Strict-blue)
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
 
 ## Live Demo
 
@@ -133,7 +134,7 @@ The Accordion component is built as a compound component with multiple parts:
   ]}
 >
   <div style={{ width: '500px' }} data-glide-part="root">
-    <Accordion isCollapsible={true} style={{ padding: '12px' }}>
+    <Accordion isCollapsible={true} defaultValue="item1" style={{ padding: '12px' }}>
       <AccordionItem value="item1" data-glide-part="item">
         <AccordionHeader data-glide-part="header">
           <AccordionTrigger
@@ -144,7 +145,7 @@ The Accordion component is built as a compound component with multiple parts:
               border: '1px solid #ccc',
             }}
           >
-            What is Glide Accordion?
+            {' What is Glide Accordion? '}
           </AccordionTrigger>
         </AccordionHeader>
         <AccordionContent
@@ -155,7 +156,7 @@ The Accordion component is built as a compound component with multiple parts:
             border: '1px solid #ccc',
           }}
         >
-          Glide Accordion is a headless, accessible React component with no default styling.
+          {' Glide Accordion is a headless, accessible React component with no default styling. '}
         </AccordionContent>
       </AccordionItem>
 
@@ -169,7 +170,7 @@ The Accordion component is built as a compound component with multiple parts:
               border: '1px solid #ccc',
             }}
           >
-            How to use it?
+            {' How to use it? '}
           </AccordionTrigger>
         </AccordionHeader>
         <AccordionContent
@@ -180,7 +181,7 @@ The Accordion component is built as a compound component with multiple parts:
             border: '1px solid #ccc',
           }}
         >
-          Simply import the components and compose them together. Add your own CSS for styling.
+          {' Simply import the components and compose them together. Add your own CSS for styling. '}
         </AccordionContent>
       </AccordionItem>
     </Accordion>

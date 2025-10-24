@@ -38,6 +38,12 @@
         "**/*.{js,jsx,ts,tsx,md,json,yml,yaml,css,scss,less,html}"
       ],
       "outputs": []
+    },
+    "publish": {
+      "dependsOn": ["build", "lint", "check-types"],
+      "inputs": ["$TURBO_DEFAULT$", "dist/**"],
+      "outputs": [],
+      "cache": false
     }
   }
 }
