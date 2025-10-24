@@ -1,4 +1,5 @@
 import { createContext, useContext, useId, useMemo, useState, useCallback, useRef } from 'react';
+import { useItemRegistry } from '@/hooks';
 import type { SelectRootProps, SelectContextValue, SelectItemData } from './types';
 
 const SelectContext = createContext<SelectContextValue | null>(null);
@@ -50,7 +51,7 @@ export const SelectRoot = ({
   const valueId = useId();
 
   // Item collection
-  const [items, setItems] = useState<Map<string, SelectItemData>>(new Map());
+  const { items, registerItem, unregisterItem } = useItemRegistry<SelectItemData>();
 
   // Focus and type-ahead state
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -87,23 +88,6 @@ export const SelectRoot = ({
     },
     [isDisabled, isOpenControlled, onOpenChange],
   );
-
-  // Item registration
-  const registerItem = useCallback((value: string, data: SelectItemData) => {
-    setItems((prev) => {
-      const newMap = new Map(prev);
-      newMap.set(value, data);
-      return newMap;
-    });
-  }, []);
-
-  const unregisterItem = useCallback((value: string) => {
-    setItems((prev) => {
-      const newMap = new Map(prev);
-      newMap.delete(value);
-      return newMap;
-    });
-  }, []);
 
   // Context value
   const contextValue = useMemo<SelectContextValue>(

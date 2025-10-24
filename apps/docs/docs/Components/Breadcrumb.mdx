@@ -1,17 +1,20 @@
 ---
-sidebar_position: 2
 title: Breadcrumb
 description: Accessible headless breadcrumb navigation component for hierarchical page structures
 ---
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { BreadcrumbRoot, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from '@turkish-technology/glide';
 
 # Breadcrumb
 
 A fully accessible headless breadcrumb component for displaying hierarchical navigation paths with complete keyboard support and screen reader compatibility.
 
-![Accessibility Badge](https://img.shields.io/badge/Accessible-WCAG%202.2%20AA-green) ![Tree-shakeable Badge](https://img.shields.io/badge/Tree--shakeable-Yes-green) ![TypeScript Badge](https://img.shields.io/badge/TypeScript-Strict-blue)
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
 
 ## Live Demo
 
@@ -217,22 +220,92 @@ import {
 
 ## Anatomy
 
-Visual component hierarchy showing the semantic structure and data flow:
+The Breadcrumb component is built as a compound component with multiple parts:
 
-```
-BreadcrumbRoot (nav)
-├── BreadcrumbList (ol)
-    ├── BreadcrumbItem (li) → [position: first]
-    │   └── BreadcrumbLink (a)
-    ├── BreadcrumbSeparator (li) → [aria-hidden: true]
-    ├── BreadcrumbItem (li) → [position: middle]
-    │   └── BreadcrumbLink (a)
-    ├── BreadcrumbSeparator (li) → [aria-hidden: true]
-    └── BreadcrumbItem (li) → [position: last, isCurrent: true]
-        └── BreadcrumbPage (span) → [aria-current: page]
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'BreadcrumbRoot', description: 'Navigation landmark container' },
+    { name: 'list', label: 'BreadcrumbList', description: 'Ordered list with position calculation' },
+    { name: 'item', label: 'BreadcrumbItem', description: 'Individual list item wrapper' },
+    { name: 'link', label: 'BreadcrumbLink', description: 'Navigational link element' },
+    { name: 'page', label: 'BreadcrumbPage', description: 'Current page indicator' },
+    { name: 'separator', label: 'BreadcrumbSeparator', description: 'Visual separator element' },
+  ]}
+>
+  <BreadcrumbRoot 
+    data-glide-part="root"
+    style={{ padding: '16px', border: '1px solid #e0e0e0', borderRadius: '8px' }}
+  >
+    <BreadcrumbList 
+      data-glide-part="list"
+      style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        listStyle: 'none',
+        margin: 0,
+        padding: 0
+      }}
+    >
+      <BreadcrumbItem data-glide-part="item" style={{ margin: 0, padding: 0 }}>
+        <BreadcrumbLink 
+          data-glide-part="link"
+          href="/"
+          style={{ 
+            color: '#0066cc', 
+            textDecoration: 'none',
+            cursor: 'pointer'
+          }}
+        >
+          {' Home '}
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator data-glide-part="separator" style={{ color: '#666', margin: '0 8px', display: 'flex', alignItems: 'center' }}>{' › '}</BreadcrumbSeparator>
+      <BreadcrumbItem data-glide-part="item" style={{ margin: 0, padding: 0 }}>
+        <BreadcrumbLink 
+          data-glide-part="link"
+          href="/products"
+          style={{ 
+            color: '#0066cc', 
+            textDecoration: 'none',
+            cursor: 'pointer'
+          }}
+        >
+          {' Products '}
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator data-glide-part="separator" style={{ color: '#666', margin: '0 8px', display: 'flex', alignItems: 'center' }}>{' › '}</BreadcrumbSeparator>
+      <BreadcrumbItem data-glide-part="item" style={{ margin: 0, padding: 0 }}>
+        <BreadcrumbPage data-glide-part="page" style={{ color: '#333', fontWeight: '500' }}>
+          {' Current Page '}
+        </BreadcrumbPage>
+      </BreadcrumbItem>
+    </BreadcrumbList>
+  </BreadcrumbRoot>
+</AnatomyViewer>
+
+### Structure
+
+```tsx
+<BreadcrumbRoot>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink />
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage />
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</BreadcrumbRoot>
 ```
 
-**Data Flow**: BreadcrumbRoot provides navigation context → BreadcrumbList calculates positions → BreadcrumbItem receives position data → BreadcrumbLink/Page consume context for behavior.
+**Data Flow:**
+- `BreadcrumbRoot` provides navigation context and manages shared state
+- `BreadcrumbList` calculates position data (first, middle, last) for items
+- `BreadcrumbItem` receives position information for styling hooks
+- `BreadcrumbLink` handles navigation and routing integration
+- `BreadcrumbPage` marks the current page with proper ARIA attributes
+- `BreadcrumbSeparator` provides visual separation (hidden from screen readers)
 
 ## Code Examples
 

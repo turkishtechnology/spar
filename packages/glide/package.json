@@ -2,26 +2,39 @@
   "name": "@turkish-technology/glide",
   "version": "0.1.0",
   "description": "A modern headless React component library providing unstyled, accessible UI primitives",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.esm.js",
-      "require": "./dist/index.js"
+      "require": "./dist/index.js",
+      "default": "./dist/index.esm.js"
     },
     "./package.json": "./package.json"
   },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/index.d.ts"
+      ]
+    }
+  },
   "sideEffects": false,
   "files": [
-    "dist",
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
     "README.md",
+    "LICENSE",
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "rspack build && tsc --emitDeclarationOnly",
+    "build": "pnpm run clean && rspack build && tsc --emitDeclarationOnly",
     "dev": "rspack build --watch",
+    "prepublishOnly": "pnpm run build && pnpm run check-types && pnpm run lint",
+    "prepack": "pnpm run build",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "check-types": "tsc --noEmit",
@@ -46,16 +59,15 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=22.18.0",
     "pnpm": ">=10.0.0"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "access": "public"
   },
   "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0"
   },
   "devDependencies": {
     "@rspack/cli": "^1.0.0",
@@ -82,8 +94,20 @@
   },
   "keywords": [
     "react",
+    "react-components",
     "glide",
-    "components"
+    "headless-ui",
+    "headless-components",
+    "accessible",
+    "accessibility",
+    "a11y",
+    "unstyled",
+    "ui-primitives",
+    "component-library",
+    "typescript",
+    "wcag",
+    "aria",
+    "react-19"
   ],
   "dependencies": {
     "@floating-ui/react-dom": "^2.1.6"

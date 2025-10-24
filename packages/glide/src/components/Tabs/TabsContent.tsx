@@ -30,6 +30,7 @@ export const TabsContent = ({
       aria-labelledby={triggerId}
       data-state={isSelected ? 'active' : 'inactive'}
       data-orientation={orientation}
+      tabIndex={0}
       hidden={!isSelected}
       {...props}
     >
