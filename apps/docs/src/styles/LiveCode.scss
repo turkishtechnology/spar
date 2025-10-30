@@ -3,7 +3,6 @@
 .live-code-container {
   display: flex;
   flex-direction: column;
-  
 
   .live-preview-wrapper {
     border: 2px solid var(--ifm-gray);
@@ -13,7 +12,6 @@
     justify-content: center;
     position: relative;
     border-radius: 12px 12px 0 0;
-
 
     .live-preview {
       width: 100%;
@@ -33,9 +31,7 @@
       font-size: 14px;
       white-space: pre-wrap;
       max-width: 100%;
-
     }
-
   }
   .collapsible-code-block {
     margin: 0;
@@ -59,7 +55,6 @@
         color: #c90019;
       }
 
-
       .toggle-icon {
         font-size: 12px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -73,13 +68,13 @@
       transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
 
-      .copy-button{
+      .copy-button {
         position: absolute;
         right: 8px;
         top: 8px;
         background: none;
       }
-      &[style*="opacity: 0"] {
+      &[style*='opacity: 0'] {
         pointer-events: none;
       }
 
@@ -89,8 +84,6 @@
         border-radius: 0;
         border: none;
       }
-
-
     }
 
     // Animation states
@@ -105,18 +98,32 @@
         transform: rotate(90deg) scale(1.1);
       }
     }
-
   }
-  .live-code-wrapper{
-
+  .live-code-wrapper {
     .live-editor {
-    
-      pre[class*="language-"] {
-      
+      pre[class*='language-'] {
         border-radius: 0 0 12px 12px;
-        overflow-y: auto ;
-      
+        overflow-y: auto;
       }
     }
   }
+}
+
+.button-demo-container {
+  .button {
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-weight: 400;
+
+    /* Light mode styles */
+    background: rgba(0, 0, 0, 0.08);
+    color: #222530;
+    font-size: 13px;
+  }
+}
+
+/* Dark mode styles */
+[data-theme='dark'] .button {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f2f5f8;
 }

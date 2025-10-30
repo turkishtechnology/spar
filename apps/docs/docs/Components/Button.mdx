@@ -20,27 +20,48 @@ A headless, accessible button component that provides complete keyboard support 
 
 <LiveCode
   code={`function BasicExample() {
-  const [count, setCount] = useState(0);
-  
   return (
-    <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
-      <Button 
-        onClick={() => setCount(count + 1)}
-        style={{ padding: '8px 16px', marginRight: '8px' }}
-      >
-        Clicked {count} times
-      </Button>
-      
-      <Button 
-        isDisabled
-        style={{ padding: '8px 16px' }}
-      >
-        Disabled Button
+    <div className="button-demo-container">
+      <Button className="button">
+        button
       </Button>
     </div>
   );
 }`}
 />
+
+### button.tsx
+
+```tsx
+import { Button } from '@turkish-technology/glide';
+
+function ButtonDemo() {
+  return <Button className='button'>button</Button>;
+}
+
+export default ButtonDemo;
+```
+
+### button.css
+
+```css
+.button {
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-weight: 400;
+
+  /* Light mode styles */
+  background: rgba(0, 0, 0, 0.08);
+  color: #222530;
+  font-size: 13px;
+}
+
+/* Dark mode styles */
+[data-theme='dark'] .button {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f2f5f8;
+}
+```
 
 ## Features
 
@@ -83,6 +104,7 @@ The Button is a single component that can be configured for different use cases:
     >
       Disabled Button
     </Button>
+
   </div>
 </AnatomyViewer>
 
@@ -93,6 +115,7 @@ The Button is a single component that can be configured for different use cases:
 ```
 
 **Data Flow:**
+
 - Single component with complete keyboard support and toggle functionality
 - Manages its own state or accepts controlled props
 - Provides comprehensive accessibility features
