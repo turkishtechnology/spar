@@ -139,6 +139,8 @@
 }
 
 [data-theme='dark'] .checkbox-demo-container .checkbox {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: #000;
 }
 
 .checkbox-demo-container .checkbox-icon {
@@ -147,4 +149,10 @@
   height: 24px;
   flex-shrink: 0;
   background: rgba(0, 0, 0, 0.72);
+  fill: #fff;
+}
+
+[data-theme='dark'] .checkbox-demo-container .checkbox-icon {
+  background: rgba(255, 255, 255, 0.72);
+  fill: #000;
 }
