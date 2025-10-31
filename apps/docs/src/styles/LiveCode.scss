@@ -165,3 +165,53 @@
 [data-theme='dark'] .label-demo-container .label {
   color: #f2f5f8;
 }
+
+.select-demo-container .select-trigger {
+  width: 100px;
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 5px;
+  border: 1px solid #e1e4ea;
+  background: rgba(0, 0, 0, 0.16);
+}
+
+[data-theme='dark'] .select-demo-container .select-trigger {
+  border-color: #2b303b;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.select-demo-container .select-value {
+  color: #222530;
+}
+
+[data-theme='dark'] .select-demo-container .select-value {
+  color: #f2f5f8;
+}
+
+.select-demo-container .select-icon {
+  height: 20px;
+}
+
+.select-demo-container .select-svg {
+  width: 20px;
+  height: 20px;
+  fill: #222530;
+}
+
+[data-theme='dark'] .select-demo-container .select-svg {
+  fill: #f2f5f8;
+}
+
+.select-content {
+  padding: 4px 8px;
+  border-radius: 5px;
+  border: 1px solid #e1e4ea;
+  background: #ddd;
+}
+
+[data-theme='dark'] .select-content {
+  border-color: #2b303b;
+  background: #222;
+}
