@@ -109,21 +109,42 @@
   }
 }
 
-.button-demo-container {
-  .button {
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-weight: 400;
+// Used in CSS file examples in a copy-pasteable way in demos. CSS only below this line.
+.button-demo-container .button {
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-weight: 400;
 
-    /* Light mode styles */
-    background: rgba(0, 0, 0, 0.08);
-    color: #222530;
-    font-size: 13px;
-  }
+  /* Light mode styles */
+  background: rgba(0, 0, 0, 0.08);
+  color: #222530;
+  font-size: 13px;
 }
 
-/* Dark mode styles */
-[data-theme='dark'] .button {
+[data-theme='dark'] .button-demo-container .button {
+  /* Dark mode styles */
   background: rgba(255, 255, 255, 0.12);
   color: #f2f5f8;
+}
+
+.checkbox-demo-container .checkbox {
+  border-radius: 12px;
+  border: 4px solid rgba(0, 0, 0, 0.16);
+  background: #fff;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-theme='dark'] .checkbox-demo-container .checkbox {
+}
+
+.checkbox-demo-container .checkbox-icon {
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.72);
 }
