@@ -221,6 +221,26 @@
   background: #222;
 }
 
+.select-viewport {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.select-item {
+  padding: 5.475px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4.977px;
+  background: rgba(255, 255, 255, 0.48);
+  width: 125px;
+}
+
+[data-theme='dark'] .select-item {
+  background: rgba(0, 0, 0, 0.48);
+}
+
 // Input styles
 .input-demo-container .input {
   border-radius: 5px;
