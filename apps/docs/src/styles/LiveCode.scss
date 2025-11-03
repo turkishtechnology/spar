@@ -372,3 +372,37 @@
 [data-theme='dark'] .radio-demo-container input[type='radio']:checked:before {
   background-color: rgba(255, 255, 255, 0.72);
 }
+
+// Switch styles
+.switch-demo-container .switch {
+  background-color: rgba(0, 0, 0, 0.08);
+  border: 0;
+  width: 56px;
+  height: 32px;
+  padding: 4px;
+  border-radius: 24px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.switch-demo-container .switch::after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.72);
+  transition: transform 0.2s ease;
+}
+
+.switch-demo-container .switch[data-checked]::after {
+  transform: translateX(100%);
+}
+
+[data-theme='dark'] .switch-demo-container .switch {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme='dark'] .switch-demo-container .switch::after {
+  background: rgba(255, 255, 255, 0.72);
+}
