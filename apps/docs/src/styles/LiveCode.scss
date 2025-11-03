@@ -118,14 +118,14 @@
   font-weight: 400;
 
   /* Light mode styles */
-  background: rgba(0, 0, 0, 0.08);
+  background-color: rgba(0, 0, 0, 0.08);
   color: #222530;
   font-size: 13px;
 }
 
 [data-theme='dark'] .button-demo-container .button {
   /* Dark mode styles */
-  background: rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.12);
   color: #f2f5f8;
 }
 
@@ -460,4 +460,46 @@
 
 [data-theme='dark'] .tabs-demo-container .tab[data-state='active'] .tab-label {
   border-color: rgba(255, 255, 255, 0.72);
+}
+
+// Tooltip styles
+
+.tooltip-demo-container .tooltip-trigger {
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-weight: 400;
+  border: none;
+
+  /* Light mode styles */
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #222530;
+  font-size: 13px;
+}
+
+[data-theme='dark'] .tooltip-demo-container .tooltip-trigger {
+  /* Dark mode styles */
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #f2f5f8;
+}
+
+.tooltip-content {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: #ddd;
+
+  box-shadow:
+    0 2px 2px -1px rgba(82, 88, 102, 0.04),
+    0 6px 12px -2px rgba(82, 88, 102, 0.04),
+    0 8px 20px 0 rgba(82, 88, 102, 0.04);
+}
+
+[data-theme='dark'] .tooltip-content {
+  border-color: rgba(0, 0, 0, 0.08);
+  background-color: #222;
+
+  box-shadow:
+    0 2px 2px -1px rgba(82, 88, 102, 0.04),
+    0 6px 12px -2px rgba(82, 88, 102, 0.04),
+    0 8px 20px 0 rgba(82, 88, 102, 0.04);
 }
