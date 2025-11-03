@@ -341,3 +341,34 @@
   height: 13.688px;
   background-color: #474747;
 }
+
+// Radio styles
+.radio-demo-container input[type='radio'] {
+  position: relative;
+  appearance: none;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  border: 4px solid rgba(0, 0, 0, 0.16);
+}
+
+.radio-demo-container input[type='radio']:checked:before {
+  content: '';
+  width: 24px;
+  height: 24px;
+  background-color: rgba(0, 0, 0, 0.72);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+[data-theme='dark'] .radio-demo-container input[type='radio'] {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+[data-theme='dark'] .radio-demo-container input[type='radio']:checked:before {
+  background-color: rgba(255, 255, 255, 0.72);
+}
