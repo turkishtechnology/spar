@@ -110,6 +110,8 @@
 }
 
 // Used in CSS file examples in a copy-pasteable way in demos. CSS only below this line.
+
+// Button styles
 .button-demo-container .button {
   border-radius: 8px;
   padding: 12px 14px;
@@ -127,6 +129,7 @@
   color: #f2f5f8;
 }
 
+// Checkbox styles
 .checkbox-demo-container .checkbox {
   border-radius: 12px;
   border: 4px solid rgba(0, 0, 0, 0.16);
@@ -157,6 +160,7 @@
   fill: #000;
 }
 
+// Label styles
 .label-demo-container .label {
   color: #222530;
 }
@@ -166,6 +170,7 @@
   color: #f2f5f8;
 }
 
+// Select styles
 .select-demo-container .select-trigger {
   width: 100px;
   display: flex;
@@ -214,4 +219,32 @@
 [data-theme='dark'] .select-content {
   border-color: #2b303b;
   background: #222;
+}
+
+// Input styles
+.input-demo-container .input {
+  border-radius: 5px;
+  border: 1px solid #e1e4ea;
+  background: rgba(0, 0, 0, 0.08);
+  height: 27px;
+  width: 200px;
+  padding: 7px;
+}
+
+[data-theme='dark'] .input-demo-container .input {
+  border: 1px solid #2b303b;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.input-demo-container .label {
+  color: #222530;
+  display: block;
+  font-size: 9px;
+  line-height: 13px;
+  padding-left: 5px;
+  margin-bottom: 2px;
+}
+
+[data-theme='dark'] .input-demo-container .label {
+  color: #f2f5f8;
 }
