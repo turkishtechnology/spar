@@ -213,12 +213,12 @@
   padding: 8px;
   border-radius: 11px;
   border: 1px solid #e1e4ea;
-  background: #ddd;
+  background: #d6d6d6;
 }
 
 [data-theme='dark'] .select-content {
   border-color: #2b303b;
-  background: #222;
+  background: #292929;
 }
 
 .select-viewport {
@@ -301,7 +301,7 @@
   padding: 8px;
   border-radius: 11px;
   border: 0.684px solid #e1e4ea;
-  background: #ddd;
+  background: #d6d6d6;
   box-shadow:
     0 1.369px 1.369px -0.684px rgba(82, 88, 102, 0.04),
     0 4.106px 8.213px -1.369px rgba(82, 88, 102, 0.04),
@@ -313,7 +313,7 @@
 
 [data-theme='dark'] .dropdown-content {
   border: 0.684px solid #2b303b;
-  background: #222;
+  background: #292929;
   box-shadow:
     0 2px 2px -1px rgba(82, 88, 102, 0.04),
     0 6px 12px -2px rgba(82, 88, 102, 0.04),
@@ -485,7 +485,7 @@
   padding: 8px 12px;
   border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  background-color: #ddd;
+  background-color: #d6d6d6;
 
   box-shadow:
     0 2px 2px -1px rgba(82, 88, 102, 0.04),
@@ -495,7 +495,7 @@
 
 [data-theme='dark'] .tooltip-content {
   border-color: rgba(0, 0, 0, 0.08);
-  background-color: #222;
+  background-color: #292929;
 
   box-shadow:
     0 2px 2px -1px rgba(82, 88, 102, 0.04),
@@ -588,7 +588,7 @@
 
 [data-theme='dark'] .popover-content {
   border-color: #2b303b;
-  background-color: #222;
+  background-color: #292929;
 }
 
 .popover-header {
