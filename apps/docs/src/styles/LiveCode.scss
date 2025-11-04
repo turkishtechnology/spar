@@ -677,7 +677,7 @@
 .collapsible-demo-container .collapsible-content {
   display: flex;
   flex-direction: column;
-  width: 216px;
+  width: 420px;
   gap: 8px;
 }
 
@@ -695,14 +695,28 @@
 
 // Accordion styles
 .accordion-demo-container .accordion {
-  width: 216px;
+  width: 420px;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
 .accordion-demo-container .accordion-header {
+  border-radius: 8px;
   margin-bottom: 0;
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 1.355px 1.355px -0.677px rgba(82, 88, 102, 0.04),
+    0 4.064px 8.128px -1.355px rgba(82, 88, 102, 0.04),
+    0 5.419px 13.547px 0 rgba(82, 88, 102, 0.04);
+}
+
+[data-theme='dark'] .accordion-demo-container .accordion-header {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 1.355px 1.355px -0.677px rgba(82, 88, 102, 0.04),
+    0 4.064px 8.128px -1.355px rgba(82, 88, 102, 0.04),
+    0 5.419px 13.547px 0 rgba(82, 88, 102, 0.04);
 }
 
 .accordion-demo-container .accordion-trigger {
@@ -712,6 +726,7 @@
   gap: 5px;
   padding: 7.5px;
   border: none;
+  background: transparent;
 }
 
 .accordion-demo-container .accordion-icon {
@@ -738,23 +753,35 @@
 
 .accordion-demo-container .accordion-expand {
   margin-left: auto;
-}
-
-.accordion-demo-container .accordion-expand {
-  fill: #222530;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease-in-out;
 }
 
 .accordion-demo-container .accordion-item[data-state='open'] .accordion-expand {
   transform: rotate(180deg);
 }
 
+.accordion-demo-container .accordion-expand-icon {
+  fill: #222530;
+}
+
+[data-theme='dark'] .accordion-demo-container .accordion-expand-icon {
+  fill: #f2f5f8;
+}
+
 .accordion-demo-container .accordion-content {
   margin-top: 4px;
   padding: 8px;
-  border-radius: 5.5px;
+  border-radius: 8px;
   border: 0.677px solid #e1e4ea;
   background: rgba(0, 0, 0, 0.02);
   font-size: 12px;
   font-weight: 300;
   line-height: 18px;
+}
+
+[data-theme='dark'] .accordion-demo-container .accordion-content {
+  border: 0.677px solid #2b303b;
+  background: rgba(255, 255, 255, 0.08);
 }
