@@ -26,6 +26,8 @@ Accessible radio group component for creating mutually exclusive selections with
     <div className="radio-demo-container">
       <Radio.Group value={value} onValueChange={setValue} aria-label="Basic radio group">
         <Radio.Item value="option1"></Radio.Item>
+        <Radio.Item value='option2' className='radio-item'></Radio.Item>
+        <Radio.Item value='option3' className='radio-item'></Radio.Item>
       </Radio.Group>
     </div>
   );
@@ -41,6 +43,8 @@ function RadioDemo() {
   return (
     <Radio.Group aria-label='Basic radio group' className='radio-group'>
       <Radio.Item value='option1' className='radio-item'></Radio.Item>
+      <Radio.Item value='option2' className='radio-item'></Radio.Item>
+      <Radio.Item value='option3' className='radio-item'></Radio.Item>
     </Radio.Group>
   );
 }
