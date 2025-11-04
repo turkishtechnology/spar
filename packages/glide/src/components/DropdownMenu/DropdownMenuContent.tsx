@@ -8,6 +8,7 @@ import {
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
+import { useInteractOutside } from '@/hooks';
 import {
   useFloating,
   autoUpdate,
@@ -331,46 +332,24 @@ export const DropdownMenuContent = ({
     [],
   );
 
-  useEffect(() => {
-    if (!menu.open) return;
-    const node = contentRef.current;
-    if (!node) return;
-
-    const doc = node.ownerDocument;
-    const handlePointerDown = (event: globalThis.PointerEvent) => {
-      const target = event.target as Node | null;
-      if (!node.contains(target) && !menu.triggerRef.current?.contains(target as Node)) {
-        onPointerDownOutside?.(event);
+  // Handle outside interactions
+  useInteractOutside([contentRef, menu.triggerRef], {
+    enabled: menu.open,
+    includeFocus: true,
+    onPointerDownOutside: (event) => {
+      onPointerDownOutside?.(event);
+      menu.closeMenu({ focusTrigger: false });
+    },
+    onFocusOutside: (event) => {
+      onFocusOutside?.(event);
+      if (menu.modal) {
+        event.preventDefault();
+        highlightFirst();
+      } else {
         menu.closeMenu({ focusTrigger: false });
       }
-    };
-    const handleFocusIn = (event: FocusEvent) => {
-      const target = event.target as Node | null;
-      if (!node.contains(target)) {
-        onFocusOutside?.(event);
-        if (menu.modal) {
-          event.preventDefault();
-          highlightFirst();
-        } else {
-          menu.closeMenu({ focusTrigger: false });
-        }
-      }
-    };
-    doc.addEventListener('pointerdown', handlePointerDown);
-    doc.addEventListener('focusin', handleFocusIn);
-    return () => {
-      doc.removeEventListener('pointerdown', handlePointerDown);
-      doc.removeEventListener('focusin', handleFocusIn);
-    };
-  }, [
-    menu.open,
-    menu.triggerRef,
-    menu.modal,
-    onPointerDownOutside,
-    onFocusOutside,
-    highlightFirst,
-    menu.closeMenu,
-  ]);
+    },
+  });
 
   const handleKeyDownInternal = useCallback(
     (event: ReactKeyboardEvent<HTMLElement>) => {

@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { useInteractOutside } from '@/hooks';
 import { PopoverContentProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 import { getFocusableElements } from './utils';
@@ -89,56 +90,20 @@ export const PopoverContent = ({
   }, [state.isOpen, closePopover, onEscapeKeyDown]);
 
   // Outside interaction handling
-  useEffect(() => {
-    if (!state.isOpen) return;
-
-    const handlePointerDown = (event: PointerEvent) => {
-      const target = event.target as Node;
-      if (
-        contentRef.current &&
-        !contentRef.current.contains(target) &&
-        triggerRef.current &&
-        !triggerRef.current.contains(target)
-      ) {
-        closePopover();
-        onPointerDownOutside?.(event);
-        onInteractOutside?.(event);
-      }
-    };
-
-    const handleFocusOutside = (event: FocusEvent) => {
-      if (trapFocus) return; // Don't close if focus is trapped
-
-      const target = event.target as Node;
-      if (
-        contentRef.current &&
-        !contentRef.current.contains(target) &&
-        triggerRef.current &&
-        !triggerRef.current.contains(target)
-      ) {
-        closePopover();
-        onFocusOutside?.(event);
-        onInteractOutside?.(event);
-      }
-    };
-
-    document.addEventListener('pointerdown', handlePointerDown);
-    document.addEventListener('focusin', handleFocusOutside);
-
-    return () => {
-      document.removeEventListener('pointerdown', handlePointerDown);
-      document.removeEventListener('focusin', handleFocusOutside);
-    };
-  }, [
-    state.isOpen,
-    trapFocus,
-    closePopover,
-    onPointerDownOutside,
-    onFocusOutside,
-    onInteractOutside,
-    contentRef,
-    triggerRef,
-  ]);
+  useInteractOutside([contentRef, triggerRef], {
+    enabled: state.isOpen,
+    includeFocus: !trapFocus, // Only include focus events if focus is not trapped
+    onPointerDownOutside: (event) => {
+      closePopover();
+      onPointerDownOutside?.(event);
+      onInteractOutside?.(event);
+    },
+    onFocusOutside: (event) => {
+      closePopover();
+      onFocusOutside?.(event);
+      onInteractOutside?.(event);
+    },
+  });
 
   // Focus trapping
   useEffect(() => {
