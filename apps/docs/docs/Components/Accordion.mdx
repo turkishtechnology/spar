@@ -6,7 +6,13 @@ description: A headless accordion component that supports single and multiple pa
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Accordion, AccordionItem, AccordionHeader, AccordionTrigger, AccordionContent } from '@turkish-technology/glide';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionHeader,
+  AccordionTrigger,
+  AccordionContent,
+} from '@turkish-technology/glide';
 
 # Accordion
 
@@ -23,71 +29,252 @@ A collapsible content component that supports single or multiple panel expansion
   code={`
 function Example() {
   return (
-    <div style={{ width: '500px'}}>
-      <Accordion isCollapsible={true} style={{padding:'12px'}}>
-        <AccordionItem value="item1">
-          <AccordionHeader>
-            <AccordionTrigger style={{
-              width: '100%',
-              padding: '12px',
-              border: '1px solid #ccc',
-            }}>
-              What is Glide Accordion?
+    <div className='accordion-demo-container'>
+      <Accordion className='accordion' defaultValue="2">
+        <AccordionItem className='accordion-item' value="1">
+          <AccordionHeader className='accordion-header'>
+            <AccordionTrigger className='accordion-trigger'>
+              <span className='accordion-icon'></span>
+              <span className='accordion-title'>Accordion</span>
+              <div className='accordion-expand'>
+                <svg className='accordion-expand-icon' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z"/>
+                </svg> 
+              </div>
             </AccordionTrigger>
           </AccordionHeader>
-          <AccordionContent style={{
-            padding: '12px',
-            margin: '12px 0',
-            border: '1px solid #ccc',
-          }}>
-            Glide Accordion is a headless, accessible React component with no default styling.
+          <AccordionContent className='accordion-content'>
+            The accordion component is a customizable area. Users can add content as per their request.
           </AccordionContent>
         </AccordionItem>
-
-        <AccordionItem value="item2">
-          <AccordionHeader>
-            <AccordionTrigger style={{
-              width: '100%',
-              padding: '12px',
-              border: '1px solid #ccc',
-            }}>
-              How to use it?
+        <AccordionItem className='accordion-item' value="2">
+          <AccordionHeader className='accordion-header'>
+            <AccordionTrigger className='accordion-trigger'>
+              <span className='accordion-icon'></span>
+              <span className='accordion-title'>Accordion</span>
+              <div className='accordion-expand'>
+                <svg className='accordion-expand-icon' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z"/>
+                </svg> 
+              </div>
             </AccordionTrigger>
           </AccordionHeader>
-          <AccordionContent style={{
-            padding: '12px',
-            margin: '12px 0',
-            border: '1px solid #ccc',
-          }}>
-            Simply import the components and compose them together. Add your own CSS for styling.
+          <AccordionContent className='accordion-content'>
+            The accordion component is a customizable area. Users can add content as per their request.
           </AccordionContent>
         </AccordionItem>
-
-        <AccordionItem value="item3">
-          <AccordionHeader>
-            <AccordionTrigger style={{
-              width: '100%',
-              padding: '12px',
-              border: '1px solid #ccc',
-            }}>
-              Is it accessible?
-            </AccordionTrigger>
+        <AccordionItem className='accordion-item' value="3">
+          <AccordionHeader className='accordion-header'>
+            <AccordionTrigger className='accordion-trigger'>
+              <span className='accordion-icon'></span>
+              <span className='accordion-title'>Accordion</span>
+              <div className='accordion-expand'>
+               <svg className='accordion-expand-icon' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z"/>
+                </svg> 
+              </div>
+            </AccordionTrigger> 
           </AccordionHeader>
-          <AccordionContent style={{
-            padding: '12px',
-            margin: '12px 0',
-            border: '1px solid #ccc',
-          }}>
-            Yes! Full ARIA support and keyboard navigation are built-in.
+          <AccordionContent className='accordion-content'>
+            The accordion component is a customizable area. Users can add content as per their request.
           </AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>
+
+);
+}
+`}
+/>
+
+### accordion.tsx
+
+```tsx
+import {
+  Accordion,
+  AccordionItem,
+  AccordionHeader,
+  AccordionTrigger,
+  AccordionContent,
+} from '@turkish-technology/glide';
+
+function AccordionDemo() {
+  return (
+    <Accordion className='accordion' defaultValue='2'>
+      <AccordionItem className='accordion-item' value='1'>
+        <AccordionHeader className='accordion-header'>
+          <AccordionTrigger className='accordion-trigger'>
+            <span className='accordion-icon'></span>
+            <span className='accordion-title'>Accordion</span>
+            <div className='accordion-expand'>
+              <svg
+                className='accordion-expand-icon'
+                xmlns='http://www.w3.org/2000/svg'
+                width='20'
+                height='20'
+                viewBox='0 0 20 20'
+                fill='none'
+              >
+                <path d='M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z' />
+              </svg>
+            </div>
+          </AccordionTrigger>
+        </AccordionHeader>
+        <AccordionContent className='accordion-content'>
+          The accordion component is a customizable area. Users can add content as per their
+          request.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem className='accordion-item' value='2'>
+        <AccordionHeader className='accordion-header'>
+          <AccordionTrigger className='accordion-trigger'>
+            <span className='accordion-icon'></span>
+            <span className='accordion-title'>Accordion</span>
+            <div className='accordion-expand'>
+              <svg
+                className='accordion-expand-icon'
+                xmlns='http://www.w3.org/2000/svg'
+                width='20'
+                height='20'
+                viewBox='0 0 20 20'
+                fill='none'
+              >
+                <path d='M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z' />
+              </svg>
+            </div>
+          </AccordionTrigger>
+        </AccordionHeader>
+        <AccordionContent className='accordion-content'>
+          The accordion component is a customizable area. Users can add content as per their
+          request.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem className='accordion-item' value='3'>
+        <AccordionHeader className='accordion-header'>
+          <AccordionTrigger className='accordion-trigger'>
+            <span className='accordion-icon'></span>
+            <span className='accordion-title'>Accordion</span>
+            <div className='accordion-expand'>
+              <svg
+                className='accordion-expand-icon'
+                xmlns='http://www.w3.org/2000/svg'
+                width='20'
+                height='20'
+                viewBox='0 0 20 20'
+                fill='none'
+              >
+                <path d='M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z' />
+              </svg>
+            </div>
+          </AccordionTrigger>
+        </AccordionHeader>
+        <AccordionContent className='accordion-content'>
+          The accordion component is a customizable area. Users can add content as per their
+          request.
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 }
-  `}
-  />
----
+
+export default AccordionDemo;
+```
+
+### accordion.css
+
+```css
+.accordion {
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.accordion-header {
+  border-radius: 8px;
+  margin-bottom: 0;
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 1.355px 1.355px -0.677px rgba(82, 88, 102, 0.04),
+    0 4.064px 8.128px -1.355px rgba(82, 88, 102, 0.04),
+    0 5.419px 13.547px 0 rgba(82, 88, 102, 0.04);
+}
+
+[data-theme='dark'] .accordion-header {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 1.355px 1.355px -0.677px rgba(82, 88, 102, 0.04),
+    0 4.064px 8.128px -1.355px rgba(82, 88, 102, 0.04),
+    0 5.419px 13.547px 0 rgba(82, 88, 102, 0.04);
+}
+
+.accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7.5px;
+  border: none;
+  background: transparent;
+}
+
+.accordion-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 0.625px solid #cacfd8;
+  background: rgba(0, 0, 0, 0.72);
+}
+
+[data-theme='dark'] .accordion-icon {
+  border-color: #525866;
+  background-color: #c0c0c0;
+}
+
+.accordion-title {
+  color: #222530;
+  font-size: 14px;
+}
+
+[data-theme='dark'] .accordion-title {
+  color: #f2f5f8;
+}
+
+.accordion-expand {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+.accordion-item[data-state='open'] .accordion-expand {
+  transform: rotate(180deg);
+}
+
+.accordion-expand-icon {
+  fill: #222530;
+}
+
+[data-theme='dark'] .accordion-expand-icon {
+  fill: #f2f5f8;
+}
+
+.accordion-content {
+  margin-top: 4px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 0.677px solid #e1e4ea;
+  background: rgba(0, 0, 0, 0.02);
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 18px;
+}
+
+[data-theme='dark'] .accordion-content {
+  border: 0.677px solid #2b303b;
+  background: rgba(255, 255, 255, 0.08);
+}
+```
 
 ## Features
 
@@ -118,6 +305,7 @@ import {
   AccordionContent,
 } from '@turkish-technology/glide';
 ```
+
 ---
 
 ## Anatomy
@@ -185,6 +373,7 @@ The Accordion component is built as a compound component with multiple parts:
         </AccordionContent>
       </AccordionItem>
     </Accordion>
+
   </div>
 </AnatomyViewer>
 
@@ -192,7 +381,7 @@ The Accordion component is built as a compound component with multiple parts:
 
 ```tsx
 <Accordion>
-  <AccordionItem value="item-1">
+  <AccordionItem value='item-1'>
     <AccordionHeader>
       <AccordionTrigger>...</AccordionTrigger>
     </AccordionHeader>
@@ -202,6 +391,7 @@ The Accordion component is built as a compound component with multiple parts:
 ```
 
 **Data Flow:**
+
 - `Accordion`: Root context provider that manages state
 - `AccordionItem`: Represents a single collapsible section
 - `AccordionHeader`: Semantic heading wrapper for proper document structure
@@ -220,13 +410,13 @@ Basic accordion that allows only one panel to be expanded at a time:
 export function BasicAccordion() {
   return (
     <Accordion>
-      <AccordionItem value="a">
+      <AccordionItem value='a'>
         <AccordionHeader>
           <AccordionTrigger>Toggle A</AccordionTrigger>
         </AccordionHeader>
         <AccordionContent>Panel A</AccordionContent>
       </AccordionItem>
-      <AccordionItem value="b">
+      <AccordionItem value='b'>
         <AccordionHeader>
           <AccordionTrigger>Toggle B</AccordionTrigger>
         </AccordionHeader>
@@ -242,14 +432,14 @@ export function BasicAccordion() {
 Accordion that allows multiple panels to be expanded simultaneously:
 
 ```tsx
-<Accordion type="multiple" defaultValue={['a']}>
-  <AccordionItem value="a">
+<Accordion type='multiple' defaultValue={['a']}>
+  <AccordionItem value='a'>
     <AccordionHeader>
       <AccordionTrigger>Section A</AccordionTrigger>
     </AccordionHeader>
     <AccordionContent>...</AccordionContent>
   </AccordionItem>
-  <AccordionItem value="b">
+  <AccordionItem value='b'>
     <AccordionHeader>
       <AccordionTrigger>Section B</AccordionTrigger>
     </AccordionHeader>
@@ -265,13 +455,9 @@ Accordion with external state control and change handling:
 ```tsx
 const [openItems, setOpenItems] = React.useState<string[]>(['a']);
 
-<Accordion
-  type="multiple"
-  value={openItems}
-  onValueChange={setOpenItems}
->
+<Accordion type='multiple' value={openItems} onValueChange={setOpenItems}>
   {/* ...items */}
-</Accordion>
+</Accordion>;
 ```
 
 ---
@@ -279,6 +465,7 @@ const [openItems, setOpenItems] = React.useState<string[]>(['a']);
 ## API Reference
 
 ### Accordion
+
 The root container that provides context and manages the state for all accordion items within it.
 
 **Props**

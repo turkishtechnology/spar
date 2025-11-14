@@ -1,5 +1,4 @@
 ---
-sidebar_position: 3
 title: Dialog
 description: Accessible modal and non-modal dialog component with focus management, escape key handling, click outside behavior, and complete ARIA support.
 ---
@@ -7,7 +6,7 @@ description: Accessible modal and non-modal dialog component with focus manageme
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Dialog } from '@turkish-technology/glide';
+import { Button, Dialog } from '@turkish-technology/glide';
 
 # Dialog
 
@@ -22,62 +21,165 @@ A headless modal and non-modal dialog component that provides accessibility feat
   const [isOpen, setIsOpen] = React.useState(false);
   
   return (
-    <Dialog.Root isOpen={isOpen} onOpenChange={setIsOpen}>
-      <Dialog.Trigger
-        style={{
-          padding: '8px 16px',
-          border: '1px solid #ccc',
-          borderRadius: '4px',
-          background: 'white',
-          cursor: 'pointer',
-        }}
-      >
-        Open Dialog
-      </Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay
-          style={{
-            position: 'fixed',
-            inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          }}
-        />
-        <Dialog.Content
-          style={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            backgroundColor: 'white',
-            padding: '24px',
-            borderRadius: '8px',
-            border: '1px solid #ccc',
-            minWidth: '300px',
-          }}
-        >
-          <Dialog.Title style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}>
-            Dialog Title
-          </Dialog.Title>
-          <Dialog.Description style={{ color: '#666', marginBottom: '16px' }}>
-            This is a basic dialog example with proper accessibility features.
+    <div className='dialog-demo-container'>
+      <Dialog.Root className='dialog' isOpen={isOpen} onOpenChange={setIsOpen}>
+        <Dialog.Trigger className='dialog-trigger'>
+          Open Dialog
+        </Dialog.Trigger>
+        <Dialog.Portal className='dialog-portal'>
+          <Dialog.Overlay className='dialog-overlay'/>
+          <Dialog.Content className='dialog-content'>
+            <Dialog.Title className='dialog-title'>
+              Dialog Title
+            </Dialog.Title>
+            <Dialog.Description className='dialog-description'>
+              If you delete this item, it will be permanently removed. Are you sure you want to delete
+              it?
+            </Dialog.Description>
+            <div className='dialog-actions'>
+              <Dialog.Close className='dialog-close'>
+                Close
+              </Dialog.Close>
+              <Button className='dialog-continue'>
+                Continue
+              </Button>
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+    </div>
+  );
+}`}
+/>
+
+### dialog.tsx
+
+```tsx
+import { Button, Dialog } from '@turkish-technology/glide';
+
+function DialogDemo() {
+  return (
+    <Dialog.Root className='dialog' isOpen={isOpen} onOpenChange={setIsOpen}>
+      <Dialog.Trigger className='dialog-trigger'>Open Dialog</Dialog.Trigger>
+      <Dialog.Portal className='dialog-portal'>
+        <Dialog.Overlay className='dialog-overlay' />
+        <Dialog.Content className='dialog-content'>
+          <Dialog.Title className='dialog-title'>Dialog Title</Dialog.Title>
+          <Dialog.Description className='dialog-description'>
+            If you delete this item, it will be permanently removed. Are you sure you want to delete
+            it?
           </Dialog.Description>
-          <Dialog.Close
-            style={{
-              padding: '8px 16px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              background: 'white',
-              cursor: 'pointer',
-            }}
-          >
-            Close
-          </Dialog.Close>
+          <div className='dialog-actions'>
+            <Dialog.Close className='dialog-close'>Close</Dialog.Close>
+            <Button className='dialog-continue'>Continue</Button>
+          </div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
   );
-}`}
-/>
+}
+
+export default DialogDemo;
+```
+
+### dialog.css
+
+```css
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.dialog-trigger {
+  border-radius: 8px;
+  border: none;
+  padding: 12px 14px;
+  font-weight: 400;
+
+  /* Light mode styles */
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #222530;
+  font-size: 13px;
+}
+
+[data-theme='dark'] .dialog-trigger {
+  /* Dark mode styles */
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #f2f5f8;
+}
+
+.dialog-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 16px;
+  border: 0.625px solid #e1e4ea;
+  background-color: #ebebeb;
+  width: 480px;
+  padding: 16px;
+}
+
+[data-theme='dark'] .dialog-content {
+  border-color: #2b303b;
+  background-color: #292929;
+}
+
+.dialog-title {
+  color: #222530;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+[data-theme='dark'] .dialog-title {
+  color: #f2f5f8;
+}
+
+.dialog-description {
+  color: #717784;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 20px;
+}
+
+[data-theme='dark'] .dialog-description {
+  color: #99a0ae;
+}
+
+.dialog-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.dialog-close {
+  background-color: transparent;
+  border: none;
+  padding: 12px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.dialog-continue {
+  border-radius: 8px;
+  border: none;
+  padding: 12px 14px;
+  font-weight: 400;
+
+  /* Light mode styles */
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #222530;
+  font-size: 13px;
+}
+
+[data-theme='dark'] .dialog-continue {
+  /* Dark mode styles */
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #f2f5f8;
+}
+```
 
 ## Features
 
@@ -133,7 +235,7 @@ The Dialog component is built as a compound component with multiple parts:
         cursor: 'pointer',
       }}
     >
-      { 'Open Dialog' }
+      {'Open Dialog'}
     </Dialog.Trigger>
     <Dialog.Portal data-glide-part='portal'>
       <Dialog.Overlay
@@ -162,13 +264,13 @@ The Dialog component is built as a compound component with multiple parts:
           data-glide-part='title'
           style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}
         >
-          { 'Dialog Title' }
+          {'Dialog Title'}
         </Dialog.Title>
         <Dialog.Description
           data-glide-part='description'
           style={{ color: '#666', marginBottom: '16px' }}
         >
-          { 'This is a basic dialog example with proper accessibility features.' }
+          {'This is a basic dialog example with proper accessibility features.'}
         </Dialog.Description>
         <Dialog.Close
           data-glide-part='close'
@@ -180,7 +282,7 @@ The Dialog component is built as a compound component with multiple parts:
             cursor: 'pointer',
           }}
         >
-          { 'Close' }
+          {'Close'}
         </Dialog.Close>
       </Dialog.Content>
     </Dialog.Portal>
