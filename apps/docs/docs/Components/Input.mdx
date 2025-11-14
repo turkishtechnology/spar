@@ -20,36 +20,70 @@ A headless input component providing accessible form input primitives with compo
 
 ### Simple Usage (Most Common)
 
-<LiveCode 
+<LiveCode
   code={`function SimpleInputExample() {
-  const [value, setValue] = React.useState('');
-  
+
+return (
+
+<div className='input-demo-container'>
+  <Label htmlFor='my-input' className='label'>
+    Label
+  </Label>
+  <Input id='my-input' className='input' />
+</div>
+); }`} />
+
+### input.tsx
+
+```tsx
+import { Input } from '@turkish-technology/glide';
+
+function InputDemo() {
   return (
-    <div style={{ padding: '16px' }}>
-      <Input 
-        placeholder="Enter your username"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        style={{ 
-          width: '100%', 
-          padding: '12px', 
-          border: '2px solid #e2e8f0', 
-          borderRadius: '6px',
-          fontSize: '16px',
-          outline: 'none',
-          transition: 'border-color 0.2s'
-        }}
-        onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
-        onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
-      />
-    </div>
+    <>
+      <Label className='label'>Label</Label>
+      <Input className='input' />
+    </>
   );
-}`}
-/>
+}
+
+export default InputDemo;
+```
+
+### input.css
+
+```css
+.input {
+  border-radius: 5px;
+  border: 1px solid #e1e4ea;
+  background: rgba(0, 0, 0, 0.08);
+  height: 27px;
+  width: 200px;
+  padding: 7px;
+}
+
+[data-theme='dark'] .input {
+  border: 1px solid #2b303b;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.label {
+  color: #222530;
+  display: block;
+  font-size: 9px;
+  line-height: 13px;
+  padding-left: 5px;
+  margin-bottom: 2px;
+}
+
+[data-theme='dark'] .label {
+  color: #f2f5f8;
+}
+```
 
 ### Compound Pattern (Advanced)
 
-<LiveCode 
+<LiveCode
   code={`function CompoundInputExample() {
   const [value, setValue] = React.useState('');
   
@@ -86,16 +120,16 @@ A headless input component providing accessible form input primitives with compo
 
 ```tsx
 // Compound component (dot notation)
-import { Input } from '@turkish-technology/glide'
+import { Input } from '@turkish-technology/glide';
 
 // Named imports (tree-shakeable)
-import { 
-  InputRoot, 
-  InputField, 
-  InputLabel, 
-  InputDescription, 
-  InputErrorMessage 
-} from '@turkish-technology/glide'
+import {
+  InputRoot,
+  InputField,
+  InputLabel,
+  InputDescription,
+  InputErrorMessage,
+} from '@turkish-technology/glide';
 ```
 
 ## Anatomy
@@ -117,31 +151,31 @@ The Input component follows a compound component pattern with context-based stat
     const isInvalid = email.length > 0 && !emailRegex.test(email);
 
     return (
-      <Input.Root 
-        data-glide-part="root" 
+      <Input.Root
+        data-glide-part="root"
         isInvalid={isInvalid}
         isRequired
-        style={{ 
-          padding: '12px', 
-          border: `1px solid ${isInvalid ? '#ff6b6b' : '#e5e5e5'}`, 
-          borderRadius: '6px' 
+        style={{
+          padding: '12px',
+          border: `1px solid ${isInvalid ? '#ff6b6b' : '#e5e5e5'}`,
+          borderRadius: '6px'
         }}
       >
         <Input.Label data-glide-part="label" style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
           Email Address
         </Input.Label>
-        <Input.Field 
+        <Input.Field
           data-glide-part="field"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
-          style={{ 
-            width: '100%', 
-            padding: '8px 12px', 
-            border: `1px solid ${isInvalid ? '#ff6b6b' : '#ccc'}`, 
-            borderRadius: '4px', 
-            fontSize: '14px' 
+          style={{
+            width: '100%',
+            padding: '8px 12px',
+            border: `1px solid ${isInvalid ? '#ff6b6b' : '#ccc'}`,
+            borderRadius: '4px',
+            fontSize: '14px'
           }}
         />
         <Input.Description data-glide-part="description" style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
@@ -154,7 +188,9 @@ The Input component follows a compound component pattern with context-based stat
         )}
       </Input.Root>
     );
-  })()}
+
+})()}
+
 </AnatomyViewer>
 
 ### Structure
@@ -169,6 +205,7 @@ The Input component follows a compound component pattern with context-based stat
 ```
 
 **Data Flow:**
+
 - **Input.Root**: Context provider that manages validation, disabled, and required states
 - **Input.Field**: Core input element with polymorphic support (input/textarea)
 - **Input.Label**: Associated label element with automatic ID linking
@@ -185,25 +222,32 @@ A simple text input with label and description for user guidance.
   code={`function BasicTextInput() {
   const [value, setValue] = React.useState('');
 
-  return (
-    <Input.Root style={{ padding: '12px', border: '1px solid #e5e5e5', borderRadius: '6px' }}>
-      <Input.Label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
-        Email Address
-      </Input.Label>
-      <Input.Field 
-        type="email"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder="Enter your email"
-        style={{ width: '100%', padding: '8px 12px', border: '1px solid #ccc', borderRadius: '4px', fontSize: '14px' }}
-      />
-      <Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
-        We'll use this to send you important updates
-      </Input.Description>
-    </Input.Root>
-  );
-}`}
-/>
+return (
+
+<Input.Root style={{ padding: '12px', border: '1px solid #e5e5e5', borderRadius: '6px' }}>
+  <Input.Label
+    style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}
+  >
+    Email Address
+  </Input.Label>
+  <Input.Field
+    type='email'
+    value={value}
+    onChange={(e) => setValue(e.target.value)}
+    placeholder='Enter your email'
+    style={{
+      width: '100%',
+      padding: '8px 12px',
+      border: '1px solid #ccc',
+      borderRadius: '4px',
+      fontSize: '14px',
+    }}
+  />
+  <Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+    We'll use this to send you important updates
+  </Input.Description>
+</Input.Root>
+); }`} />
 
 ### Input with Validation
 
@@ -214,58 +258,57 @@ Demonstrates validation state management with error message display and ARIA ann
   const [email, setEmail] = React.useState('');
   const [isInvalid, setIsInvalid] = React.useState(false);
 
-  const handleSubmit = () => {
-    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-    setIsInvalid(!emailRegex.test(email));
-  };
+const handleSubmit = () => {
+const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+setIsInvalid(!emailRegex.test(email));
+};
 
-  return (
-    <div>
-      <Input.Root 
-        isInvalid={isInvalid} 
-        isRequired 
-        style={{ padding: '12px', border: \`1px solid \${isInvalid ? '#ff6b6b' : '#e5e5e5'}\`, borderRadius: '6px' }}
-      >
-        <Input.Label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
-          Email Address
-        </Input.Label>
-        <Input.Field
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="user@example.com"
-          style={{ 
-            width: '100%', 
-            padding: '8px 12px', 
-            border: \`1px solid \${isInvalid ? '#ff6b6b' : '#ccc'}\`, 
-            borderRadius: '4px', 
-            fontSize: '14px' 
+return (
+
+<div>
+<Input.Root
+isInvalid={isInvalid}
+isRequired
+style={{ padding: '12px', border: \`1px solid \${isInvalid ? '#ff6b6b' : '#e5e5e5'}\`, borderRadius: '6px' }} >
+<Input.Label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
+Email Address
+</Input.Label>
+<Input.Field
+type="email"
+value={email}
+onChange={(e) => setEmail(e.target.value)}
+placeholder="user@example.com"
+style={{
+            width: '100%',
+            padding: '8px 12px',
+            border: \`1px solid \${isInvalid ? '#ff6b6b' : '#ccc'}\`,
+            borderRadius: '4px',
+            fontSize: '14px'
           }}
-        />
-        <Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
-          Enter a valid email address for account verification
-        </Input.Description>
-        <Input.ErrorMessage style={{ marginTop: '4px', fontSize: '12px', color: '#ff6b6b' }}>
-          Please enter a valid email address
-        </Input.ErrorMessage>
-      </Input.Root>
-      <button 
-        type="button" 
-        onClick={handleSubmit}
-        style={{ 
-          marginTop: '12px', 
-          padding: '8px 16px', 
-          backgroundColor: '#007bff', 
-          color: 'white', 
-          border: 'none', 
-          borderRadius: '4px', 
-          cursor: 'pointer' 
-        }}
-      >
-        Validate Email
-      </button>
-    </div>
-  );
+/>
+<Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+Enter a valid email address for account verification
+</Input.Description>
+<Input.ErrorMessage style={{ marginTop: '4px', fontSize: '12px', color: '#ff6b6b' }}>
+Please enter a valid email address
+</Input.ErrorMessage>
+</Input.Root>
+<button
+type="button"
+onClick={handleSubmit}
+style={{
+          marginTop: '12px',
+          padding: '8px 16px',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer'
+        }} >
+Validate Email
+</button>
+</div>
+);
 }`}
 />
 
@@ -273,7 +316,7 @@ Demonstrates validation state management with error message display and ARIA ann
 
 Shows polymorphic rendering capability for multi-line text input with proper accessibility.
 
-<LiveCode 
+<LiveCode
   code={`function TextareaInput() {
   const [message, setMessage] = React.useState('');
   
@@ -310,7 +353,7 @@ Shows polymorphic rendering capability for multi-line text input with proper acc
 
 Demonstrates disabled state with proper accessibility attributes and visual indicators.
 
-<LiveCode 
+<LiveCode
   code={`function DisabledInput() {
   return (
     <Input.Root 
@@ -360,86 +403,88 @@ Complete form example with validation, submission, and error handling.
   });
   const [errors, setErrors] = React.useState({});
 
-  const validateForm = () => {
-    const newErrors = {};
-    
+const validateForm = () => {
+const newErrors = {};
+
     if (!formData.name) newErrors.name = 'Name is required';
     if (!formData.email) newErrors.email = 'Email is required';
     else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email';
     }
     if (!formData.message) newErrors.message = 'Message is required';
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log('Form submitted:', formData);
-      alert('Form submitted successfully!');
-    }
-  };
+};
 
-  const formStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-    maxWidth: '400px'
-  };
+const handleSubmit = (e) => {
+e.preventDefault();
+if (validateForm()) {
+console.log('Form submitted:', formData);
+alert('Form submitted successfully!');
+}
+};
 
-  const inputRootStyle = (hasError) => ({
-    padding: '12px',
-    border: \`1px solid \${hasError ? '#ff6b6b' : '#e5e5e5'}\`,
-    borderRadius: '6px'
-  });
+const formStyle = {
+display: 'flex',
+flexDirection: 'column',
+gap: '16px',
+maxWidth: '400px'
+};
 
-  const labelStyle = {
-    display: 'block',
-    marginBottom: '6px',
-    fontSize: '14px',
-    fontWeight: '500'
-  };
+const inputRootStyle = (hasError) => ({
+padding: '12px',
+border: \`1px solid \${hasError ? '#ff6b6b' : '#e5e5e5'}\`,
+borderRadius: '6px'
+});
 
-  const fieldStyle = (hasError) => ({
-    width: '100%',
-    padding: '8px 12px',
-    border: \`1px solid \${hasError ? '#ff6b6b' : '#ccc'}\`,
-    borderRadius: '4px',
-    fontSize: '14px'
-  });
+const labelStyle = {
+display: 'block',
+marginBottom: '6px',
+fontSize: '14px',
+fontWeight: '500'
+};
 
-  const errorStyle = {
-    marginTop: '4px',
-    fontSize: '12px',
-    color: '#ff6b6b'
-  };
+const fieldStyle = (hasError) => ({
+width: '100%',
+padding: '8px 12px',
+border: \`1px solid \${hasError ? '#ff6b6b' : '#ccc'}\`,
+borderRadius: '4px',
+fontSize: '14px'
+});
 
-  const buttonStyle = {
-    padding: '12px 24px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    fontSize: '14px',
-    fontWeight: '500',
-    cursor: 'pointer',
-    marginTop: '8px'
-  };
+const errorStyle = {
+marginTop: '4px',
+fontSize: '12px',
+color: '#ff6b6b'
+};
 
-  return (
-    <form onSubmit={handleSubmit} style={formStyle} noValidate>
-      <Input.Root isInvalid={!!errors.name} isRequired style={inputRootStyle(!!errors.name)}>
-        <Input.Label style={labelStyle}>Full Name</Input.Label>
-        <Input.Field
-          name="name"
-          value={formData.name}
-          onChange={(e) => setFormData({...formData, name: e.target.value})}
-          style={fieldStyle(!!errors.name)}
-        />
-        <Input.ErrorMessage style={errorStyle}>{errors.name}</Input.ErrorMessage>
-      </Input.Root>
+const buttonStyle = {
+padding: '12px 24px',
+backgroundColor: '#007bff',
+color: 'white',
+border: 'none',
+borderRadius: '4px',
+fontSize: '14px',
+fontWeight: '500',
+cursor: 'pointer',
+marginTop: '8px'
+};
+
+return (
+
+<form onSubmit={handleSubmit} style={formStyle} noValidate>
+<Input.Root isInvalid={!!errors.name} isRequired style={inputRootStyle(!!errors.name)}>
+<Input.Label style={labelStyle}>Full Name</Input.Label>
+<Input.Field
+name="name"
+value={formData.name}
+onChange={(e) => setFormData({...formData, name: e.target.value})}
+style={fieldStyle(!!errors.name)}
+/>
+<Input.ErrorMessage style={errorStyle}>{errors.name}</Input.ErrorMessage>
+</Input.Root>
 
       <Input.Root isInvalid={!!errors.email} isRequired style={inputRootStyle(!!errors.email)}>
         <Input.Label style={labelStyle}>Email</Input.Label>
@@ -468,7 +513,8 @@ Complete form example with validation, submission, and error handling.
 
       <button type="submit" style={buttonStyle}>Send Message</button>
     </form>
-  );
+
+);
 }`}
 />
 
@@ -477,28 +523,26 @@ Complete form example with validation, submission, and error handling.
 Using named imports for better bundle optimization:
 
 ```tsx
-import { 
-  InputRoot, 
-  InputField, 
-  InputLabel, 
-  InputDescription, 
-  InputErrorMessage 
+import {
+  InputRoot,
+  InputField,
+  InputLabel,
+  InputDescription,
+  InputErrorMessage,
 } from '@turkish-technology/glide';
 
 function TreeShakeableInput() {
   const [value, setValue] = useState('');
-  
+
   return (
     <InputRoot>
       <InputLabel>Username</InputLabel>
-      <InputField 
+      <InputField
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Enter username"
+        placeholder='Enter username'
       />
-      <InputDescription>
-        Choose a unique username
-      </InputDescription>
+      <InputDescription>Choose a unique username</InputDescription>
     </InputRoot>
   );
 }
@@ -512,17 +556,17 @@ Direct input component function that returns an `InputField` without wrapper. De
 
 **Props**
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `as?` | `ElementType` | `'input'` | Element type for polymorphic rendering |
-| `ref?` | `React.ComponentPropsWithRef<T>['ref']` | `undefined` | Ref for the input element |
-| `type?` | `string` | `'text'` | Input type attribute |
-| `placeholder?` | `string` | `undefined` | Input placeholder text |
-| `value?` | `string` | `undefined` | Controlled input value |
-| `onChange?` | `(event: React.ChangeEvent<HTMLElement>) => void` | `undefined` | Input change handler |
-| `onFocus?` | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Focus event handler |
-| `onBlur?` | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Blur event handler |
-| `...props` | `React.ComponentProps<T>` | - | All standard HTML input/textarea attributes |
+| Name           | Type                                              | Default     | Description                                 |
+| -------------- | ------------------------------------------------- | ----------- | ------------------------------------------- |
+| `as?`          | `ElementType`                                     | `'input'`   | Element type for polymorphic rendering      |
+| `ref?`         | `React.ComponentPropsWithRef<T>['ref']`           | `undefined` | Ref for the input element                   |
+| `type?`        | `string`                                          | `'text'`    | Input type attribute                        |
+| `placeholder?` | `string`                                          | `undefined` | Input placeholder text                      |
+| `value?`       | `string`                                          | `undefined` | Controlled input value                      |
+| `onChange?`    | `(event: React.ChangeEvent<HTMLElement>) => void` | `undefined` | Input change handler                        |
+| `onFocus?`     | `(event: React.FocusEvent<HTMLElement>) => void`  | `undefined` | Focus event handler                         |
+| `onBlur?`      | `(event: React.FocusEvent<HTMLElement>) => void`  | `undefined` | Blur event handler                          |
+| `...props`     | `React.ComponentProps<T>`                         | -           | All standard HTML input/textarea attributes |
 
 **Usage Notes**
 
@@ -538,21 +582,21 @@ The root container that provides context and state management for all input comp
 
 **Props**
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode` | - | Compound input elements |
-| `isInvalid?` | `boolean` | `false` | Input validation state |
-| `isDisabled?` | `boolean` | `false` | Input disabled state |
-| `isRequired?` | `boolean` | `false` | Input required state |
+| Name          | Type        | Default | Description             |
+| ------------- | ----------- | ------- | ----------------------- |
+| `children`    | `ReactNode` | -       | Compound input elements |
+| `isInvalid?`  | `boolean`   | `false` | Input validation state  |
+| `isDisabled?` | `boolean`   | `false` | Input disabled state    |
+| `isRequired?` | `boolean`   | `false` | Input required state    |
 
 **ARIA Attributes**
 
-| Attribute | Value | Purpose | Applied To |
-|-----------|-------|---------|------------|
-| `data-glide-input` | `""` | Identifies input root container | Root element |
-| `data-invalid` | `""` \| `undefined` | Indicates validation state | Root element |
-| `data-disabled` | `""` \| `undefined` | Indicates disabled state | Root element |
-| `data-required` | `""` \| `undefined` | Indicates required state | Root element |
+| Attribute          | Value               | Purpose                         | Applied To   |
+| ------------------ | ------------------- | ------------------------------- | ------------ |
+| `data-glide-input` | `""`                | Identifies input root container | Root element |
+| `data-invalid`     | `""` \| `undefined` | Indicates validation state      | Root element |
+| `data-disabled`    | `""` \| `undefined` | Indicates disabled state        | Root element |
+| `data-required`    | `""` \| `undefined` | Indicates required state        | Root element |
 
 ### Input.Field
 
@@ -560,32 +604,32 @@ The core input element with polymorphic rendering support. Handles focus states,
 
 **Props**
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `as?` | `ElementType` | `'input'` | Element type for polymorphic rendering |
-| `ref?` | `React.ComponentPropsWithRef<T>['ref']` | `undefined` | Ref for the input element |
-| `onFocus?` | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Focus event handler |
-| `onBlur?` | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Blur event handler |
+| Name       | Type                                             | Default     | Description                            |
+| ---------- | ------------------------------------------------ | ----------- | -------------------------------------- |
+| `as?`      | `ElementType`                                    | `'input'`   | Element type for polymorphic rendering |
+| `ref?`     | `React.ComponentPropsWithRef<T>['ref']`          | `undefined` | Ref for the input element              |
+| `onFocus?` | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Focus event handler                    |
+| `onBlur?`  | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Blur event handler                     |
 
 **Events**
 
-| Name | Parameters | Description | When Triggered |
-|------|------------|-------------|----------------|
-| `onFocus` | `(event: React.FocusEvent<HTMLElement>)` | Input gains focus | User clicks or tabs to input |
-| `onBlur` | `(event: React.FocusEvent<HTMLElement>)` | Input loses focus | User clicks away or tabs to next element |
-| `onChange` | `(event: React.ChangeEvent<HTMLElement>)` | Input value changes | User types or modifies input content |
+| Name       | Parameters                                | Description         | When Triggered                           |
+| ---------- | ----------------------------------------- | ------------------- | ---------------------------------------- |
+| `onFocus`  | `(event: React.FocusEvent<HTMLElement>)`  | Input gains focus   | User clicks or tabs to input             |
+| `onBlur`   | `(event: React.FocusEvent<HTMLElement>)`  | Input loses focus   | User clicks away or tabs to next element |
+| `onChange` | `(event: React.ChangeEvent<HTMLElement>)` | Input value changes | User types or modifies input content     |
 
 **ARIA Attributes**
 
-| Attribute | Value | Purpose | Applied To |
-|-----------|-------|---------|------------|
-| `id` | `string` | Unique field identifier | Field element |
-| `aria-labelledby` | `string` | References associated label | Field element |
-| `aria-describedby` | `string` | References description or error | Field element |
-| `aria-required` | `boolean` | Indicates required state | Field element |
-| `aria-invalid` | `boolean` | Indicates validation state | Field element |
-| `data-glide-input-field` | `""` | Identifies input field element | Field element |
-| `data-focused` | `""` \| `undefined` | Indicates focus state | Field element |
+| Attribute                | Value               | Purpose                         | Applied To    |
+| ------------------------ | ------------------- | ------------------------------- | ------------- |
+| `id`                     | `string`            | Unique field identifier         | Field element |
+| `aria-labelledby`        | `string`            | References associated label     | Field element |
+| `aria-describedby`       | `string`            | References description or error | Field element |
+| `aria-required`          | `boolean`           | Indicates required state        | Field element |
+| `aria-invalid`           | `boolean`           | Indicates validation state      | Field element |
+| `data-glide-input-field` | `""`                | Identifies input field element  | Field element |
+| `data-focused`           | `""` \| `undefined` | Indicates focus state           | Field element |
 
 ### Input.Label
 
@@ -593,18 +637,18 @@ The label element that provides accessible labeling for the input field. Automat
 
 **Props**
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode` | - | Label content |
-| `ref?` | `React.Ref<HTMLLabelElement>` | `undefined` | Ref for the label element |
+| Name       | Type                          | Default     | Description               |
+| ---------- | ----------------------------- | ----------- | ------------------------- |
+| `children` | `ReactNode`                   | -           | Label content             |
+| `ref?`     | `React.Ref<HTMLLabelElement>` | `undefined` | Ref for the label element |
 
 **ARIA Attributes**
 
-| Attribute | Value | Purpose | Applied To |
-|-----------|-------|---------|------------|
-| `id` | `string` | Unique label identifier | Label element |
-| `htmlFor` | `string` | Associates with input field | Label element |
-| `data-glide-input-label` | `""` | Identifies input label element | Label element |
+| Attribute                | Value    | Purpose                        | Applied To    |
+| ------------------------ | -------- | ------------------------------ | ------------- |
+| `id`                     | `string` | Unique label identifier        | Label element |
+| `htmlFor`                | `string` | Associates with input field    | Label element |
+| `data-glide-input-label` | `""`     | Identifies input label element | Label element |
 
 ### Input.Description
 
@@ -612,17 +656,17 @@ The description element that provides helper text for the input field. Automatic
 
 **Props**
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode` | - | Description content |
-| `ref?` | `React.Ref<HTMLDivElement>` | `undefined` | Ref for the description element |
+| Name       | Type                        | Default     | Description                     |
+| ---------- | --------------------------- | ----------- | ------------------------------- |
+| `children` | `ReactNode`                 | -           | Description content             |
+| `ref?`     | `React.Ref<HTMLDivElement>` | `undefined` | Ref for the description element |
 
 **ARIA Attributes**
 
-| Attribute | Value | Purpose | Applied To |
-|-----------|-------|---------|------------|
-| `id` | `string` | Unique description identifier | Description element |
-| `data-glide-input-description` | `""` | Identifies input description element | Description element |
+| Attribute                      | Value    | Purpose                              | Applied To          |
+| ------------------------------ | -------- | ------------------------------------ | ------------------- |
+| `id`                           | `string` | Unique description identifier        | Description element |
+| `data-glide-input-description` | `""`     | Identifies input description element | Description element |
 
 ### Input.ErrorMessage
 
@@ -630,37 +674,37 @@ The error message element that announces validation errors to screen readers. Us
 
 **Props**
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode` | - | Error content |
-| `ref?` | `React.Ref<HTMLDivElement>` | `undefined` | Ref for the error element |
+| Name       | Type                        | Default     | Description               |
+| ---------- | --------------------------- | ----------- | ------------------------- |
+| `children` | `ReactNode`                 | -           | Error content             |
+| `ref?`     | `React.Ref<HTMLDivElement>` | `undefined` | Ref for the error element |
 
 **ARIA Attributes**
 
-| Attribute | Value | Purpose | Applied To |
-|-----------|-------|---------|------------|
-| `id` | `string` | Unique error identifier | Error element |
-| `role` | `"alert"` | Announces errors immediately | Error element |
-| `aria-live` | `"assertive"` | Forces screen reader announcement | Error element |
-| `data-glide-input-error` | `""` | Identifies input error element | Error element |
+| Attribute                | Value         | Purpose                           | Applied To    |
+| ------------------------ | ------------- | --------------------------------- | ------------- |
+| `id`                     | `string`      | Unique error identifier           | Error element |
+| `role`                   | `"alert"`     | Announces errors immediately      | Error element |
+| `aria-live`              | `"assertive"` | Forces screen reader announcement | Error element |
+| `data-glide-input-error` | `""`          | Identifies input error element    | Error element |
 
 ## Keyboard Interactions
 
 Complete keyboard behavior for the Input component:
 
-| Key | Action | Context | Notes |
-|-----|--------|---------|-------|
-| `Tab` | Navigate forward | Always | Moves focus to the input field or next focusable element |
-| `Shift + Tab` | Navigate backward | Always | Moves focus to previous focusable element |
-| `Enter` | Submit form | Form context | Submits parent form when input is focused |
-| `Backspace` | Delete character | Text input | Removes character before cursor |
-| `Delete` | Delete character | Text input | Removes character after cursor |
-| `Home` | Move to start | Text input | Moves cursor to beginning of text |
-| `End` | Move to end | Text input | Moves cursor to end of text |
-| `ArrowLeft` | Move left | Text input | Moves cursor one character left |
-| `ArrowRight` | Move right | Text input | Moves cursor one character right |
-| `Ctrl + A` | Select all | Text input | Selects all text in input |
-| `Ctrl + C` | Copy | Text selected | Copies selected text to clipboard |
-| `Ctrl + X` | Cut | Text selected | Cuts selected text to clipboard |
-| `Ctrl + V` | Paste | Text input | Pastes text from clipboard |
-| `Ctrl + Z` | Undo | Text input | Undoes last edit operation |
+| Key           | Action            | Context       | Notes                                                    |
+| ------------- | ----------------- | ------------- | -------------------------------------------------------- |
+| `Tab`         | Navigate forward  | Always        | Moves focus to the input field or next focusable element |
+| `Shift + Tab` | Navigate backward | Always        | Moves focus to previous focusable element                |
+| `Enter`       | Submit form       | Form context  | Submits parent form when input is focused                |
+| `Backspace`   | Delete character  | Text input    | Removes character before cursor                          |
+| `Delete`      | Delete character  | Text input    | Removes character after cursor                           |
+| `Home`        | Move to start     | Text input    | Moves cursor to beginning of text                        |
+| `End`         | Move to end       | Text input    | Moves cursor to end of text                              |
+| `ArrowLeft`   | Move left         | Text input    | Moves cursor one character left                          |
+| `ArrowRight`  | Move right        | Text input    | Moves cursor one character right                         |
+| `Ctrl + A`    | Select all        | Text input    | Selects all text in input                                |
+| `Ctrl + C`    | Copy              | Text selected | Copies selected text to clipboard                        |
+| `Ctrl + X`    | Cut               | Text selected | Cuts selected text to clipboard                          |
+| `Ctrl + V`    | Paste             | Text input    | Pastes text from clipboard                               |
+| `Ctrl + Z`    | Undo              | Text input    | Undoes last edit operation                               |
