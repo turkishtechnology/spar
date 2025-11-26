@@ -12,7 +12,7 @@ import {
   AccordionHeader,
   AccordionTrigger,
   AccordionContent,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 
 # Accordion
 
@@ -96,7 +96,7 @@ import {
   AccordionHeader,
   AccordionTrigger,
   AccordionContent,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 
 function AccordionDemo() {
   return (
@@ -293,7 +293,7 @@ export default AccordionDemo;
 ## Installation
 
 ```sh
-pnpm install @turkish-technology/glide
+pnpm install @turkish-technology/spar
 ```
 
 ```ts
@@ -303,7 +303,7 @@ import {
   AccordionHeader,
   AccordionTrigger,
   AccordionContent,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 ```
 
 ---
@@ -321,37 +321,37 @@ The Accordion component is built as a compound component with multiple parts:
     { name: 'content', label: 'AccordionContent', description: 'Collapsible content panel' },
   ]}
 >
-  <div style={{ width: '500px' }} data-glide-part="root">
+  <div style={{ width: '500px' }} data-spar-part="root">
     <Accordion isCollapsible={true} defaultValue="item1" style={{ padding: '12px' }}>
-      <AccordionItem value="item1" data-glide-part="item">
-        <AccordionHeader data-glide-part="header">
+      <AccordionItem value="item1" data-spar-part="item">
+        <AccordionHeader data-spar-part="header">
           <AccordionTrigger
-            data-glide-part="trigger"
+            data-spar-part="trigger"
             style={{
               width: '100%',
               padding: '12px',
               border: '1px solid #ccc',
             }}
           >
-            {' What is Glide Accordion? '}
+            {' What is Spar Accordion? '}
           </AccordionTrigger>
         </AccordionHeader>
         <AccordionContent
-          data-glide-part="content"
+          data-spar-part="content"
           style={{
             padding: '12px',
             margin: '12px 0',
             border: '1px solid #ccc',
           }}
         >
-          {' Glide Accordion is a headless, accessible React component with no default styling. '}
+          {' Spar Accordion is a headless, accessible React component with no default styling. '}
         </AccordionContent>
       </AccordionItem>
 
-      <AccordionItem value="item2" data-glide-part="item">
-        <AccordionHeader data-glide-part="header">
+      <AccordionItem value="item2" data-spar-part="item">
+        <AccordionHeader data-spar-part="header">
           <AccordionTrigger
-            data-glide-part="trigger"
+            data-spar-part="trigger"
             style={{
               width: '100%',
               padding: '12px',
@@ -362,7 +362,7 @@ The Accordion component is built as a compound component with multiple parts:
           </AccordionTrigger>
         </AccordionHeader>
         <AccordionContent
-          data-glide-part="content"
+          data-spar-part="content"
           style={{
             padding: '12px',
             margin: '12px 0',

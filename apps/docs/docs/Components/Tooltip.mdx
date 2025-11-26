@@ -6,7 +6,7 @@ description: A headless tooltip component that displays informative text when us
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Button } from '@turkish-technology/glide';
+import { Button } from '@turkish-technology/spar';
 import {
   TooltipProvider,
   TooltipRoot,
@@ -14,7 +14,7 @@ import {
   TooltipContent,
   TooltipPortal,
   TooltipArrow,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 
 # Tooltip
 
@@ -61,7 +61,7 @@ import {
   TooltipTrigger,
   TooltipContent,
   TooltipPortal,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 
 function TooltipDemo() {
   return (
@@ -142,7 +142,7 @@ export default TooltipDemo;
 ## Installation
 
 ```sh
-pnpm install @turkish-technology/glide
+pnpm install @turkish-technology/spar
 ```
 
 ```ts
@@ -153,7 +153,7 @@ import {
   TooltipContent,
   TooltipPortal,
   TooltipArrow,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 ```
 
 ---
@@ -176,10 +176,10 @@ The Tooltip component is built as a compound component with multiple parts:
     { name: 'arrow', label: 'TooltipArrow', description: 'Optional arrow element' },
   ]}
 >
-  <div data-glide-part='provider'>
+  <div data-spar-part='provider'>
     <TooltipProvider>
-      <TooltipRoot data-glide-part='root'>
-        <TooltipTrigger data-glide-part='trigger' asChild>
+      <TooltipRoot data-spar-part='root'>
+        <TooltipTrigger data-spar-part='trigger' asChild>
           <button
             style={{
               padding: '12px 24px',
@@ -191,9 +191,9 @@ The Tooltip component is built as a compound component with multiple parts:
             {' Hover or Focus Me '}
           </button>
         </TooltipTrigger>
-        <TooltipPortal data-glide-part='portal'>
+        <TooltipPortal data-spar-part='portal'>
           <TooltipContent
-            data-glide-part='content'
+            data-spar-part='content'
             style={{
               background: '#333',
               color: '#fff',
@@ -203,7 +203,7 @@ The Tooltip component is built as a compound component with multiple parts:
             }}
           >
             {' This is a helpful tooltip message! '}
-            <TooltipArrow data-glide-part='arrow' style={{ fill: '#333' }} />
+            <TooltipArrow data-spar-part='arrow' style={{ fill: '#333' }} />
           </TooltipContent>
         </TooltipPortal>
       </TooltipRoot>

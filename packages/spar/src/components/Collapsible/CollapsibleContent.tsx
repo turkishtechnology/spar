@@ -35,8 +35,8 @@ export const CollapsibleContent = ({
 
     const updateCustomProperties = () => {
       const { width, height } = element.getBoundingClientRect();
-      element.style.setProperty('--glide-collapsible-content-width', `${width}px`);
-      element.style.setProperty('--glide-collapsible-content-height', `${height}px`);
+      element.style.setProperty('--spar-collapsible-content-width', `${width}px`);
+      element.style.setProperty('--spar-collapsible-content-height', `${height}px`);
     };
 
     // Update properties when content becomes visible

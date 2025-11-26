@@ -6,7 +6,7 @@ description: Accessible radio group component for mutually exclusive selections 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Radio, RadioGroup, RadioItem } from '@turkish-technology/glide';
+import { Radio, RadioGroup, RadioItem } from '@turkish-technology/spar';
 
 # Radio
 
@@ -37,7 +37,7 @@ Accessible radio group component for creating mutually exclusive selections with
 ### radio.tsx
 
 ```tsx
-import { Radio } from '@turkish-technology/glide';
+import { Radio } from '@turkish-technology/spar';
 
 function RadioDemo() {
   return (
@@ -101,10 +101,10 @@ input[type='radio']:checked:before {
 
 ```tsx
 // Compound component (recommended)
-import { Radio } from '@turkish-technology/glide';
+import { Radio } from '@turkish-technology/spar';
 
 // Named imports (tree-shakeable)
-import { RadioGroup, RadioItem } from '@turkish-technology/glide';
+import { RadioGroup, RadioItem } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -118,7 +118,7 @@ The Radio component is built as a compound component with two main parts:
   ]}
 >
   <Radio.Group
-    data-glide-part='group'
+    data-spar-part='group'
     defaultValue='option1'
     aria-label='Basic radio group'
     style={{
@@ -130,21 +130,21 @@ The Radio component is built as a compound component with two main parts:
     }}
   >
     <Radio.Item
-      data-glide-part='item'
+      data-spar-part='item'
       value='option1'
       style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
     >
       {' Option 1 '}
     </Radio.Item>
     <Radio.Item
-      data-glide-part='item'
+      data-spar-part='item'
       value='option2'
       style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
     >
       {' Option 2 '}
     </Radio.Item>
     <Radio.Item
-      data-glide-part='item'
+      data-spar-part='item'
       value='option3'
       style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
     >
@@ -166,7 +166,7 @@ The Radio component is built as a compound component with two main parts:
 **Alternative: Tree-shakeable named imports**
 
 ```tsx
-import { RadioGroup, RadioItem } from '@turkish-technology/glide';
+import { RadioGroup, RadioItem } from '@turkish-technology/spar';
 
 <RadioGroup>
   <RadioItem />

@@ -27,7 +27,7 @@ export const BreadcrumbRoot = ({
           ...props,
           'aria-label': ariaLabel,
           'aria-disabled': isDisabled || undefined,
-          'data-glide-breadcrumb-root': '',
+          'data-spar-breadcrumb-root': '',
           'data-disabled': isDisabled || undefined,
         },
         children,

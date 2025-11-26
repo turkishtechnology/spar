@@ -6,7 +6,7 @@ description: Accessible dropdown menu component with keyboard navigation, typeah
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { DropdownMenu } from '@turkish-technology/glide';
+import { DropdownMenu } from '@turkish-technology/spar';
 
 # DropdownMenu
 
@@ -63,7 +63,7 @@ Accessible dropdown menu component for creating interactive command menus with k
 ### dropdown.tsx
 
 ```tsx
-import { DropdownMenu } from '@turkish-technology/glide';
+import { DropdownMenu } from '@turkish-technology/spar';
 
 function DropdownDemo() {
   return
@@ -198,7 +198,7 @@ export default DropdownMenuDemo;
 
 ```tsx
 // Compound component (recommended)
-import { DropdownMenu } from '@turkish-technology/glide';
+import { DropdownMenu } from '@turkish-technology/spar';
 
 // Named imports (tree-shakeable)
 import {
@@ -215,7 +215,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -231,9 +231,9 @@ The DropdownMenu component is built as a compound component with multiple parts:
     { name: 'separator', label: 'Separator', description: 'Visual separator between sections' },
   ]}
 >
-  <DropdownMenu.Root data-glide-part='root'>
+  <DropdownMenu.Root data-spar-part='root'>
     <DropdownMenu.Trigger
-      data-glide-part='trigger'
+      data-spar-part='trigger'
       style={{
         padding: '8px 16px',
         border: '1px solid #ccc',
@@ -245,7 +245,7 @@ The DropdownMenu component is built as a compound component with multiple parts:
       {' Open Menu '}
     </DropdownMenu.Trigger>
     <DropdownMenu.Content
-      data-glide-part='content'
+      data-spar-part='content'
       style={{
         border: '1px solid #ccc',
         borderRadius: '4px',
@@ -254,17 +254,17 @@ The DropdownMenu component is built as a compound component with multiple parts:
         minWidth: '180px',
       }}
     >
-      <DropdownMenu.Item data-glide-part='item' style={{ padding: '8px 12px', cursor: 'pointer' }}>
+      <DropdownMenu.Item data-spar-part='item' style={{ padding: '8px 12px', cursor: 'pointer' }}>
         {' New File '}
       </DropdownMenu.Item>
-      <DropdownMenu.Item data-glide-part='item' style={{ padding: '8px 12px', cursor: 'pointer' }}>
+      <DropdownMenu.Item data-spar-part='item' style={{ padding: '8px 12px', cursor: 'pointer' }}>
         {' Save '}
       </DropdownMenu.Item>
       <DropdownMenu.Separator
-        data-glide-part='separator'
+        data-spar-part='separator'
         style={{ height: '1px', background: '#e0e0e0', margin: '4px 0' }}
       />
-      <DropdownMenu.Item data-glide-part='item' style={{ padding: '8px 12px', cursor: 'pointer' }}>
+      <DropdownMenu.Item data-spar-part='item' style={{ padding: '8px 12px', cursor: 'pointer' }}>
         {' Exit '}
       </DropdownMenu.Item>
     </DropdownMenu.Content>
@@ -305,7 +305,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 
 <DropdownMenuRoot>
   <DropdownMenuTrigger />

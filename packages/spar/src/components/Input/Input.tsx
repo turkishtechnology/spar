@@ -40,7 +40,7 @@ export const InputRoot = ({
     <InputContext.Provider value={contextValue}>
       <div
         {...props}
-        data-glide-input
+        data-spar-input
         data-invalid={isInvalid ? '' : undefined}
         data-disabled={isDisabled ? '' : undefined}
         data-required={isRequired ? '' : undefined}

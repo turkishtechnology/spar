@@ -9,7 +9,7 @@ export const InputDescription = ({ children, ref, ...props }: InputDescriptionPr
   const context = useInputContext();
 
   return (
-    <div {...props} ref={ref} id={context.descriptionId} data-glide-input-description>
+    <div {...props} ref={ref} id={context.descriptionId} data-spar-input-description>
       {children}
     </div>
   );

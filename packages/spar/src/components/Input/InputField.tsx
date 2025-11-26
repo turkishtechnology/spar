@@ -38,7 +38,7 @@ export const InputField = <T extends ElementType = 'input'>({
         }
         onFocus={handleFocus}
         onBlur={handleBlur}
-        data-glide-input
+        data-spar-input
         data-focused={focused ? '' : undefined}
       />
     );
@@ -61,7 +61,7 @@ export const InputField = <T extends ElementType = 'input'>({
       required={context.isRequired}
       onFocus={handleFocus}
       onBlur={handleBlur}
-      data-glide-input-field
+      data-spar-input-field
       data-focused={focused ? '' : undefined}
     />
   );

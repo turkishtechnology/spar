@@ -13,7 +13,7 @@ import {
   BreadcrumbLink,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 
 # Breadcrumb
 
@@ -58,7 +58,7 @@ import {
   BreadcrumbLink,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 
 function BreadcrumbDemo() {
   return (
@@ -259,7 +259,7 @@ const Icon = item.Icon;
 ## Installation
 
 ```bash
-pnpm add @turkish-technology/glide
+pnpm add @turkish-technology/spar
 ```
 
 ```tsx
@@ -270,7 +270,7 @@ import {
   BreadcrumbLink,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -292,11 +292,11 @@ The Breadcrumb component is built as a compound component with multiple parts:
   ]}
 >
   <BreadcrumbRoot
-    data-glide-part='root'
+    data-spar-part='root'
     style={{ padding: '16px', border: '1px solid #e0e0e0', borderRadius: '8px' }}
   >
     <BreadcrumbList
-      data-glide-part='list'
+      data-spar-part='list'
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -305,9 +305,9 @@ The Breadcrumb component is built as a compound component with multiple parts:
         padding: 0,
       }}
     >
-      <BreadcrumbItem data-glide-part='item' style={{ margin: 0, padding: 0 }}>
+      <BreadcrumbItem data-spar-part='item' style={{ margin: 0, padding: 0 }}>
         <BreadcrumbLink
-          data-glide-part='link'
+          data-spar-part='link'
           href='/'
           style={{
             color: '#0066cc',
@@ -319,14 +319,14 @@ The Breadcrumb component is built as a compound component with multiple parts:
         </BreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbSeparator
-        data-glide-part='separator'
+        data-spar-part='separator'
         style={{ color: '#666', margin: '0 8px', display: 'flex', alignItems: 'center' }}
       >
         {' › '}
       </BreadcrumbSeparator>
-      <BreadcrumbItem data-glide-part='item' style={{ margin: 0, padding: 0 }}>
+      <BreadcrumbItem data-spar-part='item' style={{ margin: 0, padding: 0 }}>
         <BreadcrumbLink
-          data-glide-part='link'
+          data-spar-part='link'
           href='/products'
           style={{
             color: '#0066cc',
@@ -338,13 +338,13 @@ The Breadcrumb component is built as a compound component with multiple parts:
         </BreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbSeparator
-        data-glide-part='separator'
+        data-spar-part='separator'
         style={{ color: '#666', margin: '0 8px', display: 'flex', alignItems: 'center' }}
       >
         {' › '}
       </BreadcrumbSeparator>
-      <BreadcrumbItem data-glide-part='item' style={{ margin: 0, padding: 0 }}>
-        <BreadcrumbPage data-glide-part='page' style={{ color: '#333', fontWeight: '500' }}>
+      <BreadcrumbItem data-spar-part='item' style={{ margin: 0, padding: 0 }}>
+        <BreadcrumbPage data-spar-part='page' style={{ color: '#333', fontWeight: '500' }}>
           {' Current Page '}
         </BreadcrumbPage>
       </BreadcrumbItem>
