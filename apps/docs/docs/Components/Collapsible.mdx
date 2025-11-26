@@ -6,7 +6,7 @@ description: A headless collapsible component that manages the visibility of con
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/glide';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
 
 # Collapsible
 
@@ -47,7 +47,7 @@ return (
 ### collapsible.tsx
 
 ```tsx
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/glide';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
 
 function CollapsibleDemo() {
   return (
@@ -140,13 +140,13 @@ export default CollapsibleDemo;
 ## Installation
 
 ```bash
-pnpm install @turkish-technology/glide
+pnpm install @turkish-technology/spar
 ```
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 // or
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/glide';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -160,9 +160,9 @@ The Collapsible component consists of three main parts:
     { name: 'content', label: 'CollapsibleContent', description: 'Collapsible content container' },
   ]}
 >
-  <Collapsible data-glide-part='root' style={{ width: '100%' }}>
+  <Collapsible data-spar-part='root' style={{ width: '100%' }}>
     <CollapsibleTrigger
-      data-glide-part='trigger'
+      data-spar-part='trigger'
       style={{
         padding: '10px 16px',
         background: '#f5f5f5',
@@ -179,7 +179,7 @@ The Collapsible component consists of three main parts:
       {' Show Content '}
     </CollapsibleTrigger>
     <CollapsibleContent
-      data-glide-part='content'
+      data-spar-part='content'
       style={{
         marginTop: '8px',
         padding: '12px',
@@ -213,7 +213,7 @@ The Collapsible component consists of three main parts:
 ### Basic Usage
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 
 function BasicCollapsible() {
   return (
@@ -230,7 +230,7 @@ function BasicCollapsible() {
 ### Controlled State
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 import { useState } from 'react';
 
 function ControlledCollapsible() {
@@ -253,7 +253,7 @@ function ControlledCollapsible() {
 ### Default Open State
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 
 function DefaultOpenCollapsible() {
   return (
@@ -270,7 +270,7 @@ function DefaultOpenCollapsible() {
 ### Custom Trigger Element
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 
 function CustomTriggerCollapsible() {
   return (
@@ -289,7 +289,7 @@ function CustomTriggerCollapsible() {
 ### Force Mount Content
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 
 function ForceMountCollapsible() {
   return (
@@ -307,7 +307,7 @@ function ForceMountCollapsible() {
 ### Disabled State
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 
 function DisabledCollapsible() {
   return (
@@ -412,8 +412,8 @@ Container that shows/hides based on the collapsible state with advanced features
 
 | Property                             | Description                      | When Available       |
 | ------------------------------------ | -------------------------------- | -------------------- |
-| `--glide-collapsible-content-width`  | Current content width in pixels  | When content is open |
-| `--glide-collapsible-content-height` | Current content height in pixels | When content is open |
+| `--spar-collapsible-content-width`  | Current content width in pixels  | When content is open |
+| `--spar-collapsible-content-height` | Current content height in pixels | When content is open |
 
 ## Keyboard Interactions
 

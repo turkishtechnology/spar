@@ -73,7 +73,7 @@ export const BreadcrumbLink = ({
     tabIndex: linkIsDisabled ? -1 : undefined,
     onClick: handleClick,
     onKeyDown: handleKeyDown,
-    'data-glide-breadcrumb-link': '',
+    'data-spar-breadcrumb-link': '',
     'data-disabled': linkIsDisabled || undefined,
     'data-external': isExternal || undefined,
   };

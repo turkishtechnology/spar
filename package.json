@@ -1,20 +1,20 @@
 {
-  "name": "glide",
+  "name": "spar",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "dev:docs": "pnpm --filter @turkish-technology/glide build && pnpm --filter @turkish-technology/docs start",
+    "dev:docs": "pnpm --filter @turkish-technology/spar build && pnpm --filter @turkish-technology/docs start",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,mdx,json,yml,yaml,css,scss}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx,json,yml,yaml,css,scss}\"",
     "check-types": "turbo run check-types",
     "prepare": "husky",
-    "version:glide": "pnpm --filter @turkish-technology/glide version",
-    "publish:glide": "pnpm --filter @turkish-technology/glide publish --no-git-checks",
-    "publish:glide:dry": "pnpm --filter @turkish-technology/glide publish --dry-run --no-git-checks"
+    "version:spar": "pnpm --filter @turkish-technology/spar version",
+    "publish:spar": "pnpm publish --filter @turkish-technology/spar --no-git-checks --provenance",
+    "publish:spar:dry": "pnpm --filter @turkish-technology/spar publish --dry-run --no-git-checks"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

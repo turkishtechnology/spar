@@ -6,7 +6,7 @@ description: A headless, accessible tabs component with full keyboard navigation
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/glide';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/spar';
 
 # Tabs
 
@@ -45,7 +45,7 @@ A headless, accessible tabs component that provides complete keyboard navigation
 ### tabs.tsx
 
 ```tsx
-import { Tabs } from '@turkish-technology/glide';
+import { Tabs } from '@turkish-technology/spar';
 
 function TabsDemo() {
   return (
@@ -143,7 +143,7 @@ export default TabsDemo;
 ## Installation
 
 ```tsx
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/glide';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -175,14 +175,14 @@ The Tabs component consists of multiple compound parts that work together:
   ]}
 >
   <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
-    <Tabs defaultValue='overview' data-glide-part='root'>
+    <Tabs defaultValue='overview' data-spar-part='root'>
       <TabsList
-        data-glide-part='list'
+        data-spar-part='list'
         style={{ display: 'flex', borderBottom: '1px solid #ddd', marginBottom: '16px' }}
       >
         <TabsTrigger
           value='overview'
-          data-glide-part='trigger'
+          data-spar-part='trigger'
           style={{
             padding: '8px 16px',
             border: 'none',
@@ -195,7 +195,7 @@ The Tabs component consists of multiple compound parts that work together:
         </TabsTrigger>
         <TabsTrigger
           value='details'
-          data-glide-part='trigger'
+          data-spar-part='trigger'
           style={{
             padding: '8px 16px',
             border: 'none',
@@ -207,11 +207,11 @@ The Tabs component consists of multiple compound parts that work together:
           {' Details '}
         </TabsTrigger>
       </TabsList>
-      <TabsContent value='overview' data-glide-part='content'>
+      <TabsContent value='overview' data-spar-part='content'>
         <h4>{' Overview Panel '}</h4>
         <p>{' This is the overview content panel. '}</p>
       </TabsContent>
-      <TabsContent value='details' data-glide-part='content'>
+      <TabsContent value='details' data-spar-part='content'>
         <h4>{' Details Panel '}</h4>
         <p>{' This is the details content panel. '}</p>
       </TabsContent>

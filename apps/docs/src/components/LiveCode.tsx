@@ -45,7 +45,7 @@ import {
   TooltipArrow,
   Select,
   DropdownMenu,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 
 interface LiveCodeProps {
   title?: string;
@@ -140,7 +140,7 @@ const LiveCode: React.FC<LiveCodeProps> = ({ title, code, theme }) => {
     TabsList,
     TabsTrigger,
     TabsContent,
-    // Glide Tooltip components
+    // Spar Tooltip components
     TooltipProvider,
     TooltipRoot,
     TooltipTrigger,

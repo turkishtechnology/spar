@@ -1,20 +1,20 @@
-# @turkish-technology/glide
+# @turkish-technology/spar
 
 A minimal React 19 + TypeScript library scaffold.
 
 ## Installation
 
 ```bash
-pnpm add @turkish-technology/glide
+pnpm add @turkish-technology/spar
 ```
 
 ## Usage
 
 ```tsx
 // Public API is currently minimal. Extend via `src/hooks`, `src/utils`, and `src/types`.
-import * as Glide from '@turkish-technology/glide';
+import * as Spar from '@turkish-technology/spar';
 
-console.log(Glide);
+console.log(Spar);
 ```
 
 ## Development

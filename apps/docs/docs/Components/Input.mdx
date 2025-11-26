@@ -6,7 +6,7 @@ description: A headless input component with compound pattern support, full acce
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Input } from '@turkish-technology/glide';
+import { Input } from '@turkish-technology/spar';
 
 # Input
 
@@ -36,7 +36,7 @@ return (
 ### input.tsx
 
 ```tsx
-import { Input } from '@turkish-technology/glide';
+import { Input } from '@turkish-technology/spar';
 
 function InputDemo() {
   return (
@@ -120,7 +120,7 @@ export default InputDemo;
 
 ```tsx
 // Compound component (dot notation)
-import { Input } from '@turkish-technology/glide';
+import { Input } from '@turkish-technology/spar';
 
 // Named imports (tree-shakeable)
 import {
@@ -129,7 +129,7 @@ import {
   InputLabel,
   InputDescription,
   InputErrorMessage,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -152,7 +152,7 @@ The Input component follows a compound component pattern with context-based stat
 
     return (
       <Input.Root
-        data-glide-part="root"
+        data-spar-part="root"
         isInvalid={isInvalid}
         isRequired
         style={{
@@ -161,11 +161,11 @@ The Input component follows a compound component pattern with context-based stat
           borderRadius: '6px'
         }}
       >
-        <Input.Label data-glide-part="label" style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
+        <Input.Label data-spar-part="label" style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
           Email Address
         </Input.Label>
         <Input.Field
-          data-glide-part="field"
+          data-spar-part="field"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -178,11 +178,11 @@ The Input component follows a compound component pattern with context-based stat
             fontSize: '14px'
           }}
         />
-        <Input.Description data-glide-part="description" style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+        <Input.Description data-spar-part="description" style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
           We'll use this to send you important updates
         </Input.Description>
         {isInvalid && (
-          <Input.ErrorMessage data-glide-part="errorMessage" style={{ marginTop: '4px', fontSize: '12px', color: '#ff6b6b' }}>
+          <Input.ErrorMessage data-spar-part="errorMessage" style={{ marginTop: '4px', fontSize: '12px', color: '#ff6b6b' }}>
             Please enter a valid email address
           </Input.ErrorMessage>
         )}
@@ -529,7 +529,7 @@ import {
   InputLabel,
   InputDescription,
   InputErrorMessage,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 
 function TreeShakeableInput() {
   const [value, setValue] = useState('');
@@ -593,7 +593,7 @@ The root container that provides context and state management for all input comp
 
 | Attribute          | Value               | Purpose                         | Applied To   |
 | ------------------ | ------------------- | ------------------------------- | ------------ |
-| `data-glide-input` | `""`                | Identifies input root container | Root element |
+| `data-spar-input` | `""`                | Identifies input root container | Root element |
 | `data-invalid`     | `""` \| `undefined` | Indicates validation state      | Root element |
 | `data-disabled`    | `""` \| `undefined` | Indicates disabled state        | Root element |
 | `data-required`    | `""` \| `undefined` | Indicates required state        | Root element |
@@ -628,7 +628,7 @@ The core input element with polymorphic rendering support. Handles focus states,
 | `aria-describedby`       | `string`            | References description or error | Field element |
 | `aria-required`          | `boolean`           | Indicates required state        | Field element |
 | `aria-invalid`           | `boolean`           | Indicates validation state      | Field element |
-| `data-glide-input-field` | `""`                | Identifies input field element  | Field element |
+| `data-spar-input-field` | `""`                | Identifies input field element  | Field element |
 | `data-focused`           | `""` \| `undefined` | Indicates focus state           | Field element |
 
 ### Input.Label
@@ -648,7 +648,7 @@ The label element that provides accessible labeling for the input field. Automat
 | ------------------------ | -------- | ------------------------------ | ------------- |
 | `id`                     | `string` | Unique label identifier        | Label element |
 | `htmlFor`                | `string` | Associates with input field    | Label element |
-| `data-glide-input-label` | `""`     | Identifies input label element | Label element |
+| `data-spar-input-label` | `""`     | Identifies input label element | Label element |
 
 ### Input.Description
 
@@ -666,7 +666,7 @@ The description element that provides helper text for the input field. Automatic
 | Attribute                      | Value    | Purpose                              | Applied To          |
 | ------------------------------ | -------- | ------------------------------------ | ------------------- |
 | `id`                           | `string` | Unique description identifier        | Description element |
-| `data-glide-input-description` | `""`     | Identifies input description element | Description element |
+| `data-spar-input-description` | `""`     | Identifies input description element | Description element |
 
 ### Input.ErrorMessage
 
@@ -686,7 +686,7 @@ The error message element that announces validation errors to screen readers. Us
 | `id`                     | `string`      | Unique error identifier           | Error element |
 | `role`                   | `"alert"`     | Announces errors immediately      | Error element |
 | `aria-live`              | `"assertive"` | Forces screen reader announcement | Error element |
-| `data-glide-input-error` | `""`          | Identifies input error element    | Error element |
+| `data-spar-input-error` | `""`          | Identifies input error element    | Error element |
 
 ## Keyboard Interactions
 

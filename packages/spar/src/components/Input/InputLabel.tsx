@@ -14,7 +14,7 @@ export const InputLabel = ({ children, ref, ...props }: InputLabelProps) => {
       ref={ref}
       id={context.labelId}
       htmlFor={context.fieldId}
-      data-glide-input-label
+      data-spar-input-label
     >
       {children}
     </label>

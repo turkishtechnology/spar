@@ -1,12 +1,12 @@
 [
   {
-    "name": "@turkish-technology/glide (ESM)",
+    "name": "@turkish-technology/spar (ESM)",
     "path": "dist/index.esm.js",
     "limit": "50 KB",
     "gzip": true
   },
   {
-    "name": "@turkish-technology/glide (CJS)",
+    "name": "@turkish-technology/spar (CJS)",
     "path": "dist/index.js",
     "limit": "50 KB",
     "gzip": true
