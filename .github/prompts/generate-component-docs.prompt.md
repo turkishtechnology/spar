@@ -1,7 +1,7 @@
 ---
 mode: agent
 model: Claude Opus 4.1
-description: Generate comprehensive documentation for Glide components
+description: Generate comprehensive documentation for Spar components
 ---
 
 # Documentation Generator
@@ -32,7 +32,7 @@ Generate documentation for **${input:ComponentName:Button}** component.
 5. **Anatomy Viewer**
    - Interactive anatomy using AnatomyViewer component
    - **Use the exact same demo code from LiveCode section**
-   - Add data-glide-part attributes to each compound part
+   - Add data-spar-part attributes to each compound part
    - All compound parts with names, labels, and descriptions
    - Basic inline styles for visibility (same as LiveCode)
    - Structure code block after the viewer
@@ -50,7 +50,7 @@ Generate documentation for **${input:ComponentName:Button}** component.
 - **TypeScript First**: All examples use strict TypeScript
 - **Accessibility Detailed**: Document ARIA patterns, keyboard navigation
 - **Complete API**: All props, events, methods, keyboard interactions documented with exact TypeScript types
-- **Demo Consistency**: AnatomyViewer must use the exact same demo code as LiveCode section, only adding data-glide-part attributes
+- **Demo Consistency**: AnatomyViewer must use the exact same demo code as LiveCode section, only adding data-spar-part attributes
 
 ## File Location
 
@@ -64,10 +64,10 @@ Create documentation at: `apps/docs/docs/Components/${ComponentName}.mdx`
   - `import React from 'react';`
   - `import LiveCode from '../../src/components/LiveCode';`
   - `import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';`
-  - `import { [ComponentName] } from '@turkish-technology/glide';`
+  - `import { [ComponentName] } from '@turkish-technology/spar';`
 - **Docusaurus Frontmatter**: SEO metadata, sidebar position, title, description
 - **LiveCode Example**: Only one, minimal, accessibility-focused
-- **AnatomyViewer**: Same demo as LiveCode + data-glide-part attributes + parts array
+- **AnatomyViewer**: Same demo as LiveCode + data-spar-part attributes + parts array
 - **Code Examples**: Static, progressive, TypeScript, headless, accessible
   - Use line highlighting for important sections: `tsx {1,4-6,11}`
   - Highlight state management, event handlers, accessibility props
@@ -83,7 +83,7 @@ Create documentation at: `apps/docs/docs/Components/${ComponentName}.mdx`
 - **Structure Compliance**: Follows 7-section structure exactly
 - **Compound Documentation**: All compound parts documented separately
 - **LiveCode Functionality**: Example renders correctly
-- **AnatomyViewer Consistency**: Uses same demo as LiveCode with data-glide-part attributes
+- **AnatomyViewer Consistency**: Uses same demo as LiveCode with data-spar-part attributes
 - **Headless Implementation**: No styling opinions
 - **API Completeness**: All props, events, methods with exact TypeScript types
 - **Keyboard Documentation**: Complete keyboard behavior table
@@ -92,7 +92,7 @@ Create documentation at: `apps/docs/docs/Components/${ComponentName}.mdx`
 
 - [ ] Component TypeScript interfaces analyzed
 - [ ] All compound parts identified and documented
-- [ ] AnatomyViewer uses same demo as LiveCode with data-glide-part attributes
+- [ ] AnatomyViewer uses same demo as LiveCode with data-spar-part attributes
 - [ ] All parts have clear names, labels, and descriptions
 - [ ] Accessibility implementation verified and explained
 - [ ] Real examples tested with component

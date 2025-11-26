@@ -1,4 +1,4 @@
-# Dialog — Glide Headless Instructions
+# Dialog — Spar Headless Instructions
 
 ## 1. Component Overview
 
@@ -418,7 +418,7 @@ describe('Dialog Integration', () => {
 For teams migrating from other dialog libraries:
 
 **From React Modal/similar:**
-- Keep `isOpen` prop pattern (consistent with Glide standards)
+- Keep `isOpen` prop pattern (consistent with Spar standards)
 - Update focus management to use built-in trapping
 - Migrate overlay click handling to `onPointerDownOutside` or `onInteractOutside`
 - Replace custom portal logic with `Dialog.Portal`

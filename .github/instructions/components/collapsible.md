@@ -1,4 +1,4 @@
-# Collapsible — Glide Headless Instructions
+# Collapsible — Spar Headless Instructions
 
 ## 1. Component Overview
 
@@ -278,8 +278,8 @@ All components automatically receive data attributes for styling:
 ### CSS Custom Properties
 The content component exposes CSS custom properties for smooth animations:
 
-- `--glide-collapsible-content-width`: Current content width in pixels
-- `--glide-collapsible-content-height`: Current content height in pixels
+- `--spar-collapsible-content-width`: Current content width in pixels
+- `--spar-collapsible-content-height`: Current content height in pixels
 
 These properties are automatically updated and can be used for height/width transitions.
 
@@ -322,7 +322,7 @@ These properties are automatically updated and can be used for height/width tran
 }
 
 [data-state="open"] .collapsible-content {
-  height: var(--glide-collapsible-content-height);
+  height: var(--spar-collapsible-content-height);
 }
 
 /* Alternative: Width-based transitions */
@@ -336,7 +336,7 @@ These properties are automatically updated and can be used for height/width tran
 }
 
 [data-state="open"] .collapsible-content-horizontal {
-  width: var(--glide-collapsible-content-width);
+  width: var(--spar-collapsible-content-width);
 }
 
 /* Fade transition for content */
@@ -473,7 +473,7 @@ __tests__/
 
 **Issue: Content doesn't animate properly**
 - Solution: Ensure CSS transitions target the correct data attributes
-- Use CSS custom properties (`--glide-collapsible-content-height`) for smooth height transitions
+- Use CSS custom properties (`--spar-collapsible-content-height`) for smooth height transitions
 - Set `overflow: hidden` on animating container
 
 **Issue: Focus lost after toggle**

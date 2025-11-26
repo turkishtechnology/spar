@@ -1,4 +1,4 @@
-# Checkbox — Glide Headless Instructions
+# Checkbox — Spar Headless Instructions
 
 ## 1. Component Overview
 
@@ -287,7 +287,7 @@ const useCheckboxState = (props: CheckboxProps) => {
 - Test keyboard navigation
 
 **From other libraries:**
-- Map existing props to Glide API
+- Map existing props to Spar API
 - Update styling to use data attributes
 - Verify accessibility improvements
 - Test form integration

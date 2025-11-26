@@ -4,7 +4,7 @@ model: Claude Sonnet 4 (copilot)
 description: Apply coding standards to component specifications or generated code
 ---
 
-# Glide Coding Standards Application
+# Spar Coding Standards Application
 
 Apply the coding standards from `.github/instructions/coding-standards.instructions.md` to refine the **${input:ComponentName:Button}** component ${input:Target:spec or code}.
 
