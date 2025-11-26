@@ -47,6 +47,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Publish to NPM
-        run: pnpm run publish:glide
+        run: pnpm run publish:spar
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
