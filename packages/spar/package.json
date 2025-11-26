@@ -1,5 +1,5 @@
 {
-  "name": "@turkish-technology/glide",
+  "name": "@turkish-technology/spar",
   "version": "0.1.0",
   "description": "A modern headless React component library providing unstyled, accessible UI primitives",
   "type": "module",
@@ -50,7 +50,7 @@
   "repository": {
     "type": "git",
     "url": "",
-    "directory": "packages/glide"
+    "directory": "packages/spar"
   },
   "author": {
     "name": "Turkish Technology",
@@ -95,7 +95,7 @@
   "keywords": [
     "react",
     "react-components",
-    "glide",
+    "spar",
     "headless-ui",
     "headless-components",
     "accessible",

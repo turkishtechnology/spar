@@ -16,7 +16,7 @@ export const BreadcrumbSeparator = ({
     {
       ...props,
       'aria-hidden': ariaHidden,
-      'data-glide-breadcrumb-separator': '',
+      'data-spar-breadcrumb-separator': '',
     },
     children,
   );

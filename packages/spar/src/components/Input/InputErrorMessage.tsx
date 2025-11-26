@@ -19,7 +19,7 @@ export const InputErrorMessage = ({ children, ref, ...props }: InputErrorMessage
       id={context.errorId}
       role='alert'
       aria-live='assertive'
-      data-glide-input-error
+      data-spar-input-error
     >
       {children}
     </div>

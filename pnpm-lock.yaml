@@ -61,9 +61,9 @@ importers:
       '@mdx-js/react':
         specifier: ^3.0.0
         version: 3.1.1(@types/react@19.1.12)(react@19.1.1)
-      '@turkish-technology/glide':
+      '@turkish-technology/spar':
         specifier: workspace:*
-        version: link:../../packages/glide
+        version: link:../../packages/spar
       clsx:
         specifier: ^2.0.0
         version: 2.1.1
@@ -99,7 +99,7 @@ importers:
         specifier: ~5.6.2
         version: 5.6.3
 
-  packages/glide:
+  packages/spar:
     dependencies:
       '@floating-ui/react-dom':
         specifier: ^2.1.6

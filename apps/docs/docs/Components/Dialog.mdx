@@ -6,7 +6,7 @@ description: Accessible modal and non-modal dialog component with focus manageme
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Button, Dialog } from '@turkish-technology/glide';
+import { Button, Dialog } from '@turkish-technology/spar';
 
 # Dialog
 
@@ -55,7 +55,7 @@ A headless modal and non-modal dialog component that provides accessibility feat
 ### dialog.tsx
 
 ```tsx
-import { Button, Dialog } from '@turkish-technology/glide';
+import { Button, Dialog } from '@turkish-technology/spar';
 
 function DialogDemo() {
   return (
@@ -197,7 +197,7 @@ export default DialogDemo;
 ## Installation
 
 ```tsx
-import { Dialog } from '@turkish-technology/glide';
+import { Dialog } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -224,9 +224,9 @@ The Dialog component is built as a compound component with multiple parts:
     { name: 'close', label: 'Close', description: 'Button that closes the dialog' },
   ]}
 >
-  <Dialog.Root data-glide-part='root'>
+  <Dialog.Root data-spar-part='root'>
     <Dialog.Trigger
-      data-glide-part='trigger'
+      data-spar-part='trigger'
       style={{
         padding: '8px 16px',
         border: '1px solid #ccc',
@@ -237,9 +237,9 @@ The Dialog component is built as a compound component with multiple parts:
     >
       {'Open Dialog'}
     </Dialog.Trigger>
-    <Dialog.Portal data-glide-part='portal'>
+    <Dialog.Portal data-spar-part='portal'>
       <Dialog.Overlay
-        data-glide-part='overlay'
+        data-spar-part='overlay'
         style={{
           position: 'fixed',
           inset: 0,
@@ -247,7 +247,7 @@ The Dialog component is built as a compound component with multiple parts:
         }}
       />
       <Dialog.Content
-        data-glide-part='content'
+        data-spar-part='content'
         style={{
           position: 'fixed',
           top: '50%',
@@ -261,19 +261,19 @@ The Dialog component is built as a compound component with multiple parts:
         }}
       >
         <Dialog.Title
-          data-glide-part='title'
+          data-spar-part='title'
           style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}
         >
           {'Dialog Title'}
         </Dialog.Title>
         <Dialog.Description
-          data-glide-part='description'
+          data-spar-part='description'
           style={{ color: '#666', marginBottom: '16px' }}
         >
           {'This is a basic dialog example with proper accessibility features.'}
         </Dialog.Description>
         <Dialog.Close
-          data-glide-part='close'
+          data-spar-part='close'
           style={{
             padding: '8px 16px',
             border: '1px solid #ccc',

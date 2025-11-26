@@ -6,7 +6,7 @@ description: A headless boolean toggle control for on/off states with comprehens
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Switch } from '@turkish-technology/glide';
+import { Switch } from '@turkish-technology/spar';
 
 # Switch
 
@@ -38,7 +38,7 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
 ### switch.tsx
 
 ```tsx
-import { Switch } from '@turkish-technology/glide';
+import { Switch } from '@turkish-technology/spar';
 
 function SwitchDemo() {
   return <Switch className='switch' checked={isEnabled} onChange={setIsEnabled}></Switch>;
@@ -99,7 +99,7 @@ export default SwitchDemo;
 ## Installation
 
 ```tsx
-import { Switch } from '@turkish-technology/glide';
+import { Switch } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -117,7 +117,7 @@ The Switch component is a single element that handles all switch functionality i
 >
   <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
     <Switch
-      data-glide-part='switch'
+      data-spar-part='switch'
       defaultChecked={true}
       style={{
         padding: '8px 16px',

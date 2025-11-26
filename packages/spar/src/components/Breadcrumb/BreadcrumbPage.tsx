@@ -11,7 +11,7 @@ export const BreadcrumbPage = ({ as = 'span', children, ...props }: BreadcrumbPa
     {
       ...props,
       'aria-current': 'page',
-      'data-glide-breadcrumb-page': '',
+      'data-spar-breadcrumb-page': '',
       'data-current': 'true',
     },
     children,

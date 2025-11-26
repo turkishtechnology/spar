@@ -6,7 +6,7 @@ description: A headless, accessible label component for form controls that estab
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Label } from '@turkish-technology/glide';
+import { Label } from '@turkish-technology/spar';
 
 # Label
 
@@ -33,7 +33,7 @@ A headless, accessible label component for form controls that establishes progra
 ### label.tsx
 
 ```tsx
-import { Label } from '@turkish-technology/glide';
+import { Label } from '@turkish-technology/spar';
 
 function LabelDemo() {
   return <Label className='label'>Label</Label>;
@@ -67,7 +67,7 @@ export default LabelDemo;
 ## Installation
 
 ```tsx
-import { Label } from '@turkish-technology/glide';
+import { Label } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -84,7 +84,7 @@ The Label component is a simple, single-element component that provides accessib
   ]}
 >
   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <Label htmlFor='username' isRequired data-glide-part='label' style={{ fontWeight: 'bold' }}>
+    <Label htmlFor='username' isRequired data-spar-part='label' style={{ fontWeight: 'bold' }}>
       {' Username '}
     </Label>
     <input
