@@ -1,6 +1,6 @@
 {
   "name": "@turkish-technology/spar",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A modern headless React component library providing unstyled, accessible UI primitives",
   "type": "module",
   "main": "./dist/index.js",
