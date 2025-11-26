@@ -8,20 +8,20 @@ const AnatomyViewer: React.FC<AnatomyViewerProps> = ({ parts, children }) => {
   const handlePartEnter = (partName: string) => {
     setHoveredPart(partName);
 
-    const elements = containerRef.current?.querySelectorAll(`[data-glide-part="${partName}"]`);
+    const elements = containerRef.current?.querySelectorAll(`[data-spar-part="${partName}"]`);
 
     elements?.forEach((el: Element) => {
-      el.classList.add('glide-anatomy-highlight');
+      el.classList.add('spar-anatomy-highlight');
     });
   };
 
   const handlePartLeave = () => {
     setHoveredPart(null);
 
-    const elements = containerRef.current?.querySelectorAll('.glide-anatomy-highlight');
+    const elements = containerRef.current?.querySelectorAll('.spar-anatomy-highlight');
 
     elements?.forEach((el: Element) => {
-      el.classList.remove('glide-anatomy-highlight');
+      el.classList.remove('spar-anatomy-highlight');
     });
   };
 

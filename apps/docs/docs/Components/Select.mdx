@@ -6,7 +6,7 @@ description: Fully accessible, headless select component for single-value select
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Select } from '@turkish-technology/glide';
+import { Select } from '@turkish-technology/spar';
 
 # Select
 
@@ -66,7 +66,7 @@ return (
 ### select.tsx
 
 ```tsx
-import { Select } from '@turkish-technology/glide';
+import { Select } from '@turkish-technology/spar';
 
 function SelectDemo() {
   return (
@@ -187,7 +187,7 @@ export default SelectDemo;
 
 ```tsx
 // Compound component (recommended)
-import { Select } from '@turkish-technology/glide';
+import { Select } from '@turkish-technology/spar';
 
 // Named imports (tree-shakeable)
 import {
@@ -205,7 +205,7 @@ import {
   SelectLabel,
   SelectSeparator,
   SelectArrow,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -230,9 +230,9 @@ The Select component is built as a compound component with multiple parts:
     { name: 'arrow', label: 'Arrow', description: 'Optional arrow pointing to trigger' },
   ]}
 >
-  <Select.Root data-glide-part="root" value="apple">
+  <Select.Root data-spar-part="root" value="apple">
     <Select.Trigger
-      data-glide-part="trigger"
+      data-spar-part="trigger"
       style={{
         padding: '8px 12px',
         border: '1px solid #ccc',
@@ -247,15 +247,15 @@ The Select component is built as a compound component with multiple parts:
       }}
     >
       <Select.Value
-        data-glide-part="value"
+        data-spar-part="value"
         placeholder="Select a fruit..."
       />
-      <Select.Icon data-glide-part="icon">▼</Select.Icon>
+      <Select.Icon data-spar-part="icon">▼</Select.Icon>
     </Select.Trigger>
 
-    <Select.Portal data-glide-part="portal">
+    <Select.Portal data-spar-part="portal">
       <Select.Content
-        data-glide-part="content"
+        data-spar-part="content"
         placement="bottom-start"
         offset={5}
         style={{
@@ -267,10 +267,10 @@ The Select component is built as a compound component with multiple parts:
           boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
         }}
       >
-        <Select.Viewport data-glide-part="viewport">
-          <Select.Group data-glide-part="group">
+        <Select.Viewport data-spar-part="viewport">
+          <Select.Group data-spar-part="group">
             <Select.Label
-              data-glide-part="label"
+              data-spar-part="label"
               style={{
                 padding: '4px 8px',
                 fontSize: '12px',
@@ -281,7 +281,7 @@ The Select component is built as a compound component with multiple parts:
               Fruits
             </Select.Label>
             <Select.Item
-              data-glide-part="item"
+              data-spar-part="item"
               value="apple"
               style={{
                 padding: '8px 12px',
@@ -291,11 +291,11 @@ The Select component is built as a compound component with multiple parts:
                 gap: '8px',
               }}
             >
-              <Select.ItemText data-glide-part="itemText">Apple</Select.ItemText>
-              <Select.ItemIndicator data-glide-part="itemIndicator">✓</Select.ItemIndicator>
+              <Select.ItemText data-spar-part="itemText">Apple</Select.ItemText>
+              <Select.ItemIndicator data-spar-part="itemIndicator">✓</Select.ItemIndicator>
             </Select.Item>
             <Select.Item
-              data-glide-part="item"
+              data-spar-part="item"
               value="banana"
               style={{
                 padding: '8px 12px',
@@ -305,13 +305,13 @@ The Select component is built as a compound component with multiple parts:
                 gap: '8px',
               }}
             >
-              <Select.ItemText data-glide-part="itemText">Banana</Select.ItemText>
-              <Select.ItemIndicator data-glide-part="itemIndicator">✓</Select.ItemIndicator>
+              <Select.ItemText data-spar-part="itemText">Banana</Select.ItemText>
+              <Select.ItemIndicator data-spar-part="itemIndicator">✓</Select.ItemIndicator>
             </Select.Item>
           </Select.Group>
 
           <Select.Separator
-            data-glide-part="separator"
+            data-spar-part="separator"
             style={{
               height: '1px',
               background: '#e0e0e0',
@@ -320,7 +320,7 @@ The Select component is built as a compound component with multiple parts:
           />
 
           <Select.Arrow
-            data-glide-part="arrow"
+            data-spar-part="arrow"
             width={10}
             height={5}
           />
@@ -379,7 +379,7 @@ The Select component is built as a compound component with multiple parts:
 **Alternative: Tree-shakeable named imports**
 
 ```tsx
-import { SelectRoot, SelectTrigger, SelectValue } from '@turkish-technology/glide';
+import { SelectRoot, SelectTrigger, SelectValue } from '@turkish-technology/spar';
 
 <SelectRoot>
   <SelectTrigger>

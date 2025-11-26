@@ -20,7 +20,7 @@ export const BreadcrumbList = ({ as = 'ol', children, ...props }: BreadcrumbList
     as,
     {
       ...props,
-      'data-glide-breadcrumb-list': '',
+      'data-spar-breadcrumb-list': '',
     },
     Children.map(children, (child, index) => {
       if (isValidElement(child)) {

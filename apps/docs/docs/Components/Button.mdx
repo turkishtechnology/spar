@@ -6,7 +6,7 @@ description: A headless, accessible button component with complete keyboard supp
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Button } from '@turkish-technology/glide';
+import { Button } from '@turkish-technology/spar';
 
 # Button
 
@@ -33,7 +33,7 @@ A headless, accessible button component that provides complete keyboard support 
 ### button.tsx
 
 ```tsx
-import { Button } from '@turkish-technology/glide';
+import { Button } from '@turkish-technology/spar';
 
 function ButtonDemo() {
   return <Button className='button'>button</Button>;
@@ -76,7 +76,7 @@ export default ButtonDemo;
 ## Installation
 
 ```tsx
-import { Button } from '@turkish-technology/glide';
+import { Button } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -90,7 +90,7 @@ The Button is a single component that can be configured for different use cases:
 >
   <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
     <Button
-      data-glide-part="button"
+      data-spar-part="button"
       onClick={() => {}}
       style={{ padding: '8px 16px', marginRight: '8px' }}
     >
@@ -98,7 +98,7 @@ The Button is a single component that can be configured for different use cases:
     </Button>
 
     <Button
-      data-glide-part="button"
+      data-spar-part="button"
       isDisabled
       style={{ padding: '8px 16px' }}
     >

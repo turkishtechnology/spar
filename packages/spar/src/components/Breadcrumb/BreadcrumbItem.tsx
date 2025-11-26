@@ -16,7 +16,7 @@ export const BreadcrumbItem = ({
     as,
     {
       ...domProps,
-      'data-glide-breadcrumb-item': '',
+      'data-spar-breadcrumb-item': '',
       'data-position': position,
       'data-current': isCurrent || undefined,
     },

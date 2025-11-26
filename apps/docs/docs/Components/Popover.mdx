@@ -11,7 +11,7 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverClose,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 
 # Popover
 
@@ -62,7 +62,7 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverClose,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 
 function PopoverDemo() {
   return (
@@ -202,7 +202,7 @@ export default PopoverDemo;
 ## Installation
 
 ```sh
-pnpm install @turkish-technology/glide
+pnpm install @turkish-technology/spar
 ```
 
 ```ts
@@ -214,7 +214,7 @@ import {
   PopoverAnchor,
   PopoverPortal,
   PopoverClose,
-} from '@turkish-technology/glide';
+} from '@turkish-technology/spar';
 ```
 
 ---
@@ -244,9 +244,9 @@ The Popover component is built as a compound component with multiple parts:
   ]}
 >
   <div style={{ padding: '100px', display: 'flex', justifyContent: 'center' }}>
-    <PopoverRoot data-glide-part='root'>
+    <PopoverRoot data-spar-part='root'>
       <PopoverTrigger
-        data-glide-part='trigger'
+        data-spar-part='trigger'
         style={{
           padding: '8px 16px',
           border: '1px solid #ccc',
@@ -258,7 +258,7 @@ The Popover component is built as a compound component with multiple parts:
         {' Open Popover '}
       </PopoverTrigger>
       <PopoverContent
-        data-glide-part='content'
+        data-spar-part='content'
         style={{
           padding: '16px',
           border: '1px solid #ccc',
@@ -270,7 +270,7 @@ The Popover component is built as a compound component with multiple parts:
       >
         <p style={{ margin: '0 0 12px 0' }}>{' This is a popover content '}</p>
         <PopoverClose
-          data-glide-part='close'
+          data-spar-part='close'
           style={{
             padding: '4px 12px',
             border: '1px solid #ccc',

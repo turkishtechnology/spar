@@ -86,7 +86,7 @@ describe('Breadcrumb Components', () => {
         </BreadcrumbRoot>,
       );
 
-      expect(screen.getByRole('navigation')).toHaveAttribute('data-glide-breadcrumb-root', '');
+      expect(screen.getByRole('navigation')).toHaveAttribute('data-spar-breadcrumb-root', '');
     });
 
     it('calls onNavigate when link is clicked', async () => {
@@ -167,7 +167,7 @@ describe('Breadcrumb Components', () => {
         </BreadcrumbRoot>,
       );
 
-      expect(screen.getByRole('list')).toHaveAttribute('data-glide-breadcrumb-list', '');
+      expect(screen.getByRole('list')).toHaveAttribute('data-spar-breadcrumb-list', '');
     });
   });
 
@@ -213,7 +213,7 @@ describe('Breadcrumb Components', () => {
         </BreadcrumbRoot>,
       );
 
-      expect(screen.getByRole('listitem')).toHaveAttribute('data-glide-breadcrumb-item', '');
+      expect(screen.getByRole('listitem')).toHaveAttribute('data-spar-breadcrumb-item', '');
     });
 
     it('calculates position for multiple items', () => {
@@ -432,7 +432,7 @@ describe('Breadcrumb Components', () => {
         </BreadcrumbRoot>,
       );
 
-      expect(screen.getByRole('link')).toHaveAttribute('data-glide-breadcrumb-link', '');
+      expect(screen.getByRole('link')).toHaveAttribute('data-spar-breadcrumb-link', '');
     });
   });
 
@@ -483,7 +483,7 @@ describe('Breadcrumb Components', () => {
       );
 
       const page = screen.getByText('Current Page');
-      expect(page).toHaveAttribute('data-glide-breadcrumb-page', '');
+      expect(page).toHaveAttribute('data-spar-breadcrumb-page', '');
       expect(page).toHaveAttribute('data-current', 'true');
     });
   });
@@ -581,7 +581,7 @@ describe('Breadcrumb Components', () => {
         </BreadcrumbRoot>,
       );
 
-      expect(screen.getByText('/')).toHaveAttribute('data-glide-breadcrumb-separator', '');
+      expect(screen.getByText('/')).toHaveAttribute('data-spar-breadcrumb-separator', '');
     });
 
     it('renders without children', () => {

@@ -50,11 +50,11 @@ export type {
 
 // Usage examples:
 // 1. Simple usage (most common):
-//    import { Input } from '@glide/components';
+//    import { Input } from '@spar/components';
 //    <Input placeholder="Enter text" />
 //
 // 2. Compound usage (advanced):
-//    import { Input } from '@glide/components';
+//    import { Input } from '@spar/components';
 //    <Input.Root>
 //      <Input.Label>Username</Input.Label>
 //      <Input.Field />
@@ -62,5 +62,5 @@ export type {
 //    </Input.Root>
 //
 // 3. Named imports (tree-shakeable):
-//    import { InputRoot, InputField } from '@glide/components';
+//    import { InputRoot, InputField } from '@spar/components';
 //    <InputRoot><InputField /></InputRoot>,
