@@ -1,4 +1,4 @@
-# Breadcrumb — Glide Headless Instructions
+# Breadcrumb — Spar Headless Instructions
 
 ## 1. Component Overview
 
@@ -272,28 +272,28 @@ const useId = () => {
 ### Required Data Attributes
 
 **Breadcrumb.Root**
-- `data-glide-breadcrumb-root`: Component identifier
+- `data-spar-breadcrumb-root`: Component identifier
 - `data-disabled="true"`: Applied when root is disabled
 
 **Breadcrumb.List**
-- `data-glide-breadcrumb-list`: Component identifier
+- `data-spar-breadcrumb-list`: Component identifier
 
 **Breadcrumb.Item**
-- `data-glide-breadcrumb-item`: Component identifier
+- `data-spar-breadcrumb-item`: Component identifier
 - `data-position="first|middle|last"`: Item position in breadcrumb trail
 
 **Breadcrumb.Link**
-- `data-glide-breadcrumb-link`: Component identifier
+- `data-spar-breadcrumb-link`: Component identifier
 - `data-disabled="true"`: Applied when link is disabled
 - `data-external="true"`: Applied to external links
 - `data-focus-visible="true"`: Applied during keyboard focus
 
 **Breadcrumb.Page**
-- `data-glide-breadcrumb-page`: Component identifier
+- `data-spar-breadcrumb-page`: Component identifier
 - `data-current="true"`: Indicates current page
 
 **Breadcrumb.Separator**
-- `data-glide-breadcrumb-separator`: Component identifier
+- `data-spar-breadcrumb-separator`: Component identifier
 
 ### State-Based Data Attributes
 - `data-current="true"`: Applied to current page item/page component

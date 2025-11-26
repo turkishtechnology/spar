@@ -22,7 +22,7 @@ Generate ONLY the component implementation. DO NOT run tests or create test file
 
 **For Simple Components:**
 ```
-packages/glide/src/components/${ComponentName}/
+packages/spar/src/components/${ComponentName}/
 ├── ${ComponentName}.tsx    # Core component logic
 ├── types.ts                # TypeScript interfaces
 └── index.ts                # Barrel exports
@@ -30,7 +30,7 @@ packages/glide/src/components/${ComponentName}/
 
 **For Compound Components:**
 ```
-packages/glide/src/components/${ComponentName}/
+packages/spar/src/components/${ComponentName}/
 ├── ${ComponentName}.tsx        # Root component
 ├── ${ComponentName}Item.tsx    # Child parts (if applicable)
 ├── ${ComponentName}Trigger.tsx # Interactive parts (if applicable)

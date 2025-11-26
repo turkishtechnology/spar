@@ -1,7 +1,7 @@
 ---
 mode: agent
 model: Claude Sonnet 4 (copilot)
-description: Generate comprehensive test suite for Glide components
+description: Generate comprehensive test suite for Spar components
 ---
 
 # Test Generator

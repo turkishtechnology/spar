@@ -1,4 +1,4 @@
-# Switch — Glide Headless Instructions
+# Switch — Spar Headless Instructions
 
 ## 1. Component Overview
 
@@ -219,7 +219,7 @@ All data attributes are boolean (present/absent) except:
 ### Data Attributes for Styling
 - Visual state communicated via `data-*` attributes
 - No inline styles or CSS classes applied by component
-- Consistent attribute naming following Glide conventions
+- Consistent attribute naming following Spar conventions
 
 ### Tree-shakeable Exports
 - Named exports only, no default exports
