@@ -43,11 +43,17 @@ RUN pnpm --filter @turkish-technology/docs build
 FROM nginx:alpine AS runner
 WORKDIR /usr/share/nginx/html
 
+# Remove default nginx config
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copy built files
 COPY --from=builder /app/apps/docs/build /usr/share/nginx/html
 
-# Copy nginx configuration
-COPY apps/docs/nginx.conf /etc/nginx/conf.d/default.conf
+# Verify files exist
+RUN ls -la /usr/share/nginx/html && ls -la /etc/nginx/conf.d/
 
 EXPOSE 80
 
