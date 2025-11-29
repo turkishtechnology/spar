@@ -1,0 +1,42 @@
+---
+mode: agent
+model: Claude Sonnet 4 (copilot)
+description: Generate comprehensive test suite for Spar components
+---
+
+# Test Generator
+
+Generate tests for **${input:ComponentName:Button}** component.
+
+## Prerequisites
+
+1. **Component must already exist** - Verify component logic is implemented
+2. **Run linting first** - Execute `pnpm lint` and fix any ESLint errors
+3. **Type checking** - Run `pnpm check-types` to ensure TypeScript compliance
+
+ALWAYS follow instructions in [Testing Guidelines](../instructions/testing-guidelines.instructions.md).
+
+## Test Types
+
+- **Unit tests**: Functionality, props, state, events
+- **Integration tests**: User workflows, interactions
+- **DO NOT generate accessibility tests** - Accessibility tests are outside the scope of this prompt
+
+## Requirements
+
+- Test coverage > 90%
+- All user interactions covered
+- Edge cases included
+- Follow React Testing Library patterns
+- Ensure all tests pass linting (`pnpm lint`)
+
+## Files to Create
+
+- `${ComponentName}.test.tsx` - Unit tests
+- `${ComponentName}.integration.test.tsx` - Integration tests (if applicable)
+
+## Success Criteria
+
+- All tests pass (`pnpm test`)
+- ESLint passes for test files (`pnpm lint`)
+- Coverage meets requirements (> 90%)

@@ -1,0 +1,447 @@
+---
+title: Radio
+description: Accessible radio group component for mutually exclusive selections with full keyboard navigation and ARIA support.
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Radio, RadioGroup, RadioItem } from '@turkish-technology/spar';
+
+# Radio
+
+Accessible radio group component for creating mutually exclusive selections with full keyboard navigation and ARIA support.
+
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
+
+## Live Demo
+
+<LiveCode
+  code={`function BasicRadioExample() {
+  const [value, setValue] = React.useState('option1');
+  
+  return (
+    <div className="radio-demo-container">
+      <Radio.Group value={value} onValueChange={setValue} aria-label="Basic radio group">
+        <Radio.Item value="option1"></Radio.Item>
+        <Radio.Item value='option2' className='radio-item'></Radio.Item>
+        <Radio.Item value='option3' className='radio-item'></Radio.Item>
+      </Radio.Group>
+    </div>
+  );
+}`}
+/>
+
+### radio.tsx
+
+```tsx
+import { Radio } from '@turkish-technology/spar';
+
+function RadioDemo() {
+  return (
+    <Radio.Group aria-label='Basic radio group' className='radio-group'>
+      <Radio.Item value='option1' className='radio-item'></Radio.Item>
+      <Radio.Item value='option2' className='radio-item'></Radio.Item>
+      <Radio.Item value='option3' className='radio-item'></Radio.Item>
+    </Radio.Group>
+  );
+}
+
+export default RadioDemo;
+```
+
+### radio.css
+
+```css
+input[type='radio'] {
+  position: relative;
+  appearance: none;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  border: 4px solid rgba(0, 0, 0, 0.16);
+}
+
+input[type='radio']:checked:before {
+  content: '';
+  width: 24px;
+  height: 24px;
+  background-color: rgba(0, 0, 0, 0.72);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+[data-theme='dark'] input[type='radio'] {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+[data-theme='dark'] input[type='radio']:checked:before {
+  background-color: rgba(255, 255, 255, 0.72);
+}
+```
+
+## Features
+
+- ✅ Mutually exclusive selection within radio groups
+- ✅ Controlled and uncontrolled state management
+- ✅ Roving tabindex for optimal keyboard navigation
+- ✅ Form integration with hidden inputs
+- ✅ Individual item disable functionality
+- ✅ Horizontal and vertical orientation support
+- ✅ Polymorphic component API with custom element support
+- ✅ Focus management with visual indicators
+
+## Installation
+
+```tsx
+// Compound component (recommended)
+import { Radio } from '@turkish-technology/spar';
+
+// Named imports (tree-shakeable)
+import { RadioGroup, RadioItem } from '@turkish-technology/spar';
+```
+
+## Anatomy
+
+The Radio component is built as a compound component with two main parts:
+
+<AnatomyViewer
+  parts={[
+    { name: 'group', label: 'Radio.Group', description: 'Context and state provider' },
+    { name: 'item', label: 'Radio.Item', description: 'Individual radio option' },
+  ]}
+>
+  <Radio.Group
+    data-spar-part='group'
+    defaultValue='option1'
+    aria-label='Basic radio group'
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '8px',
+      padding: '16px',
+      border: '1px solid #ccc',
+    }}
+  >
+    <Radio.Item
+      data-spar-part='item'
+      value='option1'
+      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
+    >
+      {' Option 1 '}
+    </Radio.Item>
+    <Radio.Item
+      data-spar-part='item'
+      value='option2'
+      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
+    >
+      {' Option 2 '}
+    </Radio.Item>
+    <Radio.Item
+      data-spar-part='item'
+      value='option3'
+      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
+    >
+      {' Option 3 '}
+    </Radio.Item>
+  </Radio.Group>
+</AnatomyViewer>
+
+### Structure
+
+```tsx
+<Radio.Group>
+  <Radio.Item />
+  <Radio.Item />
+  <Radio.Item />
+</Radio.Group>
+```
+
+**Alternative: Tree-shakeable named imports**
+
+```tsx
+import { RadioGroup, RadioItem } from '@turkish-technology/spar';
+
+<RadioGroup>
+  <RadioItem />
+  <RadioItem />
+  <RadioItem />
+</RadioGroup>;
+```
+
+**Data Flow:**
+
+- `Radio.Group` manages selection state and provides context
+- `Radio.Item` components register with the group and handle individual interactions
+- Focus management ensures only one radio is tabbable at a time
+- Hidden inputs provide form integration and accessibility
+
+## Code Examples
+
+### Basic Controlled Radio Group
+
+```tsx
+function ControlledRadio() {
+  const [selectedValue, setSelectedValue] = React.useState('medium');
+
+  return (
+    <Radio.Group value={selectedValue} onValueChange={setSelectedValue} aria-label='Size selection'>
+      <Radio.Item value='small'>Small</Radio.Item>
+      <Radio.Item value='medium'>Medium</Radio.Item>
+      <Radio.Item value='large'>Large</Radio.Item>
+    </Radio.Group>
+  );
+}
+```
+
+### Uncontrolled Radio Group with Default Value
+
+```tsx
+function UncontrolledRadio() {
+  const handleValueChange = (value: string) => {
+    console.log('Selected:', value);
+  };
+
+  return (
+    <Radio.Group
+      defaultValue='silver'
+      onValueChange={handleValueChange}
+      aria-label='Membership tier'
+    >
+      <Radio.Item value='bronze'>Bronze Membership</Radio.Item>
+      <Radio.Item value='silver'>Silver Membership</Radio.Item>
+      <Radio.Item value='gold'>Gold Membership</Radio.Item>
+    </Radio.Group>
+  );
+}
+```
+
+### Horizontal Orientation
+
+```tsx
+function HorizontalRadio() {
+  const [alignment, setAlignment] = React.useState('left');
+
+  return (
+    <Radio.Group
+      value={alignment}
+      onValueChange={setAlignment}
+      orientation='horizontal'
+      aria-label='Text alignment'
+    >
+      <Radio.Item value='left'>Left</Radio.Item>
+      <Radio.Item value='center'>Center</Radio.Item>
+      <Radio.Item value='right'>Right</Radio.Item>
+    </Radio.Group>
+  );
+}
+```
+
+### Disabled Items and Groups
+
+```tsx
+function DisabledRadio() {
+  const [plan, setPlan] = React.useState('basic');
+
+  return (
+    <Radio.Group value={plan} onValueChange={setPlan} aria-label='Subscription plan'>
+      <Radio.Item value='free'>Free Plan</Radio.Item>
+      <Radio.Item value='basic'>Basic Plan</Radio.Item>
+      <Radio.Item value='premium' disabled>
+        Premium Plan (Coming Soon)
+      </Radio.Item>
+    </Radio.Group>
+  );
+}
+```
+
+### Toolbar Radio Group
+
+```tsx
+function ToolbarRadio() {
+  const [alignment, setAlignment] = React.useState('left');
+
+  return (
+    <div role='toolbar' aria-label='Text formatting'>
+      <Radio.Group
+        value={alignment}
+        onValueChange={setAlignment}
+        isInToolbar={true}
+        orientation='horizontal'
+        aria-label='Text alignment'
+      >
+        <Radio.Item value='left'>Align Left</Radio.Item>
+        <Radio.Item value='center'>Align Center</Radio.Item>
+        <Radio.Item value='right'>Align Right</Radio.Item>
+        <Radio.Item value='justify'>Justify</Radio.Item>
+      </Radio.Group>
+      {/* Other toolbar controls */}
+    </div>
+  );
+}
+```
+
+### Form Integration
+
+```tsx
+function FormRadio() {
+  const [paymentMethod, setPaymentMethod] = React.useState('credit');
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    const formData = new FormData(event.target as HTMLFormElement);
+    console.log('Payment method:', formData.get('payment'));
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Radio.Group
+        value={paymentMethod}
+        onValueChange={setPaymentMethod}
+        name='payment'
+        required
+        aria-label='Payment method'
+      >
+        <Radio.Item value='credit'>Credit Card</Radio.Item>
+        <Radio.Item value='debit'>Debit Card</Radio.Item>
+        <Radio.Item value='paypal'>PayPal</Radio.Item>
+        <Radio.Item value='bank'>Bank Transfer</Radio.Item>
+      </Radio.Group>
+      <button type='submit'>Continue</button>
+    </form>
+  );
+}
+```
+
+### Custom Elements with Polymorphic API
+
+```tsx
+function CustomRadio() {
+  const [theme, setTheme] = React.useState('light');
+
+  return (
+    <Radio.Group value={theme} onValueChange={setTheme} as='fieldset' aria-label='Theme selection'>
+      <legend>Choose Theme</legend>
+      <Radio.Item value='light' as='div'>
+        Light Theme
+      </Radio.Item>
+      <Radio.Item value='dark' as='div'>
+        Dark Theme
+      </Radio.Item>
+      <Radio.Item value='auto' as='div'>
+        Auto Theme
+      </Radio.Item>
+    </Radio.Group>
+  );
+}
+```
+
+## API Reference
+
+### Radio.Group
+
+The root container that manages the radio group state and provides keyboard navigation.
+
+**Props**
+
+| Name                | Type                         | Default      | Description                                       |
+| ------------------- | ---------------------------- | ------------ | ------------------------------------------------- |
+| `value?`            | `string`                     | `undefined`  | Controlled selected value                         |
+| `defaultValue?`     | `string`                     | `undefined`  | Uncontrolled initial value                        |
+| `onValueChange?`    | `(value: string) => void`    | `undefined`  | Selection change handler                          |
+| `name?`             | `string`                     | `undefined`  | HTML name for form submission                     |
+| `disabled?`         | `boolean`                    | `false`      | Disables entire radio group                       |
+| `required?`         | `boolean`                    | `false`      | Marks group as required for forms                 |
+| `orientation?`      | `'horizontal' \| 'vertical'` | `'vertical'` | Layout direction for keyboard navigation          |
+| `isInToolbar?`      | `boolean`                    | `false`      | Changes keyboard behavior per WAI-ARIA guidelines |
+| `aria-label?`       | `string`                     | `undefined`  | Accessible name for the group                     |
+| `aria-labelledby?`  | `string`                     | `undefined`  | References element that labels the group          |
+| `aria-describedby?` | `string`                     | `undefined`  | References element that describes the group       |
+| `as?`               | `React.ElementType`          | `'div'`      | Polymorphic root element                          |
+| `children?`         | `React.ReactNode`            | `undefined`  | Radio.Item components                             |
+
+**Events**
+
+| Name            | Parameters               | Description             | When Triggered                    |
+| --------------- | ------------------------ | ----------------------- | --------------------------------- |
+| `onValueChange` | `(value: string)`        | Selection state changes | User selects different radio item |
+| `onKeyDown`     | `(event: KeyboardEvent)` | Key pressed on group    | Keyboard navigation occurs        |
+
+**ARIA Attributes**
+
+| Attribute          | Value          | Purpose                               | Applied To   |
+| ------------------ | -------------- | ------------------------------------- | ------------ |
+| `role`             | `"radiogroup"` | Identifies the group of radio buttons | Root element |
+| `aria-label`       | `string`       | Provides accessible name              | Root element |
+| `aria-labelledby`  | `string`       | References labeling element           | Root element |
+| `aria-describedby` | `string`       | References describing element         | Root element |
+| `aria-required`    | `boolean`      | Indicates if selection is required    | Root element |
+
+### Radio.Item
+
+Individual radio option within a Radio.Group that handles selection and accessibility.
+
+**Props**
+
+| Name                | Type                | Default     | Description                                 |
+| ------------------- | ------------------- | ----------- | ------------------------------------------- |
+| `value`             | `string`            | -           | Unique identifier for this radio option     |
+| `disabled?`         | `boolean`           | `false`     | Disables this specific radio item           |
+| `aria-label?`       | `string`            | `undefined` | Accessible name when children insufficient  |
+| `aria-describedby?` | `string`            | `undefined` | References element that describes this item |
+| `as?`               | `React.ElementType` | `'label'`   | Polymorphic root element                    |
+| `children?`         | `React.ReactNode`   | `undefined` | Label content for the radio item            |
+
+**Events**
+
+| Name        | Parameters               | Description         | When Triggered            |
+| ----------- | ------------------------ | ------------------- | ------------------------- |
+| `onClick`   | `(event: MouseEvent)`    | Item clicked        | Mouse click on radio item |
+| `onKeyDown` | `(event: KeyboardEvent)` | Key pressed on item | Keyboard interaction      |
+| `onFocus`   | `(event: FocusEvent)`    | Item receives focus | Focus management          |
+
+**ARIA Attributes**
+
+| Attribute          | Value     | Purpose                            | Applied To   |
+| ------------------ | --------- | ---------------------------------- | ------------ |
+| `role`             | `"radio"` | Identifies as radio button         | Root element |
+| `aria-checked`     | `boolean` | Indicates selection state          | Root element |
+| `aria-label`       | `string`  | Provides accessible name           | Root element |
+| `aria-describedby` | `string`  | References describing element      | Root element |
+| `tabindex`         | `0 \| -1` | Manages focus with roving tabindex | Root element |
+
+## Keyboard Interactions
+
+Complete keyboard behavior for the Radio component. Behavior changes based on the `isInToolbar` prop:
+
+| Key            | Standard Mode                                       | Toolbar Mode                                       |
+| -------------- | --------------------------------------------------- | -------------------------------------------------- |
+| `Tab`          | Focus to selected radio or first radio              | Focus to selected radio or first radio             |
+| `Shift + Tab`  | Focus away from radio group                         | Focus away from radio group                        |
+| `ArrowDown` ↓  | **Move focus + select** next radio (wraps)          | **Move focus only** to next radio (wraps)          |
+| `ArrowUp` ↑    | **Move focus + select** previous radio (wraps)      | **Move focus only** to previous radio (wraps)      |
+| `ArrowRight` → | **Move focus + select** next radio (horizontal)     | **Move focus only** to next radio (horizontal)     |
+| `ArrowLeft` ←  | **Move focus + select** previous radio (horizontal) | **Move focus only** to previous radio (horizontal) |
+| `Space`        | Select focused radio (optional)                     | **Select focused radio** (required)                |
+| `Enter`        | Select focused radio (optional)                     | **Select focused radio** (required)                |
+| `Home`         | **Move + select** first radio                       | **Move focus only** to first radio                 |
+| `End`          | **Move + select** last radio                        | **Move focus only** to last radio                  |
+
+### Mode Configuration
+
+- **Standard Mode**: `isInToolbar={false}` (default)
+- **Toolbar Mode**: `isInToolbar={true}`
+
+### Behavior Summary
+
+- **Standard Mode**: Arrow keys automatically move focus and select the radio (traditional radio group behavior)
+- **Toolbar Mode**: Arrow keys only move focus, Space/Enter required for selection (WAI-ARIA toolbar pattern)
+- **Focus Management**: Only one radio receives Tab focus at a time (roving tabindex)
+- **Disabled Items**: Automatically skipped during keyboard navigation
+- **Wrapping**: Arrow navigation wraps from last to first and vice versa
