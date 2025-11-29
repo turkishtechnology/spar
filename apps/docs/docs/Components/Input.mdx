@@ -1,0 +1,710 @@
+---
+title: Input
+description: A headless input component with compound pattern support, full accessibility features, and validation states for building custom form inputs without styling opinions.
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Input } from '@turkish-technology/spar';
+
+# Input
+
+A headless input component providing accessible form input primitives with compound pattern support and zero styling opinions.
+
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
+
+## Live Demo
+
+### Simple Usage (Most Common)
+
+<LiveCode
+  code={`function SimpleInputExample() {
+
+return (
+
+<div className='input-demo-container'>
+  <Label htmlFor='my-input' className='label'>
+    Label
+  </Label>
+  <Input id='my-input' className='input' />
+</div>
+); }`} />
+
+### input.tsx
+
+```tsx
+import { Input } from '@turkish-technology/spar';
+
+function InputDemo() {
+  return (
+    <>
+      <Label className='label'>Label</Label>
+      <Input className='input' />
+    </>
+  );
+}
+
+export default InputDemo;
+```
+
+### input.css
+
+```css
+.input {
+  border-radius: 5px;
+  border: 1px solid #e1e4ea;
+  background: rgba(0, 0, 0, 0.08);
+  height: 27px;
+  width: 200px;
+  padding: 7px;
+}
+
+[data-theme='dark'] .input {
+  border: 1px solid #2b303b;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.label {
+  color: #222530;
+  display: block;
+  font-size: 9px;
+  line-height: 13px;
+  padding-left: 5px;
+  margin-bottom: 2px;
+}
+
+[data-theme='dark'] .label {
+  color: #f2f5f8;
+}
+```
+
+### Compound Pattern (Advanced)
+
+<LiveCode
+  code={`function CompoundInputExample() {
+  const [value, setValue] = React.useState('');
+  
+  return (
+    <Input.Root style={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px' }}>
+      <Input.Label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+        Username
+      </Input.Label>
+      <Input.Field 
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+      />
+      <Input.Description style={{ marginTop: '4px', fontSize: '14px', color: '#666' }}>
+        Enter your username to continue
+      </Input.Description>
+    </Input.Root>
+  );
+}`}
+/>
+
+## Features
+
+- ✅ Text input and textarea support with polymorphic rendering
+- ✅ Validation states (invalid, valid) with automatic ARIA handling
+- ✅ Interactive states (disabled, required, focused) with proper attributes
+- ✅ Error message display with role="alert" for screen reader announcements
+- ✅ Helper text support with automatic ARIA associations
+- ✅ Form integration with proper name and validation attribute support
+- ✅ Focus management with visual focus indicators
+- ✅ Context-based state management across compound components
+
+## Installation
+
+```tsx
+// Compound component (dot notation)
+import { Input } from '@turkish-technology/spar';
+
+// Named imports (tree-shakeable)
+import {
+  InputRoot,
+  InputField,
+  InputLabel,
+  InputDescription,
+  InputErrorMessage,
+} from '@turkish-technology/spar';
+```
+
+## Anatomy
+
+The Input component follows a compound component pattern with context-based state management:
+
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'Root', description: 'Context provider for state management' },
+    { name: 'label', label: 'Label', description: 'Associated label with automatic ID linking' },
+    { name: 'field', label: 'Field', description: 'Core input element (input/textarea)' },
+    { name: 'description', label: 'Description', description: 'Helper text for guidance' },
+    { name: 'errorMessage', label: 'ErrorMessage', description: 'Error announcement with role="alert"' },
+  ]}
+>
+  {(() => {
+    const [email, setEmail] = React.useState('invalid-email');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isInvalid = email.length > 0 && !emailRegex.test(email);
+
+    return (
+      <Input.Root
+        data-spar-part="root"
+        isInvalid={isInvalid}
+        isRequired
+        style={{
+          padding: '12px',
+          border: `1px solid ${isInvalid ? '#ff6b6b' : '#e5e5e5'}`,
+          borderRadius: '6px'
+        }}
+      >
+        <Input.Label data-spar-part="label" style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
+          Email Address
+        </Input.Label>
+        <Input.Field
+          data-spar-part="field"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          style={{
+            width: '100%',
+            padding: '8px 12px',
+            border: `1px solid ${isInvalid ? '#ff6b6b' : '#ccc'}`,
+            borderRadius: '4px',
+            fontSize: '14px'
+          }}
+        />
+        <Input.Description data-spar-part="description" style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+          We'll use this to send you important updates
+        </Input.Description>
+        {isInvalid && (
+          <Input.ErrorMessage data-spar-part="errorMessage" style={{ marginTop: '4px', fontSize: '12px', color: '#ff6b6b' }}>
+            Please enter a valid email address
+          </Input.ErrorMessage>
+        )}
+      </Input.Root>
+    );
+
+})()}
+
+</AnatomyViewer>
+
+### Structure
+
+```tsx
+<Input.Root>
+  <Input.Label />
+  <Input.Field />
+  <Input.Description />
+  <Input.ErrorMessage />
+</Input.Root>
+```
+
+**Data Flow:**
+
+- **Input.Root**: Context provider that manages validation, disabled, and required states
+- **Input.Field**: Core input element with polymorphic support (input/textarea)
+- **Input.Label**: Associated label element with automatic ID linking
+- **Input.Description**: Helper text element for additional guidance
+- **Input.ErrorMessage**: Error announcement element with role="alert"
+
+## Code Examples
+
+### Basic Text Input
+
+A simple text input with label and description for user guidance.
+
+<LiveCode 
+  code={`function BasicTextInput() {
+  const [value, setValue] = React.useState('');
+
+return (
+
+<Input.Root style={{ padding: '12px', border: '1px solid #e5e5e5', borderRadius: '6px' }}>
+  <Input.Label
+    style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}
+  >
+    Email Address
+  </Input.Label>
+  <Input.Field
+    type='email'
+    value={value}
+    onChange={(e) => setValue(e.target.value)}
+    placeholder='Enter your email'
+    style={{
+      width: '100%',
+      padding: '8px 12px',
+      border: '1px solid #ccc',
+      borderRadius: '4px',
+      fontSize: '14px',
+    }}
+  />
+  <Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+    We'll use this to send you important updates
+  </Input.Description>
+</Input.Root>
+); }`} />
+
+### Input with Validation
+
+Demonstrates validation state management with error message display and ARIA announcements.
+
+<LiveCode 
+  code={`function ValidatedInput() {
+  const [email, setEmail] = React.useState('');
+  const [isInvalid, setIsInvalid] = React.useState(false);
+
+const handleSubmit = () => {
+const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+setIsInvalid(!emailRegex.test(email));
+};
+
+return (
+
+<div>
+<Input.Root
+isInvalid={isInvalid}
+isRequired
+style={{ padding: '12px', border: \`1px solid \${isInvalid ? '#ff6b6b' : '#e5e5e5'}\`, borderRadius: '6px' }} >
+<Input.Label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
+Email Address
+</Input.Label>
+<Input.Field
+type="email"
+value={email}
+onChange={(e) => setEmail(e.target.value)}
+placeholder="user@example.com"
+style={{
+            width: '100%',
+            padding: '8px 12px',
+            border: \`1px solid \${isInvalid ? '#ff6b6b' : '#ccc'}\`,
+            borderRadius: '4px',
+            fontSize: '14px'
+          }}
+/>
+<Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+Enter a valid email address for account verification
+</Input.Description>
+<Input.ErrorMessage style={{ marginTop: '4px', fontSize: '12px', color: '#ff6b6b' }}>
+Please enter a valid email address
+</Input.ErrorMessage>
+</Input.Root>
+<button
+type="button"
+onClick={handleSubmit}
+style={{
+          marginTop: '12px',
+          padding: '8px 16px',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer'
+        }} >
+Validate Email
+</button>
+</div>
+);
+}`}
+/>
+
+### Textarea Input
+
+Shows polymorphic rendering capability for multi-line text input with proper accessibility.
+
+<LiveCode
+  code={`function TextareaInput() {
+  const [message, setMessage] = React.useState('');
+  
+  return (
+    <Input.Root style={{ padding: '12px', border: '1px solid #e5e5e5', borderRadius: '6px' }}>
+      <Input.Label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
+        Message
+      </Input.Label>
+      <Input.Field
+        as="textarea"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        rows={4}
+        placeholder="Enter your message here..."
+        style={{ 
+          width: '100%', 
+          padding: '8px 12px', 
+          border: '1px solid #ccc', 
+          borderRadius: '4px', 
+          fontSize: '14px', 
+          resize: 'vertical',
+          fontFamily: 'inherit'
+        }}
+      />
+      <Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+        Maximum 500 characters ({message.length}/500)
+      </Input.Description>
+    </Input.Root>
+  );
+}`}
+/>
+
+### Disabled Input
+
+Demonstrates disabled state with proper accessibility attributes and visual indicators.
+
+<LiveCode
+  code={`function DisabledInput() {
+  return (
+    <Input.Root 
+      isDisabled 
+      style={{ 
+        padding: '12px', 
+        border: '1px solid #e5e5e5', 
+        borderRadius: '6px', 
+        backgroundColor: '#f8f9fa',
+        opacity: 0.6 
+      }}
+    >
+      <Input.Label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
+        Account Type
+      </Input.Label>
+      <Input.Field 
+        value="Premium Account"
+        readOnly
+        style={{ 
+          width: '100%', 
+          padding: '8px 12px', 
+          border: '1px solid #ccc', 
+          borderRadius: '4px', 
+          fontSize: '14px',
+          backgroundColor: '#f8f9fa',
+          cursor: 'not-allowed'
+        }}
+      />
+      <Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+        Contact support to change your account type
+      </Input.Description>
+    </Input.Root>
+  );
+}`}
+/>
+
+### Form Integration
+
+Complete form example with validation, submission, and error handling.
+
+<LiveCode 
+  code={`function ContactForm() {
+  const [formData, setFormData] = React.useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [errors, setErrors] = React.useState({});
+
+const validateForm = () => {
+const newErrors = {};
+
+    if (!formData.name) newErrors.name = 'Name is required';
+    if (!formData.email) newErrors.email = 'Email is required';
+    else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+    if (!formData.message) newErrors.message = 'Message is required';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+
+};
+
+const handleSubmit = (e) => {
+e.preventDefault();
+if (validateForm()) {
+console.log('Form submitted:', formData);
+alert('Form submitted successfully!');
+}
+};
+
+const formStyle = {
+display: 'flex',
+flexDirection: 'column',
+gap: '16px',
+maxWidth: '400px'
+};
+
+const inputRootStyle = (hasError) => ({
+padding: '12px',
+border: \`1px solid \${hasError ? '#ff6b6b' : '#e5e5e5'}\`,
+borderRadius: '6px'
+});
+
+const labelStyle = {
+display: 'block',
+marginBottom: '6px',
+fontSize: '14px',
+fontWeight: '500'
+};
+
+const fieldStyle = (hasError) => ({
+width: '100%',
+padding: '8px 12px',
+border: \`1px solid \${hasError ? '#ff6b6b' : '#ccc'}\`,
+borderRadius: '4px',
+fontSize: '14px'
+});
+
+const errorStyle = {
+marginTop: '4px',
+fontSize: '12px',
+color: '#ff6b6b'
+};
+
+const buttonStyle = {
+padding: '12px 24px',
+backgroundColor: '#007bff',
+color: 'white',
+border: 'none',
+borderRadius: '4px',
+fontSize: '14px',
+fontWeight: '500',
+cursor: 'pointer',
+marginTop: '8px'
+};
+
+return (
+
+<form onSubmit={handleSubmit} style={formStyle} noValidate>
+<Input.Root isInvalid={!!errors.name} isRequired style={inputRootStyle(!!errors.name)}>
+<Input.Label style={labelStyle}>Full Name</Input.Label>
+<Input.Field
+name="name"
+value={formData.name}
+onChange={(e) => setFormData({...formData, name: e.target.value})}
+style={fieldStyle(!!errors.name)}
+/>
+<Input.ErrorMessage style={errorStyle}>{errors.name}</Input.ErrorMessage>
+</Input.Root>
+
+      <Input.Root isInvalid={!!errors.email} isRequired style={inputRootStyle(!!errors.email)}>
+        <Input.Label style={labelStyle}>Email</Input.Label>
+        <Input.Field
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={(e) => setFormData({...formData, email: e.target.value})}
+          style={fieldStyle(!!errors.email)}
+        />
+        <Input.ErrorMessage style={errorStyle}>{errors.email}</Input.ErrorMessage>
+      </Input.Root>
+
+      <Input.Root isInvalid={!!errors.message} isRequired style={inputRootStyle(!!errors.message)}>
+        <Input.Label style={labelStyle}>Message</Input.Label>
+        <Input.Field
+          as="textarea"
+          name="message"
+          rows={4}
+          value={formData.message}
+          onChange={(e) => setFormData({...formData, message: e.target.value})}
+          style={{...fieldStyle(!!errors.message), resize: 'vertical', fontFamily: 'inherit'}}
+        />
+        <Input.ErrorMessage style={errorStyle}>{errors.message}</Input.ErrorMessage>
+      </Input.Root>
+
+      <button type="submit" style={buttonStyle}>Send Message</button>
+    </form>
+
+);
+}`}
+/>
+
+### Tree-shakeable Import Example
+
+Using named imports for better bundle optimization:
+
+```tsx
+import {
+  InputRoot,
+  InputField,
+  InputLabel,
+  InputDescription,
+  InputErrorMessage,
+} from '@turkish-technology/spar';
+
+function TreeShakeableInput() {
+  const [value, setValue] = useState('');
+
+  return (
+    <InputRoot>
+      <InputLabel>Username</InputLabel>
+      <InputField
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder='Enter username'
+      />
+      <InputDescription>Choose a unique username</InputDescription>
+    </InputRoot>
+  );
+}
+```
+
+## API Reference
+
+### Input (Simple Usage)
+
+Direct input component function that returns an `InputField` without wrapper. Designed for simple form inputs where compound features aren't needed. No context provider overhead, optimal for basic use cases.
+
+**Props**
+
+| Name           | Type                                              | Default     | Description                                 |
+| -------------- | ------------------------------------------------- | ----------- | ------------------------------------------- |
+| `as?`          | `ElementType`                                     | `'input'`   | Element type for polymorphic rendering      |
+| `ref?`         | `React.ComponentPropsWithRef<T>['ref']`           | `undefined` | Ref for the input element                   |
+| `type?`        | `string`                                          | `'text'`    | Input type attribute                        |
+| `placeholder?` | `string`                                          | `undefined` | Input placeholder text                      |
+| `value?`       | `string`                                          | `undefined` | Controlled input value                      |
+| `onChange?`    | `(event: React.ChangeEvent<HTMLElement>) => void` | `undefined` | Input change handler                        |
+| `onFocus?`     | `(event: React.FocusEvent<HTMLElement>) => void`  | `undefined` | Focus event handler                         |
+| `onBlur?`      | `(event: React.FocusEvent<HTMLElement>) => void`  | `undefined` | Blur event handler                          |
+| `...props`     | `React.ComponentProps<T>`                         | -           | All standard HTML input/textarea attributes |
+
+**Usage Notes**
+
+- Returns a single `<input>` or `<textarea>` element (based on `as` prop)
+- No wrapper `<div>` element created
+- Context-independent, doesn't support compound features
+- Ideal for simple forms, search inputs, or single-field components
+- Use compound pattern (`Input.Root` + `Input.Field`) when needing labels, descriptions, or validation messages
+
+### Input.Root
+
+The root container that provides context and state management for all input compound components. Manages validation, disabled, and required states with proper ARIA coordination.
+
+**Props**
+
+| Name          | Type        | Default | Description             |
+| ------------- | ----------- | ------- | ----------------------- |
+| `children`    | `ReactNode` | -       | Compound input elements |
+| `isInvalid?`  | `boolean`   | `false` | Input validation state  |
+| `isDisabled?` | `boolean`   | `false` | Input disabled state    |
+| `isRequired?` | `boolean`   | `false` | Input required state    |
+
+**ARIA Attributes**
+
+| Attribute          | Value               | Purpose                         | Applied To   |
+| ------------------ | ------------------- | ------------------------------- | ------------ |
+| `data-spar-input` | `""`                | Identifies input root container | Root element |
+| `data-invalid`     | `""` \| `undefined` | Indicates validation state      | Root element |
+| `data-disabled`    | `""` \| `undefined` | Indicates disabled state        | Root element |
+| `data-required`    | `""` \| `undefined` | Indicates required state        | Root element |
+
+### Input.Field
+
+The core input element with polymorphic rendering support. Handles focus states, validation attributes, and ARIA associations automatically.
+
+**Props**
+
+| Name       | Type                                             | Default     | Description                            |
+| ---------- | ------------------------------------------------ | ----------- | -------------------------------------- |
+| `as?`      | `ElementType`                                    | `'input'`   | Element type for polymorphic rendering |
+| `ref?`     | `React.ComponentPropsWithRef<T>['ref']`          | `undefined` | Ref for the input element              |
+| `onFocus?` | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Focus event handler                    |
+| `onBlur?`  | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Blur event handler                     |
+
+**Events**
+
+| Name       | Parameters                                | Description         | When Triggered                           |
+| ---------- | ----------------------------------------- | ------------------- | ---------------------------------------- |
+| `onFocus`  | `(event: React.FocusEvent<HTMLElement>)`  | Input gains focus   | User clicks or tabs to input             |
+| `onBlur`   | `(event: React.FocusEvent<HTMLElement>)`  | Input loses focus   | User clicks away or tabs to next element |
+| `onChange` | `(event: React.ChangeEvent<HTMLElement>)` | Input value changes | User types or modifies input content     |
+
+**ARIA Attributes**
+
+| Attribute                | Value               | Purpose                         | Applied To    |
+| ------------------------ | ------------------- | ------------------------------- | ------------- |
+| `id`                     | `string`            | Unique field identifier         | Field element |
+| `aria-labelledby`        | `string`            | References associated label     | Field element |
+| `aria-describedby`       | `string`            | References description or error | Field element |
+| `aria-required`          | `boolean`           | Indicates required state        | Field element |
+| `aria-invalid`           | `boolean`           | Indicates validation state      | Field element |
+| `data-spar-input-field` | `""`                | Identifies input field element  | Field element |
+| `data-focused`           | `""` \| `undefined` | Indicates focus state           | Field element |
+
+### Input.Label
+
+The label element that provides accessible labeling for the input field. Automatically associates with the input field via ARIA.
+
+**Props**
+
+| Name       | Type                          | Default     | Description               |
+| ---------- | ----------------------------- | ----------- | ------------------------- |
+| `children` | `ReactNode`                   | -           | Label content             |
+| `ref?`     | `React.Ref<HTMLLabelElement>` | `undefined` | Ref for the label element |
+
+**ARIA Attributes**
+
+| Attribute                | Value    | Purpose                        | Applied To    |
+| ------------------------ | -------- | ------------------------------ | ------------- |
+| `id`                     | `string` | Unique label identifier        | Label element |
+| `htmlFor`                | `string` | Associates with input field    | Label element |
+| `data-spar-input-label` | `""`     | Identifies input label element | Label element |
+
+### Input.Description
+
+The description element that provides helper text for the input field. Automatically linked to the input field via aria-describedby.
+
+**Props**
+
+| Name       | Type                        | Default     | Description                     |
+| ---------- | --------------------------- | ----------- | ------------------------------- |
+| `children` | `ReactNode`                 | -           | Description content             |
+| `ref?`     | `React.Ref<HTMLDivElement>` | `undefined` | Ref for the description element |
+
+**ARIA Attributes**
+
+| Attribute                      | Value    | Purpose                              | Applied To          |
+| ------------------------------ | -------- | ------------------------------------ | ------------------- |
+| `id`                           | `string` | Unique description identifier        | Description element |
+| `data-spar-input-description` | `""`     | Identifies input description element | Description element |
+
+### Input.ErrorMessage
+
+The error message element that announces validation errors to screen readers. Uses role="alert" for immediate announcement and is automatically linked to the input field.
+
+**Props**
+
+| Name       | Type                        | Default     | Description               |
+| ---------- | --------------------------- | ----------- | ------------------------- |
+| `children` | `ReactNode`                 | -           | Error content             |
+| `ref?`     | `React.Ref<HTMLDivElement>` | `undefined` | Ref for the error element |
+
+**ARIA Attributes**
+
+| Attribute                | Value         | Purpose                           | Applied To    |
+| ------------------------ | ------------- | --------------------------------- | ------------- |
+| `id`                     | `string`      | Unique error identifier           | Error element |
+| `role`                   | `"alert"`     | Announces errors immediately      | Error element |
+| `aria-live`              | `"assertive"` | Forces screen reader announcement | Error element |
+| `data-spar-input-error` | `""`          | Identifies input error element    | Error element |
+
+## Keyboard Interactions
+
+Complete keyboard behavior for the Input component:
+
+| Key           | Action            | Context       | Notes                                                    |
+| ------------- | ----------------- | ------------- | -------------------------------------------------------- |
+| `Tab`         | Navigate forward  | Always        | Moves focus to the input field or next focusable element |
+| `Shift + Tab` | Navigate backward | Always        | Moves focus to previous focusable element                |
+| `Enter`       | Submit form       | Form context  | Submits parent form when input is focused                |
+| `Backspace`   | Delete character  | Text input    | Removes character before cursor                          |
+| `Delete`      | Delete character  | Text input    | Removes character after cursor                           |
+| `Home`        | Move to start     | Text input    | Moves cursor to beginning of text                        |
+| `End`         | Move to end       | Text input    | Moves cursor to end of text                              |
+| `ArrowLeft`   | Move left         | Text input    | Moves cursor one character left                          |
+| `ArrowRight`  | Move right        | Text input    | Moves cursor one character right                         |
+| `Ctrl + A`    | Select all        | Text input    | Selects all text in input                                |
+| `Ctrl + C`    | Copy              | Text selected | Copies selected text to clipboard                        |
+| `Ctrl + X`    | Cut               | Text selected | Cuts selected text to clipboard                          |
+| `Ctrl + V`    | Paste             | Text input    | Pastes text from clipboard                               |
+| `Ctrl + Z`    | Undo              | Text input    | Undoes last edit operation                               |

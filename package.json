@@ -1,0 +1,52 @@
+{
+  "name": "spar",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:docs": "pnpm --filter @turkish-technology/spar build && pnpm --filter @turkish-technology/docs start",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "format": "prettier --write \"**/*.{ts,tsx,mdx,json,yml,yaml,css,scss}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx,json,yml,yaml,css,scss}\"",
+    "check-types": "turbo run check-types",
+    "prepare": "husky",
+    "version:spar": "pnpm --filter @turkish-technology/spar version",
+    "publish:spar": "pnpm publish --filter @turkish-technology/spar --no-git-checks --provenance",
+    "publish:spar:dry": "pnpm --filter @turkish-technology/spar publish --dry-run --no-git-checks"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@docusaurus/eslint-plugin": "^3.8.1",
+    "@eslint/js": "^9.34.0",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
+    "@typescript-eslint/parser": "^8.41.0",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.5",
+    "prettier": "^3.6.2",
+    "turbo": "latest"
+  },
+  "packageManager": "pnpm@10.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{md,json,yaml,yml}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=22.18.0",
+    "pnpm": ">=9.15.0"
+  }
+}

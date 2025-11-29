@@ -1,0 +1,170 @@
+.anatomy-viewer-wrapper {
+  display: flex;
+  gap: 1rem;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 2rem 0;
+  background: #FAFAFA;
+
+  .anatomy-demo {
+    flex: 1;
+    padding: 2rem;
+    min-height: 200px;
+    max-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF;
+    border-radius: 4px;
+    overflow: visible;
+    position: relative;
+  }
+
+  .anatomy-parts {
+    width: 220px;
+    border-left: 1px solid #E0E0E0;
+    padding-left: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Hide scrollbar by default, show on hover */
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    
+    &:hover {
+      scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+    }
+
+    /* Webkit browsers (Chrome, Safari, Edge) */
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: transparent;
+      border-radius: 3px;
+      transition: background-color 0.2s ease;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .part-header {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: #222530;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .part-item {
+      padding: 0.625rem 0.75rem;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      margin-bottom: 0.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      &:hover,
+      &.active {
+        background: rgba(34, 37, 48, 0.08);
+      }
+
+      .part-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #222530;
+      }
+
+      .part-description {
+        font-size: 0.75rem;
+        color: #757575;
+        line-height: 1.3;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    .anatomy-parts {
+      width: 100%;
+      border-left: none;
+      border-top: 1px solid #E0E0E0;
+      padding-left: 0;
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+  }
+}
+
+.spar-anatomy-highlight {
+  outline: 3px solid #222530 !important;
+  outline-offset: 2px;
+  position: relative;
+  z-index: 10;
+  transition: outline 0.15s ease;
+  border-radius: 4px;
+}
+
+[data-theme='dark'] {
+  .anatomy-viewer-wrapper {
+    border-color: #2A2D3A;
+    background: #1A1D28;
+
+    .anatomy-demo {
+      background: #212433;
+    }
+
+    .anatomy-parts {
+      border-left-color: #2A2D3A;
+
+      &:hover {
+        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+      }
+
+      &:hover::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.3);
+      }
+
+      .part-header {
+        color: #FFFFFF;
+      }
+
+      .part-item {
+        &:hover,
+        &.active {
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        .part-label {
+          color: #FFFFFF;
+        }
+
+        .part-description {
+          color: #B0B0B0;
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      .anatomy-parts {
+        border-top-color: #2A2D3A;
+      }
+    }
+  }
+
+  .spar-anatomy-highlight {
+    outline-color: #FFFFFF !important;
+  }
+}

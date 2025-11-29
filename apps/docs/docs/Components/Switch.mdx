@@ -1,0 +1,390 @@
+---
+title: Switch
+description: A headless boolean toggle control for on/off states with comprehensive accessibility support and form integration.
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Switch } from '@turkish-technology/spar';
+
+# Switch
+
+A headless boolean toggle control that provides switch-specific ARIA semantics and behavior for on/off states.
+
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
+
+## Live Demo
+
+<LiveCode
+  code={`function BasicExample() {
+  const [isEnabled, setIsEnabled] = useState(false);
+  
+  return (
+    <div className='switch-demo-container'>
+      <Switch 
+        className='switch'
+        checked={isEnabled}
+        onChange={setIsEnabled}
+      >
+      </Switch>
+    </div>
+  );
+}`}
+/>
+
+### switch.tsx
+
+```tsx
+import { Switch } from '@turkish-technology/spar';
+
+function SwitchDemo() {
+  return <Switch className='switch' checked={isEnabled} onChange={setIsEnabled}></Switch>;
+}
+
+export default SwitchDemo;
+```
+
+### switch.css
+
+```css
+.switch {
+  background-color: rgba(0, 0, 0, 0.08);
+  border: 0;
+  width: 56px;
+  height: 32px;
+  padding: 4px;
+  border-radius: 24px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.switch::after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.72);
+  transition: transform 0.2s ease;
+}
+
+.switch[data-checked]::after {
+  transform: translateX(100%);
+}
+
+[data-theme='dark'] .switch {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme='dark'] .switch::after {
+  background: rgba(255, 255, 255, 0.72);
+}
+```
+
+## Features
+
+- ✅ Full switch ARIA semantics with `role="switch"`
+- ✅ Controlled and uncontrolled modes
+- ✅ Comprehensive keyboard navigation (Space, Enter)
+- ✅ Form integration with hidden input
+- ✅ State management (focus, hover, active tracking)
+- ✅ Disabled and read-only states
+- ✅ Auto-focus support
+- ✅ Custom element rendering with `as` prop
+- ✅ Rich data attributes for styling hooks
+
+## Installation
+
+```tsx
+import { Switch } from '@turkish-technology/spar';
+```
+
+## Anatomy
+
+The Switch component is a single element that handles all switch functionality internally:
+
+<AnatomyViewer
+  parts={[
+    {
+      name: 'switch',
+      label: 'Switch',
+      description: 'Boolean toggle control with state management',
+    },
+  ]}
+>
+  <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
+    <Switch
+      data-spar-part='switch'
+      defaultChecked={true}
+      style={{
+        padding: '8px 16px',
+        border: '2px solid #007acc',
+        borderRadius: '4px',
+        backgroundColor: '#007acc',
+        color: 'white',
+        cursor: 'pointer',
+      }}
+    >
+      {' ON '}
+    </Switch>
+  </div>
+</AnatomyViewer>
+
+### Structure
+
+```tsx
+<Switch>Toggle Label</Switch>
+```
+
+**Data Flow:**
+
+- User interaction (click/keyboard) → Internal state management → onChange callback
+- Hidden input synchronizes with switch state for form submission
+- ARIA attributes (role="switch", aria-checked) update automatically
+- Focus and interaction states tracked internally
+
+## Code Examples
+
+### Basic Usage
+
+```tsx
+function BasicSwitch() {
+  const [enabled, setEnabled] = useState(false);
+
+  return (
+    <Switch checked={enabled} onChange={setEnabled}>
+      Toggle Setting
+    </Switch>
+  );
+}
+```
+
+### Uncontrolled Switch
+
+```tsx
+function UncontrolledSwitch() {
+  return (
+    <Switch defaultChecked={false} onChange={(checked) => console.log('Changed to:', checked)}>
+      Auto-managed Switch
+    </Switch>
+  );
+}
+```
+
+### Form Integration
+
+```tsx
+function FormExample() {
+  const [settings, setSettings] = useState({
+    notifications: false,
+    darkMode: true,
+    autoSave: false,
+  });
+
+  return (
+    <form onSubmit={(e) => e.preventDefault()}>
+      <fieldset>
+        <legend>User Preferences</legend>
+
+        <Switch
+          name='notifications'
+          checked={settings.notifications}
+          onChange={(checked) => setSettings((prev) => ({ ...prev, notifications: checked }))}
+          aria-label='Enable notifications'
+        >
+          Notifications
+        </Switch>
+
+        <Switch
+          name='darkMode'
+          checked={settings.darkMode}
+          onChange={(checked) => setSettings((prev) => ({ ...prev, darkMode: checked }))}
+          aria-label='Enable dark mode'
+        >
+          Dark Mode
+        </Switch>
+
+        <Switch
+          name='autoSave'
+          checked={settings.autoSave}
+          onChange={(checked) => setSettings((prev) => ({ ...prev, autoSave: checked }))}
+          isRequired
+          aria-label='Enable auto-save'
+        >
+          Auto-save (Required)
+        </Switch>
+      </fieldset>
+    </form>
+  );
+}
+```
+
+### Accessibility with Labels
+
+```tsx
+function AccessibleSwitch() {
+  const [isOn, setIsOn] = useState(false);
+
+  return (
+    <div>
+      <label id='wifi-label' htmlFor='wifi-switch'>
+        Wi-Fi Connection
+      </label>
+      <p id='wifi-desc'>Toggle to enable or disable Wi-Fi connectivity</p>
+      <Switch
+        id='wifi-switch'
+        checked={isOn}
+        onChange={setIsOn}
+        aria-labelledby='wifi-label'
+        aria-describedby='wifi-desc'
+      >
+        {isOn ? 'Connected' : 'Disconnected'}
+      </Switch>
+    </div>
+  );
+}
+```
+
+### Disabled and Read-only States
+
+```tsx
+function StateVariations() {
+  const [enabled, setEnabled] = useState(true);
+
+  return (
+    <div>
+      <Switch checked={enabled} onChange={setEnabled}>
+        Normal Switch
+      </Switch>
+
+      <Switch checked={true} isDisabled>
+        Disabled (On)
+      </Switch>
+
+      <Switch checked={false} isDisabled>
+        Disabled (Off)
+      </Switch>
+
+      <Switch checked={true} isReadOnly>
+        Read-only (On)
+      </Switch>
+    </div>
+  );
+}
+```
+
+### Custom Element Rendering
+
+```tsx
+function CustomElement() {
+  const [active, setActive] = useState(false);
+
+  return (
+    <Switch
+      as='div'
+      checked={active}
+      onChange={setActive}
+      role='switch' // Required when using non-button elements
+      tabIndex={0} // Required for keyboard navigation
+    >
+      Custom Div Switch
+    </Switch>
+  );
+}
+```
+
+## API Reference
+
+### Switch
+
+A headless boolean toggle control that provides switch-specific ARIA semantics and comprehensive accessibility features.
+
+**Props**
+
+| Name                | Type                         | Default     | Description                                                                    |
+| ------------------- | ---------------------------- | ----------- | ------------------------------------------------------------------------------ |
+| `as?`               | `ElementType`                | `'button'`  | The element or component to render as                                          |
+| `checked?`          | `boolean`                    | `undefined` | Controlled checked state. When provided, component operates in controlled mode |
+| `defaultChecked?`   | `boolean`                    | `false`     | Default checked state for uncontrolled usage                                   |
+| `onChange?`         | `(checked: boolean) => void` | `undefined` | Callback fired when the checked state changes                                  |
+| `isDisabled?`       | `boolean`                    | `false`     | Disabled state - properly announced to screen readers                          |
+| `name?`             | `string`                     | `undefined` | Form input name for form integration                                           |
+| `value?`            | `string`                     | `'on'`      | Form input value when checked                                                  |
+| `form?`             | `string`                     | `undefined` | Form ID to associate with                                                      |
+| `isRequired?`       | `boolean`                    | `false`     | Required state for form validation                                             |
+| `isReadOnly?`       | `boolean`                    | `false`     | Read-only state - prevents interaction                                         |
+| `shouldAutoFocus?`  | `boolean`                    | `false`     | Auto-focus on mount                                                            |
+| `aria-label?`       | `string`                     | `undefined` | Accessible name for the switch. Required when switch has no visible label      |
+| `aria-labelledby?`  | `string`                     | `undefined` | ID of element that labels the switch                                           |
+| `aria-describedby?` | `string`                     | `undefined` | ID of element that describes the switch                                        |
+| `children?`         | `ReactNode`                  | `undefined` | Content to display inside the switch                                           |
+
+**Events**
+
+| Name           | Parameters               | Description               | When Triggered                                                  |
+| -------------- | ------------------------ | ------------------------- | --------------------------------------------------------------- |
+| `onChange`     | `(checked: boolean)`     | Switch state changes      | User toggles switch via click, keyboard, or programmatic change |
+| `onClick`      | `(event: MouseEvent)`    | Mouse click on switch     | User clicks the switch element                                  |
+| `onKeyDown`    | `(event: KeyboardEvent)` | Key pressed while focused | User presses Space or Enter keys                                |
+| `onFocus`      | `(event: FocusEvent)`    | Switch receives focus     | Focus moves to switch via Tab navigation or programmatically    |
+| `onBlur`       | `(event: FocusEvent)`    | Switch loses focus        | Focus moves away from switch                                    |
+| `onMouseEnter` | `(event: MouseEvent)`    | Mouse enters switch area  | Cursor moves over switch (unless disabled)                      |
+| `onMouseLeave` | `(event: MouseEvent)`    | Mouse leaves switch area  | Cursor moves away from switch                                   |
+| `onMouseDown`  | `(event: MouseEvent)`    | Mouse button pressed      | User starts clicking switch (unless disabled or read-only)      |
+| `onMouseUp`    | `(event: MouseEvent)`    | Mouse button released     | User releases click on switch                                   |
+
+**ARIA Attributes**
+
+| Attribute          | Value      | Purpose                                                  | Applied To           |
+| ------------------ | ---------- | -------------------------------------------------------- | -------------------- |
+| `role`             | `"switch"` | Identifies element as a switch control                   | Switch element       |
+| `aria-checked`     | `boolean`  | Indicates the current state of the switch                | Switch element       |
+| `aria-disabled`    | `boolean`  | Indicates switch is disabled (when `isDisabled={true}`)  | Switch element       |
+| `aria-readonly`    | `boolean`  | Indicates switch is read-only (when `isReadOnly={true}`) | Switch element       |
+| `aria-label`       | `string`   | Provides accessible name when no visible label exists    | Switch element       |
+| `aria-labelledby`  | `string`   | References element that labels the switch                | Switch element       |
+| `aria-describedby` | `string`   | References element that describes the switch             | Switch element       |
+| `aria-hidden`      | `true`     | Hides hidden form input from assistive technology        | Hidden input element |
+
+**Data Attributes**
+
+| Attribute       | Value                      | Purpose                                             | Applied To     |
+| --------------- | -------------------------- | --------------------------------------------------- | -------------- |
+| `data-switch`   | `""`                       | Identifies the element as a switch                  | Switch element |
+| `data-state`    | `"checked" \| "unchecked"` | Indicates current checked state                     | Switch element |
+| `data-checked`  | `""`                       | Present when switch is checked                      | Switch element |
+| `data-disabled` | `""`                       | Present when switch is disabled                     | Switch element |
+| `data-readonly` | `""`                       | Present when switch is read-only                    | Switch element |
+| `data-focus`    | `""`                       | Present when switch has focus                       | Switch element |
+| `data-hover`    | `""`                       | Present when switch is hovered (unless disabled)    | Switch element |
+| `data-active`   | `""`                       | Present when switch is being pressed                | Switch element |
+| `data-required` | `""`                       | Present when switch is required for form validation | Switch element |
+
+## Keyboard Interactions
+
+Complete keyboard behavior for the Switch component:
+
+| Key           | Action                    | Context          | Notes                                                             |
+| ------------- | ------------------------- | ---------------- | ----------------------------------------------------------------- |
+| `Tab`         | Navigate to switch        | Focus management | Moves focus to the switch if not disabled                         |
+| `Shift + Tab` | Navigate away from switch | Focus management | Moves focus to previous focusable element                         |
+| `Space`       | Toggle switch             | Switch focused   | Toggles checked state, prevented if disabled or read-only         |
+| `Enter`       | Toggle switch             | Switch focused   | Alternative activation method, prevented if disabled or read-only |
+
+**Focus Management:**
+
+- Switch receives focus via Tab navigation when `tabIndex={0}` (default)
+- Disabled switches are excluded from tab order (`tabIndex={-1}`)
+- Focus is visually indicated through `data-focus` attribute
+- Focus state is properly managed during mouse interactions
+
+**Screen Reader Behavior:**
+
+- Switch is announced as "switch" due to `role="switch"`
+- Current state is announced as "checked" or "not checked"
+- Disabled state is announced when `aria-disabled="true"`
+- Read-only state is announced when `aria-readonly="true"`
+- Label and description are properly associated via ARIA attributes

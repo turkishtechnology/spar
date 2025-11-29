@@ -1,0 +1,425 @@
+---
+title: Collapsible
+description: A headless collapsible component that manages the visibility of content sections with full accessibility support.
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
+
+# Collapsible
+
+A headless collapsible component that manages the visibility of content sections with full accessibility support.
+
+![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
+![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
+
+## Live Demo
+
+<LiveCode 
+  code={`function BasicExample() {
+
+return (
+
+<Collapsible className='collapsible-demo-container'>
+  <CollapsibleTrigger className='collapsible-trigger'>
+    <svg
+      className='collapsible-trigger-icon'
+      xmlns='http://www.w3.org/2000/svg'
+      width='17'
+      height='17'
+      viewBox='0 0 17 17'
+      fill='none'
+    >
+      <path d='M8.33312 1.38867C4.49978 1.38867 1.38867 4.49978 1.38867 8.33312C1.38867 12.1665 4.49978 15.2776 8.33312 15.2776C12.1665 15.2776 15.2776 12.1665 15.2776 8.33312C15.2776 4.49978 12.1665 1.38867 8.33312 1.38867ZM11.1109 9.02756H9.02756V11.1109C9.02756 11.4928 8.71506 11.8053 8.33312 11.8053C7.95117 11.8053 7.63867 11.4928 7.63867 11.1109V9.02756H5.55534C5.17339 9.02756 4.86089 8.71506 4.86089 8.33312C4.86089 7.95117 5.17339 7.63867 5.55534 7.63867H7.63867V5.55534C7.63867 5.17339 7.95117 4.86089 8.33312 4.86089C8.71506 4.86089 9.02756 5.17339 9.02756 5.55534V7.63867H11.1109C11.4928 7.63867 11.8053 7.95117 11.8053 8.33312C11.8053 8.71506 11.4928 9.02756 11.1109 9.02756Z' />
+    </svg>
+  </CollapsibleTrigger>
+  <CollapsibleContent className='collapsible-content'>
+    <div className='collapsible-item'></div>
+    <div className='collapsible-item'></div>
+    <div className='collapsible-item'></div>
+  </CollapsibleContent>
+</Collapsible>
+); }`} />
+
+### collapsible.tsx
+
+```tsx
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
+
+function CollapsibleDemo() {
+  return (
+    <Collapsible>
+      <CollapsibleTrigger className='collapsible-trigger'>
+        <svg
+          className='collapsible-trigger-icon'
+          xmlns='http://www.w3.org/2000/svg'
+          width='17'
+          height='17'
+          viewBox='0 0 17 17'
+          fill='none'
+        >
+          <path d='M8.33312 1.38867C4.49978 1.38867 1.38867 4.49978 1.38867 8.33312C1.38867 12.1665 4.49978 15.2776 8.33312 15.2776C12.1665 15.2776 15.2776 12.1665 15.2776 8.33312C15.2776 4.49978 12.1665 1.38867 8.33312 1.38867ZM11.1109 9.02756H9.02756V11.1109C9.02756 11.4928 8.71506 11.8053 8.33312 11.8053C7.95117 11.8053 7.63867 11.4928 7.63867 11.1109V9.02756H5.55534C5.17339 9.02756 4.86089 8.71506 4.86089 8.33312C4.86089 7.95117 5.17339 7.63867 5.55534 7.63867H7.63867V5.55534C7.63867 5.17339 7.95117 4.86089 8.33312 4.86089C8.71506 4.86089 9.02756 5.17339 9.02756 5.55534V7.63867H11.1109C11.4928 7.63867 11.8053 7.95117 11.8053 8.33312C11.8053 8.71506 11.4928 9.02756 11.1109 9.02756Z' />
+        </svg>
+      </CollapsibleTrigger>
+      <CollapsibleContent className='collapsible-content'>
+        <div className='collapsible-item'></div>
+        <div className='collapsible-item'></div>
+        <div className='collapsible-item'></div>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
+export default CollapsibleDemo;
+```
+
+### collapsible.css
+
+```css
+.collapsible-trigger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 26.667px;
+  padding: 5px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-inline: auto;
+}
+
+[data-theme='dark'] .collapsible-trigger {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.collapsible-trigger-icon {
+  fill: #222530;
+}
+
+[data-theme='dark'] .collapsible-trigger-icon {
+  fill: #f2f5f8;
+}
+
+.collapsible-content {
+  display: flex;
+  flex-direction: column;
+  width: 216px;
+  gap: 8px;
+}
+
+.collapsible-item {
+  height: 27px;
+  border-radius: 5.4px;
+  border: 0.675px solid #e1e4ea;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] .collapsible-item {
+  border-color: #2b303b;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+```
+
+## Features
+
+- **Controlled and uncontrolled modes** - Full control over open state or automatic management
+- **Keyboard navigation** - Enter and Space key support for trigger activation
+- **Focus management** - Proper focus handling and restoration
+- **Screen reader support** - ARIA attributes for accessibility
+- **Flexible trigger elements** - Support for button and custom elements with proper semantics
+- **Force mount option** - Keep content mounted when closed for performance or search optimization
+- **Browser search integration** - Content findability with `beforematch` event support
+- **Animation support** - CSS custom properties for smooth transitions
+- **Polymorphic components** - Render as any element using the `as` prop
+
+## Installation
+
+```bash
+pnpm install @turkish-technology/spar
+```
+
+```tsx
+import { Collapsible } from '@turkish-technology/spar';
+// or
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
+```
+
+## Anatomy
+
+The Collapsible component consists of three main parts:
+
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'Collapsible', description: 'Context and state provider' },
+    { name: 'trigger', label: 'CollapsibleTrigger', description: 'Toggle button' },
+    { name: 'content', label: 'CollapsibleContent', description: 'Collapsible content container' },
+  ]}
+>
+  <Collapsible data-spar-part='root' style={{ width: '100%' }}>
+    <CollapsibleTrigger
+      data-spar-part='trigger'
+      style={{
+        padding: '10px 16px',
+        background: '#f5f5f5',
+        border: '1px solid #ddd',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: '14px',
+        fontWeight: '500',
+        display: 'block',
+        width: '100%',
+        textAlign: 'left',
+      }}
+    >
+      {' Show Content '}
+    </CollapsibleTrigger>
+    <CollapsibleContent
+      data-spar-part='content'
+      style={{
+        marginTop: '8px',
+        padding: '12px',
+        border: '1px solid #ddd',
+        borderRadius: '6px',
+        background: '#fafafa',
+      }}
+    >
+      {' This content can be collapsed and expanded. '}
+    </CollapsibleContent>
+  </Collapsible>
+</AnatomyViewer>
+
+### Structure
+
+```tsx
+<Collapsible>
+  <CollapsibleTrigger />
+  <CollapsibleContent />
+</Collapsible>
+```
+
+**Data Flow:**
+
+- `Collapsible`: Provides context and state management for the collapsible
+- `CollapsibleTrigger`: Interactive element that toggles the content visibility
+- `CollapsibleContent`: Container that shows/hides based on the collapsible state
+
+## Code Examples
+
+### Basic Usage
+
+```tsx
+import { Collapsible } from '@turkish-technology/spar';
+
+function BasicCollapsible() {
+  return (
+    <CollapsibleRoot>
+      <CollapsibleTrigger>Toggle Content</CollapsibleTrigger>
+      <CollapsibleContent>
+        <p>This content can be toggled.</p>
+      </CollapsibleContent>
+    </CollapsibleRoot>
+  );
+}
+```
+
+### Controlled State
+
+```tsx
+import { Collapsible } from '@turkish-technology/spar';
+import { useState } from 'react';
+
+function ControlledCollapsible() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <CollapsibleRoot open={isOpen} onOpenChange={setIsOpen}>
+      <CollapsibleTrigger>{isOpen ? 'Collapse' : 'Expand'}</CollapsibleTrigger>
+      <CollapsibleContent>
+        <div>
+          <h3>Controlled Content</h3>
+          <p>The parent component controls this state</p>
+        </div>
+      </CollapsibleContent>
+    </CollapsibleRoot>
+  );
+}
+```
+
+### Default Open State
+
+```tsx
+import { Collapsible } from '@turkish-technology/spar';
+
+function DefaultOpenCollapsible() {
+  return (
+    <CollapsibleRoot defaultOpen={true}>
+      <CollapsibleTrigger>Toggle Content</CollapsibleTrigger>
+      <CollapsibleContent>
+        <p>This content starts expanded</p>
+      </CollapsibleContent>
+    </CollapsibleRoot>
+  );
+}
+```
+
+### Custom Trigger Element
+
+```tsx
+import { Collapsible } from '@turkish-technology/spar';
+
+function CustomTriggerCollapsible() {
+  return (
+    <CollapsibleRoot>
+      <CollapsibleTrigger as='div' style={{ cursor: 'pointer' }}>
+        <h3>Click this heading to expand</h3>
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <p>Content revealed by custom trigger.</p>
+      </CollapsibleContent>
+    </CollapsibleRoot>
+  );
+}
+```
+
+### Force Mount Content
+
+```tsx
+import { Collapsible } from '@turkish-technology/spar';
+
+function ForceMountCollapsible() {
+  return (
+    <CollapsibleRoot>
+      <CollapsibleTrigger>Toggle (Content Always Mounted)</CollapsibleTrigger>
+      <CollapsibleContent forceMount={true}>
+        <p>This content stays in the DOM even when collapsed.</p>
+        <p>Useful for maintaining component state or enabling browser search.</p>
+      </CollapsibleContent>
+    </CollapsibleRoot>
+  );
+}
+```
+
+### Disabled State
+
+```tsx
+import { Collapsible } from '@turkish-technology/spar';
+
+function DisabledCollapsible() {
+  return (
+    <CollapsibleRoot isDisabled={true}>
+      <CollapsibleTrigger>Disabled Trigger</CollapsibleTrigger>
+      <CollapsibleContent>
+        <p>This content cannot be toggled</p>
+      </CollapsibleContent>
+    </CollapsibleRoot>
+  );
+}
+```
+
+## API Reference
+
+### CollapsibleRoot
+
+The root component that provides context and state management for the collapsible.
+
+**Props**
+
+| Name            | Type                      | Default | Description                               |
+| --------------- | ------------------------- | ------- | ----------------------------------------- |
+| `open?`         | `boolean`                 | -       | Controlled open state                     |
+| `defaultOpen?`  | `boolean`                 | `false` | Default open state for uncontrolled usage |
+| `onOpenChange?` | `(open: boolean) => void` | -       | Callback fired when open state changes    |
+| `isDisabled?`   | `boolean`                 | `false` | Whether the collapsible is disabled       |
+| `children`      | `ReactNode`               | -       | Child components                          |
+
+**Events**
+
+| Name           | Parameters        | Description        | When Triggered                          |
+| -------------- | ----------------- | ------------------ | --------------------------------------- |
+| `onOpenChange` | `(open: boolean)` | Open state changes | User interaction or programmatic change |
+
+**ARIA Attributes**
+
+| Attribute       | Value                | Purpose                  | Applied To   |
+| --------------- | -------------------- | ------------------------ | ------------ |
+| `data-state`    | `"open" \| "closed"` | Indicates current state  | Root element |
+| `data-disabled` | `""` (when disabled) | Indicates disabled state | Root element |
+
+### CollapsibleTrigger
+
+Interactive element that toggles the content visibility with full accessibility support.
+
+**Props**
+
+| Name        | Type                | Default    | Description                            |
+| ----------- | ------------------- | ---------- | -------------------------------------- |
+| `as?`       | `React.ElementType` | `"button"` | Element type for polymorphic rendering |
+| `children?` | `ReactNode`         | -          | Trigger content                        |
+
+**Events**
+
+| Name        | Parameters                     | Description            | When Triggered          |
+| ----------- | ------------------------------ | ---------------------- | ----------------------- |
+| `onClick`   | `(event: React.MouseEvent)`    | Trigger clicked        | Mouse click interaction |
+| `onKeyDown` | `(event: React.KeyboardEvent)` | Key pressed on trigger | Keyboard interaction    |
+
+**ARIA Attributes**
+
+| Attribute       | Value                | Purpose                                        | Applied To         |
+| --------------- | -------------------- | ---------------------------------------------- | ------------------ |
+| `aria-expanded` | `boolean`            | Indicates if content is expanded               | Trigger element    |
+| `aria-controls` | `string`             | References the controlled content              | Trigger element    |
+| `aria-disabled` | `boolean`            | Indicates disabled state (non-button elements) | Trigger element    |
+| `disabled`      | `boolean`            | Native disabled attribute (button elements)    | Button trigger     |
+| `role`          | `"button"`           | Semantic button role (non-button elements)     | Non-button trigger |
+| `tabIndex`      | `0 \| -1`            | Focus management (non-button elements)         | Non-button trigger |
+| `data-state`    | `"open" \| "closed"` | Indicates current state                        | Trigger element    |
+| `data-disabled` | `""` (when disabled) | Indicates disabled state                       | Trigger element    |
+
+### CollapsibleContent
+
+Container that shows/hides based on the collapsible state with advanced features.
+
+**Props**
+
+| Name             | Type                     | Default | Description                                             |
+| ---------------- | ------------------------ | ------- | ------------------------------------------------------- |
+| `as?`            | `React.ElementType`      | `"div"` | Element type for polymorphic rendering                  |
+| `forceMount?`    | `boolean`                | `false` | Force content to remain mounted when closed             |
+| `children?`      | `ReactNode`              | -       | Content to be shown/hidden                              |
+| `onBeforeMatch?` | `(event: Event) => void` | -       | Callback fired when content is found via browser search |
+
+**Events**
+
+| Name            | Parameters       | Description                      | When Triggered                                   |
+| --------------- | ---------------- | -------------------------------- | ------------------------------------------------ |
+| `onBeforeMatch` | `(event: Event)` | Content found via browser search | Browser's "find on page" feature locates content |
+
+**ARIA Attributes**
+
+| Attribute       | Value                   | Purpose                             | Applied To      |
+| --------------- | ----------------------- | ----------------------------------- | --------------- |
+| `hidden`        | `true \| "until-found"` | Controls visibility and findability | Content element |
+| `data-state`    | `"open" \| "closed"`    | Indicates current state             | Content element |
+| `data-disabled` | `""` (when disabled)    | Indicates disabled state            | Content element |
+
+**CSS Custom Properties**
+
+| Property                             | Description                      | When Available       |
+| ------------------------------------ | -------------------------------- | -------------------- |
+| `--spar-collapsible-content-width`  | Current content width in pixels  | When content is open |
+| `--spar-collapsible-content-height` | Current content height in pixels | When content is open |
+
+## Keyboard Interactions
+
+| Key           | Action                     | Context         | Notes                                      |
+| ------------- | -------------------------- | --------------- | ------------------------------------------ |
+| `Tab`         | Navigate to trigger        | Always          | Moves focus to the trigger element         |
+| `Shift + Tab` | Navigate away from trigger | Always          | Moves focus to previous focusable element  |
+| `Enter`       | Toggle content             | Trigger focused | Activates the trigger to show/hide content |
+| `Space`       | Toggle content             | Trigger focused | Alternative activation method for trigger  |
