@@ -1,4 +1,4 @@
-# Dockerfile for Docusaurus deployment on Dokploy
+# Dockerfile for Docusaurus deployment on Dokploy (Node.js serve)
 FROM node:22-alpine AS base
 
 # Enable pnpm
@@ -39,22 +39,24 @@ RUN pnpm --filter @turkish-technology/spar build
 # Build docs
 RUN pnpm --filter @turkish-technology/docs build
 
-# Production image
-FROM nginx:alpine AS runner
-WORKDIR /usr/share/nginx/html
+# Production image - Node.js serve
+FROM base AS runner
+WORKDIR /app
 
-# Remove default nginx config
-RUN rm /etc/nginx/conf.d/default.conf
-
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy only production dependencies
+COPY --from=deps /app/apps/docs/node_modules ./apps/docs/node_modules
+COPY --from=deps /app/apps/docs/package.json ./apps/docs/package.json
 
 # Copy built files
-COPY --from=builder /app/apps/docs/build /usr/share/nginx/html
+COPY --from=builder /app/apps/docs/build ./apps/docs/build
 
-# Verify files exist
-RUN ls -la /usr/share/nginx/html && ls -la /etc/nginx/conf.d/
+# Set working directory to docs
+WORKDIR /app/apps/docs
 
-EXPOSE 80
+# Install serve globally for static file serving
+RUN pnpm add -g serve
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 3000
+
+# Serve the built files
+CMD ["serve", "-s", "build", "-l", "3000"]
