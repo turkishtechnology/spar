@@ -15,9 +15,15 @@ COPY packages/glide/src ./packages/glide/src
 COPY packages/glide/tsconfig.json ./packages/glide/
 COPY packages/glide/rspack.config.mjs ./packages/glide/
 
-# Copy docs app
+# Copy docs app (exclude build folder)
 COPY apps/docs/package.json ./apps/docs/
-COPY apps/docs ./apps/docs
+COPY apps/docs/docusaurus.config.ts ./apps/docs/
+COPY apps/docs/sidebars.ts ./apps/docs/
+COPY apps/docs/tsconfig.json ./apps/docs/
+COPY apps/docs/docs ./apps/docs/docs
+COPY apps/docs/src ./apps/docs/src
+COPY apps/docs/static ./apps/docs/static
+COPY apps/docs/i18n ./apps/docs/i18n
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
