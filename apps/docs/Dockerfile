@@ -30,6 +30,9 @@ COPY --from=deps /app/apps/docs/node_modules ./apps/docs/node_modules
 # Copy source files
 COPY . .
 
+# Ensure build directory exists for Dokploy's .env file creation
+RUN mkdir -p /app/apps/docs/build
+
 # Build spar package first (dependency)
 RUN pnpm --filter @turkish-technology/spar build
 
