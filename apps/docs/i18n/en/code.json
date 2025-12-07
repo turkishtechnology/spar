@@ -323,43 +323,43 @@
     "description": "The title of the tag list page"
   },
   "landing.whats.new": {
-    "message": "YENİ ÖZELLİKLER",
+    "message": "WHAT'S NEW",
     "description": "WHAT'S NEW"
   },
   "landing.insights": {
-    "message": "Beş yeni özellik ile daha hızlı içgörüler",
+    "message": "Faster insights with five new features",
     "description": "Faster insights with five new features"
   },
-  "landing.build": {
-    "message": "Geliştir",
-    "description": "Build"
+  "landing.hero.accessible": {
+    "message": "Accessible",
+    "description": "Accessible (highlighted word in hero)"
   },
-  "landing.faster": {
-    "message": "daha hızlı",
-    "description": "faster"
+  "landing.hero.unstyled": {
+    "message": "unstyled",
+    "description": "unstyled (highlighted word in hero)"
   },
-  "landing.with": {
-    "message": "ile",
-    "description": "with"
+  "landing.hero.flexible": {
+    "message": "flexible",
+    "description": "flexible (highlighted word in hero)"
   },
-  "landing.takeoffs": {
-    "message": "Takeoff'un",
-    "description": "Takeoff's"
+  "landing.hero.tagline": {
+    "message": "components for your design system.",
+    "description": "Hero tagline after highlighted words"
   },
-  "landing.headless": {
-    "message": "Headless",
-    "description": "Headless"
+  "landing.hero.separator.comma": {
+    "message": ", ",
+    "description": "Comma separator"
   },
-  "landing.ui.system": {
-    "message": "UI sistemi",
-    "description": "UI system"
+  "landing.hero.separator.and": {
+    "message": ", and ",
+    "description": "And separator"
   },
   "landing.description": {
-    "message": "Stilsiz, temel bileşenler içeren açık kaynak kütüphanesi, uygulamalarınıza kopyalayıp yapıştırabileceğiniz stillendirilmiş örnekler koleksiyonu ile birlikte.",
+    "message": "Open-source library with unstyled, primitive components, along with a collection of styled examples you can copy and paste into your applications.",
     "description": "Open-source library with unstyled, primitive components description"
   },
   "landing.get.started": {
-    "message": "Başlayın",
+    "message": "Get Started",
     "description": "Get Started"
   },
   "landing.why.takeoff.headless": {

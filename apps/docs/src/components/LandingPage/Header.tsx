@@ -35,22 +35,22 @@ export default function LandingHeader() {
         </div>
         <div className='landing-header-titles'>
           <div className='landing-header-title-row'>
-            <Translate description='Build'>landing.build</Translate>
             <div className='landing-header-title-accent'>
-              <Translate description='faster'>landing.faster</Translate>
+              <Translate description='Accessible'>landing.hero.accessible</Translate>
+            </div>
+            <Translate description='comma'>landing.hero.separator.comma</Translate>
+            <div className='landing-header-title-accent'>
+              <Translate description='unstyled'>landing.hero.unstyled</Translate>
+            </div>
+            <Translate description='and'>landing.hero.separator.and</Translate>
+            <div className='landing-header-title-accent'>
+              <Translate description='flexible'>landing.hero.flexible</Translate>
             </div>
           </div>
           <div className='landing-header-title-row'>
-            <Translate description='with'>landing.with</Translate>
-            <div className='landing-header-title-accent'>
-              <Translate description="Takeoff's">landing.takeoffs</Translate>
-            </div>
-          </div>
-          <div className='landing-header-title-row'>
-            <div className='landing-header-title-accent'>
-              <Translate description='Headless'>landing.headless</Translate>
-            </div>
-            <Translate description='UI system'>landing.ui.system</Translate>
+            <Translate description='the UI components at the core of your design system'>
+              landing.hero.tagline
+            </Translate>
           </div>
         </div>
         <div className='landing-header-bottom'>
