@@ -323,11 +323,11 @@
     "description": "The title of the tag list page"
   },
   "landing.whats.new": {
-    "message": "YENİ ÖZELLİKLER",
+    "message": "YENİ",
     "description": "WHAT'S NEW"
   },
   "landing.insights": {
-    "message": "Beş yeni özellik ile daha hızlı içgörüler",
+    "message": "Üretime hazır headless bileşenler",
     "description": "Faster insights with five new features"
   },
   "landing.hero.accessible": {
@@ -336,14 +336,14 @@
   },
   "landing.hero.unstyled": {
     "message": "stilsiz",
-    "description": "stilsiz (highlighted word in hero)"
+    "description": "headless (highlighted word in hero)"
   },
   "landing.hero.flexible": {
-    "message": "esnek",
-    "description": "esnek (highlighted word in hero)"
+    "message": "özelleştirilebilir",
+    "description": "birleştirilebilir (highlighted word in hero)"
   },
   "landing.hero.tagline": {
-    "message": "Tasarım sisteminiz için bileşenler.",
+    "message": "React bileşenleri, çalışmaya hazır.",
     "description": "Hero tagline after highlighted words"
   },
   "landing.hero.separator.comma": {
@@ -355,15 +355,15 @@
     "description": "And separator"
   },
   "landing.description": {
-    "message": "Stilsiz, temel bileşenler içeren açık kaynak kütüphanesi, uygulamalarınıza kopyalayıp yapıştırabileceğiniz stillendirilmiş örnekler koleksiyonu ile birlikte.",
+    "message": "Stilsiz, davranış odaklı React bileşen primitifleri sunan açık kaynak kütüphanesi. Sıfır stil dayatması, tam erişilebilirlik yerleşik. Npm ile yükle ve tasarım sistemini özgürce inşa et.",
     "description": "Open-source library with unstyled, primitive components description"
   },
   "landing.get.started": {
-    "message": "Başlayın",
+    "message": "Geliştirmeye Başla",
     "description": "Get Started"
   },
   "landing.why.takeoff.headless": {
-    "message": "NEDEN TAKEOFF HEADLESS",
+    "message": "NEDEN SPAR HEADLESS",
     "description": "WHY TAKEOFF HEADLESS"
   },
   "landing.build.subheader": {
@@ -371,59 +371,59 @@
     "description": "Build (subheader)"
   },
   "landing.smarter": {
-    "message": "Daha Akıllı",
+    "message": "Akıllıca",
     "description": "Smarter"
   },
   "landing.not.harder": {
-    "message": ", Daha Zor Değil",
+    "message": ", Zorlanmadan",
     "description": ", not Harder"
   },
   "landing.speed.up.workflow": {
-    "message": "İş akışınızı hızlandırın",
+    "message": "Daha az kodla daha hızlı yayınla",
     "description": "Speed up your workflow"
   },
   "landing.workflow.description": {
-    "message": "Mantık ağırlıklı UI bileşenlerini yönetmek zaman alıcıdır. Takeoff Headless durum, erişilebilirlik ve klavye etkileşimlerini hazır olarak sunar—böylece ürününüzü benzersiz kılan şeyleri geliştirmeye odaklanabilirsiniz.",
+    "message": "Tekerleği yeniden icat etmeyi bırak. Spar Headless durum yönetimi, erişilebilirlik ve klavye etkileşimlerini hazır olarak sunar—böylece ürününüzü benzersiz kılan özelliklere odaklanabilirsin.",
     "description": "Managing logic-heavy UI components description"
   },
   "landing.your.ui.rules": {
-    "message": "UI'nız, kurallarınız",
+    "message": "Tasarımın, sınırsız özgürlük",
     "description": "Your UI, your rules"
   },
   "landing.styling.description": {
-    "message": "Stil sınırlamalarını atlayın. Headless bileşenlerimiz size tasarım üzerinde tam kontrol sağlarken, davranış ve erişilebilirlik gibi zor kısımlarla perde arkasında ilgilenir.",
+    "message": "Dayatılmış stillerle uğraşma. Headless bileşenlerimiz tasarım üzerinde tam özgürlük sağlarken, karmaşık davranışları ve erişilebilirliği perde arkasında yönetir.",
     "description": "Skip the styling limitations description"
   },
   "landing.monthly.downloads": {
-    "message": "Aylık npm indirmeleri",
+    "message": "Aylık npm indirme",
     "description": "Monthly npm downloads"
   },
   "landing.developers.building": {
-    "message": "Takeoff ile geliştiren geliştirici",
+    "message": "Spar kullanan geliştirici",
     "description": "Developers building with Takeoff"
   },
   "landing.github.stars": {
-    "message": "GitHub Yıldızları",
+    "message": "GitHub yıldızı",
     "description": "Github Stars"
   },
   "landing.headless.components": {
-    "message": "Dahil edilen headless bileşen",
+    "message": "Kullanıma hazır headless bileşen",
     "description": "Headless components included"
   },
   "features.wai.aria.ready": {
-    "message": "WAI-ARIA Hazır",
+    "message": "WAI-ARIA Uyumlu",
     "description": "WAI-ARIA Ready"
   },
   "features.wai.aria.description": {
-    "message": "Takeoff, yardımcı teknolojiler için anlamsal ve davranışsal doğruluğu sağlamak amacıyla WAI-ARIA en iyi uygulamalarını takip eder",
+    "message": "İlk günden WAI-ARIA standartlarına göre inşa edildi. Spar, yardımcı teknolojiler için semantik doğruluğu ve uygun davranışı garanti eder.",
     "description": "Takeoff follows WAI-ARIA best practices description"
   },
   "features.keyboard.support": {
-    "message": "Tam Klavye Desteği",
+    "message": "Tam Klavye Navigasyonu",
     "description": "Full Keyboard Support"
   },
   "features.keyboard.description": {
-    "message": "Tüm Takeoff bileşenleri tam klavye etkileşimini destekler—tab, ok tuşları, enter/escape—hazır olarak gelir.",
+    "message": "Tab, ok tuşları, enter/escape ile tam klavye desteği—tüm Spar bileşenleri kullanıcıların beklediği gibi çalışır, kutudan çıktığı gibi.",
     "description": "All Takeoff components support full keyboard interaction description"
   },
   "features.focus.handling": {
@@ -431,23 +431,23 @@
     "description": "Smart Focus Handling"
   },
   "features.focus.description": {
-    "message": "Odak yönetimi varsayılan olarak beklendiği gibi çalışır ve karmaşık UI akışları için özelleştirilebilir.",
+    "message": "Varsayılan olarak öngörülebilir çalışan odak yönetimi, karmaşık UI akışları ve modal etkileşimleri için tam özelleştirme seçenekleriyle.",
     "description": "Focus management works as expected by default description"
   },
   "features.screen.reader": {
-    "message": "Ekran Okuyucu Dostu",
+    "message": "Ekran Okuyucu Optimize",
     "description": "Screen Reader Friendly"
   },
   "features.screen.reader.description": {
-    "message": "Yaygın tuzakları önlemek ve tutarlı davranış sağlamak için başlıca ekran okuyucular üzerinde test edilmiştir.",
+    "message": "Yaygın erişilebilirlik tuzaklarını önlemek ve tutarlı davranış sağlamak için NVDA, VoiceOver ve JAWS ile titizlikle test edildi.",
     "description": "Tested across major screen readers description"
   },
   "aidriven.features": {
-    "message": "ÖZELLİKLER",
+    "message": "AI DESTEKLİ",
     "description": "FEATURES"
   },
   "aidriven.ai.driven": {
-    "message": "Yapay Zeka Destekli",
+    "message": "Copilot-Hazır",
     "description": "Ai Driven"
   },
   "aidriven.development": {
@@ -455,39 +455,39 @@
     "description": "Development"
   },
   "aidriven.description": {
-    "message": "Yapay zeka desteği ile hatasız ve hızlı geliştirme süreçleri için destek",
+    "message": ".github klasöründeki önceden yapılandırılmış GitHub Copilot talimatları ve promptlar, geliştirme süreciniz boyunca tutarlı ve ekip uyumlu AI desteği sağlar.",
     "description": "Support for error-free and rapid development processes with artificial intelligence assistance"
   },
   "aidriven.explore": {
-    "message": "Keşfet",
+    "message": "Daha Fazla",
     "description": "Explore"
   },
   "ending.ready.to.use": {
-    "message": "Kullanmaya hazır mısınız",
+    "message": "Geliştirmeye hazır mısın",
     "description": "Are you ready to use the"
   },
   "ending.headless.library": {
-    "message": "headless Takeoff UI kütüphanesini?",
-    "description": "headless Takeoff UI library?"
+    "message": "Spar Headless ile?",
+    "description": "headless Spar?"
   },
   "theming.themes": {
-    "message": "TEMALAR",
+    "message": "STİLLENDİRME",
     "description": "THEMES"
   },
   "theming.simple": {
-    "message": "Basit",
+    "message": "Zahmetsiz",
     "description": "Simple"
   },
   "theming.development": {
-    "message": "Geliştirme",
+    "message": "Özelleştirme",
     "description": "Development"
   },
   "theming.description": {
-    "message": "Kullanıcıları etkilemek için modern kullanıcı arayüzleri için tasarlanmıştır",
+    "message": "Modern tasarım sistemleri için tasarlandı. Kendi stillerini, tokenlerini veya CSS frameworkünü getir—Spar yolunun dışında kalır.",
     "description": "Built for the modern user interfaces to engage users"
   },
   "theming.try.it.now": {
-    "message": "Şimdi Deneyin",
+    "message": "Bileşenleri Keşfet",
     "description": "Try It Now"
   }
 }

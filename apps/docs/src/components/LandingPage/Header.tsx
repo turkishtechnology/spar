@@ -1,26 +1,24 @@
 import { useColorMode } from '@docusaurus/theme-common';
 import Translate from '@docusaurus/Translate';
 import Link from '@docusaurus/Link';
+import { Button } from '@turkish-technology/spar';
 
 export default function LandingHeader() {
   const color = useColorMode().colorMode === 'light' ? 'black' : 'white';
   return (
     <div
       className='landing-header-container'
-      style={{
-        backgroundImage: "url('/img/header-bg.svg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
     >
+      <img className='hero-image' src='/img/header-bg.svg' alt="" />
       <div className='landing-header-content'>
-        <div className='landing-header-top'>
+        <Link to='/docs/introduction' className='landing-header-top'>
           <Translate description="WHAT'S NEW">landing.whats.new</Translate>
           <div className='landing-header-divider' />
           <Translate description='Faster insights with five new features'>
             landing.insights
           </Translate>
           <svg
+            className='landing-header-arrow'
             xmlns='http://www.w3.org/2000/svg'
             width='24'
             height='24'
@@ -32,7 +30,7 @@ export default function LandingHeader() {
               fill={color}
             />
           </svg>
-        </div>
+        </Link>
         <div className='landing-header-titles'>
           <div className='landing-header-title-row'>
             <div className='landing-header-title-accent'>
@@ -59,10 +57,13 @@ export default function LandingHeader() {
               landing.description
             </Translate>
           </div>
-          <div className='landing-header-getstarted'>
-            <Link to='/docs/introduction'>
-              <Translate description='Get Started'>landing.get.started</Translate>
-            </Link>
+          <Button
+            as={Link}
+            // @ts-expect-error: Button is polymorphic but types are strict
+            to='/docs/introduction'
+            className='landing-header-getstarted'
+          >
+            <Translate description='Get Started'>landing.get.started</Translate>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='24'
@@ -75,7 +76,7 @@ export default function LandingHeader() {
                 fill={color}
               />
             </svg>
-          </div>
+          </Button>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             width='140'
