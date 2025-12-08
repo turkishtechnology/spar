@@ -489,5 +489,25 @@
   "theming.try.it.now": {
     "message": "Explore Components",
     "description": "Try It Now"
+  },
+  "footer.copyright": {
+    "message": "© 2024 Turkish Airlines",
+    "description": "Footer copyright text"
+  },
+  "footer.rights": {
+    "message": "All rights reserved.",
+    "description": "Footer rights reserved text"
+  },
+  "footer.term": {
+    "message": "Term",
+    "description": "Footer term link"
+  },
+  "footer.privacy": {
+    "message": "Privacy",
+    "description": "Footer privacy link"
+  },
+  "footer.cookies": {
+    "message": "Cookies",
+    "description": "Footer cookies link"
   }
 }

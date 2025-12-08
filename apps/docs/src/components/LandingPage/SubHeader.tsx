@@ -51,56 +51,56 @@ export default function LandingSubHeader() {
           </div>
         </div>
       </div>
-      <div className='subheader-stats'>
-        <div className='subheader-stat'>
-          <div className='subheader-stat-divider' />
-          <div className='subheader-stat-content'>
-            <div className='subheader-stat-number'>
-              <Translate>80k+</Translate>
-            </div>
-            <div>
-              <Translate description='Monthly npm downloads'>landing.monthly.downloads</Translate>
-            </div>
-          </div>
-        </div>
-        <div className='subheader-stat'>
-          <div className='subheader-stat-divider' />
-          <div className='subheader-stat-content'>
-            <div className='subheader-stat-number'>
-              <Translate>200+</Translate>
-            </div>
-            <div>
-              <Translate description='Developers building with Takeoff'>
-                landing.developers.building
-              </Translate>
-            </div>
-          </div>
-        </div>
-        <div className='subheader-stat'>
-          <div className='subheader-stat-divider' />
-          <div className='subheader-stat-content'>
-            <div className='subheader-stat-number'>
-              <Translate>900+</Translate>
-            </div>
-            <div>
-              <Translate description='Github Stars'>landing.github.stars</Translate>
-            </div>
-          </div>
-        </div>
-        <div className='subheader-stat'>
-          <div className='subheader-stat-divider' />
-          <div className='subheader-stat-content'>
-            <div className='subheader-stat-number'>
-              <Translate>30+</Translate>
-            </div>
-            <div>
-              <Translate description='Headless components included'>
-                landing.headless.components
-              </Translate>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* <div className='subheader-stats'> */}
+      {/*   <div className='subheader-stat'> */}
+      {/*     <div className='subheader-stat-divider' /> */}
+      {/*     <div className='subheader-stat-content'> */}
+      {/*       <div className='subheader-stat-number'> */}
+      {/*         <Translate>80k+</Translate> */}
+      {/*       </div> */}
+      {/*       <div> */}
+      {/*         <Translate description='Monthly npm downloads'>landing.monthly.downloads</Translate> */}
+      {/*       </div> */}
+      {/*     </div> */}
+      {/*   </div> */}
+      {/*   <div className='subheader-stat'> */}
+      {/*     <div className='subheader-stat-divider' /> */}
+      {/*     <div className='subheader-stat-content'> */}
+      {/*       <div className='subheader-stat-number'> */}
+      {/*         <Translate>200+</Translate> */}
+      {/*       </div> */}
+      {/*       <div> */}
+      {/*         <Translate description='Developers building with Takeoff'> */}
+      {/*           landing.developers.building */}
+      {/*         </Translate> */}
+      {/*       </div> */}
+      {/*     </div> */}
+      {/*   </div> */}
+      {/*   <div className='subheader-stat'> */}
+      {/*     <div className='subheader-stat-divider' /> */}
+      {/*     <div className='subheader-stat-content'> */}
+      {/*       <div className='subheader-stat-number'> */}
+      {/*         <Translate>900+</Translate> */}
+      {/*       </div> */}
+      {/*       <div> */}
+      {/*         <Translate description='Github Stars'>landing.github.stars</Translate> */}
+      {/*       </div> */}
+      {/*     </div> */}
+      {/*   </div> */}
+      {/*   <div className='subheader-stat'> */}
+      {/*     <div className='subheader-stat-divider' /> */}
+      {/*     <div className='subheader-stat-content'> */}
+      {/*       <div className='subheader-stat-number'> */}
+      {/*         <Translate>30+</Translate> */}
+      {/*       </div> */}
+      {/*       <div> */}
+      {/*         <Translate description='Headless components included'> */}
+      {/*           landing.headless.components */}
+      {/*         </Translate> */}
+      {/*       </div> */}
+      {/*     </div> */}
+      {/*   </div> */}
+      {/* </div> */}
     </div>
   );
 }
