@@ -489,5 +489,25 @@
   "theming.try.it.now": {
     "message": "Bileşenleri Keşfet",
     "description": "Try It Now"
+  },
+  "footer.copyright": {
+    "message": "© 2024 Türk Hava Yolları",
+    "description": "Footer copyright text"
+  },
+  "footer.rights": {
+    "message": "Tüm hakları saklıdır.",
+    "description": "Footer rights reserved text"
+  },
+  "footer.term": {
+    "message": "Term",
+    "description": "Footer term link"
+  },
+  "footer.privacy": {
+    "message": "Privacy",
+    "description": "Footer privacy link"
+  },
+  "footer.cookies": {
+    "message": "Cookies",
+    "description": "Footer cookies link"
   }
 }
