@@ -73,11 +73,11 @@ const Footer: React.FC = () => {
           />
           <path d='M63.026 13.4453H60.8555V22.8363H63.026V13.4453Z' fill='white' />
         </svg>
-        <Translate
-          id='footer.copyright'
-          description='Footer copyright text'
-          values={{ year: new Date().getFullYear() }}
-        />
+        <div>
+          <Translate id='footer.copyright' description='Footer copyright text' />
+          <br />
+          <Translate id='footer.rights' description='Footer rights reserved text' />
+        </div>
       </div>
       <div className='footer-links'>
         <div className='footer-link'>

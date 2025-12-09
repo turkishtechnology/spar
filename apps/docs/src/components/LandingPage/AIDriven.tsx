@@ -1,4 +1,6 @@
 import Translate from '@docusaurus/Translate';
+import { Button } from '@turkish-technology/spar';
+
 export default function AIDriven() {
   return (
     <div className='aidriven-container'>
@@ -38,7 +40,7 @@ export default function AIDriven() {
           </Translate>
         </div>
       </div>
-      <div className='aidriven-explore'>
+      <Button className='aidriven-explore'>
         <div>
           <Translate description='Explore'>aidriven.explore</Translate>
         </div>
@@ -55,7 +57,7 @@ export default function AIDriven() {
             fill='white'
           />
         </svg>
-      </div>
+      </Button>
     </div>
   );
 }
