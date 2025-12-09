@@ -48,6 +48,10 @@
 .theming-cta {
   background: #c90019;
   display: flex;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
   align-items: center;
   justify-content: center;
   border-radius: 0.5rem;
