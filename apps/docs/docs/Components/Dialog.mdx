@@ -16,76 +16,39 @@ A headless modal and non-modal dialog component that provides accessibility feat
 
 ## Live Demo
 
-<LiveCode
-  code={`function BasicExample() {
+<div className='dialog-demo-container'>
+  <LiveCode
+    code={`function DialogDemo() {
   const [isOpen, setIsOpen] = React.useState(false);
-  
-  return (
-    <div className='dialog-demo-container'>
-      <Dialog.Root className='dialog' isOpen={isOpen} onOpenChange={setIsOpen}>
-        <Dialog.Trigger className='dialog-trigger'>
-          Open Dialog
-        </Dialog.Trigger>
-        <Dialog.Portal className='dialog-portal'>
-          <Dialog.Overlay className='dialog-overlay'/>
-          <Dialog.Content className='dialog-content'>
-            <Dialog.Title className='dialog-title'>
-              Dialog Title
-            </Dialog.Title>
-            <Dialog.Description className='dialog-description'>
-              If you delete this item, it will be permanently removed. Are you sure you want to delete
-              it?
-            </Dialog.Description>
-            <div className='dialog-actions'>
-              <Dialog.Close className='dialog-close'>
-                Close
-              </Dialog.Close>
-              <Button className='dialog-continue'>
-                Continue
-              </Button>
-            </div>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
-    </div>
-  );
-}`}
-/>
-
-### dialog.tsx
-
-```tsx
-import { Button, Dialog } from '@turkish-technology/spar';
-
-function DialogDemo() {
   return (
     <Dialog.Root className='dialog' isOpen={isOpen} onOpenChange={setIsOpen}>
-      <Dialog.Trigger className='dialog-trigger'>Open Dialog</Dialog.Trigger>
+      <Dialog.Trigger className='dialog-trigger'>
+        Open Dialog
+      </Dialog.Trigger>
       <Dialog.Portal className='dialog-portal'>
-        <Dialog.Overlay className='dialog-overlay' />
+        <Dialog.Overlay className='dialog-overlay'/>
         <Dialog.Content className='dialog-content'>
-          <Dialog.Title className='dialog-title'>Dialog Title</Dialog.Title>
+          <Dialog.Title className='dialog-title'>
+            Dialog Title
+          </Dialog.Title>
           <Dialog.Description className='dialog-description'>
             If you delete this item, it will be permanently removed. Are you sure you want to delete
             it?
           </Dialog.Description>
           <div className='dialog-actions'>
-            <Dialog.Close className='dialog-close'>Close</Dialog.Close>
-            <Button className='dialog-continue'>Continue</Button>
+            <Dialog.Close className='dialog-close'>
+              Close
+            </Dialog.Close>
+            <Button className='dialog-continue'>
+              Continue
+            </Button>
           </div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
   );
-}
-
-export default DialogDemo;
-```
-
-### dialog.css
-
-```css
-.dialog-overlay {
+}`}
+cssCode={`.dialog-overlay {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
@@ -178,8 +141,10 @@ export default DialogDemo;
   /* Dark mode styles */
   background-color: rgba(255, 255, 255, 0.12);
   color: #f2f5f8;
-}
-```
+}`}
+  />
+
+</div>
 
 ## Features
 

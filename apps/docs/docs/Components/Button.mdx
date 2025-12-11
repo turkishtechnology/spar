@@ -18,50 +18,30 @@ A headless, accessible button component that provides complete keyboard support 
 
 ## Live Demo
 
+<div className='button-demo-container'>
 <LiveCode
-  code={`function BasicExample() {
-  return (
-    <div className="button-demo-container">
-      <Button className="button">
-        button
-      </Button>
-    </div>
-  );
-}`}
-/>
-
-### button.tsx
-
-```tsx
-import { Button } from '@turkish-technology/spar';
-
-function ButtonDemo() {
-  return <Button className='button'>button</Button>;
-}
-
-export default ButtonDemo;
-```
-
-### button.css
-
-```css
-.button {
+  code={`<Button className="button">
+      button
+    </Button>`}
+  cssCode={`.button {
   border-radius: 8px;
   padding: 12px 14px;
   font-weight: 400;
 
-  /* Light mode styles */
-  background: rgba(0, 0, 0, 0.08);
-  color: #222530;
-  font-size: 13px;
+/_ Light mode styles _/
+background: rgba(0, 0, 0, 0.08);
+color: #222530;
+font-size: 13px;
 }
 
-/* Dark mode styles */
+/_ Dark mode styles _/
 [data-theme='dark'] .button {
-  background: rgba(255, 255, 255, 0.12);
-  color: #f2f5f8;
-}
-```
+background: rgba(255, 255, 255, 0.12);
+color: #f2f5f8;
+}`}
+/>
+
+</div>
 
 ## Features
 

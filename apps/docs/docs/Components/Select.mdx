@@ -18,14 +18,9 @@ A headless, fully accessible dropdown component that allows users to choose a si
 
 ## Live Demo
 
-<LiveCode
-  code={`function BasicSelectExample() {
-  const [value, setValue] = React.useState();
-
-return (
-
 <div className='select-demo-container'>
-  <Select.Root value={value} onValueChange={setValue}>
+<LiveCode
+  code={`<Select.Root>
     <Select.Trigger className='select-trigger'>
       <Select.Value className='select-value' placeholder='Options' />
       <Select.Icon className='select-icon'>
@@ -59,62 +54,8 @@ return (
         </Select.Viewport>
       </Select.Content>
     </Select.Portal>
-  </Select.Root>
-</div>
-); }`} />
-
-### select.tsx
-
-```tsx
-import { Select } from '@turkish-technology/spar';
-
-function SelectDemo() {
-  return (
-    <Select.Root value={value} onValueChange={setValue}>
-      <Select.Trigger className='select-trigger'>
-        <Select.Value className='select-value' placeholder='Options' />
-        <Select.Icon className='select-icon'>
-          <svg
-            className='select-svg'
-            xmlns='http://www.w3.org/2000/svg'
-            width='20'
-            height='20'
-            viewBox='0 0 20 20'
-            fill='none'
-          >
-            <path d='M13.2292 7.5001L9.99583 10.7334L6.7625 7.5001C6.4375 7.1751 5.9125 7.1751 5.5875 7.5001C5.2625 7.8251 5.2625 8.3501 5.5875 8.6751L9.4125 12.5001C9.7375 12.8251 10.2625 12.8251 10.5875 12.5001L14.4125 8.6751C14.7375 8.3501 14.7375 7.8251 14.4125 7.5001C14.0875 7.18343 13.5542 7.1751 13.2292 7.5001Z' />
-          </svg>
-        </Select.Icon>
-      </Select.Trigger>
-      <Select.Portal>
-        <Select.Content className='select-content'>
-          <Select.Viewport className='select-viewport'>
-            <Select.Item className='select-item' value='option1'>
-              <Select.ItemText className='select-item-text'>Option 1</Select.ItemText>
-              <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
-            </Select.Item>
-            <Select.Item className='select-item' value='option2'>
-              <Select.ItemText className='select-item-text'>Option 2</Select.ItemText>
-              <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
-            </Select.Item>
-            <Select.Item className='select-item' value='option3'>
-              <Select.ItemText className='select-item-text'>Option 3</Select.ItemText>
-              <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
-            </Select.Item>
-          </Select.Viewport>
-        </Select.Content>
-      </Select.Portal>
-    </Select.Root>
-  );
-}
-
-export default SelectDemo;
-```
-
-### select.css
-
-```css
-.select-trigger {
+  </Select.Root>`}
+  cssCode={`.select-trigger {
   width: 100px;
   display: flex;
   padding: 10px;
@@ -162,8 +103,10 @@ export default SelectDemo;
 [data-theme='dark'] .select-content {
   border-color: #2b303b;
   background: #222;
-}
-```
+}`}
+/>
+
+</div>
 
 ## Features
 
