@@ -5,18 +5,19 @@
   flex-direction: column;
 
   .live-preview-wrapper {
-    border: 2px solid var(--ifm-gray);
+    border: 1px solid #e1e4ea;
     min-height: 140px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    border-radius: 12px 12px 0 0;
+    border-radius: 12px;
 
     .live-preview {
       width: 100%;
       padding: 24px;
-      justify-items: center;
+      display: flex;
+      justify-content: center;
 
       // Reset any inherited styles that might interfere
       * {
@@ -34,46 +35,43 @@
     }
   }
   .collapsible-code-block {
-    margin: 0;
     overflow: hidden;
+    margin-top: 12px;
 
     .collapsible-toggle {
       width: 100%;
-      padding: 16px 20px;
-      border: none;
-      border-radius: 0 -12px 0 0;
-      background: var(--ifm-gray);
-      font-size: 15px;
-      font-weight: 500;
+      padding: 16px;
+      font-size: 20px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 12px;
-      text-align: left;
-
-      &:hover {
-        color: #c90019;
-      }
+      gap: 6px;
+      border-radius: 12px;
+      border: 1px solid #e1e4ea;
+      background: #fff;
 
       .toggle-icon {
-        font-size: 12px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        width: 12px;
-        text-align: center;
+        padding: 6px;
+        border-radius: 8px;
+        border: 1px solid #e1e4ea;
+        background: #f9fafc;
+        height: 34px;
+      }
+
+      .expand-icon {
+        padding: 6px;
+        margin-left: auto;
+        height: 34px;
       }
     }
 
     .collapsible-content {
-      overflow: auto;
+      overflow: hidden;
+      margin-top: 12px;
+      border-radius: 12px;
+      border: 1px solid #e1e4ea;
       transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
 
-      .copy-button {
-        position: absolute;
-        right: 8px;
-        top: 8px;
-        background: none;
-      }
       &[style*='opacity: 0'] {
         pointer-events: none;
       }
@@ -84,27 +82,92 @@
         border-radius: 0;
         border: none;
       }
-    }
-
-    // Animation states
-    &.collapsed {
-      .collapsible-toggle .toggle-icon {
-        transform: rotate(0deg) scale(1);
-      }
-    }
-
-    &.expanded {
-      .collapsible-toggle .toggle-icon {
-        transform: rotate(90deg) scale(1.1);
+      .live-editor {
+        overflow-y: auto;
+        max-height: 600px;
       }
     }
   }
-  .live-code-wrapper {
-    .live-editor {
-      pre[class*='language-'] {
-        border-radius: 0 0 12px 12px;
-        overflow-y: auto;
+}
+
+.live-code-wrapper {
+  .live-code-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 16px;
+    font-size: 20px;
+    border-bottom: 1px solid #e1e4ea;
+  }
+
+  .live-code-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #e1e4ea;
+    background: #f9fafc;
+    height: 34px;
+    width: 34px;
+  }
+
+  .live-code-action-button {
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+    width: 34px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .live-code-header-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tabs-list {
+    border-radius: 12px;
+    border: 1px solid #e1e4ea;
+    display: flex;
+    align-items: center;
+    padding-block: 2px;
+  }
+
+  .tab {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    .tab-icon-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 24px;
+      border-radius: 8px;
+    }
+
+    .tab-icon {
+      fill: '#717784';
+    }
+
+    &[data-state='active'] {
+      .tab-icon-container {
+        background: #222530;
       }
+      .tab-icon {
+        fill: #f9fafc;
+      }
+    }
+  }
+
+  .live-editor {
+    pre[class*='language-'] {
+      border-radius: 0 0 12px 12px;
+      overflow-y: auto;
     }
   }
 }
