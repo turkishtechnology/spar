@@ -25,13 +25,9 @@ A fully accessible headless breadcrumb component for displaying hierarchical nav
 
 ## Live Demo
 
-<LiveCode 
-  code={`function BasicBreadcrumb() {
-
-return (
-
 <div className='breadcrumb-demo-container'>
-  <BreadcrumbRoot>
+  <LiveCode
+    code={`<BreadcrumbRoot>
     <BreadcrumbList className='breadcrumb-list'>
       <BreadcrumbItem className='breadcrumb-item'>
         <BreadcrumbLink className='breadcrumb-link'>step 0</BreadcrumbLink>
@@ -41,48 +37,8 @@ return (
         <BreadcrumbPage className='breadcrumb-page'>step 1</BreadcrumbPage>
       </BreadcrumbItem>
     </BreadcrumbList>
-  </BreadcrumbRoot>
-</div>
-
-);
-}`}
-/>
-
-### breadcrumb.tsx
-
-```tsx
-import {
-  BreadcrumbRoot,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@turkish-technology/spar';
-
-function BreadcrumbDemo() {
-  return (
-    <BreadcrumbRoot>
-      <BreadcrumbList className='breadcrumb-list'>
-        <BreadcrumbItem className='breadcrumb-item'>
-          <BreadcrumbLink className='breadcrumb-link'>step 0</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator className='breadcrumb-separator'>/</BreadcrumbSeparator>
-        <BreadcrumbItem className='breadcrumb-item'>
-          <BreadcrumbPage className='breadcrumb-page'>step 1</BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </BreadcrumbRoot>
-  );
-}
-
-export default BreadcrumbDemo;
-```
-
-### breadcrumb.css
-
-```css
-.breadcrumb-list {
+  </BreadcrumbRoot>`}
+    cssCode={`.breadcrumb-list {
   padding: 0;
   margin: 0;
   list-style: none;
@@ -92,52 +48,54 @@ export default BreadcrumbDemo;
 }
 
 .breadcrumb-link {
-  padding: 2.4px 12px 2.4px 7.2px;
-  border-radius: 9.6px;
-  border: 1.2px solid #e1e4ea;
-  background: rgba(0, 0, 0, 0.02);
+padding: 2.4px 12px 2.4px 7.2px;
+border-radius: 9.6px;
+border: 1.2px solid #e1e4ea;
+background: rgba(0, 0, 0, 0.02);
 }
 
 [data-theme='dark'] .breadcrumb-link {
-  border-color: #2b303b;
-  background-color: rgba(255, 255, 255, 0.02);
+border-color: #2b303b;
+background-color: rgba(255, 255, 255, 0.02);
 }
 
 .breadcrumb-separator {
-  text-align: center;
-  width: 24px;
+text-align: center;
+width: 24px;
 }
 
 .breadcrumb-page {
-  padding: 2.4px 12px 2.4px 7.2px;
-  border-radius: 9.6px;
-  border: 1.2px solid #cacfd8;
-  background: rgba(0, 0, 0, 0.02);
-  color: #222530;
+padding: 2.4px 12px 2.4px 7.2px;
+border-radius: 9.6px;
+border: 1.2px solid #cacfd8;
+background: rgba(0, 0, 0, 0.02);
+color: #222530;
 }
 
 [data-theme='dark'] .breadcrumb-page {
-  border-color: 1.2px solid #2b303b;
-  background-color: rgba(255, 255, 255, 0.02);
-  color: #f2f5f8;
+border-color: 1.2px solid #2b303b;
+background-color: rgba(255, 255, 255, 0.02);
+color: #f2f5f8;
 }
 
 .breadcrumb-item,
 .breadcrumb-separator {
-  margin-top: 0;
-  font-size: 16.8px;
+margin-top: 0;
+font-size: 16.8px;
 }
 
 .breadcrumb-link,
 .breadcrumb-separator {
-  color: #99a0ae;
+color: #99a0ae;
 }
 
 [data-theme='dark'] .breadcrumb-link,
 [data-theme='dark'] .breadcrumb-separator {
-  color: #717784;
-}
-```
+color: #717784;
+}`}
+/>
+
+</div>
 
 ## Live Demo with Icons
 

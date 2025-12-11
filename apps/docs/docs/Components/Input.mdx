@@ -21,39 +21,13 @@ A headless input component providing accessible form input primitives with compo
 ### Simple Usage (Most Common)
 
 <LiveCode
-  code={`function SimpleInputExample() {
-
-return (
-
-<div className='input-demo-container'>
+  code={`<div className='input-demo-container'>
   <Label htmlFor='my-input' className='label'>
     Label
   </Label>
   <Input id='my-input' className='input' />
-</div>
-); }`} />
-
-### input.tsx
-
-```tsx
-import { Input } from '@turkish-technology/spar';
-
-function InputDemo() {
-  return (
-    <>
-      <Label className='label'>Label</Label>
-      <Input className='input' />
-    </>
-  );
-}
-
-export default InputDemo;
-```
-
-### input.css
-
-```css
-.input {
+</div>`}
+cssCode={`.input {
   border-radius: 5px;
   border: 1px solid #e1e4ea;
   background: rgba(0, 0, 0, 0.08);
@@ -78,8 +52,8 @@ export default InputDemo;
 
 [data-theme='dark'] .label {
   color: #f2f5f8;
-}
-```
+}`}
+/>
 
 ### Compound Pattern (Advanced)
 
