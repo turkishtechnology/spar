@@ -105,7 +105,7 @@ export default [
       '@docusaurus/no-untranslated-text': [
         'warn',
         {
-          ignoredStrings: ['·', '—', '×', '→', '←', '↑', '↓'],
+          ignoredStrings: ['·', '—', '×', '→', '←', '↑', '↓', ', ', ',', ', and '],
         },
       ],
       '@docusaurus/no-html-links': 'error',
