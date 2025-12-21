@@ -1,15 +1,21 @@
+---
+mode: agent
+model: Claude Sonnet 4 (copilot)
+description: Comprehensive component review against all established rules (accessibility, headless, composition, type safety, test/documentation separation, etc.)
+---
+
 # Component Review Prompt
 
-Amaç: Seçilen Glide headless bileşen(ler)inin geçmişte tanımlanmış tüm kurallara (accessibility, headlesslık, composition, tip güvenliği, test/dokümantasyon ayrımı vb.) tam uyumunu denetlemek ve eksikler için bir düzeltme planı üretmek. Kısmi inceleme yok; her zaman tüm başlıklar değerlendirilir.
+Purpose: Audit selected Glide headless component(s) for full compliance with all previously defined rules (accessibility, headless, composition, type safety, test/documentation separation, etc.) and generate a correction plan for deficiencies. No partial reviews; all headings are always evaluated.
 
-## Referans Talimat Dosyaları
+## Reference Instruction Files
 
-İnceleme sırasında **mutlaka** aşağıdaki talimat dosyalarını referans al:
+**MUST** reference the following instruction files during review:
 
-1. **Ana Talimat**: `.github/copilot-instructions.md`
+1. **Main Instructions**: `.github/copilot-instructions.md`
    - Core Rules (Headless Only, Accessibility First, TypeScript Strict, Tree-Shakeable)
    - Component Structure (Simple/Compound patterns)
-   - Task-Specific Instructions referansları
+   - Task-Specific Instructions references
 
 2. **Accessibility**: `.github/instructions/accessibility-guidelines.instructions.md`
    - WCAG 2.2 AA compliance
@@ -40,31 +46,31 @@ Amaç: Seçilen Glide headless bileşen(ler)inin geçmişte tanımlanmış tüm 
    - API Reference Tables (Props, Events, ARIA for each compound part)
    - Global Keyboard Interactions table
 
-## Girdi Örnekleri
+## Input Examples
 
-- "Button için inceleme yap"
-- "Accordion ve Tabs komponentlerini değerlendir"
-- "Tooltip'i erişilebilirlik ve test açısından kontrol et" (not: yine tüm başlıklar raporlanır)
-- "DropdownMenu, Popover ve Tooltip'i karşılaştır" (aynı raporda ayrı bloklar)
-- "Switch ve Checkbox'ta a11y sorunlarını bul" (tüm kategoriler yine değerlendirilir)
+- "Review Button"
+- "Evaluate Accordion and Tabs components"
+- "Check Tooltip for accessibility and testing" (note: all headings still reported)
+- "Compare DropdownMenu, Popover and Tooltip" (separate blocks in same report)
+- "Find a11y issues in Switch and Checkbox" (all categories still evaluated)
 
-İçerikten component adlarını/klasörlerini çıkar ve ilgili dizinleri `packages/glide/src/components/<Name>` varsay.
+Extract component names/folders from content and assume relevant directories at `packages/glide/src/components/<Name>`.
 
-## Değerlendirme Başlıkları
+## Evaluation Headings
 
-Her başlık için ilgili talimat dosyasına referans ver ve detaylı kuralları oradan al:
+For each heading, reference the relevant instruction file and pull detailed rules from there:
 
 ### 1. Accessibility
-**Referans**: `accessibility-guidelines.instructions.md`
-- ARIA Authoring Practices Guide (APG) pattern uyumu
+**Reference**: `accessibility-guidelines.instructions.md`
+- ARIA Authoring Practices Guide (APG) pattern compliance
 - Mandatory keyboard support (Tab, Shift+Tab, Enter, Space, Escape, Arrows, Home/End)
-- ARIA attributes (role, aria-label, aria-labelledby, aria-expanded, aria-controls, vb.)
+- ARIA attributes (role, aria-label, aria-labelledby, aria-expanded, aria-controls, etc.)
 - Focus management (visible indicators, trap, restore)
 - Screen reader announcements (aria-live regions)
 - WCAG 2.2 AA compliance (contrast ratios, perceivable, operable, understandable, robust)
 
-### 2. Prop Kalitesi & Tip Güvenliği
-**Referans**: `coding-standards.instructions.md` (TypeScript Standards, Component Props Pattern)
+### 2. Prop Quality & Type Safety
+**Reference**: `coding-standards.instructions.md` (TypeScript Standards, Component Props Pattern)
 - Explicit types in `types.ts`
 - No `any` usage (strict mode)
 - `React.AriaAttributes` for ARIA props
@@ -73,147 +79,147 @@ Her başlık için ilgili talimat dosyasına referans ver ve detaylı kuralları
 - Proper generic usage
 - Callback signatures consistency
 
-### 3. Composition Yapısı
-**Referans**: `coding-standards.instructions.md` (File Organization Standards)
-- **File Separation Rule**: Her logical component ayrı dosyada
-- Tek dosyada çoklu component tanımı yok
+### 3. Composition Structure
+**Reference**: `coding-standards.instructions.md` (File Organization Standards)
+- **File Separation Rule**: Each logical component in separate file
+- No multiple component definitions in single file
 - Simple vs Compound component patterns
-- Context yapısı minimal (gereksiz nesting yok)
+- Context structure minimal (no unnecessary nesting)
 
-### 4. Headlesslık
-**Referans**: `copilot-instructions.md` (Core Rules - Headless Only)
+### 4. Headlessness
+**Reference**: `copilot-instructions.md` (Core Rules - Headless Only)
 - Zero styling opinions
 - No CSS imports
 - No className forcing
-- No inline style patterns (sadece optional className pass-through)
+- No inline style patterns (only optional className pass-through)
 - Behavior-only props
 
-### 5. State & Mantık Ayrımı
-**Referans**: `coding-standards.instructions.md` (State Management, Component Architecture)
+### 5. State & Logic Separation
+**Reference**: `coding-standards.instructions.md` (State Management, Component Architecture)
 - Controlled + Uncontrolled support (`value` + `defaultValue` + `onChange`)
 - Proper cleanup (event listeners, timeouts, observers)
 - No global mutations in render
-- `useItemRegistry` usage (keyboard navigation için)
-- RefObject<T> kullanımı (MutableRefObject değil)
+- `useItemRegistry` usage (for keyboard navigation)
+- RefObject<T> usage (not MutableRefObject)
 
 ### 6. Export & Tree-shake
-**Referans**: `coding-standards.instructions.md` (Module Exports)
+**Reference**: `coding-standards.instructions.md` (Module Exports)
 - Named exports only
 - No side effects (no top-level subscriptions)
-- `index.ts` sadece re-export
+- `index.ts` re-export only
 - **Dual export pattern** (compound + named exports)
 - No generic aliases (Root, Item, Trigger) - component-specific names
 
-### 7. Test Kapsamı
-**Referans**: `testing-guidelines.instructions.md`
+### 7. Test Coverage
+**Reference**: `testing-guidelines.instructions.md`
 - 3 test files: `Component.test.tsx`, `Component.a11y.test.tsx`, `Component.integration.test.tsx`
-- Coverage %90+ (statements, branches, functions, lines)
+- Coverage 90%+ (statements, branches, functions, lines)
 - jest-axe mandatory (zero violations)
-- Pre-test linting (`pnpm lint`) ve type checking
+- Pre-test linting (`pnpm lint`) and type checking
 - User behavior testing (not implementation)
 
-### 8. Dokümantasyon Uyum
-**Referans**: `docs-guidelines.instructions.md`
+### 8. Documentation Compliance
+**Reference**: `docs-guidelines.instructions.md`
 - **LiveCode**: Single interactive demo (basic inline styles for visibility)
 - **AnatomyViewer**: data-glide-part attributes, parts array with descriptions
-- **API Reference**: Her compound part için 3 tablo (Props, Events, ARIA)
+- **API Reference**: 3 tables per compound part (Props, Events, ARIA)
 - **Code Examples**: Progressive, headless, static markdown blocks with line highlighting
 - **Global Keyboard Interactions**: Complete keyboard behavior table
 - Structure, Data Flow explanation
 
-### 9. Performans
-**Referans**: `coding-standards.instructions.md` (Performance Guidelines)
-- Context değerleri granular (büyük value objesi yok)
-- Gerekli yerlerde memoization (useCallback, useMemo)
-- Anonymous function usage azaltılmış
+### 9. Performance
+**Reference**: `coding-standards.instructions.md` (Performance Guidelines)
+- Context values granular (no large value objects)
+- Memoization in necessary places (useCallback, useMemo)
+- Reduced anonymous function usage
 - Early returns for conditional rendering
 
-### 10. Kod Standartları
-**Referans**: `coding-standards.instructions.md` (Naming Conventions, Code Style)
-- Arrow functions kullanımı
+### 10. Code Standards
+**Reference**: `coding-standards.instructions.md` (Naming Conventions, Code Style)
+- Arrow functions usage
 - Event handler naming (`handle` prefix)
 - Boolean props (`is/has/should/can` prefix)
 - Function size (50+ lines warning)
 - Single responsibility
 - Error handling (early return, console.warn patterns)
 
-### 11. Düzen ve Format Tutarlılığı
-**Referans**: Mevcut dosya yapısı ve proje standartları
-- **Naming Pattern Uyumu**: Mevcut component naming convention'ına uygun
-- **Import Sıralaması**: Proje genelindeki gruplaşmaya uygun (React, external, internal)
-- **Code Structure**: Benzer component'lerin organizasyon pattern'lerini takip
-- **Comment Style**: Mevcut JSDoc veya inline comment style'ı ile tutarlı
-- **Spacing ve Indentation**: Prettier/ESLint konfigürasyonuna uygun
-- **Export Pattern**: Aynı kategorideki component'lerin export pattern'ini takip (dual export consistency)
+### 11. Layout and Format Consistency
+**Reference**: Current file structure and project standards
+- **Naming Pattern Compliance**: Consistent with existing component naming conventions
+- **Import Order**: Aligned with project-wide grouping (React, external, internal)
+- **Code Structure**: Follow organization patterns of similar components
+- **Comment Style**: Consistent with existing JSDoc or inline comment styles
+- **Spacing and Indentation**: Aligned with Prettier/ESLint configuration
+- **Export Pattern**: Follow export patterns of components in same category (dual export consistency)
 
-Çıktı Yapısı:
+Output Structure:
 ```
 REVIEW_SUMMARY:
   component: Accordion
   status: needs-improvement | compliant | partial
   score: 83/100
   findings:
-    - [Accessibility][High] Trigger'da Enter + Space birlikte test edilmiyor.
-    - [Types][Medium] onChange callback parametresi union yerine generic olabilir.
+    - [Accessibility][High] Trigger doesn't test Enter + Space together.
+    - [Types][Medium] onChange callback parameter could use generic instead of union.
   missingArtifacts:
     - tests: Accordion.a11y.test.tsx
   plan:
     - step: Add keyboard handling for Space key in AccordionTrigger. (High)
       file: packages/glide/src/components/Accordion/AccordionTrigger.tsx
-      rationale: WCAG klavye erişimi.
+      rationale: WCAG keyboard access requirement.
     - step: Create a11y test for Enter/Space toggling. (High)
       file: packages/glide/src/components/Accordion/__tests__/Accordion.a11y.test.tsx
     - step: Refactor onChange to use generic value type. (Medium)
 ```
 
-## Puanlama Sistemi
+## Scoring System
 
-Başlangıç skoru: 100 (tüm kategoriler her zaman dahildir)
+Starting score: 100 (all categories always included)
 
-**Severity Bazlı Düşüş:**
-- **High**: -8 (Accessibility violations, test eksiklikleri, public API hataları)
-- **Medium**: -4 (Performans optimizasyonları, tip iyileştirmeleri)
-- **Low**: -2 (Kod düzeni, naming conventions)
-- **Critical Missing Artifact**: -10 (a11y test dosyası, root component, types.ts)
+**Severity-Based Deductions:**
+- **High**: -8 (Accessibility violations, test deficiencies, public API errors)
+- **Medium**: -4 (Performance optimizations, type improvements)
+- **Low**: -2 (Code layout, naming conventions)
+- **Critical Missing Artifact**: -10 (a11y test file, root component, types.ts)
 
-**Örnekler:**
-- Missing `Component.a11y.test.tsx`: -10 (Critical) + -8 (High - a11y compliance yok)
-- Klavye navigation eksik: -8 (High)
-- Type `any` kullanımı: -4 (Medium)
-- Import sıralaması düzensiz: -2 (Low)
+**Examples:**
+- Missing `Component.a11y.test.tsx`: -10 (Critical) + -8 (High - no a11y compliance)
+- Keyboard navigation missing: -8 (High)
+- Type `any` usage: -4 (Medium)
+- Import order messy: -2 (Low)
 
-Normalize işlemi yok; skor doğrudan 0-100 aralığında kalır.
+No normalization; score remains directly in 0-100 range.
 
-## Önceliklendirme Kriterleri
+## Prioritization Criteria
 
 **High Priority:**
-- Accessibility kırılımları (APG pattern violations)
-- Test eksiklikleri (özellikle a11y tests)
-- Public API hataları (type safety issues)
+- Accessibility breakages (APG pattern violations)
+- Test deficiencies (especially a11y tests)
+- Public API errors (type safety issues)
 - Headless principle violations (styling opinions)
 
 **Medium Priority:**
-- Performans optimizasyonları
-- Type iyileştirmeleri
-- Documentation eksiklikleri
-- Export pattern uyumsuzlukları
+- Performance optimizations
+- Type improvements
+- Documentation deficiencies
+- Export pattern inconsistencies
 
 **Low Priority:**
-- Kozmetik düzenlemeler
+- Cosmetic adjustments
 - Naming convention improvements
 - File organization tweaks
 
-## Çıktı Yapısı
+## Output Structure
 
-**Format Kuralları:**
-- Markdown formatında yaz (başlıklar, listeler, kod blokları)
-- Her bileşen için ayrı H2 başlığı (`## Component Review: Accordion`)
-- Kod dosyalarını backtick içinde göster (`file.tsx`)
-- Severity işaretçileri: `[HIGH]`, `[MEDIUM]`, `[LOW]`
-- Okunabilir boşluklar ve düzenli girinti
-- Bold kullan önemli başlıklar için
+**Format Rules:**
+- Write in Markdown format (headings, lists, code blocks)
+- Separate H2 heading per component (`## Component Review: Accordion`)
+- Show code files in backticks (`file.tsx`)
+- Severity indicators: `[HIGH]`, `[MEDIUM]`, `[LOW]`
+- Readable spacing and proper indentation
+- Use bold for important headings
 
-### Her Component İçin Markdown Blok
+### Markdown Block Per Component
 
 ```markdown
 ## Component Review: **Accordion**
@@ -227,15 +233,15 @@ Normalize işlemi yok; skor doğrudan 0-100 aralığında kalır.
 
 #### HIGH PRIORITY (2)
 
-1. **[Accessibility]** Trigger'da Enter + Space birlikte test edilmiyor.
+1. **[Accessibility]** Trigger doesn't test Enter + Space together.
    - **Ref:** `accessibility-guidelines.instructions.md` - Keyboard Support
 
-2. **[Documentation]** AnatomyViewer eksik, data-glide-part attributes yok.
+2. **[Documentation]** AnatomyViewer missing, no data-glide-part attributes.
    - **Ref:** `docs-guidelines.instructions.md` - AnatomyViewer Integration
 
 #### MEDIUM PRIORITY (1)
 
-1. **[Types]** onChange callback parametresi union yerine generic olabilir.
+1. **[Types]** onChange callback parameter could use generic instead of union.
    - **Ref:** `coding-standards.instructions.md` - TypeScript Standards
 
 ---
@@ -253,7 +259,7 @@ Normalize işlemi yok; skor doğrudan 0-100 aralığında kalır.
 
 **1. Add keyboard handling for Space key**
 - **File:** `packages/glide/src/components/Accordion/AccordionTrigger.tsx`
-- **Rationale:** WCAG klavye erişimi gereksinimi
+- **Rationale:** WCAG keyboard access requirement
 - **Reference:** `accessibility-guidelines.instructions.md`
 
 **2. Create a11y test for Enter/Space toggling**
@@ -276,7 +282,7 @@ Normalize işlemi yok; skor doğrudan 0-100 aralığında kalır.
 ---
 ```
 
-### Global Plan (Componentler Arası)
+### Global Plan (Cross-Component)
 
 ```markdown
 ## Global Refactoring Plan
@@ -328,38 +334,38 @@ Normalize işlemi yok; skor doğrudan 0-100 aralığında kalır.
 ---
 ```
 
-## Plan Üretim Kuralları
+## Plan Generation Rules
 
-- Her High issue için en az bir net dosya + eylem
-- İlgisiz veya belirsiz öneri yok
-- Her adım "değişiklik tek cümle" formatında
-- 10'dan fazla adım varsa en kritik ilk 10, kalanları "backlog" alt listesine
-- **Her plan item'da ilgili talimat dosyasına referans ver**
+- At least one clear file + action per High issue
+- No irrelevant or vague suggestions
+- Each step in "single sentence change" format
+- If more than 10 steps, move most critical first 10, rest to "backlog" sub-list
+- **Reference relevant instruction file in each plan item**
 
-## Sınırlamalar
+## Limitations
 
-- Stil ekleme, docs yazma veya test dosyası oluşturma bu aşamada yapılmaz; sadece plan
-- Kod örnekleri gerekiyorsa kısa diff ipucu şeklinde (örn. `+ onKeyDown => handleSpace(event)`), tam dosya içeriği değil
-- Tüm kategoriler zorunlu değerlendirilir (kısmi veya STRICT mod kavramı yok)
+- No styling addition, docs writing, or test file creation at this stage; only planning
+- If code examples needed, brief diff hint format (e.g., `+ onKeyDown => handleSpace(event)`), not full file content
+- All categories mandatory evaluation (no partial or STRICT mode concept)
 
-## İnceleme Süreci
+## Review Process
 
-1. **Talimat Dosyalarını Oku**: Önce ilgili `.github/instructions/*.instructions.md` dosyalarını oku
-2. **Component Analizi**: `packages/glide/src/components/<Name>` içeriğini incele
-3. **Mevcut Düzeni İncele**: İncelenecek dosyanın (component, test, docs) mevcut formatına ve düzenine bak
-4. **Her Kategori İçin**: İlgili talimat dosyasındaki kurallara göre değerlendir
-5. **Finding Format**: `[Category][Severity] Açıklama. (Ref: ilgili-dosya.instructions.md - section)`
-6. **Plan Üret**: Her issue için actionable step + dosya + rationale (talimat referansıyla)
-7. **Düzen Uyumu**: Refactor önerileri mevcut dosya düzenine uyumlu olmalı (naming patterns, structure, formatting)
+1. **Read Instruction Files**: First read relevant `.github/instructions/*.instructions.md` files
+2. **Component Analysis**: Examine `packages/glide/src/components/<Name>` contents
+3. **Review Current Layout**: Look at existing format and layout of file to be reviewed (component, test, docs)
+4. **Per Category**: Evaluate against rules in relevant instruction file
+5. **Finding Format**: `[Category][Severity] Description. (Ref: relevant-file.instructions.md - section)`
+6. **Generate Plan**: Actionable step + file + rationale (with instruction reference) per issue
+7. **Layout Compliance**: Refactor suggestions should align with existing file layout (naming patterns, structure, formatting)
 
-## Örnek Finding Format
+## Example Finding Format
 
 ```
-[Accessibility][High] TooltipTrigger Escape ile kapatma davranışı eksik. 
+[Accessibility][High] TooltipTrigger missing Escape key closing behavior. 
 (Ref: accessibility-guidelines.instructions.md - Mandatory Rules - Keyboard Support)
 ```
 
-**Notlar:**
-- Category tagleri İngilizce, açıklama Türkçe
-- Her finding mutlaka bir talimat dosyasına referans vermeli
-- Mikro kozmetik iyileştirmeler (örn. import sıralaması) yalnızca anlamlı etki yaratmıyorsa raporlanmayabilir
+**Notes:**
+- Category tags in English, description in English
+- Each finding must reference an instruction file
+- Micro cosmetic improvements (e.g., import order) may not be reported if they don't create meaningful impact
