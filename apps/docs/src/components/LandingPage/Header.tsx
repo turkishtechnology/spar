@@ -1,26 +1,22 @@
 import { useColorMode } from '@docusaurus/theme-common';
 import Translate from '@docusaurus/Translate';
 import Link from '@docusaurus/Link';
+import { Button } from '@turkish-technology/spar';
 
 export default function LandingHeader() {
   const color = useColorMode().colorMode === 'light' ? 'black' : 'white';
   return (
-    <div
-      className='landing-header-container'
-      style={{
-        backgroundImage: "url('/img/header-bg.svg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
+    <div className='landing-header-container'>
+      <img className='hero-image' src='/img/header-bg.svg' alt='' />
       <div className='landing-header-content'>
-        <div className='landing-header-top'>
+        <Link to='/docs/introduction' className='landing-header-top'>
           <Translate description="WHAT'S NEW">landing.whats.new</Translate>
           <div className='landing-header-divider' />
           <Translate description='Faster insights with five new features'>
             landing.insights
           </Translate>
           <svg
+            className='landing-header-arrow'
             xmlns='http://www.w3.org/2000/svg'
             width='24'
             height='24'
@@ -32,25 +28,25 @@ export default function LandingHeader() {
               fill={color}
             />
           </svg>
-        </div>
+        </Link>
         <div className='landing-header-titles'>
           <div className='landing-header-title-row'>
-            <Translate description='Build'>landing.build</Translate>
             <div className='landing-header-title-accent'>
-              <Translate description='faster'>landing.faster</Translate>
+              <Translate description='Accessible'>landing.hero.accessible</Translate>
+            </div>
+            <Translate description='comma'>landing.hero.separator.comma</Translate>
+            <div className='landing-header-title-accent'>
+              <Translate description='unstyled'>landing.hero.unstyled</Translate>
+            </div>
+            <Translate description='and'>landing.hero.separator.and</Translate>
+            <div className='landing-header-title-accent'>
+              <Translate description='flexible'>landing.hero.flexible</Translate>
             </div>
           </div>
           <div className='landing-header-title-row'>
-            <Translate description='with'>landing.with</Translate>
-            <div className='landing-header-title-accent'>
-              <Translate description="Takeoff's">landing.takeoffs</Translate>
-            </div>
-          </div>
-          <div className='landing-header-title-row'>
-            <div className='landing-header-title-accent'>
-              <Translate description='Headless'>landing.headless</Translate>
-            </div>
-            <Translate description='UI system'>landing.ui.system</Translate>
+            <Translate description='the UI components at the core of your design system'>
+              landing.hero.tagline
+            </Translate>
           </div>
         </div>
         <div className='landing-header-bottom'>
@@ -59,10 +55,13 @@ export default function LandingHeader() {
               landing.description
             </Translate>
           </div>
-          <div className='landing-header-getstarted'>
-            <Link to='/docs/introduction'>
-              <Translate description='Get Started'>landing.get.started</Translate>
-            </Link>
+          <Button
+            as={Link}
+            // @ts-expect-error: Button is polymorphic but types are strict
+            to='/docs/introduction'
+            className='landing-header-getstarted'
+          >
+            <Translate description='Get Started'>landing.get.started</Translate>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='24'
@@ -75,7 +74,7 @@ export default function LandingHeader() {
                 fill={color}
               />
             </svg>
-          </div>
+          </Button>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             width='140'
