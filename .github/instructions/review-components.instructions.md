@@ -1,165 +1,151 @@
-# Component Review Instructions
+---
+applyTo: '**/components/**/*.tsx'
+---
 
-Bu dosya `review-components.prompt.md` kullanılarak bileşen incelemesi yapılırken izlenecek işlem adımlarını tanımlar.
+# Component Review Instructions - Glide
 
-## 0. Referans Ta## 6. Tutarlılık Notu
-- Terminoloji İngilizce başlık + Türkçe açıklama karması: Category tagleri İngilizce, açıklama Türkçe.
-- Refactor önerileri mevcut dosya düzenine uyumlu olmalı; benzer component'lerdeki pattern'leri takip et.
+This file defines the operational steps to follow when performing component reviews using `review-components.prompt.md`.
 
-## 7. Örnek Finding
+## 0. Reference Files
 
-**HIGH Priority:**
-```
-**[Accessibility]** TooltipTrigger Escape ile kapatma davranışı eksik.
-- **Ref:** `accessibility-guidelines.instructions.md` - Mandatory Rules - Keyboard Support
-```
-
-**LOW Priority:**
-```
-**[Format]** Import sıralaması mevcut component pattern'i ile uyumsuz (React imports önce olmalı).
-- **Ref:** Mevcut proje yapısı
-```
-
-Hazır olduğunda prompt çalıştırıldığında bu talimat setine göre değerlendirme üret. Dosya değişikliği yapma; sadece rapor. Kısmi veya STRICT mod kavramı yok; tüm kategoriler zorunlu.osyaları
-
-Bileşen incelemesi sırasında aşağıdaki talimat dosyaları referans alınmalıdır:
+The following instruction files should be referenced during component review:
 - **Accessibility**: `.github/instructions/accessibility-guidelines.instructions.md`
 - **Coding Standards**: `.github/instructions/coding-standards.instructions.md`
 - **Testing**: `.github/instructions/testing-guidelines.instructions.md`
 - **Documentation**: `.github/instructions/docs-guidelines.instructions.md`
 
-Bu dosyalar, her kategori için detaylı kurallar ve best practice'leri içerir.
+These files contain detailed rules and best practices for each category.
 
-## 1. Hazırlık
-- Kullanıcı doğal dilde ifade verebilir (örn. "Button için yap", "Accordion ve Tabs'i kontrol et").
-- Metinden component adlarını ayıkla: PascalCase veya kelime listesi -> `packages/glide/src/components/<Name>` dizinine eşle.
-- Eşleşmeyen adlar için raporda `missing component path` uyarısı üret.
-- Her path için parça dosyalarını listele (`*Root.tsx`, `*Trigger.tsx`, vb.) ve `types.ts`, `index.ts`, `__tests__` klasör varlığını not al.
-- **Mevcut Düzen Analizi**: İncelenecek her dosyanın mevcut formatını, naming pattern'lerini ve code style'ını not al.
+## 1. Preparation
+- Users can express in natural language (e.g., "Do it for Button", "Check Accordion and Tabs").
+- Extract component names from text: PascalCase or word list → map to `packages/glide/src/components/<Name>` directory.
+- Generate `missing component path` warning in report for unmatched names.
+- List fragment files for each path (`*Root.tsx`, `*Trigger.tsx`, etc.) and note the existence of `types.ts`, `index.ts`, `__tests__` folder.
+- **Current Layout Analysis**: Note the existing format, naming patterns, and code style of each file to be reviewed.
 
-## 2. İnceleme Akışı (Her Bileşen)
-Sıralı kontrol uygula; her başlık için bulguları (finding) severity ile kaydet.
+## 2. Review Flow (Per Component)
+Apply sequential checks; record findings with severity for each heading.
 
 ### A. Accessibility
-**Referans**: `accessibility-guidelines.instructions.md`
+**Reference**: `accessibility-guidelines.instructions.md`
 
-- ARIA Authoring Practices Guide (APG) pattern uyumu
-- Klavye desteklenen tuşlar: Tab, Shift+Tab, Enter, Space, Escape, Arrow keys (gerekiyorsa). Eksik olanları işaretle.
-- aria-* ilişkileri: `aria-controls`, `aria-labelledby`, `aria-expanded`, `role` kullanımı doğru mu.
-- Odak yönetimi: Programatik `focus()` veya roving tab index ihtiyacında context kullanımı.
-- Live region veya announcement gerekliyse (örn. dynamic content) var mı/yok mu.
-- WCAG 2.2 AA uyumu (contrast, focus indicators, screen reader support).
+- ARIA Authoring Practices Guide (APG) pattern compliance
+- Keyboard-supported keys: Tab, Shift+Tab, Enter, Space, Escape, Arrow keys (if needed). Mark missing ones.
+- aria-* relationships: Correct usage of `aria-controls`, `aria-labelledby`, `aria-expanded`, `role`.
+- Focus management: Context usage in programmatic `focus()` or roving tab index needs.
+- Live region or announcement if needed (e.g., dynamic content) - present/absent.
+- WCAG 2.2 AA compliance (contrast, focus indicators, screen reader support).
 
-### B. Prop & Tip Kalitesi
-**Referans**: `coding-standards.instructions.md` (TypeScript Standards, Props Interface Template)
+### B. Prop & Type Quality
+**Reference**: `coding-standards.instructions.md` (TypeScript Standards, Props Interface Template)
 
-- Public prop'lar `types.ts` içinde mi tanımlı.
-- `any`, `unknown` gereksiz kullanımı var mı.
-- Callback imzaları (ör. `onChange(value: T)`), generic veya discriminated union ihtiyacına göre uygun mu.
-- Default prop değerleri headless davranışı bozuyor mu.
-- ARIA attribute types `React.AriaAttributes` kullanımı.
-- `children` props redundant declaration yok mu (HTMLAttributes'tan gelir).
+- Public props defined in `types.ts`.
+- Unnecessary use of `any`, `unknown`.
+- Callback signatures (e.g., `onChange(value: T)`), appropriate for generic or discriminated union needs.
+- Default prop values breaking headless behavior.
+- ARIA attribute types using `React.AriaAttributes`.
+- No redundant `children` props declaration (comes from HTMLAttributes).
 
 ### C. Composition
-**Referans**: `coding-standards.instructions.md` (File Organization Standards, Module Exports)
+**Reference**: `coding-standards.instructions.md` (File Organization Standards, Module Exports)
 
-- Her parça ayrı dosyada mı (Root, Trigger, Content, vs.).
-- İç içe context yapısı minimal mi, fazlalık var mı.
-- Dot notation export (index.ts) doğru mu (dual export pattern).
-- Generic aliases (Root, Item, Trigger) kullanılmıyor mu (component-specific names gerekli).
+- Each part in separate file (Root, Trigger, Content, etc.).
+- Nested context structure minimal, no redundancy.
+- Dot notation export (index.ts) correct (dual export pattern).
+- Generic aliases (Root, Item, Trigger) not used (component-specific names required).
 
-### D. Headlesslık
-**Referans**: `copilot-instructions.md` (Core Rules - Headless Only)
+### D. Headlessness
+**Reference**: `copilot-instructions.md` (Core Rules - Headless Only)
 
-- Stil, className zorlaması, inline style pattern yok mu (yalnızca opsiyonel `className` pass-through serbest).
-- A11y için gerekli attribute eklerken stil eklenmemeli.
-- Zero styling opinions, CSS imports yok.
+- No style, className forcing, inline style patterns (only optional `className` pass-through allowed).
+- No styling added when adding A11y required attributes.
+- Zero styling opinions, no CSS imports.
 
-### E. State & Mantık Ayrımı
-**Referans**: `coding-standards.instructions.md` (State Management, Component Architecture)
+### E. State & Logic Separation
+**Reference**: `coding-standards.instructions.md` (State Management, Component Architecture)
 
-- Kontrolsüz + kontrollü kullanım seçeneği (örn. `value` + `defaultValue` + `onChange`).
-- Cleanup: event listener / timeout / observer kaldırılıyor mu.
-- Yan etki: render dışında global mutasyon yok.
-- `useItemRegistry` kullanımı uygun mu (keyboard navigation gereken durumlarda).
+- Uncontrolled + controlled usage option (e.g., `value` + `defaultValue` + `onChange`).
+- Cleanup: event listener / timeout / observer removal.
+- Side effects: no global mutations outside render.
+- Appropriate `useItemRegistry` usage (when keyboard navigation needed).
 
 ### F. Export & Tree-shake
-**Referans**: `coding-standards.instructions.md` (Module Exports)
+**Reference**: `coding-standards.instructions.md` (Module Exports)
 
-- Named exports, side-effect (örn. top-level subscription) yok.
-- `index.ts` sadece yeniden export içeriyor.
+- Named exports, no side-effects (e.g., top-level subscription).
+- `index.ts` contains only re-exports.
 - Dual export pattern (compound + named exports).
 
-### G. Test Kapsamı
-**Referans**: `testing-guidelines.instructions.md`
+### G. Test Coverage
+**Reference**: `testing-guidelines.instructions.md`
 
-- Dosyalar: `<Comp>.test.tsx`, `<Comp>.a11y.test.tsx`, `<Comp>.integration.test.tsx`.
-- Temel senaryolar: render, prop değişimi, klavye etkileşimi, a11y attribute assertion.
-- jest-axe testleri zero violations.
-- Coverage %90+ (statements, branches, functions, lines).
-- Pre-test linting (`pnpm lint`) ve type checking.
+- Files: `<Comp>.test.tsx`, `<Comp>.a11y.test.tsx`, `<Comp>.integration.test.tsx`.
+- Basic scenarios: render, prop changes, keyboard interaction, a11y attribute assertions.
+- jest-axe tests zero violations.
+- Coverage 90%+ (statements, branches, functions, lines).
+- Pre-test linting (`pnpm lint`) and type checking.
 
-### H. Dokümantasyon
-**Referans**: `docs-guidelines.instructions.md`
+### H. Documentation
+**Reference**: `docs-guidelines.instructions.md`
 
-- Anatomy bölümü mevcut (her parça listelenmiş, AnatomyViewer kullanımı).
-- Props tablosu (her public prop açıklanmış - her compound part için 3 tablo: Props, Events, ARIA).
-- Usage örneği (en az bir controlled veya un-controlled varyant).
+- Anatomy section present (all parts listed, AnatomyViewer usage).
+- Props table (every public prop explained - 3 tables per compound part: Props, Events, ARIA).
+- Usage example (at least one controlled or uncontrolled variant).
 - LiveCode demo (single interactive example).
 - Code Examples (progressive, headless, static markdown blocks).
-- Erişilebilirlik notu (kritik rol/aria vurgusu).
-- Global Keyboard Interactions tablosu.
+- Accessibility note (critical role/aria emphasis).
+- Global Keyboard Interactions table.
 
-### I. Performans
-**Referans**: `coding-standards.instructions.md` (Performance Guidelines)
+### I. Performance
+**Reference**: `coding-standards.instructions.md` (Performance Guidelines)
 
-- Gereksiz context genişliği (aşırı büyük value objesi) var mı.
-- Memoizasyon (`useCallback`, `useMemo`) gerçekten gerekli yerlerde mi.
-- Re-render tetikleyen anon fonksiyonlar azaltılmış mı.
-- Early returns conditional rendering için kullanılıyor mu.
+- Unnecessary context width (excessively large value object).
+- Memoization (`useCallback`, `useMemo`) truly needed in necessary places.
+- Reduced anonymous functions triggering re-renders.
+- Early returns used for conditional rendering.
 
-### J. Kod Standartları
-**Referans**: `coding-standards.instructions.md` (Naming Conventions, Code Style, Component Architecture)
+### J. Code Standards
+**Reference**: `coding-standards.instructions.md` (Naming Conventions, Code Style, Component Architecture)
 
-- Fonksiyon boyutu: 50+ satır tek fonksiyon uyarı.
-- Tek sorumluluk: karmaşık dallanmalar ayıklanmalı.
-- Hata durumları (örn. invalid prop kombinasyonu) early return veya `console.warn` (opsiyonel) pattern.
-- Arrow functions kullanımı.
+- Function size: 50+ line single function warning.
+- Single responsibility: complex branches should be extracted.
+- Error states (e.g., invalid prop combination) early return or `console.warn` (optional) pattern.
+- Arrow functions usage.
 - Event handler naming (`handle` prefix).
 - Boolean props naming (`is/has/should/can` prefix).
 
-### K. Düzen ve Format Tutarlılığı
-**Referans**: Mevcut dosya yapısı ve proje standartları
+### K. Layout and Format Consistency
+**Reference**: Current file structure and project standards
 
-- **Naming Pattern Uyumu**: Mevcut component'teki naming convention'a uygun olmalı (örn. `AccordionItem` varsa `AccordionNewPart` pattern'i kullan).
-- **Import Sıralaması**: Mevcut dosyadaki import gruplamasına (React, external libs, internal) uygun olmalı.
-- **Code Structure**: Benzer component'lerdeki dosya organizasyonu pattern'lerini takip et.
-- **Comment Style**: Varsa mevcut JSDoc veya inline comment style'ına uyumlu olmalı.
-- **Spacing ve Indentation**: Proje genelindeki prettier/eslint konfigürasyonuna uygun.
-- **Export Pattern**: Aynı kategorideki diğer component'lerin export pattern'ini takip et (dual export varsa devam ettir).
+- **Naming Pattern Compliance**: Should match existing component naming convention (e.g., if `AccordionItem` exists, use `AccordionNewPart` pattern).
+- **Import Order**: Should match import grouping in existing file (React, external libs, internal).
+- **Code Structure**: Follow file organization patterns in similar components.
+- **Comment Style**: Should match existing JSDoc or inline comment style if present.
+- **Spacing and Indentation**: Consistent with project-wide prettier/eslint configuration.
+- **Export Pattern**: Follow export pattern of other components in same category (continue dual export if exists).
 
-## 3. Puanlama
-Başlangıç skoru: 100 (tüm kategoriler her zaman dahildir).
+## 3. Scoring
+Starting score: 100 (all categories always included).
 - High: -8
 - Medium: -4
 - Low: -2
-- Kritik eksik artifact (a11y test, root parça, types.ts): -10 ek.
+- Critical missing artifact (a11y test, root part, types.ts): -10 additional.
 
-**Önemli**: Düzen ve format tutarlılığı (K kategorisi) genellikle Low severity olarak değerlendirilir, ancak mevcut yapıyla ciddi çelişkiler varsa Medium olabilir.
+**Important**: Layout and format consistency (K category) is generally evaluated as Low severity, but can be Medium if serious conflicts with existing structure exist.
 
-Normalize işlemi yok; skor doğrudan 0-100 aralığında kalır.
+No normalization; score remains directly in 0-100 range.
 
-## 4. Çıktı Formatı
+## 4. Output Format
 
-**Format Kuralları:**
-- Markdown formatında yaz (başlıklar, listeler, kod blokları, tablolar)
-- Her bileşen için ayrı H2 başlığı (`## Component Review: ComponentName`)
-- Kod dosyalarını backtick içinde göster (`file.tsx`)
-- Severity işaretçileri: `[HIGH]`, `[MEDIUM]`, `[LOW]`
-- Okunabilir boşluklar ve düzenli girinti
-- Bold kullan önemli başlıklar için
+**Format Rules:**
+- Write in Markdown format (headings, lists, code blocks, tables)
+- Separate H2 heading for each component (`## Component Review: ComponentName`)
+- Show code files in backticks (`file.tsx`)
+- Severity indicators: `[HIGH]`, `[MEDIUM]`, `[LOW]`
+- Readable spacing and proper indentation
+- Use bold for important headings
 
-### Component Review Bloğu
+### Component Review Block
 
 ```markdown
 ## Component Review: **ComponentName**
@@ -172,16 +158,16 @@ Normalize işlemi yok; skor doğrudan 0-100 aralığında kalır.
 ### Findings
 
 #### HIGH PRIORITY (count)
-1. **[Category]** Açıklama.
-   - **Ref:** `dosya.instructions.md` - Section
+1. **[Category]** Description.
+   - **Ref:** `file.instructions.md` - Section
 
 #### MEDIUM PRIORITY (count)
-1. **[Category]** Açıklama.
-   - **Ref:** `dosya.instructions.md` - Section
+1. **[Category]** Description.
+   - **Ref:** `file.instructions.md` - Section
 
 #### LOW PRIORITY (count)
-1. **[Category]** Açıklama.
-   - **Ref:** `dosya.instructions.md` - Section
+1. **[Category]** Description.
+   - **Ref:** `file.instructions.md` - Section
 
 ---
 
@@ -197,43 +183,43 @@ Normalize işlemi yok; skor doğrudan 0-100 aralığında kalır.
 
 **1. Action title**
 - **File:** `path/to/file.tsx`
-- **Rationale:** Neden gerekli
-- **Reference:** `dosya.instructions.md`
+- **Rationale:** Why needed
+- **Reference:** `file.instructions.md`
 
 #### MEDIUM PRIORITY ACTIONS
 
 **2. Action title**
 - **File:** `path/to/file.tsx`
-- **Rationale:** Neden gerekli
-- **Reference:** `dosya.instructions.md`
+- **Rationale:** Why needed
+- **Reference:** `file.instructions.md`
 
 ---
 ```
 
-### Global Plan ve Next Actions
+### Global Plan and Next Actions
 
 ```markdown
 ## Global Refactoring Plan
 
 ### HIGH PRIORITY
 **1. Action title**
-- **Rationale:** Neden
-- **Reference:** `dosya.instructions.md`
+- **Rationale:** Why
+- **Reference:** `file.instructions.md`
 
 ### MEDIUM PRIORITY
 **2. Action title**
-- **Rationale:** Neden
-- **Reference:** `dosya.instructions.md`
+- **Rationale:** Why
+- **Reference:** `file.instructions.md`
 
 ---
 
 ## Next Actions (Top 5)
 
-1. **[HIGH]** Action açıklaması
-2. **[HIGH]** Action açıklaması
-3. **[MEDIUM]** Action açıklaması
-4. **[HIGH]** Action açıklaması
-5. **[LOW]** Action açıklaması
+1. **[HIGH]** Action description
+2. **[HIGH]** Action description
+3. **[MEDIUM]** Action description
+4. **[HIGH]** Action description
+5. **[LOW]** Action description
 
 ---
 
@@ -251,24 +237,36 @@ Normalize işlemi yok; skor doğrudan 0-100 aralığında kalır.
 ---
 ```
 
-## 5. Önceliklendirme Kriterleri
-- High: Accessibility kırılımı, test eksikliği, public API hatası.
-- Medium: Performans optimizasyonu, tip iyileştirmesi.
-- Low: Kozmetik düzen, dosya yeniden sıralama.
+## 5. Prioritization Criteria
+- High: Accessibility breakage, test missing, public API error.
+- Medium: Performance optimization, type improvement.
+- Low: Cosmetic layout, file reordering.
 
-## 6. Plan Üretim Kuralları
-- Her High issue için en az bir net dosya + eylem.
-- İlgisiz veya belirsiz öneri yok; her adım "değişiklik tek cümle" formatında.
-- 10'dan fazla adım varsa en kritik ilk 10, kalanları "backlog" alt listesine taşı.
+## 6. Plan Generation Rules
+- At least one clear file + action for each High issue.
+- No irrelevant or vague suggestions; each step in "change single sentence" format.
+- If more than 10 steps, move most critical first 10, rest to "backlog" sub-list.
 
-## 7. Sınırlamalar
-- Stil ekleme, docs yazma veya test dosyası oluşturma bu aşamada yapılmaz; sadece plan.
-- Kod örnekleri gerekiyorsa kısa diff ipucu şeklinde (örn. `+ onKeyDown => handleSpace(event)`), tam dosya içeriği değil.
+## 7. Limitations
+- No styling addition, docs writing, or test file creation at this stage; only planning.
+- If code examples needed, brief diff hint format (e.g., `+ onKeyDown => handleSpace(event)`), not full file content.
 
-## 8. Tutarlılık Notu
-- Terminoloji İngilizce başlık + Türkçe açıklama karması: Category tagleri İngilizce, açıklama Türkçe.
+## 8. Consistency Note
+- Terminology: English headings + descriptions. Category tags in English, descriptions in English.
+- Refactor suggestions should align with existing file layout; follow patterns in similar components.
 
-## 9. Örnek Finding
-`[Accessibility][High] TooltipTrigger Escape ile kapatma davranışı eksik.`
+## 9. Example Finding
 
-Hazır olduğunda prompt çalıştırıldığında bu talimat setine göre değerlendirme üret. Dosya değişikliği yapma; sadece rapor. Kısmi veya STRICT mod kavramı yok; tüm kategoriler zorunlu.
+**HIGH Priority:**
+```
+**[Accessibility]** TooltipTrigger missing Escape key closing behavior.
+- **Ref:** `accessibility-guidelines.instructions.md` - Mandatory Rules - Keyboard Support
+```
+
+**LOW Priority:**
+```
+**[Format]** Import order inconsistent with existing component pattern (React imports should come first).
+- **Ref:** Existing project structure
+```
+
+When ready and prompt is executed, generate evaluation according to this instruction set. Do not make file changes; only report. No partial or STRICT mode concept; all categories are mandatory.
