@@ -70,11 +70,6 @@
       margin-top: 12px;
       border-radius: 12px;
       border: 1px solid #e1e4ea;
-      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-
-      &[style*='opacity: 0'] {
-        pointer-events: none;
-      }
 
       // Ensure code blocks inside have proper styling
       pre {
