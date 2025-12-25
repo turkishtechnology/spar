@@ -167,6 +167,36 @@
   }
 }
 
+.live-code-copy-tooltip {
+  padding: var(--tooltips-base-v-padding, 8px) var(--tooltips-base-h-padding, 12px);
+  border-radius: var(--tooltips-base-radius, 8px);
+  box-shadow:
+    0 2px 2px -1px var(--shadow-black-alpha-light, rgba(82, 88, 102, 0.04)),
+    0 6px 12px -2px var(--shadow-black-alpha-light, rgba(82, 88, 102, 0.04)),
+    0 8px 20px 0 var(--shadow-black-alpha-light, rgba(82, 88, 102, 0.04));
+  font-size: 12px;
+  z-index: 50;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+  border-width: 1px;
+  border-style: solid;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.live-code-copy-tooltip-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 4px;
+  border: 1px solid var(--states-success-sub-base, #a0e6ba);
+  background: var(--background-lightest, #f9fafc);
+}
+
 // Used in CSS file examples in a copy-pasteable way in demos. CSS only below this line.
 
 // Button styles
