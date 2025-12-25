@@ -108,6 +108,7 @@ const LiveCode: React.FC<LiveCodeProps> = ({ code, cssCode }) => {
   // Pick theme for syntax highlighting
   const selectedTheme = themes.github;
   const [activeTab, setActiveTab] = useState<'js' | 'css'>('js');
+  const [isCopied, setIsCopied] = useState(false);
 
   // React Live scope - burada kullanılabilir değişkenler ve bileşenler
   const scope = {
@@ -178,6 +179,8 @@ const LiveCode: React.FC<LiveCodeProps> = ({ code, cssCode }) => {
     if (textToCopy) {
       try {
         await navigator.clipboard.writeText(textToCopy);
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 2000);
       } catch (err) {
         console.error('Failed to copy:', err);
       }
@@ -260,20 +263,60 @@ const LiveCode: React.FC<LiveCodeProps> = ({ code, cssCode }) => {
                     )}
                   </TabsList>
                 </Tabs>
-                <button className='live-code-action-button' onClick={handleCopy}>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    width='15'
-                    height='19'
-                    viewBox='0 0 15 19'
-                    fill='none'
-                  >
-                    <path
-                      d='M13.3333 1.66667H9.85C9.5 0.7 8.58333 0 7.5 0C6.41667 0 5.5 0.7 5.15 1.66667H1.66667C0.75 1.66667 0 2.41667 0 3.33333V16.6667C0 17.5833 0.75 18.3333 1.66667 18.3333H13.3333C14.25 18.3333 15 17.5833 15 16.6667V3.33333C15 2.41667 14.25 1.66667 13.3333 1.66667ZM7.5 1.66667C7.95833 1.66667 8.33333 2.04167 8.33333 2.5C8.33333 2.95833 7.95833 3.33333 7.5 3.33333C7.04167 3.33333 6.66667 2.95833 6.66667 2.5C6.66667 2.04167 7.04167 1.66667 7.5 1.66667ZM12.5 16.6667H2.5C2.04167 16.6667 1.66667 16.2917 1.66667 15.8333V4.16667C1.66667 3.70833 2.04167 3.33333 2.5 3.33333H3.33333V4.16667C3.33333 5.08333 4.08333 5.83333 5 5.83333H10C10.9167 5.83333 11.6667 5.08333 11.6667 4.16667V3.33333H12.5C12.9583 3.33333 13.3333 3.70833 13.3333 4.16667V15.8333C13.3333 16.2917 12.9583 16.6667 12.5 16.6667Z'
-                      fill='#222530'
-                    />
-                  </svg>
-                </button>
+                <TooltipProvider delayDuration={0}>
+                  <TooltipRoot>
+                    <TooltipTrigger asChild>
+                      <button className='live-code-action-button' onClick={handleCopy}>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          width='15'
+                          height='19'
+                          viewBox='0 0 15 19'
+                          fill='none'
+                        >
+                          <path
+                            d='M13.3333 1.66667H9.85C9.5 0.7 8.58333 0 7.5 0C6.41667 0 5.5 0.7 5.15 1.66667H1.66667C0.75 1.66667 0 2.41667 0 3.33333V16.6667C0 17.5833 0.75 18.3333 1.66667 18.3333H13.3333C14.25 18.3333 15 17.5833 15 16.6667V3.33333C15 2.41667 14.25 1.66667 13.3333 1.66667ZM7.5 1.66667C7.95833 1.66667 8.33333 2.04167 8.33333 2.5C8.33333 2.95833 7.95833 3.33333 7.5 3.33333C7.04167 3.33333 6.66667 2.95833 6.66667 2.5C6.66667 2.04167 7.04167 1.66667 7.5 1.66667ZM12.5 16.6667H2.5C2.04167 16.6667 1.66667 16.2917 1.66667 15.8333V4.16667C1.66667 3.70833 2.04167 3.33333 2.5 3.33333H3.33333V4.16667C3.33333 5.08333 4.08333 5.83333 5 5.83333H10C10.9167 5.83333 11.6667 5.08333 11.6667 4.16667V3.33333H12.5C12.9583 3.33333 13.3333 3.70833 13.3333 4.16667V15.8333C13.3333 16.2917 12.9583 16.6667 12.5 16.6667Z'
+                            fill='#222530'
+                          />
+                        </svg>
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipPortal>
+                      <TooltipContent
+                        className='live-code-copy-tooltip'
+                        side='bottom'
+                        sideOffset={5}
+                        style={{
+                          borderColor: isCopied
+                            ? 'var(--states-success-sub-base, #A0E6BA)'
+                            : 'var(--border-dark, #525866)',
+                          background: isCopied
+                            ? 'var(--states-success-light, #CAF1D8)'
+                            : 'var(--background-darkest, #222530)',
+                          color: isCopied ? 'var(--text-darkest, #222530)' : '#fff',
+                        }}
+                      >
+                        {isCopied && (
+                          <div className='live-code-copy-tooltip-icon'>
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='14'
+                              height='14'
+                              viewBox='0 0 14 14'
+                              fill='none'
+                            >
+                              <path
+                                d='M6.66667 0C2.98667 0 0 2.98667 0 6.66667C0 10.3467 2.98667 13.3333 6.66667 13.3333C10.3467 13.3333 13.3333 10.3467 13.3333 6.66667C13.3333 2.98667 10.3467 0 6.66667 0ZM4.86 9.52667L2.46667 7.13333C2.20667 6.87333 2.20667 6.45333 2.46667 6.19333C2.72667 5.93333 3.14667 5.93333 3.40667 6.19333L5.33333 8.11333L9.92 3.52667C10.18 3.26667 10.6 3.26667 10.86 3.52667C11.12 3.78667 11.12 4.20667 10.86 4.46667L5.8 9.52667C5.54667 9.78667 5.12 9.78667 4.86 9.52667Z'
+                                fill='#188A42'
+                              />
+                            </svg>
+                          </div>
+                        )}
+                        {isCopied ? 'Copied successfully' : 'Copy'}
+                      </TooltipContent>
+                    </TooltipPortal>
+                  </TooltipRoot>
+                </TooltipProvider>
               </div>
             </div>
 
