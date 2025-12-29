@@ -1,6 +1,6 @@
 ---
-mode: agent
-model: Claude Sonnet 4 (copilot)
+agent: agent
+model: Claude Opus 4.5 (copilot)
 description: Generate comprehensive test suite for Glide components
 ---
 
