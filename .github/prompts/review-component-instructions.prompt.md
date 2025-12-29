@@ -1,6 +1,6 @@
 ---
-mode: agent
-model: Claude Sonnet 4 (copilot)
+agent: Plan
+model: Gemini 3 Pro (Preview) (copilot)
 description: Comprehensive review of Glide component instruction files against accessibility and headless standards
 ---
 

@@ -1,6 +1,6 @@
 ---
-mode: agent
-model: Claude Sonnet 4 (copilot)
+agent: Plan
+model: Gemini 3 Pro (Preview) (copilot)
 description: Design comprehensive specifications for new Glide headless components
 ---
 
