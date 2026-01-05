@@ -18,11 +18,9 @@ Accessible dropdown menu component for creating interactive command menus with k
 
 ## Live Demo
 
+<div className='dropdown-demo-container'>
 <LiveCode
-  code={`function BasicDropdownExample() {
-  return (
-    <div className='dropdown-demo-container'>
-      <DropdownMenu.Root>
+  code={`<DropdownMenu.Root>
         <DropdownMenu.Trigger className='dropdown-trigger'>
           Options
           <svg
@@ -54,61 +52,8 @@ Accessible dropdown menu component for creating interactive command menus with k
             Diana
           </DropdownMenu.Item>
         </DropdownMenu.Content>
-      </DropdownMenu.Root>
-    </div>
-  );
-}`}
-/>
-
-### dropdown.tsx
-
-```tsx
-import { DropdownMenu } from '@turkish-technology/spar';
-
-function DropdownDemo() {
-  return
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger className='dropdown-trigger'>
-        Options
-        <svg
-          className='dropdown-svg'
-          xmlns='http://www.w3.org/2000/svg'
-          width='20'
-          height='20'
-          viewBox='0 0 20 20'
-          fill='none'
-        >
-          <path d='M13.2292 7.5001L9.99583 10.7334L6.7625 7.5001C6.4375 7.1751 5.9125 7.1751 5.5875 7.5001C5.2625 7.8251 5.2625 8.3501 5.5875 8.6751L9.4125 12.5001C9.7375 12.8251 10.2625 12.8251 10.5875 12.5001L14.4125 8.6751C14.7375 8.3501 14.7375 7.8251 14.4125 7.5001C14.0875 7.18343 13.5542 7.1751 13.2292 7.5001Z' />
-        </svg>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content className='dropdown-content' align='end' sideOffset={4}>
-        <DropdownMenu.Item className='dropdown-item'>
-          <span className='dropdown-item-avatar'>
-          Alice
-        </DropdownMenu.Item>
-        <DropdownMenu.Item className='dropdown-item'>
-          <span className='dropdown-item-avatar'>
-          Bob
-        </DropdownMenu.Item>
-        <DropdownMenu.Item className='dropdown-item'>
-          <span className='dropdown-item-avatar'>
-          Charlie
-        </DropdownMenu.Item>
-        <DropdownMenu.Item className='dropdown-item'>
-          <span className='dropdown-item-avatar'>
-          Diana
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
-}
-
-export default DropdownMenuDemo;
-```
-
-### dropdown.css
-
-```css
-.dropdown-trigger {
+      </DropdownMenu.Root>`}
+    cssCode={`.dropdown-trigger {
   margin-inline: auto;
   width: 100px;
   display: flex;
@@ -178,8 +123,10 @@ export default DropdownMenuDemo;
   width: 13.688px;
   height: 13.688px;
   background-color: #474747;
-}
-```
+}`}
+/>
+
+</div>
 
 ## Features
 

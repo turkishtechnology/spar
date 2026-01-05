@@ -18,12 +18,11 @@ Headless checkbox component providing accessibility and behavior without styling
 
 ## Live Demo
 
+<div className='checkbox-demo-container'>
 <LiveCode
-  code={`function BasicExample() {
+  code={`function CheckboxDemo() {
   const [checked, setChecked] = React.useState(true);
-  
   return (
-    <div className='checkbox-demo-container'>
       <Checkbox
         className='checkbox'
         checked={checked}
@@ -35,40 +34,9 @@ Headless checkbox component providing accessibility and behavior without styling
           </svg>
         )}
       </Checkbox>
-    </div>
   );
 }`}
-/>
-
-### checkbox.tsx
-
-```tsx
-import { Checkbox } from '@turkish-technology/spar';
-
-function CheckboxDemo() {
-  return (
-    <Checkbox className='checkbox' checked={checked} onChange={setChecked}>
-      <svg
-        className='checkbox-icon'
-        xmlns='http://www.w3.org/2000/svg'
-        width='24'
-        height='24'
-        viewBox='0 0 24 24'
-        fill='none'
-      >
-        <path d='M8.79555 15.8754L5.32555 12.4054C4.93555 12.0154 4.30555 12.0154 3.91555 12.4054C3.52555 12.7954 3.52555 13.4254 3.91555 13.8154L8.09555 17.9954C8.48555 18.3854 9.11555 18.3854 9.50555 17.9954L20.0855 7.41539C20.4755 7.02539 20.4755 6.39539 20.0855 6.00539C19.6955 5.61539 19.0655 5.61539 18.6755 6.00539L8.79555 15.8754Z' />
-      </svg>
-    </Checkbox>
-  );
-}
-
-export default CheckboxDemo;
-```
-
-### checkbox.css
-
-```css
-.checkbox-demo-container .checkbox {
+  cssCode={`.checkbox {
   border-radius: 12px;
   border: 4px solid rgba(0, 0, 0, 0.16);
   background: #fff;
@@ -79,25 +47,28 @@ export default CheckboxDemo;
   justify-content: center;
 }
 
-[data-theme='dark'] .checkbox-demo-container .checkbox {
-  border-color: rgba(255, 255, 255, 0.16);
-  background: #000;
+[data-theme='dark'] .checkbox {
+border-color: rgba(255, 255, 255, 0.16);
+background: #000;
 }
 
-.checkbox-demo-container .checkbox-icon {
-  border-radius: 4px;
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-  background: rgba(0, 0, 0, 0.72);
-  fill: #fff;
+.checkbox-icon {
+border-radius: 4px;
+width: 24px;
+height: 24px;
+flex-shrink: 0;
+background: rgba(0, 0, 0, 0.72);
+fill: #fff;
 }
 
-[data-theme='dark'] .checkbox-demo-container .checkbox-icon {
-  background: rgba(255, 255, 255, 0.72);
-  fill: #000;
+[data-theme='dark'] .checkbox-icon {
+background: rgba(255, 255, 255, 0.72);
+fill: #000;
 }
-```
+`}
+/>
+
+</div>
 
 ## Features
 

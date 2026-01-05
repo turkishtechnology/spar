@@ -19,10 +19,8 @@ A headless, accessible tabs component that provides complete keyboard navigation
 ## Live Demo
 
 <LiveCode
-  code={`function BasicExample() {
-  return (
-    <div className='tabs-demo-container'>
-      <Tabs defaultValue='trend' className='tabs'>
+  code={`<div className='tabs-demo-container'>
+<Tabs defaultValue='trend' className='tabs'>
         <TabsList className='tabs-list'>
           <TabsTrigger value='recent' className='tab'>
             <span className='tab-label'>Recent</span>
@@ -36,43 +34,9 @@ A headless, accessible tabs component that provides complete keyboard navigation
         </TabsList>
         <TabsContent value='trend'>
         </TabsContent>
-      </Tabs>
-    </div>
-  );
-}`}
-/>
-
-### tabs.tsx
-
-```tsx
-import { Tabs } from '@turkish-technology/spar';
-
-function TabsDemo() {
-  return (
-    <Tabs defaultValue='trend' className='tabs'>
-      <TabsList className='tabs-list'>
-        <TabsTrigger value='recent' className='tab'>
-          <span className='tab-label'>Recent</span>
-        </TabsTrigger>
-        <TabsTrigger value='popular' className='tab'>
-          <span className='tab-label'>Popular</span>
-        </TabsTrigger>
-        <TabsTrigger value='trend' className='tab'>
-          <span className='tab-label'>Trend</span>
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value='trend'></TabsContent>
-    </Tabs>
-  );
-}
-
-export default TabsDemo;
-```
-
-### tabs.css
-
-```css
-.tabs {
+</Tabs>
+</div>`}
+cssCode={`.tabs {
   height: 29.288px;
   padding: 0 11.715px;
   border-radius: 5.858px;
@@ -125,7 +89,8 @@ export default TabsDemo;
 [data-theme='dark'] .tab[data-state='active'] .tab-label {
   border-color: rgba(255, 255, 255, 0.72);
 }
-```
+`}
+/>
 
 ## Features
 

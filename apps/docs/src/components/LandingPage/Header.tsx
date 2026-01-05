@@ -6,10 +6,8 @@ import { Button } from '@turkish-technology/spar';
 export default function LandingHeader() {
   const color = useColorMode().colorMode === 'light' ? 'black' : 'white';
   return (
-    <div
-      className='landing-header-container'
-    >
-      <img className='hero-image' src='/img/header-bg.svg' alt="" />
+    <div className='landing-header-container'>
+      <img className='hero-image' src='/img/header-bg.svg' alt='' />
       <div className='landing-header-content'>
         <Link to='/docs/introduction' className='landing-header-top'>
           <Translate description="WHAT'S NEW">landing.whats.new</Translate>

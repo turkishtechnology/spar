@@ -23,14 +23,9 @@ A floating panel component anchored to a trigger element with smart positioning,
 
 ## Live Demo
 
+<div className='popover-demo-container'>
 <LiveCode
-  title='Basic Popover Example'
-  code={`
-function Example() {
-  return (
-
-    <div className='popover-demo-container'>
-      <PopoverRoot>
+  code={`<PopoverRoot>
         <PopoverTrigger className='popover-trigger'>
           Open Popover
         </PopoverTrigger>
@@ -46,60 +41,8 @@ function Example() {
           </div>
           <p className='popover-paragraph'>Lorem ipsum dolor sit amet consectetur. Duis cras laeet ultrices tellus. Vitae id interdum sagittis </p>
         </PopoverContent>
-      </PopoverRoot>
-    </div>
-
-);
-}
-`}
-/>
-
-### popover.tsx
-
-```tsx
-import {
-  PopoverRoot,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverClose,
-} from '@turkish-technology/spar';
-
-function PopoverDemo() {
-  return (
-    <PopoverRoot>
-      <PopoverTrigger className='popover-trigger'>Open Popover</PopoverTrigger>
-      <PopoverContent className='popover-content'>
-        <div className='popover-header'>
-          <span className='popover-icon'></span>
-          <span className='popover-title'>Information</span>
-          <PopoverClose className='popover-close'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              width='7'
-              height='7'
-              viewBox='0 0 7 7'
-              fill='none'
-            >
-              <path d='M6.72003 0.157674C6.51675 -0.045608 6.18837 -0.045608 5.98509 0.157674L3.43625 2.7013L0.887404 0.152461C0.684122 -0.0508205 0.355743 -0.0508205 0.152461 0.152461C-0.0508205 0.355743 -0.0508205 0.684122 0.152461 0.887404L2.7013 3.43625L0.152461 5.98509C-0.0508205 6.18837 -0.0508205 6.51675 0.152461 6.72003C0.355743 6.92331 0.684122 6.92331 0.887404 6.72003L3.43625 4.17119L5.98509 6.72003C6.18837 6.92331 6.51675 6.92331 6.72003 6.72003C6.92331 6.51675 6.92331 6.18837 6.72003 5.98509L4.17119 3.43625L6.72003 0.887404C6.9181 0.689334 6.9181 0.355743 6.72003 0.157674Z' />
-            </svg>
-          </PopoverClose>
-        </div>
-        <p className='popover-paragraph'>
-          Lorem ipsum dolor sit amet consectetur. Duis cras laeet ultrices tellus. Vitae id interdum
-          sagittis{' '}
-        </p>
-      </PopoverContent>
-    </PopoverRoot>
-  );
-}
-
-export default PopoverDemo;
-```
-
-### popover.css
-
-```css
-.popover-trigger {
+      </PopoverRoot>`}
+  cssCode={`.popover-trigger {
   border-radius: 8px;
   padding: 12px 14px;
   font-weight: 400;
@@ -182,8 +125,11 @@ export default PopoverDemo;
 }
 
 [data-theme='dark'] .popover-paragraph {
-}
-```
+  color: #99a0ae;
+}`}
+/>
+
+</div>
 
 ## Features
 

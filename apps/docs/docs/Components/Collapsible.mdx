@@ -18,68 +18,28 @@ A headless collapsible component that manages the visibility of content sections
 
 ## Live Demo
 
-<LiveCode 
-  code={`function BasicExample() {
-
-return (
-
-<Collapsible className='collapsible-demo-container'>
-  <CollapsibleTrigger className='collapsible-trigger'>
-    <svg
-      className='collapsible-trigger-icon'
-      xmlns='http://www.w3.org/2000/svg'
-      width='17'
-      height='17'
-      viewBox='0 0 17 17'
-      fill='none'
-    >
-      <path d='M8.33312 1.38867C4.49978 1.38867 1.38867 4.49978 1.38867 8.33312C1.38867 12.1665 4.49978 15.2776 8.33312 15.2776C12.1665 15.2776 15.2776 12.1665 15.2776 8.33312C15.2776 4.49978 12.1665 1.38867 8.33312 1.38867ZM11.1109 9.02756H9.02756V11.1109C9.02756 11.4928 8.71506 11.8053 8.33312 11.8053C7.95117 11.8053 7.63867 11.4928 7.63867 11.1109V9.02756H5.55534C5.17339 9.02756 4.86089 8.71506 4.86089 8.33312C4.86089 7.95117 5.17339 7.63867 5.55534 7.63867H7.63867V5.55534C7.63867 5.17339 7.95117 4.86089 8.33312 4.86089C8.71506 4.86089 9.02756 5.17339 9.02756 5.55534V7.63867H11.1109C11.4928 7.63867 11.8053 7.95117 11.8053 8.33312C11.8053 8.71506 11.4928 9.02756 11.1109 9.02756Z' />
-    </svg>
-  </CollapsibleTrigger>
-  <CollapsibleContent className='collapsible-content'>
-    <div className='collapsible-item'></div>
-    <div className='collapsible-item'></div>
-    <div className='collapsible-item'></div>
-  </CollapsibleContent>
-</Collapsible>
-); }`} />
-
-### collapsible.tsx
-
-```tsx
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
-
-function CollapsibleDemo() {
-  return (
-    <Collapsible>
-      <CollapsibleTrigger className='collapsible-trigger'>
-        <svg
-          className='collapsible-trigger-icon'
-          xmlns='http://www.w3.org/2000/svg'
-          width='17'
-          height='17'
-          viewBox='0 0 17 17'
-          fill='none'
-        >
-          <path d='M8.33312 1.38867C4.49978 1.38867 1.38867 4.49978 1.38867 8.33312C1.38867 12.1665 4.49978 15.2776 8.33312 15.2776C12.1665 15.2776 15.2776 12.1665 15.2776 8.33312C15.2776 4.49978 12.1665 1.38867 8.33312 1.38867ZM11.1109 9.02756H9.02756V11.1109C9.02756 11.4928 8.71506 11.8053 8.33312 11.8053C7.95117 11.8053 7.63867 11.4928 7.63867 11.1109V9.02756H5.55534C5.17339 9.02756 4.86089 8.71506 4.86089 8.33312C4.86089 7.95117 5.17339 7.63867 5.55534 7.63867H7.63867V5.55534C7.63867 5.17339 7.95117 4.86089 8.33312 4.86089C8.71506 4.86089 9.02756 5.17339 9.02756 5.55534V7.63867H11.1109C11.4928 7.63867 11.8053 7.95117 11.8053 8.33312C11.8053 8.71506 11.4928 9.02756 11.1109 9.02756Z' />
-        </svg>
-      </CollapsibleTrigger>
-      <CollapsibleContent className='collapsible-content'>
-        <div className='collapsible-item'></div>
-        <div className='collapsible-item'></div>
-        <div className='collapsible-item'></div>
-      </CollapsibleContent>
-    </Collapsible>
-  );
-}
-
-export default CollapsibleDemo;
-```
-
-### collapsible.css
-
-```css
-.collapsible-trigger {
+<LiveCode
+  code={`<Collapsible className="collapsible-demo-container">
+        <CollapsibleTrigger className="collapsible-trigger">
+          <svg
+            className="collapsible-trigger-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="17"
+            height="17"
+            viewBox="0 0 17 17"
+            fill="none"
+          >
+            <path d="M8.33312 1.38867C4.49978 1.38867 1.38867 4.49978 1.38867 8.33312C1.38867 12.1665 4.49978 15.2776 8.33312 15.2776C12.1665 15.2776 15.2776 12.1665 15.2776 8.33312C15.2776 4.49978 12.1665 1.38867 8.33312 1.38867ZM11.1109 9.02756H9.02756V11.1109C9.02756 11.4928 8.71506 11.8053 8.33312 11.8053C7.95117 11.8053 7.63867 11.4928 7.63867 11.1109V9.02756H5.55534C5.17339 9.02756 4.86089 8.71506 4.86089 8.33312C4.86089 7.95117 5.17339 7.63867 5.55534 7.63867H7.63867V5.55534C7.63867 5.17339 7.95117 4.86089 8.33312 4.86089C8.71506 4.86089 9.02756 5.17339 9.02756 5.55534V7.63867H11.1109C11.4928 7.63867 11.8053 7.95117 11.8053 8.33312C11.8053 8.71506 11.4928 9.02756 11.1109 9.02756Z" />
+          </svg>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="collapsible-content">
+          <div className="collapsible-item"></div>
+          <div className="collapsible-item"></div>
+          <div className="collapsible-item"></div>
+        </CollapsibleContent>
+      </Collapsible>
+  `}
+  cssCode={`.collapsible-trigger {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,36 +54,37 @@ export default CollapsibleDemo;
 }
 
 [data-theme='dark'] .collapsible-trigger {
-  background-color: rgba(255, 255, 255, 0.12);
+background-color: rgba(255, 255, 255, 0.12);
 }
 
 .collapsible-trigger-icon {
-  fill: #222530;
+fill: #222530;
 }
 
 [data-theme='dark'] .collapsible-trigger-icon {
-  fill: #f2f5f8;
+fill: #f2f5f8;
 }
 
 .collapsible-content {
-  display: flex;
-  flex-direction: column;
-  width: 216px;
-  gap: 8px;
+display: flex;
+flex-direction: column;
+width: 216px;
+gap: 8px;
 }
 
 .collapsible-item {
-  height: 27px;
-  border-radius: 5.4px;
-  border: 0.675px solid #e1e4ea;
-  background: rgba(0, 0, 0, 0.08);
+height: 27px;
+border-radius: 5.4px;
+border: 0.675px solid #e1e4ea;
+background: rgba(0, 0, 0, 0.08);
 }
 
 [data-theme='dark'] .collapsible-item {
-  border-color: #2b303b;
-  background-color: rgba(255, 255, 255, 0.12);
+border-color: #2b303b;
+background-color: rgba(255, 255, 255, 0.12);
 }
-```
+`}
+/>
 
 ## Features
 
@@ -410,8 +371,8 @@ Container that shows/hides based on the collapsible state with advanced features
 
 **CSS Custom Properties**
 
-| Property                             | Description                      | When Available       |
-| ------------------------------------ | -------------------------------- | -------------------- |
+| Property                            | Description                      | When Available       |
+| ----------------------------------- | -------------------------------- | -------------------- |
 | `--spar-collapsible-content-width`  | Current content width in pixels  | When content is open |
 | `--spar-collapsible-content-height` | Current content height in pixels | When content is open |
 

@@ -26,13 +26,9 @@ A popup that displays information related to an element when the element receive
 
 ## Live Demo
 
+<div className='tooltip-demo-container'>
 <LiveCode
-  title='Basic Tooltip Example'
-  code={`
-function Example() {
-  return (
-    <div className='tooltip-demo-container'>
-      <TooltipProvider>
+  code={`<TooltipProvider>
         <TooltipRoot>
           <TooltipTrigger asChild>
             <Button className='tooltip-trigger'>
@@ -45,46 +41,8 @@ function Example() {
             </TooltipContent>
           </TooltipPortal>
         </TooltipRoot>
-      </TooltipProvider>
-    </div>
-  );
-}
-  `}
-/>
-
-### tooltip.tsx
-
-```tsx
-import {
-  TooltipProvider,
-  TooltipRoot,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipPortal,
-} from '@turkish-technology/spar';
-
-function TooltipDemo() {
-  return (
-    <TooltipProvider>
-      <TooltipRoot>
-        <TooltipTrigger asChild>
-          <Button className='tooltip-trigger'>Hover or Focus Me</Button>
-        </TooltipTrigger>
-        <TooltipPortal>
-          <TooltipContent className='tooltip-content'>Explore</TooltipContent>
-        </TooltipPortal>
-      </TooltipRoot>
-    </TooltipProvider>
-  );
-}
-
-export default TooltipDemo;
-```
-
-### tooltip.css
-
-```css
-.tooltip-trigger {
+</TooltipProvider>`}
+cssCode={`.tooltip-trigger {
   border-radius: 8px;
   padding: 12px 14px;
   font-weight: 400;
@@ -122,8 +80,10 @@ export default TooltipDemo;
     0 2px 2px -1px rgba(82, 88, 102, 0.04),
     0 6px 12px -2px rgba(82, 88, 102, 0.04),
     0 8px 20px 0 rgba(82, 88, 102, 0.04);
-}
-```
+}`}
+/>
+
+</div>
 
 ## Features
 
