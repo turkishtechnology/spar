@@ -128,7 +128,7 @@ function BasicSwitch() {
   const [enabled, setEnabled] = useState(false);
 
   return (
-    <Switch checked={enabled} onChange={setEnabled}>
+    <Switch checked={enabled} onCheckedChange={setEnabled}>
       Toggle Setting
     </Switch>
   );
@@ -140,7 +140,7 @@ function BasicSwitch() {
 ```tsx
 function UncontrolledSwitch() {
   return (
-    <Switch defaultChecked={false} onChange={(checked) => console.log('Changed to:', checked)}>
+    <Switch defaultChecked={false} onCheckedChange={(checked) => console.log('Changed to:', checked)}>
       Auto-managed Switch
     </Switch>
   );
@@ -165,7 +165,7 @@ function FormExample() {
         <Switch
           name='notifications'
           checked={settings.notifications}
-          onChange={(checked) => setSettings((prev) => ({ ...prev, notifications: checked }))}
+          onCheckedChange={(checked) => setSettings((prev) => ({ ...prev, notifications: checked }))}
           aria-label='Enable notifications'
         >
           Notifications
@@ -174,7 +174,7 @@ function FormExample() {
         <Switch
           name='darkMode'
           checked={settings.darkMode}
-          onChange={(checked) => setSettings((prev) => ({ ...prev, darkMode: checked }))}
+          onCheckedChange={(checked) => setSettings((prev) => ({ ...prev, darkMode: checked }))}
           aria-label='Enable dark mode'
         >
           Dark Mode
@@ -183,7 +183,7 @@ function FormExample() {
         <Switch
           name='autoSave'
           checked={settings.autoSave}
-          onChange={(checked) => setSettings((prev) => ({ ...prev, autoSave: checked }))}
+          onCheckedChange={(checked) => setSettings((prev) => ({ ...prev, autoSave: checked }))}
           required
           aria-label='Enable auto-save'
         >
@@ -210,7 +210,7 @@ function AccessibleSwitch() {
       <Switch
         id='wifi-switch'
         checked={isOn}
-        onChange={setIsOn}
+        onCheckedChange={setIsOn}
         aria-labelledby='wifi-label'
         aria-describedby='wifi-desc'
       >
@@ -229,7 +229,7 @@ function StateVariations() {
 
   return (
     <div>
-      <Switch checked={enabled} onChange={setEnabled}>
+      <Switch checked={enabled} onCheckedChange={setEnabled}>
         Normal Switch
       </Switch>
 
@@ -259,7 +259,7 @@ function CustomElement() {
     <Switch
       as='div'
       checked={active}
-      onChange={setActive}
+      onCheckedChange={setActive}
       role='switch' // Required when using non-button elements
       tabIndex={0} // Required for keyboard navigation
     >
@@ -282,7 +282,7 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
 | `as?`               | `ElementType`                | `'button'`  | The element or component to render as                                          |
 | `checked?`          | `boolean`                    | `undefined` | Controlled checked state. When provided, component operates in controlled mode |
 | `defaultChecked?`   | `boolean`                    | `false`     | Default checked state for uncontrolled usage                                   |
-| `onChange?`         | `(checked: boolean) => void` | `undefined` | Callback fired when the checked state changes                                  |
+| `onCheckedChange?`         | `(checked: boolean) => void` | `undefined` | Callback fired when the checked state changes                                  |
 | `disabled?`       | `boolean`                    | `false`     | Disabled state - properly announced to screen readers                          |
 | `name?`             | `string`                     | `undefined` | Form input name for form integration                                           |
 | `value?`            | `string`                     | `'on'`      | Form input value when checked                                                  |

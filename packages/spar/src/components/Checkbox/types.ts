@@ -58,7 +58,7 @@ export interface CheckboxProps
   /**
    * Callback fired when checked state changes
    */
-  onChange?: (checked: CheckedState) => void;
+  onCheckedChange?: (checked: CheckedState) => void;
 
   /**
    * Whether the checkbox is disabled

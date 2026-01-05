@@ -30,7 +30,7 @@ The Switch follows a simple single-component pattern rather than compound struct
 | `as` | `React.ElementType` | No | `"button"` | The element or component to render as |
 | `checked` | `boolean` | No | `undefined` | Controlled checked state |
 | `defaultChecked` | `boolean` | No | `false` | Default checked state for uncontrolled usage |
-| `onChange` | `(checked: boolean) => void` | No | `undefined` | Callback fired when the checked state changes |
+| `onCheckedChange` | `(checked: boolean) => void` | No | `undefined` | Callback fired when the checked state changes |
 | `disabled` | `boolean` | No | `false` | Whether the switch is disabled |
 | `name` | `string` | No | `undefined` | Form input name for form integration |
 | `value` | `string` | No | `"on"` | Form input value when checked |
@@ -49,7 +49,7 @@ The Switch follows a simple single-component pattern rather than compound struct
 - Type-safe polymorphic props with generic constraints
 
 ### Controlled/Uncontrolled
-- **Controlled**: Provide `checked` and `onChange` props
+- **Controlled**: Provide `checked` and `onCheckedChange` props
 - **Uncontrolled**: Omit `checked`, optionally provide `defaultChecked`
 
 ## 3. Behavior Matrix
@@ -113,7 +113,7 @@ Based on [ARIA APG Switch Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/swit
 interface UseSwitchProps {
   checked?: boolean;
   defaultChecked?: boolean;
-  onChange?: (checked: boolean) => void;
+  onCheckedChange?: (checked: boolean) => void;
   disabled?: boolean;
   readOnly?: boolean;
 }
@@ -256,19 +256,19 @@ For teams migrating from other switch implementations:
 <input type="checkbox" checked={checked} onChange={e => setChecked(e.target.checked)} />
 
 // After  
-<Switch checked={checked} onChange={setChecked} />
+<Switch checked={checked} onCheckedChange={setChecked} />
 ```
 
 #### From Other Headless Libraries
 - Map `isSelected`/`selected` props to `checked`
-- Map `onSelectionChange` to `onChange`
+- Map `onSelectionChange` to `onCheckedChange`
 - Update ARIA attribute targeting in CSS
 - Verify keyboard interaction consistency
 
 ### Implementation Checklist
 
 #### Core Functionality
-- [ ] Controlled state management with `checked` and `onChange`
+- [ ] Controlled state management with `checked` and `onCheckedChange`
 - [ ] Uncontrolled state management with `defaultChecked`
 - [ ] Proper event handling for click and keyboard
 - [ ] Form integration with hidden input element

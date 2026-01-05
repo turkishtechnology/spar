@@ -37,7 +37,7 @@ export interface SwitchProps
    * Callback fired when the checked state changes
    * @param checked - The new checked state
    */
-  onChange?: (checked: boolean) => void;
+  onCheckedChange?: (checked: boolean) => void;
 
   /**
    * Disabled state - properly announced to screen readers
@@ -102,7 +102,7 @@ export interface SwitchProps
 export interface UseSwitchProps {
   checked?: boolean;
   defaultChecked?: boolean;
-  onChange?: (checked: boolean) => void;
+  onCheckedChange?: (checked: boolean) => void;
   disabled?: boolean;
   readOnly?: boolean;
 }

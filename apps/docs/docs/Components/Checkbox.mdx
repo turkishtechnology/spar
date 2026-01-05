@@ -26,7 +26,7 @@ Headless checkbox component providing accessibility and behavior without styling
       <Checkbox
         className='checkbox'
         checked={checked}
-        onChange={setChecked}
+        onCheckedChange={setChecked}
       >
         {checked && (
           <svg className="checkbox-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -188,7 +188,7 @@ function ControlledCheckbox() {
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '16px' }}>
       <Checkbox
         checked={isChecked}
-        onChange={setIsChecked}
+        onCheckedChange={setIsChecked}
         style={{
           width: '16px',
           height: '16px',
@@ -241,7 +241,7 @@ function IndeterminateCheckbox() {
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '16px' }}>
       <Checkbox
         checked={checked}
-        onChange={handleChange}
+        onCheckedChange={handleChange}
         style={{
           width: '16px',
           height: '16px',
@@ -522,7 +522,7 @@ function AccessibleCheckbox() {
           required
           aria-describedby={hasError ? 'error-message' : undefined}
           aria-invalid={hasError}
-          onChange={(checked) => {
+          onCheckedChange={(checked) => {
             setHasError(!checked);
           }}
           style={{
@@ -593,7 +593,7 @@ A headless checkbox component that provides complete accessibility and behavior 
 | `ref?`             | `React.Ref<HTMLElement>`                                   | `undefined`      | Ref to the underlying DOM element                                     |
 | `checked?`         | `CheckedState`                                             | `undefined`      | Controlled checked state. When provided, component becomes controlled |
 | `defaultChecked?`  | `CheckedState`                                             | `false`          | Default checked state for uncontrolled usage                          |
-| `onChange?`        | `(checked: CheckedState) => void`                          | `undefined`      | Callback fired when checked state changes                             |
+| `onCheckedChange?`        | `(checked: CheckedState) => void`                          | `undefined`      | Callback fired when checked state changes                             |
 | `disabled?`      | `boolean`                                                  | `false`          | Whether the checkbox is disabled                                      |
 | `readOnly?`      | `boolean`                                                  | `false`          | Whether the checkbox is read-only                                     |
 | `required?`      | `boolean`                                                  | `false`          | Whether the checkbox is required in forms                             |
