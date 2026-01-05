@@ -302,13 +302,13 @@ Popover with external state control:
 
 ```tsx
 export function ControlledPopover() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   return (
     <div>
       <button onClick={() => setIsOpen(!isOpen)}>External Toggle</button>
 
-      <PopoverRoot isOpen={isOpen} onOpenChange={setIsOpen}>
+      <PopoverRoot open={open} onOpenChange={setOpen}>
         <PopoverTrigger>Open Popover</PopoverTrigger>
         <PopoverContent>
           <p>Controlled content</p>
@@ -494,7 +494,7 @@ The root container that provides context and manages state for all popover compo
 
 | Name            | Type                                     | Default     | Description                                    |
 | --------------- | ---------------------------------------- | ----------- | ---------------------------------------------- |
-| `isOpen?`       | `boolean`                                | `undefined` | Controlled state for popover visibility        |
+| `open?`       | `boolean`                                | `undefined` | Controlled state for popover visibility        |
 | `onOpenChange?` | `(open: boolean) => void`                | `undefined` | Callback when popover open state changes       |
 | `defaultOpen?`  | `boolean`                                | `false`     | Initial open state for uncontrolled mode       |
 | `modal?`        | `boolean`                                | `false`     | Whether popover should behave modally          |

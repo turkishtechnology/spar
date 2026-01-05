@@ -44,7 +44,7 @@ export interface TooltipRootProps {
   /**
    * Controlled state for tooltip visibility
    */
-  isOpen?: boolean;
+  open?: boolean;
 
   /**
    * Default open state for uncontrolled tooltip

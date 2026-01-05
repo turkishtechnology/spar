@@ -96,7 +96,7 @@ describe('TooltipRoot', () => {
 
   it('handles controlled state', () => {
     const onOpenChange = jest.fn();
-    render(<BasicTooltip isOpen={false} onOpenChange={onOpenChange} />);
+    render(<BasicTooltip open={false} onOpenChange={onOpenChange} />);
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
     expect(trigger).not.toHaveAttribute('aria-describedby');

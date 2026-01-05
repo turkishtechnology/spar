@@ -33,7 +33,7 @@
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `children` | `React.ReactNode` | Yes | - | Tooltip trigger and content components |
-| `isOpen` | `boolean` | No | - | Controlled state for tooltip visibility |
+| `open` | `boolean` | No | - | Controlled state for tooltip visibility |
 | `defaultOpen` | `boolean` | No | `false` | Default open state for uncontrolled tooltip |
 | `onOpenChange` | `(open: boolean) => void` | No | - | Callback when tooltip open state changes |
 | `delay` | `number` | No | - | Override provider delay for this tooltip |
@@ -94,7 +94,7 @@
 
 ### Controlled/Uncontrolled
 - **Uncontrolled**: Default behavior with internal show/hide state
-- **Controlled**: Provide `isOpen` and `onOpenChange` for external state management
+- **Controlled**: Provide `open` and `onOpenChange` for external state management
 
 ## 3. Behavior Matrix
 

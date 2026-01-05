@@ -8,7 +8,7 @@ export interface DialogRootProps {
   /**
    * Controlled open state
    */
-  isOpen?: boolean;
+  open?: boolean;
 
   /**
    * Callback when open state changes

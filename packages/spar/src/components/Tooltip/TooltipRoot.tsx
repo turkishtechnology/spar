@@ -9,7 +9,7 @@ import { useTooltipProvider } from './useTooltipProvider';
  */
 export const TooltipRoot = ({
   children,
-  isOpen: controlledOpen,
+  open: controlledOpen,
   defaultOpen = false,
   onOpenChange,
   delay,

@@ -18,7 +18,7 @@ import { getPlacement } from '../utils';
  */
 export const usePopover = (props: Omit<PopoverRootProps, 'children'>) => {
   const {
-    isOpen: controlledOpen,
+    open: controlledOpen,
     onOpenChange,
     defaultOpen = false,
     modal = false,

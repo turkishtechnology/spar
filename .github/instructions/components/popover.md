@@ -23,7 +23,7 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `isOpen` | `boolean` | No | - | Controlled state for popover visibility |
+| `open` | `boolean` | No | - | Controlled state for popover visibility |
 | `onOpenChange` | `(open: boolean) => void` | No | - | Callback when popover open state changes |
 | `defaultOpen` | `boolean` | No | `false` | Initial open state for uncontrolled mode |
 | `modal` | `boolean` | No | `false` | Whether popover should behave modally (focus trap + backdrop) |
@@ -98,7 +98,7 @@
 
 ### Controlled/Uncontrolled
 - **Uncontrolled**: Use `defaultOpen` for initial state, internal state management
-- **Controlled**: Provide `isOpen` and `onOpenChange` for external state control
+- **Controlled**: Provide `open` and `onOpenChange` for external state control
 
 ## 3. Behavior Matrix
 

@@ -11,7 +11,7 @@ export interface PopoverRootProps {
   /**
    * Controlled state for popover visibility
    */
-  isOpen?: boolean;
+  open?: boolean;
 
   /**
    * Callback when popover open state changes
