@@ -17,7 +17,7 @@ export const useDialogContext = () => {
  * Supports both modal and non-modal dialogs with controlled/uncontrolled patterns.
  */
 export const DialogRoot = ({
-  isOpen: controlledOpen,
+  open: controlledOpen,
   defaultOpen = false,
   onOpenChange,
   modal = true,
