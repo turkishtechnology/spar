@@ -8,7 +8,7 @@ import { usePopoverContext } from './hooks/usePopoverContext';
 export const PopoverTrigger = ({
   asChild = false,
   children,
-  isDisabled = false,
+  disabled = false,
   onClick,
   onKeyDown,
   ref,
@@ -18,18 +18,18 @@ export const PopoverTrigger = ({
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
-      if (isDisabled) return;
+      if (disabled) return;
 
       event.preventDefault();
       togglePopover();
       onClick?.(event);
     },
-    [isDisabled, togglePopover, onClick],
+    [disabled, togglePopover, onClick],
   );
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
-      if (isDisabled) return;
+      if (disabled) return;
 
       switch (event.key) {
         case 'Enter':
@@ -46,7 +46,7 @@ export const PopoverTrigger = ({
       }
       onKeyDown?.(event);
     },
-    [isDisabled, state.isOpen, togglePopover, openPopover, onKeyDown],
+    [disabled, state.isOpen, togglePopover, openPopover, onKeyDown],
   );
 
   const triggerProps = useMemo(
@@ -66,12 +66,12 @@ export const PopoverTrigger = ({
       'aria-expanded': state.isOpen,
       'aria-controls': state.isOpen ? state.contentId : undefined,
       'aria-haspopup': 'dialog' as const,
-      disabled: isDisabled,
+      disabled,
       'data-state': state.isOpen ? 'open' : 'closed',
-      'data-disabled': isDisabled ? '' : undefined,
+      'data-disabled': disabled ? '' : undefined,
       ...props,
     }),
-    [handleClick, handleKeyDown, state.isOpen, state.contentId, isDisabled, props, triggerRef, ref],
+    [handleClick, handleKeyDown, state.isOpen, state.contentId, disabled, props, triggerRef, ref],
   );
 
   if (asChild && isValidElement(children)) {

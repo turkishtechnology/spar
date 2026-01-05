@@ -33,9 +33,9 @@ describe('Checkbox - Unit Tests', () => {
     it('renders with render prop children', () => {
       render(
         <Checkbox>
-          {({ checked, isDisabled }) => (
+          {({ checked, disabled }) => (
             <span>
-              {checked ? 'Checked' : 'Unchecked'} - {isDisabled ? 'Disabled' : 'Enabled'}
+              {checked ? 'Checked' : 'Unchecked'} - {disabled ? 'Disabled' : 'Enabled'}
             </span>
           )}
         </Checkbox>,
@@ -181,8 +181,8 @@ describe('Checkbox - Unit Tests', () => {
   });
 
   describe('Disabled State', () => {
-    it('renders as disabled when isDisabled is true', () => {
-      render(<Checkbox isDisabled />);
+    it('renders as disabled when disabled is true', () => {
+      render(<Checkbox disabled />);
       const checkbox = screen.getByRole('checkbox');
 
       expect(checkbox).toHaveAttribute('aria-disabled', 'true');
@@ -194,7 +194,7 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox isDisabled onChange={handleChange} />);
+      render(<Checkbox disabled onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       await user.click(checkbox);
@@ -207,7 +207,7 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox isDisabled onChange={handleChange} />);
+      render(<Checkbox disabled onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       checkbox.focus();
@@ -222,7 +222,7 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox isReadOnly onChange={handleChange} />);
+      render(<Checkbox readOnly onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       await user.click(checkbox);
@@ -231,7 +231,7 @@ describe('Checkbox - Unit Tests', () => {
     });
 
     it('remains focusable when read-only', () => {
-      render(<Checkbox isReadOnly />);
+      render(<Checkbox readOnly />);
       const checkbox = screen.getByRole('checkbox');
 
       expect(checkbox).toHaveAttribute('tabIndex', '0');
@@ -240,8 +240,8 @@ describe('Checkbox - Unit Tests', () => {
   });
 
   describe('Required State', () => {
-    it('sets aria-required when isRequired is true', () => {
-      render(<Checkbox isRequired />);
+    it('sets aria-required when required is true', () => {
+      render(<Checkbox required />);
       const checkbox = screen.getByRole('checkbox');
 
       expect(checkbox).toHaveAttribute('aria-required', 'true');
@@ -344,7 +344,7 @@ describe('Checkbox - Unit Tests', () => {
     it('does not set hover state when disabled', async () => {
       const user = userEvent.setup();
 
-      render(<Checkbox isDisabled />);
+      render(<Checkbox disabled />);
       const checkbox = screen.getByRole('checkbox');
 
       await user.hover(checkbox);
@@ -423,7 +423,7 @@ describe('Checkbox - Unit Tests', () => {
     });
 
     it('sets correct data attributes for various states', () => {
-      render(<Checkbox isDisabled isRequired checked={true} />);
+      render(<Checkbox disabled required checked={true} />);
       const checkbox = screen.getByRole('checkbox');
 
       expect(checkbox).toHaveAttribute('data-checked', 'true');
@@ -437,11 +437,11 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const renderFn = jest.fn(() => <span>Render prop content</span>);
 
-      render(<Checkbox isDisabled>{renderFn}</Checkbox>);
+      render(<Checkbox disabled>{renderFn}</Checkbox>);
 
       expect(renderFn).toHaveBeenCalledWith({
         checked: false,
-        isDisabled: true,
+        disabled: true,
         isFocused: false,
         isHovered: false,
         isPressed: false,
@@ -453,7 +453,7 @@ describe('Checkbox - Unit Tests', () => {
       // Should not update hover state when disabled
       expect(renderFn).toHaveBeenLastCalledWith({
         checked: false,
-        isDisabled: true,
+        disabled: true,
         isFocused: false,
         isHovered: false,
         isPressed: false,
@@ -471,7 +471,7 @@ describe('Checkbox - Unit Tests', () => {
 
       expect(renderFn).toHaveBeenLastCalledWith({
         checked: false,
-        isDisabled: false,
+        disabled: false,
         isFocused: false,
         isHovered: true,
         isPressed: false,

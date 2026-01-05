@@ -78,7 +78,7 @@ describe('Select Accessibility', () => {
 
     it('should pass accessibility checks with disabled state', async () => {
       const { container } = render(
-        <Select isDisabled>
+        <Select disabled>
           <Select.Trigger aria-label='Choose option'>
             <Select.Value placeholder='Select...' />
           </Select.Trigger>
@@ -221,7 +221,7 @@ describe('Select Accessibility', () => {
             <Select.Value placeholder='Select...' />
           </Select.Trigger>
           <Select.Content>
-            <Select.Item value='option1' isDisabled>
+            <Select.Item value='option1' disabled>
               Option 1
             </Select.Item>
             <Select.Item value='option2'>Option 2</Select.Item>
@@ -501,7 +501,7 @@ describe('Select Accessibility', () => {
           </Select.Trigger>
           <Select.Content>
             <Select.Item value='option1'>Option 1</Select.Item>
-            <Select.Item value='option2' isDisabled>
+            <Select.Item value='option2' disabled>
               Option 2
             </Select.Item>
             <Select.Item value='option3'>Option 3</Select.Item>
@@ -758,7 +758,7 @@ describe('Select Accessibility', () => {
 
     it('should work with disabled state', () => {
       render(
-        <Select isDisabled>
+        <Select disabled>
           <Select.Trigger aria-label='Choose option'>
             <Select.Value placeholder='Select...' />
           </Select.Trigger>

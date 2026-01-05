@@ -11,11 +11,11 @@ export const BreadcrumbRoot = ({
   children,
   'aria-label': ariaLabel = 'Breadcrumb',
   onNavigate,
-  isDisabled = false,
+  disabled = false,
   ...props
 }: BreadcrumbRootProps) => {
   const contextValue: BreadcrumbContextValue = {
-    ...(isDisabled !== undefined && { isDisabled }),
+    ...(disabled !== undefined && { disabled }),
     ...(onNavigate && { onNavigate }),
   };
 
@@ -26,9 +26,9 @@ export const BreadcrumbRoot = ({
         {
           ...props,
           'aria-label': ariaLabel,
-          'aria-disabled': isDisabled || undefined,
+          'aria-disabled': disabled || undefined,
           'data-spar-breadcrumb-root': '',
-          'data-disabled': isDisabled || undefined,
+          'data-disabled': disabled || undefined,
         },
         children,
       )}

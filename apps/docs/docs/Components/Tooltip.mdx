@@ -342,7 +342,7 @@ function DisabledExample() {
   const [disabled, setDisabled] = React.useState(false);
 
   return (
-    <TooltipRoot isDisabled={disabled}>
+    <TooltipRoot disabled={disabled}>
       <TooltipTrigger>
         <button>Toggle disabled: {disabled ? 'Yes' : 'No'}</button>
       </TooltipTrigger>
@@ -466,7 +466,7 @@ Root component that manages tooltip state and provides context to child componen
 | `onOpenChange?` | `(open: boolean) => void` | -       | Callback when tooltip open state changes |
 | `delay?`        | `number`                  | `700`   | Override provider delay for this tooltip |
 | `hideDelay?`    | `number`                  | `0`     | Override provider hide delay             |
-| `isDisabled?`   | `boolean`                 | `false` | Whether tooltip is disabled              |
+| `disabled?`   | `boolean`                 | `false` | Whether tooltip is disabled              |
 
 **Events**
 

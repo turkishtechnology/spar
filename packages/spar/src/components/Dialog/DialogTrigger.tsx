@@ -9,7 +9,7 @@ import type { DialogTriggerProps } from './types';
  */
 export const DialogTrigger = ({
   as: Element = 'button',
-  isDisabled = false,
+  disabled = false,
   ref,
   onClick,
   onKeyDown,
@@ -24,17 +24,17 @@ export const DialogTrigger = ({
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
-      if (isDisabled) return;
+      if (disabled) return;
 
       setIsOpen(!isOpen);
       onClick?.(event as React.MouseEvent<HTMLButtonElement>);
     },
-    [isDisabled, isOpen, setIsOpen, onClick],
+    [disabled, isOpen, setIsOpen, onClick],
   );
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
-      if (isDisabled) return;
+      if (disabled) return;
 
       // Handle Enter and Space keys for button activation
       if (event.key === 'Enter' || event.key === ' ') {
@@ -44,7 +44,7 @@ export const DialogTrigger = ({
 
       onKeyDown?.(event as React.KeyboardEvent<HTMLButtonElement>);
     },
-    [isDisabled, isOpen, setIsOpen, onKeyDown],
+    [disabled, isOpen, setIsOpen, onKeyDown],
   );
 
   const dataState = isOpen ? 'open' : 'closed';
@@ -53,11 +53,11 @@ export const DialogTrigger = ({
     <Element
       ref={mergedRef}
       type={Element === 'button' ? 'button' : undefined}
-      disabled={isDisabled}
+      disabled={disabled}
       aria-haspopup='dialog'
       aria-expanded={isOpen}
       data-state={dataState}
-      data-disabled={isDisabled ? '' : undefined}
+      data-disabled={disabled ? '' : undefined}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       {...props}

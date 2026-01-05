@@ -14,7 +14,7 @@ export const TooltipRoot = ({
   onOpenChange,
   delay,
   hideDelay = 0,
-  isDisabled = false,
+  disabled = false,
 }: TooltipRootProps) => {
   const provider = useTooltipProvider();
   const triggerId = useId();
@@ -44,7 +44,7 @@ export const TooltipRoot = ({
 
   // Handle open change
   const handleOpenChange = (open: boolean) => {
-    if (isDisabled) return;
+    if (disabled) return;
 
     if (isControlled) {
       onOpenChange?.(open);
@@ -75,7 +75,7 @@ export const TooltipRoot = ({
       asLabel,
       placement,
       setPlacement,
-      isDisabled,
+      disabled,
       triggerRef,
       contentRef,
       arrowRef,
@@ -94,7 +94,7 @@ export const TooltipRoot = ({
       asLabel,
       placement,
       setPlacement,
-      isDisabled,
+      disabled,
       triggerRef,
       contentRef,
       arrowRef,

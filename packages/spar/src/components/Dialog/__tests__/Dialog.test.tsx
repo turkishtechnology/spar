@@ -206,7 +206,7 @@ describe('Dialog', () => {
       const onClick = jest.fn();
       render(
         <DialogRoot>
-          <DialogTrigger isDisabled onClick={onClick}>
+          <DialogTrigger disabled onClick={onClick}>
             Open Dialog
           </DialogTrigger>
           <DialogPortal>

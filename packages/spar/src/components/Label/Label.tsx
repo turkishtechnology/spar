@@ -6,20 +6,20 @@ import type { LabelProps } from './types';
  */
 export const Label = ({
   as: Element = 'label',
-  isRequired = false,
+  required = false,
   isOptional = false,
-  isDisabled = false,
+  disabled = false,
   children,
   ...htmlProps
 }: LabelProps) => {
   // Memoize data attributes to prevent object recreation
   const dataAttributes = useMemo(
     () => ({
-      'data-required': isRequired || undefined,
+      'data-required': required || undefined,
       'data-optional': isOptional || undefined,
-      'data-disabled': isDisabled || undefined,
+      'data-disabled': disabled || undefined,
     }),
-    [isRequired, isOptional, isDisabled],
+    [required, isOptional, disabled],
   );
 
   return (

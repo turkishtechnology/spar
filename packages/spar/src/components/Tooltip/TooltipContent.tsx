@@ -183,7 +183,7 @@ export const TooltipContent = ({
   }, [context]);
 
   // Don't render if not open or disabled
-  if (!context.isOpen || context.isDisabled) {
+  if (!context.isOpen || context.disabled) {
     return null;
   }
 

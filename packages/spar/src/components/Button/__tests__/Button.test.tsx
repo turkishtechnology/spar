@@ -69,7 +69,7 @@ describe('Button', () => {
 
   describe('Disabled State', () => {
     it('handles disabled state correctly', () => {
-      render(<Button isDisabled>Disabled</Button>);
+      render(<Button disabled>Disabled</Button>);
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('disabled');
       expect(button).toHaveAttribute('aria-disabled', 'true');
@@ -81,7 +81,7 @@ describe('Button', () => {
       const user = userEvent.setup();
       const handleClick = jest.fn();
       render(
-        <Button isDisabled onClick={handleClick}>
+        <Button disabled onClick={handleClick}>
           Disabled
         </Button>,
       );
@@ -92,7 +92,7 @@ describe('Button', () => {
 
     it('does not apply disabled attribute when not rendered as button', () => {
       render(
-        <Button as='div' isDisabled>
+        <Button as='div' disabled>
           Disabled
         </Button>,
       );
@@ -322,7 +322,7 @@ describe('Button', () => {
     });
 
     it('has tabIndex -1 when disabled', () => {
-      render(<Button isDisabled>Disabled</Button>);
+      render(<Button disabled>Disabled</Button>);
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('tabIndex', '-1');
     });
@@ -350,7 +350,7 @@ describe('Button', () => {
       expect(button).not.toHaveAttribute('data-autofocus');
 
       rerender(
-        <Button isDisabled isLoading isPressed={true} shouldAutoFocus>
+        <Button disabled isLoading isPressed={true} shouldAutoFocus>
           All states
         </Button>,
       );
@@ -379,7 +379,7 @@ describe('Button', () => {
       const user = userEvent.setup();
       const handleClick = jest.fn();
       render(
-        <Button isLoading isDisabled onClick={handleClick}>
+        <Button isLoading disabled onClick={handleClick}>
           Loading and Disabled
         </Button>,
       );

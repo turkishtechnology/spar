@@ -15,7 +15,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
    * Disabled state - properly announced to screen readers
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Whether the button should receive focus when first rendered

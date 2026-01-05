@@ -53,7 +53,7 @@ export interface SelectRootProps
    * Disables the entire select
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Makes the select required for forms
@@ -293,7 +293,7 @@ export interface SelectItemProps extends React.HTMLAttributes<HTMLDivElement> {
    * Disables the option
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Text for type-ahead (auto-detected if not provided)
@@ -490,7 +490,7 @@ export interface SelectContextValue {
 export interface SelectItemContextValue {
   value: string;
   isSelected: boolean;
-  isDisabled: boolean;
+  disabled: boolean;
   isHighlighted: boolean;
   textValue: string;
   onSelect: () => void;

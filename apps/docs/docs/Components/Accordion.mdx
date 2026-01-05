@@ -372,7 +372,7 @@ The root container that provides context and manages the state for all accordion
 | `value?`         | `string \| string[]`                  | `undefined`  | Controlled state - single value or array for multiple  |
 | `defaultValue?`  | `string \| string[]`                  | `undefined`  | Uncontrolled initial state                             |
 | `onValueChange?` | `(value: string \| string[]) => void` | `undefined`  | Callback when state changes                            |
-| `isDisabled?`    | `boolean`                             | `false`      | Disables all accordion items                           |
+| `disabled?`    | `boolean`                             | `false`      | Disables all accordion items                           |
 | `orientation?`   | `"vertical" \| "horizontal"`          | `"vertical"` | Orientation for keyboard navigation                    |
 | `as?`            | `React.ElementType`                   | `"div"`      | Polymorphic component type                             |
 | `children`       | `React.ReactNode`                     | -            | AccordionItem components                               |
@@ -399,7 +399,7 @@ Individual accordion item that contains a header and content panel.
 | Name          | Type                | Default | Description                                     |
 | ------------- | ------------------- | ------- | ----------------------------------------------- |
 | `value`       | `string`            | -       | Unique identifier for the item                  |
-| `isDisabled?` | `boolean`           | `false` | Disables this specific item                     |
+| `disabled?` | `boolean`           | `false` | Disables this specific item                     |
 | `as?`         | `React.ElementType` | `"div"` | Polymorphic component type                      |
 | `children`    | `React.ReactNode`   | -       | AccordionHeader and AccordionContent components |
 

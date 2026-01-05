@@ -38,7 +38,7 @@
 | `onOpenChange` | `(open: boolean) => void` | No | - | Callback when tooltip open state changes |
 | `delay` | `number` | No | - | Override provider delay for this tooltip |
 | `hideDelay` | `number` | No | `0` | Override provider hide delay for this tooltip |
-| `isDisabled` | `boolean` | No | `false` | Whether tooltip is disabled |
+| `disabled` | `boolean` | No | `false` | Whether tooltip is disabled |
 
 #### Tooltip.Trigger Props
 

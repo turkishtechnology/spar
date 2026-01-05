@@ -21,13 +21,13 @@ describe('Switch Accessibility', () => {
     });
 
     it('should pass axe tests when disabled', async () => {
-      const { container } = render(<Switch isDisabled>Toggle setting</Switch>);
+      const { container } = render(<Switch disabled>Toggle setting</Switch>);
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
     it('should pass axe tests when read-only', async () => {
-      const { container } = render(<Switch isReadOnly>Toggle setting</Switch>);
+      const { container } = render(<Switch readOnly>Toggle setting</Switch>);
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
@@ -65,7 +65,7 @@ describe('Switch Accessibility', () => {
     it('should pass axe tests with form integration', async () => {
       const { container } = render(
         <form>
-          <Switch name='darkMode' isRequired>
+          <Switch name='darkMode' required>
             Enable dark mode
           </Switch>
         </form>,
@@ -93,13 +93,13 @@ describe('Switch Accessibility', () => {
     });
 
     it('should announce disabled state correctly', () => {
-      render(<Switch isDisabled>Toggle setting</Switch>);
+      render(<Switch disabled>Toggle setting</Switch>);
       const switchElement = screen.getByRole('switch');
       expect(switchElement).toHaveAttribute('aria-disabled', 'true');
     });
 
     it('should announce read-only state correctly', () => {
-      render(<Switch isReadOnly>Toggle setting</Switch>);
+      render(<Switch readOnly>Toggle setting</Switch>);
       const switchElement = screen.getByRole('switch');
       expect(switchElement).toHaveAttribute('aria-readonly', 'true');
     });
@@ -187,13 +187,13 @@ describe('Switch Accessibility', () => {
     });
 
     it('should not be focusable when disabled', () => {
-      render(<Switch isDisabled>Toggle setting</Switch>);
+      render(<Switch disabled>Toggle setting</Switch>);
       const switchElement = screen.getByRole('switch');
       expect(switchElement).toHaveAttribute('tabindex', '-1');
     });
 
     it('should remain focusable when read-only', () => {
-      render(<Switch isReadOnly>Toggle setting</Switch>);
+      render(<Switch readOnly>Toggle setting</Switch>);
       const switchElement = screen.getByRole('switch');
       expect(switchElement).toHaveAttribute('tabindex', '0');
     });
@@ -250,7 +250,7 @@ describe('Switch Accessibility', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch isDisabled onChange={handleChange}>
+        <Switch disabled onChange={handleChange}>
           Toggle setting
         </Switch>,
       );
@@ -268,7 +268,7 @@ describe('Switch Accessibility', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch isReadOnly onChange={handleChange}>
+        <Switch readOnly onChange={handleChange}>
           Toggle setting
         </Switch>,
       );
@@ -322,7 +322,7 @@ describe('Switch Accessibility', () => {
 
     it('should not auto-focus when disabled', () => {
       render(
-        <Switch shouldAutoFocus isDisabled>
+        <Switch shouldAutoFocus disabled>
           Toggle setting
         </Switch>,
       );
@@ -393,13 +393,13 @@ describe('Switch Accessibility', () => {
     });
 
     it('should announce disabled state', () => {
-      render(<Switch isDisabled>Toggle setting</Switch>);
+      render(<Switch disabled>Toggle setting</Switch>);
       const switchElement = screen.getByRole('switch');
       expect(switchElement).toHaveAttribute('aria-disabled', 'true');
     });
 
     it('should announce read-only state', () => {
-      render(<Switch isReadOnly>Toggle setting</Switch>);
+      render(<Switch readOnly>Toggle setting</Switch>);
       const switchElement = screen.getByRole('switch');
       expect(switchElement).toHaveAttribute('aria-readonly', 'true');
     });
@@ -457,7 +457,7 @@ describe('Switch Accessibility', () => {
   describe('High contrast mode support', () => {
     it('should provide data attributes for high contrast styling', () => {
       render(
-        <Switch checked={true} isDisabled>
+        <Switch checked={true} disabled>
           Toggle
         </Switch>,
       );
@@ -474,9 +474,9 @@ describe('Switch Accessibility', () => {
       const states = [
         { props: {}, label: 'default' },
         { props: { checked: true }, label: 'checked' },
-        { props: { isDisabled: true }, label: 'disabled' },
-        { props: { isReadOnly: true }, label: 'read-only' },
-        { props: { checked: true, isDisabled: true }, label: 'checked disabled' },
+        { props: { disabled: true }, label: 'disabled' },
+        { props: { readOnly: true }, label: 'read-only' },
+        { props: { checked: true, disabled: true }, label: 'checked disabled' },
       ];
 
       for (const state of states) {

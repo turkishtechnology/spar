@@ -17,7 +17,7 @@ export const useAccordionItemContext = () => {
  */
 export const AccordionItem = ({
   value,
-  isDisabled: itemIsDisabled = false,
+  disabled: itemDisabled = false,
   as: Component = 'div',
   children,
   ...props
@@ -43,24 +43,24 @@ export const AccordionItem = ({
   }, [accordionContext.type, accordionContext.value, value]);
 
   // Determine if this item is disabled
-  const isDisabled = accordionContext.isDisabled || itemIsDisabled;
+  const isItemDisabled = accordionContext.disabled || itemDisabled;
 
   const handleToggle = useCallback(() => {
-    if (!isDisabled) {
+    if (!isItemDisabled) {
       accordionContext.onItemToggle(value);
     }
-  }, [isDisabled, value, accordionContext.onItemToggle]);
+  }, [isItemDisabled, value, accordionContext.onItemToggle]);
 
   const itemContextValue = useMemo<AccordionItemContextValue>(
     () => ({
       value,
       isExpanded,
-      isDisabled,
+      disabled: isItemDisabled,
       triggerId,
       contentId,
       onToggle: handleToggle,
     }),
-    [value, isExpanded, isDisabled, triggerId, contentId, handleToggle],
+    [value, isExpanded, isItemDisabled, triggerId, contentId, handleToggle],
   );
 
   return (
@@ -68,7 +68,7 @@ export const AccordionItem = ({
       <Component
         {...props}
         data-state={isExpanded ? 'open' : 'closed'}
-        {...(isDisabled && { 'data-disabled': '' })}
+        {...(isItemDisabled && { 'data-disabled': '' })}
       >
         {children}
       </Component>

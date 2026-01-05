@@ -128,7 +128,7 @@ The Input component follows a compound component pattern with context-based stat
       <Input.Root
         data-spar-part="root"
         isInvalid={isInvalid}
-        isRequired
+        required
         style={{
           padding: '12px',
           border: `1px solid ${isInvalid ? '#ff6b6b' : '#e5e5e5'}`,
@@ -242,7 +242,7 @@ return (
 <div>
 <Input.Root
 isInvalid={isInvalid}
-isRequired
+required
 style={{ padding: '12px', border: \`1px solid \${isInvalid ? '#ff6b6b' : '#e5e5e5'}\`, borderRadius: '6px' }} >
 <Input.Label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
 Email Address
@@ -331,7 +331,7 @@ Demonstrates disabled state with proper accessibility attributes and visual indi
   code={`function DisabledInput() {
   return (
     <Input.Root 
-      isDisabled 
+      disabled 
       style={{ 
         padding: '12px', 
         border: '1px solid #e5e5e5', 
@@ -449,7 +449,7 @@ marginTop: '8px'
 return (
 
 <form onSubmit={handleSubmit} style={formStyle} noValidate>
-<Input.Root isInvalid={!!errors.name} isRequired style={inputRootStyle(!!errors.name)}>
+<Input.Root isInvalid={!!errors.name} required style={inputRootStyle(!!errors.name)}>
 <Input.Label style={labelStyle}>Full Name</Input.Label>
 <Input.Field
 name="name"
@@ -460,7 +460,7 @@ style={fieldStyle(!!errors.name)}
 <Input.ErrorMessage style={errorStyle}>{errors.name}</Input.ErrorMessage>
 </Input.Root>
 
-      <Input.Root isInvalid={!!errors.email} isRequired style={inputRootStyle(!!errors.email)}>
+      <Input.Root isInvalid={!!errors.email} required style={inputRootStyle(!!errors.email)}>
         <Input.Label style={labelStyle}>Email</Input.Label>
         <Input.Field
           type="email"
@@ -472,7 +472,7 @@ style={fieldStyle(!!errors.name)}
         <Input.ErrorMessage style={errorStyle}>{errors.email}</Input.ErrorMessage>
       </Input.Root>
 
-      <Input.Root isInvalid={!!errors.message} isRequired style={inputRootStyle(!!errors.message)}>
+      <Input.Root isInvalid={!!errors.message} required style={inputRootStyle(!!errors.message)}>
         <Input.Label style={labelStyle}>Message</Input.Label>
         <Input.Field
           as="textarea"
@@ -560,8 +560,8 @@ The root container that provides context and state management for all input comp
 | ------------- | ----------- | ------- | ----------------------- |
 | `children`    | `ReactNode` | -       | Compound input elements |
 | `isInvalid?`  | `boolean`   | `false` | Input validation state  |
-| `isDisabled?` | `boolean`   | `false` | Input disabled state    |
-| `isRequired?` | `boolean`   | `false` | Input required state    |
+| `disabled?` | `boolean`   | `false` | Input disabled state    |
+| `required?` | `boolean`   | `false` | Input required state    |
 
 **ARIA Attributes**
 

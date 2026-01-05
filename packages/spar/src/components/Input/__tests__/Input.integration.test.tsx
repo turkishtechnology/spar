@@ -41,7 +41,7 @@ describe('Input Integration', () => {
 
       render(
         <form onSubmit={onSubmit}>
-          <Input.Root isRequired>
+          <Input.Root required>
             <Input.Label>Username</Input.Label>
             <Input.Field name='username' />
           </Input.Root>

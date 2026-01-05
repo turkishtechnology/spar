@@ -72,7 +72,7 @@ export interface TooltipRootProps {
    * Whether tooltip is disabled
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 }
 
 /**
@@ -254,7 +254,7 @@ export interface TooltipContextValue {
   asLabel: boolean;
   placement: Side;
   setPlacement: (placement: Side) => void;
-  isDisabled: boolean;
+  disabled: boolean;
   // Floating UI refs
   triggerRef: React.RefObject<HTMLElement | null>;
   contentRef: React.RefObject<HTMLElement | null>;

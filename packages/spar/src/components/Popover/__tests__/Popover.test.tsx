@@ -148,7 +148,7 @@ describe('PopoverTrigger', () => {
 
     render(
       <PopoverRoot>
-        <PopoverTrigger isDisabled>Open</PopoverTrigger>
+        <PopoverTrigger disabled>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
       </PopoverRoot>,
     );

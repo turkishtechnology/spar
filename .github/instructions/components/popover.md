@@ -38,7 +38,7 @@
 |------|------|----------|---------|-------------|
 | `asChild` | `boolean` | No | `false` | Whether to render as child element instead of button |
 | `children` | `React.ReactNode` | Yes | - | Trigger element content |
-| `isDisabled` | `boolean` | No | `false` | Whether trigger is disabled |
+| `disabled` | `boolean` | No | `false` | Whether trigger is disabled |
 
 ### PopoverContent Props
 
@@ -228,7 +228,7 @@ type PolymorphicComponent<T extends React.ElementType, P = {}> = <C extends Reac
 // Enhanced component interfaces with generics
 interface PopoverTriggerProps<T extends React.ElementType = 'button'> 
   extends PolymorphicComponentProps<T> {
-  isDisabled?: boolean;
+  disabled?: boolean;
 }
 
 interface PopoverContentProps<T extends React.ElementType = 'div'> 

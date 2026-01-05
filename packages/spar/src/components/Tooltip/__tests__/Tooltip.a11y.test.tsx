@@ -36,7 +36,7 @@ interface AccessibleTooltipProps {
   defaultOpen?: boolean;
   triggerContent?: string;
   tooltipContent?: string;
-  isDisabled?: boolean;
+  disabled?: boolean;
   [key: string]: unknown;
 }
 
@@ -45,11 +45,11 @@ const AccessibleTooltip = ({
   defaultOpen = false,
   triggerContent = 'Trigger button',
   tooltipContent = 'Helpful tooltip content',
-  isDisabled = false,
+  disabled = false,
   ...props
 }: AccessibleTooltipProps) => (
   <TooltipProvider>
-    <TooltipRoot defaultOpen={defaultOpen} isDisabled={isDisabled} {...props}>
+    <TooltipRoot defaultOpen={defaultOpen} disabled={disabled} {...props}>
       <TooltipTrigger asChild>
         <button>{triggerContent}</button>
       </TooltipTrigger>
@@ -173,7 +173,7 @@ describe('Tooltip Accessibility', () => {
     }, 10000);
 
     it('does not apply ARIA attributes when disabled', () => {
-      render(<AccessibleTooltip isDisabled />);
+      render(<AccessibleTooltip disabled />);
 
       const trigger = screen.getByRole('button');
       expect(trigger).not.toHaveAttribute('aria-describedby');

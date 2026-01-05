@@ -10,7 +10,7 @@ export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> 
    * @remarks Does NOT add required functionality - set `required` on the control itself
    * @defaultValue false
    */
-  isRequired?: boolean;
+  required?: boolean;
 
   /**
    * Marks label for an optional field (exposed via data attribute for styling)
@@ -23,7 +23,7 @@ export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> 
    * @remarks Does NOT disable the control - set `disabled` on the control itself
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Polymorphic element type to render as

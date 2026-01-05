@@ -39,7 +39,7 @@ export interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
    * Disables all accordion items
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Orientation for keyboard navigation
@@ -73,7 +73,7 @@ export interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement>
    * Disables this specific item
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Polymorphic component type
@@ -156,7 +156,7 @@ export interface AccordionContextValue {
   isCollapsible: boolean;
   value: string | string[];
   onItemToggle: (itemValue: string) => void;
-  isDisabled: boolean;
+  disabled: boolean;
   orientation: Orientation;
   registerItem: (itemValue: string) => void;
   unregisterItem: (itemValue: string) => void;
@@ -170,7 +170,7 @@ export interface AccordionContextValue {
 export interface AccordionItemContextValue {
   value: string;
   isExpanded: boolean;
-  isDisabled: boolean;
+  disabled: boolean;
   triggerId: string;
   contentId: string;
   onToggle: () => void;
