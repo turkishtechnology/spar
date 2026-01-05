@@ -53,7 +53,7 @@ describe('Switch', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch checked={false} onChange={handleChange}>
+        <Switch checked={false} onCheckedChange={handleChange}>
           Toggle me
         </Switch>,
       );
@@ -70,7 +70,7 @@ describe('Switch', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch checked={false} onChange={handleChange}>
+        <Switch checked={false} onCheckedChange={handleChange}>
           Toggle me
         </Switch>,
       );
@@ -112,7 +112,7 @@ describe('Switch', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch defaultChecked={false} onChange={handleChange}>
+        <Switch defaultChecked={false} onCheckedChange={handleChange}>
           Toggle me
         </Switch>,
       );
@@ -141,7 +141,7 @@ describe('Switch', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch disabled onChange={handleChange}>
+        <Switch disabled onCheckedChange={handleChange}>
           Toggle me
         </Switch>,
       );
@@ -158,7 +158,7 @@ describe('Switch', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch disabled onChange={handleChange}>
+        <Switch disabled onCheckedChange={handleChange}>
           Toggle me
         </Switch>,
       );
@@ -189,7 +189,7 @@ describe('Switch', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch readOnly onChange={handleChange}>
+        <Switch readOnly onCheckedChange={handleChange}>
           Toggle me
         </Switch>,
       );
@@ -206,7 +206,7 @@ describe('Switch', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch readOnly onChange={handleChange}>
+        <Switch readOnly onCheckedChange={handleChange}>
           Toggle me
         </Switch>,
       );
@@ -226,7 +226,7 @@ describe('Switch', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Switch onChange={handleChange}>Toggle me</Switch>);
+      render(<Switch onCheckedChange={handleChange}>Toggle me</Switch>);
 
       const switchElement = screen.getByRole('switch');
       switchElement.focus();
@@ -239,7 +239,7 @@ describe('Switch', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Switch onChange={handleChange}>Toggle me</Switch>);
+      render(<Switch onCheckedChange={handleChange}>Toggle me</Switch>);
 
       const switchElement = screen.getByRole('switch');
       switchElement.focus();
@@ -252,7 +252,7 @@ describe('Switch', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Switch onChange={handleChange}>Toggle me</Switch>);
+      render(<Switch onCheckedChange={handleChange}>Toggle me</Switch>);
 
       const switchElement = screen.getByRole('switch');
       switchElement.focus();
@@ -415,7 +415,7 @@ describe('Switch', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Switch onChange={handleChange}>Toggle me</Switch>);
+      render(<Switch onCheckedChange={handleChange}>Toggle me</Switch>);
 
       const switchElement = screen.getByRole('switch');
 
