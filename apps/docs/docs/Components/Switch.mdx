@@ -18,39 +18,10 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
 
 ## Live Demo
 
+<div className='switch-demo-container'>
 <LiveCode
-  code={`function BasicExample() {
-  const [isEnabled, setIsEnabled] = useState(false);
-  
-  return (
-    <div className='switch-demo-container'>
-      <Switch 
-        className='switch'
-        checked={isEnabled}
-        onChange={setIsEnabled}
-      >
-      </Switch>
-    </div>
-  );
-}`}
-/>
-
-### switch.tsx
-
-```tsx
-import { Switch } from '@turkish-technology/spar';
-
-function SwitchDemo() {
-  return <Switch className='switch' checked={isEnabled} onChange={setIsEnabled}></Switch>;
-}
-
-export default SwitchDemo;
-```
-
-### switch.css
-
-```css
-.switch {
+  code={`<Switch className='switch'/>`}
+  cssCode={`.switch {
   background-color: rgba(0, 0, 0, 0.08);
   border: 0;
   width: 56px;
@@ -81,8 +52,10 @@ export default SwitchDemo;
 
 [data-theme='dark'] .switch::after {
   background: rgba(255, 255, 255, 0.72);
-}
-```
+}`}
+/>
+
+</div>
 
 ## Features
 

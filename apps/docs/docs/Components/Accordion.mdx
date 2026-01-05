@@ -24,13 +24,9 @@ A collapsible content component that supports single or multiple panel expansion
 
 ## Live Demo
 
+<div className='accordion-demo-container'>
 <LiveCode
-  title="Basic Accordion Example"
-  code={`
-function Example() {
-  return (
-    <div className='accordion-demo-container'>
-      <Accordion className='accordion' defaultValue="2">
+  code={`<Accordion className='accordion' defaultValue="2">
         <AccordionItem className='accordion-item' value="1">
           <AccordionHeader className='accordion-header'>
             <AccordionTrigger className='accordion-trigger'>
@@ -79,202 +75,101 @@ function Example() {
             The accordion component is a customizable area. Users can add content as per their request.
           </AccordionContent>
         </AccordionItem>
-      </Accordion>
-    </div>
-
-);
-}
-`}
-/>
-
-### accordion.tsx
-
-```tsx
-import {
-  Accordion,
-  AccordionItem,
-  AccordionHeader,
-  AccordionTrigger,
-  AccordionContent,
-} from '@turkish-technology/spar';
-
-function AccordionDemo() {
-  return (
-    <Accordion className='accordion' defaultValue='2'>
-      <AccordionItem className='accordion-item' value='1'>
-        <AccordionHeader className='accordion-header'>
-          <AccordionTrigger className='accordion-trigger'>
-            <span className='accordion-icon'></span>
-            <span className='accordion-title'>Accordion</span>
-            <div className='accordion-expand'>
-              <svg
-                className='accordion-expand-icon'
-                xmlns='http://www.w3.org/2000/svg'
-                width='20'
-                height='20'
-                viewBox='0 0 20 20'
-                fill='none'
-              >
-                <path d='M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z' />
-              </svg>
-            </div>
-          </AccordionTrigger>
-        </AccordionHeader>
-        <AccordionContent className='accordion-content'>
-          The accordion component is a customizable area. Users can add content as per their
-          request.
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem className='accordion-item' value='2'>
-        <AccordionHeader className='accordion-header'>
-          <AccordionTrigger className='accordion-trigger'>
-            <span className='accordion-icon'></span>
-            <span className='accordion-title'>Accordion</span>
-            <div className='accordion-expand'>
-              <svg
-                className='accordion-expand-icon'
-                xmlns='http://www.w3.org/2000/svg'
-                width='20'
-                height='20'
-                viewBox='0 0 20 20'
-                fill='none'
-              >
-                <path d='M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z' />
-              </svg>
-            </div>
-          </AccordionTrigger>
-        </AccordionHeader>
-        <AccordionContent className='accordion-content'>
-          The accordion component is a customizable area. Users can add content as per their
-          request.
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem className='accordion-item' value='3'>
-        <AccordionHeader className='accordion-header'>
-          <AccordionTrigger className='accordion-trigger'>
-            <span className='accordion-icon'></span>
-            <span className='accordion-title'>Accordion</span>
-            <div className='accordion-expand'>
-              <svg
-                className='accordion-expand-icon'
-                xmlns='http://www.w3.org/2000/svg'
-                width='20'
-                height='20'
-                viewBox='0 0 20 20'
-                fill='none'
-              >
-                <path d='M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z' />
-              </svg>
-            </div>
-          </AccordionTrigger>
-        </AccordionHeader>
-        <AccordionContent className='accordion-content'>
-          The accordion component is a customizable area. Users can add content as per their
-          request.
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
-  );
-}
-
-export default AccordionDemo;
-```
-
-### accordion.css
-
-```css
-.accordion {
-  width: 420px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+      </Accordion>`}
+cssCode={`.accordion {
+width: 420px;
+display: flex;
+flex-direction: column;
+gap: 6px;
 }
 
 .accordion-header {
-  border-radius: 8px;
-  margin-bottom: 0;
-  background: rgba(0, 0, 0, 0.08);
-  box-shadow:
-    0 1.355px 1.355px -0.677px rgba(82, 88, 102, 0.04),
-    0 4.064px 8.128px -1.355px rgba(82, 88, 102, 0.04),
-    0 5.419px 13.547px 0 rgba(82, 88, 102, 0.04);
+border-radius: 8px;
+margin-bottom: 0;
+background: rgba(0, 0, 0, 0.08);
+box-shadow:
+0 1.355px 1.355px -0.677px rgba(82, 88, 102, 0.04),
+0 4.064px 8.128px -1.355px rgba(82, 88, 102, 0.04),
+0 5.419px 13.547px 0 rgba(82, 88, 102, 0.04);
 }
 
 [data-theme='dark'] .accordion-header {
-  background: rgba(255, 255, 255, 0.12);
-  box-shadow:
-    0 1.355px 1.355px -0.677px rgba(82, 88, 102, 0.04),
-    0 4.064px 8.128px -1.355px rgba(82, 88, 102, 0.04),
-    0 5.419px 13.547px 0 rgba(82, 88, 102, 0.04);
+background: rgba(255, 255, 255, 0.12);
+box-shadow:
+0 1.355px 1.355px -0.677px rgba(82, 88, 102, 0.04),
+0 4.064px 8.128px -1.355px rgba(82, 88, 102, 0.04),
+0 5.419px 13.547px 0 rgba(82, 88, 102, 0.04);
 }
 
 .accordion-trigger {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 7.5px;
-  border: none;
-  background: transparent;
+width: 100%;
+display: flex;
+align-items: center;
+gap: 5px;
+padding: 7.5px;
+border: none;
+background: transparent;
 }
 
 .accordion-icon {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  border: 0.625px solid #cacfd8;
-  background: rgba(0, 0, 0, 0.72);
+width: 16px;
+height: 16px;
+border-radius: 4px;
+border: 0.625px solid #cacfd8;
+background: rgba(0, 0, 0, 0.72);
 }
 
 [data-theme='dark'] .accordion-icon {
-  border-color: #525866;
-  background-color: #c0c0c0;
+border-color: #525866;
+background-color: #c0c0c0;
 }
 
 .accordion-title {
-  color: #222530;
-  font-size: 14px;
+color: #222530;
+font-size: 14px;
 }
 
 [data-theme='dark'] .accordion-title {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .accordion-expand {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  transition: transform 0.2s ease-in-out;
+margin-left: auto;
+display: flex;
+align-items: center;
+transition: transform 0.2s ease-in-out;
 }
 
 .accordion-item[data-state='open'] .accordion-expand {
-  transform: rotate(180deg);
+transform: rotate(180deg);
 }
 
 .accordion-expand-icon {
-  fill: #222530;
+fill: #222530;
 }
 
 [data-theme='dark'] .accordion-expand-icon {
-  fill: #f2f5f8;
+fill: #f2f5f8;
 }
 
 .accordion-content {
-  margin-top: 4px;
-  padding: 8px;
-  border-radius: 8px;
-  border: 0.677px solid #e1e4ea;
-  background: rgba(0, 0, 0, 0.02);
-  font-size: 12px;
-  font-weight: 300;
-  line-height: 18px;
+margin-top: 4px;
+padding: 8px;
+border-radius: 8px;
+border: 0.677px solid #e1e4ea;
+background: rgba(0, 0, 0, 0.02);
+font-size: 12px;
+font-weight: 300;
+line-height: 18px;
 }
 
 [data-theme='dark'] .accordion-content {
-  border: 0.677px solid #2b303b;
-  background: rgba(255, 255, 255, 0.08);
-}
-```
+border: 0.677px solid #2b303b;
+background: rgba(255, 255, 255, 0.08);
+}`}
+/>
+
+</div>
 
 ## Features
 

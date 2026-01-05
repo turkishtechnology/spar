@@ -18,44 +18,14 @@ Accessible radio group component for creating mutually exclusive selections with
 
 ## Live Demo
 
+<div className="radio-demo-container">
 <LiveCode
-  code={`function BasicRadioExample() {
-  const [value, setValue] = React.useState('option1');
-  
-  return (
-    <div className="radio-demo-container">
-      <Radio.Group value={value} onValueChange={setValue} aria-label="Basic radio group">
+  code={`<Radio.Group>
         <Radio.Item value="option1"></Radio.Item>
         <Radio.Item value='option2' className='radio-item'></Radio.Item>
         <Radio.Item value='option3' className='radio-item'></Radio.Item>
-      </Radio.Group>
-    </div>
-  );
-}`}
-/>
-
-### radio.tsx
-
-```tsx
-import { Radio } from '@turkish-technology/spar';
-
-function RadioDemo() {
-  return (
-    <Radio.Group aria-label='Basic radio group' className='radio-group'>
-      <Radio.Item value='option1' className='radio-item'></Radio.Item>
-      <Radio.Item value='option2' className='radio-item'></Radio.Item>
-      <Radio.Item value='option3' className='radio-item'></Radio.Item>
-    </Radio.Group>
-  );
-}
-
-export default RadioDemo;
-```
-
-### radio.css
-
-```css
-input[type='radio'] {
+</Radio.Group>`}
+cssCode={`input[type='radio'] {
   position: relative;
   appearance: none;
   width: 40px;
@@ -84,7 +54,10 @@ input[type='radio']:checked:before {
 [data-theme='dark'] input[type='radio']:checked:before {
   background-color: rgba(255, 255, 255, 0.72);
 }
-```
+`}
+/>
+
+</div>
 
 ## Features
 

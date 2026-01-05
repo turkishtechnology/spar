@@ -18,42 +18,22 @@ A headless, accessible label component for form controls that establishes progra
 
 ## Live Demo
 
+<div className='label-demo-container'>
 <LiveCode
-  code={`function BasicLabelExample() {
-  return (
-    <div className='label-demo-container'>
-      <Label className='label'>
+  code={`<Label className='label'>
         Label
-      </Label>
-    </div>
-  );
-}`}
-/>
-
-### label.tsx
-
-```tsx
-import { Label } from '@turkish-technology/spar';
-
-function LabelDemo() {
-  return <Label className='label'>Label</Label>;
-}
-
-export default LabelDemo;
-```
-
-### label.css
-
-```css
-.label {
+</Label>`}
+  cssCode={`.label {
   color: #222530;
 }
 
 /* Dark mode styles */
 [data-theme='dark'] .label {
   color: #f2f5f8;
-}
-```
+}`}
+/>
+
+</div>
 
 ## Features
 
