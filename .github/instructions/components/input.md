@@ -1,4 +1,4 @@
-# Input — Glide Headless Instructions
+# Input — Spar Headless Instructions
 
 ## 1. Component Overview
 
@@ -136,27 +136,27 @@ const useInputContext = () => {
 
 **Input.Root**:
 
-- `data-glide-input` - Base identifier
+- `data-spar-input` - Base identifier
 - `data-invalid` - When validation fails
 - `data-disabled` - When input disabled
 - `data-required` - When input required
 
 **Input.Field**:
 
-- `data-glide-input-field` - Field identifier
+- `data-spar-input-field` - Field identifier
 - `data-focused` - When input focused
 
 **Input.Label**:
 
-- `data-glide-input-label` - Label identifier
+- `data-spar-input-label` - Label identifier
 
 **Input.Description**:
 
-- `data-glide-input-description` - Description identifier
+- `data-spar-input-description` - Description identifier
 
 **Input.ErrorMessage**:
 
-- `data-glide-input-error` - Error identifier
+- `data-spar-input-error` - Error identifier
 
 ## 7. Test Coverage Plan
 

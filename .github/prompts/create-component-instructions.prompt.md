@@ -4,9 +4,9 @@ model: Gemini 3 Pro (Preview) (copilot)
 description: Design comprehensive specifications for new Glide headless components
 ---
 
-# Glide Component Specification Designer
+# Spar Component Specification Designer
 
-Create a detailed specification for the **${input:ComponentName:Dialog}** Glide headless component.
+Create a detailed specification for the **${input:ComponentName:Dialog}** Spar headless component.
 
 ## Phase 1: Research
 
@@ -24,7 +24,7 @@ Focus on: API patterns, accessibility, state management, composition structure.
 Use the exact section order and headings below:
 
 ```markdown
-# ${ComponentName} — Glide Headless Instructions
+# ${ComponentName} — Spar Headless Instructions
 
 ## 1. Component Overview
 

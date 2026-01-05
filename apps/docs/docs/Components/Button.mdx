@@ -6,7 +6,7 @@ description: A headless, accessible button component with complete keyboard supp
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Button } from '@turkish-technology/glide';
+import { Button } from '@turkish-technology/spar';
 
 # Button
 
@@ -18,29 +18,30 @@ A headless, accessible button component that provides complete keyboard support 
 
 ## Live Demo
 
+<div className='button-demo-container'>
 <LiveCode
-  code={`function BasicExample() {
-  const [count, setCount] = useState(0);
-  
-  return (
-    <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
-      <Button 
-        onClick={() => setCount(count + 1)}
-        style={{ padding: '8px 16px', marginRight: '8px' }}
-      >
-        Clicked {count} times
-      </Button>
-      
-      <Button 
-        isDisabled
-        style={{ padding: '8px 16px' }}
-      >
-        Disabled Button
-      </Button>
-    </div>
-  );
+  code={`<Button className="button">
+      button
+    </Button>`}
+  cssCode={`.button {
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-weight: 400;
+
+/_ Light mode styles _/
+background: rgba(0, 0, 0, 0.08);
+color: #222530;
+font-size: 13px;
+}
+
+/_ Dark mode styles _/
+[data-theme='dark'] .button {
+background: rgba(255, 255, 255, 0.12);
+color: #f2f5f8;
 }`}
 />
+
+</div>
 
 ## Features
 
@@ -55,7 +56,7 @@ A headless, accessible button component that provides complete keyboard support 
 ## Installation
 
 ```tsx
-import { Button } from '@turkish-technology/glide';
+import { Button } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -69,7 +70,7 @@ The Button is a single component that can be configured for different use cases:
 >
   <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
     <Button
-      data-glide-part="button"
+      data-spar-part="button"
       onClick={() => {}}
       style={{ padding: '8px 16px', marginRight: '8px' }}
     >
@@ -77,12 +78,13 @@ The Button is a single component that can be configured for different use cases:
     </Button>
 
     <Button
-      data-glide-part="button"
+      data-spar-part="button"
       isDisabled
       style={{ padding: '8px 16px' }}
     >
       Disabled Button
     </Button>
+
   </div>
 </AnatomyViewer>
 
@@ -93,6 +95,7 @@ The Button is a single component that can be configured for different use cases:
 ```
 
 **Data Flow:**
+
 - Single component with complete keyboard support and toggle functionality
 - Manages its own state or accepts controlled props
 - Provides comprehensive accessibility features

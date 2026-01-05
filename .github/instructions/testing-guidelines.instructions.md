@@ -2,7 +2,7 @@
 applyTo: '**/*.test.tsx'
 ---
 
-# Testing Guidelines - Glide
+# Testing Guidelines - Spar
 
 ## Context
 
@@ -153,14 +153,14 @@ Before creating or running tests:
 pnpm exec turbo test
 
 # Run tests for specific package only
-pnpm exec turbo test --filter=@turkish-technology/glide
+pnpm exec turbo test --filter=@turkish-technology/spar
 
 # Alternative: Navigate to package first
-cd packages/glide
+cd packages/spar
 pnpm test
 ```
 
-**Package level (packages/glide):**
+**Package level (packages/spar):**
 
 ```bash
 # Check available test scripts

@@ -2,7 +2,7 @@
 applyTo: "**/components/**/*.tsx"
 ---
 
-# Accessibility Guidelines - Glide
+# Accessibility Guidelines - Spar
 
 ## Context
 Accessibility is **mandatory**. Every component must be fully accessible and WCAG 2.2 AA compliant. No component ships without it.

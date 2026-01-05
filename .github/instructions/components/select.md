@@ -1,4 +1,4 @@
-# Select — Glide Headless Instructions
+# Select — Spar Headless Instructions
 
 ## 1. Component Overview
 

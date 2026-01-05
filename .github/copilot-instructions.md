@@ -1,4 +1,4 @@
-# Glide - Headless UI Library
+# Spar - Headless UI Library
 
 ## Context
 
@@ -52,7 +52,7 @@ Based on your task, follow these focused guidelines in the .github/instructions 
 
 ### Simple Components
 ```
-packages/glide/src/components/{Component}/
+packages/spar/src/components/{Component}/
 ├── {Component}.tsx          # Core component logic + accessibility
 ├── types.ts                 # TypeScript definitions (shared across component parts)
 ├── __tests__/
@@ -64,7 +64,7 @@ packages/glide/src/components/{Component}/
 
 ### Compound Components
 ```
-packages/glide/src/components/{Component}/
+packages/spar/src/components/{Component}/
 ├── {Component}.tsx          # Root component (e.g., Accordion)
 ├── {Component}Item.tsx      # Child component parts (e.g., AccordionItem)
 ├── {Component}Trigger.tsx   # Interactive parts (e.g., AccordionTrigger)

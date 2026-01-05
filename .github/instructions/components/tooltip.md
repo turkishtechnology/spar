@@ -1,4 +1,4 @@
-# Tooltip — Glide Headless Instructions
+# Tooltip — Spar Headless Instructions
 
 ## 1. Component Overview
 
@@ -284,7 +284,7 @@ interface TooltipProviderContextValue {
 - Styling via `data-*` attributes and CSS custom properties
 - **Tree-shakeable exports**: Named exports only, zero side effects, ES modules compatible
 - **Side-effect-free imports**: No global state mutations, CSS imports, or initialization code in module scope
-- **Bundle optimization**: Supports dead code elimination and partial imports (`import { Tooltip } from '@turkish-technology/glide'`)
+- **Bundle optimization**: Supports dead code elimination and partial imports (`import { Tooltip } from '@turkish-technology/spar'`)
 - TypeScript strict mode
 - WCAG 2.2 AA compliant
 - Controlled/uncontrolled support
@@ -326,7 +326,7 @@ interface TooltipProviderContextValue {
 - [ ] **Pointer grace area**: Smooth pointer movement between trigger and tooltip
 - [ ] **Performance monitoring**: Event listener cleanup and memory leak prevention
 - [ ] **Bundle size analysis**: Tree-shaking verification and side effects audit
-- [ ] **Dead code elimination**: Test partial imports work correctly (`import { Tooltip } from '@turkish-technology/glide'`)
+- [ ] **Dead code elimination**: Test partial imports work correctly (`import { Tooltip } from '@turkish-technology/spar'`)
 - [ ] **Prop forwarding**: className, style, data-*, aria-* attributes support
 - [ ] Keyboard-only testing
 - [ ] Touch device testing with real devices
