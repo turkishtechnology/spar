@@ -42,16 +42,16 @@ Single component pattern - Label is a simple primitive that wraps label content 
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `isRequired` | `boolean` | No | `false` | Marks label for a required field (exposed via data attribute) |
+| `required` | `boolean` | No | `false` | Marks label for a required field (exposed via data attribute) |
 | `isOptional` | `boolean` | No | `false` | Marks label for an optional field (exposed via data attribute) |
-| `isDisabled` | `boolean` | No | `false` | Marks label for a disabled field (exposed via data attribute) |
+| `disabled` | `boolean` | No | `false` | Marks label for a disabled field (exposed via data attribute) |
 | `as` | `React.ElementType` | No | `'label'` | Polymorphic element type |
 | `children` | `React.ReactNode` | Yes | — | Label content (text, icons, form controls) |
 
 **Note**: All standard HTML label attributes (`htmlFor`, `className`, `style`, `ref`, etc.) are inherited from `React.LabelHTMLAttributes<HTMLLabelElement>`.
 
 **⚠️ Important Notes:**
-- `isRequired`, `isOptional`, and `isDisabled` are for **styling purposes only**. Always set `required`, `aria-required`, and `disabled` attributes on the **form control itself** for proper functionality.
+- `required`, `isOptional`, and `disabled` are for **styling purposes only**. Always set `required`, `aria-required`, and `disabled` attributes on the **form control itself** for proper functionality.
 - When using `as` prop with non-label elements, `htmlFor` will not create native association. You must use `aria-labelledby` or other ARIA labeling techniques on the control.
 
 ### Ref Forwarding
@@ -82,9 +82,9 @@ The `as` prop allows rendering as any valid element, but **breaks native label b
 | Default | Render with `htmlFor` | Associates with control by ID | `for` attribute set |
 | Default | Render wrapping control | Implicitly associates with control | Control nested in label |
 | Multiple Labels | Multiple labels with same `htmlFor` | All labels associate with same control | Multiple labels valid and supported |
-| Required | Render with `isRequired={true}` | Marks as required field label | `data-required="true"` |
+| Required | Render with `required={true}` | Marks as required field label | `data-required="true"` |
 | Optional | Render with `isOptional={true}` | Marks as optional field label | `data-optional="true"` |
-| Disabled | Render with `isDisabled={true}` | Marks as disabled field label | `data-disabled="true"` |
+| Disabled | Render with `disabled={true}` | Marks as disabled field label | `data-disabled="true"` |
 | Polymorphic | Render with `as` prop | Changes root element | Renders as specified element |
 
 ## 4. Accessibility
@@ -175,9 +175,9 @@ Labels do not receive focus. Focus is automatically transferred to the associate
 ```tsx
 export const Label = ({
   htmlFor,
-  isRequired = false,
+  required = false,
   isOptional = false,
-  isDisabled = false,
+  disabled = false,
   as = 'label',
   children,
   className,
@@ -189,9 +189,9 @@ export const Label = ({
   
   // Data attributes for styling hooks
   const dataAttributes = {
-    'data-required': isRequired || undefined,
+    'data-required': required || undefined,
     'data-optional': isOptional || undefined,
-    'data-disabled': isDisabled || undefined,
+    'data-disabled': disabled || undefined,
   };
 
   return (
@@ -230,9 +230,9 @@ export const Label = ({
 
 ### State Data Attributes
 ```typescript
-'data-required': isRequired ? 'true' : undefined
+'data-required': required ? 'true' : undefined
 'data-optional': isOptional ? 'true' : undefined
-'data-disabled': isDisabled ? 'true' : undefined
+'data-disabled': disabled ? 'true' : undefined
 ```
 
 ### Usage Examples for Styling
@@ -340,7 +340,7 @@ const styles = {
 2. ✅ Create `types.ts` with TypeScript interfaces
 3. ✅ Implement polymorphic `as` prop support
 4. ✅ Add `htmlFor` attribute support
-5. ✅ Add state props (`isRequired`, `isOptional`, `isDisabled`)
+5. ✅ Add state props (`required`, `isOptional`, `disabled`)
 6. ✅ Implement data attributes for styling hooks
 7. ✅ Add ref forwarding
 8. ✅ Create `index.ts` with named exports
@@ -361,7 +361,7 @@ const styles = {
 <input id="username" type="text" />
 
 // With required indicator
-<Label htmlFor="email" isRequired>Email</Label>
+<Label htmlFor="email" required>Email</Label>
 <input id="email" type="email" required />
 
 // With optional indicator

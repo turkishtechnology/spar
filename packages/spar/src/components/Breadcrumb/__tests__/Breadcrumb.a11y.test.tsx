@@ -43,14 +43,14 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should have no axe violations - disabled state', async () => {
       const { container } = render(
-        <BreadcrumbRoot isDisabled>
+        <BreadcrumbRoot disabled>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator>/</BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/products' isDisabled>
+              <BreadcrumbLink href='/products' disabled>
                 Products
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -173,7 +173,7 @@ describe('Breadcrumb Accessibility', () => {
   describe('Disabled State Accessibility', () => {
     it('should handle root disabled state accessibility', () => {
       render(
-        <BreadcrumbRoot isDisabled>
+        <BreadcrumbRoot disabled>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/test'>Test</BreadcrumbLink>
@@ -195,7 +195,7 @@ describe('Breadcrumb Accessibility', () => {
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/products' isDisabled>
+              <BreadcrumbLink href='/products' disabled>
                 Products
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -213,7 +213,7 @@ describe('Breadcrumb Accessibility', () => {
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test' isDisabled>
+              <BreadcrumbLink href='/test' disabled>
                 Test
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -230,7 +230,7 @@ describe('Breadcrumb Accessibility', () => {
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/test' isDisabled>
+              <BreadcrumbLink href='/test' disabled>
                 Test
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -322,7 +322,7 @@ describe('Breadcrumb Accessibility', () => {
                 <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbItem>
-                <BreadcrumbLink href='/products' isDisabled>
+                <BreadcrumbLink href='/products' disabled>
                   Products
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -396,7 +396,7 @@ describe('Breadcrumb Accessibility', () => {
         <BreadcrumbRoot onNavigate={handleNavigate}>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/home' isDisabled>
+              <BreadcrumbLink href='/home' disabled>
                 Home
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -458,7 +458,7 @@ describe('Breadcrumb Accessibility', () => {
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/products' isDisabled>
+              <BreadcrumbLink href='/products' disabled>
                 Products
               </BreadcrumbLink>
             </BreadcrumbItem>

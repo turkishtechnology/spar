@@ -16,7 +16,7 @@ const BasicAccordion = ({
   value,
   defaultValue,
   onValueChange,
-  isDisabled = false,
+  disabled = false,
   orientation = 'vertical',
   children,
   ...rest
@@ -27,7 +27,7 @@ const BasicAccordion = ({
     {...(value !== undefined && { value })}
     {...(defaultValue !== undefined && { defaultValue })}
     {...(onValueChange && { onValueChange })}
-    isDisabled={isDisabled}
+    disabled={disabled}
     orientation={orientation}
     {...rest}
   >
@@ -45,7 +45,7 @@ const BasicAccordion = ({
           </AccordionHeader>
           <AccordionContent>Content 2</AccordionContent>
         </AccordionItem>
-        <AccordionItem value='item-3' isDisabled>
+        <AccordionItem value='item-3' disabled>
           <AccordionHeader>
             <AccordionTrigger>Item 3 (Disabled)</AccordionTrigger>
           </AccordionHeader>
@@ -294,7 +294,7 @@ describe('Accordion', () => {
   describe('Disabled State', () => {
     it('should disable all items when accordion is disabled', async () => {
       const user = userEvent.setup();
-      render(<BasicAccordion isDisabled={true} />);
+      render(<BasicAccordion disabled={true} />);
 
       const triggers = screen.getAllByRole('button');
       for (const trigger of triggers) {
@@ -306,7 +306,7 @@ describe('Accordion', () => {
       expect(triggers[0]!).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('should disable individual items when item isDisabled is true', async () => {
+    it('should disable individual items when item disabled is true', async () => {
       const user = userEvent.setup();
       render(<BasicAccordion />);
 
@@ -354,7 +354,7 @@ describe('Accordion', () => {
       const user = userEvent.setup();
       const onValueChange = jest.fn();
 
-      render(<BasicAccordion isDisabled={true} onValueChange={onValueChange} />);
+      render(<BasicAccordion disabled={true} onValueChange={onValueChange} />);
 
       const trigger = screen.getByRole('button', { name: 'Item 1' });
       await user.click(trigger);
@@ -590,7 +590,7 @@ describe('Accordion', () => {
       const onValueChange = jest.fn();
       render(
         <Accordion type='single' onValueChange={onValueChange}>
-          <AccordionItem value='item-1' isDisabled>
+          <AccordionItem value='item-1' disabled>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>

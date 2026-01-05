@@ -206,7 +206,7 @@ describe('Dialog Accessibility', () => {
       const user = userEvent.setup();
       render(
         <DialogRoot>
-          <DialogTrigger isDisabled>Open Dialog</DialogTrigger>
+          <DialogTrigger disabled>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogOverlay />
             <DialogContent>
@@ -464,7 +464,7 @@ describe('Dialog Accessibility', () => {
     it('should handle disabled state announcements', () => {
       render(
         <DialogRoot>
-          <DialogTrigger isDisabled>Open Dialog</DialogTrigger>
+          <DialogTrigger disabled>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogOverlay />
             <DialogContent>

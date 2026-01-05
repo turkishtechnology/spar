@@ -12,7 +12,7 @@ export interface CheckboxRenderProps {
   /**
    * Whether the checkbox is disabled
    */
-  isDisabled: boolean;
+  disabled: boolean;
   /**
    * Whether the checkbox is focused
    */
@@ -64,19 +64,19 @@ export interface CheckboxProps
    * Whether the checkbox is disabled
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Whether the checkbox is read-only
    * @defaultValue false
    */
-  isReadOnly?: boolean;
+  readOnly?: boolean;
 
   /**
    * Whether the checkbox is required in forms
    * @defaultValue false
    */
-  isRequired?: boolean;
+  required?: boolean;
 
   /**
    * Name attribute for form submission

@@ -102,14 +102,14 @@ describe('Label', () => {
   });
 
   describe('Required State', () => {
-    it('sets data-required attribute when isRequired is true', () => {
-      render(<Label isRequired>Required Field</Label>);
+    it('sets data-required attribute when required is true', () => {
+      render(<Label required>Required Field</Label>);
       const label = screen.getByText('Required Field');
       expect(label).toHaveAttribute('data-required');
     });
 
-    it('does not set data-required attribute when isRequired is false', () => {
-      render(<Label isRequired={false}>Optional Field</Label>);
+    it('does not set data-required attribute when required is false', () => {
+      render(<Label required={false}>Optional Field</Label>);
       const label = screen.getByText('Optional Field');
       expect(label).not.toHaveAttribute('data-required');
     });
@@ -122,7 +122,7 @@ describe('Label', () => {
 
     it('allows custom required indicator in children', () => {
       render(
-        <Label isRequired>
+        <Label required>
           Field Name
           <span aria-label='required'>*</span>
         </Label>,
@@ -166,14 +166,14 @@ describe('Label', () => {
   });
 
   describe('Disabled State', () => {
-    it('sets data-disabled attribute when isDisabled is true', () => {
-      render(<Label isDisabled>Disabled Field</Label>);
+    it('sets data-disabled attribute when disabled is true', () => {
+      render(<Label disabled>Disabled Field</Label>);
       const label = screen.getByText('Disabled Field');
       expect(label).toHaveAttribute('data-disabled');
     });
 
-    it('does not set data-disabled attribute when isDisabled is false', () => {
-      render(<Label isDisabled={false}>Enabled Field</Label>);
+    it('does not set data-disabled attribute when disabled is false', () => {
+      render(<Label disabled={false}>Enabled Field</Label>);
       const label = screen.getByText('Enabled Field');
       expect(label).not.toHaveAttribute('data-disabled');
     });
@@ -188,7 +188,7 @@ describe('Label', () => {
   describe('Combined States', () => {
     it('handles multiple state flags together', () => {
       render(
-        <Label isRequired isDisabled>
+        <Label required disabled>
           Combined States
         </Label>,
       );
@@ -198,9 +198,9 @@ describe('Label', () => {
       expect(label).not.toHaveAttribute('data-optional');
     });
 
-    it('handles isRequired and isOptional together', () => {
+    it('handles required and isOptional together', () => {
       render(
-        <Label isRequired isOptional>
+        <Label required isOptional>
           Both Flags
         </Label>,
       );
@@ -211,7 +211,7 @@ describe('Label', () => {
 
     it('handles all state flags together', () => {
       render(
-        <Label isRequired isOptional isDisabled>
+        <Label required isOptional disabled>
           All States
         </Label>,
       );
@@ -262,7 +262,7 @@ describe('Label', () => {
       expect(label).not.toHaveAttribute('data-disabled');
 
       rerender(
-        <Label isRequired isOptional isDisabled>
+        <Label required isOptional disabled>
           All States
         </Label>,
       );
@@ -273,12 +273,12 @@ describe('Label', () => {
     });
 
     it('memoizes data attributes correctly', () => {
-      const { rerender } = render(<Label isRequired>Required</Label>);
+      const { rerender } = render(<Label required>Required</Label>);
       const label = screen.getByText('Required');
       expect(label).toHaveAttribute('data-required');
 
       // Re-render with same props should maintain attributes
-      rerender(<Label isRequired>Required</Label>);
+      rerender(<Label required>Required</Label>);
       expect(label).toHaveAttribute('data-required');
     });
   });
@@ -333,22 +333,22 @@ describe('Label', () => {
       const label = screen.getByText('Dynamic');
       expect(label).not.toHaveAttribute('data-disabled');
 
-      rerender(<Label isDisabled>Dynamic</Label>);
+      rerender(<Label disabled>Dynamic</Label>);
       expect(label).toHaveAttribute('data-disabled');
 
-      rerender(<Label isDisabled={false}>Dynamic</Label>);
+      rerender(<Label disabled={false}>Dynamic</Label>);
       expect(label).not.toHaveAttribute('data-disabled');
     });
 
     it('handles rapid prop changes', () => {
-      const { rerender } = render(<Label isRequired>Field</Label>);
+      const { rerender } = render(<Label required>Field</Label>);
       const label = screen.getByText('Field');
 
       rerender(<Label isOptional>Field</Label>);
       expect(label).not.toHaveAttribute('data-required');
       expect(label).toHaveAttribute('data-optional');
 
-      rerender(<Label isDisabled>Field</Label>);
+      rerender(<Label disabled>Field</Label>);
       expect(label).not.toHaveAttribute('data-required');
       expect(label).not.toHaveAttribute('data-optional');
       expect(label).toHaveAttribute('data-disabled');

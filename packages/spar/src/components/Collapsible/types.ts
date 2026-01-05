@@ -25,7 +25,7 @@ export interface CollapsibleProps extends React.HTMLAttributes<HTMLDivElement> {
    * Whether the collapsible is disabled
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Child components
@@ -96,7 +96,7 @@ export interface CollapsibleContextValue {
   /**
    * Whether the collapsible is disabled
    */
-  isDisabled: boolean;
+  disabled: boolean;
 
   /**
    * ID of the trigger element

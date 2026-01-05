@@ -23,7 +23,7 @@ describe('Label Accessibility', () => {
     it('should not have violations with required state', async () => {
       const { container } = render(
         <div>
-          <Label htmlFor='required-input' isRequired>
+          <Label htmlFor='required-input' required>
             Required Field
           </Label>
           <input id='required-input' type='text' required />
@@ -49,7 +49,7 @@ describe('Label Accessibility', () => {
     it('should not have violations with disabled state', async () => {
       const { container } = render(
         <div>
-          <Label htmlFor='disabled-input' isDisabled>
+          <Label htmlFor='disabled-input' disabled>
             Disabled Field
           </Label>
           <input id='disabled-input' type='text' disabled />
@@ -86,7 +86,7 @@ describe('Label Accessibility', () => {
     it('should not have violations with complex content', async () => {
       const { container } = render(
         <div>
-          <Label htmlFor='complex-input' isRequired>
+          <Label htmlFor='complex-input' required>
             <span>Field Name</span>
             <span aria-label='required'>*</span>
           </Label>
@@ -157,7 +157,7 @@ describe('Label Accessibility', () => {
     it('provides data-required for styling required fields', () => {
       render(
         <div>
-          <Label htmlFor='required-field' isRequired>
+          <Label htmlFor='required-field' required>
             Required Field
           </Label>
           <input id='required-field' type='text' required />
@@ -171,7 +171,7 @@ describe('Label Accessibility', () => {
     it('allows custom required indicators for screen readers', () => {
       render(
         <div>
-          <Label htmlFor='custom-required' isRequired>
+          <Label htmlFor='custom-required' required>
             Field Name
             <span aria-label='required' className='required-indicator'>
               *
@@ -191,7 +191,7 @@ describe('Label Accessibility', () => {
     it('supports visually hidden required text', () => {
       render(
         <div>
-          <Label htmlFor='visually-hidden-required' isRequired>
+          <Label htmlFor='visually-hidden-required' required>
             Username
             <span className='sr-only'>(required)</span>
           </Label>
@@ -241,7 +241,7 @@ describe('Label Accessibility', () => {
     it('provides data-disabled for styling disabled fields', () => {
       render(
         <div>
-          <Label htmlFor='disabled-field' isDisabled>
+          <Label htmlFor='disabled-field' disabled>
             Disabled Field
           </Label>
           <input id='disabled-field' type='text' disabled />
@@ -255,7 +255,7 @@ describe('Label Accessibility', () => {
     it('works with aria-disabled on controls', () => {
       render(
         <div>
-          <Label htmlFor='aria-disabled-field' isDisabled>
+          <Label htmlFor='aria-disabled-field' disabled>
             Disabled Field
           </Label>
           <input id='aria-disabled-field' type='text' aria-disabled='true' />
@@ -341,7 +341,7 @@ describe('Label Accessibility', () => {
 
       render(
         <div>
-          <Label htmlFor='disabled-checkbox' isDisabled>
+          <Label htmlFor='disabled-checkbox' disabled>
             Disabled Option
           </Label>
           <input id='disabled-checkbox' type='checkbox' disabled onClick={handleClick} />
@@ -390,7 +390,7 @@ describe('Label Accessibility', () => {
     it('announces required state through content', () => {
       render(
         <div>
-          <Label htmlFor='required-sr' isRequired>
+          <Label htmlFor='required-sr' required>
             Password
             <span className='sr-only'>(required field)</span>
           </Label>
@@ -535,7 +535,7 @@ describe('Label Accessibility', () => {
     it('provides semantic attributes for visual styling', () => {
       render(
         <div>
-          <Label htmlFor='styled-input' isRequired isDisabled>
+          <Label htmlFor='styled-input' required disabled>
             Styled Label
           </Label>
           <input id='styled-input' type='text' />
@@ -550,7 +550,7 @@ describe('Label Accessibility', () => {
     it('supports custom styling through className', () => {
       render(
         <div>
-          <Label htmlFor='custom-styled' className='custom-label-style' isRequired>
+          <Label htmlFor='custom-styled' className='custom-label-style' required>
             Custom Styled
           </Label>
           <input id='custom-styled' type='text' />

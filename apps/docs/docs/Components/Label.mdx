@@ -27,9 +27,9 @@ A headless, accessible label component for form controls that establishes progra
   color: #222530;
 }
 
-/* Dark mode styles */
+/_ Dark mode styles _/
 [data-theme='dark'] .label {
-  color: #f2f5f8;
+color: #f2f5f8;
 }`}
 />
 
@@ -64,7 +64,7 @@ The Label component is a simple, single-element component that provides accessib
   ]}
 >
   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <Label htmlFor='username' isRequired data-spar-part='label' style={{ fontWeight: 'bold' }}>
+    <Label htmlFor='username' required data-spar-part='label' style={{ fontWeight: 'bold' }}>
       {' Username '}
     </Label>
     <input
@@ -87,7 +87,7 @@ The Label component is a simple, single-element component that provides accessib
 - `Label` creates a semantic association with the form control via `htmlFor` attribute
 - Clicking the label automatically focuses the associated input
 - Screen readers announce the label text when the control receives focus
-- State indicators (`isRequired`, `isOptional`, `isDisabled`) are exposed as data attributes for styling
+- State indicators (`required`, `isOptional`, `disabled`) are exposed as data attributes for styling
 
 ## Code Examples
 
@@ -108,13 +108,13 @@ function BasicExample() {
 
 ### Required Field Indicator
 
-Use `isRequired` to mark fields as required. The label exposes a `data-required` attribute for styling hooks:
+Use `required` to mark fields as required. The label exposes a `data-required` attribute for styling hooks:
 
 ```tsx
 function RequiredFieldExample() {
   return (
     <div>
-      <Label htmlFor='password' isRequired>
+      <Label htmlFor='password' required>
         Password
       </Label>
       <input id='password' type='password' required aria-required='true' />
@@ -123,7 +123,7 @@ function RequiredFieldExample() {
 }
 ```
 
-**Note**: The `isRequired` prop only adds a data attribute for styling. You must set the `required` attribute on the input itself for actual validation.
+**Note**: The `required` prop only adds a data attribute for styling. You must set the `required` attribute on the input itself for actual validation.
 
 ### Optional Field Indicator
 
@@ -144,13 +144,13 @@ function OptionalFieldExample() {
 
 ### Disabled State
 
-Use `isDisabled` to visually indicate disabled controls:
+Use `disabled` to visually indicate disabled controls:
 
 ```tsx
 function DisabledFieldExample() {
   return (
     <div>
-      <Label htmlFor='locked-field' isDisabled>
+      <Label htmlFor='locked-field' disabled>
         Locked Field
       </Label>
       <input id='locked-field' type='text' disabled aria-disabled='true' />
@@ -159,7 +159,7 @@ function DisabledFieldExample() {
 }
 ```
 
-**Note**: The `isDisabled` prop only adds a data attribute. You must set the `disabled` attribute on the control itself.
+**Note**: The `disabled` prop only adds a data attribute. You must set the `disabled` attribute on the control itself.
 
 ### Implicit Association (Wrapping)
 
@@ -203,7 +203,7 @@ Labels can contain rich content like icons, badges, or help text:
 function ComplexLabelExample() {
   return (
     <div>
-      <Label htmlFor='username' isRequired>
+      <Label htmlFor='username' required>
         <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span>Username</span>
           <span style={{ fontSize: '12px', color: '#666' }}>(must be unique)</span>
@@ -221,15 +221,15 @@ Combine multiple state indicators:
 
 ```tsx
 function MultipleStatesExample() {
-  const [isDisabled, setIsDisabled] = React.useState(false);
+  const [disabled, setDisabled] = React.useState(false);
 
   return (
     <div>
-      <Label htmlFor='conditional-field' isRequired isDisabled={isDisabled}>
+      <Label htmlFor='conditional-field' required disabled={disabled}>
         Conditional Field
       </Label>
-      <input id='conditional-field' type='text' required disabled={isDisabled} />
-      <button onClick={() => setIsDisabled(!isDisabled)}>Toggle Disabled</button>
+      <input id='conditional-field' type='text' required disabled={disabled} />
+      <button onClick={() => setDisabled(!disabled)}>Toggle Disabled</button>
     </div>
   );
 }
@@ -245,7 +245,7 @@ function StyledLabelExample() {
     <div>
       <Label
         htmlFor='styled-input'
-        isRequired
+        required
         className='custom-label'
         style={{
           fontWeight: 'bold',
@@ -296,7 +296,7 @@ function FormGroupExample() {
 
   return (
     <div>
-      <Label htmlFor='validated-input' isRequired>
+      <Label htmlFor='validated-input' required>
         Username
       </Label>
       <input
@@ -369,9 +369,9 @@ The Label component creates accessible labels for form controls with support for
 
 | Name          | Type          | Default     | Description                                                                                                                                          |
 | ------------- | ------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `isRequired?` | `boolean`     | `false`     | Marks label for a required field (exposed via `data-required` attribute). Does NOT add required functionality - set `required` on the control itself |
+| `required?`   | `boolean`     | `false`     | Marks label for a required field (exposed via `data-required` attribute). Does NOT add required functionality - set `required` on the control itself |
 | `isOptional?` | `boolean`     | `false`     | Marks label for an optional field (exposed via `data-optional` attribute for styling)                                                                |
-| `isDisabled?` | `boolean`     | `false`     | Marks label for a disabled field (exposed via `data-disabled` attribute). Does NOT disable the control - set `disabled` on the control itself        |
+| `disabled?`   | `boolean`     | `false`     | Marks label for a disabled field (exposed via `data-disabled` attribute). Does NOT disable the control - set `disabled` on the control itself        |
 | `as?`         | `ElementType` | `'label'`   | Polymorphic element type to render as. Using non-label elements breaks native association - use `aria-labelledby` on control                         |
 | `children?`   | `ReactNode`   | `undefined` | Label content (text, icons, or form controls for implicit association)                                                                               |
 
@@ -393,9 +393,9 @@ The Label component creates accessible labels for form controls with support for
 
 | Attribute       | Value               | Purpose                                    | Applied To                              |
 | --------------- | ------------------- | ------------------------------------------ | --------------------------------------- |
-| `data-required` | `true \| undefined` | Indicates the associated field is required | Root element (when `isRequired={true}`) |
+| `data-required` | `true \| undefined` | Indicates the associated field is required | Root element (when `required={true}`)   |
 | `data-optional` | `true \| undefined` | Indicates the associated field is optional | Root element (when `isOptional={true}`) |
-| `data-disabled` | `true \| undefined` | Indicates the associated field is disabled | Root element (when `isDisabled={true}`) |
+| `data-disabled` | `true \| undefined` | Indicates the associated field is disabled | Root element (when `disabled={true}`)   |
 
 **Accessibility Attributes**
 

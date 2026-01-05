@@ -48,7 +48,7 @@ export interface DialogTriggerProps extends ButtonHTMLAttributes<HTMLButtonEleme
    * Disables trigger interaction
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Ref forwarded to trigger element

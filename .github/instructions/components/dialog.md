@@ -51,7 +51,7 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'button'` | Polymorphic element type |
-| `isDisabled` | `boolean` | No | `false` | Disables trigger interaction |
+| `disabled` | `boolean` | No | `false` | Disables trigger interaction |
 | `children` | `ReactNode` | Yes | - | Trigger content |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
 

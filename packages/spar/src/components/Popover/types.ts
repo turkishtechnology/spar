@@ -69,7 +69,7 @@ export interface PopoverTriggerProps extends React.ButtonHTMLAttributes<HTMLButt
    * Whether trigger is disabled
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Ref to the trigger element

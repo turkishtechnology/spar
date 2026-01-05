@@ -466,7 +466,7 @@ describe('Select Integration Tests', () => {
               name='plan'
               value={selectedPlan}
               onValueChange={handlePlanChange}
-              isDisabled={isProcessing}
+              disabled={isProcessing}
             >
               <Select.Trigger aria-label='Plan selection'>
                 <Select.Value placeholder='Select...' />
@@ -590,7 +590,7 @@ describe('Select Integration Tests', () => {
 
         return (
           <div>
-            <Select value={selectedValue} onValueChange={handleValueChange} isDisabled={isLoading}>
+            <Select value={selectedValue} onValueChange={handleValueChange} disabled={isLoading}>
               <Select.Trigger aria-label='Async options'>
                 <Select.Value placeholder='Select...' />
               </Select.Trigger>

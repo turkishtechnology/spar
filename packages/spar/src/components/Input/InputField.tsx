@@ -55,10 +55,10 @@ export const InputField = <T extends ElementType = 'input'>({
       type={Component === 'input' ? ('type' in props ? (props.type as string) : 'text') : undefined}
       aria-labelledby={context.labelId}
       aria-describedby={describedBy}
-      aria-required={context.isRequired}
+      aria-required={context.required}
       aria-invalid={context.isInvalid}
-      disabled={context.isDisabled}
-      required={context.isRequired}
+      disabled={context.disabled}
+      required={context.required}
       onFocus={handleFocus}
       onBlur={handleBlur}
       data-spar-input-field

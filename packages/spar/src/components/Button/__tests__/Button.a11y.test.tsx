@@ -16,7 +16,7 @@ describe('Button Accessibility', () => {
     });
 
     it('should not have violations when disabled', async () => {
-      const { container } = render(<Button isDisabled>Disabled</Button>);
+      const { container } = render(<Button disabled>Disabled</Button>);
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
@@ -54,7 +54,7 @@ describe('Button Accessibility', () => {
     });
 
     it('should have aria-disabled when disabled', () => {
-      render(<Button isDisabled>Disabled</Button>);
+      render(<Button disabled>Disabled</Button>);
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('aria-disabled', 'true');
     });
@@ -113,7 +113,7 @@ describe('Button Accessibility', () => {
     });
 
     it('should not be focusable when disabled', () => {
-      render(<Button isDisabled>Disabled</Button>);
+      render(<Button disabled>Disabled</Button>);
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('tabIndex', '-1');
     });
@@ -292,7 +292,7 @@ describe('Button Accessibility', () => {
 
   describe('State Communication', () => {
     it('should communicate disabled state to assistive technology', () => {
-      render(<Button isDisabled>Disabled Button</Button>);
+      render(<Button disabled>Disabled Button</Button>);
       const button = screen.getByRole('button');
 
       // Both HTML and ARIA attributes for maximum compatibility
@@ -320,7 +320,7 @@ describe('Button Accessibility', () => {
 
     it('should communicate multiple states simultaneously', () => {
       render(
-        <Button isDisabled isLoading isPressed={true}>
+        <Button disabled isLoading isPressed={true}>
           Complex State
         </Button>,
       );
@@ -335,7 +335,7 @@ describe('Button Accessibility', () => {
 
   describe('Color Contrast & Visual Indicators', () => {
     it('should provide semantic attributes for visual styling', () => {
-      render(<Button isDisabled>Styled Button</Button>);
+      render(<Button disabled>Styled Button</Button>);
       const button = screen.getByRole('button');
 
       // Data attributes allow CSS to apply appropriate contrast ratios

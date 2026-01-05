@@ -127,7 +127,7 @@ describe('Switch', () => {
 
   describe('Disabled state', () => {
     it('should apply disabled attributes correctly', () => {
-      render(<Switch isDisabled>Toggle me</Switch>);
+      render(<Switch disabled>Toggle me</Switch>);
 
       const switchElement = screen.getByRole('switch');
       expect(switchElement).toHaveAttribute('aria-disabled', 'true');
@@ -141,7 +141,7 @@ describe('Switch', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch isDisabled onChange={handleChange}>
+        <Switch disabled onChange={handleChange}>
           Toggle me
         </Switch>,
       );
@@ -158,7 +158,7 @@ describe('Switch', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch isDisabled onChange={handleChange}>
+        <Switch disabled onChange={handleChange}>
           Toggle me
         </Switch>,
       );
@@ -175,7 +175,7 @@ describe('Switch', () => {
 
   describe('Read-only state', () => {
     it('should apply read-only attributes correctly', () => {
-      render(<Switch isReadOnly>Toggle me</Switch>);
+      render(<Switch readOnly>Toggle me</Switch>);
 
       const switchElement = screen.getByRole('switch');
       expect(switchElement).toHaveAttribute('aria-readonly', 'true');
@@ -189,7 +189,7 @@ describe('Switch', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch isReadOnly onChange={handleChange}>
+        <Switch readOnly onChange={handleChange}>
           Toggle me
         </Switch>,
       );
@@ -206,7 +206,7 @@ describe('Switch', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch isReadOnly onChange={handleChange}>
+        <Switch readOnly onChange={handleChange}>
           Toggle me
         </Switch>,
       );
@@ -323,7 +323,7 @@ describe('Switch', () => {
 
     it('should apply required attribute', () => {
       render(
-        <Switch name='settings' isRequired>
+        <Switch name='settings' required>
           Toggle me
         </Switch>,
       );

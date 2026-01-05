@@ -84,7 +84,7 @@ describe('Input', () => {
 
     it('renders with disabled state', () => {
       render(
-        <Input.Root isDisabled>
+        <Input.Root disabled>
           <Input.Field />
         </Input.Root>,
       );
@@ -95,7 +95,7 @@ describe('Input', () => {
 
     it('renders with required state', () => {
       render(
-        <Input.Root isRequired>
+        <Input.Root required>
           <Input.Field />
         </Input.Root>,
       );
@@ -175,7 +175,7 @@ describe('Input', () => {
 
     it('applies disabled state from context', () => {
       render(
-        <Input.Root isDisabled>
+        <Input.Root disabled>
           <Input.Field />
         </Input.Root>,
       );
@@ -186,7 +186,7 @@ describe('Input', () => {
 
     it('applies required state from context', () => {
       render(
-        <Input.Root isRequired>
+        <Input.Root required>
           <Input.Field />
         </Input.Root>,
       );

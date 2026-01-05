@@ -12,16 +12,16 @@ export const CollapsibleTrigger = ({
   onKeyDown,
   ...props
 }: CollapsibleTriggerProps) => {
-  const { isOpen, toggle, isDisabled, triggerId, contentId } = useCollapsibleContext();
+  const { isOpen, toggle, disabled, triggerId, contentId } = useCollapsibleContext();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    if (isDisabled) return;
+    if (disabled) return;
     toggle();
     onClick?.(event);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
-    if (isDisabled) {
+    if (disabled) {
       onKeyDown?.(event);
       return;
     }
@@ -44,7 +44,7 @@ export const CollapsibleTrigger = ({
     'aria-expanded': isOpen,
     'aria-controls': contentId,
     'data-state': dataState,
-    'data-disabled': isDisabled ? '' : undefined,
+    'data-disabled': disabled ? '' : undefined,
     onClick: handleClick,
     onKeyDown: handleKeyDown,
     ...props,
@@ -54,7 +54,7 @@ export const CollapsibleTrigger = ({
   if (Component === 'button') {
     // Use native disabled attribute for semantic button elements
     return (
-      <Component type='button' disabled={isDisabled} {...commonProps}>
+      <Component type='button' disabled={disabled} {...commonProps}>
         {children}
       </Component>
     );
@@ -63,8 +63,8 @@ export const CollapsibleTrigger = ({
     return (
       <Component
         role='button'
-        aria-disabled={isDisabled}
-        tabIndex={isDisabled ? -1 : 0}
+        aria-disabled={disabled}
+        tabIndex={disabled ? -1 : 0}
         {...commonProps}
       >
         {children}

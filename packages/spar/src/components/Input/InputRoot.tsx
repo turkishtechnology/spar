@@ -19,8 +19,8 @@ export { InputContext, useInputContext };
  */
 export const InputRoot = ({
   isInvalid = false,
-  isDisabled = false,
-  isRequired = false,
+  disabled = false,
+  required = false,
   children,
   ...props
 }: InputRootProps) => {
@@ -32,8 +32,8 @@ export const InputRoot = ({
     descriptionId: `${id}-description`,
     errorId: `${id}-error`,
     isInvalid,
-    isDisabled,
-    isRequired,
+    disabled,
+    required,
   };
 
   return (
@@ -42,8 +42,8 @@ export const InputRoot = ({
         {...props}
         data-spar-input
         data-invalid={isInvalid ? '' : undefined}
-        data-disabled={isDisabled ? '' : undefined}
-        data-required={isRequired ? '' : undefined}
+        data-disabled={disabled ? '' : undefined}
+        data-required={required ? '' : undefined}
       >
         {children}
       </div>

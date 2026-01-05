@@ -432,14 +432,14 @@ function DisabledBreadcrumb() {
         Toggle Navigation: {isNavigationDisabled ? 'Disabled' : 'Enabled'}
       </button>
 
-      <BreadcrumbRoot isDisabled={isNavigationDisabled}>
+      <BreadcrumbRoot disabled={isNavigationDisabled}>
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href='/'>Home</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator>›</BreadcrumbSeparator>
           <BreadcrumbItem>
-            <BreadcrumbLink href='/products' isDisabled={true}>
+            <BreadcrumbLink href='/products' disabled={true}>
               Products (Individual Disabled)
             </BreadcrumbLink>
           </BreadcrumbItem>
@@ -574,7 +574,7 @@ Navigation landmark container that provides context and manages shared state for
 | `as?`         | `ElementType`       | `'nav'`        | Polymorphic element type                         |
 | `aria-label?` | `string`            | `'Breadcrumb'` | Accessible name for navigation landmark          |
 | `onNavigate?` | `NavigationHandler` | `undefined`    | Navigation event handler for routing integration |
-| `isDisabled?` | `boolean`           | `false`        | Disable all breadcrumb navigation                |
+| `disabled?` | `boolean`           | `false`        | Disable all breadcrumb navigation                |
 
 **Events**
 
@@ -648,7 +648,7 @@ Interactive link component with accessibility features, routing integration, and
 | `children`    | `ReactNode`                   | -           | Link text content                                                  |
 | `as?`         | `ElementType`                 | `'a'`       | Polymorphic element type                                           |
 | `href?`       | `string`                      | `undefined` | Link destination                                                   |
-| `isDisabled?` | `boolean`                     | `false`     | Disable this specific link                                         |
+| `disabled?` | `boolean`                     | `false`     | Disable this specific link                                         |
 | `isExternal?` | `boolean`                     | `false`     | Indicates external link (adds security attributes)                 |
 | `onPress?`    | `(event: PressEvent) => void` | `undefined` | Press event handler (overrides default navigation)                 |
 | `target?`     | `string`                      | `undefined` | Link target (auto-set to '\_blank' for external links)             |

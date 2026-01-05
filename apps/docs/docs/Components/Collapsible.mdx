@@ -272,7 +272,7 @@ import { Collapsible } from '@turkish-technology/spar';
 
 function DisabledCollapsible() {
   return (
-    <CollapsibleRoot isDisabled={true}>
+    <CollapsibleRoot disabled={true}>
       <CollapsibleTrigger>Disabled Trigger</CollapsibleTrigger>
       <CollapsibleContent>
         <p>This content cannot be toggled</p>
@@ -295,7 +295,7 @@ The root component that provides context and state management for the collapsibl
 | `open?`         | `boolean`                 | -       | Controlled open state                     |
 | `defaultOpen?`  | `boolean`                 | `false` | Default open state for uncontrolled usage |
 | `onOpenChange?` | `(open: boolean) => void` | -       | Callback fired when open state changes    |
-| `isDisabled?`   | `boolean`                 | `false` | Whether the collapsible is disabled       |
+| `disabled?`   | `boolean`                 | `false` | Whether the collapsible is disabled       |
 | `children`      | `ReactNode`               | -       | Child components                          |
 
 **Events**

@@ -9,8 +9,8 @@ export interface InputContextValue {
   descriptionId: string;
   errorId: string;
   isInvalid: boolean;
-  isDisabled: boolean;
-  isRequired: boolean;
+  disabled: boolean;
+  required: boolean;
 }
 
 /**
@@ -28,13 +28,13 @@ export interface InputRootProps extends React.HTMLAttributes<HTMLDivElement> {
    * Input disabled state
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Input required state
    * @defaultValue false
    */
-  isRequired?: boolean;
+  required?: boolean;
 
   /**
    * Compound input elements
