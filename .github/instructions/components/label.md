@@ -1,4 +1,4 @@
-# Label — Glide Headless Instructions
+# Label — Spar Headless Instructions
 
 ## 1. Component Overview
 

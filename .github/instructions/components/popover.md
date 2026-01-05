@@ -1,4 +1,4 @@
-# Popover — Glide Headless Instructions
+# Popover — Spar Headless Instructions
 
 ## 1. Component Overview
 

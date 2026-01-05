@@ -1,4 +1,4 @@
-# Button — Glide Headless Instructions
+# Button — Spar Headless Instructions
 
 ## 1. Component Overview
 
@@ -297,7 +297,7 @@ All data attributes designed to work with CSS-in-JS libraries, CSS modules, and 
 
 ### Migration Guidance
 - **From HTML Button**: Replace `<button>` with `<Button>` - maintains same API
-- **From Other Libraries**: Map existing button props to Glide Button props
+- **From Other Libraries**: Map existing button props to Spar Button props
 - **Styling Migration**: Replace CSS classes with data attribute selectors
 - **Event Handling**: `onClick` remains the same, keyboard events handled internally
 

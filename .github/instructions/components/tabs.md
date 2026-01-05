@@ -1,4 +1,4 @@
-# Tabs — Glide Headless Instructions
+# Tabs — Spar Headless Instructions
 
 ## 1. Component Overview
 
@@ -259,7 +259,7 @@ These data attributes enable CSS selectors for styling different states:
 
 ### Styling via Data Attributes
 - All visual states exposed through `data-*` attributes
-- Consistent naming convention with other Glide components
+- Consistent naming convention with other Spar components
 - Support for complex styling scenarios (themes, variants, animations)
 
 ### Tree-Shakeable Exports
@@ -320,5 +320,5 @@ These data attributes enable CSS selectors for styling different states:
 #### Documentation & Integration
 - [ ] Data attributes documented for styling
 - [ ] Component exported properly (named + compound)
-- [ ] Integration with existing Glide patterns
+- [ ] Integration with existing Spar patterns
 - [ ] Performance optimization for large tab sets

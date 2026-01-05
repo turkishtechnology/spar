@@ -1,0 +1,22 @@
+{
+  "name": "turkish-technology-docs",
+  "type": "docker",
+  "dockerfile": "apps/docs/Dockerfile",
+  "dockerContext": ".",
+  "port": 80,
+  "buildArgs": {},
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "healthCheck": {
+    "enabled": true,
+    "path": "/",
+    "interval": 30,
+    "timeout": 10,
+    "retries": 3
+  },
+  "resources": {
+    "cpus": "1",
+    "memory": "1G"
+  }
+}

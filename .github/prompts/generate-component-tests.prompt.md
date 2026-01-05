@@ -20,6 +20,7 @@ ALWAYS follow instructions in [Testing Guidelines](../instructions/testing-guide
 
 - **Unit tests**: Functionality, props, state, events
 - **Integration tests**: User workflows, interactions
+- **DO NOT generate accessibility tests** - Accessibility tests are outside the scope of this prompt
 
 ## Requirements
 

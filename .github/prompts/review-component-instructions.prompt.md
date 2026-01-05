@@ -6,7 +6,7 @@ description: Comprehensive review of Glide component instruction files against a
 
 # Component Instructions Review & Validation
 
-Review the **${input:ComponentName}** component instructions for compliance with Glide headless principles: fully headless (unstyled), accessible by default, keyboard navigable, and assistive-technology friendly.
+Review the **${input:ComponentName}** component instructions for compliance with Spar headless principles: fully headless (unstyled), accessible by default, keyboard navigable, and assistive-technology friendly.
 
 **Important**: This review focuses ONLY on the component instructions file (`.github/instructions/components/${ComponentName}.md`). Do NOT examine any actual component implementation files, as the component may not yet be implemented.
 
@@ -22,7 +22,7 @@ Use Context7 MCP or web search for up-to-date sources.
 
 ## Phase 2: Component Instructions Analysis
 
-Examine `packages/glide/src/components/${ComponentName}/` and `.github/instructions/components/${component-name}.md`:
+Examine `packages/spar/src/components/${ComponentName}/` and `.github/instructions/components/${component-name}.md`:
 
 ### 1. Instruction Template Conformance
 

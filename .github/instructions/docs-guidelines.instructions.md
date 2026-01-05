@@ -49,7 +49,7 @@ Every component documentation page MUST follow this exact structure:
 - Interactive component anatomy using `AnatomyViewer` component
 - Shows all compound component parts with hover highlighting
 - Parts list with descriptions
-- Live demo with `data-glide-part` attributes
+- Live demo with `data-spar-part` attributes
 - Data flow explanation after the viewer
 
 ### 6. Code Examples
@@ -147,7 +147,7 @@ The LiveCode component provides these React utilities in scope:
 - `React` - Full React library
 - `useState` - React.useState hook
 - `useEffect` - React.useEffect hook
-- All Glide components (automatically imported)
+- All Spar components (automatically imported)
 
 ### LiveCode Component Integration
 To add new components to LiveCode scope, update the scope object in `apps/docs/src/components/LiveCode.tsx`:
@@ -168,9 +168,9 @@ const scope = {
 
 ### AnatomyViewer Props
 - `parts`: Array of anatomy parts with name, label, and optional description
-- `children`: Demo component with data-glide-part attributes
+- `children`: Demo component with data-spar-part attributes
 
-**IMPORTANT**: Use the same demo code from LiveCode section, only add `data-glide-part` attributes to each compound part.
+**IMPORTANT**: Use the same demo code from LiveCode section, only add `data-spar-part` attributes to each compound part.
 
 ### AnatomyViewer Usage Pattern
 
@@ -182,15 +182,15 @@ const scope = {
     { name: 'content', label: 'Content', description: 'Content container' },
   ]}
 >
-  <ComponentName.Root data-glide-part="root">
+  <ComponentName.Root data-spar-part="root">
     <ComponentName.Trigger
-      data-glide-part="trigger"
+      data-spar-part="trigger"
       style={{ padding: '8px 16px', border: '1px solid #ccc' }}
     >
       Trigger
     </ComponentName.Trigger>
     <ComponentName.Content
-      data-glide-part="content"
+      data-spar-part="content"
       style={{ border: '1px solid #ccc', padding: '8px' }}
     >
       Content
@@ -203,7 +203,7 @@ const scope = {
 
 #### DO
 - ✅ Use the exact same demo code from LiveCode section
-- ✅ Add data-glide-part attribute to every compound part
+- ✅ Add data-spar-part attribute to every compound part
 - ✅ Use basic inline styles for visibility (same as LiveCode)
 - ✅ Include all compound parts in the parts array
 - ✅ Provide clear, concise descriptions for each part
@@ -215,7 +215,7 @@ const scope = {
 - ❌ Create a different demo than LiveCode
 - ❌ Skip any compound parts
 - ❌ Use complex or styled demos
-- ❌ Forget data-glide-part attributes
+- ❌ Forget data-spar-part attributes
 - ❌ Omit descriptions from parts array
 - ❌ Include non-interactive or non-compound components
 - ❌ Write plain text directly in component children - Always use JSX expression syntax `{' ... '}` to avoid unwanted paragraph tags
@@ -296,7 +296,7 @@ description: [Brief description for SEO]
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { [ComponentName] } from '@turkish-technology/glide';
+import { [ComponentName] } from '@turkish-technology/spar';
  
 # [ComponentName]
  
@@ -330,7 +330,7 @@ import { [ComponentName] } from '@turkish-technology/glide';
 ## Installation
  
 ```tsx
-import { [ComponentName] } from '@turkish-technology/glide'
+import { [ComponentName] } from '@turkish-technology/spar'
 ```
  
 ## Anatomy
@@ -345,9 +345,9 @@ The [ComponentName] component is built as a compound component with multiple par
     // Add all compound parts with their descriptions
   ]}
 >
-  <ComponentName.Root data-glide-part="root">
+  <ComponentName.Root data-spar-part="root">
     <ComponentName.Trigger
-      data-glide-part="trigger"
+      data-spar-part="trigger"
       style={{
         padding: '8px 16px',
         border: '1px solid #ccc',
@@ -359,7 +359,7 @@ The [ComponentName] component is built as a compound component with multiple par
       Trigger Text
     </ComponentName.Trigger>
     <ComponentName.Content
-      data-glide-part="content"
+      data-spar-part="content"
       style={{
         border: '1px solid #ccc',
         borderRadius: '4px',

@@ -6,7 +6,7 @@ description: A headless collapsible component that manages the visibility of con
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/glide';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
 
 # Collapsible
 
@@ -18,42 +18,72 @@ A headless collapsible component that manages the visibility of content sections
 
 ## Live Demo
 
-<LiveCode 
-  code={`function BasicExample() {
-  const [isOpen, setIsOpen] = React.useState(false);
+<LiveCode
+  code={`<Collapsible className="collapsible-demo-container">
+        <CollapsibleTrigger className="collapsible-trigger">
+          <svg
+            className="collapsible-trigger-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="17"
+            height="17"
+            viewBox="0 0 17 17"
+            fill="none"
+          >
+            <path d="M8.33312 1.38867C4.49978 1.38867 1.38867 4.49978 1.38867 8.33312C1.38867 12.1665 4.49978 15.2776 8.33312 15.2776C12.1665 15.2776 15.2776 12.1665 15.2776 8.33312C15.2776 4.49978 12.1665 1.38867 8.33312 1.38867ZM11.1109 9.02756H9.02756V11.1109C9.02756 11.4928 8.71506 11.8053 8.33312 11.8053C7.95117 11.8053 7.63867 11.4928 7.63867 11.1109V9.02756H5.55534C5.17339 9.02756 4.86089 8.71506 4.86089 8.33312C4.86089 7.95117 5.17339 7.63867 5.55534 7.63867H7.63867V5.55534C7.63867 5.17339 7.95117 4.86089 8.33312 4.86089C8.71506 4.86089 9.02756 5.17339 9.02756 5.55534V7.63867H11.1109C11.4928 7.63867 11.8053 7.95117 11.8053 8.33312C11.8053 8.71506 11.4928 9.02756 11.1109 9.02756Z" />
+          </svg>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="collapsible-content">
+          <div className="collapsible-item"></div>
+          <div className="collapsible-item"></div>
+          <div className="collapsible-item"></div>
+        </CollapsibleContent>
+      </Collapsible>
+  `}
+  cssCode={`.collapsible-trigger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 26.667px;
+  padding: 5px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-inline: auto;
+}
 
-  return (
-    <Collapsible style={{ width: '100%' }}>
-      <CollapsibleTrigger 
-        style={{
-          padding: '10px 16px',
-          background: '#f5f5f5',
-          border: '1px solid #ddd',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          fontSize: '14px',
-          fontWeight: '500',
-          display: 'block',
-          width: '100%',
-          textAlign: 'left',
-        }}
-      >
-        Show Content
-      </CollapsibleTrigger>
-      <CollapsibleContent 
-        style={{ 
-          marginTop: '8px', 
-          padding: '12px',
-          border: '1px solid #ddd',
-          borderRadius: '6px',
-          background: '#fafafa',
-        }}
-      >
-        This content can be collapsed and expanded.
-      </CollapsibleContent>
-    </Collapsible>
-  );
-}`}
+[data-theme='dark'] .collapsible-trigger {
+background-color: rgba(255, 255, 255, 0.12);
+}
+
+.collapsible-trigger-icon {
+fill: #222530;
+}
+
+[data-theme='dark'] .collapsible-trigger-icon {
+fill: #f2f5f8;
+}
+
+.collapsible-content {
+display: flex;
+flex-direction: column;
+width: 216px;
+gap: 8px;
+}
+
+.collapsible-item {
+height: 27px;
+border-radius: 5.4px;
+border: 0.675px solid #e1e4ea;
+background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] .collapsible-item {
+border-color: #2b303b;
+background-color: rgba(255, 255, 255, 0.12);
+}
+`}
 />
 
 ## Features
@@ -71,13 +101,13 @@ A headless collapsible component that manages the visibility of content sections
 ## Installation
 
 ```bash
-pnpm install @turkish-technology/glide
+pnpm install @turkish-technology/spar
 ```
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 // or
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/glide';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -91,9 +121,9 @@ The Collapsible component consists of three main parts:
     { name: 'content', label: 'CollapsibleContent', description: 'Collapsible content container' },
   ]}
 >
-  <Collapsible data-glide-part="root" style={{ width: '100%' }}>
+  <Collapsible data-spar-part='root' style={{ width: '100%' }}>
     <CollapsibleTrigger
-      data-glide-part="trigger"
+      data-spar-part='trigger'
       style={{
         padding: '10px 16px',
         background: '#f5f5f5',
@@ -110,9 +140,9 @@ The Collapsible component consists of three main parts:
       {' Show Content '}
     </CollapsibleTrigger>
     <CollapsibleContent
-      data-glide-part="content"
-      style={{ 
-        marginTop: '8px', 
+      data-spar-part='content'
+      style={{
+        marginTop: '8px',
         padding: '12px',
         border: '1px solid #ddd',
         borderRadius: '6px',
@@ -134,6 +164,7 @@ The Collapsible component consists of three main parts:
 ```
 
 **Data Flow:**
+
 - `Collapsible`: Provides context and state management for the collapsible
 - `CollapsibleTrigger`: Interactive element that toggles the content visibility
 - `CollapsibleContent`: Container that shows/hides based on the collapsible state
@@ -143,7 +174,7 @@ The Collapsible component consists of three main parts:
 ### Basic Usage
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 
 function BasicCollapsible() {
   return (
@@ -160,7 +191,7 @@ function BasicCollapsible() {
 ### Controlled State
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 import { useState } from 'react';
 
 function ControlledCollapsible() {
@@ -183,7 +214,7 @@ function ControlledCollapsible() {
 ### Default Open State
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 
 function DefaultOpenCollapsible() {
   return (
@@ -200,7 +231,7 @@ function DefaultOpenCollapsible() {
 ### Custom Trigger Element
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 
 function CustomTriggerCollapsible() {
   return (
@@ -219,7 +250,7 @@ function CustomTriggerCollapsible() {
 ### Force Mount Content
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 
 function ForceMountCollapsible() {
   return (
@@ -237,7 +268,7 @@ function ForceMountCollapsible() {
 ### Disabled State
 
 ```tsx
-import { Collapsible } from '@turkish-technology/glide';
+import { Collapsible } from '@turkish-technology/spar';
 
 function DisabledCollapsible() {
   return (
@@ -340,10 +371,10 @@ Container that shows/hides based on the collapsible state with advanced features
 
 **CSS Custom Properties**
 
-| Property                             | Description                      | When Available       |
-| ------------------------------------ | -------------------------------- | -------------------- |
-| `--glide-collapsible-content-width`  | Current content width in pixels  | When content is open |
-| `--glide-collapsible-content-height` | Current content height in pixels | When content is open |
+| Property                            | Description                      | When Available       |
+| ----------------------------------- | -------------------------------- | -------------------- |
+| `--spar-collapsible-content-width`  | Current content width in pixels  | When content is open |
+| `--spar-collapsible-content-height` | Current content height in pixels | When content is open |
 
 ## Keyboard Interactions
 

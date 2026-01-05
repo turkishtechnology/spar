@@ -1,4 +1,6 @@
 import Translate from '@docusaurus/Translate';
+import { Button } from '@turkish-technology/spar';
+
 export default function Theming() {
   return (
     <div className='theming-container'>
@@ -39,11 +41,11 @@ export default function Theming() {
             </Translate>
           </div>
         </div>
-        <div className='theming-cta'>
+        <Button className='theming-cta'>
           <div>
             <Translate description='Try It Now'>theming.try.it.now</Translate>
           </div>
-        </div>
+        </Button>
       </div>
       <div className='theming-image'>
         <img src='img/design-example.png'></img>

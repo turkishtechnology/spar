@@ -2,7 +2,7 @@
 applyTo: '**/components/**/*.tsx'
 ---
 
-# Coding Standards - Glide
+# Coding Standards - Spar
 
 ## TypeScript Standards
 
@@ -254,7 +254,7 @@ Never export generic names like `Root`, `Item`, `Trigger` from component index f
 #### Simple Components
 
 ```typescript
-// packages/glide/src/components/Button/index.ts
+// packages/spar/src/components/Button/index.ts
 export { Button } from './Button';
 export type { ButtonProps } from './Button.types';
 ```
@@ -262,7 +262,7 @@ export type { ButtonProps } from './Button.types';
 #### Compound/Grouped Components - Dual Export Pattern
 
 ```typescript
-// packages/glide/src/components/Accordion/index.ts
+// packages/spar/src/components/Accordion/index.ts
 import { Accordion } from './Accordion';
 import { AccordionItem } from './AccordionItem';
 import { AccordionHeader } from './AccordionHeader';
@@ -310,18 +310,18 @@ export type {
 
 // Usage examples:
 // 1. Dot notation (compound): 
-//    import { Accordion } from '@glide/components';
+//    import { Accordion } from '@spar/components';
 //    <Accordion.Root><Accordion.Trigger /></Accordion.Root>
 // 
 // 2. Named imports (tree-shakeable): 
-//    import { AccordionRoot, AccordionTrigger } from '@glide/components';
+//    import { AccordionRoot, AccordionTrigger } from '@spar/components';
 //    <AccordionRoot><AccordionTrigger /></AccordionRoot>
 ```
 
 #### Root Index Exports
 
 ```typescript
-// packages/glide/src/components/index.ts
+// packages/spar/src/components/index.ts
 export * from './Button';
 export * from './Dialog';
 export * from './Accordion';
