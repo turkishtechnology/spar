@@ -67,7 +67,7 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
 | `side` | `'top' | 'right' | 'bottom' | 'left'` | No | `'bottom'` | Preferred placement side |
 | `align` | `'start' | 'center' | 'end'` | No | `'start'` | Alignment on placement side |
-| `sideOffset` | `number` | No | `0` | Offset from trigger |
+| `sideOffset` | `number` | No | `8` | Offset from trigger |
 | `alignOffset` | `number` | No | `0` | Alignment offset |
 | `avoidCollisions` | `boolean` | No | `true` | Automatically adjust position |
 | `collisionBoundary` | `Element | null` | No | `null` | Boundary for collision detection |

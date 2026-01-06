@@ -1,15 +1,15 @@
-import * as React from 'react';
+import type { ElementType, ReactNode, Ref, HTMLAttributes } from 'react';
 import type { Orientation } from '../../types';
 
 /**
  * Props for RadioGroup component
  * @remarks Fully accessible, headless radio group component
  */
-export interface RadioGroupProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   /**
    * Ref forwarded to the root element
    */
-  ref?: React.Ref<HTMLDivElement>;
+  ref?: Ref<HTMLDivElement>;
   /**
    * Controlled value of selected radio item
    */
@@ -76,12 +76,12 @@ export interface RadioGroupProps extends Omit<React.HTMLAttributes<HTMLDivElemen
    * Polymorphic root element
    * @defaultValue 'div'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 
   /**
    * Radio.Item components
    */
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 /**
@@ -93,7 +93,7 @@ export interface RadioItemProps
   /**
    * Ref forwarded to the root element
    */
-  ref?: React.Ref<HTMLLabelElement>;
+  ref?: Ref<HTMLLabelElement>;
   /**
    * Unique value for this radio item
    */
@@ -119,12 +119,12 @@ export interface RadioItemProps
    * Polymorphic root element
    * @defaultValue 'label'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 
   /**
    * Label content for the radio item
    */
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 /**

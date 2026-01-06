@@ -1,5 +1,4 @@
-import type React from 'react';
-import type { RefObject } from 'react';
+import type { ElementType, HTMLAttributes, ButtonHTMLAttributes, RefObject } from 'react';
 import type { Direction, Orientation } from '../../types';
 
 export type TabsActivationMode = 'automatic' | 'manual';
@@ -7,7 +6,7 @@ export type TabsActivationMode = 'automatic' | 'manual';
 /**
  * Props for Tabs root component
  */
-export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface TabsProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Controlled selected tab value
    */
@@ -46,13 +45,13 @@ export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 }
 
 /**
  * Props for TabsList component
  */
-export interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface TabsListProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Whether arrow key navigation wraps around
    * @defaultValue true
@@ -63,13 +62,13 @@ export interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 }
 
 /**
  * Props for TabsTrigger component
  */
-export interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface TabsTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * Unique identifier for the tab
    */
@@ -91,13 +90,13 @@ export interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonE
    * Polymorphic component type
    * @defaultValue 'button'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 }
 
 /**
  * Props for TabsContent component
  */
-export interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface TabsContentProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Unique identifier matching a TabsTrigger value
    */
@@ -113,7 +112,7 @@ export interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 }
 
 /**

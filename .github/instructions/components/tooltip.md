@@ -63,7 +63,7 @@
 | `alignOffset` | `number` | No | `0` | Offset for alignment |
 | `avoidCollisions` | `boolean` | No | `true` | Whether to avoid viewport collisions |
 | `collisionBoundary` | `Element \| Element[]` | No | - | Collision boundary elements |
-| `collisionPadding` | `number \| Partial<Record<Side, number>>` | No | `10` | Padding for collision detection |
+| `collisionPadding` | `number \| Partial<Record<Side, number>>` | No | `8` | Padding for collision detection |
 | `sticky` | `'partial' \| 'always'` | No | `'partial'` | Sticky behavior during scroll |
 | `hideWhenDetached` | `boolean` | No | `false` | Hide when trigger becomes detached |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Escape key handler |

@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode } from 'react';
+import type { ElementType, ReactNode, HTMLAttributes, Ref } from 'react';
 
 /**
  * Input context state
@@ -17,7 +17,7 @@ export interface InputContextValue {
  * Props for Input.Root
  * @remarks Provides state context for compound input elements
  */
-export interface InputRootProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface InputRootProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Input validation state
    * @defaultValue false
@@ -78,14 +78,14 @@ export interface InputLabelProps extends React.LabelHTMLAttributes<HTMLLabelElem
   /**
    * Ref for the label element
    */
-  ref?: React.Ref<HTMLLabelElement>;
+  ref?: Ref<HTMLLabelElement>;
 }
 
 /**
  * Props for Input.Description
  * @remarks Helper text element for additional input guidance
  */
-export interface InputDescriptionProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface InputDescriptionProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Description content
    */
@@ -94,14 +94,14 @@ export interface InputDescriptionProps extends React.HTMLAttributes<HTMLDivEleme
   /**
    * Ref for the description element
    */
-  ref?: React.Ref<HTMLDivElement>;
+  ref?: Ref<HTMLDivElement>;
 }
 
 /**
  * Props for Input.ErrorMessage
  * @remarks Error announcement element with automatic ARIA handling
  */
-export interface InputErrorMessageProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface InputErrorMessageProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Error content
    */
@@ -110,5 +110,5 @@ export interface InputErrorMessageProps extends React.HTMLAttributes<HTMLDivElem
   /**
    * Ref for the error element
    */
-  ref?: React.Ref<HTMLDivElement>;
+  ref?: Ref<HTMLDivElement>;
 }

@@ -38,7 +38,7 @@ export const TooltipContent = ({
   alignOffset = 0,
   avoidCollisions = true,
   collisionBoundary,
-  collisionPadding = 10,
+  collisionPadding = 8,
   hideWhenDetached = false,
   onEscapeKeyDown,
   ...props
@@ -93,7 +93,7 @@ export const TooltipContent = ({
           maxHeight: `${availableHeight}px`,
         });
       },
-      padding: typeof collisionPadding === 'number' ? collisionPadding : 10,
+      padding: typeof collisionPadding === 'number' ? collisionPadding : 8,
     }),
   );
 
