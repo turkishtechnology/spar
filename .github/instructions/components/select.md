@@ -110,12 +110,12 @@ The dropdown container that appears when open.
 |------|------|----------|---------|-------------|
 | `position` | `'item-aligned' \| 'popper'` | No | `'item-aligned'` | Positioning strategy |
 | `side` | `'top' \| 'right' \| 'bottom' \| 'left'` | No | `'bottom'` | Preferred placement side (popper only) |
-| `sideOffset` | `number` | No | `0` | Distance from trigger (popper only) |
+| `sideOffset` | `number` | No | `8` | Distance from trigger in pixels |
 | `align` | `'start' \| 'center' \| 'end'` | No | `'start'` | Alignment relative to trigger |
 | `alignOffset` | `number` | No | `0` | Alignment offset in pixels |
 | `avoidCollisions` | `boolean` | No | `true` | Adjust position to avoid viewport edges |
 | `collisionBoundary` | `Element \| Element[]` | No | `[]` | Boundaries for collision detection |
-| `collisionPadding` | `number \| Padding` | No | `10` | Padding for collision detection |
+| `collisionPadding` | `number \| Padding` | No | `8` | Padding from boundary edges (in pixels) |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Escape key handler |
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | - | Outside click handler |
 | `onCloseAutoFocus` | `(event: FocusEvent) => void` | No | - | Focus handler on close |

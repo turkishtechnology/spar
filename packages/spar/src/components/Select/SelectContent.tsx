@@ -21,9 +21,9 @@ export const SelectContent = ({
   placement = 'bottom-start',
   strategy = 'absolute',
   middleware: customMiddleware,
-  offset = 5,
+  sideOffset = 8,
   shift = true,
-  shiftPadding = 5,
+  collisionPadding = 8,
   flip = true,
   hide = false,
   size = true,
@@ -49,7 +49,7 @@ export const SelectContent = ({
     const middlewares = [];
 
     // Offset from trigger
-    middlewares.push(offsetMiddleware(offset));
+    middlewares.push(offsetMiddleware(sideOffset));
 
     // Flip to opposite side when no space
     if (flip) {
@@ -58,7 +58,7 @@ export const SelectContent = ({
 
     // Shift to stay in view
     if (shift) {
-      middlewares.push(shiftMiddleware({ padding: shiftPadding }));
+      middlewares.push(shiftMiddleware({ padding: collisionPadding }));
     }
 
     // Size to fit available space
@@ -86,7 +86,7 @@ export const SelectContent = ({
     }
 
     return middlewares;
-  }, [customMiddleware, offset, flip, shift, shiftPadding, size, hide, arrowRef]);
+  }, [customMiddleware, sideOffset, flip, shift, collisionPadding, size, hide, arrowRef]);
 
   // Use Floating UI hook for positioning
   const {

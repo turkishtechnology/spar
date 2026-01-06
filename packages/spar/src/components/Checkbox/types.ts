@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode } from 'react';
+import type { ElementType, ReactNode, HTMLAttributes, Ref } from 'react';
 import type { CheckedState } from '../../types';
 
 /**
@@ -32,7 +32,7 @@ export interface CheckboxRenderProps {
  * @remarks Fully accessible, headless checkbox component
  */
 export interface CheckboxProps
-  extends Omit<React.HTMLAttributes<HTMLElement>, 'defaultChecked' | 'children' | 'onChange'> {
+  extends Omit<HTMLAttributes<HTMLElement>, 'defaultChecked' | 'children' | 'onChange'> {
   /**
    * The element or component to render as
    * @defaultValue 'span'
@@ -42,7 +42,7 @@ export interface CheckboxProps
   /**
    * Ref to the underlying DOM element
    */
-  ref?: React.Ref<HTMLElement>;
+  ref?: Ref<HTMLElement>;
 
   /**
    * Controlled checked state. When provided, component becomes controlled

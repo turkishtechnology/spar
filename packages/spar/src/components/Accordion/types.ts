@@ -1,4 +1,4 @@
-import type React from 'react';
+import type { ElementType, ReactNode, HTMLAttributes, ButtonHTMLAttributes } from 'react';
 import type { Orientation } from '../../types';
 
 export type AccordionType = 'single' | 'multiple';
@@ -7,7 +7,7 @@ export type AccordionType = 'single' | 'multiple';
  * Props for Accordion root component
  * @remarks Fully accessible, headless component
  */
-export interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Single panel or multiple panels can be expanded
    * @defaultValue 'single'
@@ -51,19 +51,19 @@ export interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 
   /**
    * AccordionItem components
    */
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 /**
  * Props for AccordionItem component
  * @remarks Individual item within accordion
  */
-export interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface AccordionItemProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Unique identifier for the item
    */
@@ -79,19 +79,19 @@ export interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement>
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 
   /**
    * AccordionHeader and AccordionContent components
    */
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 /**
  * Props for AccordionHeader component
  * @remarks Semantic heading wrapper for trigger
  */
-export interface AccordionHeaderProps extends React.HTMLAttributes<HTMLHeadingElement> {
+export interface AccordionHeaderProps extends HTMLAttributes<HTMLHeadingElement> {
   /**
    * Heading level (1-6) for document hierarchy
    * @defaultValue 3
@@ -102,36 +102,36 @@ export interface AccordionHeaderProps extends React.HTMLAttributes<HTMLHeadingEl
    * Polymorphic component type (heading element)
    * @defaultValue 'h3'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 
   /**
    * AccordionTrigger component
    */
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 /**
  * Props for AccordionTrigger component
  * @remarks Button that toggles panel visibility
  */
-export interface AccordionTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface AccordionTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * Polymorphic component type
    * @defaultValue 'button'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 
   /**
    * Trigger content (heading text)
    */
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 /**
  * Props for AccordionContent component
  * @remarks Collapsible panel content
  */
-export interface AccordionContentProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface AccordionContentProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Force content to remain mounted when collapsed
    * @defaultValue false
@@ -142,12 +142,12 @@ export interface AccordionContentProps extends React.HTMLAttributes<HTMLDivEleme
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 
   /**
    * Panel content
    */
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 // Internal context types

@@ -1,4 +1,11 @@
-import type { ReactNode } from 'react';
+import type {
+  ReactNode,
+  Ref,
+  RefObject,
+  CSSProperties,
+  ButtonHTMLAttributes,
+  HTMLAttributes,
+} from 'react';
 
 export type PopoverSide = 'top' | 'bottom' | 'left' | 'right';
 export type PopoverAlign = 'start' | 'center' | 'end';
@@ -58,7 +65,7 @@ export interface PopoverRootProps {
  * Props for PopoverTrigger component
  * @remarks Fully accessible, headless popover trigger
  */
-export interface PopoverTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface PopoverTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * Whether to render as child element instead of button
    * @defaultValue false
@@ -74,14 +81,14 @@ export interface PopoverTriggerProps extends React.ButtonHTMLAttributes<HTMLButt
   /**
    * Ref to the trigger element
    */
-  ref?: React.Ref<HTMLButtonElement>;
+  ref?: Ref<HTMLButtonElement>;
 }
 
 /**
  * Props for PopoverContent component
  * @remarks Fully accessible, headless popover content container
  */
-export interface PopoverContentProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface PopoverContentProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Side of trigger to position against
    * @defaultValue 'bottom'
@@ -162,14 +169,14 @@ export interface PopoverContentProps extends React.HTMLAttributes<HTMLDivElement
   /**
    * Ref to the content element
    */
-  ref?: React.Ref<HTMLDivElement>;
+  ref?: Ref<HTMLDivElement>;
 }
 
 /**
  * Props for PopoverArrow component
  * @remarks Purely decorative arrow element
  */
-export interface PopoverArrowProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface PopoverArrowProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Arrow width in pixels
    * @defaultValue 10
@@ -191,14 +198,14 @@ export interface PopoverArrowProps extends React.HTMLAttributes<HTMLDivElement> 
   /**
    * Ref to the arrow element
    */
-  ref?: React.Ref<HTMLDivElement>;
+  ref?: Ref<HTMLDivElement>;
 }
 
 /**
  * Props for PopoverAnchor component
  * @remarks Element used as positioning reference instead of trigger
  */
-export interface PopoverAnchorProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface PopoverAnchorProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Whether to render as child element instead of div
    * @defaultValue false
@@ -208,7 +215,7 @@ export interface PopoverAnchorProps extends React.HTMLAttributes<HTMLDivElement>
   /**
    * Ref to the anchor element
    */
-  ref?: React.Ref<HTMLDivElement>;
+  ref?: Ref<HTMLDivElement>;
 }
 
 /**
@@ -232,7 +239,7 @@ export interface PopoverPortalProps {
  * Props for PopoverClose component
  * @remarks Close trigger that automatically closes the popover
  */
-export interface PopoverCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface PopoverCloseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * Whether to render as child element instead of button
    * @defaultValue false
@@ -242,7 +249,7 @@ export interface PopoverCloseProps extends React.ButtonHTMLAttributes<HTMLButton
   /**
    * Ref to the close element
    */
-  ref?: React.Ref<HTMLButtonElement>;
+  ref?: Ref<HTMLButtonElement>;
 }
 
 /**
@@ -268,11 +275,11 @@ export interface PopoverState {
  */
 export interface PopoverContextValue {
   state: PopoverState;
-  triggerRef: React.RefObject<HTMLElement | null>;
-  contentRef: React.RefObject<HTMLDivElement | null>;
-  anchorRef: React.RefObject<HTMLElement | null>;
-  arrowRef: React.RefObject<HTMLDivElement | null>;
-  floatingStyles: React.CSSProperties;
+  triggerRef: RefObject<HTMLElement | null>;
+  contentRef: RefObject<HTMLDivElement | null>;
+  anchorRef: RefObject<HTMLElement | null>;
+  arrowRef: RefObject<HTMLDivElement | null>;
+  floatingStyles: CSSProperties;
   modal: boolean;
   side: PopoverSide;
   align: PopoverAlign;

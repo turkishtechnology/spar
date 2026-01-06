@@ -51,7 +51,7 @@ export const DropdownMenuContent = ({
   as: Component = 'div',
   side: sideProp,
   align = 'start',
-  sideOffset = 0,
+  sideOffset = 8,
   alignOffset = 0,
   avoidCollisions = true,
   collisionBoundary = null,
