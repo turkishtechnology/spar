@@ -692,7 +692,7 @@ describe('DropdownMenu', () => {
 
       const item = screen.getByRole('menuitemcheckbox');
       expect(item).toHaveAttribute('aria-checked', 'true');
-      expect(item).toHaveAttribute('data-checked', 'true');
+      expect(item).toHaveAttribute('data-checked', '');
     });
 
     it('should handle indeterminate state', () => {
@@ -709,7 +709,7 @@ describe('DropdownMenu', () => {
 
       const item = screen.getByRole('menuitemcheckbox');
       expect(item).toHaveAttribute('aria-checked', 'mixed');
-      expect(item).toHaveAttribute('data-checked', 'indeterminate');
+      expect(item).toHaveAttribute('data-indeterminate', '');
     });
 
     it('should toggle checked state on selection', async () => {
@@ -810,7 +810,7 @@ describe('DropdownMenu', () => {
       const radioItems = screen.getAllByRole('menuitemradio');
       expect(radioItems[0]).toHaveAttribute('aria-checked', 'false');
       expect(radioItems[1]).toHaveAttribute('aria-checked', 'true');
-      expect(radioItems[1]).toHaveAttribute('data-checked', 'true');
+      expect(radioItems[1]).toHaveAttribute('data-checked', '');
     });
 
     it('should change value on radio item selection', async () => {

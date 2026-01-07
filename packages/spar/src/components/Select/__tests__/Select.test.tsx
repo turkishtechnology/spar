@@ -50,7 +50,8 @@ describe('Select', () => {
 
         const trigger = screen.getByRole('combobox');
         expect(trigger).toBeDisabled();
-        expect(trigger).toHaveAttribute('aria-disabled', 'true');
+        // Native button uses disabled attribute, not aria-disabled
+        expect(trigger).not.toHaveAttribute('aria-disabled');
       });
 
       it('renders required state correctly', () => {

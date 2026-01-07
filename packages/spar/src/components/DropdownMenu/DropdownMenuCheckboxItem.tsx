@@ -31,7 +31,7 @@ export const DropdownMenuCheckboxItem = ({
       closeBehavior='persist'
       onSelectImpl={handleSelectImpl}
       aria-checked={mapCheckedStateToAria(checked)}
-      data-checked={mapCheckedStateToDataAttribute(checked)}
+      {...mapCheckedStateToDataAttribute(checked)}
     />
   );
 };

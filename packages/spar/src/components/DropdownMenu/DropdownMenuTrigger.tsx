@@ -85,6 +85,8 @@ export const DropdownMenuTrigger = ({
     [onKeyDown, disabled, handleOpen, menu],
   );
 
+  const isNativeButton = Component === 'button';
+
   const commonProps = {
     ...props,
     id: menu.triggerId,
@@ -92,7 +94,7 @@ export const DropdownMenuTrigger = ({
     'aria-expanded': menu.open,
     'aria-controls': menu.open ? menu.contentId : undefined,
     'data-state': menu.open ? 'open' : 'closed',
-    ...(disabled ? { 'data-disabled': '', 'aria-disabled': true } : {}),
+    ...(disabled ? { 'data-disabled': '' } : {}),
     onClick: handleClick,
     onKeyDown: handleKeyDown,
   };
@@ -108,12 +110,12 @@ export const DropdownMenuTrigger = ({
       onlyChild as ReactElement<Record<string, unknown> & { ref?: Ref<HTMLElement | null> }>,
       {
         ...commonProps,
+        // For asChild, use aria-disabled since we don't control the underlying element
+        ...(disabled ? { 'aria-disabled': true } : {}),
         ref: composeRefs<HTMLElement | null>(childRef, triggerRefCallback),
       },
     );
   }
-
-  const isNativeButton = Component === 'button';
 
   return (
     <Component
@@ -122,6 +124,8 @@ export const DropdownMenuTrigger = ({
       role={isNativeButton ? undefined : 'button'}
       tabIndex={isNativeButton ? commonProps.tabIndex : disabled ? -1 : (commonProps.tabIndex ?? 0)}
       disabled={isNativeButton ? disabled : undefined}
+      // Only add aria-disabled for non-native button elements
+      {...(!isNativeButton && disabled ? { 'aria-disabled': true } : {})}
     >
       {children}
     </Component>

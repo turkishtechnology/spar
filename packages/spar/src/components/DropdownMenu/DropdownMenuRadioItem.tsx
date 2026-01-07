@@ -29,7 +29,7 @@ export const DropdownMenuRadioItem = ({ value, ...props }: DropdownMenuRadioItem
       closeBehavior='persist'
       onSelectImpl={handleSelectImpl}
       aria-checked={checked}
-      data-checked={checked ? 'true' : 'false'}
+      data-checked={checked ? '' : undefined}
     />
   );
 };

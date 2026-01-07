@@ -111,7 +111,6 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
   const switchProps = {
     role: 'switch' as const,
     'aria-checked': checked,
-    ...(disabled && { 'aria-disabled': true }),
     ...(readOnly && { 'aria-readonly': true }),
     'data-switch': '' as const,
     'data-state': checked ? ('checked' as const) : ('unchecked' as const),
@@ -207,12 +206,14 @@ export const Switch = ({
         {...safeProps}
         id={id}
         {...(Component === 'button' ? { disabled } : {})}
+        {...(Component !== 'button' && disabled ? { 'aria-disabled': true } : {})}
         autoFocus={shouldAutoFocus}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}
         className={className}
         style={style}
+        {...(required && { 'aria-required': true })}
         {...(required && { 'data-required': '' })}
         {...(Component === 'button' ? { type: 'button' } : {})}
       >

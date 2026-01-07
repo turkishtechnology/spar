@@ -12,7 +12,7 @@ export const BreadcrumbPage = ({ as = 'span', children, ...props }: BreadcrumbPa
       ...props,
       'aria-current': 'page',
       'data-spar-breadcrumb-page': '',
-      'data-current': 'true',
+      'data-current': '',
     },
     children,
   );

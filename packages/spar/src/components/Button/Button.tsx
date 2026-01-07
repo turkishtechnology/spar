@@ -92,10 +92,10 @@ export const Button = ({
   // Memoize data attributes to prevent object recreation
   const dataAttributes = useMemo(
     () => ({
-      'data-disabled': disabled ? 'true' : undefined,
-      'data-loading': isLoading ? 'true' : undefined,
+      'data-disabled': disabled ? '' : undefined,
+      'data-loading': isLoading ? '' : undefined,
       'data-pressed': isToggle ? String(currentPressed) : undefined,
-      'data-autofocus': shouldAutoFocus ? 'true' : undefined,
+      'data-autofocus': shouldAutoFocus ? '' : undefined,
     }),
     [disabled, isLoading, isToggle, currentPressed, shouldAutoFocus],
   );
@@ -114,13 +114,14 @@ export const Button = ({
       attrs['aria-busy'] = true;
     }
 
-    // Disabled state
-    if (disabled) {
+    // Disabled state - only add aria-disabled for non-native button elements
+    // Native buttons already communicate disabled state via the disabled attribute
+    if (disabled && Element !== 'button') {
       attrs['aria-disabled'] = true;
     }
 
     return attrs;
-  }, [isToggle, currentPressed, isLoading, disabled]);
+  }, [isToggle, currentPressed, isLoading, disabled, Element]);
 
   // Build props for the element
   const elementProps: Record<string, unknown> = {

@@ -94,24 +94,30 @@ export const AccordionTrigger = ({
     [accordionContext, itemContext, disabled, onToggle, onKeyDown],
   );
 
-  return (
-    <Component
-      {...props}
-      id={triggerId}
-      type={Component === 'button' ? 'button' : undefined}
-      aria-expanded={isExpanded}
-      aria-controls={contentId}
-      disabled={disabled}
-      data-state={isExpanded ? 'open' : 'closed'}
-      data-accordion-trigger=''
-      data-value={itemContext.value}
-      {...(disabled && { 'data-disabled': '' })}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-    >
-      {children}
-    </Component>
-  );
+  // Common props for all component types
+  const isButton = Component === 'button';
+  const triggerProps = {
+    ...props,
+    id: triggerId,
+    'aria-expanded': isExpanded,
+    'aria-controls': contentId,
+    'data-state': isExpanded ? 'open' : 'closed',
+    'data-accordion-trigger': '',
+    'data-value': itemContext.value,
+    ...(disabled && { 'data-disabled': '' }),
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    // Button-specific props
+    ...(isButton && { type: 'button' as const, disabled }),
+    // Non-button props for accessibility
+    ...(!isButton && {
+      role: 'button',
+      'aria-disabled': disabled,
+      tabIndex: disabled ? -1 : 0,
+    }),
+  };
+
+  return <Component {...triggerProps}>{children}</Component>;
 };
 
 AccordionTrigger.displayName = 'AccordionTrigger';

@@ -298,7 +298,7 @@ describe('Checkbox - Accessibility Tests', () => {
 
       // Focus the checkbox
       await user.tab();
-      expect(checkbox).toHaveAttribute('data-focus', 'true');
+      expect(checkbox).toHaveAttribute('data-focus', '');
 
       // Blur the checkbox
       await user.tab();
