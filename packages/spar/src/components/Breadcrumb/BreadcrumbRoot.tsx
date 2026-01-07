@@ -28,7 +28,7 @@ export const BreadcrumbRoot = ({
           'aria-label': ariaLabel,
           'aria-disabled': disabled || undefined,
           'data-spar-breadcrumb-root': '',
-          'data-disabled': disabled || undefined,
+          'data-disabled': disabled ? '' : undefined,
         },
         children,
       )}

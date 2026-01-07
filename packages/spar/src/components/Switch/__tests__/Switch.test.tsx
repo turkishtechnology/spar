@@ -130,10 +130,14 @@ describe('Switch', () => {
       render(<Switch disabled>Toggle me</Switch>);
 
       const switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('aria-disabled', 'true');
+      if (switchElement.tagName === 'BUTTON') {
+        expect(switchElement).toHaveAttribute('disabled');
+        expect(switchElement).not.toHaveAttribute('aria-disabled');
+      } else {
+        expect(switchElement).toHaveAttribute('aria-disabled', 'true');
+      }
       expect(switchElement).toHaveAttribute('data-disabled', '');
       expect(switchElement).toHaveAttribute('tabindex', '-1');
-      expect(switchElement).toHaveAttribute('disabled');
     });
 
     it('should not respond to clicks when disabled', async () => {

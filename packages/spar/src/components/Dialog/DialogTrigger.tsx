@@ -49,22 +49,28 @@ export const DialogTrigger = ({
 
   const dataState = isOpen ? 'open' : 'closed';
 
-  return (
-    <Element
-      ref={mergedRef}
-      type={Element === 'button' ? 'button' : undefined}
-      disabled={disabled}
-      aria-haspopup='dialog'
-      aria-expanded={isOpen}
-      data-state={dataState}
-      data-disabled={disabled ? '' : undefined}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      {...props}
-    >
-      {children}
-    </Element>
-  );
+  // Build props with conditional logic for button vs non-button elements
+  const isButton = Element === 'button';
+  const triggerProps = {
+    ref: mergedRef,
+    'aria-haspopup': 'dialog' as const,
+    'aria-expanded': isOpen,
+    'data-state': dataState,
+    'data-disabled': disabled ? '' : undefined,
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    ...props,
+    // Button-specific props
+    ...(isButton && { type: 'button' as const, disabled }),
+    // Non-button props for accessibility
+    ...(!isButton && {
+      role: 'button',
+      'aria-disabled': disabled,
+      tabIndex: disabled ? -1 : 0,
+    }),
+  };
+
+  return <Element {...triggerProps}>{children}</Element>;
 };
 
 DialogTrigger.displayName = 'DialogTrigger';

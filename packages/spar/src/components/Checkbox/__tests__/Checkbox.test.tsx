@@ -175,7 +175,7 @@ describe('Checkbox - Unit Tests', () => {
       render(<Checkbox checked='indeterminate' />);
       const checkbox = screen.getByRole('checkbox');
 
-      expect(checkbox).toHaveAttribute('data-indeterminate', 'true');
+      expect(checkbox).toHaveAttribute('data-indeterminate', '');
       expect(checkbox).not.toHaveAttribute('data-checked');
     });
   });
@@ -186,7 +186,7 @@ describe('Checkbox - Unit Tests', () => {
       const checkbox = screen.getByRole('checkbox');
 
       expect(checkbox).toHaveAttribute('aria-disabled', 'true');
-      expect(checkbox).toHaveAttribute('data-disabled', 'true');
+      expect(checkbox).toHaveAttribute('data-disabled', '');
       expect(checkbox).toHaveAttribute('tabIndex', '-1');
     });
 
@@ -245,7 +245,7 @@ describe('Checkbox - Unit Tests', () => {
       const checkbox = screen.getByRole('checkbox');
 
       expect(checkbox).toHaveAttribute('aria-required', 'true');
-      expect(checkbox).toHaveAttribute('data-required', 'true');
+      expect(checkbox).toHaveAttribute('data-required', '');
     });
   });
 
@@ -298,7 +298,7 @@ describe('Checkbox - Unit Tests', () => {
       const checkbox = screen.getByRole('checkbox');
 
       await user.tab();
-      expect(checkbox).toHaveAttribute('data-focus', 'true');
+      expect(checkbox).toHaveAttribute('data-focus', '');
 
       await user.tab();
       expect(checkbox).not.toHaveAttribute('data-focus');
@@ -335,7 +335,7 @@ describe('Checkbox - Unit Tests', () => {
       const checkbox = screen.getByRole('checkbox');
 
       await user.hover(checkbox);
-      expect(checkbox).toHaveAttribute('data-hover', 'true');
+      expect(checkbox).toHaveAttribute('data-hover', '');
 
       await user.unhover(checkbox);
       expect(checkbox).not.toHaveAttribute('data-hover');
@@ -418,7 +418,7 @@ describe('Checkbox - Unit Tests', () => {
       render(<Checkbox checked={true} />);
       const checkbox = screen.getByRole('checkbox');
 
-      expect(checkbox).toHaveAttribute('data-checked', 'true');
+      expect(checkbox).toHaveAttribute('data-checked', '');
       expect(checkbox).not.toHaveAttribute('data-indeterminate');
     });
 
@@ -426,9 +426,9 @@ describe('Checkbox - Unit Tests', () => {
       render(<Checkbox disabled required checked={true} />);
       const checkbox = screen.getByRole('checkbox');
 
-      expect(checkbox).toHaveAttribute('data-checked', 'true');
-      expect(checkbox).toHaveAttribute('data-disabled', 'true');
-      expect(checkbox).toHaveAttribute('data-required', 'true');
+      expect(checkbox).toHaveAttribute('data-checked', '');
+      expect(checkbox).toHaveAttribute('data-disabled', '');
+      expect(checkbox).toHaveAttribute('data-required', '');
     });
   });
 

@@ -67,42 +67,42 @@ A headless, fully accessible dropdown component that allows users to choose a si
 }
 
 [data-theme='dark'] .select-trigger {
-  border-color: #2b303b;
-  background: rgba(255, 255, 255, 0.16);
+border-color: #2b303b;
+background: rgba(255, 255, 255, 0.16);
 }
 
 .select-value {
-  color: #222530;
+color: #222530;
 }
 
 [data-theme='dark'] .select-value {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .select-icon {
-  height: 20px;
+height: 20px;
 }
 
 .select-svg {
-  width: 20px;
-  height: 20px;
-  fill: #222530;
+width: 20px;
+height: 20px;
+fill: #222530;
 }
 
 [data-theme='dark'] .select-svg {
-  fill: #f2f5f8;
+fill: #f2f5f8;
 }
 
 .select-content {
-  padding: 4px 8px;
-  border-radius: 5px;
-  border: 1px solid #e1e4ea;
-  background: #ddd;
+padding: 4px 8px;
+border-radius: 5px;
+border: 1px solid #e1e4ea;
+background: #ddd;
 }
 
 [data-theme='dark'] .select-content {
-  border-color: #2b303b;
-  background: #222;
+border-color: #2b303b;
+background: #222;
 }`}
 />
 
@@ -655,7 +655,7 @@ The main container that manages all select state and behavior.
 | `open?`          | `boolean`                 | `undefined` | Controlled open state               |
 | `defaultOpen?`   | `boolean`                 | `false`     | Uncontrolled initial open state     |
 | `onOpenChange?`  | `(open: boolean) => void` | `undefined` | Callback when open state changes    |
-| `disabled?`    | `boolean`                 | `false`     | Disables the entire select          |
+| `disabled?`      | `boolean`                 | `false`     | Disables the entire select          |
 | `required?`      | `boolean`                 | `false`     | Makes the select required for forms |
 | `name?`          | `string`                  | `undefined` | Form field name                     |
 | `dir?`           | `'ltr' \| 'rtl'`          | `'ltr'`     | Reading direction                   |
@@ -696,13 +696,13 @@ The button that toggles the dropdown open and closed.
 
 **ARIA Attributes**
 
-| Attribute       | Value        | Purpose                                 | Applied To                      |
-| --------------- | ------------ | --------------------------------------- | ------------------------------- |
-| `role`          | `"combobox"` | Identifies interactive dropdown trigger | Trigger element                 |
-| `aria-haspopup` | `"listbox"`  | Indicates trigger opens a listbox       | Trigger element                 |
-| `aria-expanded` | `boolean`    | Current open/closed state               | Trigger element                 |
-| `aria-controls` | `string`     | References content element ID           | Trigger element                 |
-| `aria-disabled` | `boolean`    | Disabled state                          | Trigger element (when disabled) |
+| Attribute       | Value        | Purpose                                 | Applied To                                         |
+| --------------- | ------------ | --------------------------------------- | -------------------------------------------------- |
+| `role`          | `"combobox"` | Identifies interactive dropdown trigger | Trigger element                                    |
+| `aria-haspopup` | `"listbox"`  | Indicates trigger opens a listbox       | Trigger element                                    |
+| `aria-expanded` | `boolean`    | Current open/closed state               | Trigger element                                    |
+| `aria-controls` | `string`     | References content element ID           | Trigger element                                    |
+| `aria-disabled` | `boolean`    | Disabled state                          | Trigger element (when disabled + `as != "button"`) |
 
 **Data Attributes**
 
@@ -855,14 +855,14 @@ Individual selectable option within the dropdown.
 
 **Props**
 
-| Name          | Type          | Default     | Description                                         |
-| ------------- | ------------- | ----------- | --------------------------------------------------- |
-| `value`       | `string`      | -           | Option value (required)                             |
-| `disabled?` | `boolean`     | `false`     | Disables the option                                 |
-| `textValue?`  | `string`      | `undefined` | Text for type-ahead (auto-detected if not provided) |
-| `as?`         | `ElementType` | `'div'`     | Polymorphic component type                          |
-| `ref?`        | `RefObject`   | `undefined` | Forward ref support                                 |
-| `children`    | `ReactNode`   | -           | Item content                                        |
+| Name         | Type          | Default     | Description                                         |
+| ------------ | ------------- | ----------- | --------------------------------------------------- |
+| `value`      | `string`      | -           | Option value (required)                             |
+| `disabled?`  | `boolean`     | `false`     | Disables the option                                 |
+| `textValue?` | `string`      | `undefined` | Text for type-ahead (auto-detected if not provided) |
+| `as?`        | `ElementType` | `'div'`     | Polymorphic component type                          |
+| `ref?`       | `RefObject`   | `undefined` | Forward ref support                                 |
+| `children`   | `ReactNode`   | -           | Item content                                        |
 
 **Events**
 

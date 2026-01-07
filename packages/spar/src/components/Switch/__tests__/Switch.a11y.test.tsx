@@ -95,7 +95,12 @@ describe('Switch Accessibility', () => {
     it('should announce disabled state correctly', () => {
       render(<Switch disabled>Toggle setting</Switch>);
       const switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('aria-disabled', 'true');
+      if (switchElement.tagName === 'BUTTON') {
+        expect(switchElement).toHaveAttribute('disabled');
+        expect(switchElement).not.toHaveAttribute('aria-disabled');
+      } else {
+        expect(switchElement).toHaveAttribute('aria-disabled', 'true');
+      }
     });
 
     it('should announce read-only state correctly', () => {

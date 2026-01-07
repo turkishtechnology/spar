@@ -127,23 +127,25 @@ export const Checkbox = ({
 
   // Data attributes for styling
   const dataAttributes: Record<string, string | undefined> = {
-    'data-checked': checked === true ? 'true' : undefined,
-    'data-indeterminate': checked === 'indeterminate' ? 'true' : undefined,
-    'data-disabled': disabled ? 'true' : undefined,
-    'data-focus': isFocused ? 'true' : undefined,
-    'data-hover': isHovered ? 'true' : undefined,
-    'data-active': isPressed ? 'true' : undefined,
+    'data-checked': checked === true ? '' : undefined,
+    'data-indeterminate': checked === 'indeterminate' ? '' : undefined,
+    'data-disabled': disabled ? '' : undefined,
+    'data-readonly': readOnly ? '' : undefined,
+    'data-focus': isFocused ? '' : undefined,
+    'data-hover': isHovered ? '' : undefined,
+    'data-active': isPressed ? '' : undefined,
     'data-invalid': undefined, // Will be set by validation logic
-    'data-required': required ? 'true' : undefined,
+    'data-required': required ? '' : undefined,
   };
 
   // ARIA attributes
   const ariaAttributes = {
     role: 'checkbox',
     'aria-checked': checked === 'indeterminate' ? 'mixed' : checked,
-    'aria-disabled': disabled ? 'true' : undefined,
+    'aria-disabled': disabled || undefined,
+    'aria-readonly': readOnly || undefined,
     'aria-invalid': undefined, // Will be set by validation logic
-    'aria-required': required ? 'true' : undefined,
+    'aria-required': required || undefined,
     tabIndex: disabled ? -1 : tabIndex,
   };
 

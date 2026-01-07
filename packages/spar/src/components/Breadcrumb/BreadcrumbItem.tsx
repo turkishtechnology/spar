@@ -18,7 +18,7 @@ export const BreadcrumbItem = ({
       ...domProps,
       'data-spar-breadcrumb-item': '',
       'data-position': position,
-      'data-current': isCurrent || undefined,
+      'data-current': isCurrent ? '' : undefined,
     },
     children,
   );

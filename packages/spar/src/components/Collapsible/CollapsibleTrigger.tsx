@@ -38,8 +38,9 @@ export const CollapsibleTrigger = ({
   // Get data attributes for styling
   const dataState = isOpen ? 'open' : 'closed';
 
-  // Common props for all component types
-  const commonProps = {
+  // Build props with conditional logic for button vs non-button elements
+  const isButton = Component === 'button';
+  const triggerProps = {
     id: triggerId,
     'aria-expanded': isOpen,
     'aria-controls': contentId,
@@ -48,29 +49,17 @@ export const CollapsibleTrigger = ({
     onClick: handleClick,
     onKeyDown: handleKeyDown,
     ...props,
+    // Button-specific props
+    ...(isButton && { type: 'button' as const, disabled }),
+    // Non-button props for accessibility
+    ...(!isButton && {
+      role: 'button',
+      'aria-disabled': disabled,
+      tabIndex: disabled ? -1 : 0,
+    }),
   };
 
-  // Handle disabled state based on component type
-  if (Component === 'button') {
-    // Use native disabled attribute for semantic button elements
-    return (
-      <Component type='button' disabled={disabled} {...commonProps}>
-        {children}
-      </Component>
-    );
-  } else {
-    // Use aria-disabled and tabIndex for non-semantic elements
-    return (
-      <Component
-        role='button'
-        aria-disabled={disabled}
-        tabIndex={disabled ? -1 : 0}
-        {...commonProps}
-      >
-        {children}
-      </Component>
-    );
-  }
+  return <Component {...triggerProps}>{children}</Component>;
 };
 
 CollapsibleTrigger.displayName = 'CollapsibleTrigger';
