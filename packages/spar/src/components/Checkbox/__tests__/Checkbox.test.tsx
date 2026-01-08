@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Checkbox } from '../Checkbox';
 
@@ -181,11 +181,20 @@ describe('Checkbox - Unit Tests', () => {
   });
 
   describe('Disabled State', () => {
-    it('renders as disabled when disabled is true', () => {
-      render(<Checkbox disabled />);
+    it('renders as disabled when disabled is true (non-button)', () => {
+      render(<Checkbox as='span' disabled />);
       const checkbox = screen.getByRole('checkbox');
-
       expect(checkbox).toHaveAttribute('aria-disabled', 'true');
+      expect(checkbox).toHaveAttribute('data-disabled', '');
+      expect(checkbox).toHaveAttribute('tabIndex', '-1');
+      expect(checkbox).not.toHaveAttribute('disabled');
+    });
+
+    it('renders as disabled when disabled is true (button)', () => {
+      render(<Checkbox as='button' disabled />);
+      const checkbox = screen.getByRole('checkbox');
+      expect(checkbox).toHaveAttribute('disabled');
+      expect(checkbox).not.toHaveAttribute('aria-disabled');
       expect(checkbox).toHaveAttribute('data-disabled', '');
       expect(checkbox).toHaveAttribute('tabIndex', '-1');
     });
@@ -210,7 +219,9 @@ describe('Checkbox - Unit Tests', () => {
       render(<Checkbox disabled onCheckedChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleChange).not.toHaveBeenCalled();
@@ -257,7 +268,9 @@ describe('Checkbox - Unit Tests', () => {
       render(<Checkbox onCheckedChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleChange).toHaveBeenCalledWith(true);
@@ -270,7 +283,9 @@ describe('Checkbox - Unit Tests', () => {
       render(<Checkbox onCheckedChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard('{Enter}');
 
       expect(handleChange).not.toHaveBeenCalled();
@@ -283,7 +298,9 @@ describe('Checkbox - Unit Tests', () => {
       render(<Checkbox onKeyDown={handleKeyDown} />);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleKeyDown).toHaveBeenCalled();

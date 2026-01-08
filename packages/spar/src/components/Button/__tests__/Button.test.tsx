@@ -69,11 +69,28 @@ describe('Button', () => {
 
   describe('Disabled State', () => {
     it('handles disabled state correctly for native button', () => {
-      render(<Button disabled>Disabled</Button>);
+      render(
+        <Button as='button' disabled>
+          Disabled
+        </Button>,
+      );
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('disabled');
       // Native button uses disabled attribute, not aria-disabled
       expect(button).not.toHaveAttribute('aria-disabled');
+      expect(button).toHaveAttribute('data-disabled', '');
+      expect(button).toHaveAttribute('tabIndex', '-1');
+    });
+
+    it('handles disabled state correctly for non-button', () => {
+      render(
+        <Button as='div' disabled>
+          Disabled
+        </Button>,
+      );
+      const button = screen.getByRole('button');
+      expect(button).not.toHaveAttribute('disabled');
+      expect(button).toHaveAttribute('aria-disabled', 'true');
       expect(button).toHaveAttribute('data-disabled', '');
       expect(button).toHaveAttribute('tabIndex', '-1');
     });

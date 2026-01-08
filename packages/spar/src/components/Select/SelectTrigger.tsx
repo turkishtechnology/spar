@@ -68,7 +68,7 @@ export const SelectTrigger = ({
   return (
     <Component
       ref={context.triggerRef}
-      type='button'
+      type={Component === 'button' ? 'button' : undefined}
       role='combobox'
       aria-haspopup='listbox'
       aria-expanded={context.open}
@@ -76,7 +76,7 @@ export const SelectTrigger = ({
       aria-labelledby={context.valueId}
       aria-disabled={Component !== 'button' ? context.disabled || undefined : undefined}
       aria-required={context.required || undefined}
-      disabled={context.disabled}
+      {...(Component === 'button' ? { disabled: context.disabled } : {})}
       data-state={context.open ? 'open' : 'closed'}
       data-disabled={context.disabled ? '' : undefined}
       data-required={context.required ? '' : undefined}

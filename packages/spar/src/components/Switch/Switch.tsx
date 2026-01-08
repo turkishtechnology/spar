@@ -199,27 +199,39 @@ export const Switch = ({
     ...safeProps
   } = restProps;
 
+  const isNativeButton = Component === 'button';
+  // Remove native disabled/type for non-button
+  const componentProps: Record<string, unknown> = {
+    ...switchProps,
+    ...safeProps,
+    id,
+    autoFocus: shouldAutoFocus,
+    'aria-label': ariaLabel,
+    'aria-labelledby': ariaLabelledBy,
+    'aria-describedby': ariaDescribedBy,
+    className,
+    style,
+    ...(required && { 'aria-required': true }),
+    ...(required && { 'data-required': '' }),
+  };
+  if (isNativeButton) {
+    componentProps['disabled'] = disabled;
+    componentProps['type'] = 'button';
+  } else {
+    componentProps['role'] = 'switch';
+    if (disabled) {
+      componentProps['aria-disabled'] = true;
+    }
+    if ('disabled' in componentProps) {
+      delete componentProps['disabled'];
+    }
+    if ('type' in componentProps) {
+      delete componentProps['type'];
+    }
+  }
   return (
     <>
-      <Component
-        {...switchProps}
-        {...safeProps}
-        id={id}
-        {...(Component === 'button' ? { disabled } : {})}
-        {...(Component !== 'button' && disabled ? { 'aria-disabled': true } : {})}
-        autoFocus={shouldAutoFocus}
-        aria-label={ariaLabel}
-        aria-labelledby={ariaLabelledBy}
-        aria-describedby={ariaDescribedBy}
-        className={className}
-        style={style}
-        {...(required && { 'aria-required': true })}
-        {...(required && { 'data-required': '' })}
-        {...(Component === 'button' ? { type: 'button' } : {})}
-      >
-        {children}
-      </Component>
-
+      <Component {...componentProps}>{children}</Component>
       {name && (
         <input {...hiddenInputProps} name={name} value={value} form={form} required={required} />
       )}

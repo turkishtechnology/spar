@@ -74,10 +74,14 @@ export const PopoverTrigger = ({
   );
 
   if (asChild && isValidElement(children)) {
-    // For asChild, use aria-disabled for non-button elements
+    const childType = (children as React.ReactElement).type;
+    let isButton = false;
+    if (typeof childType === 'string') {
+      isButton = childType.toLowerCase() === 'button';
+    }
     const asChildProps = {
       ...triggerProps,
-      'aria-disabled': disabled || undefined,
+      ...(isButton ? { disabled } : disabled ? { 'aria-disabled': true } : {}),
       tabIndex: disabled ? -1 : 0,
     };
     return cloneElement(children, asChildProps);

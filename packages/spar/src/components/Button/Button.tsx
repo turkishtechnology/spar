@@ -124,27 +124,38 @@ export const Button = ({
   }, [isToggle, currentPressed, isLoading, disabled, Element]);
 
   // Build props for the element
+  const isNativeButton = Element === 'button';
   const elementProps: Record<string, unknown> = {
     ref,
     className,
     style,
     onClick: handleClick,
     onKeyDown: handleKeyDown,
-    tabIndex: disabled ? -1 : 0,
+    tabIndex: isNativeButton ? (disabled ? -1 : 0) : disabled ? -1 : 0,
     ...dataAttributes,
     ...ariaAttributes,
     ...htmlProps,
   };
 
   // Add button-specific props when rendering as button
-  if (Element === 'button') {
+  if (isNativeButton) {
     (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).type = type;
     (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = disabled;
   }
 
-  // Add role when not rendering as button
-  if (Element !== 'button') {
+  // Add role and aria-disabled when not rendering as button
+  if (!isNativeButton) {
     elementProps.role = 'button';
+    if (disabled) {
+      elementProps['aria-disabled'] = true;
+    }
+    // Remove native disabled and type if present, using Record<string, unknown>
+    if ('disabled' in elementProps) {
+      delete elementProps['disabled'];
+    }
+    if ('type' in elementProps) {
+      delete elementProps['type'];
+    }
   }
 
   return <Element {...elementProps}>{children}</Element>;

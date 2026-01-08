@@ -1,9 +1,22 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Switch } from '../Switch';
 
 describe('Switch Integration', () => {
+  // Shim for requestSubmit in JSDOM
+  beforeAll(() => {
+    Object.defineProperty(HTMLFormElement.prototype, 'requestSubmit', {
+      writable: true,
+      configurable: true,
+      value: function () {
+        if (this.checkValidity()) {
+          this.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        }
+      },
+    });
+  });
+
   describe('Form integration workflows', () => {
     it('should work in a complete form submission flow', async () => {
       const user = userEvent.setup();
@@ -304,7 +317,9 @@ describe('Switch Integration', () => {
       expect(handleChange).toHaveBeenLastCalledWith(true);
 
       // Then keyboard
-      switchElement.focus();
+      act(() => {
+        switchElement.focus();
+      });
       await user.keyboard(' ');
       expect(handleChange).toHaveBeenLastCalledWith(false);
 
@@ -361,7 +376,7 @@ describe('Switch Integration', () => {
 
       // Make disabled
       await user.click(disabledButton);
-      expect(switchElement).toHaveAttribute('aria-disabled', 'true');
+      expect(switchElement).toBeDisabled();
       expect(switchElement).toHaveAttribute('data-disabled', '');
 
       // Try to interact while disabled (should not work)
@@ -374,7 +389,7 @@ describe('Switch Integration', () => {
 
       expect(switchElement).toHaveAttribute('aria-readonly', 'true');
       expect(switchElement).toHaveAttribute('data-readonly', '');
-      expect(switchElement).not.toHaveAttribute('aria-disabled');
+      expect(switchElement).toBeEnabled();
 
       // Try to interact while read-only (should not work)
       await user.click(switchElement);

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import userEvent from '@testing-library/user-event';
 import { Switch } from '../Switch';
@@ -161,7 +161,9 @@ describe('Switch Accessibility', () => {
       const switchElement = screen.getByRole('switch');
       const afterButton = screen.getByRole('button', { name: 'After' });
 
-      beforeButton.focus();
+      act(() => {
+        beforeButton.focus();
+      });
       await user.tab();
       expect(switchElement).toHaveFocus();
 
@@ -183,7 +185,9 @@ describe('Switch Accessibility', () => {
       const switchElement = screen.getByRole('switch');
       const afterButton = screen.getByRole('button', { name: 'After' });
 
-      afterButton.focus();
+      act(() => {
+        afterButton.focus();
+      });
       await user.tab({ shift: true });
       expect(switchElement).toHaveFocus();
 
@@ -210,7 +214,9 @@ describe('Switch Accessibility', () => {
       render(<Switch onCheckedChange={handleChange}>Toggle setting</Switch>);
 
       const switchElement = screen.getByRole('switch');
-      switchElement.focus();
+      act(() => {
+        switchElement.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleChange).toHaveBeenCalledWith(true);
@@ -223,7 +229,9 @@ describe('Switch Accessibility', () => {
       render(<Switch onCheckedChange={handleChange}>Toggle setting</Switch>);
 
       const switchElement = screen.getByRole('switch');
-      switchElement.focus();
+      act(() => {
+        switchElement.focus();
+      });
       await user.keyboard('{Enter}');
 
       expect(handleChange).toHaveBeenCalledWith(true);
@@ -236,7 +244,9 @@ describe('Switch Accessibility', () => {
       render(<Switch onCheckedChange={handleChange}>Toggle setting</Switch>);
 
       const switchElement = screen.getByRole('switch');
-      switchElement.focus();
+      act(() => {
+        switchElement.focus();
+      });
       await user.keyboard('{ArrowUp}');
       await user.keyboard('{ArrowDown}');
       await user.keyboard('{ArrowLeft}');
@@ -261,7 +271,9 @@ describe('Switch Accessibility', () => {
       );
 
       const switchElement = screen.getByRole('switch');
-      switchElement.focus();
+      act(() => {
+        switchElement.focus();
+      });
       await user.keyboard(' ');
       await user.keyboard('{Enter}');
 
@@ -279,7 +291,9 @@ describe('Switch Accessibility', () => {
       );
 
       const switchElement = screen.getByRole('switch');
-      switchElement.focus();
+      act(() => {
+        switchElement.focus();
+      });
       await user.keyboard(' ');
       await user.keyboard('{Enter}');
 
@@ -400,7 +414,7 @@ describe('Switch Accessibility', () => {
     it('should announce disabled state', () => {
       render(<Switch disabled>Toggle setting</Switch>);
       const switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('aria-disabled', 'true');
+      expect(switchElement).toBeDisabled();
     });
 
     it('should announce read-only state', () => {

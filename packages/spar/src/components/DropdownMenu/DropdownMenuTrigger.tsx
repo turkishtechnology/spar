@@ -104,14 +104,17 @@ export const DropdownMenuTrigger = ({
     if (!isValidElement(onlyChild)) {
       throw new Error('DropdownMenuTrigger with asChild expects a single React element child');
     }
+    const childType = (onlyChild as ReactElement).type;
+    let isButton = false;
+    if (typeof childType === 'string') {
+      isButton = childType.toLowerCase() === 'button';
+    }
     const childRef = (onlyChild as { ref?: Ref<HTMLElement | null> }).ref;
-
     return cloneElement<Record<string, unknown> & { ref?: Ref<HTMLElement | null> }>(
       onlyChild as ReactElement<Record<string, unknown> & { ref?: Ref<HTMLElement | null> }>,
       {
         ...commonProps,
-        // For asChild, use aria-disabled since we don't control the underlying element
-        ...(disabled ? { 'aria-disabled': true } : {}),
+        ...(isButton ? { disabled } : disabled ? { 'aria-disabled': true } : {}),
         ref: composeRefs<HTMLElement | null>(childRef, triggerRefCallback),
       },
     );
@@ -124,7 +127,6 @@ export const DropdownMenuTrigger = ({
       role={isNativeButton ? undefined : 'button'}
       tabIndex={isNativeButton ? commonProps.tabIndex : disabled ? -1 : (commonProps.tabIndex ?? 0)}
       disabled={isNativeButton ? disabled : undefined}
-      // Only add aria-disabled for non-native button elements
       {...(!isNativeButton && disabled ? { 'aria-disabled': true } : {})}
     >
       {children}
