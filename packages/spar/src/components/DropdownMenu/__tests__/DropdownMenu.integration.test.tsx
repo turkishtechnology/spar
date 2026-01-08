@@ -18,6 +18,16 @@ import {
 } from '../';
 
 describe('DropdownMenu Integration', () => {
+  beforeAll(() => {
+    if (!HTMLFormElement.prototype.requestSubmit) {
+      HTMLFormElement.prototype.requestSubmit = function () {
+        if (this.checkValidity()) {
+          this.submit();
+        }
+      };
+    }
+  });
+
   describe('Real-world User Workflows', () => {
     it('should handle complete file menu workflow', async () => {
       const onNewFile = jest.fn();

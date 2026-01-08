@@ -138,17 +138,6 @@ export const Checkbox = ({
     'data-required': required ? '' : undefined,
   };
 
-  // ARIA attributes
-  const ariaAttributes = {
-    role: 'checkbox',
-    'aria-checked': checked === 'indeterminate' ? 'mixed' : checked,
-    'aria-disabled': disabled || undefined,
-    'aria-readonly': readOnly || undefined,
-    'aria-invalid': undefined, // Will be set by validation logic
-    'aria-required': required || undefined,
-    tabIndex: disabled ? -1 : tabIndex,
-  };
-
   // Render props for children function
   const renderProps: CheckboxRenderProps = {
     checked,
@@ -158,26 +147,56 @@ export const Checkbox = ({
     isPressed,
   };
 
-  // Extract known props to avoid spreading to DOM
+  // Build props for the element
+  const isNativeButton = Component === 'button';
+  const elementProps: Record<string, unknown> = {
+    ref,
+    id,
+    className,
+    style,
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    onFocus: handleFocus,
+    onBlur: handleBlur,
+    onMouseEnter: handleMouseEnter,
+    onMouseLeave: handleMouseLeave,
+    onMouseDown: handleMouseDown,
+    onMouseUp: handleMouseUp,
+    ...dataAttributes,
+    ...restProps,
+    tabIndex: disabled ? -1 : tabIndex,
+  };
+  if (isNativeButton) {
+    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = disabled;
+    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).type = 'button';
+    elementProps['role'] = 'checkbox';
+    elementProps['aria-checked'] = checked === 'indeterminate' ? 'mixed' : checked;
+    elementProps['aria-readonly'] = readOnly || undefined;
+    elementProps['aria-invalid'] = undefined;
+    elementProps['aria-required'] = required || undefined;
+    // Remove aria-disabled for native button
+    if ('aria-disabled' in elementProps) {
+      delete elementProps['aria-disabled'];
+    }
+  } else {
+    elementProps['role'] = 'checkbox';
+    elementProps['aria-checked'] = checked === 'indeterminate' ? 'mixed' : checked;
+    elementProps['aria-disabled'] = disabled || undefined;
+    elementProps['aria-readonly'] = readOnly || undefined;
+    elementProps['aria-invalid'] = undefined;
+    elementProps['aria-required'] = required || undefined;
+    // Remove native disabled/type if present
+    if ('disabled' in elementProps) {
+      delete elementProps['disabled'];
+    }
+    if ('type' in elementProps) {
+      delete elementProps['type'];
+    }
+  }
+
   return (
     <>
-      <Component
-        ref={ref}
-        id={id}
-        className={className}
-        style={style}
-        onClick={handleClick}
-        onKeyDown={handleKeyDown}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        {...ariaAttributes}
-        {...dataAttributes}
-        {...restProps}
-      >
+      <Component {...elementProps}>
         {typeof children === 'function' ? children(renderProps) : children}
       </Component>
 

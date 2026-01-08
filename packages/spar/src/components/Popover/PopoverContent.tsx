@@ -66,9 +66,11 @@ export const PopoverContent = ({
 
     return () => {
       // Return focus to trigger when closing
-      if (triggerRef.current) {
+      const event = new Event('closeautofocus', { cancelable: true });
+      onCloseAutoFocus?.(event);
+
+      if (!event.defaultPrevented && triggerRef.current) {
         (triggerRef.current as HTMLElement).focus();
-        onCloseAutoFocus?.(new Event('closeautofocus'));
       }
     };
   }, [state.isOpen, onOpenAutoFocus, onCloseAutoFocus, contentRef, triggerRef]);
