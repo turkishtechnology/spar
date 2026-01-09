@@ -61,7 +61,7 @@ describe('Breadcrumb Components', () => {
 
     it('applies disabled state', () => {
       render(
-        <BreadcrumbRoot isDisabled>
+        <BreadcrumbRoot disabled>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -287,7 +287,7 @@ describe('Breadcrumb Components', () => {
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/home' isDisabled>
+              <BreadcrumbLink href='/home' disabled>
                 Home
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -305,7 +305,7 @@ describe('Breadcrumb Components', () => {
 
     it('handles disabled state from root context', () => {
       render(
-        <BreadcrumbRoot isDisabled>
+        <BreadcrumbRoot disabled>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -408,7 +408,7 @@ describe('Breadcrumb Components', () => {
         <BreadcrumbRoot>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/home' isDisabled onClick={handleClick}>
+              <BreadcrumbLink href='/home' disabled onClick={handleClick}>
                 Home
               </BreadcrumbLink>
             </BreadcrumbItem>

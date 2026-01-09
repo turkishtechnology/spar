@@ -23,20 +23,20 @@ expect.extend(toHaveNoViolations);
 
 // Test component setup
 const DialogTestComponent = ({
-  isOpen,
+  open,
   onOpenChange,
   modal = true,
   trapFocus = true,
   restoreFocus = true,
 }: {
-  isOpen?: boolean;
+  open?: boolean;
   onOpenChange?: (open: boolean) => void;
   modal?: boolean;
   trapFocus?: boolean;
   restoreFocus?: boolean;
 }) => (
   <DialogRoot
-    {...(isOpen !== undefined && { isOpen })}
+    {...(open !== undefined && { open })}
     {...(onOpenChange !== undefined && { onOpenChange })}
     modal={modal}
   >
@@ -83,7 +83,7 @@ describe('Dialog Accessibility', () => {
     });
 
     it('should pass axe accessibility checks when open', async () => {
-      const { container } = render(<DialogTestComponent isOpen={true} />);
+      const { container } = render(<DialogTestComponent open={true} />);
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
@@ -127,7 +127,7 @@ describe('Dialog Accessibility', () => {
     });
 
     it('should have proper ARIA attributes on dialog content', async () => {
-      render(<DialogTestComponent isOpen={true} />);
+      render(<DialogTestComponent open={true} />);
 
       await waitFor(() => {
         const dialog = screen.getByRole('dialog');
@@ -137,7 +137,7 @@ describe('Dialog Accessibility', () => {
     });
 
     it('should properly associate title and description with dialog', async () => {
-      render(<DialogTestComponent isOpen={true} />);
+      render(<DialogTestComponent open={true} />);
 
       await waitFor(() => {
         const dialog = screen.getByRole('dialog');
@@ -191,7 +191,7 @@ describe('Dialog Accessibility', () => {
     it('should close dialog with Escape key', async () => {
       const user = userEvent.setup();
       const onOpenChange = jest.fn();
-      render(<DialogTestComponent isOpen={true} onOpenChange={onOpenChange} />);
+      render(<DialogTestComponent open={true} onOpenChange={onOpenChange} />);
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -206,7 +206,7 @@ describe('Dialog Accessibility', () => {
       const user = userEvent.setup();
       render(
         <DialogRoot>
-          <DialogTrigger isDisabled>Open Dialog</DialogTrigger>
+          <DialogTrigger disabled>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogOverlay />
             <DialogContent>
@@ -228,7 +228,7 @@ describe('Dialog Accessibility', () => {
 
     it('should trap focus within modal dialog', async () => {
       const user = userEvent.setup();
-      render(<DialogTestComponent isOpen={true} modal={true} trapFocus={true} />);
+      render(<DialogTestComponent open={true} modal={true} trapFocus={true} />);
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -260,7 +260,7 @@ describe('Dialog Accessibility', () => {
       render(
         <div>
           <button type='button'>Outside Button</button>
-          <DialogTestComponent isOpen={true} modal={false} trapFocus={false} />
+          <DialogTestComponent open={true} modal={false} trapFocus={false} />
         </div>,
       );
 
@@ -337,7 +337,7 @@ describe('Dialog Accessibility', () => {
       let customFocusElement: HTMLElement | null = null;
 
       const CustomFocusDialog = () => (
-        <DialogRoot isOpen={true}>
+        <DialogRoot open={true}>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogOverlay />
@@ -388,7 +388,7 @@ describe('Dialog Accessibility', () => {
 
   describe('Screen Reader Support', () => {
     it('should announce dialog title to screen readers', async () => {
-      render(<DialogTestComponent isOpen={true} />);
+      render(<DialogTestComponent open={true} />);
 
       await waitFor(() => {
         const dialog = screen.getByRole('dialog');
@@ -400,7 +400,7 @@ describe('Dialog Accessibility', () => {
     });
 
     it('should provide accessible description', async () => {
-      render(<DialogTestComponent isOpen={true} />);
+      render(<DialogTestComponent open={true} />);
 
       await waitFor(() => {
         const dialog = screen.getByRole('dialog');
@@ -422,7 +422,7 @@ describe('Dialog Accessibility', () => {
     });
 
     it('should have proper heading hierarchy', async () => {
-      render(<DialogTestComponent isOpen={true} />);
+      render(<DialogTestComponent open={true} />);
 
       await waitFor(() => {
         const title = screen.getByRole('heading', { name: 'Dialog Title' });
@@ -434,7 +434,7 @@ describe('Dialog Accessibility', () => {
     });
 
     it('should maintain landmark structure', async () => {
-      render(<DialogTestComponent isOpen={true} />);
+      render(<DialogTestComponent open={true} />);
 
       await waitFor(() => {
         const dialog = screen.getByRole('dialog');
@@ -464,7 +464,7 @@ describe('Dialog Accessibility', () => {
     it('should handle disabled state announcements', () => {
       render(
         <DialogRoot>
-          <DialogTrigger isDisabled>Open Dialog</DialogTrigger>
+          <DialogTrigger disabled>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogOverlay />
             <DialogContent>
@@ -504,7 +504,7 @@ describe('Dialog Accessibility', () => {
   describe('Error States', () => {
     it('should handle missing title gracefully for accessibility', async () => {
       const { container } = render(
-        <DialogRoot isOpen={true}>
+        <DialogRoot open={true}>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogOverlay />
@@ -529,7 +529,7 @@ describe('Dialog Accessibility', () => {
     });
 
     it('should maintain accessibility when dialog content changes', async () => {
-      const { rerender, container } = render(<DialogTestComponent isOpen={true} />);
+      const { rerender, container } = render(<DialogTestComponent open={true} />);
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -537,7 +537,7 @@ describe('Dialog Accessibility', () => {
 
       // Rerender with different content
       rerender(
-        <DialogRoot isOpen={true}>
+        <DialogRoot open={true}>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogOverlay />

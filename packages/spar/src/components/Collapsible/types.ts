@@ -1,10 +1,10 @@
-import type React from 'react';
+import type { ElementType, ReactNode, HTMLAttributes } from 'react';
 
 /**
  * Props for Collapsible root component
  * @remarks Fully accessible, headless component
  */
-export interface CollapsibleProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface CollapsibleProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Controlled open state
    */
@@ -25,41 +25,41 @@ export interface CollapsibleProps extends React.HTMLAttributes<HTMLDivElement> {
    * Whether the collapsible is disabled
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Child components
    */
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 /**
  * Props for CollapsibleTrigger component
  * @remarks Button element that toggles visibility
  */
-export interface CollapsibleTriggerProps extends React.HTMLAttributes<HTMLElement> {
+export interface CollapsibleTriggerProps extends HTMLAttributes<HTMLElement> {
   /**
    * Element type for polymorphic rendering
    * @defaultValue 'button'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 
   /**
    * Trigger content
    */
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 /**
  * Props for CollapsibleContent component
  * @remarks Panel containing the collapsible content
  */
-export interface CollapsibleContentProps extends React.HTMLAttributes<HTMLElement> {
+export interface CollapsibleContentProps extends HTMLAttributes<HTMLElement> {
   /**
    * Element type for polymorphic rendering
    * @defaultValue 'div'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 
   /**
    * Force content to remain mounted when closed
@@ -70,7 +70,7 @@ export interface CollapsibleContentProps extends React.HTMLAttributes<HTMLElemen
   /**
    * Content to be shown/hidden
    */
-  children?: React.ReactNode;
+  children?: ReactNode;
 
   /**
    * Callback fired when content is found via browser search
@@ -96,7 +96,7 @@ export interface CollapsibleContextValue {
   /**
    * Whether the collapsible is disabled
    */
-  isDisabled: boolean;
+  disabled: boolean;
 
   /**
    * ID of the trigger element

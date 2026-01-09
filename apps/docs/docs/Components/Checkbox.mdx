@@ -286,7 +286,7 @@ function FormCheckbox() {
     <form style={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Checkbox name='terms' value='accepted' isRequired style={checkboxStyle}>
+          <Checkbox name='terms' value='accepted' required style={checkboxStyle}>
             {({ checked }) =>
               checked && (
                 <span style={{ color: '#007acc', fontSize: '12px', lineHeight: 1 }}>✓</span>
@@ -347,7 +347,7 @@ function RenderPropsCheckbox() {
           backgroundColor: '#f9f9f9',
         }}
       >
-        {({ checked, isDisabled, isFocused, isHovered, isPressed }) => (
+        {({ checked, disabled, isFocused, isHovered, isPressed }) => (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <div
               style={{
@@ -423,7 +423,7 @@ function DisabledCheckbox() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '16px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <Checkbox isDisabled style={disabledStyle}>
+        <Checkbox disabled style={disabledStyle}>
           {({ checked }) =>
             checked && <span style={{ color: '#ccc', fontSize: '12px', lineHeight: 1 }}>✓</span>
           }
@@ -433,7 +433,7 @@ function DisabledCheckbox() {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <Checkbox
-          isDisabled
+          disabled
           defaultChecked={true}
           style={{
             ...disabledStyle,
@@ -447,7 +447,7 @@ function DisabledCheckbox() {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <Checkbox
-          isDisabled
+          disabled
           checked='indeterminate'
           style={{
             ...disabledStyle,
@@ -519,7 +519,7 @@ function AccessibleCheckbox() {
     <div style={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
         <Checkbox
-          isRequired
+          required
           aria-describedby={hasError ? 'error-message' : undefined}
           aria-invalid={hasError}
           onChange={(checked) => {
@@ -594,9 +594,9 @@ A headless checkbox component that provides complete accessibility and behavior 
 | `checked?`         | `CheckedState`                                             | `undefined`      | Controlled checked state. When provided, component becomes controlled |
 | `defaultChecked?`  | `CheckedState`                                             | `false`          | Default checked state for uncontrolled usage                          |
 | `onChange?`        | `(checked: CheckedState) => void`                          | `undefined`      | Callback fired when checked state changes                             |
-| `isDisabled?`      | `boolean`                                                  | `false`          | Whether the checkbox is disabled                                      |
-| `isReadOnly?`      | `boolean`                                                  | `false`          | Whether the checkbox is read-only                                     |
-| `isRequired?`      | `boolean`                                                  | `false`          | Whether the checkbox is required in forms                             |
+| `disabled?`      | `boolean`                                                  | `false`          | Whether the checkbox is disabled                                      |
+| `readOnly?`      | `boolean`                                                  | `false`          | Whether the checkbox is read-only                                     |
+| `required?`      | `boolean`                                                  | `false`          | Whether the checkbox is required in forms                             |
 | `name?`            | `string`                                                   | `undefined`      | Name attribute for form submission                                    |
 | `value?`           | `string`                                                   | `'on'`           | Value sent in form data when checked                                  |
 | `form?`            | `string`                                                   | `undefined`      | ID of the form this checkbox belongs to                               |

@@ -33,12 +33,12 @@ describe('PopoverRoot', () => {
     expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('supports controlled state with isOpen prop', async () => {
+  it('supports controlled state with open prop', async () => {
     const user = userEvent.setup();
     const onOpenChange = jest.fn();
 
     const { rerender } = render(
-      <PopoverRoot isOpen={false} onOpenChange={onOpenChange}>
+      <PopoverRoot open={false} onOpenChange={onOpenChange}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
       </PopoverRoot>,
@@ -51,7 +51,7 @@ describe('PopoverRoot', () => {
     expect(onOpenChange).toHaveBeenCalledWith(true);
 
     rerender(
-      <PopoverRoot isOpen={true} onOpenChange={onOpenChange}>
+      <PopoverRoot open={true} onOpenChange={onOpenChange}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
       </PopoverRoot>,
@@ -148,7 +148,7 @@ describe('PopoverTrigger', () => {
 
     render(
       <PopoverRoot>
-        <PopoverTrigger isDisabled>Open</PopoverTrigger>
+        <PopoverTrigger disabled>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
       </PopoverRoot>,
     );
@@ -304,7 +304,7 @@ describe('PopoverContent', () => {
 
   it('does not render when popover is closed', () => {
     render(
-      <PopoverRoot isOpen={false}>
+      <PopoverRoot open={false}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Test content</PopoverContent>
       </PopoverRoot>,
@@ -527,7 +527,7 @@ describe('PopoverArrow', () => {
 
   it('does not render when popover is closed', () => {
     render(
-      <PopoverRoot isOpen={false}>
+      <PopoverRoot open={false}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>
           Content

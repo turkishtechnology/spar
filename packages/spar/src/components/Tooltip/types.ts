@@ -1,3 +1,12 @@
+import type {
+  ReactNode,
+  ReactElement,
+  ElementType,
+  RefObject,
+  ButtonHTMLAttributes,
+  HTMLAttributes,
+  SVGProps,
+} from 'react';
 import { Side, Align } from '../../types';
 
 export type Sticky = 'partial' | 'always';
@@ -10,7 +19,7 @@ export interface TooltipProviderProps {
   /**
    * Tooltip components to share provider context
    */
-  children: React.ReactNode;
+  children: ReactNode;
 
   /**
    * Global delay duration for all tooltips
@@ -39,12 +48,12 @@ export interface TooltipRootProps {
   /**
    * Tooltip trigger and content components
    */
-  children: React.ReactNode;
+  children: ReactNode;
 
   /**
    * Controlled state for tooltip visibility
    */
-  isOpen?: boolean;
+  open?: boolean;
 
   /**
    * Default open state for uncontrolled tooltip
@@ -72,18 +81,18 @@ export interface TooltipRootProps {
    * Whether tooltip is disabled
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 }
 
 /**
  * Props for TooltipTrigger
  * @remarks The trigger element that shows/hides the tooltip
  */
-export interface TooltipTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface TooltipTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * The trigger element (must be single focusable element)
    */
-  children: React.ReactElement;
+  children: ReactElement;
 
   /**
    * Compose with child element instead of rendering button
@@ -95,24 +104,24 @@ export interface TooltipTriggerProps extends React.ButtonHTMLAttributes<HTMLButt
    * Element type when not using asChild
    * @defaultValue 'button'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 }
 
 /**
  * Props for TooltipContent
  * @remarks The content that displays in the tooltip
  */
-export interface TooltipContentProps extends React.HTMLAttributes<HTMLElement> {
+export interface TooltipContentProps extends HTMLAttributes<HTMLElement> {
   /**
    * Content to display in tooltip
    */
-  children: React.ReactNode;
+  children: ReactNode;
 
   /**
    * Element type for tooltip content container
    * @defaultValue 'div'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 
   /**
    * Whether tooltip provides primary label or auxiliary description
@@ -157,7 +166,7 @@ export interface TooltipContentProps extends React.HTMLAttributes<HTMLElement> {
 
   /**
    * Padding for collision detection
-   * @defaultValue 10
+   * @defaultValue 8
    */
   collisionPadding?: number | Partial<Record<Side, number>>;
 
@@ -202,7 +211,7 @@ export interface TooltipPortalProps {
   /**
    * Content to render in portal
    */
-  children: React.ReactNode;
+  children: ReactNode;
 
   /**
    * Portal container element
@@ -221,7 +230,7 @@ export interface TooltipPortalProps {
  * Props for TooltipArrow
  * @remarks Optional arrow pointing to the trigger element
  */
-export interface TooltipArrowProps extends React.SVGProps<SVGSVGElement> {
+export interface TooltipArrowProps extends SVGProps<SVGSVGElement> {
   /**
    * Arrow width in pixels
    * @defaultValue 10
@@ -238,7 +247,7 @@ export interface TooltipArrowProps extends React.SVGProps<SVGSVGElement> {
    * Element type for arrow
    * @defaultValue 'svg'
    */
-  as?: React.ElementType;
+  as?: ElementType;
 }
 
 // Internal context types
@@ -254,13 +263,13 @@ export interface TooltipContextValue {
   asLabel: boolean;
   placement: Side;
   setPlacement: (placement: Side) => void;
-  isDisabled: boolean;
+  disabled: boolean;
   // Floating UI refs
-  triggerRef: React.RefObject<HTMLElement | null>;
-  contentRef: React.RefObject<HTMLElement | null>;
-  arrowRef: React.RefObject<HTMLElement | SVGSVGElement | null>;
+  triggerRef: RefObject<HTMLElement | null>;
+  contentRef: RefObject<HTMLElement | null>;
+  arrowRef: RefObject<HTMLElement | SVGSVGElement | null>;
   // Timeout control for hoverable content
-  hideTimeoutRef: React.RefObject<number | null>;
+  hideTimeoutRef: RefObject<number | null>;
   clearHideTimeout: () => void;
 }
 

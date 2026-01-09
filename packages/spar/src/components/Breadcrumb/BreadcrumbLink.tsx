@@ -10,7 +10,7 @@ export const BreadcrumbLink = ({
   as = 'a',
   children,
   href,
-  isDisabled = false,
+  disabled = false,
   isExternal = false,
   target,
   rel,
@@ -19,8 +19,8 @@ export const BreadcrumbLink = ({
   onKeyDown,
   ...props
 }: BreadcrumbLinkProps) => {
-  const { isDisabled: rootIsDisabled, onNavigate } = useBreadcrumb();
-  const linkIsDisabled = isDisabled || rootIsDisabled;
+  const { disabled: rootDisabled, onNavigate } = useBreadcrumb();
+  const linkIsDisabled = disabled || rootDisabled;
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (linkIsDisabled) {

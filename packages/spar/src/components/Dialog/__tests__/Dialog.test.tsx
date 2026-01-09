@@ -43,13 +43,13 @@ describe('Dialog', () => {
     it('should handle controlled state', () => {
       const onOpenChange = jest.fn();
       const { rerender } = render(
-        <DialogRoot isOpen={false} onOpenChange={onOpenChange}>
+        <DialogRoot open={false} onOpenChange={onOpenChange}>
           <DialogTrigger>Open</DialogTrigger>
         </DialogRoot>,
       );
 
       rerender(
-        <DialogRoot isOpen={true} onOpenChange={onOpenChange}>
+        <DialogRoot open={true} onOpenChange={onOpenChange}>
           <DialogTrigger>Open</DialogTrigger>
         </DialogRoot>,
       );
@@ -206,7 +206,7 @@ describe('Dialog', () => {
       const onClick = jest.fn();
       render(
         <DialogRoot>
-          <DialogTrigger isDisabled onClick={onClick}>
+          <DialogTrigger disabled onClick={onClick}>
             Open Dialog
           </DialogTrigger>
           <DialogPortal>

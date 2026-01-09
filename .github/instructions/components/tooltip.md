@@ -33,12 +33,12 @@
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `children` | `React.ReactNode` | Yes | - | Tooltip trigger and content components |
-| `isOpen` | `boolean` | No | - | Controlled state for tooltip visibility |
+| `open` | `boolean` | No | - | Controlled state for tooltip visibility |
 | `defaultOpen` | `boolean` | No | `false` | Default open state for uncontrolled tooltip |
 | `onOpenChange` | `(open: boolean) => void` | No | - | Callback when tooltip open state changes |
 | `delay` | `number` | No | - | Override provider delay for this tooltip |
 | `hideDelay` | `number` | No | `0` | Override provider hide delay for this tooltip |
-| `isDisabled` | `boolean` | No | `false` | Whether tooltip is disabled |
+| `disabled` | `boolean` | No | `false` | Whether tooltip is disabled |
 
 #### Tooltip.Trigger Props
 
@@ -63,7 +63,7 @@
 | `alignOffset` | `number` | No | `0` | Offset for alignment |
 | `avoidCollisions` | `boolean` | No | `true` | Whether to avoid viewport collisions |
 | `collisionBoundary` | `Element \| Element[]` | No | - | Collision boundary elements |
-| `collisionPadding` | `number \| Partial<Record<Side, number>>` | No | `10` | Padding for collision detection |
+| `collisionPadding` | `number \| Partial<Record<Side, number>>` | No | `8` | Padding for collision detection |
 | `sticky` | `'partial' \| 'always'` | No | `'partial'` | Sticky behavior during scroll |
 | `hideWhenDetached` | `boolean` | No | `false` | Hide when trigger becomes detached |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Escape key handler |
@@ -94,7 +94,7 @@
 
 ### Controlled/Uncontrolled
 - **Uncontrolled**: Default behavior with internal show/hide state
-- **Controlled**: Provide `isOpen` and `onOpenChange` for external state management
+- **Controlled**: Provide `open` and `onOpenChange` for external state management
 
 ## 3. Behavior Matrix
 

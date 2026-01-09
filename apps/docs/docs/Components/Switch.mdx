@@ -184,7 +184,7 @@ function FormExample() {
           name='autoSave'
           checked={settings.autoSave}
           onChange={(checked) => setSettings((prev) => ({ ...prev, autoSave: checked }))}
-          isRequired
+          required
           aria-label='Enable auto-save'
         >
           Auto-save (Required)
@@ -233,15 +233,15 @@ function StateVariations() {
         Normal Switch
       </Switch>
 
-      <Switch checked={true} isDisabled>
+      <Switch checked={true} disabled>
         Disabled (On)
       </Switch>
 
-      <Switch checked={false} isDisabled>
+      <Switch checked={false} disabled>
         Disabled (Off)
       </Switch>
 
-      <Switch checked={true} isReadOnly>
+      <Switch checked={true} readOnly>
         Read-only (On)
       </Switch>
     </div>
@@ -283,12 +283,12 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
 | `checked?`          | `boolean`                    | `undefined` | Controlled checked state. When provided, component operates in controlled mode |
 | `defaultChecked?`   | `boolean`                    | `false`     | Default checked state for uncontrolled usage                                   |
 | `onChange?`         | `(checked: boolean) => void` | `undefined` | Callback fired when the checked state changes                                  |
-| `isDisabled?`       | `boolean`                    | `false`     | Disabled state - properly announced to screen readers                          |
+| `disabled?`       | `boolean`                    | `false`     | Disabled state - properly announced to screen readers                          |
 | `name?`             | `string`                     | `undefined` | Form input name for form integration                                           |
 | `value?`            | `string`                     | `'on'`      | Form input value when checked                                                  |
 | `form?`             | `string`                     | `undefined` | Form ID to associate with                                                      |
-| `isRequired?`       | `boolean`                    | `false`     | Required state for form validation                                             |
-| `isReadOnly?`       | `boolean`                    | `false`     | Read-only state - prevents interaction                                         |
+| `required?`       | `boolean`                    | `false`     | Required state for form validation                                             |
+| `readOnly?`       | `boolean`                    | `false`     | Read-only state - prevents interaction                                         |
 | `shouldAutoFocus?`  | `boolean`                    | `false`     | Auto-focus on mount                                                            |
 | `aria-label?`       | `string`                     | `undefined` | Accessible name for the switch. Required when switch has no visible label      |
 | `aria-labelledby?`  | `string`                     | `undefined` | ID of element that labels the switch                                           |
@@ -315,8 +315,8 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
 | ------------------ | ---------- | -------------------------------------------------------- | -------------------- |
 | `role`             | `"switch"` | Identifies element as a switch control                   | Switch element       |
 | `aria-checked`     | `boolean`  | Indicates the current state of the switch                | Switch element       |
-| `aria-disabled`    | `boolean`  | Indicates switch is disabled (when `isDisabled={true}`)  | Switch element       |
-| `aria-readonly`    | `boolean`  | Indicates switch is read-only (when `isReadOnly={true}`) | Switch element       |
+| `aria-disabled`    | `boolean`  | Indicates switch is disabled (when `disabled={true}`)  | Switch element       |
+| `aria-readonly`    | `boolean`  | Indicates switch is read-only (when `readOnly={true}`) | Switch element       |
 | `aria-label`       | `string`   | Provides accessible name when no visible label exists    | Switch element       |
 | `aria-labelledby`  | `string`   | References element that labels the switch                | Switch element       |
 | `aria-describedby` | `string`   | References element that describes the switch             | Switch element       |

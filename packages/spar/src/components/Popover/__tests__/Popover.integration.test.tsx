@@ -388,7 +388,7 @@ describe('Popover Integration Tests', () => {
                 aria-describedby={emailError ? 'email-error' : undefined}
               />
 
-              <PopoverRoot isOpen={showValidation && !!emailError} onOpenChange={setShowValidation}>
+              <PopoverRoot open={showValidation && !!emailError} onOpenChange={setShowValidation}>
                 <PopoverTrigger asChild>
                   <span id='email-error' role='alert' aria-live='polite'>
                     {emailError && '⚠️'}
@@ -481,18 +481,18 @@ describe('Popover Integration Tests', () => {
       const user = userEvent.setup();
 
       const ExternallyControlledPopover = () => {
-        const [isOpen, setIsOpen] = useState(false);
+        const [open, setOpen] = useState(false);
         const [counter, setCounter] = useState(0);
 
         return (
           <div>
-            <button onClick={() => setIsOpen(!isOpen)}>
-              External Toggle ({isOpen ? 'Close' : 'Open'})
+            <button onClick={() => setOpen(!open)}>
+              External Toggle ({open ? 'Close' : 'Open'})
             </button>
 
             <button onClick={() => setCounter((c) => c + 1)}>Increment: {counter}</button>
 
-            <PopoverRoot isOpen={isOpen} onOpenChange={setIsOpen}>
+            <PopoverRoot open={open} onOpenChange={setOpen}>
               <PopoverTrigger>Internal Toggle</PopoverTrigger>
               <PopoverContent>
                 <p>Counter value: {counter}</p>

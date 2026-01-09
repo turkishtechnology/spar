@@ -41,7 +41,7 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 ### DialogRoot Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `isOpen` | `boolean` | No | - | Controlled open state |
+| `open` | `boolean` | No | - | Controlled open state |
 | `onOpenChange` | `(open: boolean) => void` | No | - | Callback when open state changes |
 | `defaultOpen` | `boolean` | No | `false` | Initial open state (uncontrolled) |
 | `modal` | `boolean` | No | `true` | Whether dialog is modal (blocks interaction outside) |
@@ -51,7 +51,7 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'button'` | Polymorphic element type |
-| `isDisabled` | `boolean` | No | `false` | Disables trigger interaction |
+| `disabled` | `boolean` | No | `false` | Disables trigger interaction |
 | `children` | `ReactNode` | Yes | - | Trigger content |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
 
@@ -110,7 +110,7 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
 
 ### Controlled/Uncontrolled Support
-- **Controlled**: Use `isOpen` + `onOpenChange`
+- **Controlled**: Use `open` + `onOpenChange`
 - **Uncontrolled**: Use `defaultOpen` only
 - **Ref forwarding**: All components forward refs to DOM elements
 
@@ -197,12 +197,12 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 ```tsx
 // Core dialog state management
 const useDialogState = (props: {
-  isOpen?: boolean;
+  open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) => {
   const [isOpen, setIsOpen] = useControlledState({
-    prop: props.isOpen,
+    prop: props.open,
     defaultProp: props.defaultOpen ?? false,
     onChange: props.onOpenChange,
   });
@@ -314,7 +314,7 @@ All components expose `data-*` attributes for styling without className coupling
 ```tsx
 describe('Dialog Component', () => {
   // State management
-  test('controlled mode with isOpen prop');
+  test('controlled mode with open prop');
   test('uncontrolled mode with defaultOpen');
   test('onOpenChange callback execution');
   
@@ -418,7 +418,7 @@ describe('Dialog Integration', () => {
 For teams migrating from other dialog libraries:
 
 **From React Modal/similar:**
-- Keep `isOpen` prop pattern (consistent with Spar standards)
+- Keep `open` prop pattern (consistent with Spar standards)
 - Update focus management to use built-in trapping
 - Migrate overlay click handling to `onPointerDownOutside` or `onInteractOutside`
 - Replace custom portal logic with `Dialog.Portal`
@@ -439,7 +439,7 @@ For teams migrating from other dialog libraries:
 ### Implementation Checklist
 
 #### Core Functionality
-- [ ] DialogRoot with controlled/uncontrolled state (`isOpen` prop)
+- [ ] DialogRoot with controlled/uncontrolled state (`open` prop)
 - [ ] DialogTrigger with proper event handling
 - [ ] DialogPortal with configurable container
 - [ ] DialogOverlay with modal/non-modal background behavior

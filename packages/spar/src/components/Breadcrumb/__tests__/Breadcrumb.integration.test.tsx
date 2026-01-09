@@ -100,13 +100,13 @@ describe('Breadcrumb Integration', () => {
           <BreadcrumbRoot>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href='/' isDisabled={isActive('/')}>
+                <BreadcrumbLink href='/' disabled={isActive('/')}>
                   Home
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator>/</BreadcrumbSeparator>
               <BreadcrumbItem>
-                <BreadcrumbLink href='/products' isDisabled={isActive('/products')}>
+                <BreadcrumbLink href='/products' disabled={isActive('/products')}>
                   Products
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -169,7 +169,7 @@ describe('Breadcrumb Integration', () => {
 
         return (
           <div>
-            <BreadcrumbRoot isDisabled={hasError}>
+            <BreadcrumbRoot disabled={hasError}>
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink href='/form-step-1'>Step 1</BreadcrumbLink>
@@ -338,7 +338,7 @@ describe('Breadcrumb Integration', () => {
         };
 
         return (
-          <BreadcrumbRoot onNavigate={handleNavigate} isDisabled={isNavigating}>
+          <BreadcrumbRoot onNavigate={handleNavigate} disabled={isNavigating}>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink href='/home'>{isNavigating ? 'Loading...' : 'Home'}</BreadcrumbLink>
@@ -371,7 +371,7 @@ describe('Breadcrumb Integration', () => {
 
     it('should handle loading states for dynamic breadcrumbs', () => {
       const LoadingBreadcrumb = ({ isLoading }: { isLoading: boolean }) => (
-        <BreadcrumbRoot isDisabled={isLoading}>
+        <BreadcrumbRoot disabled={isLoading}>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/'>Home</BreadcrumbLink>
@@ -448,7 +448,7 @@ describe('Breadcrumb Integration', () => {
             </BreadcrumbItem>
             <BreadcrumbSeparator>/</BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbLink href='/admin/users' isDisabled={!canAccessUsers}>
+              <BreadcrumbLink href='/admin/users' disabled={!canAccessUsers}>
                 Users
               </BreadcrumbLink>
             </BreadcrumbItem>

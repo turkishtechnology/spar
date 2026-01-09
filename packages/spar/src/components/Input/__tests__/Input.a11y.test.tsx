@@ -51,7 +51,7 @@ describe('Input Accessibility', () => {
 
     it('passes accessibility checks with all elements', async () => {
       const { container } = render(
-        <Input.Root isInvalid isRequired>
+        <Input.Root isInvalid required>
           <Input.Label>Username</Input.Label>
           <Input.Field />
           <Input.Description>Enter your username</Input.Description>
@@ -78,7 +78,7 @@ describe('Input Accessibility', () => {
 
     it('passes accessibility checks in disabled state', async () => {
       const { container } = render(
-        <Input.Root isDisabled>
+        <Input.Root disabled>
           <Input.Label>Username</Input.Label>
           <Input.Field />
           <Input.Description>Enter your username</Input.Description>
@@ -155,7 +155,7 @@ describe('Input Accessibility', () => {
 
     it('sets aria-required correctly', () => {
       render(
-        <Input.Root isRequired>
+        <Input.Root required>
           <Input.Label>Username</Input.Label>
           <Input.Field />
         </Input.Root>,
@@ -294,7 +294,7 @@ describe('Input Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Input.Root isDisabled>
+        <Input.Root disabled>
           <Input.Label>Username</Input.Label>
           <Input.Field />
         </Input.Root>,
@@ -343,7 +343,7 @@ describe('Input Accessibility', () => {
 
     it('announces required state', () => {
       render(
-        <Input.Root isRequired>
+        <Input.Root required>
           <Input.Label>Email</Input.Label>
           <Input.Field type='email' />
         </Input.Root>,
@@ -384,7 +384,7 @@ describe('Input Accessibility', () => {
 
     it('supports form validation attributes', () => {
       render(
-        <Input.Root isRequired>
+        <Input.Root required>
           <Input.Label>Email</Input.Label>
           <Input.Field type='email' pattern='[^@]+@[^@]+\.[a-zA-Z]{2,}' />
         </Input.Root>,

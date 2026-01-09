@@ -9,8 +9,8 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
     checked: controlledChecked,
     defaultChecked = false,
     onChange,
-    isDisabled = false,
-    isReadOnly = false,
+    disabled = false,
+    readOnly = false,
   } = props;
 
   // Determine if component is controlled
@@ -29,7 +29,7 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
 
   // Toggle function
   const handleToggle = useCallback(() => {
-    if (isDisabled || isReadOnly) return;
+    if (disabled || readOnly) return;
 
     const newChecked = !checked;
 
@@ -38,38 +38,38 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
     }
 
     onChange?.(newChecked);
-  }, [checked, isDisabled, isReadOnly, isControlled, onChange]);
+  }, [checked, disabled, readOnly, isControlled, onChange]);
 
   // Keyboard event handler
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
-      if (isDisabled || isReadOnly) return;
+      if (disabled || readOnly) return;
 
       if (event.key === ' ' || event.key === 'Enter') {
         event.preventDefault();
         handleToggle();
       }
     },
-    [isDisabled, isReadOnly, handleToggle],
+    [disabled, readOnly, handleToggle],
   );
 
   // Click event handler
   const handleClick = useCallback(
     (_event: React.MouseEvent) => {
-      if (isDisabled || isReadOnly) return;
+      if (disabled || readOnly) return;
 
       handleToggle();
     },
-    [isDisabled, isReadOnly, handleToggle],
+    [disabled, readOnly, handleToggle],
   );
 
   // Focus event handlers
   const handleFocus = useCallback(
     (_event: React.FocusEvent) => {
-      if (isDisabled) return;
+      if (disabled) return;
       setIsFocused(true);
     },
-    [isDisabled],
+    [disabled],
   );
 
   const handleBlur = useCallback((_event: React.FocusEvent) => {
@@ -79,10 +79,10 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
   // Pointer event handlers (mouse + touch unified)
   const handlePointerEnter = useCallback(
     (_event: React.PointerEvent) => {
-      if (isDisabled) return;
+      if (disabled) return;
       setIsHovered(true);
     },
-    [isDisabled],
+    [disabled],
   );
 
   const handlePointerLeave = useCallback((_event: React.PointerEvent) => {
@@ -92,10 +92,10 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
 
   const handlePointerDown = useCallback(
     (_event: React.PointerEvent) => {
-      if (isDisabled || isReadOnly) return;
+      if (disabled || readOnly) return;
       setIsActive(true);
     },
-    [isDisabled, isReadOnly],
+    [disabled, readOnly],
   );
 
   const handlePointerUp = useCallback((_event: React.PointerEvent) => {
@@ -111,17 +111,17 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
   const switchProps = {
     role: 'switch' as const,
     'aria-checked': checked,
-    ...(isDisabled && { 'aria-disabled': true }),
-    ...(isReadOnly && { 'aria-readonly': true }),
+    ...(disabled && { 'aria-disabled': true }),
+    ...(readOnly && { 'aria-readonly': true }),
     'data-switch': '' as const,
     'data-state': checked ? ('checked' as const) : ('unchecked' as const),
     ...(checked && { 'data-checked': '' as const }),
-    ...(isDisabled && { 'data-disabled': '' as const }),
-    ...(isReadOnly && { 'data-readonly': '' as const }),
+    ...(disabled && { 'data-disabled': '' as const }),
+    ...(readOnly && { 'data-readonly': '' as const }),
     ...(isFocused && { 'data-focus': '' as const }),
     ...(isHovered && { 'data-hover': '' as const }),
     ...(isActive && { 'data-active': '' as const }),
-    tabIndex: isDisabled ? -1 : 0,
+    tabIndex: disabled ? -1 : 0,
     onKeyDown: handleKeyDown,
     onClick: handleClick,
     onFocus: handleFocus,
@@ -152,8 +152,8 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
 
   return {
     checked,
-    isDisabled,
-    isReadOnly,
+    disabled,
+    readOnly,
     switchProps,
     hiddenInputProps,
   };
@@ -167,12 +167,12 @@ export const Switch = ({
   checked,
   defaultChecked,
   onChange,
-  isDisabled = false,
+  disabled = false,
   name,
   value = 'on',
   form,
-  isRequired = false,
-  isReadOnly = false,
+  required = false,
+  readOnly = false,
   shouldAutoFocus = false,
   id: providedId,
   children,
@@ -186,8 +186,8 @@ export const Switch = ({
     ...(checked !== undefined && { checked }),
     ...(defaultChecked !== undefined && { defaultChecked }),
     ...(onChange && { onChange }),
-    isDisabled,
-    isReadOnly,
+    disabled,
+    readOnly,
   });
 
   // Extract known props to prevent conflicts
@@ -206,21 +206,21 @@ export const Switch = ({
         {...switchProps}
         {...safeProps}
         id={id}
-        {...(Component === 'button' ? { disabled: isDisabled } : {})}
+        {...(Component === 'button' ? { disabled } : {})}
         autoFocus={shouldAutoFocus}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}
         className={className}
         style={style}
-        {...(isRequired && { 'data-required': '' })}
+        {...(required && { 'data-required': '' })}
         {...(Component === 'button' ? { type: 'button' } : {})}
       >
         {children}
       </Component>
 
       {name && (
-        <input {...hiddenInputProps} name={name} value={value} form={form} required={isRequired} />
+        <input {...hiddenInputProps} name={name} value={value} form={form} required={required} />
       )}
     </>
   );

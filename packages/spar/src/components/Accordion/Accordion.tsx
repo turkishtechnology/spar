@@ -21,7 +21,7 @@ export const Accordion = ({
   value: controlledValue,
   defaultValue,
   onValueChange,
-  isDisabled = false,
+  disabled = false,
   orientation = 'vertical',
   as: Component = 'div',
   children,
@@ -49,7 +49,7 @@ export const Accordion = ({
 
   const handleItemToggle = useCallback(
     (itemValue: string) => {
-      if (isDisabled) return;
+      if (disabled) return;
 
       let newValue: string | string[];
 
@@ -75,7 +75,7 @@ export const Accordion = ({
 
       onValueChange?.(newValue);
     },
-    [type, isCollapsible, currentValue, isDisabled, controlledValue, onValueChange],
+    [type, isCollapsible, currentValue, disabled, controlledValue, onValueChange],
   );
 
   const contextValue = useMemo<AccordionContextValue>(
@@ -84,7 +84,7 @@ export const Accordion = ({
       isCollapsible,
       value: currentValue,
       onItemToggle: handleItemToggle,
-      isDisabled,
+      disabled,
       orientation,
       registerItem,
       unregisterItem,
@@ -99,7 +99,7 @@ export const Accordion = ({
       isCollapsible,
       currentValue,
       handleItemToggle,
-      isDisabled,
+      disabled,
       orientation,
       registerItem,
       unregisterItem,

@@ -9,7 +9,7 @@ const TestComponent = () => {
   return (
     <div>
       <span data-testid='context-open'>{context.isOpen.toString()}</span>
-      <span data-testid='context-disabled'>{context.isDisabled.toString()}</span>
+      <span data-testid='context-disabled'>{context.disabled.toString()}</span>
       <span data-testid='context-trigger-id'>{context.triggerId}</span>
       <span data-testid='context-content-id'>{context.contentId}</span>
       <button data-testid='context-toggle' onClick={context.toggle}>
@@ -45,7 +45,7 @@ describe('Collapsible', () => {
 
     it('renders with data-disabled attribute when disabled', () => {
       render(
-        <Collapsible isDisabled data-testid='collapsible'>
+        <Collapsible disabled data-testid='collapsible'>
           <div>Content</div>
         </Collapsible>,
       );
@@ -219,9 +219,9 @@ describe('Collapsible', () => {
   });
 
   describe('Disabled state', () => {
-    it('sets isDisabled in context when disabled', () => {
+    it('sets disabled in context when disabled', () => {
       render(
-        <Collapsible isDisabled>
+        <Collapsible disabled>
           <TestComponent />
         </Collapsible>,
       );
@@ -234,7 +234,7 @@ describe('Collapsible', () => {
       const handleOpenChange = jest.fn();
 
       render(
-        <Collapsible isDisabled onOpenChange={handleOpenChange} data-testid='collapsible'>
+        <Collapsible disabled onOpenChange={handleOpenChange} data-testid='collapsible'>
           <TestComponent />
         </Collapsible>,
       );
@@ -252,7 +252,7 @@ describe('Collapsible', () => {
       render(
         <Collapsible
           open={false}
-          isDisabled
+          disabled
           onOpenChange={handleOpenChange}
           data-testid='collapsible'
         >

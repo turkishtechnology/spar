@@ -96,7 +96,7 @@ describe('TooltipRoot', () => {
 
   it('handles controlled state', () => {
     const onOpenChange = jest.fn();
-    render(<BasicTooltip isOpen={false} onOpenChange={onOpenChange} />);
+    render(<BasicTooltip open={false} onOpenChange={onOpenChange} />);
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
     expect(trigger).not.toHaveAttribute('aria-describedby');
@@ -111,7 +111,7 @@ describe('TooltipRoot', () => {
 
   it('handles disabled state', () => {
     const onOpenChange = jest.fn();
-    render(<BasicTooltip isDisabled onOpenChange={onOpenChange} />);
+    render(<BasicTooltip disabled onOpenChange={onOpenChange} />);
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
     // Disabled tooltips should not respond to interactions

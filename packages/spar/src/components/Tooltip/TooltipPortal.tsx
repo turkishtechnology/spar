@@ -16,7 +16,7 @@ export const TooltipPortal = ({ children, container, forceMount = false }: Toolt
   }, []);
 
   // Don't render if not mounted, disabled, or not open (unless forced)
-  if (!mounted || context.isDisabled || (!context.isOpen && !forceMount)) {
+  if (!mounted || context.disabled || (!context.isOpen && !forceMount)) {
     return null;
   }
 

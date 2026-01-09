@@ -200,7 +200,7 @@ The Select component is built as a compound component with multiple parts:
       <Select.Content
         data-spar-part="content"
         placement="bottom-start"
-        offset={5}
+        sideOffset={8}
         style={{
           background: 'white',
           border: '1px solid #ccc',
@@ -496,10 +496,10 @@ function SelectWithDisabledItems() {
               <Select.ItemText>Basic Plan - $9/month</Select.ItemText>
               <Select.ItemIndicator>✓</Select.ItemIndicator>
             </Select.Item>
-            <Select.Item value='premium' isDisabled>
+            <Select.Item value='premium' disabled>
               <Select.ItemText>Premium Plan - Coming Soon</Select.ItemText>
             </Select.Item>
-            <Select.Item value='enterprise' isDisabled>
+            <Select.Item value='enterprise' disabled>
               <Select.ItemText>Enterprise - Contact Sales</Select.ItemText>
             </Select.Item>
           </Select.Viewport>
@@ -576,9 +576,9 @@ function AdvancedPositioningSelect() {
       <Select.Portal>
         <Select.Content
           placement='bottom-start'
-          offset={10}
+          sideOffset={10}
           shift={true}
-          shiftPadding={5}
+          collisionPadding={8}
           flip={true}
           size={true}
           arrowRef={arrowRef}
@@ -655,7 +655,7 @@ The main container that manages all select state and behavior.
 | `open?`          | `boolean`                 | `undefined` | Controlled open state               |
 | `defaultOpen?`   | `boolean`                 | `false`     | Uncontrolled initial open state     |
 | `onOpenChange?`  | `(open: boolean) => void` | `undefined` | Callback when open state changes    |
-| `isDisabled?`    | `boolean`                 | `false`     | Disables the entire select          |
+| `disabled?`    | `boolean`                 | `false`     | Disables the entire select          |
 | `required?`      | `boolean`                 | `false`     | Makes the select required for forms |
 | `name?`          | `string`                  | `undefined` | Form field name                     |
 | `dir?`           | `'ltr' \| 'rtl'`          | `'ltr'`     | Reading direction                   |
@@ -707,7 +707,7 @@ The button that toggles the dropdown open and closed.
 **Data Attributes**
 
 - `data-state`: `"open" | "closed"` - Dropdown open state
-- `data-disabled`: Present when `isDisabled={true}`
+- `data-disabled`: Present when `disabled={true}`
 - `data-placeholder`: Present when no value selected
 
 ### Select.Value
@@ -779,21 +779,21 @@ The dropdown container that appears when select is open. Uses Floating UI for in
 
 **Props**
 
-| Name            | Type                                      | Default          | Description                                                                                                                                                                                                                |
-| --------------- | ----------------------------------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `placement?`    | `Placement`                               | `'bottom-start'` | Placement relative to trigger. Supports 12 positions: `'top'`, `'top-start'`, `'top-end'`, `'right'`, `'right-start'`, `'right-end'`, `'bottom'`, `'bottom-start'`, `'bottom-end'`, `'left'`, `'left-start'`, `'left-end'` |
-| `strategy?`     | `'absolute' \| 'fixed'`                   | `'absolute'`     | CSS positioning strategy                                                                                                                                                                                                   |
-| `middleware?`   | `Middleware[]`                            | `undefined`      | Custom Floating UI middleware array for advanced positioning control                                                                                                                                                       |
-| `offset?`       | `number`                                  | `5`              | Distance from trigger in pixels                                                                                                                                                                                            |
-| `shift?`        | `boolean`                                 | `true`           | Whether to shift the content to stay in viewport                                                                                                                                                                           |
-| `shiftPadding?` | `number`                                  | `5`              | Padding for shift calculations                                                                                                                                                                                             |
-| `flip?`         | `boolean`                                 | `true`           | Whether to flip to opposite side when no space                                                                                                                                                                             |
-| `hide?`         | `boolean`                                 | `false`          | Whether to hide when trigger is fully scrolled out of view                                                                                                                                                                 |
-| `size?`         | `boolean`                                 | `true`           | Whether to constrain size to available space                                                                                                                                                                               |
-| `arrowRef?`     | `RefObject<HTMLElement \| SVGSVGElement>` | `undefined`      | Arrow element ref for arrow positioning                                                                                                                                                                                    |
-| `as?`           | `ElementType`                             | `'div'`          | Polymorphic component type                                                                                                                                                                                                 |
-| `ref?`          | `RefObject`                               | `undefined`      | Forward ref support                                                                                                                                                                                                        |
-| `children`      | `ReactNode`                               | -                | Content children                                                                                                                                                                                                           |
+| Name                | Type                                      | Default          | Description                                                                                                                                                                                                                |
+| ------------------- | ----------------------------------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `placement?`        | `Placement`                               | `'bottom-start'` | Placement relative to trigger. Supports 12 positions: `'top'`, `'top-start'`, `'top-end'`, `'right'`, `'right-start'`, `'right-end'`, `'bottom'`, `'bottom-start'`, `'bottom-end'`, `'left'`, `'left-start'`, `'left-end'` |
+| `strategy?`         | `'absolute' \| 'fixed'`                   | `'absolute'`     | CSS positioning strategy                                                                                                                                                                                                   |
+| `middleware?`       | `Middleware[]`                            | `undefined`      | Custom Floating UI middleware array for advanced positioning control                                                                                                                                                       |
+| `sideOffset?`       | `number`                                  | `8`              | Distance from trigger in pixels                                                                                                                                                                                            |
+| `shift?`            | `boolean`                                 | `true`           | Whether to shift the content to stay in viewport                                                                                                                                                                           |
+| `collisionPadding?` | `number`                                  | `8`              | Padding from boundary edges (in pixels)                                                                                                                                                                                    |
+| `flip?`             | `boolean`                                 | `true`           | Whether to flip to opposite side when no space                                                                                                                                                                             |
+| `hide?`             | `boolean`                                 | `false`          | Whether to hide when trigger is fully scrolled out of view                                                                                                                                                                 |
+| `size?`             | `boolean`                                 | `true`           | Whether to constrain size to available space                                                                                                                                                                               |
+| `arrowRef?`         | `RefObject<HTMLElement \| SVGSVGElement>` | `undefined`      | Arrow element ref for arrow positioning                                                                                                                                                                                    |
+| `as?`               | `ElementType`                             | `'div'`          | Polymorphic component type                                                                                                                                                                                                 |
+| `ref?`              | `RefObject`                               | `undefined`      | Forward ref support                                                                                                                                                                                                        |
+| `children`          | `ReactNode`                               | -                | Content children                                                                                                                                                                                                           |
 
 **Events**
 
@@ -821,7 +821,7 @@ The dropdown container that appears when select is open. Uses Floating UI for in
 SelectContent uses Floating UI for advanced positioning. The component automatically:
 
 - Positions relative to the trigger using the specified `placement`
-- Applies `offset` distance from the trigger
+- Applies `sideOffset` distance from the trigger
 - Shifts content to stay within the viewport when `shift={true}`
 - Flips to the opposite side when there's no space and `flip={true}`
 - Constrains content height to available space when `size={true}`
@@ -858,7 +858,7 @@ Individual selectable option within the dropdown.
 | Name          | Type          | Default     | Description                                         |
 | ------------- | ------------- | ----------- | --------------------------------------------------- |
 | `value`       | `string`      | -           | Option value (required)                             |
-| `isDisabled?` | `boolean`     | `false`     | Disables the option                                 |
+| `disabled?` | `boolean`     | `false`     | Disables the option                                 |
 | `textValue?`  | `string`      | `undefined` | Text for type-ahead (auto-detected if not provided) |
 | `as?`         | `ElementType` | `'div'`     | Polymorphic component type                          |
 | `ref?`        | `RefObject`   | `undefined` | Forward ref support                                 |
@@ -884,7 +884,7 @@ Individual selectable option within the dropdown.
 **Data Attributes**
 
 - `data-state`: `"checked" | "unchecked"` - Selection state
-- `data-disabled`: Present when `isDisabled={true}`
+- `data-disabled`: Present when `disabled={true}`
 - `data-highlighted`: Present when focused via keyboard
 
 ### Select.ItemText

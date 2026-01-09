@@ -15,16 +15,16 @@ export const AccordionTrigger = ({
 }: AccordionTriggerProps) => {
   const accordionContext = useAccordionContext();
   const itemContext = useAccordionItemContext();
-  const { isExpanded, isDisabled, triggerId, contentId, onToggle } = itemContext;
+  const { isExpanded, disabled, triggerId, contentId, onToggle } = itemContext;
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
-      if (!isDisabled) {
+      if (!disabled) {
         onToggle();
       }
       onClick?.(event as React.MouseEvent<HTMLButtonElement>);
     },
-    [isDisabled, onToggle, onClick],
+    [disabled, onToggle, onClick],
   );
 
   const handleKeyDown = useCallback(
@@ -37,7 +37,7 @@ export const AccordionTrigger = ({
         case 'Enter':
         case ' ': // Space
           event.preventDefault();
-          if (!isDisabled) {
+          if (!disabled) {
             onToggle();
           }
           break;
@@ -91,7 +91,7 @@ export const AccordionTrigger = ({
 
       onKeyDown?.(event as React.KeyboardEvent<HTMLButtonElement>);
     },
-    [accordionContext, itemContext, isDisabled, onToggle, onKeyDown],
+    [accordionContext, itemContext, disabled, onToggle, onKeyDown],
   );
 
   return (
@@ -101,11 +101,11 @@ export const AccordionTrigger = ({
       type={Component === 'button' ? 'button' : undefined}
       aria-expanded={isExpanded}
       aria-controls={contentId}
-      disabled={isDisabled}
+      disabled={disabled}
       data-state={isExpanded ? 'open' : 'closed'}
       data-accordion-trigger=''
       data-value={itemContext.value}
-      {...(isDisabled && { 'data-disabled': '' })}
+      {...(disabled && { 'data-disabled': '' })}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >

@@ -43,7 +43,7 @@ export interface SwitchProps
    * Disabled state - properly announced to screen readers
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Form input name for form integration
@@ -65,13 +65,13 @@ export interface SwitchProps
    * Required state for form validation
    * @defaultValue false
    */
-  isRequired?: boolean;
+  required?: boolean;
 
   /**
    * Read-only state - prevents interaction
    * @defaultValue false
    */
-  isReadOnly?: boolean;
+  readOnly?: boolean;
 
   /**
    * Auto-focus on mount
@@ -103,8 +103,8 @@ export interface UseSwitchProps {
   checked?: boolean;
   defaultChecked?: boolean;
   onChange?: (checked: boolean) => void;
-  isDisabled?: boolean;
-  isReadOnly?: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
 }
 
 /**
@@ -112,8 +112,8 @@ export interface UseSwitchProps {
  */
 export interface UseSwitchReturn {
   checked: boolean;
-  isDisabled: boolean;
-  isReadOnly: boolean;
+  disabled: boolean;
+  readOnly: boolean;
   switchProps: {
     role: 'switch';
     'aria-checked': boolean;

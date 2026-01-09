@@ -42,7 +42,7 @@ const BasicAccordion = ({
             <button type='button'>Take Action</button>
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value='item-3' isDisabled>
+        <AccordionItem value='item-3' disabled>
           <AccordionHeader level={2}>
             <AccordionTrigger>Section 3: Advanced (Coming Soon)</AccordionTrigger>
           </AccordionHeader>

@@ -24,7 +24,7 @@ export type BreadcrumbPosition = 'first' | 'middle' | 'last';
  * Context value for breadcrumb component communication
  */
 export interface BreadcrumbContextValue {
-  isDisabled?: boolean;
+  disabled?: boolean;
   onNavigate?: NavigationHandler;
 }
 
@@ -55,7 +55,7 @@ export interface BreadcrumbRootProps extends HTMLAttributes<HTMLElement> {
    * Disable all breadcrumb navigation
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 }
 
 /**
@@ -122,7 +122,7 @@ export interface BreadcrumbLinkProps extends AnchorHTMLAttributes<HTMLAnchorElem
    * Disable this specific link
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
   /**
    * Indicates external link (adds security attributes)
    * @defaultValue false

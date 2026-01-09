@@ -12,13 +12,13 @@ describe('Label Integration', () => {
       render(
         <form onSubmit={handleSubmit}>
           <div>
-            <Label htmlFor='username' isRequired>
+            <Label htmlFor='username' required>
               Username
             </Label>
             <input id='username' type='text' required />
           </div>
           <div>
-            <Label htmlFor='email' isRequired>
+            <Label htmlFor='email' required>
               Email
             </Label>
             <input id='email' type='email' required />
@@ -53,7 +53,7 @@ describe('Label Integration', () => {
       render(
         <form>
           <div>
-            <Label htmlFor='password' isRequired>
+            <Label htmlFor='password' required>
               Password
               <span aria-label='required'>*</span>
             </Label>
@@ -182,7 +182,7 @@ describe('Label Integration', () => {
             <input id='option1' type='radio' name='option' value='1' />
           </div>
           <div>
-            <Label htmlFor='option2' isDisabled>
+            <Label htmlFor='option2' disabled>
               Option 2 (Disabled)
             </Label>
             <input id='option2' type='radio' name='option' value='2' disabled />
@@ -275,7 +275,7 @@ describe('Label Integration', () => {
           <form>
             {step === 1 && (
               <div>
-                <Label htmlFor='name' isRequired>
+                <Label htmlFor='name' required>
                   Name
                 </Label>
                 <input
@@ -291,7 +291,7 @@ describe('Label Integration', () => {
             )}
             {step === 2 && (
               <div>
-                <Label htmlFor='email' isRequired>
+                <Label htmlFor='email' required>
                   Email
                 </Label>
                 <input
@@ -369,7 +369,7 @@ describe('Label Integration', () => {
 
             {accountType === 'business' && (
               <div>
-                <Label htmlFor='company-name' isRequired>
+                <Label htmlFor='company-name' required>
                   Company Name
                 </Label>
                 <input id='company-name' type='text' required />
@@ -377,7 +377,7 @@ describe('Label Integration', () => {
             )}
 
             <div>
-              <Label htmlFor='full-name' isRequired>
+              <Label htmlFor='full-name' required>
                 Full Name
               </Label>
               <input id='full-name' type='text' required />
@@ -441,7 +441,7 @@ describe('Label Integration', () => {
 
       rerender(
         <div>
-          <Label htmlFor='state-input' isRequired>
+          <Label htmlFor='state-input' required>
             Field
           </Label>
           <input id='state-input' type='text' required />
@@ -523,7 +523,7 @@ describe('Label Integration', () => {
 
         return (
           <div>
-            <Label htmlFor='validated-input' isRequired>
+            <Label htmlFor='validated-input' required>
               Username
             </Label>
             <input
@@ -564,13 +564,13 @@ describe('Label Integration', () => {
         <form onSubmit={handleSubmit}>
           <h2>Login</h2>
           <div>
-            <Label htmlFor='login-email' isRequired>
+            <Label htmlFor='login-email' required>
               Email
             </Label>
             <input id='login-email' type='email' required />
           </div>
           <div>
-            <Label htmlFor='login-password' isRequired>
+            <Label htmlFor='login-password' required>
               Password
             </Label>
             <input id='login-password' type='password' required />
@@ -599,19 +599,19 @@ describe('Label Integration', () => {
       render(
         <form>
           <div>
-            <Label htmlFor='reg-username' isRequired>
+            <Label htmlFor='reg-username' required>
               Username
             </Label>
             <input id='reg-username' type='text' required />
           </div>
           <div>
-            <Label htmlFor='reg-email' isRequired>
+            <Label htmlFor='reg-email' required>
               Email
             </Label>
             <input id='reg-email' type='email' required />
           </div>
           <div>
-            <Label htmlFor='reg-country' isRequired>
+            <Label htmlFor='reg-country' required>
               Country
             </Label>
             <select id='reg-country' required>

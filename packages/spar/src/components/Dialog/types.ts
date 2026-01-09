@@ -1,4 +1,12 @@
-import type { ElementType, ReactNode, HTMLAttributes, ButtonHTMLAttributes } from 'react';
+import type {
+  ElementType,
+  ReactNode,
+  HTMLAttributes,
+  ButtonHTMLAttributes,
+  Ref,
+  AriaRole,
+  RefObject,
+} from 'react';
 
 /**
  * Props for DialogRoot
@@ -8,7 +16,7 @@ export interface DialogRootProps {
   /**
    * Controlled open state
    */
-  isOpen?: boolean;
+  open?: boolean;
 
   /**
    * Callback when open state changes
@@ -48,12 +56,12 @@ export interface DialogTriggerProps extends ButtonHTMLAttributes<HTMLButtonEleme
    * Disables trigger interaction
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Ref forwarded to trigger element
    */
-  ref?: React.Ref<HTMLElement>;
+  ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -93,7 +101,7 @@ export interface DialogOverlayProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Ref forwarded to overlay element
    */
-  ref?: React.Ref<HTMLElement>;
+  ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -111,7 +119,7 @@ export interface DialogContentProps extends HTMLAttributes<HTMLDivElement> {
    * ARIA role for dialog type
    * @defaultValue 'dialog'
    */
-  role?: React.AriaRole;
+  role?: AriaRole;
 
   /**
    * Always render (for animation libraries)
@@ -169,7 +177,7 @@ export interface DialogContentProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Ref forwarded to content element
    */
-  ref?: React.Ref<HTMLElement>;
+  ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -192,7 +200,7 @@ export interface DialogTitleProps extends HTMLAttributes<HTMLHeadingElement> {
   /**
    * Ref forwarded to title element
    */
-  ref?: React.Ref<HTMLElement>;
+  ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -209,7 +217,7 @@ export interface DialogDescriptionProps extends HTMLAttributes<HTMLParagraphElem
   /**
    * Ref forwarded to description element
    */
-  ref?: React.Ref<HTMLElement>;
+  ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -226,7 +234,7 @@ export interface DialogCloseProps extends ButtonHTMLAttributes<HTMLButtonElement
   /**
    * Ref forwarded to close button element
    */
-  ref?: React.Ref<HTMLElement>;
+  ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -236,9 +244,9 @@ export interface DialogContextValue {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   modal: boolean;
-  role: React.AriaRole;
-  triggerRef: React.RefObject<HTMLElement | null>;
-  contentRef: React.RefObject<HTMLElement | null>;
+  role: AriaRole;
+  triggerRef: RefObject<HTMLElement | null>;
+  contentRef: RefObject<HTMLElement | null>;
   titleId: string;
   descriptionId: string;
 }
