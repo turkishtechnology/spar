@@ -7,6 +7,7 @@ import type {
   PointerEvent,
   FocusEvent,
   CSSProperties,
+  Ref,
 } from 'react';
 
 /**
@@ -72,6 +73,11 @@ export interface SwitchProps
    * @defaultValue false
    */
   readOnly?: boolean;
+
+  /**
+   * Ref to the underlying element
+   */
+  ref?: Ref<HTMLElement>;
 
   /**
    * Auto-focus on mount
