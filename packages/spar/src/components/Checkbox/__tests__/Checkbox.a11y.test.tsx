@@ -173,7 +173,7 @@ describe('Checkbox - Accessibility Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox onCheckedChange={handleChange}>Subscribe to newsletter</Checkbox>);
+      render(<Checkbox onChange={handleChange}>Subscribe to newsletter</Checkbox>);
       const checkbox = screen.getByRole('checkbox');
 
       checkbox.focus();
@@ -187,7 +187,7 @@ describe('Checkbox - Accessibility Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox onCheckedChange={handleChange}>Subscribe to newsletter</Checkbox>);
+      render(<Checkbox onChange={handleChange}>Subscribe to newsletter</Checkbox>);
       const checkbox = screen.getByRole('checkbox');
 
       checkbox.focus();
@@ -227,7 +227,7 @@ describe('Checkbox - Accessibility Tests', () => {
       const handleChange = jest.fn();
 
       render(
-        <Checkbox disabled onCheckedChange={handleChange}>
+        <Checkbox disabled onChange={handleChange}>
           Subscribe to newsletter
         </Checkbox>,
       );
@@ -245,7 +245,7 @@ describe('Checkbox - Accessibility Tests', () => {
       const handleChange = jest.fn();
 
       render(
-        <Checkbox readOnly onCheckedChange={handleChange}>
+        <Checkbox readOnly onChange={handleChange}>
           Subscribe to newsletter
         </Checkbox>,
       );

@@ -11,7 +11,7 @@ export const Checkbox = ({
   ref,
   checked: controlledChecked,
   defaultChecked = false,
-  onCheckedChange,
+  onChange,
   disabled = false,
   readOnly = false,
   required = false,
@@ -73,7 +73,7 @@ export const Checkbox = ({
       setInternalChecked(newChecked);
     }
 
-    onCheckedChange?.(newChecked);
+    onChange?.(newChecked);
   };
 
   // Event handlers

@@ -85,23 +85,21 @@ describe('Switch Integration', () => {
             <Switch
               name='notifications'
               checked={settings.notifications}
-              onCheckedChange={(checked) =>
-                setSettings((prev) => ({ ...prev, notifications: checked }))
-              }
+              onChange={(checked) => setSettings((prev) => ({ ...prev, notifications: checked }))}
             >
               Notifications
             </Switch>
             <Switch
               name='darkMode'
               checked={settings.darkMode}
-              onCheckedChange={(checked) => setSettings((prev) => ({ ...prev, darkMode: checked }))}
+              onChange={(checked) => setSettings((prev) => ({ ...prev, darkMode: checked }))}
             >
               Dark Mode
             </Switch>
             <Switch
               name='autoSave'
               checked={settings.autoSave}
-              onCheckedChange={(checked) => setSettings((prev) => ({ ...prev, autoSave: checked }))}
+              onChange={(checked) => setSettings((prev) => ({ ...prev, autoSave: checked }))}
             >
               Auto Save
             </Switch>
@@ -231,8 +229,8 @@ describe('Switch Integration', () => {
 
       render(
         <div>
-          <Switch onCheckedChange={handleChange}>Primary Switch</Switch>
-          <Switch onCheckedChange={handleChange}>Secondary Switch</Switch>
+          <Switch onChange={handleChange}>Primary Switch</Switch>
+          <Switch onChange={handleChange}>Secondary Switch</Switch>
           <button>Other Button</button>
         </div>,
       );
@@ -272,7 +270,7 @@ describe('Switch Integration', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Switch onCheckedChange={handleChange}>Rapid Toggle</Switch>);
+      render(<Switch onChange={handleChange}>Rapid Toggle</Switch>);
 
       const switchElement = screen.getByRole('switch');
 
@@ -295,7 +293,7 @@ describe('Switch Integration', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Switch onCheckedChange={handleChange}>Mixed Interaction</Switch>);
+      render(<Switch onChange={handleChange}>Mixed Interaction</Switch>);
 
       const switchElement = screen.getByRole('switch');
 
@@ -331,12 +329,7 @@ describe('Switch Integration', () => {
 
         return (
           <div>
-            <Switch
-              checked={checked}
-              onCheckedChange={setChecked}
-              disabled={disabled}
-              readOnly={readOnly}
-            >
+            <Switch checked={checked} onChange={setChecked} disabled={disabled} readOnly={readOnly}>
               Dynamic Switch
             </Switch>
             <button onClick={() => setDisabled(!disabled)}>Toggle Disabled</button>
@@ -394,7 +387,7 @@ describe('Switch Integration', () => {
               {showSwitch ? 'Hide' : 'Show'} Switch
             </button>
             {showSwitch && (
-              <Switch checked={switchValue} onCheckedChange={setSwitchValue}>
+              <Switch checked={switchValue} onChange={setSwitchValue}>
                 Conditional Switch
               </Switch>
             )}
@@ -455,7 +448,7 @@ describe('Switch Integration', () => {
         return (
           <div>
             <Switch
-              onCheckedChange={() => {
+              onChange={() => {
                 // Simulate unmounting during onChange
                 setTimeout(() => setMounted(false), 0);
               }}
@@ -521,7 +514,7 @@ describe('Switch Integration', () => {
       const handleChange = jest.fn();
 
       const switches = Array.from({ length: 50 }, (_, i) => (
-        <Switch key={i} onCheckedChange={handleChange}>
+        <Switch key={i} onChange={handleChange}>
           Switch {i + 1}
         </Switch>
       ));
@@ -553,7 +546,7 @@ describe('Switch Integration', () => {
 
         return (
           <div>
-            <Switch checked={value} onCheckedChange={setValue}>
+            <Switch checked={value} onChange={setValue}>
               Frequent Updates
             </Switch>
             <div data-testid='update-count'>{updateCount}</div>

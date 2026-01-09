@@ -31,7 +31,7 @@ The Checkbox component provides a headless, accessible checkbox implementation t
 | `as` | `ElementType` | No | `"span"` | The element or component to render as |
 | `checked` | `boolean \| "indeterminate"` | No | `undefined` | Controlled checked state. When provided, component becomes controlled |
 | `defaultChecked` | `boolean \| "indeterminate"` | No | `false` | Default checked state for uncontrolled usage |
-| `onCheckedChange` | `(checked: boolean \| "indeterminate") => void` | No | `undefined` | Callback fired when checked state changes |
+| `onChange` | `(checked: boolean \| "indeterminate") => void` | No | `undefined` | Callback fired when checked state changes |
 | `disabled` | `boolean` | No | `false` | Whether the checkbox is disabled |
 | `readOnly` | `boolean` | No | `false` | Whether the checkbox is read-only |
 | `required` | `boolean` | No | `false` | Whether the checkbox is required in forms |
@@ -152,7 +152,7 @@ const useCheckboxState = (props: CheckboxProps) => {
 - Keyboard events: Space and Enter key handling
 - Mouse events: Click, hover, active states
 - Focus events: Focus and blur management
-- Custom onCheckedChange callback with new checked value
+- Custom onChange callback with new checked value
 
 ### SSR/CSR Safety
 - Generate deterministic IDs using useId hook or provided ID

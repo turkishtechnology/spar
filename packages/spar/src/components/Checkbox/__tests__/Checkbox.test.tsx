@@ -86,11 +86,11 @@ describe('Checkbox - Unit Tests', () => {
       expect(checkbox).toHaveAttribute('aria-checked', 'mixed');
     });
 
-    it('calls onCheckedChange when toggled in controlled mode', async () => {
+    it('calls onChange when toggled in controlled mode', async () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox checked={false} onCheckedChange={handleChange} />);
+      render(<Checkbox checked={false} onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       await user.click(checkbox);
@@ -102,7 +102,7 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox checked={false} onCheckedChange={handleChange} />);
+      render(<Checkbox checked={false} onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       await user.click(checkbox);
@@ -142,11 +142,11 @@ describe('Checkbox - Unit Tests', () => {
       expect(checkbox).toHaveAttribute('aria-checked', 'false');
     });
 
-    it('calls onCheckedChange with new state in uncontrolled mode', async () => {
+    it('calls onChange with new state in uncontrolled mode', async () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox defaultChecked={false} onCheckedChange={handleChange} />);
+      render(<Checkbox defaultChecked={false} onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       await user.click(checkbox);
@@ -162,7 +162,7 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox checked='indeterminate' onCheckedChange={handleChange} />);
+      render(<Checkbox checked='indeterminate' onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       expect(checkbox).toHaveAttribute('aria-checked', 'mixed');
@@ -194,7 +194,7 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox disabled onCheckedChange={handleChange} />);
+      render(<Checkbox disabled onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       await user.click(checkbox);
@@ -207,7 +207,7 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox disabled onCheckedChange={handleChange} />);
+      render(<Checkbox disabled onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       checkbox.focus();
@@ -222,7 +222,7 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox readOnly onCheckedChange={handleChange} />);
+      render(<Checkbox readOnly onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       await user.click(checkbox);
@@ -254,7 +254,7 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox onCheckedChange={handleChange} />);
+      render(<Checkbox onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       checkbox.focus();
@@ -267,7 +267,7 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox onCheckedChange={handleChange} />);
+      render(<Checkbox onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       checkbox.focus();
@@ -484,7 +484,7 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox onCheckedChange={handleChange} />);
+      render(<Checkbox onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       // Rapid clicks
@@ -498,7 +498,7 @@ describe('Checkbox - Unit Tests', () => {
       expect(handleChange).toHaveBeenNthCalledWith(3, true);
     });
 
-    it('handles undefined onCheckedChange gracefully', async () => {
+    it('handles undefined onChange gracefully', async () => {
       const user = userEvent.setup();
 
       render(<Checkbox />);
