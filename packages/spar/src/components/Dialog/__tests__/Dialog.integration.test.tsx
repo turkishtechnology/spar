@@ -313,13 +313,13 @@ describe('Dialog Integration Tests', () => {
 
     it('should handle controlled state changes', async () => {
       const ControlledDialog = () => {
-        const [isOpen, setIsOpen] = React.useState(false);
+        const [open, setOpen] = React.useState(false);
 
         return (
           <div>
-            <button onClick={() => setIsOpen(true)}>External Open</button>
-            <button onClick={() => setIsOpen(false)}>External Close</button>
-            <DialogRoot isOpen={isOpen} onOpenChange={setIsOpen}>
+            <button onClick={() => setOpen(true)}>External Open</button>
+            <button onClick={() => setOpen(false)}>External Close</button>
+            <DialogRoot open={open} onOpenChange={setOpen}>
               <DialogTrigger>Internal Toggle</DialogTrigger>
               <DialogPortal>
                 <DialogContent>
@@ -488,7 +488,7 @@ describe('Dialog Integration Tests', () => {
             ))}
 
             <DialogRoot
-              isOpen={selectedImage !== null}
+              open={selectedImage !== null}
               onOpenChange={(open) => !open && setSelectedImage(null)}
             >
               <DialogPortal>

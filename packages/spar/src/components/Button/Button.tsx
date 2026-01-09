@@ -7,7 +7,7 @@ import type { ButtonProps } from './types';
 export const Button = ({
   as: Element = 'button',
   type = 'button',
-  isDisabled = false,
+  disabled = false,
   shouldAutoFocus = false,
   isLoading = false,
   isPressed,
@@ -28,7 +28,7 @@ export const Button = ({
   const currentPressed = isToggle ? isPressed : internalPressed;
 
   // Interactive state
-  const isInteractive = !isDisabled && !isLoading;
+  const isInteractive = !disabled && !isLoading;
 
   // Auto focus handling - SSR safe with stable dependency array
   useEffect(() => {
@@ -92,12 +92,12 @@ export const Button = ({
   // Memoize data attributes to prevent object recreation
   const dataAttributes = useMemo(
     () => ({
-      'data-disabled': isDisabled ? 'true' : undefined,
+      'data-disabled': disabled ? 'true' : undefined,
       'data-loading': isLoading ? 'true' : undefined,
       'data-pressed': isToggle ? String(currentPressed) : undefined,
       'data-autofocus': shouldAutoFocus ? 'true' : undefined,
     }),
-    [isDisabled, isLoading, isToggle, currentPressed, shouldAutoFocus],
+    [disabled, isLoading, isToggle, currentPressed, shouldAutoFocus],
   );
 
   // Determine ARIA attributes
@@ -115,12 +115,12 @@ export const Button = ({
     }
 
     // Disabled state
-    if (isDisabled) {
+    if (disabled) {
       attrs['aria-disabled'] = true;
     }
 
     return attrs;
-  }, [isToggle, currentPressed, isLoading, isDisabled]);
+  }, [isToggle, currentPressed, isLoading, disabled]);
 
   // Build props for the element
   const elementProps: Record<string, unknown> = {
@@ -129,7 +129,7 @@ export const Button = ({
     style,
     onClick: handleClick,
     onKeyDown: handleKeyDown,
-    tabIndex: isDisabled ? -1 : 0,
+    tabIndex: disabled ? -1 : 0,
     ...dataAttributes,
     ...ariaAttributes,
     ...htmlProps,
@@ -138,7 +138,7 @@ export const Button = ({
   // Add button-specific props when rendering as button
   if (Element === 'button') {
     (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).type = type;
-    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = isDisabled;
+    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = disabled;
   }
 
   // Add role when not rendering as button

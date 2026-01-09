@@ -25,7 +25,7 @@ export const CollapsibleContent = ({
   onBeforeMatch,
   ...props
 }: CollapsibleContentProps) => {
-  const { isOpen, isDisabled, contentId, toggle } = useCollapsibleContext();
+  const { isOpen, disabled, contentId, toggle } = useCollapsibleContext();
   const contentRef = useRef<HTMLElement>(null);
 
   // Update CSS custom properties for animations
@@ -85,7 +85,7 @@ export const CollapsibleContent = ({
       id={contentId}
       hidden={hiddenAttribute}
       data-state={dataState}
-      data-disabled={isDisabled ? '' : undefined}
+      data-disabled={disabled ? '' : undefined}
       style={combinedStyle}
       onBeforeMatch={forceMount && !isOpen ? handleBeforeMatch : undefined}
       {...props}

@@ -1,10 +1,18 @@
-import type { ElementType, ReactNode, MouseEventHandler, KeyboardEventHandler } from 'react';
+import type {
+  ElementType,
+  ReactNode,
+  MouseEventHandler,
+  KeyboardEventHandler,
+  ButtonHTMLAttributes,
+  CSSProperties,
+  Ref,
+} from 'react';
 
 /**
  * Props for Button component
  * @remarks Fully accessible, headless component
  */
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * The element type to render as
    * @defaultValue "button"
@@ -15,7 +23,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
    * Disabled state - properly announced to screen readers
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Whether the button should receive focus when first rendered
@@ -63,10 +71,10 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   /**
    * Inline styles
    */
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 
   /**
    * Ref to the underlying element
    */
-  ref?: React.Ref<HTMLElement>;
+  ref?: Ref<HTMLElement>;
 }

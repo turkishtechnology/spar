@@ -85,13 +85,13 @@ const FormWithTooltips = () => {
 };
 
 const ControlledTooltipDemo = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
 
   return (
     <TooltipProvider>
       <div>
-        <TooltipRoot isOpen={isOpen} onOpenChange={setIsOpen}>
+        <TooltipRoot open={open} onOpenChange={setOpen}>
           <TooltipTrigger asChild>
             <button>Controlled tooltip trigger</button>
           </TooltipTrigger>
@@ -100,7 +100,7 @@ const ControlledTooltipDemo = () => {
           </TooltipPortal>
         </TooltipRoot>
 
-        <button onClick={() => setIsOpen(!isOpen)}>Toggle tooltip programmatically</button>
+        <button onClick={() => setOpen(!open)}>Toggle tooltip programmatically</button>
 
         <input
           type='text'
@@ -109,7 +109,7 @@ const ControlledTooltipDemo = () => {
           onChange={(e) => setMessage(e.target.value)}
         />
 
-        <div>Status: {isOpen ? 'Open' : 'Closed'}</div>
+        <div>Status: {open ? 'Open' : 'Closed'}</div>
       </div>
     </TooltipProvider>
   );

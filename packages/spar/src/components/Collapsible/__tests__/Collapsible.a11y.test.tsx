@@ -33,7 +33,7 @@ describe('Collapsible Accessibility', () => {
 
     it('has no accessibility violations with disabled state', async () => {
       const { container } = render(
-        <Collapsible isDisabled>
+        <Collapsible disabled>
           <CollapsibleTrigger>Toggle content</CollapsibleTrigger>
           <CollapsibleContent>This is the collapsible content</CollapsibleContent>
         </Collapsible>,
@@ -134,7 +134,7 @@ describe('Collapsible Accessibility', () => {
 
     it('handles aria-disabled for button elements when disabled', () => {
       render(
-        <Collapsible isDisabled>
+        <Collapsible disabled>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Content</CollapsibleContent>
         </Collapsible>,
@@ -147,7 +147,7 @@ describe('Collapsible Accessibility', () => {
 
     it('handles aria-disabled for custom elements when disabled', () => {
       render(
-        <Collapsible isDisabled>
+        <Collapsible disabled>
           <CollapsibleTrigger as='div' data-testid='trigger'>
             Toggle
           </CollapsibleTrigger>
@@ -250,7 +250,7 @@ describe('Collapsible Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible isDisabled>
+        <Collapsible disabled>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent data-testid='content'>Content</CollapsibleContent>
         </Collapsible>,
@@ -271,7 +271,7 @@ describe('Collapsible Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible isDisabled>
+        <Collapsible disabled>
           <CollapsibleTrigger as='div' data-testid='trigger'>
             Toggle
           </CollapsibleTrigger>
@@ -369,7 +369,7 @@ describe('Collapsible Accessibility', () => {
 
     it('prevents tabbing to trigger when disabled (custom element)', () => {
       render(
-        <Collapsible isDisabled>
+        <Collapsible disabled>
           <CollapsibleTrigger as='div' data-testid='trigger'>
             Toggle
           </CollapsibleTrigger>
@@ -383,7 +383,7 @@ describe('Collapsible Accessibility', () => {
 
     it('prevents interaction when disabled (button)', () => {
       render(
-        <Collapsible isDisabled>
+        <Collapsible disabled>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Content</CollapsibleContent>
         </Collapsible>,
@@ -525,7 +525,7 @@ describe('Collapsible Accessibility', () => {
 
     it('provides data-disabled attribute when disabled', () => {
       render(
-        <Collapsible isDisabled data-testid='collapsible'>
+        <Collapsible disabled data-testid='collapsible'>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent data-testid='content' forceMount>
             Content

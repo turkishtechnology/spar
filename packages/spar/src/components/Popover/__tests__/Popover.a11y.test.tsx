@@ -105,7 +105,7 @@ describe('Popover Accessibility', () => {
     it('should pass axe accessibility tests - with disabled trigger', async () => {
       const { container } = render(
         <PopoverRoot>
-          <PopoverTrigger isDisabled>Disabled Trigger</PopoverTrigger>
+          <PopoverTrigger disabled>Disabled Trigger</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
         </PopoverRoot>,
       );
@@ -416,7 +416,7 @@ describe('Popover Accessibility', () => {
 
       render(
         <PopoverRoot>
-          <PopoverTrigger isDisabled>Disabled</PopoverTrigger>
+          <PopoverTrigger disabled>Disabled</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
         </PopoverRoot>,
       );
@@ -693,7 +693,7 @@ describe('Popover Accessibility', () => {
     it('indicates disabled state clearly', () => {
       render(
         <PopoverRoot>
-          <PopoverTrigger isDisabled>Disabled trigger</PopoverTrigger>
+          <PopoverTrigger disabled>Disabled trigger</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
         </PopoverRoot>,
       );

@@ -18,7 +18,7 @@ export const Collapsible = ({
   open: controlledOpen,
   defaultOpen = false,
   onOpenChange,
-  isDisabled = false,
+  disabled = false,
   children,
   ...props
 }: CollapsibleProps) => {
@@ -34,7 +34,7 @@ export const Collapsible = ({
   const isOpen = isControlled ? controlledOpen : internalOpen;
 
   const toggle = useCallback(() => {
-    if (isDisabled) return;
+    if (disabled) return;
 
     const nextOpen = !isOpen;
 
@@ -45,18 +45,18 @@ export const Collapsible = ({
 
     // Call callback for both controlled and uncontrolled
     onOpenChange?.(nextOpen);
-  }, [isDisabled, isOpen, isControlled, onOpenChange]);
+  }, [disabled, isOpen, isControlled, onOpenChange]);
 
   // Memoize context value to prevent unnecessary re-renders
   const contextValue = useMemo(
     () => ({
       isOpen,
       toggle,
-      isDisabled,
+      disabled,
       triggerId,
       contentId,
     }),
-    [isOpen, toggle, isDisabled, triggerId, contentId],
+    [isOpen, toggle, disabled, triggerId, contentId],
   );
 
   // Get data attributes for styling
@@ -64,7 +64,7 @@ export const Collapsible = ({
 
   return (
     <CollapsibleContext.Provider value={contextValue}>
-      <div data-state={dataState} data-disabled={isDisabled ? '' : undefined} {...props}>
+      <div data-state={dataState} data-disabled={disabled ? '' : undefined} {...props}>
         {children}
       </div>
     </CollapsibleContext.Provider>

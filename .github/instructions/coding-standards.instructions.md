@@ -166,7 +166,7 @@ export interface ComponentProps extends React.HTMLAttributes<HTMLElement> {
    * Disabled state - properly announced to screen readers
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Loading state with screen reader support
@@ -373,10 +373,10 @@ const click = () => {}; // Unclear
 
 ```typescript
 // ALWAYS: is/has/should/can prefix
-(isDisabled, hasError, shouldAutoFocus, canSubmit);
+(hasError, shouldAutoFocus, canSubmit);
 
 // NEVER: Ambiguous names
-(disabled, error, focus, submit);
+(error, focus, submit);
 ```
 
 ## Performance Guidelines
@@ -405,7 +405,7 @@ return isLoading ? <Spinner /> : error ? <Error /> : <Content />; // Hard to rea
 
 ```typescript
 // ALWAYS: Extract known props
-const { variant, isDisabled, children, ...safeProps } = props;
+const { variant, disabled, children, ...safeProps } = props;
 return <button {...safeProps}>{children}</button>;
 
 // NEVER: Blind prop spreading with sensitive props

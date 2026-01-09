@@ -38,7 +38,7 @@ describe('Select', () => {
 
       it('renders disabled state correctly', () => {
         render(
-          <Select isDisabled>
+          <Select disabled>
             <Select.Trigger>
               <Select.Value placeholder='Select...' />
             </Select.Trigger>
@@ -316,7 +316,7 @@ describe('Select', () => {
         const user = userEvent.setup();
 
         render(
-          <Select isDisabled>
+          <Select disabled>
             <Select.Trigger>
               <Select.Value placeholder='Select...' />
             </Select.Trigger>
@@ -341,7 +341,7 @@ describe('Select', () => {
         const handleValueChange = jest.fn();
 
         render(
-          <Select isDisabled onValueChange={handleValueChange}>
+          <Select disabled onValueChange={handleValueChange}>
             <Select.Trigger>
               <Select.Value placeholder='Select...' />
             </Select.Trigger>
@@ -415,7 +415,7 @@ describe('Select', () => {
 
       it('disables hidden input when disabled prop is true', () => {
         const { container } = render(
-          <Select name='test-select' value='option1' isDisabled>
+          <Select name='test-select' value='option1' disabled>
             <Select.Trigger>
               <Select.Value placeholder='Select...' />
             </Select.Trigger>
@@ -838,7 +838,7 @@ describe('Select', () => {
             <Select.Value placeholder='Select...' />
           </Select.Trigger>
           <Select.Content>
-            <Select.Item value='option1' isDisabled>
+            <Select.Item value='option1' disabled>
               Option 1
             </Select.Item>
             <Select.Item value='option2'>Option 2</Select.Item>
@@ -867,7 +867,7 @@ describe('Select', () => {
             <Select.Value placeholder='Select...' />
           </Select.Trigger>
           <Select.Content>
-            <Select.Item value='option1' isDisabled>
+            <Select.Item value='option1' disabled>
               Option 1
             </Select.Item>
           </Select.Content>

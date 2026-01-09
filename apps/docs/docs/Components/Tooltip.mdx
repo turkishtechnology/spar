@@ -342,7 +342,7 @@ function DisabledExample() {
   const [disabled, setDisabled] = React.useState(false);
 
   return (
-    <TooltipRoot isDisabled={disabled}>
+    <TooltipRoot disabled={disabled}>
       <TooltipTrigger>
         <button>Toggle disabled: {disabled ? 'Yes' : 'No'}</button>
       </TooltipTrigger>
@@ -461,12 +461,12 @@ Root component that manages tooltip state and provides context to child componen
 | Name            | Type                      | Default | Description                              |
 | --------------- | ------------------------- | ------- | ---------------------------------------- |
 | `children`      | `React.ReactNode`         | -       | Tooltip trigger and content components   |
-| `isOpen?`       | `boolean`                 | -       | Controlled state for tooltip visibility  |
+| `open?`       | `boolean`                 | -       | Controlled state for tooltip visibility  |
 | `defaultOpen?`  | `boolean`                 | `false` | Default open state for uncontrolled mode |
 | `onOpenChange?` | `(open: boolean) => void` | -       | Callback when tooltip open state changes |
 | `delay?`        | `number`                  | `700`   | Override provider delay for this tooltip |
 | `hideDelay?`    | `number`                  | `0`     | Override provider hide delay             |
-| `isDisabled?`   | `boolean`                 | `false` | Whether tooltip is disabled              |
+| `disabled?`   | `boolean`                 | `false` | Whether tooltip is disabled              |
 
 **Events**
 
@@ -554,7 +554,7 @@ The content that displays in the tooltip popup with smart positioning.
 | `alignOffset?`          | `number`                                  | `0`         | Offset for alignment                            |
 | `avoidCollisions?`      | `boolean`                                 | `true`      | Whether to avoid viewport collisions            |
 | `collisionBoundary?`    | `Element \| Element[]`                    | -           | Collision boundary elements                     |
-| `collisionPadding?`     | `number \| Partial<Record<Side, number>>` | `10`        | Padding for collision detection                 |
+| `collisionPadding?`     | `number \| Partial<Record<Side, number>>` | `8`         | Padding for collision detection                 |
 | `sticky?`               | `"partial" \| "always"`                   | `"partial"` | Sticky behavior during scroll                   |
 | `hideWhenDetached?`     | `boolean`                                 | `false`     | Hide when trigger becomes detached              |
 | `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`          | -           | Escape key handler                              |

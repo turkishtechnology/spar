@@ -43,7 +43,7 @@ describe('Button Integration', () => {
 
       render(
         <form onSubmit={handleSubmit}>
-          <Button type='submit' isDisabled>
+          <Button type='submit' disabled>
             Submit Disabled
           </Button>
         </form>,
@@ -61,7 +61,7 @@ describe('Button Integration', () => {
 
       render(
         <form onSubmit={handleSubmit}>
-          <Button type='submit' isLoading isDisabled>
+          <Button type='submit' isLoading disabled>
             Submit Loading
           </Button>
         </form>,
@@ -142,7 +142,7 @@ describe('Button Integration', () => {
         <div role='group' aria-label='Button Group'>
           <Button onClick={button1Click}>Button 1</Button>
           <Button onClick={button2Click}>Button 2</Button>
-          <Button onClick={button3Click} isDisabled>
+          <Button onClick={button3Click} disabled>
             Button 3
           </Button>
         </div>,

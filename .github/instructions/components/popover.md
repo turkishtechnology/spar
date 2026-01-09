@@ -23,7 +23,7 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `isOpen` | `boolean` | No | - | Controlled state for popover visibility |
+| `open` | `boolean` | No | - | Controlled state for popover visibility |
 | `onOpenChange` | `(open: boolean) => void` | No | - | Callback when popover open state changes |
 | `defaultOpen` | `boolean` | No | `false` | Initial open state for uncontrolled mode |
 | `modal` | `boolean` | No | `false` | Whether popover should behave modally (focus trap + backdrop) |
@@ -38,7 +38,7 @@
 |------|------|----------|---------|-------------|
 | `asChild` | `boolean` | No | `false` | Whether to render as child element instead of button |
 | `children` | `React.ReactNode` | Yes | - | Trigger element content |
-| `isDisabled` | `boolean` | No | `false` | Whether trigger is disabled |
+| `disabled` | `boolean` | No | `false` | Whether trigger is disabled |
 
 ### PopoverContent Props
 
@@ -98,7 +98,7 @@
 
 ### Controlled/Uncontrolled
 - **Uncontrolled**: Use `defaultOpen` for initial state, internal state management
-- **Controlled**: Provide `isOpen` and `onOpenChange` for external state control
+- **Controlled**: Provide `open` and `onOpenChange` for external state control
 
 ## 3. Behavior Matrix
 
@@ -228,7 +228,7 @@ type PolymorphicComponent<T extends React.ElementType, P = {}> = <C extends Reac
 // Enhanced component interfaces with generics
 interface PopoverTriggerProps<T extends React.ElementType = 'button'> 
   extends PolymorphicComponentProps<T> {
-  isDisabled?: boolean;
+  disabled?: boolean;
 }
 
 interface PopoverContentProps<T extends React.ElementType = 'div'> 

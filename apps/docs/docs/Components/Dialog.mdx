@@ -19,9 +19,9 @@ A headless modal and non-modal dialog component that provides accessibility feat
 <div className='dialog-demo-container'>
   <LiveCode
     code={`function DialogDemo() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
   return (
-    <Dialog.Root className='dialog' isOpen={isOpen} onOpenChange={setIsOpen}>
+    <Dialog.Root className='dialog' open={open} onOpenChange={setOpen}>
       <Dialog.Trigger className='dialog-trigger'>
         Open Dialog
       </Dialog.Trigger>
@@ -288,16 +288,16 @@ Control the dialog's open state externally for integration with other components
 
 ```tsx {2,4,12}
 function ControlledDialog() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleSave = () => {
     // Perform save operation
     console.log('Saving...');
-    setIsOpen(false);
+    setOpen(false);
   };
 
   return (
-    <Dialog.Root isOpen={isOpen} onOpenChange={setIsOpen}>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>Edit Profile</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay />
@@ -373,11 +373,11 @@ Control initial focus and focus restoration for optimal user experience.
 
 ```tsx {6-8,10-12}
 function CustomFocusDialog() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   return (
-    <Dialog.Root isOpen={isOpen} onOpenChange={setIsOpen}>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>Create Account</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay />
@@ -447,24 +447,24 @@ Use `forceMount` for animation libraries that need to control mounting and unmou
 
 ```tsx {4,6-10}
 function AnimatedDialog() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   return (
-    <Dialog.Root isOpen={isOpen} onOpenChange={setIsOpen}>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>Open Animated Dialog</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay
           forceMount
           style={{
-            opacity: isOpen ? 1 : 0,
+            opacity: open ? 1 : 0,
             transition: 'opacity 0.2s ease',
           }}
         />
         <Dialog.Content
           forceMount
           style={{
-            transform: isOpen ? 'scale(1)' : 'scale(0.95)',
-            opacity: isOpen ? 1 : 0,
+            transform: open ? 'scale(1)' : 'scale(0.95)',
+            opacity: open ? 1 : 0,
             transition: 'all 0.2s ease',
           }}
         >
@@ -489,7 +489,7 @@ The root container that manages dialog state and provides context to all child c
 | Name            | Type                      | Default     | Description                                          |
 | --------------- | ------------------------- | ----------- | ---------------------------------------------------- |
 | `children`      | `ReactNode`               | -           | Dialog trigger and portal components                 |
-| `isOpen?`       | `boolean`                 | `undefined` | Controlled open state                                |
+| `open?`       | `boolean`                 | `undefined` | Controlled open state                                |
 | `onOpenChange?` | `(open: boolean) => void` | `undefined` | Callback when open state changes                     |
 | `defaultOpen?`  | `boolean`                 | `false`     | Initial open state for uncontrolled usage            |
 | `modal?`        | `boolean`                 | `true`      | Whether dialog is modal (blocks interaction outside) |
@@ -516,7 +516,7 @@ Interactive element that opens the dialog when activated.
 | ------------- | ------------------------ | ----------- | -------------------------------- |
 | `children`    | `ReactNode`              | -           | Trigger content                  |
 | `as?`         | `ElementType`            | `'button'`  | Polymorphic element type         |
-| `isDisabled?` | `boolean`                | `false`     | Disables trigger interaction     |
+| `disabled?` | `boolean`                | `false`     | Disables trigger interaction     |
 | `ref?`        | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to trigger element |
 
 **Events**

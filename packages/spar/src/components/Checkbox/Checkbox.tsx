@@ -12,9 +12,9 @@ export const Checkbox = ({
   checked: controlledChecked,
   defaultChecked = false,
   onChange,
-  isDisabled = false,
-  isReadOnly = false,
-  isRequired = false,
+  disabled = false,
+  readOnly = false,
+  required = false,
   name,
   value = 'on',
   form,
@@ -65,7 +65,7 @@ export const Checkbox = ({
 
   // Toggle checked state
   const handleToggleChecked = () => {
-    if (isDisabled || isReadOnly) return;
+    if (disabled || readOnly) return;
 
     const newChecked: CheckedState = checked === 'indeterminate' ? true : !checked;
 
@@ -105,7 +105,7 @@ export const Checkbox = ({
   };
 
   const handleMouseEnter = () => {
-    if (!isDisabled) {
+    if (!disabled) {
       setIsHovered(true);
     }
   };
@@ -116,7 +116,7 @@ export const Checkbox = ({
   };
 
   const handleMouseDown = () => {
-    if (!isDisabled) {
+    if (!disabled) {
       setIsPressed(true);
     }
   };
@@ -129,28 +129,28 @@ export const Checkbox = ({
   const dataAttributes: Record<string, string | undefined> = {
     'data-checked': checked === true ? 'true' : undefined,
     'data-indeterminate': checked === 'indeterminate' ? 'true' : undefined,
-    'data-disabled': isDisabled ? 'true' : undefined,
+    'data-disabled': disabled ? 'true' : undefined,
     'data-focus': isFocused ? 'true' : undefined,
     'data-hover': isHovered ? 'true' : undefined,
     'data-active': isPressed ? 'true' : undefined,
     'data-invalid': undefined, // Will be set by validation logic
-    'data-required': isRequired ? 'true' : undefined,
+    'data-required': required ? 'true' : undefined,
   };
 
   // ARIA attributes
   const ariaAttributes = {
     role: 'checkbox',
     'aria-checked': checked === 'indeterminate' ? 'mixed' : checked,
-    'aria-disabled': isDisabled ? 'true' : undefined,
+    'aria-disabled': disabled ? 'true' : undefined,
     'aria-invalid': undefined, // Will be set by validation logic
-    'aria-required': isRequired ? 'true' : undefined,
-    tabIndex: isDisabled ? -1 : tabIndex,
+    'aria-required': required ? 'true' : undefined,
+    tabIndex: disabled ? -1 : tabIndex,
   };
 
   // Render props for children function
   const renderProps: CheckboxRenderProps = {
     checked,
-    isDisabled,
+    disabled,
     isFocused,
     isHovered,
     isPressed,

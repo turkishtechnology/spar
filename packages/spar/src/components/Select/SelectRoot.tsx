@@ -22,7 +22,7 @@ export const SelectRoot = ({
   open: controlledOpen,
   defaultOpen = false,
   onOpenChange,
-  isDisabled = false,
+  disabled = false,
   required = false,
   name,
   dir = 'ltr',
@@ -60,20 +60,20 @@ export const SelectRoot = ({
   // Value change handler
   const handleValueChange = useCallback(
     (newValue: string) => {
-      if (isDisabled) return;
+      if (disabled) return;
 
       if (!isValueControlled) {
         setInternalValue(newValue);
       }
       onValueChange?.(newValue);
     },
-    [isDisabled, isValueControlled, onValueChange],
+    [disabled, isValueControlled, onValueChange],
   );
 
   // Open change handler
   const handleOpenChange = useCallback(
     (newOpen: boolean) => {
-      if (isDisabled) return;
+      if (disabled) return;
 
       if (!isOpenControlled) {
         setInternalOpen(newOpen);
@@ -86,7 +86,7 @@ export const SelectRoot = ({
         setSearchString('');
       }
     },
-    [isDisabled, isOpenControlled, onOpenChange],
+    [disabled, isOpenControlled, onOpenChange],
   );
 
   // Context value
@@ -95,7 +95,7 @@ export const SelectRoot = ({
       // State
       open: currentOpen,
       value: currentValue,
-      disabled: isDisabled,
+      disabled,
       required,
       dir,
 
@@ -129,7 +129,7 @@ export const SelectRoot = ({
     [
       currentOpen,
       currentValue,
-      isDisabled,
+      disabled,
       required,
       dir,
       handleValueChange,
@@ -146,7 +146,7 @@ export const SelectRoot = ({
 
   return (
     <SelectContext.Provider value={contextValue}>
-      <Component {...props} data-disabled={isDisabled ? '' : undefined}>
+      <Component {...props} data-disabled={disabled ? '' : undefined}>
         {children}
       </Component>
       {/* Hidden input for form integration */}
@@ -156,7 +156,7 @@ export const SelectRoot = ({
           name={name}
           value={currentValue}
           required={required}
-          disabled={isDisabled}
+          disabled={disabled}
         />
       )}
     </SelectContext.Provider>

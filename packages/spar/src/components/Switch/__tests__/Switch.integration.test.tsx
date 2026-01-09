@@ -138,10 +138,10 @@ describe('Switch Integration', () => {
 
       render(
         <form>
-          <Switch name='terms' isRequired>
+          <Switch name='terms' required>
             I accept the terms and conditions
           </Switch>
-          <Switch name='privacy' isRequired>
+          <Switch name='privacy' required>
             I accept the privacy policy
           </Switch>
           <button
@@ -323,22 +323,17 @@ describe('Switch Integration', () => {
       const user = userEvent.setup();
 
       const DynamicSwitch = () => {
-        const [isDisabled, setIsDisabled] = React.useState(false);
-        const [isReadOnly, setIsReadOnly] = React.useState(false);
+        const [disabled, setDisabled] = React.useState(false);
+        const [readOnly, setIsReadOnly] = React.useState(false);
         const [checked, setChecked] = React.useState(false);
 
         return (
           <div>
-            <Switch
-              checked={checked}
-              onChange={setChecked}
-              isDisabled={isDisabled}
-              isReadOnly={isReadOnly}
-            >
+            <Switch checked={checked} onChange={setChecked} disabled={disabled} readOnly={readOnly}>
               Dynamic Switch
             </Switch>
-            <button onClick={() => setIsDisabled(!isDisabled)}>Toggle Disabled</button>
-            <button onClick={() => setIsReadOnly(!isReadOnly)}>Toggle ReadOnly</button>
+            <button onClick={() => setDisabled(!disabled)}>Toggle Disabled</button>
+            <button onClick={() => setIsReadOnly(!readOnly)}>Toggle ReadOnly</button>
           </div>
         );
       };

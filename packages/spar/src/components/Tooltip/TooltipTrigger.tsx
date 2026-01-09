@@ -157,19 +157,19 @@ export const TooltipTrigger = ({
     ref: refCallback,
     id: context.triggerId,
     ...(context.isOpen &&
-      !context.isDisabled &&
+      !context.disabled &&
       !context.asLabel && { 'aria-describedby': context.contentId }),
     ...(context.isOpen &&
-      !context.isDisabled &&
+      !context.disabled &&
       context.asLabel && { 'aria-labelledby': context.contentId }),
     'data-state': context.isOpen ? 'open' : 'closed',
     'data-placement': context.placement,
-    'data-disabled': context.isDisabled ? 'true' : 'false',
-    onPointerEnter: context.isDisabled ? undefined : handlePointerEnter,
-    onPointerLeave: context.isDisabled ? undefined : handlePointerLeave,
-    onFocus: context.isDisabled ? undefined : handleFocus,
-    onBlur: context.isDisabled ? undefined : handleBlur,
-    onKeyDown: context.isDisabled ? undefined : handleKeyDown,
+    'data-disabled': context.disabled ? 'true' : 'false',
+    onPointerEnter: context.disabled ? undefined : handlePointerEnter,
+    onPointerLeave: context.disabled ? undefined : handlePointerLeave,
+    onFocus: context.disabled ? undefined : handleFocus,
+    onBlur: context.disabled ? undefined : handleBlur,
+    onKeyDown: context.disabled ? undefined : handleKeyDown,
   };
 
   if (asChild) {

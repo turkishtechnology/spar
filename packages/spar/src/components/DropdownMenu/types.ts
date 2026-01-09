@@ -98,7 +98,7 @@ export interface DropdownMenuContentProps extends HTMLAttributes<HTMLElement> {
 
   /**
    * Offset from trigger (in pixels)
-   * @defaultValue 0
+   * @defaultValue 8
    */
   sideOffset?: number;
 
