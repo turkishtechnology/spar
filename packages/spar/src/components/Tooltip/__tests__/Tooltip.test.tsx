@@ -280,7 +280,7 @@ describe('TooltipTrigger', () => {
     const trigger = screen.getByRole('button', { name: 'Trigger' });
     expect(trigger).toHaveAttribute('data-state', 'open');
     expect(trigger).toHaveAttribute('data-placement', 'top');
-    expect(trigger).toHaveAttribute('data-disabled', 'false');
+    expect(trigger).not.toHaveAttribute('data-disabled');
   });
 });
 

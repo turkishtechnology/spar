@@ -15,9 +15,9 @@ export const Label = ({
   // Memoize data attributes to prevent object recreation
   const dataAttributes = useMemo(
     () => ({
-      'data-required': required || undefined,
-      'data-optional': isOptional || undefined,
-      'data-disabled': disabled || undefined,
+      'data-required': required ? '' : undefined,
+      'data-optional': isOptional ? '' : undefined,
+      'data-disabled': disabled ? '' : undefined,
     }),
     [required, isOptional, disabled],
   );

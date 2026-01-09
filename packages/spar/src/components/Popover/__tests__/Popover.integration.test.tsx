@@ -394,7 +394,7 @@ describe('Popover Integration Tests', () => {
                     {emailError && '⚠️'}
                   </span>
                 </PopoverTrigger>
-                <PopoverContent>
+                <PopoverContent onCloseAutoFocus={(e) => e.preventDefault()}>
                   <div>
                     <strong>Validation Error</strong>
                     <p>{emailError}</p>

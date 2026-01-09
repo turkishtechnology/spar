@@ -64,7 +64,7 @@ export const TabsTrigger = ({
       role: 'tab',
       'aria-selected': isSelected,
       'aria-controls': panelId,
-      'aria-disabled': disabled,
+      ...(Component !== 'button' && disabled ? { 'aria-disabled': true } : {}),
       'data-state': isSelected ? 'active' : 'inactive',
       'data-disabled': disabled ? '' : undefined,
       'data-orientation': orientation,
@@ -74,9 +74,8 @@ export const TabsTrigger = ({
       onFocus: handleFocus,
       onBlur: handleBlur,
       ...props,
-    } as React.HTMLAttributes<HTMLElement>;
-
-    return React.cloneElement(children, childProps);
+    };
+    return React.cloneElement(children, childProps as Partial<React.HTMLAttributes<HTMLElement>>);
   }
 
   return (
@@ -87,7 +86,7 @@ export const TabsTrigger = ({
       type={Component === 'button' ? 'button' : undefined}
       aria-selected={isSelected}
       aria-controls={panelId}
-      aria-disabled={disabled}
+      {...(Component !== 'button' && disabled ? { 'aria-disabled': true } : {})}
       data-state={isSelected ? 'active' : 'inactive'}
       data-disabled={disabled ? '' : undefined}
       data-orientation={orientation}

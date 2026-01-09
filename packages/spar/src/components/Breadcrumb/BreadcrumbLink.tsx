@@ -74,8 +74,8 @@ export const BreadcrumbLink = ({
     onClick: handleClick,
     onKeyDown: handleKeyDown,
     'data-spar-breadcrumb-link': '',
-    'data-disabled': linkIsDisabled || undefined,
-    'data-external': isExternal || undefined,
+    'data-disabled': linkIsDisabled ? '' : undefined,
+    'data-external': isExternal ? '' : undefined,
   };
 
   return createElement(as, linkProps, children);

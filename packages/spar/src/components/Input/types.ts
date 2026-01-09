@@ -11,6 +11,7 @@ export interface InputContextValue {
   isInvalid: boolean;
   disabled: boolean;
   required: boolean;
+  readOnly?: boolean;
 }
 
 /**

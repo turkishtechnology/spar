@@ -92,10 +92,10 @@ export const Button = ({
   // Memoize data attributes to prevent object recreation
   const dataAttributes = useMemo(
     () => ({
-      'data-disabled': disabled ? 'true' : undefined,
-      'data-loading': isLoading ? 'true' : undefined,
+      'data-disabled': disabled ? '' : undefined,
+      'data-loading': isLoading ? '' : undefined,
       'data-pressed': isToggle ? String(currentPressed) : undefined,
-      'data-autofocus': shouldAutoFocus ? 'true' : undefined,
+      'data-autofocus': shouldAutoFocus ? '' : undefined,
     }),
     [disabled, isLoading, isToggle, currentPressed, shouldAutoFocus],
   );
@@ -114,36 +114,48 @@ export const Button = ({
       attrs['aria-busy'] = true;
     }
 
-    // Disabled state
-    if (disabled) {
+    // Disabled state - only add aria-disabled for non-native button elements
+    // Native buttons already communicate disabled state via the disabled attribute
+    if (disabled && Element !== 'button') {
       attrs['aria-disabled'] = true;
     }
 
     return attrs;
-  }, [isToggle, currentPressed, isLoading, disabled]);
+  }, [isToggle, currentPressed, isLoading, disabled, Element]);
 
   // Build props for the element
+  const isNativeButton = Element === 'button';
   const elementProps: Record<string, unknown> = {
     ref,
     className,
     style,
     onClick: handleClick,
     onKeyDown: handleKeyDown,
-    tabIndex: disabled ? -1 : 0,
+    tabIndex: isNativeButton ? (disabled ? -1 : 0) : disabled ? -1 : 0,
     ...dataAttributes,
     ...ariaAttributes,
     ...htmlProps,
   };
 
   // Add button-specific props when rendering as button
-  if (Element === 'button') {
+  if (isNativeButton) {
     (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).type = type;
     (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = disabled;
   }
 
-  // Add role when not rendering as button
-  if (Element !== 'button') {
+  // Add role and aria-disabled when not rendering as button
+  if (!isNativeButton) {
     elementProps.role = 'button';
+    if (disabled) {
+      elementProps['aria-disabled'] = true;
+    }
+    // Remove native disabled and type if present, using Record<string, unknown>
+    if ('disabled' in elementProps) {
+      delete elementProps['disabled'];
+    }
+    if ('type' in elementProps) {
+      delete elementProps['type'];
+    }
   }
 
   return <Element {...elementProps}>{children}</Element>;

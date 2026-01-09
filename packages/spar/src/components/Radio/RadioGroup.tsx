@@ -133,9 +133,9 @@ export const RadioGroup = ({
   // Data attributes for styling
   const dataAttributes = {
     'data-orientation': orientation,
-    'data-disabled': disabled || undefined,
-    'data-required': required || undefined,
-    'data-toolbar': isInToolbar || undefined,
+    'data-disabled': disabled ? '' : undefined,
+    'data-required': required ? '' : undefined,
+    'data-toolbar': isInToolbar ? '' : undefined,
   };
 
   return (
@@ -154,7 +154,15 @@ export const RadioGroup = ({
       >
         {children}
         {/* Hidden input for form submission */}
-        {value && <input type='hidden' name={name} value={value} disabled={disabled} />}
+        {value && (
+          <input
+            type='hidden'
+            name={name}
+            value={value}
+            disabled={disabled}
+            data-disabled={disabled ? '' : undefined}
+          />
+        )}
       </Component>
     </RadioGroupContext.Provider>
   );

@@ -85,6 +85,8 @@ export const DropdownMenuTrigger = ({
     [onKeyDown, disabled, handleOpen, menu],
   );
 
+  const isNativeButton = Component === 'button';
+
   const commonProps = {
     ...props,
     id: menu.triggerId,
@@ -92,7 +94,7 @@ export const DropdownMenuTrigger = ({
     'aria-expanded': menu.open,
     'aria-controls': menu.open ? menu.contentId : undefined,
     'data-state': menu.open ? 'open' : 'closed',
-    ...(disabled ? { 'data-disabled': '', 'aria-disabled': true } : {}),
+    ...(disabled ? { 'data-disabled': '' } : {}),
     onClick: handleClick,
     onKeyDown: handleKeyDown,
   };
@@ -102,18 +104,21 @@ export const DropdownMenuTrigger = ({
     if (!isValidElement(onlyChild)) {
       throw new Error('DropdownMenuTrigger with asChild expects a single React element child');
     }
+    const childType = (onlyChild as ReactElement).type;
+    let isButton = false;
+    if (typeof childType === 'string') {
+      isButton = childType.toLowerCase() === 'button';
+    }
     const childRef = (onlyChild as { ref?: Ref<HTMLElement | null> }).ref;
-
     return cloneElement<Record<string, unknown> & { ref?: Ref<HTMLElement | null> }>(
       onlyChild as ReactElement<Record<string, unknown> & { ref?: Ref<HTMLElement | null> }>,
       {
         ...commonProps,
+        ...(isButton ? { disabled } : disabled ? { 'aria-disabled': true } : {}),
         ref: composeRefs<HTMLElement | null>(childRef, triggerRefCallback),
       },
     );
   }
-
-  const isNativeButton = Component === 'button';
 
   return (
     <Component
@@ -122,6 +127,7 @@ export const DropdownMenuTrigger = ({
       role={isNativeButton ? undefined : 'button'}
       tabIndex={isNativeButton ? commonProps.tabIndex : disabled ? -1 : (commonProps.tabIndex ?? 0)}
       disabled={isNativeButton ? disabled : undefined}
+      {...(!isNativeButton && disabled ? { 'aria-disabled': true } : {})}
     >
       {children}
     </Component>

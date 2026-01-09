@@ -40,6 +40,9 @@ export const InputField = <T extends ElementType = 'input'>({
         onBlur={handleBlur}
         data-spar-input
         data-focused={focused ? '' : undefined}
+        data-disabled={props.disabled ? '' : undefined}
+        data-required={props.required ? '' : undefined}
+        data-readonly={props.readOnly ? '' : undefined}
       />
     );
   }
@@ -59,10 +62,14 @@ export const InputField = <T extends ElementType = 'input'>({
       aria-invalid={context.isInvalid}
       disabled={context.disabled}
       required={context.required}
+      readOnly={context.readOnly}
       onFocus={handleFocus}
       onBlur={handleBlur}
       data-spar-input-field
       data-focused={focused ? '' : undefined}
+      data-disabled={context.disabled ? '' : undefined}
+      data-required={context.required ? '' : undefined}
+      data-readonly={context.readOnly ? '' : undefined}
     />
   );
 };

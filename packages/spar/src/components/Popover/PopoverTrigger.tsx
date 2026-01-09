@@ -66,7 +66,6 @@ export const PopoverTrigger = ({
       'aria-expanded': state.isOpen,
       'aria-controls': state.isOpen ? state.contentId : undefined,
       'aria-haspopup': 'dialog' as const,
-      disabled,
       'data-state': state.isOpen ? 'open' : 'closed',
       'data-disabled': disabled ? '' : undefined,
       ...props,
@@ -75,11 +74,21 @@ export const PopoverTrigger = ({
   );
 
   if (asChild && isValidElement(children)) {
-    return cloneElement(children, triggerProps);
+    const childType = (children as React.ReactElement).type;
+    let isButton = false;
+    if (typeof childType === 'string') {
+      isButton = childType.toLowerCase() === 'button';
+    }
+    const asChildProps = {
+      ...triggerProps,
+      ...(isButton ? { disabled } : disabled ? { 'aria-disabled': true } : {}),
+      tabIndex: disabled ? -1 : 0,
+    };
+    return cloneElement(children, asChildProps);
   }
 
   return (
-    <button type='button' {...triggerProps}>
+    <button type='button' disabled={disabled} {...triggerProps}>
       {children}
     </button>
   );

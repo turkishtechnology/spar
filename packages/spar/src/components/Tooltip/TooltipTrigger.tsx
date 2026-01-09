@@ -162,9 +162,10 @@ export const TooltipTrigger = ({
     ...(context.isOpen &&
       !context.disabled &&
       context.asLabel && { 'aria-labelledby': context.contentId }),
+    ...(Component !== 'button' && context.disabled ? { 'aria-disabled': true } : {}),
     'data-state': context.isOpen ? 'open' : 'closed',
     'data-placement': context.placement,
-    'data-disabled': context.disabled ? 'true' : 'false',
+    ...(context.disabled && { 'data-disabled': '' }),
     onPointerEnter: context.disabled ? undefined : handlePointerEnter,
     onPointerLeave: context.disabled ? undefined : handlePointerLeave,
     onFocus: context.disabled ? undefined : handleFocus,
