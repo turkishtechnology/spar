@@ -89,7 +89,7 @@ const config: Config = {
         },
         // { to: "/blog", label: "Blog", position: "left" },
         {
-          href: 'https://github.com/turkishtechnology/headless',
+          href: 'https://github.com/turkishtechnology/spar',
           label: 'Github',
           position: 'right',
         },
