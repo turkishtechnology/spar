@@ -50,7 +50,8 @@ describe('Select', () => {
 
         const trigger = screen.getByRole('combobox');
         expect(trigger).toBeDisabled();
-        expect(trigger).toHaveAttribute('aria-disabled', 'true');
+        // Native button uses disabled attribute, not aria-disabled
+        expect(trigger).not.toHaveAttribute('aria-disabled');
       });
 
       it('renders required state correctly', () => {
@@ -992,5 +993,19 @@ describe('Select', () => {
       });
       expect(screen.getAllByRole('option')).toHaveLength(2);
     });
+  });
+
+  it('does not set native disabled attribute when as is not button', () => {
+    const { container } = render(
+      <Select disabled>
+        <Select.Trigger as='div'>
+          <Select.Value placeholder='Select...' />
+        </Select.Trigger>
+      </Select>,
+    );
+    const trigger = container.querySelector('div[role="combobox"]');
+    expect(trigger).not.toHaveAttribute('disabled');
+    expect(trigger).toHaveAttribute('aria-disabled', 'true');
+    expect(trigger).toHaveAttribute('data-disabled', '');
   });
 });

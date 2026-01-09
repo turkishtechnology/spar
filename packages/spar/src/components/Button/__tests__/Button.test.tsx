@@ -68,12 +68,30 @@ describe('Button', () => {
   });
 
   describe('Disabled State', () => {
-    it('handles disabled state correctly', () => {
-      render(<Button disabled>Disabled</Button>);
+    it('handles disabled state correctly for native button', () => {
+      render(
+        <Button as='button' disabled>
+          Disabled
+        </Button>,
+      );
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('disabled');
+      // Native button uses disabled attribute, not aria-disabled
+      expect(button).not.toHaveAttribute('aria-disabled');
+      expect(button).toHaveAttribute('data-disabled', '');
+      expect(button).toHaveAttribute('tabIndex', '-1');
+    });
+
+    it('handles disabled state correctly for non-button', () => {
+      render(
+        <Button as='div' disabled>
+          Disabled
+        </Button>,
+      );
+      const button = screen.getByRole('button');
+      expect(button).not.toHaveAttribute('disabled');
       expect(button).toHaveAttribute('aria-disabled', 'true');
-      expect(button).toHaveAttribute('data-disabled', 'true');
+      expect(button).toHaveAttribute('data-disabled', '');
       expect(button).toHaveAttribute('tabIndex', '-1');
     });
 
@@ -90,7 +108,7 @@ describe('Button', () => {
       expect(handleClick).not.toHaveBeenCalled();
     });
 
-    it('does not apply disabled attribute when not rendered as button', () => {
+    it('uses aria-disabled when not rendered as native button', () => {
       render(
         <Button as='div' disabled>
           Disabled
@@ -99,7 +117,7 @@ describe('Button', () => {
       const button = screen.getByRole('button');
       expect(button).not.toHaveAttribute('disabled');
       expect(button).toHaveAttribute('aria-disabled', 'true');
-      expect(button).toHaveAttribute('data-disabled', 'true');
+      expect(button).toHaveAttribute('data-disabled', '');
     });
   });
 
@@ -108,7 +126,7 @@ describe('Button', () => {
       render(<Button isLoading>Loading</Button>);
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('aria-busy', 'true');
-      expect(button).toHaveAttribute('data-loading', 'true');
+      expect(button).toHaveAttribute('data-loading', '');
       // Component is headless - no built-in loading text structure
       expect(screen.getByText('Loading')).toBeInTheDocument();
     });
@@ -141,7 +159,7 @@ describe('Button', () => {
     it('exposes loading state via data attributes', () => {
       render(<Button isLoading>Submit Form</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-loading', 'true');
+      expect(button).toHaveAttribute('data-loading', '');
       expect(button).toHaveAttribute('aria-busy', 'true');
       expect(screen.getByText('Submit Form')).toBeInTheDocument();
     });
@@ -335,7 +353,7 @@ describe('Button', () => {
         </Button>,
       );
       const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-autofocus', 'true');
+      expect(button).toHaveAttribute('data-autofocus', '');
       // Note: Auto-focus is tested via useEffect which requires ref to be properly set
     });
   });
@@ -355,10 +373,10 @@ describe('Button', () => {
         </Button>,
       );
       button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-disabled', 'true');
-      expect(button).toHaveAttribute('data-loading', 'true');
+      expect(button).toHaveAttribute('data-disabled', '');
+      expect(button).toHaveAttribute('data-loading', '');
       expect(button).toHaveAttribute('data-pressed', 'true');
-      expect(button).toHaveAttribute('data-autofocus', 'true');
+      expect(button).toHaveAttribute('data-autofocus', '');
     });
   });
 
@@ -385,7 +403,8 @@ describe('Button', () => {
       );
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('disabled');
-      expect(button).toHaveAttribute('aria-disabled', 'true');
+      // Native button uses disabled attribute, not aria-disabled
+      expect(button).not.toHaveAttribute('aria-disabled');
       expect(button).toHaveAttribute('aria-busy', 'true');
 
       await user.click(button);

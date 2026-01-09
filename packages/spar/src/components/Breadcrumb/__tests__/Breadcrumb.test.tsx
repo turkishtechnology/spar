@@ -72,7 +72,7 @@ describe('Breadcrumb Components', () => {
 
       const nav = screen.getByRole('navigation');
       expect(nav).toHaveAttribute('aria-disabled', 'true');
-      expect(nav).toHaveAttribute('data-disabled', 'true');
+      expect(nav).toHaveAttribute('data-disabled', '');
     });
 
     it('applies data attributes', () => {
@@ -298,7 +298,7 @@ describe('Breadcrumb Components', () => {
       // Disabled links lose their link role, so we check by text content
       const link = screen.getByText('Home');
       expect(link).toHaveAttribute('aria-disabled', 'true');
-      expect(link).toHaveAttribute('data-disabled', 'true');
+      expect(link).toHaveAttribute('data-disabled', '');
       expect(link).toHaveAttribute('tabindex', '-1');
       expect(link).not.toHaveAttribute('href');
     });
@@ -317,7 +317,7 @@ describe('Breadcrumb Components', () => {
       // Disabled links lose their link role, so we check by text content
       const link = screen.getByText('Home');
       expect(link).toHaveAttribute('aria-disabled', 'true');
-      expect(link).toHaveAttribute('data-disabled', 'true');
+      expect(link).toHaveAttribute('data-disabled', '');
     });
 
     it('handles external links', () => {
@@ -336,7 +336,7 @@ describe('Breadcrumb Components', () => {
       const link = screen.getByRole('link', { name: 'External' });
       expect(link).toHaveAttribute('target', '_blank');
       expect(link).toHaveAttribute('rel', 'noopener noreferrer');
-      expect(link).toHaveAttribute('data-external', 'true');
+      expect(link).toHaveAttribute('data-external', '');
     });
 
     it('handles click events', async () => {
@@ -484,7 +484,7 @@ describe('Breadcrumb Components', () => {
 
       const page = screen.getByText('Current Page');
       expect(page).toHaveAttribute('data-spar-breadcrumb-page', '');
-      expect(page).toHaveAttribute('data-current', 'true');
+      expect(page).toHaveAttribute('data-current', '');
     });
   });
 

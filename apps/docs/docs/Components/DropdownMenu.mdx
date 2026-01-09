@@ -66,63 +66,63 @@ Accessible dropdown menu component for creating interactive command menus with k
 }
 
 [data-theme='dark'] .dropdown-trigger {
-  border-color: #2b303b;
-  background: rgba(255, 255, 255, 0.16);
+border-color: #2b303b;
+background: rgba(255, 255, 255, 0.16);
 }
 
 .dropdown-svg {
-  width: 20px;
-  height: 20px;
-  fill: #222530;
+width: 20px;
+height: 20px;
+fill: #222530;
 }
 
 [data-theme='dark'] .dropdown-svg {
-  fill: #f2f5f8;
+fill: #f2f5f8;
 }
 
 .dropdown-content {
-  padding: 8px;
-  border-radius: 11px;
-  border: 0.684px solid #e1e4ea;
-  background: #ddd;
-  box-shadow:
-    0 1.369px 1.369px -0.684px rgba(82, 88, 102, 0.04),
-    0 4.106px 8.213px -1.369px rgba(82, 88, 102, 0.04),
-    0 5.475px 13.688px 0 rgba(82, 88, 102, 0.04);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+padding: 8px;
+border-radius: 11px;
+border: 0.684px solid #e1e4ea;
+background: #ddd;
+box-shadow:
+0 1.369px 1.369px -0.684px rgba(82, 88, 102, 0.04),
+0 4.106px 8.213px -1.369px rgba(82, 88, 102, 0.04),
+0 5.475px 13.688px 0 rgba(82, 88, 102, 0.04);
+display: flex;
+flex-direction: column;
+gap: 4px;
 }
 
 [data-theme='dark'] .dropdown-content {
-  border: 0.684px solid #2b303b;
-  background: #222;
-  box-shadow:
-    0 2px 2px -1px rgba(82, 88, 102, 0.04),
-    0 6px 12px -2px rgba(82, 88, 102, 0.04),
-    0 8px 20px 0 rgba(82, 88, 102, 0.04);
+border: 0.684px solid #2b303b;
+background: #222;
+box-shadow:
+0 2px 2px -1px rgba(82, 88, 102, 0.04),
+0 6px 12px -2px rgba(82, 88, 102, 0.04),
+0 8px 20px 0 rgba(82, 88, 102, 0.04);
 }
 
 .dropdown-item {
-  padding: 5.475px 8px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  border-radius: 4.977px;
-  background: rgba(255, 255, 255, 0.48);
-  width: 125px;
+padding: 5.475px 8px;
+display: flex;
+align-items: center;
+gap: 4px;
+border-radius: 4.977px;
+background: rgba(255, 255, 255, 0.48);
+width: 125px;
 }
 
 [data-theme='dark'] .dropdown-item {
-  background: rgba(0, 0, 0, 0.48);
+background: rgba(0, 0, 0, 0.48);
 }
 
 .dropdown-item-avatar {
-  border-radius: 50%;
-  display: block;
-  width: 13.688px;
-  height: 13.688px;
-  background-color: #474747;
+border-radius: 50%;
+display: block;
+width: 13.688px;
+height: 13.688px;
+background-color: #474747;
 }`}
 />
 
@@ -559,14 +559,14 @@ The button or element that toggles the dropdown menu visibility.
 
 **ARIA Attributes**
 
-| Attribute       | Value                | Purpose                            | Applied To                      |
-| --------------- | -------------------- | ---------------------------------- | ------------------------------- |
-| `aria-haspopup` | `'menu'`             | Indicates element has a popup menu | Trigger element                 |
-| `aria-expanded` | `boolean`            | Indicates whether menu is expanded | Trigger element                 |
-| `aria-controls` | `string`             | References controlled menu content | Trigger element (when open)     |
-| `data-state`    | `'open' \| 'closed'` | Current state for styling          | Trigger element                 |
-| `data-disabled` | `''`                 | Present when disabled              | Trigger element (when disabled) |
-| `aria-disabled` | `true`               | Indicates disabled state           | Trigger element (when disabled) |
+| Attribute       | Value                | Purpose                            | Applied To                                                |
+| --------------- | -------------------- | ---------------------------------- | --------------------------------------------------------- |
+| `aria-haspopup` | `'menu'`             | Indicates element has a popup menu | Trigger element                                           |
+| `aria-expanded` | `boolean`            | Indicates whether menu is expanded | Trigger element                                           |
+| `aria-controls` | `string`             | References controlled menu content | Trigger element (when open)                               |
+| `data-state`    | `'open' \| 'closed'` | Current state for styling          | Trigger element                                           |
+| `data-disabled` | `''`                 | Present when disabled              | Trigger element (when disabled)                           |
+| `aria-disabled` | `true`               | Indicates disabled state           | Trigger element (asChild or non-native button + disabled) |
 
 ### DropdownMenu.Content
 

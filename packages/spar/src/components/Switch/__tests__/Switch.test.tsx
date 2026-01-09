@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Switch } from '../Switch';
 
@@ -126,14 +126,30 @@ describe('Switch', () => {
   });
 
   describe('Disabled state', () => {
-    it('should apply disabled attributes correctly', () => {
-      render(<Switch disabled>Toggle me</Switch>);
-
+    it('should apply disabled attributes correctly for button', () => {
+      render(
+        <Switch as='button' disabled>
+          Toggle me
+        </Switch>,
+      );
       const switchElement = screen.getByRole('switch');
+      expect(switchElement).toHaveAttribute('disabled');
+      expect(switchElement).not.toHaveAttribute('aria-disabled');
+      expect(switchElement).toHaveAttribute('data-disabled', '');
+      expect(switchElement).toHaveAttribute('tabindex', '-1');
+    });
+
+    it('should apply disabled attributes correctly for non-button', () => {
+      render(
+        <Switch as='div' disabled>
+          Toggle me
+        </Switch>,
+      );
+      const switchElement = screen.getByRole('switch');
+      expect(switchElement).not.toHaveAttribute('disabled');
       expect(switchElement).toHaveAttribute('aria-disabled', 'true');
       expect(switchElement).toHaveAttribute('data-disabled', '');
       expect(switchElement).toHaveAttribute('tabindex', '-1');
-      expect(switchElement).toHaveAttribute('disabled');
     });
 
     it('should not respond to clicks when disabled', async () => {
@@ -164,7 +180,9 @@ describe('Switch', () => {
       );
 
       const switchElement = screen.getByRole('switch');
-      switchElement.focus();
+      act(() => {
+        switchElement.focus();
+      });
       await user.keyboard(' ');
       await user.keyboard('{Enter}');
 
@@ -212,7 +230,9 @@ describe('Switch', () => {
       );
 
       const switchElement = screen.getByRole('switch');
-      switchElement.focus();
+      act(() => {
+        switchElement.focus();
+      });
       await user.keyboard(' ');
       await user.keyboard('{Enter}');
 
@@ -229,7 +249,9 @@ describe('Switch', () => {
       render(<Switch onChange={handleChange}>Toggle me</Switch>);
 
       const switchElement = screen.getByRole('switch');
-      switchElement.focus();
+      act(() => {
+        switchElement.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleChange).toHaveBeenCalledWith(true);
@@ -242,7 +264,9 @@ describe('Switch', () => {
       render(<Switch onChange={handleChange}>Toggle me</Switch>);
 
       const switchElement = screen.getByRole('switch');
-      switchElement.focus();
+      act(() => {
+        switchElement.focus();
+      });
       await user.keyboard('{Enter}');
 
       expect(handleChange).toHaveBeenCalledWith(true);
@@ -255,7 +279,9 @@ describe('Switch', () => {
       render(<Switch onChange={handleChange}>Toggle me</Switch>);
 
       const switchElement = screen.getByRole('switch');
-      switchElement.focus();
+      act(() => {
+        switchElement.focus();
+      });
       await user.keyboard('{Escape}');
       await user.keyboard('{Tab}');
       await user.keyboard('a');

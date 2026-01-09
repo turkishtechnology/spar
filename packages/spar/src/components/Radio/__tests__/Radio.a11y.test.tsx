@@ -123,7 +123,7 @@ describe('Radio Accessibility', () => {
       const [option1, option2] = Array.from(labels);
 
       expect(option1).not.toHaveAttribute('data-disabled');
-      expect(option2).toHaveAttribute('data-disabled', 'true');
+      expect(option2).toHaveAttribute('data-disabled', '');
     });
   });
 

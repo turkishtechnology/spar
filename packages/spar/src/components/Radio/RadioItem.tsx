@@ -81,8 +81,8 @@ export const RadioItem = ({
   // Data attributes for styling
   const dataAttributes = {
     'data-state': isChecked ? 'checked' : 'unchecked',
-    'data-disabled': isDisabled || undefined,
-    'data-focused': focusedValue === itemValue || undefined,
+    'data-disabled': isDisabled ? '' : undefined,
+    'data-focused': focusedValue === itemValue ? '' : undefined,
   };
 
   return (
@@ -109,6 +109,7 @@ export const RadioItem = ({
         disabled={isDisabled}
         tabIndex={-1}
         data-hidden
+        data-disabled={isDisabled ? '' : undefined}
         onChange={() => {}} // Controlled by parent
       />
     </Component>

@@ -151,9 +151,14 @@ describe('Tabs Accessibility', () => {
       render(<BasicTabs />);
 
       const disabledTab = screen.getByRole('tab', { name: 'Section 3: Advanced (Coming Soon)' });
-      expect(disabledTab).toHaveAttribute('aria-disabled', 'true');
+      // If rendered as a button, expect disabled attribute and no aria-disabled
+      if (disabledTab.tagName === 'BUTTON') {
+        expect(disabledTab).toHaveAttribute('disabled');
+        expect(disabledTab).not.toHaveAttribute('aria-disabled');
+      } else {
+        expect(disabledTab).toHaveAttribute('aria-disabled', 'true');
+      }
       expect(disabledTab).toHaveAttribute('data-disabled', '');
-      expect(disabledTab).toBeDisabled(); // Should be actually disabled
     });
 
     it('connects tabs and panels with aria-controls/aria-labelledby', () => {
@@ -385,7 +390,7 @@ describe('Tabs Accessibility', () => {
 
       expect(selectedTab).toHaveAttribute('aria-selected', 'true');
       expect(unselectedTab).toHaveAttribute('aria-selected', 'false');
-      expect(disabledTab).toHaveAttribute('aria-disabled', 'true');
+      expect(disabledTab).toBeDisabled();
     });
 
     it('connects content with proper labelling', () => {
@@ -823,9 +828,7 @@ describe('Tabs Accessibility', () => {
       expect(screen.getByRole('tab', { name: 'Section 2: Details' })).toBeInTheDocument();
 
       // Disabled tab should indicate its state
-      expect(
-        screen.getByRole('tab', { name: 'Section 3: Advanced (Coming Soon)' }),
-      ).toHaveAttribute('aria-disabled', 'true');
+      expect(screen.getByRole('tab', { name: 'Section 3: Advanced (Coming Soon)' })).toBeDisabled();
     });
 
     it('supports voice control navigation', async () => {
