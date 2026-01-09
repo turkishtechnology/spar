@@ -1,7 +1,7 @@
 /**
  * @type {import('jest').Config}
  */
-module.exports = {
+export default {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   roots: ['<rootDir>/src'],
