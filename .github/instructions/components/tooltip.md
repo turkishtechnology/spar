@@ -23,7 +23,7 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `children` | `React.ReactNode` | Yes | - | Tooltip components to share provider context |
+| `children` | `React.ReactNode` | No | - | Tooltip components to share provider context |
 | `delayDuration` | `number` | No | `700` | Global delay duration for all tooltips |
 | `skipDelayDuration` | `number` | No | `300` | Duration to skip delay when moving between tooltips |
 | `disableHoverableContent` | `boolean` | No | `false` | Disable hoverable content globally |
@@ -32,7 +32,7 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `children` | `React.ReactNode` | Yes | - | Tooltip trigger and content components |
+| `children` | `React.ReactNode` | No | - | Tooltip trigger and content components |
 | `open` | `boolean` | No | - | Controlled state for tooltip visibility |
 | `defaultOpen` | `boolean` | No | `false` | Default open state for uncontrolled tooltip |
 | `onOpenChange` | `(open: boolean) => void` | No | - | Callback when tooltip open state changes |
@@ -44,7 +44,7 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `children` | `React.ReactElement` | Yes | - | The trigger element (must be single focusable element) |
+| `children` | `React.ReactNode` | No | - | The trigger element (must be single focusable element) |
 | `asChild` | `boolean` | No | `false` | Compose with child element instead of rendering button |
 | `as` | `React.ElementType` | No | `'button'` | Element type when not using asChild |
 
@@ -52,7 +52,7 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `children` | `React.ReactNode` | Yes | - | Content to display in tooltip |
+| `children` | `React.ReactNode` | No | - | Content to display in tooltip |
 | `className` | `string` | No | - | CSS class names for styling |
 | `style` | `React.CSSProperties` | No | - | Inline styles |
 | `as` | `React.ElementType` | No | `'div'` | Element type for tooltip content container |
@@ -75,7 +75,7 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `children` | `React.ReactNode` | Yes | - | Content to render in portal |
+| `children` | `React.ReactNode` | No | - | Content to render in portal |
 | `container` | `HTMLElement` | No | `document.body` | Portal container element |
 | `forceMount` | `boolean` | No | `false` | Force mount regardless of open state |
 
