@@ -32,7 +32,7 @@ const config: Config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'tr'],
+    locales: ['en' /* , 'tr' */],
     path: 'i18n',
     localeConfigs: {
       en: {
@@ -42,6 +42,7 @@ const config: Config = {
         calendar: 'gregory',
         path: 'en',
       },
+      /*
       tr: {
         label: 'Türkçe',
         direction: 'ltr',
@@ -49,6 +50,7 @@ const config: Config = {
         calendar: 'gregory',
         path: 'tr',
       },
+      */
     },
   },
   plugins: ['docusaurus-plugin-sass'],
@@ -91,10 +93,12 @@ const config: Config = {
           label: 'Github',
           position: 'right',
         },
+        /*
         {
           type: 'localeDropdown',
           position: 'right',
         },
+        */
       ],
       hideOnScroll: true,
     },
