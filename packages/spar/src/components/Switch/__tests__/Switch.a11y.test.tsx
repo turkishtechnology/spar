@@ -202,7 +202,7 @@ describe('Switch Accessibility', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Switch onCheckedChange={handleChange}>Toggle setting</Switch>);
+      render(<Switch onChange={handleChange}>Toggle setting</Switch>);
 
       const switchElement = screen.getByRole('switch');
       switchElement.focus();
@@ -215,7 +215,7 @@ describe('Switch Accessibility', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Switch onCheckedChange={handleChange}>Toggle setting</Switch>);
+      render(<Switch onChange={handleChange}>Toggle setting</Switch>);
 
       const switchElement = screen.getByRole('switch');
       switchElement.focus();
@@ -228,7 +228,7 @@ describe('Switch Accessibility', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Switch onCheckedChange={handleChange}>Toggle setting</Switch>);
+      render(<Switch onChange={handleChange}>Toggle setting</Switch>);
 
       const switchElement = screen.getByRole('switch');
       switchElement.focus();
@@ -250,7 +250,7 @@ describe('Switch Accessibility', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch disabled onCheckedChange={handleChange}>
+        <Switch disabled onChange={handleChange}>
           Toggle setting
         </Switch>,
       );
@@ -268,7 +268,7 @@ describe('Switch Accessibility', () => {
       const handleChange = jest.fn();
 
       render(
-        <Switch readOnly onCheckedChange={handleChange}>
+        <Switch readOnly onChange={handleChange}>
           Toggle setting
         </Switch>,
       );
@@ -492,7 +492,7 @@ describe('Switch Accessibility', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Switch onCheckedChange={handleChange}>Toggle setting</Switch>);
+      render(<Switch onChange={handleChange}>Toggle setting</Switch>);
 
       const switchElement = screen.getByRole('switch');
       await user.pointer({ target: switchElement, keys: '[TouchA]' });

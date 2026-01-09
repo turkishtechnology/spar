@@ -31,7 +31,7 @@ describe('Checkbox Integration Tests', () => {
 
         return (
           <form onSubmit={onSubmit}>
-            <Checkbox name='terms' checked={isAgreed} onCheckedChange={handleAgreementChange}>
+            <Checkbox name='terms' checked={isAgreed} onChange={handleAgreementChange}>
               I agree to the terms
             </Checkbox>
             <button type='submit'>Submit</button>
@@ -88,11 +88,7 @@ describe('Checkbox Integration Tests', () => {
 
         return (
           <form onSubmit={validateAndSubmit}>
-            <Checkbox
-              checked={isChecked}
-              onCheckedChange={handleCheckedChange}
-              data-invalid={!!error}
-            >
+            <Checkbox checked={isChecked} onChange={handleCheckedChange} data-invalid={!!error}>
               I agree to the terms
             </Checkbox>
             {error && <div role='alert'>{error}</div>}
@@ -169,18 +165,14 @@ describe('Checkbox Integration Tests', () => {
 
         return (
           <div>
-            <Checkbox
-              checked={allChecked}
-              onCheckedChange={handleSelectAll}
-              data-testid='select-all'
-            >
+            <Checkbox checked={allChecked} onChange={handleSelectAll} data-testid='select-all'>
               Select All
             </Checkbox>
             {items.map((item) => (
               <Checkbox
                 key={item.id}
                 checked={item.checked}
-                onCheckedChange={(checked) => handleItemChange(item.id, checked)}
+                onChange={(checked) => handleItemChange(item.id, checked)}
                 data-testid={`item-${item.id}`}
               >
                 {item.name}
@@ -267,21 +259,21 @@ describe('Checkbox Integration Tests', () => {
             <legend>Choose your preferences</legend>
             <Checkbox
               checked={selections.option1}
-              onCheckedChange={(checked) => handleChange('option1', checked)}
+              onChange={(checked) => handleChange('option1', checked)}
               data-testid='option1'
             >
               Option 1
             </Checkbox>
             <Checkbox
               checked={selections.option2}
-              onCheckedChange={(checked) => handleChange('option2', checked)}
+              onChange={(checked) => handleChange('option2', checked)}
               data-testid='option2'
             >
               Option 2
             </Checkbox>
             <Checkbox
               checked={selections.option3}
-              onCheckedChange={(checked) => handleChange('option3', checked)}
+              onChange={(checked) => handleChange('option3', checked)}
               data-testid='option3'
             >
               Option 3

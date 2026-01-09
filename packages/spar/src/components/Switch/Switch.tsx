@@ -8,7 +8,7 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
   const {
     checked: controlledChecked,
     defaultChecked = false,
-    onCheckedChange,
+    onChange,
     disabled = false,
     readOnly = false,
   } = props;
@@ -37,8 +37,8 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
       setInternalChecked(newChecked);
     }
 
-    onCheckedChange?.(newChecked);
-  }, [checked, disabled, readOnly, isControlled, onCheckedChange]);
+    onChange?.(newChecked);
+  }, [checked, disabled, readOnly, isControlled, onChange]);
 
   // Keyboard event handler
   const handleKeyDown = useCallback(
@@ -166,7 +166,7 @@ export const Switch = ({
   as: Component = 'button',
   checked,
   defaultChecked,
-  onCheckedChange,
+  onChange,
   disabled = false,
   name,
   value = 'on',
@@ -185,7 +185,7 @@ export const Switch = ({
   const { switchProps, hiddenInputProps } = useSwitch({
     ...(checked !== undefined && { checked }),
     ...(defaultChecked !== undefined && { defaultChecked }),
-    ...(onCheckedChange && { onCheckedChange }),
+    ...(onChange && { onChange }),
     disabled,
     readOnly,
   });
