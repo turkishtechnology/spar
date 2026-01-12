@@ -1,34 +1,28 @@
-import React from 'react';
 import type { AccordionContentProps } from './types';
-import { useAccordionItemContext } from './AccordionItem';
+import { CollapsibleContent } from '../Collapsible';
+import { useCollapsibleContext } from '../Collapsible/Collapsible';
 
 /**
  * Accordion content panel that shows/hides based on item state. Provides semantic region with proper labeling for screen readers.
  */
 export const AccordionContent = ({
   forceMount = false,
-  as: Component = 'div',
+  as = 'div',
   children,
   ...props
 }: AccordionContentProps) => {
-  const { isExpanded, triggerId, contentId } = useAccordionItemContext();
-
-  // Early return if collapsed and not force mounted
-  if (!isExpanded && !forceMount) {
-    return null;
-  }
+  const { triggerId } = useCollapsibleContext();
 
   return (
-    <Component
-      {...props}
-      id={contentId}
+    <CollapsibleContent
       role='region'
       aria-labelledby={triggerId}
-      data-state={isExpanded ? 'open' : 'closed'}
-      hidden={!isExpanded && forceMount ? true : undefined}
+      forceMount={forceMount}
+      as={as}
+      {...props}
     >
       {children}
-    </Component>
+    </CollapsibleContent>
   );
 };
 
