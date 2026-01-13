@@ -9,7 +9,7 @@ import type { DialogTriggerProps } from './types';
  */
 export const DialogTrigger = ({
   as: Element = 'button',
-  disabled = false,
+  disabled: disabledProp,
   ref,
   onClick,
   onKeyDown,
@@ -17,10 +17,13 @@ export const DialogTrigger = ({
   ...props
 }: DialogTriggerProps) => {
   const context = useDialogContext();
-  const { isOpen, setIsOpen, triggerRef } = context;
+  const { isOpen, setIsOpen, triggerRef, disabled: contextDisabled } = context;
 
   // Merge external ref with internal ref
   const mergedRef = useMergedRef(triggerRef, ref);
+
+  // Use prop if explicitly provided, otherwise use context
+  const disabled = disabledProp ?? contextDisabled;
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {

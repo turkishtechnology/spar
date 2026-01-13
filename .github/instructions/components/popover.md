@@ -27,6 +27,7 @@
 | `onOpenChange` | `(open: boolean) => void` | No | - | Callback when popover open state changes |
 | `defaultOpen` | `boolean` | No | `false` | Initial open state for uncontrolled mode |
 | `modal` | `boolean` | No | `false` | Whether popover should behave modally (focus trap + backdrop) |
+| `disabled` | `boolean` | No | `false` | Disables all popover triggers (prevents opening) |
 | `side` | `'top' \| 'bottom' \| 'left' \| 'right'` | No | `'bottom'` | Preferred side for popover positioning |
 | `align` | `'start' \| 'center' \| 'end'` | No | `'center'` | Preferred alignment relative to trigger |
 | `sideOffset` | `number` | No | `8` | Distance in pixels between trigger and popover |

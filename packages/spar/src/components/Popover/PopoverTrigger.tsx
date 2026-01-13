@@ -8,13 +8,22 @@ import { usePopoverContext } from './hooks/usePopoverContext';
 export const PopoverTrigger = ({
   asChild = false,
   children,
-  disabled = false,
+  disabled: disabledProp,
   onClick,
   onKeyDown,
   ref,
   ...props
 }: PopoverTriggerProps) => {
-  const { state, triggerRef, togglePopover, openPopover } = usePopoverContext();
+  const {
+    state,
+    triggerRef,
+    togglePopover,
+    openPopover,
+    disabled: contextDisabled,
+  } = usePopoverContext();
+
+  // Use prop if explicitly provided, otherwise use context
+  const disabled = disabledProp ?? contextDisabled;
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {

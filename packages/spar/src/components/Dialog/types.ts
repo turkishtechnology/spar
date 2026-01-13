@@ -36,6 +36,12 @@ export interface DialogRootProps {
   modal?: boolean;
 
   /**
+   * Disables all dialog triggers (prevents opening)
+   * @defaultValue false
+   */
+  disabled?: boolean;
+
+  /**
    * Dialog trigger and portal components
    */
   children: ReactNode;
@@ -244,6 +250,7 @@ export interface DialogContextValue {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   modal: boolean;
+  disabled: boolean;
   role: AriaRole;
   triggerRef: RefObject<HTMLElement | null>;
   contentRef: RefObject<HTMLElement | null>;
