@@ -1,7 +1,10 @@
 import Translate from '@docusaurus/Translate';
-import { Button } from '@turkish-technology/spar';
+import Link from '@docusaurus/Link';
+import { useColorMode } from '@docusaurus/theme-common';
 
 export default function Theming() {
+  const { colorMode } = useColorMode();
+  const color = colorMode === 'light' ? 'black' : 'white';
   return (
     <div className='theming-container'>
       <div className='theming-content'>
@@ -41,14 +44,17 @@ export default function Theming() {
             </Translate>
           </div>
         </div>
-        <Button className='theming-cta'>
+        <Link to='/docs/introduction' className='theming-cta'>
           <div>
             <Translate description='Try It Now'>theming.try.it.now</Translate>
           </div>
-        </Button>
+        </Link>
       </div>
       <div className='theming-image'>
-        <img src='img/design-example.png'></img>
+        <img
+          src={color === 'white' ? 'img/design-example-dark.png' : 'img/design-example.png'}
+          alt='Design example'
+        ></img>
       </div>
     </div>
   );

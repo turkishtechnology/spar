@@ -7,7 +7,7 @@ description: Spar is a headless React component library built with TypeScript. U
 
 Traditional component libraries come with predefined styles and visual designs. While this works for quick prototyping, it becomes limiting when you need components that match your unique design system.
 
-Spar takes a different approach: **we provide the behavior, you provide the style.** Each component is a fully accessible, keyboard-navigable primitive with zero styling—ready to be styled exactly how you want.
+Spar takes a different approach: **we provide the behavior, you provide the style.** Each component is a fully accessible, keyboard-navigable primitive with zero styling to be modified exactly how you want.
 
 ## Quick Start
 

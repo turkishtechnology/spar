@@ -69,4 +69,12 @@
   padding: 3rem 10rem;
 }
 
+.tabs__item {
+  &--active {
+    color: var(--ifm-color-primary-dark);
+    border-bottom-color: var(--ifm-color-primary-dark);
+    border-bottom-width: 2px;
+  }
+}
+
 @import './Anatomy/index.scss';
