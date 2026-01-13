@@ -5,7 +5,7 @@ description: Get started with Spar in your React project. Learn how to install a
 
 # Installation
 
-Get up and running with Spar in minutes. This guide covers installation, setup, and basic configuration for your React project.
+Get started with Spar in minutes. This guide covers installation, setup, and basic configuration for your React project.
 
 ## Requirements
 
@@ -13,48 +13,93 @@ Before installing Spar, ensure your project meets these requirements:
 
 - **Node.js:** >=22.18.0
 - **React:** >=19.0.0
-- **pnpm:** >=10.0.0 (if using pnpm)
 - **TypeScript:** >=5.0.0 (recommended)
-
-:::info Peer Dependencies
-Spar requires React 19+ as a peer dependency. The library will automatically install `@floating-ui/react-dom` for positioning components (Dialog, Popover, Tooltip, DropdownMenu).
-:::
+- **pnpm:** >=10.0.0 (if using pnpm)
 
 ## Package Manager
 
-Spar is available on npm and can be installed with any package manager.
+Spar is available on [npm](https://www.npmjs.com/package/@turkish-technology/spar) and can be installed with any package manager.
 
-### pnpm (Recommended)
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-```bash
-pnpm add @turkish-technology/spar
-```
+<Tabs defaultValue="npm" groupId="package-manager">
+  <TabItem value="npm" label="npm">
+    ```bash
+    npm install @turkish-technology/spar
+    ```
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+    ```bash
+    yarn add @turkish-technology/spar
+    ```
+  </TabItem>
+    <TabItem value="pnpm" label="pnpm">
+    ```bash
+    pnpm add @turkish-technology/spar
+    ```
+  </TabItem>
+</Tabs>
 
-### npm
+## Framework Guides
 
-```bash
-npm install @turkish-technology/spar
-```
+Spar works seamlessly with modern React frameworks.
 
-### yarn
+### React
 
-```bash
-yarn add @turkish-technology/spar
-```
+Import components in your React files, and start developing:
 
-## Basic Setup
+```tsx title="src/App.tsx"
+import { Button } from '@turkish-technology/spar';
+import './App.css';
 
-After installation, you can start importing and using Spar components:
-
-```tsx
-import { Button, Dialog, Tooltip } from '@turkish-technology/spar';
-
-export default function App() {
+function App() {
   return (
-    <div>
-      <Button onClick={() => console.log('clicked')}>Click me</Button>
-    </div>
+    <Button className='my-button' onClick={() => console.log('Clicked!')}>
+      Click me
+    </Button>
   );
+}
+```
+
+### Next.js
+
+Spar is fully compatible with Next.js 14+ (App Router & Server Components supported).
+
+#### Server Component Example
+
+```tsx title="app/page.tsx"
+import { Breadcrumb } from '@turkish-technology/spar';
+
+export default function Home() {
+  return (
+    <main>
+      <Breadcrumb.Root>
+        <Breadcrumb.Item href='/'>Home</Breadcrumb.Item>
+        <Breadcrumb.Separator />
+        <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
+      </Breadcrumb.Root>
+      <h1>Welcome to Spar + Next.js</h1>
+    </main>
+  );
+}
+```
+
+#### Client Component with Dynamic Import
+
+For client-side only components, use dynamic imports to prevent SSR.
+
+```tsx title="app/components/DynamicButton.tsx"
+'use client';
+
+import dynamic from 'next/dynamic';
+
+const Button = dynamic(() => import('@turkish-technology/spar').then((mod) => mod.Button), {
+  ssr: false,
+});
+
+export default function DynamicButton() {
+  return <Button onClick={() => alert('Clicked!')}>Click me</Button>;
 }
 ```
 
