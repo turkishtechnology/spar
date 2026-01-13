@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode, HTMLAttributes, Ref, SyntheticEvent, RefObject } from 'react';
+import type { ComponentProps, ElementType, ReactNode, SyntheticEvent, RefObject } from 'react';
 import type { CheckedState, Side, Align, Direction } from '../../types';
 
 export type DropdownMenuFocusStrategy = 'first' | 'last' | 'none';
@@ -50,7 +50,7 @@ export interface DropdownMenuProps {
 /**
  * Props for DropdownMenu.Trigger component
  */
-export interface DropdownMenuTriggerProps extends HTMLAttributes<HTMLElement> {
+export interface DropdownMenuTriggerProps extends ComponentProps<'button'> {
   /**
    * Polymorphic component type
    * @defaultValue 'button'
@@ -62,22 +62,12 @@ export interface DropdownMenuTriggerProps extends HTMLAttributes<HTMLElement> {
    * @defaultValue false
    */
   asChild?: boolean;
-
-  /**
-   * Whether trigger is disabled
-   */
-  disabled?: boolean;
-
-  /**
-   * Ref forwarded to trigger element
-   */
-  ref?: Ref<HTMLElement | null>;
 }
 
 /**
  * Props for DropdownMenu.Content component
  */
-export interface DropdownMenuContentProps extends HTMLAttributes<HTMLElement> {
+export interface DropdownMenuContentProps extends ComponentProps<'div'> {
   /**
    * Polymorphic component type
    * @defaultValue 'div'
@@ -146,17 +136,12 @@ export interface DropdownMenuContentProps extends HTMLAttributes<HTMLElement> {
    * Outside focus handler
    */
   onFocusOutside?: (event: FocusEvent) => void;
-
-  /**
-   * Ref forwarded to content element
-   */
-  ref?: Ref<HTMLElement | null>;
 }
 
 /**
  * Props for DropdownMenu.Item component
  */
-export interface DropdownMenuItemProps extends Omit<HTMLAttributes<HTMLElement>, 'onSelect'> {
+export interface DropdownMenuItemProps extends Omit<ComponentProps<'div'>, 'onSelect'> {
   /**
    * Polymorphic component type
    * @defaultValue 'div'
@@ -178,11 +163,6 @@ export interface DropdownMenuItemProps extends Omit<HTMLAttributes<HTMLElement>,
    * Value for typeahead search
    */
   textValue?: string;
-
-  /**
-   * Ref forwarded to item element
-   */
-  ref?: Ref<HTMLElement | null>;
 }
 
 /**
@@ -204,7 +184,7 @@ export interface DropdownMenuCheckboxItemProps extends DropdownMenuItemProps {
 /**
  * Props for DropdownMenu.RadioGroup component
  */
-export interface DropdownMenuRadioGroupProps extends HTMLAttributes<HTMLElement> {
+export interface DropdownMenuRadioGroupProps extends ComponentProps<'div'> {
   /**
    * Controlled selected value
    */
@@ -229,49 +209,34 @@ export interface DropdownMenuRadioItemProps extends DropdownMenuItemProps {
 /**
  * Props for DropdownMenu.Separator component
  */
-export interface DropdownMenuSeparatorProps extends HTMLAttributes<HTMLElement> {
+export interface DropdownMenuSeparatorProps extends ComponentProps<'div'> {
   /**
    * Polymorphic component type
    * @defaultValue 'div'
    */
   as?: ElementType;
-
-  /**
-   * Ref forwarded to separator element
-   */
-  ref?: Ref<HTMLElement | null>;
 }
 
 /**
  * Props for DropdownMenu.Label component
  */
-export interface DropdownMenuLabelProps extends HTMLAttributes<HTMLElement> {
+export interface DropdownMenuLabelProps extends ComponentProps<'div'> {
   /**
    * Polymorphic component type
    * @defaultValue 'div'
    */
   as?: ElementType;
-
-  /**
-   * Ref forwarded to label element
-   */
-  ref?: Ref<HTMLElement | null>;
 }
 
 /**
  * Props for DropdownMenu.Group component
  */
-export interface DropdownMenuGroupProps extends HTMLAttributes<HTMLElement> {
+export interface DropdownMenuGroupProps extends ComponentProps<'div'> {
   /**
    * Polymorphic component type
    * @defaultValue 'div'
    */
   as?: ElementType;
-
-  /**
-   * Ref forwarded to group element
-   */
-  ref?: Ref<HTMLElement | null>;
 }
 
 /**

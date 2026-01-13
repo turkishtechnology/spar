@@ -39,7 +39,7 @@ export const DropdownMenuTrigger = ({
   );
 
   const handleClick = useCallback(
-    (event: ReactMouseEvent<HTMLElement>) => {
+    (event: ReactMouseEvent<HTMLButtonElement>) => {
       onClick?.(event);
       if (event.defaultPrevented || disabled) {
         return;
@@ -55,7 +55,7 @@ export const DropdownMenuTrigger = ({
   );
 
   const handleKeyDown = useCallback(
-    (event: ReactKeyboardEvent<HTMLElement>) => {
+    (event: ReactKeyboardEvent<HTMLButtonElement>) => {
       onKeyDown?.(event);
       if (event.defaultPrevented || disabled) {
         return;

@@ -1,12 +1,12 @@
 import type {
+  ComponentProps,
   ElementType,
-  ButtonHTMLAttributes,
   AriaAttributes,
+  CSSProperties,
   KeyboardEvent,
   MouseEvent,
-  PointerEvent,
   FocusEvent,
-  CSSProperties,
+  PointerEvent,
 } from 'react';
 
 /**
@@ -14,7 +14,7 @@ import type {
  * @remarks Fully accessible, headless switch component providing binary toggle functionality
  */
 export interface SwitchProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChange' | 'checked' | 'defaultChecked'> {
+  extends Omit<ComponentProps<'button'>, 'onChange' | 'checked' | 'defaultChecked'> {
   /**
    * The element or component to render as
    * @defaultValue 'button'
@@ -38,28 +38,6 @@ export interface SwitchProps
    * @param checked - The new checked state
    */
   onChange?: (checked: boolean) => void;
-
-  /**
-   * Disabled state - properly announced to screen readers
-   * @defaultValue false
-   */
-  disabled?: boolean;
-
-  /**
-   * Form input name for form integration
-   */
-  name?: string;
-
-  /**
-   * Form input value when checked
-   * @defaultValue 'on'
-   */
-  value?: string;
-
-  /**
-   * Form ID to associate with
-   */
-  form?: string;
 
   /**
    * Required state for form validation

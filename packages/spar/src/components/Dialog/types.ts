@@ -1,12 +1,4 @@
-import type {
-  ElementType,
-  ReactNode,
-  HTMLAttributes,
-  ButtonHTMLAttributes,
-  Ref,
-  AriaRole,
-  RefObject,
-} from 'react';
+import type { ComponentProps, ElementType, ReactNode, AriaRole, RefObject } from 'react';
 
 /**
  * Props for DialogRoot
@@ -45,23 +37,12 @@ export interface DialogRootProps {
  * Props for DialogTrigger
  * @remarks Fully accessible, headless component
  */
-export interface DialogTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface DialogTriggerProps extends ComponentProps<'button'> {
   /**
    * Polymorphic element type
    * @defaultValue 'button'
    */
   as?: ElementType;
-
-  /**
-   * Disables trigger interaction
-   * @defaultValue false
-   */
-  disabled?: boolean;
-
-  /**
-   * Ref forwarded to trigger element
-   */
-  ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -85,7 +66,7 @@ export interface DialogPortalProps {
  * Props for DialogOverlay
  * @remarks Fully accessible, headless component
  */
-export interface DialogOverlayProps extends HTMLAttributes<HTMLDivElement> {
+export interface DialogOverlayProps extends ComponentProps<'div'> {
   /**
    * Polymorphic element type
    * @defaultValue 'div'
@@ -97,18 +78,13 @@ export interface DialogOverlayProps extends HTMLAttributes<HTMLDivElement> {
    * @defaultValue false
    */
   forceMount?: boolean;
-
-  /**
-   * Ref forwarded to overlay element
-   */
-  ref?: Ref<HTMLElement>;
 }
 
 /**
  * Props for DialogContent
  * @remarks Fully accessible, headless component
  */
-export interface DialogContentProps extends HTMLAttributes<HTMLDivElement> {
+export interface DialogContentProps extends ComponentProps<'div'> {
   /**
    * Polymorphic element type
    * @defaultValue 'div'
@@ -173,18 +149,13 @@ export interface DialogContentProps extends HTMLAttributes<HTMLDivElement> {
    * Outside interaction handler with preventDefault capability
    */
   onInteractOutside?: (event: PointerEvent) => void;
-
-  /**
-   * Ref forwarded to content element
-   */
-  ref?: Ref<HTMLElement>;
 }
 
 /**
  * Props for DialogTitle
  * @remarks Fully accessible, headless component
  */
-export interface DialogTitleProps extends HTMLAttributes<HTMLHeadingElement> {
+export interface DialogTitleProps extends ComponentProps<'h2'> {
   /**
    * Polymorphic element type
    * @defaultValue 'h2'
@@ -196,45 +167,30 @@ export interface DialogTitleProps extends HTMLAttributes<HTMLHeadingElement> {
    * @defaultValue 2
    */
   level?: number;
-
-  /**
-   * Ref forwarded to title element
-   */
-  ref?: Ref<HTMLElement>;
 }
 
 /**
  * Props for DialogDescription
  * @remarks Fully accessible, headless component
  */
-export interface DialogDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {
+export interface DialogDescriptionProps extends ComponentProps<'p'> {
   /**
    * Polymorphic element type
    * @defaultValue 'p'
    */
   as?: ElementType;
-
-  /**
-   * Ref forwarded to description element
-   */
-  ref?: Ref<HTMLElement>;
 }
 
 /**
  * Props for DialogClose
  * @remarks Fully accessible, headless component
  */
-export interface DialogCloseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface DialogCloseProps extends ComponentProps<'button'> {
   /**
    * Polymorphic element type
    * @defaultValue 'button'
    */
   as?: ElementType;
-
-  /**
-   * Ref forwarded to close button element
-   */
-  ref?: Ref<HTMLElement>;
 }
 
 /**
