@@ -8,13 +8,13 @@
 .aidriven-features {
   display: flex;
   gap: 0.25rem;
-  color: var(--primary-dark, #8F0012);
+  color: var(--primary-dark, #8f0012);
   text-align: center;
   font-size: 14px;
-  line-height: 20px; 
+  line-height: 20px;
   text-transform: uppercase;
 }
-.aidriven-text{
+.aidriven-text {
   display: flex;
   flex-direction: column;
   place-items: center;
@@ -38,7 +38,7 @@
 .aidriven-description {
   display: flex;
   font-weight: 300;
-  color: #525866;
+  text-align: center;
   font-size: 16px;
   line-height: 24px;
 }
@@ -58,4 +58,3 @@
   gap: 2px;
   color: white;
 }
-
