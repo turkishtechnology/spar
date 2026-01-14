@@ -58,6 +58,12 @@ export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, 'o
   isInToolbar?: boolean;
 
   /**
+   * Whether to focus the first focusable radio item on mount
+   * @defaultValue false
+   */
+  shouldAutoFocus?: boolean;
+
+  /**
    * Accessible name for the group
    */
   'aria-label'?: React.AriaAttributes['aria-label'];

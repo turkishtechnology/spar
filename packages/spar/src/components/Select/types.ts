@@ -81,6 +81,12 @@ export interface SelectRootProps
   dir?: Direction;
 
   /**
+   * Whether to focus the trigger on mount
+   * @defaultValue false
+   */
+  shouldAutoFocus?: boolean;
+
+  /**
    * Polymorphic component type
    */
   as?: ElementType;
@@ -466,6 +472,7 @@ export interface SelectContextValue {
   disabled: boolean;
   required: boolean;
   dir: Direction;
+  shouldAutoFocus: boolean;
 
   // Actions
   onValueChange: (value: string) => void;

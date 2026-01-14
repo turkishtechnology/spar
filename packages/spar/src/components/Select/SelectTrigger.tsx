@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import type { SelectTriggerProps } from './types';
 import { useSelectContext } from './SelectRoot';
+import { useMergedRef, useAutoFocus } from '../../hooks';
 
 /**
  * Trigger button that toggles the select dropdown. Handles keyboard navigation and accessibility attributes.
@@ -14,18 +15,21 @@ export const SelectTrigger = ({
   ...props
 }: SelectTriggerProps) => {
   const context = useSelectContext();
+  const internalRef = useRef<HTMLButtonElement>(null);
+  const mergedRef = useMergedRef(internalRef, ref);
+
+  // Auto focus on mount (controlled by context from Root)
+  useAutoFocus(internalRef, context.shouldAutoFocus);
 
   // Merge external ref with internal ref
   useEffect(() => {
-    if (ref) {
-      if (typeof ref === 'function') {
-        ref(context.triggerRef.current);
-      } else if (ref) {
+    if (context.triggerRef) {
+      if (typeof context.triggerRef === 'object' && context.triggerRef !== null) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (ref as any).current = context.triggerRef.current;
+        (context.triggerRef as any).current = internalRef.current;
       }
     }
-  }, [ref, context.triggerRef]);
+  }, [context.triggerRef, internalRef]);
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -67,7 +71,7 @@ export const SelectTrigger = ({
 
   return (
     <Component
-      ref={context.triggerRef}
+      ref={mergedRef}
       type={Component === 'button' ? 'button' : undefined}
       role='combobox'
       aria-haspopup='listbox'
