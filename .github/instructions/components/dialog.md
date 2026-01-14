@@ -45,6 +45,7 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 | `onOpenChange` | `(open: boolean) => void` | No | - | Callback when open state changes |
 | `defaultOpen` | `boolean` | No | `false` | Initial open state (uncontrolled) |
 | `modal` | `boolean` | No | `true` | Whether dialog is modal (blocks interaction outside) |
+| `disabled` | `boolean` | No | `false` | Disables all dialog triggers (prevents opening) |
 | `children` | `ReactNode` | Yes | - | Dialog trigger and portal components |
 
 ### DialogTrigger Props

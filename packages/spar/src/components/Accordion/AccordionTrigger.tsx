@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import type { AccordionTriggerProps } from './types';
 import { useAccordionContext } from './Accordion';
 import { useAccordionItemContext } from './AccordionItem';
+import { CollapsibleTrigger } from '../Collapsible';
 
 /**
  * Accordion trigger button that toggles panel visibility. Provides keyboard navigation and screen reader support.
@@ -15,17 +16,6 @@ export const AccordionTrigger = ({
 }: AccordionTriggerProps) => {
   const accordionContext = useAccordionContext();
   const itemContext = useAccordionItemContext();
-  const { isExpanded, disabled, triggerId, contentId, onToggle } = itemContext;
-
-  const handleClick = useCallback(
-    (event: React.MouseEvent<HTMLElement>) => {
-      if (!disabled) {
-        onToggle();
-      }
-      onClick?.(event as React.MouseEvent<HTMLButtonElement>);
-    },
-    [disabled, onToggle, onClick],
-  );
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
@@ -34,14 +24,6 @@ export const AccordionTrigger = ({
       const totalItems = accordionContext.itemCount;
 
       switch (key) {
-        case 'Enter':
-        case ' ': // Space
-          event.preventDefault();
-          if (!disabled) {
-            onToggle();
-          }
-          break;
-
         case 'ArrowDown':
         case 'ArrowUp': {
           event.preventDefault();
@@ -91,33 +73,21 @@ export const AccordionTrigger = ({
 
       onKeyDown?.(event as React.KeyboardEvent<HTMLButtonElement>);
     },
-    [accordionContext, itemContext, disabled, onToggle, onKeyDown],
+    [accordionContext, itemContext.value, onKeyDown],
   );
 
-  // Common props for all component types
-  const isButton = Component === 'button';
-  const triggerProps = {
-    ...props,
-    id: triggerId,
-    'aria-expanded': isExpanded,
-    'aria-controls': contentId,
-    'data-state': isExpanded ? 'open' : 'closed',
-    'data-accordion-trigger': '',
-    'data-value': itemContext.value,
-    ...(disabled && { 'data-disabled': '' }),
-    onClick: handleClick,
-    onKeyDown: handleKeyDown,
-    // Button-specific props
-    ...(isButton && { type: 'button' as const, disabled }),
-    // Non-button props for accessibility
-    ...(!isButton && {
-      role: 'button',
-      'aria-disabled': disabled,
-      tabIndex: disabled ? -1 : 0,
-    }),
-  };
-
-  return <Component {...triggerProps}>{children}</Component>;
+  return (
+    <CollapsibleTrigger
+      as={Component}
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
+      data-accordion-trigger=''
+      data-value={itemContext.value}
+      {...props}
+    >
+      {children}
+    </CollapsibleTrigger>
+  );
 };
 
 AccordionTrigger.displayName = 'AccordionTrigger';

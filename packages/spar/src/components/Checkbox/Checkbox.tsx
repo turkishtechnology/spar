@@ -1,4 +1,5 @@
 import { useId, useState, useRef, useEffect } from 'react';
+import { useMergedRef, useAutoFocus } from '../../hooks';
 import type { CheckboxProps, CheckboxRenderProps } from './types';
 import type { CheckedState } from '../../types';
 
@@ -47,13 +48,10 @@ export const Checkbox = ({
   // Refs
   const elementRef = useRef<HTMLElement>(null);
   const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const mergedRef = useMergedRef(elementRef, ref);
 
   // Auto focus on mount
-  useEffect(() => {
-    if (shouldAutoFocus && elementRef.current) {
-      elementRef.current.focus();
-    }
-  }, [shouldAutoFocus]);
+  useAutoFocus(elementRef, shouldAutoFocus);
 
   // Sync hidden input with checkbox state
   useEffect(() => {
@@ -150,7 +148,7 @@ export const Checkbox = ({
   // Build props for the element
   const isNativeButton = Component === 'button';
   const elementProps: Record<string, unknown> = {
-    ref,
+    ref: mergedRef,
     id,
     className,
     style,

@@ -50,6 +50,7 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 | `defaultOpen` | `boolean` | No | `false` | Uncontrolled default open state |
 | `onOpenChange` | `(open: boolean) => void` | No | `undefined` | Callback when open state changes |
 | `modal` | `boolean` | No | `true` | Whether menu is modal (focus trapped) |
+| `disabled` | `boolean` | No | `false` | Disables all dropdown menu triggers (prevents opening) |
 | `dir` | `'ltr' | 'rtl'` | No | `'ltr'` | Reading direction for positioning |
 | `closeOnSelect` | `boolean | 'auto'` | No | `'auto'` | Selection close policy: true=always close, false=never close, 'auto'=close normal items; keep open for checkbox/radio |
 

@@ -20,14 +20,17 @@ export const Collapsible = ({
   onOpenChange,
   disabled = false,
   children,
+  as: Component = 'div',
+  triggerId: propsTriggerId,
+  contentId: propsContentId,
   ...props
 }: CollapsibleProps) => {
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
 
   // Generate stable IDs for ARIA relationships
   const baseId = useId();
-  const triggerId = `${baseId}-trigger`;
-  const contentId = `${baseId}-content`;
+  const triggerId = propsTriggerId || `${baseId}-trigger`;
+  const contentId = propsContentId || `${baseId}-content`;
 
   // Determine if controlled or uncontrolled
   const isControlled = controlledOpen !== undefined;
@@ -64,9 +67,9 @@ export const Collapsible = ({
 
   return (
     <CollapsibleContext.Provider value={contextValue}>
-      <div data-state={dataState} data-disabled={disabled ? '' : undefined} {...props}>
+      <Component data-state={dataState} data-disabled={disabled ? '' : undefined} {...props}>
         {children}
-      </div>
+      </Component>
     </CollapsibleContext.Provider>
   );
 };

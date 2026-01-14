@@ -94,6 +94,68 @@ describe('DropdownMenu', () => {
 
       expect(container).toBeInTheDocument();
     });
+
+    it('should disable all triggers when root disabled is true', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = jest.fn();
+
+      render(
+        <DropdownMenu disabled onOpenChange={onOpenChange}>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button');
+      expect(trigger).toBeDisabled();
+      expect(trigger).toHaveAttribute('data-disabled');
+
+      await user.click(trigger);
+      expect(onOpenChange).not.toHaveBeenCalled();
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    });
+
+    it('should allow trigger disabled to override root disabled', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = jest.fn();
+
+      render(
+        <DropdownMenu disabled={false} onOpenChange={onOpenChange}>
+          <DropdownMenuTrigger disabled>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button');
+      expect(trigger).toBeDisabled();
+
+      await user.click(trigger);
+      expect(onOpenChange).not.toHaveBeenCalled();
+    });
+
+    it('should allow trigger disabled=false to override root disabled=true', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = jest.fn();
+
+      render(
+        <DropdownMenu disabled onOpenChange={onOpenChange}>
+          <DropdownMenuTrigger disabled={false}>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button');
+      expect(trigger).not.toBeDisabled();
+
+      await user.click(trigger);
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+    });
   });
 
   describe('DropdownMenu.Trigger', () => {

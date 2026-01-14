@@ -1,4 +1,4 @@
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Checkbox } from '../Checkbox';
 
@@ -335,12 +335,12 @@ describe('Checkbox - Unit Tests', () => {
       expect(handleBlur).toHaveBeenCalled();
     });
 
-    it('sets shouldAutoFocus prop correctly', () => {
-      // Note: Auto-focus behavior is tested in integration tests with real DOM
-      const { container } = render(<Checkbox shouldAutoFocus />);
-      const checkbox = container.querySelector('[role="checkbox"]');
-
-      expect(checkbox).toBeInTheDocument();
+    it('should auto-focus when shouldAutoFocus is true', async () => {
+      render(<Checkbox shouldAutoFocus />);
+      const checkbox = screen.getByRole('checkbox');
+      await waitFor(() => {
+        expect(checkbox).toHaveFocus();
+      });
     });
   });
 

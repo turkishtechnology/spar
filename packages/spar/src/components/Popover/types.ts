@@ -31,6 +31,12 @@ export interface PopoverRootProps {
   modal?: boolean;
 
   /**
+   * Disables all popover triggers (prevents opening)
+   * @defaultValue false
+   */
+  disabled?: boolean;
+
+  /**
    * Preferred side for popover positioning
    * @defaultValue 'bottom'
    */
@@ -243,6 +249,7 @@ export interface PopoverContextValue {
   arrowRef: RefObject<HTMLDivElement | null>;
   floatingStyles: CSSProperties;
   modal: boolean;
+  disabled: boolean;
   side: PopoverSide;
   align: PopoverAlign;
   sideOffset: number;

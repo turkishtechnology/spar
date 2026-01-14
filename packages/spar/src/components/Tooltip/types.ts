@@ -1,7 +1,6 @@
 import type {
   ComponentProps,
   ReactNode,
-  ReactElement,
   ElementType,
   RefObject,
   SVGProps,
@@ -18,7 +17,7 @@ export interface TooltipProviderProps {
   /**
    * Tooltip components to share provider context
    */
-  children: ReactNode;
+  children?: ReactNode;
 
   /**
    * Global delay duration for all tooltips
@@ -47,7 +46,7 @@ export interface TooltipRootProps {
   /**
    * Tooltip trigger and content components
    */
-  children: ReactNode;
+  children?: ReactNode;
 
   /**
    * Controlled state for tooltip visibility
@@ -91,7 +90,7 @@ export interface TooltipTriggerProps extends ComponentProps<'button'> {
   /**
    * The trigger element (must be single focusable element)
    */
-  children: ReactElement;
+  children?: ReactNode;
 
   /**
    * Compose with child element instead of rendering button
@@ -205,7 +204,7 @@ export interface TooltipPortalProps {
   /**
    * Content to render in portal
    */
-  children: ReactNode;
+  children?: ReactNode;
 
   /**
    * Portal container element

@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useRef } from 'react';
+import { useMergedRef, useAutoFocus } from '../../hooks';
 import type { ButtonProps } from './types';
 
 /**
@@ -30,18 +31,12 @@ export const Button = ({
   // Interactive state
   const isInteractive = !disabled && !isLoading;
 
-  // Auto focus handling - SSR safe with stable dependency array
-  useEffect(() => {
-    // Only run on client-side after mount
-    if (typeof window === 'undefined') return;
+  // Refs
+  const internalRef = useRef<HTMLElement>(null);
+  const mergedRef = useMergedRef(internalRef, ref);
 
-    if (shouldAutoFocus && ref && typeof ref === 'object' && ref.current) {
-      // Use requestAnimationFrame to ensure DOM is ready
-      requestAnimationFrame(() => {
-        ref.current?.focus();
-      });
-    }
-  }, [shouldAutoFocus]);
+  // Auto focus handling
+  useAutoFocus(internalRef, shouldAutoFocus);
 
   // Unified activation handler for click and keyboard
   const handleActivation = useCallback(
@@ -126,7 +121,7 @@ export const Button = ({
   // Build props for the element
   const isNativeButton = Element === 'button';
   const elementProps: Record<string, unknown> = {
-    ref,
+    ref: mergedRef,
     className,
     style,
     onClick: handleClick,

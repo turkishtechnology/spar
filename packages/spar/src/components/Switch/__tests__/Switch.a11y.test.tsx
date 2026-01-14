@@ -1,4 +1,4 @@
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, waitFor } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import userEvent from '@testing-library/user-event';
 import { Switch } from '../Switch';
@@ -333,10 +333,12 @@ describe('Switch Accessibility', () => {
       expect(switchElement).not.toHaveAttribute('data-focus');
     });
 
-    it('should auto-focus when shouldAutoFocus is true', () => {
+    it('should auto-focus when shouldAutoFocus is true', async () => {
       render(<Switch shouldAutoFocus>Toggle setting</Switch>);
       const switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveFocus();
+      await waitFor(() => {
+        expect(switchElement).toHaveFocus();
+      });
     });
 
     it('should not auto-focus when disabled', () => {
