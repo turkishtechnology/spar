@@ -16,7 +16,7 @@ import { composeRefs } from './utils';
 export const DropdownMenuTrigger = ({
   as: Component = 'button',
   asChild = false,
-  disabled = false,
+  disabled: disabledProp,
   onClick,
   onKeyDown,
   ref,
@@ -24,6 +24,10 @@ export const DropdownMenuTrigger = ({
   ...props
 }: DropdownMenuTriggerProps) => {
   const menu = useDropdownMenuRootContext();
+
+  // Use prop if explicitly provided, otherwise use context
+  const disabled = disabledProp ?? menu.disabled;
+
   const triggerRefCallback = useMemo(
     () => composeRefs<HTMLElement | null>(menu.triggerRef, ref),
     [menu.triggerRef, ref],

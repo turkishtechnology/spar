@@ -95,6 +95,74 @@ describe('Dialog', () => {
 
       expect(screen.getByTestId('overlay')).toHaveAttribute('data-state', 'open');
     });
+
+    it('should disable all triggers when root disabled is true', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = jest.fn();
+
+      render(
+        <DialogRoot disabled onOpenChange={onOpenChange}>
+          <DialogTrigger>Open Dialog</DialogTrigger>
+          <DialogPortal>
+            <DialogContent>
+              <DialogTitle>Dialog Title</DialogTitle>
+            </DialogContent>
+          </DialogPortal>
+        </DialogRoot>,
+      );
+
+      const trigger = screen.getByRole('button');
+      expect(trigger).toBeDisabled();
+      expect(trigger).toHaveAttribute('data-disabled', '');
+
+      await user.click(trigger);
+      expect(onOpenChange).not.toHaveBeenCalled();
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+
+    it('should allow trigger disabled to override root disabled', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = jest.fn();
+
+      render(
+        <DialogRoot disabled={false} onOpenChange={onOpenChange}>
+          <DialogTrigger disabled>Open Dialog</DialogTrigger>
+          <DialogPortal>
+            <DialogContent>
+              <DialogTitle>Dialog Title</DialogTitle>
+            </DialogContent>
+          </DialogPortal>
+        </DialogRoot>,
+      );
+
+      const trigger = screen.getByRole('button');
+      expect(trigger).toBeDisabled();
+
+      await user.click(trigger);
+      expect(onOpenChange).not.toHaveBeenCalled();
+    });
+
+    it('should allow trigger disabled=false to override root disabled=true', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = jest.fn();
+
+      render(
+        <DialogRoot disabled onOpenChange={onOpenChange}>
+          <DialogTrigger disabled={false}>Open Dialog</DialogTrigger>
+          <DialogPortal>
+            <DialogContent>
+              <DialogTitle>Dialog Title</DialogTitle>
+            </DialogContent>
+          </DialogPortal>
+        </DialogRoot>,
+      );
+
+      const trigger = screen.getByRole('button');
+      expect(trigger).not.toBeDisabled();
+
+      await user.click(trigger);
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+    });
   });
 
   describe('DialogTrigger', () => {
