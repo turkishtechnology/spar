@@ -1,5 +1,5 @@
+import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { Button } from '../Button';
@@ -226,9 +226,12 @@ describe('Button Accessibility', () => {
   });
 
   describe('Focus Management', () => {
-    it('should auto-focus when shouldAutoFocus is true', () => {
+    it('should auto-focus when shouldAutoFocus is true', async () => {
       render(<Button shouldAutoFocus>Auto Focus</Button>);
       const button = screen.getByRole('button');
+      await waitFor(() => {
+        expect(button).toHaveFocus();
+      });
       expect(button).toHaveAttribute('data-autofocus', '');
     });
 

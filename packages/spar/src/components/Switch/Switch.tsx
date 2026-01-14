@@ -1,4 +1,5 @@
-import { useState, useCallback, useId } from 'react';
+import { useState, useCallback, useId, useRef } from 'react';
+import { useMergedRef, useAutoFocus } from '../../hooks';
 import type { SwitchProps, UseSwitchProps, UseSwitchReturn } from './types';
 
 /**
@@ -175,10 +176,18 @@ export const Switch = ({
   shouldAutoFocus = false,
   id: providedId,
   children,
+  ref,
   ...restProps
 }: SwitchProps) => {
   const internalId = useId();
   const id = providedId || internalId;
+
+  // Refs
+  const internalRef = useRef<HTMLElement>(null);
+  const mergedRef = useMergedRef(internalRef, ref as React.Ref<HTMLElement>);
+
+  // Auto focus handling
+  useAutoFocus(internalRef, shouldAutoFocus);
 
   // Use the switch hook
   const { switchProps, hiddenInputProps } = useSwitch({
@@ -204,8 +213,8 @@ export const Switch = ({
   const componentProps: Record<string, unknown> = {
     ...switchProps,
     ...safeProps,
+    ref: mergedRef,
     id,
-    autoFocus: shouldAutoFocus,
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
     'aria-describedby': ariaDescribedBy,
