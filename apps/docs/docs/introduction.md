@@ -48,19 +48,15 @@ Spar components are completely unstyled. They provide:
 Every component in Spar uses a compound component pattern with granular parts:
 
 ```tsx
-// Dialog with full control over structure
-<Dialog.Root open={open} onOpenChange={setOpen}>
-  <Dialog.Trigger>Open Dialog</Dialog.Trigger>
-  <Dialog.Portal>
-    <Dialog.Overlay />
-    <Dialog.Content>
-      <Dialog.Title>Dialog Title</Dialog.Title>
-      <Dialog.Description>Dialog description</Dialog.Description>
-      {/* Your content */}
-      <Dialog.Close>Close</Dialog.Close>
-    </Dialog.Content>
-  </Dialog.Portal>
-</Dialog.Root>
+// Simple accordion example
+<Accordion.Root type='single'>
+  <Accordion.Item value='item-1'>
+    <Accordion.Header>
+      <Accordion.Trigger>What is Spar?</Accordion.Trigger>
+    </Accordion.Header>
+    <Accordion.Content>A headless UI library with zero styling opinions.</Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>
 ```
 
 This pattern provides:
@@ -68,8 +64,6 @@ This pattern provides:
 - **Flexibility:** Use only the parts you need.
 - **Consistency:** All components follow the same pattern.
 - **Predictability:** Easy to learn and use across different components.
-
-_Once you understand how `Dialog` works, you already know how `Popover`, `DropdownMenu`, and other overlay components work._
 
 ## Accessibility
 
