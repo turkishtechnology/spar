@@ -363,8 +363,8 @@
     "description": "Get Started"
   },
   "landing.why.takeoff.headless": {
-    "message": "NEDEN SPAR HEADLESS",
-    "description": "WHY TAKEOFF HEADLESS"
+    "message": "NEDEN SPAR",
+    "description": "WHY SPAR"
   },
   "landing.build.subheader": {
     "message": "Geliştir",
@@ -383,7 +383,7 @@
     "description": "Speed up your workflow"
   },
   "landing.workflow.description": {
-    "message": "Tekerleği yeniden icat etmeyi bırak. Spar Headless durum yönetimi, erişilebilirlik ve klavye etkileşimlerini hazır olarak sunar—böylece ürününüzü benzersiz kılan özelliklere odaklanabilirsin.",
+    "message": "Tekerleği yeniden icat etmeyi bırak. Spar durum yönetimi, erişilebilirlik ve klavye etkileşimlerini hazır olarak sunar—böylece ürününüzü benzersiz kılan özelliklere odaklanabilirsin.",
     "description": "Managing logic-heavy UI components description"
   },
   "landing.your.ui.rules": {
@@ -400,7 +400,7 @@
   },
   "landing.developers.building": {
     "message": "Spar kullanan geliştirici",
-    "description": "Developers building with Takeoff"
+    "description": "Developers building with Spar"
   },
   "landing.github.stars": {
     "message": "GitHub yıldızı",
@@ -416,7 +416,7 @@
   },
   "features.wai.aria.description": {
     "message": "İlk günden WAI-ARIA standartlarına göre inşa edildi. Spar, yardımcı teknolojiler için semantik doğruluğu ve uygun davranışı garanti eder.",
-    "description": "Takeoff follows WAI-ARIA best practices description"
+    "description": "Spar follows WAI-ARIA best practices description"
   },
   "features.keyboard.support": {
     "message": "Tam Klavye Navigasyonu",
@@ -424,7 +424,7 @@
   },
   "features.keyboard.description": {
     "message": "Tab, ok tuşları, enter/escape ile tam klavye desteği—tüm Spar bileşenleri kullanıcıların beklediği gibi çalışır, kutudan çıktığı gibi.",
-    "description": "All Takeoff components support full keyboard interaction description"
+    "description": "All Spar components support full keyboard interaction description"
   },
   "features.focus.handling": {
     "message": "Akıllı Odak Yönetimi",
@@ -467,7 +467,7 @@
     "description": "Are you ready to use the"
   },
   "ending.headless.library": {
-    "message": "Spar Headless ile?",
+    "message": "Spar ile?",
     "description": "headless Spar?"
   },
   "theming.themes": {

@@ -363,8 +363,8 @@
     "description": "Get Started"
   },
   "landing.why.takeoff.headless": {
-    "message": "WHY SPAR HEADLESS",
-    "description": "WHY TAKEOFF HEADLESS"
+    "message": "WHY SPAR",
+    "description": "WHY SPAR"
   },
   "landing.build.subheader": {
     "message": "Build",
@@ -383,7 +383,7 @@
     "description": "Speed up your workflow"
   },
   "landing.workflow.description": {
-    "message": "Stop reinventing the wheel. Spar Headless handles state management, accessibility, and keyboard interactions out of the box—so you can focus on what makes your product unique.",
+    "message": "Stop reinventing the wheel. Spar handles state management, accessibility, and keyboard interactions out of the box—so you can focus on what makes your product unique.",
     "description": "Managing logic-heavy UI components description"
   },
   "landing.your.ui.rules": {
@@ -400,7 +400,7 @@
   },
   "landing.developers.building": {
     "message": "Developers building with Spar",
-    "description": "Developers building with Takeoff"
+    "description": "Developers building with Spar"
   },
   "landing.github.stars": {
     "message": "GitHub Stars",
@@ -416,7 +416,7 @@
   },
   "features.wai.aria.description": {
     "message": "Built on WAI-ARIA standards from day one. Spar ensures semantic correctness and proper behavior for assistive technologies.",
-    "description": "Takeoff follows WAI-ARIA best practices description"
+    "description": "Spar follows WAI-ARIA best practices description"
   },
   "features.keyboard.support": {
     "message": "Full Keyboard Navigation",
@@ -424,7 +424,7 @@
   },
   "features.keyboard.description": {
     "message": "Complete keyboard support with tab, arrow keys, enter/escape—all interactions work exactly as users expect, out of the box.",
-    "description": "All Takeoff components support full keyboard interaction description"
+    "description": "All Spar components support full keyboard interaction description"
   },
   "features.focus.handling": {
     "message": "Intelligent Focus Management",

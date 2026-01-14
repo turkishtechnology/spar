@@ -17,32 +17,37 @@
   font-family: 'Geologica', sans-serif;
 }
 
-
 :root {
   --ifm-color-primary: #222530;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-color-primary-dark: #d43347;
+  --ifm-color-primary-darker: #b70017;
+  --ifm-color-primary-darkest: #6f000e;
+  --ifm-color-primary-light: #db5465;
+  --ifm-color-primary-lighter: #e68a95;
+  --ifm-color-primary-lightest: #eeb0b8;
   --ifm-gray: #dadde1;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgb(72, 77, 91);
   --ifm-navbar-padding-vertical: 12px;
+  --ifm-link-color: #d43347;
+  --ifm-link-hover-color: #b70017;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: white;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
+  --ifm-color-primary: #e1e4ea;
+  --ifm-color-primary-dark: #b70017;
+  --ifm-color-primary-darker: #d43347;
+  --ifm-color-primary-darkest: #d43347;
+  --ifm-color-primary-light: #8f0012;
+  --ifm-color-primary-lighter: #6f000e;
+  --ifm-color-primary-lightest: #54000b;
   --ifm-gray: #242526;
+  --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-navbar-padding-vertical: 12px;
+  --ifm-link-color: #b70017;
+  --ifm-link-hover-color: #d43347;
 }
 
 .home-container {
@@ -62,6 +67,14 @@
   gap: 4rem;
   margin: 3rem;
   padding: 3rem 10rem;
+}
+
+.tabs__item {
+  &--active {
+    color: var(--ifm-color-primary-dark);
+    border-bottom-color: var(--ifm-color-primary-dark);
+    border-bottom-width: 2px;
+  }
 }
 
 @import './Anatomy/index.scss';
