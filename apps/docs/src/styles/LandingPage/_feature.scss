@@ -5,6 +5,8 @@
     position: absolute;
     z-index: 0;
     top: -25%;
+    left: 50%;
+    transform: translateX(-50%);
   }
   .features-container {
     display: flex;
