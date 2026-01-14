@@ -173,7 +173,7 @@ export const TooltipTrigger = ({
     onKeyDown: context.disabled ? undefined : handleKeyDown,
   };
 
-  if (asChild) {
+  if (asChild && React.isValidElement(children)) {
     // Clone the child and add our props
     return React.cloneElement(children, triggerProps);
   }
