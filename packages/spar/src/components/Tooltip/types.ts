@@ -1,6 +1,5 @@
 import type {
   ReactNode,
-  ReactElement,
   ElementType,
   RefObject,
   ButtonHTMLAttributes,
@@ -19,7 +18,7 @@ export interface TooltipProviderProps {
   /**
    * Tooltip components to share provider context
    */
-  children: ReactNode;
+  children?: ReactNode;
 
   /**
    * Global delay duration for all tooltips
@@ -48,7 +47,7 @@ export interface TooltipRootProps {
   /**
    * Tooltip trigger and content components
    */
-  children: ReactNode;
+  children?: ReactNode;
 
   /**
    * Controlled state for tooltip visibility
@@ -92,7 +91,7 @@ export interface TooltipTriggerProps extends ButtonHTMLAttributes<HTMLButtonElem
   /**
    * The trigger element (must be single focusable element)
    */
-  children: ReactElement;
+  children?: ReactNode;
 
   /**
    * Compose with child element instead of rendering button
@@ -115,7 +114,7 @@ export interface TooltipContentProps extends HTMLAttributes<HTMLElement> {
   /**
    * Content to display in tooltip
    */
-  children: ReactNode;
+  children?: ReactNode;
 
   /**
    * Element type for tooltip content container
@@ -211,7 +210,7 @@ export interface TooltipPortalProps {
   /**
    * Content to render in portal
    */
-  children: ReactNode;
+  children?: ReactNode;
 
   /**
    * Portal container element
