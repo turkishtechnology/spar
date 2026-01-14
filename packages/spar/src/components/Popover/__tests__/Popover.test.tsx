@@ -113,6 +113,62 @@ describe('PopoverRoot', () => {
       expect(root).toHaveAttribute('data-state', 'open');
     });
   });
+
+  it('should disable all triggers when root disabled is true', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = jest.fn();
+
+    render(
+      <PopoverRoot disabled onOpenChange={onOpenChange}>
+        <PopoverTrigger>Open</PopoverTrigger>
+        <PopoverContent>Content</PopoverContent>
+      </PopoverRoot>,
+    );
+
+    const trigger = screen.getByRole('button');
+    expect(trigger).toBeDisabled();
+    expect(trigger).toHaveAttribute('data-disabled', '');
+
+    await user.click(trigger);
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.queryByText('Content')).not.toBeInTheDocument();
+  });
+
+  it('should allow trigger disabled to override root disabled', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = jest.fn();
+
+    render(
+      <PopoverRoot disabled={false} onOpenChange={onOpenChange}>
+        <PopoverTrigger disabled>Open</PopoverTrigger>
+        <PopoverContent>Content</PopoverContent>
+      </PopoverRoot>,
+    );
+
+    const trigger = screen.getByRole('button');
+    expect(trigger).toBeDisabled();
+
+    await user.click(trigger);
+    expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
+  it('should allow trigger disabled=false to override root disabled=true', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = jest.fn();
+
+    render(
+      <PopoverRoot disabled onOpenChange={onOpenChange}>
+        <PopoverTrigger disabled={false}>Open</PopoverTrigger>
+        <PopoverContent>Content</PopoverContent>
+      </PopoverRoot>,
+    );
+
+    const trigger = screen.getByRole('button');
+    expect(trigger).not.toBeDisabled();
+
+    await user.click(trigger);
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+  });
 });
 
 describe('PopoverTrigger', () => {

@@ -30,6 +30,12 @@ export interface DropdownMenuProps {
   modal?: boolean;
 
   /**
+   * Disables all dropdown menu triggers (prevents opening)
+   * @defaultValue false
+   */
+  disabled?: boolean;
+
+  /**
    * Reading direction for positioning
    * @defaultValue 'ltr'
    */
@@ -319,6 +325,7 @@ export interface DropdownMenuContextValue {
   triggerId: string;
   contentId: string;
   modal: boolean;
+  disabled: boolean;
   dir: Direction;
   closeOnSelect: boolean | 'auto';
   focusStrategy: DropdownMenuFocusStrategy;
