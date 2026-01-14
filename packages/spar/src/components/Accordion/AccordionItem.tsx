@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useId, useEffect, useMemo, useCallback } from 'react';
+import { createContext, useContext, useEffect, useMemo, useCallback, useId } from 'react';
 import type { AccordionItemProps, AccordionItemContextValue } from './types';
 import { useAccordionContext } from './Accordion';
+import { Collapsible } from '../Collapsible';
 
 const AccordionItemContext = createContext<AccordionItemContextValue | null>(null);
 
@@ -65,13 +66,17 @@ export const AccordionItem = ({
 
   return (
     <AccordionItemContext.Provider value={itemContextValue}>
-      <Component
+      <Collapsible
+        open={isExpanded}
+        onOpenChange={handleToggle}
+        disabled={isItemDisabled}
+        triggerId={triggerId}
+        contentId={contentId}
+        as={Component}
         {...props}
-        data-state={isExpanded ? 'open' : 'closed'}
-        {...(isItemDisabled && { 'data-disabled': '' })}
       >
         {children}
-      </Component>
+      </Collapsible>
     </AccordionItemContext.Provider>
   );
 };

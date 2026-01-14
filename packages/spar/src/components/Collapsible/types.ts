@@ -6,6 +6,24 @@ import type { ElementType, ReactNode, HTMLAttributes } from 'react';
  */
 export interface CollapsibleProps extends HTMLAttributes<HTMLDivElement> {
   /**
+   * Element type for polymorphic rendering
+   * @defaultValue 'div'
+   */
+  as?: ElementType;
+
+  /**
+   * Unique identifier for the trigger element.
+   * IF not provided, one will be generated automatically.
+   */
+  triggerId?: string;
+
+  /**
+   * Unique identifier for the content element.
+   * If not provided, one will be generated automatically.
+   */
+  contentId?: string;
+
+  /**
    * Controlled open state
    */
   open?: boolean;
