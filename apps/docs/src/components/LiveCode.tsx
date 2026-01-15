@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { Highlight, themes } from 'prism-react-renderer';
+import { useColorMode } from '@docusaurus/theme-common';
 import {
   Accordion,
   AccordionItem,
@@ -51,24 +52,20 @@ import {
 interface LiveCodeProps {
   code?: string;
   cssCode?: string;
-  theme?: 'vsDark' | 'vsLight';
 }
 
 interface CollapsibleCodeBlockProps {
   children: React.ReactNode;
-  activeTab?: 'js' | 'css';
 }
 
 const CollapsibleCodeBlock: React.FC<CollapsibleCodeBlockProps> = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const handleToggle = () => setIsCollapsed((prev) => !prev);
+
   return (
     <div className='collapsible-code-block'>
-      <button
-        className='collapsible-toggle'
-        onClick={() => setIsCollapsed((value) => !value)}
-        aria-expanded={!isCollapsed}
-      >
+      <button className='collapsible-toggle' onClick={handleToggle} aria-expanded={!isCollapsed}>
         <span className='toggle-icon'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -105,8 +102,9 @@ const CollapsibleCodeBlock: React.FC<CollapsibleCodeBlockProps> = ({ children })
   );
 };
 const LiveCode: React.FC<LiveCodeProps> = ({ code, cssCode }) => {
-  // Pick theme for syntax highlighting
-  const selectedTheme = themes.github;
+  // Pick theme for syntax highlighting based on color mode
+  const { colorMode } = useColorMode();
+  const selectedTheme = colorMode === 'dark' ? themes.vsDark : themes.github;
   const [activeTab, setActiveTab] = useState<'js' | 'css'>('js');
   const [isCopied, setIsCopied] = useState(false);
 
