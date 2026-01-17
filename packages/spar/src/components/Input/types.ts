@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode, HTMLAttributes, Ref } from 'react';
+import type { ComponentProps, ElementType } from 'react';
 
 /**
  * Input context state
@@ -18,7 +18,7 @@ export interface InputContextValue {
  * Props for Input.Root
  * @remarks Provides state context for compound input elements
  */
-export interface InputRootProps extends HTMLAttributes<HTMLDivElement> {
+export interface InputRootProps extends ComponentProps<'div'> {
   /**
    * Input validation state
    * @defaultValue false
@@ -36,11 +36,6 @@ export interface InputRootProps extends HTMLAttributes<HTMLDivElement> {
    * @defaultValue false
    */
   required?: boolean;
-
-  /**
-   * Compound input elements
-   */
-  children: ReactNode;
 }
 
 /**
@@ -70,46 +65,16 @@ export type PolymorphicInputFieldProps<T extends ElementType = 'input'> = InputF
  * Props for Input.Label
  * @remarks Associated label element with automatic ID linking
  */
-export interface InputLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
-  /**
-   * Label content
-   */
-  children: ReactNode;
-
-  /**
-   * Ref for the label element
-   */
-  ref?: Ref<HTMLLabelElement>;
-}
+export interface InputLabelProps extends ComponentProps<'label'> {}
 
 /**
  * Props for Input.Description
  * @remarks Helper text element for additional input guidance
  */
-export interface InputDescriptionProps extends HTMLAttributes<HTMLDivElement> {
-  /**
-   * Description content
-   */
-  children: ReactNode;
-
-  /**
-   * Ref for the description element
-   */
-  ref?: Ref<HTMLDivElement>;
-}
+export interface InputDescriptionProps extends ComponentProps<'div'> {}
 
 /**
  * Props for Input.ErrorMessage
  * @remarks Error announcement element with automatic ARIA handling
  */
-export interface InputErrorMessageProps extends HTMLAttributes<HTMLDivElement> {
-  /**
-   * Error content
-   */
-  children: ReactNode;
-
-  /**
-   * Ref for the error element
-   */
-  ref?: Ref<HTMLDivElement>;
-}
+export interface InputErrorMessageProps extends ComponentProps<'div'> {}

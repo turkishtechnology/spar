@@ -352,7 +352,7 @@ export const DropdownMenuContent = ({
   });
 
   const handleKeyDownInternal = useCallback(
-    (event: ReactKeyboardEvent<HTMLElement>) => {
+    (event: ReactKeyboardEvent<HTMLDivElement>) => {
       onKeyDown?.(event);
       if (event.defaultPrevented) {
         return;

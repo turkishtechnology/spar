@@ -1,10 +1,10 @@
-import type { ElementType } from 'react';
+import type { ComponentProps, ElementType } from 'react';
 
 /**
  * Props for Label component
  * @remarks Fully accessible, headless label component for form controls
  */
-export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+export interface LabelProps extends ComponentProps<'label'> {
   /**
    * Marks label for a required field (exposed via data attribute for styling)
    * @remarks Does NOT add required functionality - set `required` on the control itself
