@@ -1,10 +1,10 @@
-import type { ElementType, ReactNode, HTMLAttributes } from 'react';
+import type { ComponentProps, ElementType } from 'react';
 
 /**
  * Props for Collapsible root component
  * @remarks Fully accessible, headless component
  */
-export interface CollapsibleProps extends HTMLAttributes<HTMLDivElement> {
+export interface CollapsibleProps extends ComponentProps<'div'> {
   /**
    * Element type for polymorphic rendering
    * @defaultValue 'div'
@@ -44,35 +44,25 @@ export interface CollapsibleProps extends HTMLAttributes<HTMLDivElement> {
    * @defaultValue false
    */
   disabled?: boolean;
-
-  /**
-   * Child components
-   */
-  children: ReactNode;
 }
 
 /**
  * Props for CollapsibleTrigger component
  * @remarks Button element that toggles visibility
  */
-export interface CollapsibleTriggerProps extends HTMLAttributes<HTMLElement> {
+export interface CollapsibleTriggerProps extends ComponentProps<'button'> {
   /**
    * Element type for polymorphic rendering
    * @defaultValue 'button'
    */
   as?: ElementType;
-
-  /**
-   * Trigger content
-   */
-  children?: ReactNode;
 }
 
 /**
  * Props for CollapsibleContent component
  * @remarks Panel containing the collapsible content
  */
-export interface CollapsibleContentProps extends HTMLAttributes<HTMLElement> {
+export interface CollapsibleContentProps extends ComponentProps<'div'> {
   /**
    * Element type for polymorphic rendering
    * @defaultValue 'div'
@@ -84,11 +74,6 @@ export interface CollapsibleContentProps extends HTMLAttributes<HTMLElement> {
    * @defaultValue false
    */
   forceMount?: boolean;
-
-  /**
-   * Content to be shown/hidden
-   */
-  children?: ReactNode;
 
   /**
    * Callback fired when content is found via browser search

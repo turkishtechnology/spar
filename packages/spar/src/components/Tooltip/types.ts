@@ -1,9 +1,8 @@
 import type {
+  ComponentProps,
   ReactNode,
   ElementType,
   RefObject,
-  ButtonHTMLAttributes,
-  HTMLAttributes,
   SVGProps,
 } from 'react';
 import { Side, Align } from '../../types';
@@ -87,7 +86,7 @@ export interface TooltipRootProps {
  * Props for TooltipTrigger
  * @remarks The trigger element that shows/hides the tooltip
  */
-export interface TooltipTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface TooltipTriggerProps extends ComponentProps<'button'> {
   /**
    * The trigger element (must be single focusable element)
    */
@@ -110,12 +109,7 @@ export interface TooltipTriggerProps extends ButtonHTMLAttributes<HTMLButtonElem
  * Props for TooltipContent
  * @remarks The content that displays in the tooltip
  */
-export interface TooltipContentProps extends HTMLAttributes<HTMLElement> {
-  /**
-   * Content to display in tooltip
-   */
-  children?: ReactNode;
-
+export interface TooltipContentProps extends ComponentProps<'div'> {
   /**
    * Element type for tooltip content container
    * @defaultValue 'div'

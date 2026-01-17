@@ -14,13 +14,13 @@ export const CollapsibleTrigger = ({
 }: CollapsibleTriggerProps) => {
   const { isOpen, toggle, disabled, triggerId, contentId } = useCollapsibleContext();
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (disabled) return;
     toggle();
     onClick?.(event);
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
     if (disabled) {
       onKeyDown?.(event);
       return;
