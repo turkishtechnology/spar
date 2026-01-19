@@ -136,9 +136,21 @@ export const Checkbox = ({
     'data-required': required ? '' : undefined,
   };
 
+  // Function to programmatically set checked state
+  const setCheckedState = (newChecked: CheckedState) => {
+    if (disabled || readOnly) return;
+
+    if (!isControlled) {
+      setInternalChecked(newChecked);
+    }
+
+    onChange?.(newChecked);
+  };
+
   // Render props for children function
   const renderProps: CheckboxRenderProps = {
     checked,
+    setChecked: setCheckedState,
     disabled,
     isFocused,
     isHovered,

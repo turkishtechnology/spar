@@ -81,12 +81,14 @@ describe('Tabs', () => {
       expect(screen.getByRole('tabpanel').tagName).toBe('SECTION');
     });
 
-    it('renders with asChild pattern', () => {
+    it('renders with render props pattern', () => {
       render(
         <BasicTabs>
           <TabsList>
-            <TabsTrigger value='tab1' asChild>
-              <button data-testid='custom-trigger'>Custom Tab</button>
+            <TabsTrigger value='tab1'>
+              {({ isSelected }) => (
+                <span data-testid='custom-trigger'>{isSelected ? 'Selected Tab' : 'Tab'}</span>
+              )}
             </TabsTrigger>
           </TabsList>
           <TabsContent value='tab1'>Custom Content</TabsContent>
@@ -95,8 +97,7 @@ describe('Tabs', () => {
 
       const customTrigger = screen.getByTestId('custom-trigger');
       expect(customTrigger).toBeInTheDocument();
-      expect(customTrigger).toHaveAttribute('role', 'tab');
-      expect(customTrigger).toHaveAttribute('aria-selected', 'true');
+      expect(customTrigger).toHaveTextContent('Selected Tab');
     });
   });
 

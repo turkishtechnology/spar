@@ -101,7 +101,7 @@ cssCode={`.tabs {
 - ✅ Lazy content rendering for performance
 - ✅ Force mount option for always-rendered content
 - ✅ Polymorphic rendering with `as` prop
-- ✅ `asChild` pattern for advanced composition
+- ✅ Render props pattern for TabsTrigger customization
 - ✅ Disabled tab support
 - ✅ RTL (right-to-left) text direction support
 
@@ -261,23 +261,24 @@ function ManualActivationTabs() {
 }
 ```
 
-### AsChild Pattern
+### Render Props Pattern
 
 ```tsx
-function AsChildTabs() {
+function RenderPropsTabs() {
   return (
     <Tabs defaultValue='dashboard'>
       <TabsList>
-        <TabsTrigger value='dashboard' asChild>
-          <button className='custom-tab-button'>
-            <DashboardIcon />
-            Dashboard
-          </button>
+        <TabsTrigger value='dashboard'>
+          {({ isSelected, isFocused }) => (
+            <span className={isSelected ? 'selected' : ''}>
+              <DashboardIcon />
+              Dashboard
+              {isFocused && <span className='focus-indicator' />}
+            </span>
+          )}
         </TabsTrigger>
-        <TabsTrigger value='analytics' asChild>
-          <a href='#analytics' className='custom-tab-link'>
-            Analytics
-          </a>
+        <TabsTrigger value='analytics'>
+          {({ isSelected }) => <span className={isSelected ? 'selected' : ''}>Analytics</span>}
         </TabsTrigger>
       </TabsList>
       <TabsContent value='dashboard'>Dashboard content</TabsContent>
@@ -356,13 +357,23 @@ function ForceMountTabs() {
 
 #### Props
 
-| Name               | Type                | Default    | Description                               |
-| ------------------ | ------------------- | ---------- | ----------------------------------------- |
-| `value`            | `string`            | —          | Unique identifier for the tab             |
-| `disabled`         | `boolean`           | `false`    | Disables this specific tab                |
-| `shouldAutoFocus`  | `boolean`           | `false`    | Whether to focus this tab trigger on mount|
-| `asChild`          | `boolean`           | `false`    | Render as child element instead of button |
-| `as`               | `React.ElementType` | `'button'` | Polymorphic component type                |
+| Name              | Type                                                          | Default    | Description                                |
+| ----------------- | ------------------------------------------------------------- | ---------- | ------------------------------------------ |
+| `value`           | `string`                                                      | —          | Unique identifier for the tab              |
+| `disabled`        | `boolean`                                                     | `false`    | Disables this specific tab                 |
+| `shouldAutoFocus` | `boolean`                                                     | `false`    | Whether to focus this tab trigger on mount |
+| `as`              | `React.ElementType`                                           | `'button'` | Polymorphic component type                 |
+| `children`        | `ReactNode \| ((state: TabsTriggerRenderProps) => ReactNode)` | —          | Children content or render function        |
+
+#### TabsTriggerRenderProps
+
+| Property      | Type          | Description                                  |
+| ------------- | ------------- | -------------------------------------------- |
+| `isSelected`  | `boolean`     | Whether this tab is currently selected       |
+| `select`      | `() => void`  | Function to select this tab programmatically |
+| `disabled`    | `boolean`     | Whether this tab is disabled                 |
+| `isFocused`   | `boolean`     | Whether this tab is currently focused        |
+| `orientation` | `Orientation` | The tab's orientation                        |
 
 #### Events
 

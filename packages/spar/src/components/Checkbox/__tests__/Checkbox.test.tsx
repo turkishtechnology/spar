@@ -1,6 +1,7 @@
 import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Checkbox } from '../Checkbox';
+import type { CheckboxRenderProps } from '../types';
 
 describe('Checkbox - Unit Tests', () => {
   afterEach(() => {
@@ -452,47 +453,81 @@ describe('Checkbox - Unit Tests', () => {
   describe('Render Props', () => {
     it('provides correct state to render prop children', async () => {
       const user = userEvent.setup();
-      const renderFn = jest.fn(() => <span>Render prop content</span>);
+      const renderFn = jest.fn((_props: CheckboxRenderProps) => <span>Render prop content</span>);
 
       render(<Checkbox disabled>{renderFn}</Checkbox>);
 
-      expect(renderFn).toHaveBeenCalledWith({
-        checked: false,
-        disabled: true,
-        isFocused: false,
-        isHovered: false,
-        isPressed: false,
-      });
+      expect(renderFn).toHaveBeenCalledWith(
+        expect.objectContaining({
+          checked: false,
+          disabled: true,
+          isFocused: false,
+          isHovered: false,
+          isPressed: false,
+        }),
+      );
+      // Verify setChecked is a function
+      const firstCallProps = renderFn.mock.calls[0]?.[0];
+      expect(firstCallProps).toBeDefined();
+      expect(typeof firstCallProps?.setChecked).toBe('function');
 
       const checkbox = screen.getByRole('checkbox');
       await user.hover(checkbox);
 
       // Should not update hover state when disabled
-      expect(renderFn).toHaveBeenLastCalledWith({
-        checked: false,
-        disabled: true,
-        isFocused: false,
-        isHovered: false,
-        isPressed: false,
-      });
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          checked: false,
+          disabled: true,
+          isFocused: false,
+          isHovered: false,
+          isPressed: false,
+        }),
+      );
     });
 
     it('updates render props on interaction', async () => {
       const user = userEvent.setup();
-      const renderFn = jest.fn(() => <span>Render prop content</span>);
+      const renderFn = jest.fn((_props: CheckboxRenderProps) => <span>Render prop content</span>);
 
       render(<Checkbox>{renderFn}</Checkbox>);
       const checkbox = screen.getByRole('checkbox');
 
       await user.hover(checkbox);
 
-      expect(renderFn).toHaveBeenLastCalledWith({
-        checked: false,
-        disabled: false,
-        isFocused: false,
-        isHovered: true,
-        isPressed: false,
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          checked: false,
+          disabled: false,
+          isFocused: false,
+          isHovered: true,
+          isPressed: false,
+        }),
+      );
+    });
+
+    it('provides setChecked function that updates state', async () => {
+      const handleChange = jest.fn();
+      let setCheckedFn: ((checked: boolean | 'indeterminate') => void) | undefined;
+
+      render(
+        <Checkbox onChange={handleChange}>
+          {({ checked, setChecked }) => {
+            setCheckedFn = setChecked;
+            return <span>{checked ? 'Checked' : 'Unchecked'}</span>;
+          }}
+        </Checkbox>,
+      );
+
+      expect(screen.getByText('Unchecked')).toBeInTheDocument();
+
+      // Call setChecked programmatically
+      act(() => {
+        setCheckedFn?.(true);
       });
+
+      expect(screen.getByText('Checked')).toBeInTheDocument();
+      expect(handleChange).toHaveBeenCalledWith(true);
     });
   });
 

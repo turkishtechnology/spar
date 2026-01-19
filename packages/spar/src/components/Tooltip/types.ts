@@ -1,10 +1,4 @@
-import type {
-  ComponentProps,
-  ReactNode,
-  ElementType,
-  RefObject,
-  SVGProps,
-} from 'react';
+import type { ComponentProps, ReactNode, ElementType, RefObject, SVGProps } from 'react';
 import { Side, Align } from '../../types';
 
 export type Sticky = 'partial' | 'always';

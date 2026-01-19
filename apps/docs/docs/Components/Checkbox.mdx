@@ -607,6 +607,19 @@ A headless checkbox component that provides complete accessibility and behavior 
 | `style?`           | `React.CSSProperties`                                      | `undefined`      | Inline styles                                                         |
 | `tabIndex?`        | `number`                                                   | `0`              | Tab index for keyboard navigation                                     |
 
+#### CheckboxRenderProps
+
+When using the render props pattern, the following state properties are passed to the children function:
+
+| Property     | Type                                  | Description                                         |
+| ------------ | ------------------------------------- | --------------------------------------------------- |
+| `checked`    | `CheckedState`                        | Current checked state (`true`, `false`, or `'indeterminate'`) |
+| `setChecked` | `(checked: CheckedState) => void`     | Function to programmatically set the checked state  |
+| `disabled`   | `boolean`                             | Whether the checkbox is disabled                    |
+| `isFocused`  | `boolean`                             | Whether the checkbox is currently focused           |
+| `isHovered`  | `boolean`                             | Whether the checkbox is being hovered               |
+| `isPressed`  | `boolean`                             | Whether the checkbox is being pressed               |
+
 **Events**
 
 | Name        | Parameters                | Description           | When Triggered                                     |

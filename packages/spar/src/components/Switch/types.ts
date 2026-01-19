@@ -52,11 +52,6 @@ export interface SwitchProps
   readOnly?: boolean;
 
   /**
-   * Ref to the underlying element
-   */
-  ref?: Ref<HTMLElement>;
-
-  /**
    * Auto-focus on mount
    * @defaultValue false
    */
