@@ -4,6 +4,56 @@ export type PopoverSide = 'top' | 'bottom' | 'left' | 'right';
 export type PopoverAlign = 'start' | 'center' | 'end';
 
 /**
+ * Render props provided to PopoverTrigger children function
+ */
+export interface PopoverTriggerRenderProps {
+  /**
+   * Whether the popover is currently open
+   */
+  isOpen: boolean;
+  /**
+   * Whether the trigger is disabled
+   */
+  disabled: boolean;
+  /**
+   * Function to open the popover
+   */
+  open: () => void;
+  /**
+   * Function to close the popover
+   */
+  close: () => void;
+  /**
+   * Function to toggle the popover open/closed state
+   */
+  toggle: () => void;
+}
+
+/**
+ * Render props provided to PopoverAnchor children function
+ */
+export interface PopoverAnchorRenderProps {
+  /**
+   * Whether the popover is currently open
+   */
+  isOpen: boolean;
+}
+
+/**
+ * Render props provided to PopoverClose children function
+ */
+export interface PopoverCloseRenderProps {
+  /**
+   * Whether the popover is currently open
+   */
+  isOpen: boolean;
+  /**
+   * Function to close the popover
+   */
+  close: () => void;
+}
+
+/**
  * Props for PopoverRoot component
  * @remarks Fully accessible, headless popover root container
  */
@@ -64,12 +114,11 @@ export interface PopoverRootProps {
  * Props for PopoverTrigger component
  * @remarks Fully accessible, headless popover trigger
  */
-export interface PopoverTriggerProps extends ComponentProps<'button'> {
+export interface PopoverTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
   /**
-   * Whether to render as child element instead of button
-   * @defaultValue false
+   * Children content or render function for render props pattern
    */
-  asChild?: boolean;
+  children?: ReactNode | ((state: PopoverTriggerRenderProps) => ReactNode);
 }
 
 /**
@@ -183,12 +232,11 @@ export interface PopoverArrowProps extends ComponentProps<'div'> {
  * Props for PopoverAnchor component
  * @remarks Element used as positioning reference instead of trigger
  */
-export interface PopoverAnchorProps extends ComponentProps<'div'> {
+export interface PopoverAnchorProps extends Omit<ComponentProps<'div'>, 'children'> {
   /**
-   * Whether to render as child element instead of div
-   * @defaultValue false
+   * Children content or render function for render props pattern
    */
-  asChild?: boolean;
+  children?: ReactNode | ((state: PopoverAnchorRenderProps) => ReactNode);
 }
 
 /**
@@ -212,12 +260,11 @@ export interface PopoverPortalProps {
  * Props for PopoverClose component
  * @remarks Close trigger that automatically closes the popover
  */
-export interface PopoverCloseProps extends ComponentProps<'button'> {
+export interface PopoverCloseProps extends Omit<ComponentProps<'button'>, 'children'> {
   /**
-   * Whether to render as child element instead of button
-   * @defaultValue false
+   * Children content or render function for render props pattern
    */
-  asChild?: boolean;
+  children?: ReactNode | ((state: PopoverCloseRenderProps) => ReactNode);
 }
 
 /**

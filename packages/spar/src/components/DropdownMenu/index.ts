@@ -70,6 +70,7 @@ export {
 export type {
   DropdownMenuProps,
   DropdownMenuTriggerProps,
+  DropdownMenuTriggerRenderProps,
   DropdownMenuContentProps,
   DropdownMenuItemProps,
   DropdownMenuCheckboxItemProps,

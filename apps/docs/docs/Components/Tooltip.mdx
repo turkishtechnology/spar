@@ -30,10 +30,8 @@ A popup that displays information related to an element when the element receive
 <LiveCode
   code={`<TooltipProvider>
         <TooltipRoot>
-          <TooltipTrigger asChild>
-            <Button className='tooltip-trigger'>
-              Hover or Focus Me
-            </Button>
+          <TooltipTrigger className='tooltip-trigger'>
+            Hover or Focus Me
           </TooltipTrigger>
           <TooltipPortal>
             <TooltipContent className='tooltip-content'>
@@ -48,38 +46,38 @@ cssCode={`.tooltip-trigger {
   font-weight: 400;
   border: none;
 
-  /* Light mode styles */
-  background-color: rgba(0, 0, 0, 0.08);
-  color: #222530;
-  font-size: 13px;
+/_ Light mode styles _/
+background-color: rgba(0, 0, 0, 0.08);
+color: #222530;
+font-size: 13px;
 }
 
 [data-theme='dark'] .tooltip-trigger {
-  /* Dark mode styles */
-  background-color: rgba(255, 255, 255, 0.12);
-  color: #f2f5f8;
+/_ Dark mode styles _/
+background-color: rgba(255, 255, 255, 0.12);
+color: #f2f5f8;
 }
 
 .tooltip-content {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background-color: #ddd;
+padding: 8px 12px;
+border-radius: 8px;
+border: 1px solid rgba(0, 0, 0, 0.08);
+background-color: #ddd;
 
-  box-shadow:
-    0 2px 2px -1px rgba(82, 88, 102, 0.04),
-    0 6px 12px -2px rgba(82, 88, 102, 0.04),
-    0 8px 20px 0 rgba(82, 88, 102, 0.04);
+box-shadow:
+0 2px 2px -1px rgba(82, 88, 102, 0.04),
+0 6px 12px -2px rgba(82, 88, 102, 0.04),
+0 8px 20px 0 rgba(82, 88, 102, 0.04);
 }
 
 [data-theme='dark'] .tooltip-content {
-  border-color: rgba(0, 0, 0, 0.08);
-  background-color: #222;
+border-color: rgba(0, 0, 0, 0.08);
+background-color: #222;
 
-  box-shadow:
-    0 2px 2px -1px rgba(82, 88, 102, 0.04),
-    0 6px 12px -2px rgba(82, 88, 102, 0.04),
-    0 8px 20px 0 rgba(82, 88, 102, 0.04);
+box-shadow:
+0 2px 2px -1px rgba(82, 88, 102, 0.04),
+0 6px 12px -2px rgba(82, 88, 102, 0.04),
+0 8px 20px 0 rgba(82, 88, 102, 0.04);
 }`}
 />
 
@@ -139,17 +137,16 @@ The Tooltip component is built as a compound component with multiple parts:
   <div data-spar-part='provider'>
     <TooltipProvider>
       <TooltipRoot data-spar-part='root'>
-        <TooltipTrigger data-spar-part='trigger' asChild>
-          <button
-            style={{
-              padding: '12px 24px',
-              border: '1px solid #ccc',
-              background: '#fff',
-              cursor: 'pointer',
-            }}
-          >
-            {' Hover or Focus Me '}
-          </button>
+        <TooltipTrigger
+          data-spar-part='trigger'
+          style={{
+            padding: '12px 24px',
+            border: '1px solid #ccc',
+            background: '#fff',
+            cursor: 'pointer',
+          }}
+        >
+          Hover or Focus Me
         </TooltipTrigger>
         <TooltipPortal data-spar-part='portal'>
           <TooltipContent
@@ -461,12 +458,12 @@ Root component that manages tooltip state and provides context to child componen
 | Name            | Type                      | Default | Description                              |
 | --------------- | ------------------------- | ------- | ---------------------------------------- |
 | `children`      | `React.ReactNode`         | -       | Tooltip trigger and content components   |
-| `open?`       | `boolean`                 | -       | Controlled state for tooltip visibility  |
+| `open?`         | `boolean`                 | -       | Controlled state for tooltip visibility  |
 | `defaultOpen?`  | `boolean`                 | `false` | Default open state for uncontrolled mode |
 | `onOpenChange?` | `(open: boolean) => void` | -       | Callback when tooltip open state changes |
 | `delay?`        | `number`                  | `700`   | Override provider delay for this tooltip |
 | `hideDelay?`    | `number`                  | `0`     | Override provider hide delay             |
-| `disabled?`   | `boolean`                 | `false` | Whether tooltip is disabled              |
+| `disabled?`     | `boolean`                 | `false` | Whether tooltip is disabled              |
 
 **Events**
 
@@ -482,15 +479,25 @@ Root component that manages tooltip state and provides context to child componen
 
 ### TooltipTrigger
 
-The trigger element that shows/hides the tooltip on hover or focus.
+The trigger element that shows/hides the tooltip on hover or focus. Always renders as a `button` element.
 
 **Props**
 
-| Name       | Type                 | Default    | Description                                  |
-| ---------- | -------------------- | ---------- | -------------------------------------------- |
-| `children` | `React.ReactNode`    | -          | The trigger element (must be single element) |
-| `asChild?` | `boolean`            | `false`    | Compose with child element instead of button |
-| `as?`      | `React.ElementType`  | `"button"` | Element type when not using asChild          |
+| Name       | Type                                                                         | Default | Description                                               |
+| ---------- | ---------------------------------------------------------------------------- | ------- | --------------------------------------------------------- |
+| `children` | `React.ReactNode \| ((state: TooltipTriggerRenderProps) => React.ReactNode)` | -       | Trigger content or render props function for state access |
+| `disabled` | `boolean`                                                                    | `false` | Disables the trigger                                      |
+| `...props` | `ComponentProps<'button'>`                                                   | -       | All standard button attributes                            |
+
+**Render Props (TooltipTriggerRenderProps)**
+
+| Property    | Type         | Description                                   |
+| ----------- | ------------ | --------------------------------------------- |
+| `isOpen`    | `boolean`    | Whether the tooltip is currently visible      |
+| `disabled`  | `boolean`    | Whether the trigger is disabled               |
+| `placement` | `Placement`  | Current placement of the tooltip              |
+| `show`      | `() => void` | Function to programmatically show the tooltip |
+| `hide`      | `() => void` | Function to programmatically hide the tooltip |
 
 **Events**
 

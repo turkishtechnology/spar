@@ -537,19 +537,28 @@ The root container that manages the dropdown menu state and provides context to 
 
 ### DropdownMenu.Trigger
 
-The button or element that toggles the dropdown menu visibility.
+The button element that toggles the dropdown menu visibility. Always renders as a `button` element.
 
 **Props**
 
-| Name         | Type                             | Default     | Description                                        |
-| ------------ | -------------------------------- | ----------- | -------------------------------------------------- |
-| `as?`        | `ElementType`                    | `'button'`  | Polymorphic element type to render                 |
-| `asChild?`   | `boolean`                        | `false`     | Merge props with child element instead of wrapping |
-| `disabled?`  | `boolean`                        | `false`     | Whether the trigger is disabled                    |
-| `ref?`       | `Ref<HTMLElement \| null>`       | `undefined` | Forwarded ref to trigger element                   |
-| `onClick?`   | `(event: MouseEvent) => void`    | `undefined` | Click event handler                                |
-| `onKeyDown?` | `(event: KeyboardEvent) => void` | `undefined` | Keyboard event handler                             |
-| `children?`  | `ReactNode`                      | `undefined` | Trigger content                                    |
+| Name         | Type                                                                  | Default     | Description                              |
+| ------------ | --------------------------------------------------------------------- | ----------- | ---------------------------------------- |
+| `children`   | `ReactNode \| ((state: DropdownMenuTriggerRenderProps) => ReactNode)` | `undefined` | Trigger content or render props function |
+| `disabled?`  | `boolean`                                                             | `false`     | Whether the trigger is disabled          |
+| `ref?`       | `Ref<HTMLButtonElement \| null>`                                      | `undefined` | Forwarded ref to trigger element         |
+| `onClick?`   | `(event: MouseEvent) => void`                                         | `undefined` | Click event handler                      |
+| `onKeyDown?` | `(event: KeyboardEvent) => void`                                      | `undefined` | Keyboard event handler                   |
+| `...props`   | `ComponentProps<'button'>`                                            | -           | All standard button attributes           |
+
+**Render Props (DropdownMenuTriggerRenderProps)**
+
+| Property   | Type         | Description                          |
+| ---------- | ------------ | ------------------------------------ |
+| `isOpen`   | `boolean`    | Whether the dropdown menu is open    |
+| `disabled` | `boolean`    | Whether the trigger is disabled      |
+| `open`     | `() => void` | Function to open the dropdown menu   |
+| `close`    | `() => void` | Function to close the dropdown menu  |
+| `toggle`   | `() => void` | Function to toggle the dropdown menu |
 
 **Events**
 
@@ -560,14 +569,14 @@ The button or element that toggles the dropdown menu visibility.
 
 **ARIA Attributes**
 
-| Attribute       | Value                | Purpose                            | Applied To                                                |
-| --------------- | -------------------- | ---------------------------------- | --------------------------------------------------------- |
-| `aria-haspopup` | `'menu'`             | Indicates element has a popup menu | Trigger element                                           |
-| `aria-expanded` | `boolean`            | Indicates whether menu is expanded | Trigger element                                           |
-| `aria-controls` | `string`             | References controlled menu content | Trigger element (when open)                               |
-| `data-state`    | `'open' \| 'closed'` | Current state for styling          | Trigger element                                           |
-| `data-disabled` | `''`                 | Present when disabled              | Trigger element (when disabled)                           |
-| `aria-disabled` | `true`               | Indicates disabled state           | Trigger element (asChild or non-native button + disabled) |
+| Attribute       | Value                | Purpose                            | Applied To                      |
+| --------------- | -------------------- | ---------------------------------- | ------------------------------- |
+| `aria-haspopup` | `'menu'`             | Indicates element has a popup menu | Trigger element                 |
+| `aria-expanded` | `boolean`            | Indicates whether menu is expanded | Trigger element                 |
+| `aria-controls` | `string`             | References controlled menu content | Trigger element (when open)     |
+| `data-state`    | `'open' \| 'closed'` | Current state for styling          | Trigger element                 |
+| `data-disabled` | `''`                 | Present when disabled              | Trigger element (when disabled) |
+| `aria-disabled` | `true`               | Indicates disabled state           | Trigger element (when disabled) |
 
 ### DropdownMenu.Content
 

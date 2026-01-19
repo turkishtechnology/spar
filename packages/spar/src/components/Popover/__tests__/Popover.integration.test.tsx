@@ -108,10 +108,8 @@ describe('Popover Integration Tests', () => {
 
       const UserProfilePopover = () => (
         <PopoverRoot>
-          <PopoverTrigger asChild>
-            <button>
-              <img src='/avatar.jpg' alt='John Doe' width={32} height={32} />
-            </button>
+          <PopoverTrigger>
+            <img src='/avatar.jpg' alt='John Doe' width={32} height={32} />
           </PopoverTrigger>
           <PopoverContent>
             <div>
@@ -389,7 +387,7 @@ describe('Popover Integration Tests', () => {
               />
 
               <PopoverRoot open={showValidation && !!emailError} onOpenChange={setShowValidation}>
-                <PopoverTrigger asChild>
+                <PopoverTrigger>
                   <span id='email-error' role='alert' aria-live='polite'>
                     {emailError && '⚠️'}
                   </span>
@@ -856,18 +854,18 @@ describe('Edge Cases and Uncovered Code Paths', () => {
       expect(anchorRefCallback).toHaveBeenCalledWith(expect.any(HTMLDivElement));
     });
 
-    it('handles function refs with asChild pattern', async () => {
+    it('handles function refs with render props pattern', async () => {
       const triggerRefCallback = jest.fn();
       const contentRefCallback = jest.fn();
       const anchorRefCallback = jest.fn();
 
       render(
         <PopoverRoot defaultOpen>
-          <PopoverAnchor asChild ref={anchorRefCallback}>
-            <span>Custom anchor</span>
+          <PopoverAnchor ref={anchorRefCallback}>
+            {({ isOpen }) => <span>Custom anchor: {isOpen ? 'open' : 'closed'}</span>}
           </PopoverAnchor>
-          <PopoverTrigger asChild ref={triggerRefCallback}>
-            <button>Custom trigger</button>
+          <PopoverTrigger ref={triggerRefCallback}>
+            {({ isOpen }) => <span>Custom trigger: {isOpen ? 'open' : 'closed'}</span>}
           </PopoverTrigger>
           <PopoverContent ref={contentRefCallback}>Custom content</PopoverContent>
         </PopoverRoot>,
@@ -878,7 +876,7 @@ describe('Edge Cases and Uncovered Code Paths', () => {
       });
 
       // All function refs should be called correctly
-      expect(anchorRefCallback).toHaveBeenCalledWith(expect.any(HTMLSpanElement));
+      expect(anchorRefCallback).toHaveBeenCalledWith(expect.any(HTMLDivElement));
       expect(triggerRefCallback).toHaveBeenCalledWith(expect.any(HTMLButtonElement));
       expect(contentRefCallback).toHaveBeenCalledWith(expect.any(HTMLDivElement));
     });
