@@ -20,11 +20,14 @@ export { PopoverClose as Close } from './PopoverClose';
 export type {
   PopoverRootProps,
   PopoverTriggerProps,
+  PopoverTriggerRenderProps,
   PopoverContentProps,
   PopoverArrowProps,
   PopoverAnchorProps,
+  PopoverAnchorRenderProps,
   PopoverPortalProps,
   PopoverCloseProps,
+  PopoverCloseRenderProps,
   PopoverSide,
   PopoverAlign,
 } from './types';

@@ -4,6 +4,32 @@ import type { CheckedState, Side, Align, Direction } from '../../types';
 export type DropdownMenuFocusStrategy = 'first' | 'last' | 'none';
 
 /**
+ * Render props provided to DropdownMenuTrigger children function
+ */
+export interface DropdownMenuTriggerRenderProps {
+  /**
+   * Whether the dropdown menu is currently open
+   */
+  isOpen: boolean;
+  /**
+   * Whether the trigger is disabled
+   */
+  disabled: boolean;
+  /**
+   * Function to open the dropdown menu
+   */
+  open: () => void;
+  /**
+   * Function to close the dropdown menu
+   */
+  close: () => void;
+  /**
+   * Function to toggle the dropdown menu open/closed state
+   */
+  toggle: () => void;
+}
+
+/**
  * Props for DropdownMenu.Root component
  */
 export interface DropdownMenuProps {
@@ -56,7 +82,7 @@ export interface DropdownMenuProps {
 /**
  * Props for DropdownMenu.Trigger component
  */
-export interface DropdownMenuTriggerProps extends ComponentProps<'button'> {
+export interface DropdownMenuTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
   /**
    * Polymorphic component type
    * @defaultValue 'button'
@@ -64,10 +90,9 @@ export interface DropdownMenuTriggerProps extends ComponentProps<'button'> {
   as?: ElementType;
 
   /**
-   * Render as child element
-   * @defaultValue false
+   * Children content or render function for render props pattern
    */
-  asChild?: boolean;
+  children?: ReactNode | ((state: DropdownMenuTriggerRenderProps) => ReactNode);
 }
 
 /**

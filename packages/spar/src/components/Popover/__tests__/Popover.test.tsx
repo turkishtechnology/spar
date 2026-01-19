@@ -185,18 +185,16 @@ describe('PopoverTrigger', () => {
     expect(trigger.tagName).toBe('BUTTON');
   });
 
-  it('supports asChild prop for custom elements', () => {
+  it('supports render props pattern for state access', () => {
     render(
       <PopoverRoot>
-        <PopoverTrigger asChild>
-          <div role='button'>Custom trigger</div>
-        </PopoverTrigger>
+        <PopoverTrigger>{({ isOpen }) => <span>{isOpen ? 'Close' : 'Open'}</span>}</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
       </PopoverRoot>,
     );
 
-    const trigger = screen.getByRole('button', { name: 'Custom trigger' });
-    expect(trigger.tagName).toBe('DIV');
+    const trigger = screen.getByRole('button');
+    expect(trigger).toHaveTextContent('Open');
   });
 
   it('handles disabled state', async () => {
@@ -652,11 +650,11 @@ describe('PopoverAnchor', () => {
     expect(anchor).toHaveAttribute('data-popover-anchor', '');
   });
 
-  it('supports asChild prop', () => {
+  it('supports render props pattern for state access', () => {
     render(
-      <PopoverRoot>
-        <PopoverAnchor asChild>
-          <span data-testid='anchor'>Custom anchor</span>
+      <PopoverRoot defaultOpen>
+        <PopoverAnchor data-testid='anchor'>
+          {({ isOpen }) => <span>{isOpen ? 'Open' : 'Closed'}</span>}
         </PopoverAnchor>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
@@ -664,7 +662,7 @@ describe('PopoverAnchor', () => {
     );
 
     const anchor = screen.getByTestId('anchor');
-    expect(anchor.tagName).toBe('SPAN');
+    expect(anchor).toHaveTextContent('Open');
     expect(anchor).toHaveAttribute('data-popover-anchor', '');
   });
 });
@@ -724,21 +722,21 @@ describe('PopoverClose', () => {
     });
   });
 
-  it('supports asChild prop', async () => {
+  it('supports render props pattern for state access', async () => {
     render(
       <PopoverRoot defaultOpen={true}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>
-          <PopoverClose asChild>
-            <div role='button'>Custom close</div>
+          <PopoverClose>
+            {({ isOpen }) => <span>{isOpen ? 'Close popover' : 'Hidden'}</span>}
           </PopoverClose>
         </PopoverContent>
       </PopoverRoot>,
     );
 
     await waitFor(() => {
-      const closeButton = screen.getByRole('button', { name: 'Custom close' });
-      expect(closeButton.tagName).toBe('DIV');
+      const closeButton = screen.getByRole('button', { name: 'Close popover' });
+      expect(closeButton).toHaveTextContent('Close popover');
       expect(closeButton).toHaveAttribute('data-popover-close', '');
     });
   });

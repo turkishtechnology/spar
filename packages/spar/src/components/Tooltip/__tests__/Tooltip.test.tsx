@@ -43,9 +43,7 @@ const BasicTooltip = ({
 }: BasicTooltipProps) => (
   <TooltipProvider>
     <TooltipRoot defaultOpen={defaultOpen} {...props}>
-      <TooltipTrigger asChild>
-        <button>Trigger</button>
-      </TooltipTrigger>
+      <TooltipTrigger>Trigger</TooltipTrigger>
       <TooltipPortal>
         <TooltipContent asLabel={asLabel}>{children}</TooltipContent>
       </TooltipPortal>
@@ -122,9 +120,7 @@ describe('TooltipRoot', () => {
     render(
       <TooltipProvider delayDuration={1000}>
         <TooltipRoot delay={100} hideDelay={50}>
-          <TooltipTrigger asChild>
-            <button>Custom delay trigger</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Custom delay trigger</TooltipTrigger>
         </TooltipRoot>
       </TooltipProvider>,
     );
@@ -142,9 +138,7 @@ describe('TooltipTrigger', () => {
     render(
       <TooltipProvider>
         <TooltipRoot>
-          <TooltipTrigger asChild>
-            <button>Trigger content</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Trigger content</TooltipTrigger>
         </TooltipRoot>
       </TooltipProvider>,
     );
@@ -156,9 +150,7 @@ describe('TooltipTrigger', () => {
     render(
       <TooltipProvider>
         <TooltipRoot>
-          <TooltipTrigger as='span'>
-            <span>Span trigger</span>
-          </TooltipTrigger>
+          <TooltipTrigger as='span'>Span trigger</TooltipTrigger>
         </TooltipRoot>
       </TooltipProvider>,
     );
@@ -166,18 +158,21 @@ describe('TooltipTrigger', () => {
     expect(screen.getByText('Span trigger')).toBeInTheDocument();
   });
 
-  it('supports asChild composition', () => {
+  it('supports render props pattern for state access', () => {
     render(
       <TooltipProvider>
-        <TooltipRoot>
-          <TooltipTrigger asChild>
-            <input type='text' placeholder='Custom input' />
+        <TooltipRoot defaultOpen>
+          <TooltipTrigger>
+            {({ isOpen }) => <span>{isOpen ? 'Open' : 'Closed'}</span>}
           </TooltipTrigger>
+          <TooltipPortal>
+            <TooltipContent>Content</TooltipContent>
+          </TooltipPortal>
         </TooltipRoot>
       </TooltipProvider>,
     );
 
-    expect(screen.getByPlaceholderText('Custom input')).toBeInTheDocument();
+    expect(screen.getByText('Open')).toBeInTheDocument();
   });
 
   it('shows tooltip on mouse enter with delay', async () => {
@@ -294,9 +289,7 @@ describe('TooltipContent', () => {
     render(
       <TooltipProvider>
         <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent as='section'>Section content</TooltipContent>
           </TooltipPortal>
@@ -342,9 +335,7 @@ describe('TooltipContent', () => {
     render(
       <TooltipProvider>
         <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent side='bottom' sideOffset={16} align='start'>
               Positioned content
@@ -364,9 +355,7 @@ describe('TooltipContent', () => {
     render(
       <TooltipProvider>
         <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent className='custom-class' style={customStyle}>
               Styled content
@@ -387,9 +376,7 @@ describe('TooltipContent', () => {
     render(
       <TooltipProvider>
         <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent onEscapeKeyDown={handleEscape}>Content</TooltipContent>
           </TooltipPortal>
@@ -433,9 +420,7 @@ describe('TooltipPortal', () => {
     render(
       <TooltipProvider>
         <TooltipRoot>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal forceMount>
             <TooltipContent>Always mounted</TooltipContent>
           </TooltipPortal>
@@ -457,9 +442,7 @@ describe('TooltipPortal', () => {
     render(
       <TooltipProvider>
         <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal container={customContainer}>
             <TooltipContent>Portal content</TooltipContent>
           </TooltipPortal>
@@ -477,9 +460,7 @@ describe('TooltipArrow', () => {
     render(
       <TooltipProvider>
         <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent>
               Content
@@ -499,9 +480,7 @@ describe('TooltipArrow', () => {
     render(
       <TooltipProvider>
         <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent>
               Content
@@ -521,9 +500,7 @@ describe('TooltipArrow', () => {
     render(
       <TooltipProvider>
         <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent>
               Content
@@ -542,9 +519,7 @@ describe('TooltipArrow', () => {
     render(
       <TooltipProvider>
         <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent>
               Content

@@ -40,6 +40,7 @@ export type {
   TooltipProviderProps,
   TooltipRootProps,
   TooltipTriggerProps,
+  TooltipTriggerRenderProps,
   TooltipContentProps,
   TooltipPortalProps,
   TooltipArrowProps,

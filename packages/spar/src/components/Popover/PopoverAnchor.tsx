@@ -1,15 +1,15 @@
-import { cloneElement, isValidElement } from 'react';
-import { PopoverAnchorProps } from './types';
+import { useMemo } from 'react';
+import { PopoverAnchorProps, PopoverAnchorRenderProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 
 /**
  * Anchor component for custom positioning reference
  */
-export const PopoverAnchor = ({ asChild = false, children, ref, ...props }: PopoverAnchorProps) => {
-  const { anchorRef } = usePopoverContext();
+export const PopoverAnchor = ({ children, ref, ...props }: PopoverAnchorProps) => {
+  const { anchorRef, state } = usePopoverContext();
 
-  const anchorProps = {
-    ref: (element: HTMLDivElement | null) => {
+  const anchorRefCallback = useMemo(
+    () => (element: HTMLDivElement | null) => {
       if (anchorRef && 'current' in anchorRef) {
         anchorRef.current = element;
       }
@@ -19,15 +19,19 @@ export const PopoverAnchor = ({ asChild = false, children, ref, ...props }: Popo
         ref.current = element;
       }
     },
-    'data-popover-anchor': '',
-    ...props,
+    [anchorRef, ref],
+  );
+
+  // Render props for children function
+  const renderProps: PopoverAnchorRenderProps = {
+    isOpen: state.isOpen,
   };
 
-  if (asChild && isValidElement(children)) {
-    return cloneElement(children, anchorProps);
-  }
-
-  return <div {...anchorProps}>{children}</div>;
+  return (
+    <div ref={anchorRefCallback} data-popover-anchor='' {...props}>
+      {typeof children === 'function' ? children(renderProps) : children}
+    </div>
+  );
 };
 
 PopoverAnchor.displayName = 'PopoverAnchor';
