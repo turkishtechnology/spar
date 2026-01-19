@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useState, useCallback, useId } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useId,
+  useRef,
+  useEffect,
+} from 'react';
 import { useControlledState, useItemRegistry } from '@/hooks';
 import type { RadioGroupProps, RadioGroupContextValue } from './types';
 
@@ -27,6 +35,7 @@ export const RadioGroup = ({
   required = false,
   orientation = 'vertical',
   isInToolbar = false,
+  shouldAutoFocus = false,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
   'aria-describedby': ariaDescribedBy,
@@ -40,6 +49,19 @@ export const RadioGroup = ({
   const items = getItemIds(); // Get items as array for navigation
   const generatedId = useId();
   const name = nameProp || `radio-group-${generatedId}`;
+  const hasAutoFocused = useRef(false);
+
+  // Auto focus first item on mount
+  useEffect(() => {
+    if (shouldAutoFocus && !disabled && items.length > 0 && !hasAutoFocused.current) {
+      hasAutoFocused.current = true;
+      // Focus the selected item, or the first item if none selected
+      const itemToFocus = value || items[0];
+      if (itemToFocus) {
+        setFocusedValue(itemToFocus);
+      }
+    }
+  }, [shouldAutoFocus, disabled, items, value]);
 
   // Handle value changes
   const handleValueChange = useCallback(
@@ -136,6 +158,7 @@ export const RadioGroup = ({
     'data-disabled': disabled ? '' : undefined,
     'data-required': required ? '' : undefined,
     'data-toolbar': isInToolbar ? '' : undefined,
+    'data-autofocus': shouldAutoFocus ? '' : undefined,
   };
 
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { Select } from '../index';
@@ -615,6 +615,43 @@ describe('Select Accessibility', () => {
       await user.click(option1);
 
       expect(trigger).toHaveFocus();
+    });
+
+    it('should auto-focus trigger when shouldAutoFocus is true', async () => {
+      const { container } = render(
+        <Select shouldAutoFocus>
+          <Select.Trigger aria-label='Choose option'>
+            <Select.Value placeholder='Select...' />
+          </Select.Trigger>
+          <Select.Content>
+            <Select.Item value='option1'>Option 1</Select.Item>
+          </Select.Content>
+        </Select>,
+      );
+
+      const trigger = screen.getByRole('combobox');
+      await waitFor(() => {
+        expect(trigger).toHaveFocus();
+      });
+      // data-autofocus is on the root, not the trigger
+      const root = container.firstChild;
+      expect(root).toHaveAttribute('data-autofocus', '');
+    });
+
+    it('should not auto-focus trigger by default', () => {
+      const { container } = render(
+        <Select>
+          <Select.Trigger aria-label='Choose option'>
+            <Select.Value placeholder='Select...' />
+          </Select.Trigger>
+          <Select.Content>
+            <Select.Item value='option1'>Option 1</Select.Item>
+          </Select.Content>
+        </Select>,
+      );
+
+      const root = container.firstChild;
+      expect(root).not.toHaveAttribute('data-autofocus');
     });
   });
 

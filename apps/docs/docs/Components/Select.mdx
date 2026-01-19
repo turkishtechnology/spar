@@ -647,20 +647,21 @@ The main container that manages all select state and behavior.
 
 **Props**
 
-| Name             | Type                      | Default     | Description                         |
-| ---------------- | ------------------------- | ----------- | ----------------------------------- |
-| `value?`         | `string`                  | `undefined` | Controlled selected value           |
-| `defaultValue?`  | `string`                  | `undefined` | Uncontrolled initial value          |
-| `onValueChange?` | `(value: string) => void` | `undefined` | Callback when selection changes     |
-| `open?`          | `boolean`                 | `undefined` | Controlled open state               |
-| `defaultOpen?`   | `boolean`                 | `false`     | Uncontrolled initial open state     |
-| `onOpenChange?`  | `(open: boolean) => void` | `undefined` | Callback when open state changes    |
-| `disabled?`      | `boolean`                 | `false`     | Disables the entire select          |
-| `required?`      | `boolean`                 | `false`     | Makes the select required for forms |
-| `name?`          | `string`                  | `undefined` | Form field name                     |
-| `dir?`           | `'ltr' \| 'rtl'`          | `'ltr'`     | Reading direction                   |
-| `as?`            | `ElementType`             | `undefined` | Polymorphic component type          |
-| `children`       | `ReactNode`               | -           | Select component children           |
+| Name               | Type                      | Default     | Description                              |
+| ------------------ | ------------------------- | ----------- | ---------------------------------------- |
+| `value?`           | `string`                  | `undefined` | Controlled selected value                |
+| `defaultValue?`    | `string`                  | `undefined` | Uncontrolled initial value               |
+| `onValueChange?`   | `(value: string) => void` | `undefined` | Callback when selection changes          |
+| `open?`            | `boolean`                 | `undefined` | Controlled open state                    |
+| `defaultOpen?`     | `boolean`                 | `false`     | Uncontrolled initial open state          |
+| `onOpenChange?`    | `(open: boolean) => void` | `undefined` | Callback when open state changes         |
+| `disabled?`        | `boolean`                 | `false`     | Disables the entire select               |
+| `required?`        | `boolean`                 | `false`     | Makes the select required for forms      |
+| `name?`            | `string`                  | `undefined` | Form field name                          |
+| `dir?`             | `'ltr' \| 'rtl'`          | `'ltr'`     | Reading direction                        |
+| `shouldAutoFocus?` | `boolean`                 | `false`     | Whether to focus the trigger on mount    |
+| `as?`              | `ElementType`             | `undefined` | Polymorphic component type               |
+| `children`         | `ReactNode`               | -           | Select component children                |
 
 **Events**
 
@@ -671,7 +672,9 @@ The main container that manages all select state and behavior.
 
 **ARIA Attributes**
 
-No visual rendering - context provider only.
+| Attribute        | Value     | Purpose                        | Applied To   |
+| ---------------- | --------- | ------------------------------ | ------------ |
+| `data-autofocus` | `boolean` | Marks auto-focus configuration | Root element |
 
 ### Select.Trigger
 
@@ -679,7 +682,7 @@ The button that toggles the dropdown open and closed.
 
 **Props**
 
-| Name       | Type          | Default     | Description                |
+| Name       | Type          | Default     | Description                | 
 | ---------- | ------------- | ----------- | -------------------------- |
 | `as?`      | `ElementType` | `'button'`  | Polymorphic component type |
 | `ref?`     | `RefObject`   | `undefined` | Forward ref support        |

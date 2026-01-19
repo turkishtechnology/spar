@@ -53,6 +53,12 @@ export interface InputFieldProps<T extends ElementType = 'input'> {
    * Ref for the input element
    */
   ref?: React.ComponentPropsWithRef<T>['ref'];
+
+  /**
+   * Whether to focus the input on mount
+   * @defaultValue false
+   */
+  shouldAutoFocus?: boolean;
 }
 
 /**

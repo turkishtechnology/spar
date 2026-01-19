@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { Radio } from '../Radio';
@@ -204,6 +204,50 @@ describe('Radio Accessibility', () => {
       expect(labels[0]).toHaveAttribute('tabindex', '0');
       expect(labels[1]).toHaveAttribute('tabindex', '0');
       expect(labels[2]).toHaveAttribute('tabindex', '0');
+    });
+
+    it('should auto-focus when shouldAutoFocus is true', async () => {
+      const { container } = render(
+        <Radio.Group shouldAutoFocus>
+          <Radio.Item value='option1'>Option 1</Radio.Item>
+          <Radio.Item value='option2'>Option 2</Radio.Item>
+          <Radio.Item value='option3'>Option 3</Radio.Item>
+        </Radio.Group>,
+      );
+
+      const radioGroup = container.querySelector('[role="radiogroup"]');
+      const labels = container.querySelectorAll('label[role="radio"]');
+      await waitFor(() => {
+        expect(labels[0]).toHaveFocus();
+      });
+      expect(radioGroup).toHaveAttribute('data-autofocus', '');
+    });
+
+    it('should auto-focus selected item when shouldAutoFocus is true', async () => {
+      const { container } = render(
+        <Radio.Group shouldAutoFocus value='option2'>
+          <Radio.Item value='option1'>Option 1</Radio.Item>
+          <Radio.Item value='option2'>Option 2</Radio.Item>
+          <Radio.Item value='option3'>Option 3</Radio.Item>
+        </Radio.Group>,
+      );
+
+      const labels = container.querySelectorAll('label[role="radio"]');
+      await waitFor(() => {
+        expect(labels[1]).toHaveFocus();
+      });
+    });
+
+    it('should not auto-focus by default', () => {
+      const { container } = render(
+        <Radio.Group>
+          <Radio.Item value='option1'>Option 1</Radio.Item>
+          <Radio.Item value='option2'>Option 2</Radio.Item>
+        </Radio.Group>,
+      );
+
+      const radioGroup = container.querySelector('[role="radiogroup"]');
+      expect(radioGroup).not.toHaveAttribute('data-autofocus');
     });
   });
 

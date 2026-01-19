@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../index';
@@ -367,6 +367,45 @@ describe('Tabs Accessibility', () => {
       await user.tab(); // Tab to panel
 
       expect(screen.getByRole('tabpanel')).toHaveFocus();
+    });
+
+    it('should auto-focus tab trigger when shouldAutoFocus is true', async () => {
+      render(
+        <Tabs defaultValue='tab1'>
+          <Tabs.List>
+            <Tabs.Trigger value='tab1'>Tab 1</Tabs.Trigger>
+            <Tabs.Trigger value='tab2' shouldAutoFocus>
+              Tab 2
+            </Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value='tab1'>Content 1</Tabs.Content>
+          <Tabs.Content value='tab2'>Content 2</Tabs.Content>
+        </Tabs>,
+      );
+
+      const tab2 = screen.getByRole('tab', { name: 'Tab 2' });
+      await waitFor(() => {
+        expect(tab2).toHaveFocus();
+      });
+      expect(tab2).toHaveAttribute('data-autofocus', '');
+    });
+
+    it('should not auto-focus tab trigger by default', () => {
+      render(
+        <Tabs defaultValue='tab1'>
+          <Tabs.List>
+            <Tabs.Trigger value='tab1'>Tab 1</Tabs.Trigger>
+            <Tabs.Trigger value='tab2'>Tab 2</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value='tab1'>Content 1</Tabs.Content>
+          <Tabs.Content value='tab2'>Content 2</Tabs.Content>
+        </Tabs>,
+      );
+
+      const tab1 = screen.getByRole('tab', { name: 'Tab 1' });
+      const tab2 = screen.getByRole('tab', { name: 'Tab 2' });
+      expect(tab1).not.toHaveAttribute('data-autofocus');
+      expect(tab2).not.toHaveAttribute('data-autofocus');
     });
   });
 
