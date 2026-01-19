@@ -356,12 +356,13 @@ function ForceMountTabs() {
 
 #### Props
 
-| Name       | Type                | Default    | Description                               |
-| ---------- | ------------------- | ---------- | ----------------------------------------- |
-| `value`    | `string`            | —          | Unique identifier for the tab             |
-| `disabled` | `boolean`           | `false`    | Disables this specific tab                |
-| `asChild`  | `boolean`           | `false`    | Render as child element instead of button |
-| `as`       | `React.ElementType` | `'button'` | Polymorphic component type                |
+| Name               | Type                | Default    | Description                               |
+| ------------------ | ------------------- | ---------- | ----------------------------------------- |
+| `value`            | `string`            | —          | Unique identifier for the tab             |
+| `disabled`         | `boolean`           | `false`    | Disables this specific tab                |
+| `shouldAutoFocus`  | `boolean`           | `false`    | Whether to focus this tab trigger on mount|
+| `asChild`          | `boolean`           | `false`    | Render as child element instead of button |
+| `as`               | `React.ElementType` | `'button'` | Polymorphic component type                |
 
 #### Events
 
@@ -384,6 +385,7 @@ function ForceMountTabs() {
 | `data-disabled`    | `'' \| undefined`        | Indicates disabled state        | TabsTrigger element |
 | `data-orientation` | `horizontal \| vertical` | Indicates tab orientation       | TabsTrigger element |
 | `data-value`       | `string`                 | Tab's unique value              | TabsTrigger element |
+| `data-autofocus`   | `'' \| undefined`        | Indicates auto-focus state      | TabsTrigger element |
 
 ### TabsContent
 

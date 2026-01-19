@@ -578,12 +578,13 @@ The core input element with polymorphic rendering support. Handles focus states,
 
 **Props**
 
-| Name       | Type                                             | Default     | Description                            |
-| ---------- | ------------------------------------------------ | ----------- | -------------------------------------- |
-| `as?`      | `ElementType`                                    | `'input'`   | Element type for polymorphic rendering |
-| `ref?`     | `React.ComponentPropsWithRef<T>['ref']`          | `undefined` | Ref for the input element              |
-| `onFocus?` | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Focus event handler                    |
-| `onBlur?`  | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Blur event handler                     |
+| Name               | Type                                             | Default     | Description                            |
+| ------------------ | ------------------------------------------------ | ----------- | -------------------------------------- |
+| `as?`              | `ElementType`                                    | `'input'`   | Element type for polymorphic rendering |
+| `ref?`             | `React.ComponentPropsWithRef<T>['ref']`          | `undefined` | Ref for the input element              |
+| `shouldAutoFocus?` | `boolean`                                        | `false`     | Whether to focus the input on mount    |
+| `onFocus?`         | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Focus event handler                    |
+| `onBlur?`          | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Blur event handler                     |
 
 **Events**
 
@@ -604,6 +605,7 @@ The core input element with polymorphic rendering support. Handles focus states,
 | `aria-invalid`           | `boolean`           | Indicates validation state      | Field element |
 | `data-spar-input-field` | `""`                | Identifies input field element  | Field element |
 | `data-focused`           | `""` \| `undefined` | Indicates focus state           | Field element |
+| `data-autofocus`         | `""` \| `undefined` | Indicates auto-focus state      | Field element |
 
 ### Input.Label
 

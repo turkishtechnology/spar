@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useTabsContext } from './Tabs';
 import type { TabsTriggerProps } from './types';
+import { useAutoFocus } from '../../hooks';
 
 /**
  * TabsTrigger component representing a clickable tab button with full accessibility support
@@ -8,6 +9,7 @@ import type { TabsTriggerProps } from './types';
 export const TabsTrigger = ({
   value,
   disabled = false,
+  shouldAutoFocus = false,
   asChild = false,
   as: Component = 'button',
   children,
@@ -18,14 +20,17 @@ export const TabsTrigger = ({
 }: TabsTriggerProps) => {
   const { selectedValue, onValueChange, orientation, registerTab, unregisterTab, tabsListId } =
     useTabsContext();
-  const triggerRef = useRef<HTMLElement>(null);
+  const internalRef = useRef<HTMLElement>(null);
   const triggerId = `${tabsListId}-trigger-${value}`;
   const panelId = `${tabsListId}-panel-${value}`;
 
   const isSelected = selectedValue === value;
 
+  // Auto focus on mount
+  useAutoFocus(internalRef, shouldAutoFocus);
+
   useEffect(() => {
-    const element = triggerRef.current;
+    const element = internalRef.current;
     if (element) {
       registerTab(value, element);
       return () => unregisterTab(value);
@@ -59,7 +64,7 @@ export const TabsTrigger = ({
 
   if (asChild && React.isValidElement(children)) {
     const childProps = {
-      ref: triggerRef,
+      ref: internalRef,
       id: triggerId,
       role: 'tab',
       'aria-selected': isSelected,
@@ -69,6 +74,7 @@ export const TabsTrigger = ({
       'data-disabled': disabled ? '' : undefined,
       'data-orientation': orientation,
       'data-value': value,
+      'data-autofocus': shouldAutoFocus ? '' : undefined,
       tabIndex: isSelected ? 0 : -1,
       onClick: handleClick,
       onFocus: handleFocus,
@@ -80,7 +86,7 @@ export const TabsTrigger = ({
 
   return (
     <Component
-      ref={triggerRef}
+      ref={internalRef}
       id={triggerId}
       role='tab'
       type={Component === 'button' ? 'button' : undefined}
@@ -91,6 +97,7 @@ export const TabsTrigger = ({
       data-disabled={disabled ? '' : undefined}
       data-orientation={orientation}
       data-value={value}
+      data-autofocus={shouldAutoFocus ? '' : undefined}
       tabIndex={isSelected ? 0 : -1}
       disabled={Component === 'button' ? disabled : undefined}
       onClick={handleClick}

@@ -75,6 +75,12 @@ export interface TabsTriggerProps extends ComponentProps<'button'> {
   value: string;
 
   /**
+   * Whether to focus this tab trigger on mount
+   * @defaultValue false
+   */
+  shouldAutoFocus?: boolean;
+
+  /**
    * Render as child element instead of button (for advanced composition)
    * @defaultValue false
    */

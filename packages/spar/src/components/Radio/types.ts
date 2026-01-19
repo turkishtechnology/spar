@@ -54,6 +54,12 @@ export interface RadioGroupProps extends Omit<ComponentProps<'div'>, 'onChange'>
   isInToolbar?: boolean;
 
   /**
+   * Whether to focus the first focusable radio item on mount
+   * @defaultValue false
+   */
+  shouldAutoFocus?: boolean;
+
+  /**
    * Polymorphic root element
    * @defaultValue 'div'
    */

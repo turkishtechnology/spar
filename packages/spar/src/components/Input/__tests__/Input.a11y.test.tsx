@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { Input } from '../index';
@@ -309,6 +309,43 @@ describe('Input Accessibility', () => {
 
       expect(field).not.toHaveFocus();
       expect(field).toHaveValue('');
+    });
+
+    it('should auto-focus when shouldAutoFocus is true', async () => {
+      render(
+        <Input.Root>
+          <Input.Label>Username</Input.Label>
+          <Input.Field shouldAutoFocus />
+        </Input.Root>,
+      );
+
+      const field = screen.getByRole('textbox');
+      await waitFor(() => {
+        expect(field).toHaveFocus();
+      });
+      expect(field).toHaveAttribute('data-autofocus', '');
+    });
+
+    it('should not auto-focus by default', () => {
+      render(
+        <Input.Root>
+          <Input.Label>Username</Input.Label>
+          <Input.Field />
+        </Input.Root>,
+      );
+
+      const field = screen.getByRole('textbox');
+      expect(field).not.toHaveAttribute('data-autofocus');
+    });
+
+    it('should auto-focus standalone input', async () => {
+      render(<Input.Field shouldAutoFocus aria-label='Standalone input' />);
+
+      const field = screen.getByRole('textbox');
+      await waitFor(() => {
+        expect(field).toHaveFocus();
+      });
+      expect(field).toHaveAttribute('data-autofocus', '');
     });
   });
 

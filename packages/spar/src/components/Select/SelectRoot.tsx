@@ -26,6 +26,7 @@ export const SelectRoot = ({
   required = false,
   name,
   dir = 'ltr',
+  shouldAutoFocus = false,
   as: Component = 'div',
   children,
   ...props
@@ -98,6 +99,7 @@ export const SelectRoot = ({
       disabled,
       required,
       dir,
+      shouldAutoFocus,
 
       // Actions
       onValueChange: handleValueChange,
@@ -132,6 +134,7 @@ export const SelectRoot = ({
       disabled,
       required,
       dir,
+      shouldAutoFocus,
       handleValueChange,
       handleOpenChange,
       triggerId,
@@ -146,7 +149,11 @@ export const SelectRoot = ({
 
   return (
     <SelectContext.Provider value={contextValue}>
-      <Component {...props} data-disabled={disabled ? '' : undefined}>
+      <Component
+        {...props}
+        data-disabled={disabled ? '' : undefined}
+        data-autofocus={shouldAutoFocus ? '' : undefined}
+      >
         {children}
       </Component>
       {/* Hidden input for form integration */}
