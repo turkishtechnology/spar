@@ -431,9 +431,18 @@ The [ComponentName] component is built as a compound component with multiple par
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `children` | `ReactNode` | - | Trigger content |
-| `asChild?` | `boolean` | `false` | Render as child element |
+| `children` | `ReactNode \| ((state: TriggerRenderProps) => ReactNode)` | - | Trigger content or render function for render props pattern |
 | `disabled?` | `boolean` | `false` | Disables trigger |
+
+**TriggerRenderProps**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the component is currently open |
+| `disabled` | `boolean` | Whether the trigger is disabled |
+| `open` | `() => void` | Function to open the component |
+| `close` | `() => void` | Function to close the component |
+| `toggle` | `() => void` | Function to toggle the open/closed state |
 
 **Events**
 

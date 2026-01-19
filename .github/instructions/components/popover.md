@@ -37,9 +37,18 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `asChild` | `boolean` | No | `false` | Whether to render as child element instead of button |
-| `children` | `React.ReactNode` | Yes | - | Trigger element content |
+| `children` | `ReactNode \| ((state: PopoverTriggerRenderProps) => ReactNode)` | Yes | - | Trigger element content or render function for render props pattern |
 | `disabled` | `boolean` | No | `false` | Whether trigger is disabled |
+
+### PopoverTriggerRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the popover is currently open |
+| `disabled` | `boolean` | Whether the trigger is disabled |
+| `open` | `() => void` | Function to open the popover |
+| `close` | `() => void` | Function to close the popover |
+| `toggle` | `() => void` | Function to toggle the popover open/closed state |
 
 ### PopoverContent Props
 
@@ -73,8 +82,13 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `asChild` | `boolean` | No | `false` | Whether to render as child element instead of div |
-| `children` | `React.ReactNode` | Yes | - | Anchor element content |
+| `children` | `ReactNode \| ((state: PopoverAnchorRenderProps) => ReactNode)` | Yes | - | Anchor element content or render function for render props pattern |
+
+### PopoverAnchorRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the popover is currently open |
 
 ### PopoverPortal Props
 
@@ -87,15 +101,21 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `asChild` | `boolean` | No | `false` | Whether to render as child element instead of button |
-| `children` | `React.ReactNode` | Yes | - | Close trigger element content |
+| `children` | `ReactNode \| ((state: PopoverCloseRenderProps) => ReactNode)` | Yes | - | Close trigger element content or render function for render props pattern |
 | `onClick` | `(event: MouseEvent) => void` | No | - | Additional click handler (popover will close automatically) |
+
+### PopoverCloseRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the popover is currently open |
+| `close` | `() => void` | Function to close the popover |
 
 ### Ref Support
 - PopoverTrigger forwards ref to trigger element
 - PopoverContent forwards ref to content container
 - PopoverAnchor forwards ref to anchor element
-- Polymorphic `asChild` prop for PopoverTrigger composition
+- Render props pattern for PopoverTrigger composition
 
 ### Controlled/Uncontrolled
 - **Uncontrolled**: Use `defaultOpen` for initial state, internal state management
@@ -131,12 +151,12 @@
 ## 4. Accessibility
 
 ### Roles
-- **Trigger element**: `button` role (default) or maintains semantic role with `asChild`
+- **Trigger element**: `button` role (default) or maintains semantic role with render props
 - **Content element**: `dialog` role for modal popover, no specific role for non-modal
 - **Arrow element**: `presentation` role (purely decorative)
 - **Anchor element**: No specific role (inherits from child or defaults to generic)
 - **Portal element**: No role (transparent rendering container)
-- **Close element**: `button` role (default) or maintains semantic role with `asChild`
+- **Close element**: `button` role (default) or maintains semantic role with render props
 
 ### Keyboard
 - **Tab/Shift+Tab**: Navigate focusable elements within popover
@@ -205,20 +225,14 @@ interface PopoverState {
 type PopoverSide = 'top' | 'bottom' | 'left' | 'right';
 type PopoverAlign = 'start' | 'center' | 'end';
 
-// Enhanced TypeScript Generics for AsChild Pattern
-type AsChildProps<T extends React.ElementType> = {
-  asChild?: boolean;
-} & (
-  | { asChild: true; children: React.ReactElement }
-  | { asChild?: false; children: React.ReactNode }
-);
+// Enhanced TypeScript Generics for Render Props Pattern
+type RenderPropsChildren<T> = ReactNode | ((state: T) => ReactNode);
 
 // Polymorphic component type with proper ref forwarding
 type PolymorphicRef<T extends React.ElementType> = React.ComponentPropsWithRef<T>['ref'];
 
 type PolymorphicComponentProps<T extends React.ElementType, P = {}> = P &
-  Omit<React.ComponentPropsWithoutRef<T>, keyof P> &
-  AsChildProps<T> & {
+  Omit<React.ComponentPropsWithoutRef<T>, keyof P> & {
     as?: T;
   };
 
@@ -226,10 +240,19 @@ type PolymorphicComponent<T extends React.ElementType, P = {}> = <C extends Reac
   props: PolymorphicComponentProps<C, P> & { ref?: PolymorphicRef<C> }
 ) => React.ReactElement | null;
 
-// Enhanced component interfaces with generics
+// Enhanced component interfaces with render props
 interface PopoverTriggerProps<T extends React.ElementType = 'button'> 
   extends PolymorphicComponentProps<T> {
   disabled?: boolean;
+  children?: RenderPropsChildren<PopoverTriggerRenderProps>;
+}
+
+interface PopoverTriggerRenderProps {
+  isOpen: boolean;
+  disabled: boolean;
+  open: () => void;
+  close: () => void;
+  toggle: () => void;
 }
 
 interface PopoverContentProps<T extends React.ElementType = 'div'> 
@@ -313,14 +336,14 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 - **Bundle impact**: Tree-shakeable exports targeting <5KB gzipped for core functionality
 
 ### Ref Forwarding Strategy
-- **PopoverTrigger**: forwards ref to trigger element with asChild support and generic type safety
+- **PopoverTrigger**: forwards ref to trigger element with render props support and generic type safety
 - **PopoverContent**: forwards ref to content container element with polymorphic element support
 - **PopoverAnchor**: forwards ref to anchor element for positioning reference with type inference
 - **PopoverArrow**: forwards ref to arrow SVG element for positioning
 - **PopoverClose**: forwards ref to close button element with polymorphic element support
 - **Internal ref system**: Separate refs for positioning calculations and focus management
 - **Ref composition**: Safe merging of internal, forwarded, and child refs with type preservation
-- **AsChild pattern**: Complete ref forwarding support with polymorphic composition and generic constraints
+- **Render props pattern**: Complete ref forwarding support with polymorphic composition and generic constraints
 - **Type safety**: Strict TypeScript definitions for all ref element types with generic inference
 - **Generic support**: Full TypeScript generic support for custom element types (e.g., `<PopoverTrigger<'a'>`)
 - **Performance optimization**: Memoized ref callbacks and efficient cleanup
@@ -478,7 +501,7 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 
 ### Developer Experience
 - **Controlled/uncontrolled support**: Flexible state management patterns
-- **AsChild composition**: Polymorphic component rendering with proper ref forwarding
+- **Render props composition**: Polymorphic component rendering with proper ref forwarding
 - **Data attributes**: Comprehensive styling hooks via data-* attributes
 - **CSS custom properties**: Dynamic positioning and animation support
 - **Error handling**: Clear error messages and graceful degradation
@@ -504,7 +527,7 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 #### Core Architecture
 - [ ] **Compound component architecture**: Root, Trigger, Content, Arrow, Anchor, Portal, Close components
 - [ ] **Context-based state sharing**: Unified state across all components with TypeScript safety
-- [ ] **Ref forwarding strategy**: Proper ref composition with asChild pattern support
+- [ ] **Ref forwarding strategy**: Proper ref composition with render props pattern support
 - [ ] **Event system**: Comprehensive event handling with cleanup and prevention patterns
 - [ ] **Hook architecture**: usePopover, usePopoverContext, usePopoverTrigger, usePopoverContent
 
@@ -526,10 +549,10 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 #### Developer Experience
 - [ ] **TypeScript definitions**: Complete type safety for all component props and refs
 - [ ] **Generic component support**: Full TypeScript generic support for polymorphic components
-- [ ] **AsChild type inference**: Automatic type inference for `asChild` pattern with element constraints
+- [ ] **Render props type inference**: Automatic type inference for render props pattern with element constraints
 - [ ] **Polymorphic ref forwarding**: Type-safe ref forwarding for custom element types
 - [ ] **Controlled/uncontrolled modes**: Flexible state management patterns
-- [ ] **AsChild composition**: Polymorphic rendering with proper ref forwarding
+- [ ] **Render props composition**: Polymorphic rendering with proper ref forwarding
 - [ ] **Error boundaries**: Clear error messages for context misuse and invalid configurations
 - [ ] **Performance optimization**: Efficient re-rendering and positioning updates with memoization
 
