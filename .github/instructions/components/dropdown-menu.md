@@ -59,8 +59,17 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'button'` | Polymorphic component type |
 | `disabled` | `boolean` | No | `false` | Whether trigger is disabled |
-| `asChild` | `boolean` | No | `false` | Render as child element |
+| `children` | `ReactNode \| ((state: DropdownMenuTriggerRenderProps) => ReactNode)` | No | - | Trigger content or render function for render props pattern |
 | Common button props | Various | No | - | Native button attributes |
+
+### DropdownMenuTriggerRenderProps
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the dropdown menu is currently open |
+| `disabled` | `boolean` | Whether the trigger is disabled |
+| `open` | `() => void` | Function to open the dropdown menu |
+| `close` | `() => void` | Function to close the dropdown menu |
+| `toggle` | `() => void` | Function to toggle the dropdown menu open/closed state |
 
 ### DropdownMenu.Content Props
 | Name | Type | Required | Default | Description |

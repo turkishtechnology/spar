@@ -44,9 +44,18 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `children` | `React.ReactNode` | No | - | The trigger element (must be single focusable element) |
-| `asChild` | `boolean` | No | `false` | Compose with child element instead of rendering button |
-| `as` | `React.ElementType` | No | `'button'` | Element type when not using asChild |
+| `children` | `ReactNode \| ((state: TooltipTriggerRenderProps) => ReactNode)` | No | - | The trigger element or render function for render props pattern |
+| `as` | `React.ElementType` | No | `'button'` | Element type for the trigger |
+
+#### TooltipTriggerRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the tooltip is currently visible |
+| `disabled` | `boolean` | Whether the tooltip is disabled |
+| `placement` | `Side` | Current placement side of the tooltip |
+| `show` | `() => void` | Function to show the tooltip |
+| `hide` | `() => void` | Function to hide the tooltip |
 
 #### Tooltip.Content Props
 
