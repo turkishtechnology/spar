@@ -10,6 +10,10 @@ export interface CheckboxRenderProps {
    */
   checked: CheckedState;
   /**
+   * Function to programmatically set the checked state
+   */
+  setChecked: (checked: CheckedState) => void;
+  /**
    * Whether the checkbox is disabled
    */
   disabled: boolean;
