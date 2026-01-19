@@ -17,7 +17,9 @@ interface MenuItemPrimitiveProps extends DropdownMenuItemProps {
   itemType: MenuItemType;
   closeBehavior: 'close' | 'persist';
   role: string;
-  onSelectImpl?: (event: React.MouseEvent<HTMLElement> | ReactKeyboardEvent<HTMLElement>) => void;
+  onSelectImpl?: (
+    event: React.MouseEvent<HTMLDivElement> | ReactKeyboardEvent<HTMLDivElement>,
+  ) => void;
 }
 
 export const MenuItemPrimitive = ({
@@ -74,7 +76,9 @@ export const MenuItemPrimitive = ({
     return closeBehavior === 'close';
   };
 
-  const runSelection = (event: ReactMouseEvent<HTMLElement> | ReactKeyboardEvent<HTMLElement>) => {
+  const runSelection = (
+    event: ReactMouseEvent<HTMLDivElement> | ReactKeyboardEvent<HTMLDivElement>,
+  ) => {
     if (disabled) {
       return;
     }
@@ -94,25 +98,25 @@ export const MenuItemPrimitive = ({
     }
   };
 
-  const handlePointerMove = (event: ReactPointerEvent<HTMLElement>) => {
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (!disabled && !isHighlighted) {
       collection.highlightItem(itemId);
     }
     onPointerMove?.(event);
   };
 
-  const handlePointerLeave = (event: ReactPointerEvent<HTMLElement>) => {
+  const handlePointerLeave = (event: ReactPointerEvent<HTMLDivElement>) => {
     onPointerLeave?.(event);
   };
 
-  const handleFocus = (event: ReactFocusEvent<HTMLElement>) => {
+  const handleFocus = (event: ReactFocusEvent<HTMLDivElement>) => {
     if (!disabled) {
       collection.highlightItem(itemId);
     }
     onFocus?.(event);
   };
 
-  const handleClick = (event: ReactMouseEvent<HTMLElement>) => {
+  const handleClick = (event: ReactMouseEvent<HTMLDivElement>) => {
     onClick?.(event);
     if (event.defaultPrevented) {
       return;
@@ -120,7 +124,7 @@ export const MenuItemPrimitive = ({
     runSelection(event);
   };
 
-  const handleKeyDown = (event: ReactKeyboardEvent<HTMLElement>) => {
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
     onKeyDown?.(event);
     if (event.defaultPrevented) {
       return;

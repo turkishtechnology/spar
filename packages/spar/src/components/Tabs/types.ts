@@ -1,4 +1,4 @@
-import type { ElementType, HTMLAttributes, ButtonHTMLAttributes, RefObject } from 'react';
+import type { ComponentProps, ElementType, RefObject } from 'react';
 import type { Direction, Orientation } from '../../types';
 
 export type TabsActivationMode = 'automatic' | 'manual';
@@ -6,7 +6,7 @@ export type TabsActivationMode = 'automatic' | 'manual';
 /**
  * Props for Tabs root component
  */
-export interface TabsProps extends HTMLAttributes<HTMLDivElement> {
+export interface TabsProps extends ComponentProps<'div'> {
   /**
    * Controlled selected tab value
    */
@@ -51,7 +51,7 @@ export interface TabsProps extends HTMLAttributes<HTMLDivElement> {
 /**
  * Props for TabsList component
  */
-export interface TabsListProps extends HTMLAttributes<HTMLDivElement> {
+export interface TabsListProps extends ComponentProps<'div'> {
   /**
    * Whether arrow key navigation wraps around
    * @defaultValue true
@@ -68,17 +68,11 @@ export interface TabsListProps extends HTMLAttributes<HTMLDivElement> {
 /**
  * Props for TabsTrigger component
  */
-export interface TabsTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface TabsTriggerProps extends ComponentProps<'button'> {
   /**
    * Unique identifier for the tab
    */
   value: string;
-
-  /**
-   * Disables this specific tab
-   * @defaultValue false
-   */
-  disabled?: boolean;
 
   /**
    * Whether to focus this tab trigger on mount
@@ -102,7 +96,7 @@ export interface TabsTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement
 /**
  * Props for TabsContent component
  */
-export interface TabsContentProps extends HTMLAttributes<HTMLDivElement> {
+export interface TabsContentProps extends ComponentProps<'div'> {
   /**
    * Unique identifier matching a TabsTrigger value
    */

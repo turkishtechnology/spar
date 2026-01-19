@@ -1,12 +1,4 @@
-import type {
-  ElementType,
-  ReactNode,
-  Ref,
-  RefObject,
-  HTMLAttributes,
-  ButtonHTMLAttributes,
-  SVGAttributes,
-} from 'react';
+import type { ComponentProps, ElementType, ReactNode, RefObject } from 'react';
 import type { Placement, Strategy, Middleware, VirtualElement } from '@floating-ui/react-dom';
 import type { Direction } from '../../types';
 
@@ -24,8 +16,7 @@ export interface Padding {
  * Props for Select root component
  * @remarks Fully accessible, headless select component
  */
-export interface SelectRootProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'> {
+export interface SelectRootProps extends Omit<ComponentProps<'div'>, 'defaultValue' | 'onChange'> {
   /**
    * Controlled selected value
    */
@@ -90,40 +81,25 @@ export interface SelectRootProps
    * Polymorphic component type
    */
   as?: ElementType;
-
-  /**
-   * Select component children
-   */
-  children: ReactNode;
 }
 
 /**
  * Props for SelectTrigger component
  * @remarks Button that toggles the dropdown
  */
-export interface SelectTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface SelectTriggerProps extends ComponentProps<'button'> {
   /**
    * Polymorphic component type
    * @defaultValue 'button'
    */
   as?: ElementType;
-
-  /**
-   * Forward ref support
-   */
-  ref?: Ref<HTMLButtonElement>;
-
-  /**
-   * Trigger content
-   */
-  children: ReactNode;
 }
 
 /**
  * Props for SelectValue component
  * @remarks Displays the selected value or placeholder
  */
-export interface SelectValueProps extends HTMLAttributes<HTMLSpanElement> {
+export interface SelectValueProps extends ComponentProps<'span'> {
   /**
    * Text shown when no value selected
    */
@@ -134,28 +110,18 @@ export interface SelectValueProps extends HTMLAttributes<HTMLSpanElement> {
    * @defaultValue 'span'
    */
   as?: ElementType;
-
-  /**
-   * Optional children (usually not needed)
-   */
-  children?: ReactNode;
 }
 
 /**
  * Props for SelectIcon component
  * @remarks Optional visual indicator (chevron, arrow)
  */
-export interface SelectIconProps extends HTMLAttributes<HTMLSpanElement> {
+export interface SelectIconProps extends ComponentProps<'span'> {
   /**
    * Polymorphic component type
    * @defaultValue 'span'
    */
   as?: ElementType;
-
-  /**
-   * Icon content
-   */
-  children?: ReactNode;
 }
 
 /**
@@ -185,7 +151,7 @@ export interface SelectPortalProps {
  * Props for SelectContent component
  * @remarks The dropdown container that appears when open
  */
-export interface SelectContentProps extends HTMLAttributes<HTMLDivElement> {
+export interface SelectContentProps extends ComponentProps<'div'> {
   /**
    * Placement of the floating content relative to the trigger
    * @defaultValue 'bottom-start'
@@ -264,40 +230,25 @@ export interface SelectContentProps extends HTMLAttributes<HTMLDivElement> {
    * @defaultValue 'div'
    */
   as?: ElementType;
-
-  /**
-   * Forward ref support
-   */
-  ref?: Ref<HTMLDivElement>;
-
-  /**
-   * Content children
-   */
-  children: ReactNode;
 }
 
 /**
  * Props for SelectViewport component
  * @remarks Scrollable container for select items
  */
-export interface SelectViewportProps extends HTMLAttributes<HTMLDivElement> {
+export interface SelectViewportProps extends ComponentProps<'div'> {
   /**
    * Polymorphic component type
    * @defaultValue 'div'
    */
   as?: ElementType;
-
-  /**
-   * Viewport children
-   */
-  children: ReactNode;
 }
 
 /**
  * Props for SelectItem component
  * @remarks Individual selectable option
  */
-export interface SelectItemProps extends HTMLAttributes<HTMLDivElement> {
+export interface SelectItemProps extends ComponentProps<'div'> {
   /**
    * Option value
    */
@@ -319,40 +270,25 @@ export interface SelectItemProps extends HTMLAttributes<HTMLDivElement> {
    * @defaultValue 'div'
    */
   as?: ElementType;
-
-  /**
-   * Forward ref support
-   */
-  ref?: Ref<HTMLDivElement>;
-
-  /**
-   * Item content
-   */
-  children: ReactNode;
 }
 
 /**
  * Props for SelectItemText component
  * @remarks The text content of an item
  */
-export interface SelectItemTextProps extends HTMLAttributes<HTMLSpanElement> {
+export interface SelectItemTextProps extends ComponentProps<'span'> {
   /**
    * Polymorphic component type
    * @defaultValue 'span'
    */
   as?: ElementType;
-
-  /**
-   * Item text content
-   */
-  children: ReactNode;
 }
 
 /**
  * Props for SelectItemIndicator component
  * @remarks Visual indicator for selected state (checkmark, etc)
  */
-export interface SelectItemIndicatorProps extends HTMLAttributes<HTMLSpanElement> {
+export interface SelectItemIndicatorProps extends ComponentProps<'span'> {
   /**
    * Force mount for animation
    * @defaultValue false
@@ -364,69 +300,49 @@ export interface SelectItemIndicatorProps extends HTMLAttributes<HTMLSpanElement
    * @defaultValue 'span'
    */
   as?: ElementType;
-
-  /**
-   * Indicator content
-   */
-  children?: ReactNode;
 }
 
 /**
  * Props for SelectGroup component
  * @remarks Groups related items together
  */
-export interface SelectGroupProps extends HTMLAttributes<HTMLDivElement> {
+export interface SelectGroupProps extends ComponentProps<'div'> {
   /**
    * Polymorphic component type
    * @defaultValue 'div'
    */
   as?: ElementType;
-
-  /**
-   * Group children
-   */
-  children: ReactNode;
 }
 
 /**
  * Props for SelectLabel component
  * @remarks Label for a group of items
  */
-export interface SelectLabelProps extends HTMLAttributes<HTMLDivElement> {
+export interface SelectLabelProps extends ComponentProps<'div'> {
   /**
    * Polymorphic component type
    * @defaultValue 'div'
    */
   as?: ElementType;
-
-  /**
-   * Label content
-   */
-  children: ReactNode;
 }
 
 /**
  * Props for SelectSeparator component
  * @remarks Visual separator between items or groups
  */
-export interface SelectSeparatorProps extends HTMLAttributes<HTMLDivElement> {
+export interface SelectSeparatorProps extends ComponentProps<'div'> {
   /**
    * Polymorphic component type
    * @defaultValue 'div'
    */
   as?: ElementType;
-
-  /**
-   * Optional children
-   */
-  children?: ReactNode;
 }
 
 /**
  * Props for SelectArrow component
  * @remarks Optional arrow pointing to trigger
  */
-export interface SelectArrowProps extends SVGAttributes<SVGSVGElement> {
+export interface SelectArrowProps extends ComponentProps<'svg'> {
   /**
    * Arrow width
    * @defaultValue 10
@@ -444,16 +360,6 @@ export interface SelectArrowProps extends SVGAttributes<SVGSVGElement> {
    * @defaultValue 'svg'
    */
   as?: ElementType;
-
-  /**
-   * Forward ref support
-   */
-  ref?: Ref<SVGSVGElement>;
-
-  /**
-   * Optional children (custom arrow shape)
-   */
-  children?: ReactNode;
 }
 
 // Internal context types

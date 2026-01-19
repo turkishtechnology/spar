@@ -1,15 +1,11 @@
-import type { ElementType, ReactNode, Ref, HTMLAttributes } from 'react';
+import type { ComponentProps, ElementType } from 'react';
 import type { Orientation } from '../../types';
 
 /**
  * Props for RadioGroup component
  * @remarks Fully accessible, headless radio group component
  */
-export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
-  /**
-   * Ref forwarded to the root element
-   */
-  ref?: Ref<HTMLDivElement>;
+export interface RadioGroupProps extends Omit<ComponentProps<'div'>, 'onChange'> {
   /**
    * Controlled value of selected radio item
    */
@@ -64,42 +60,17 @@ export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, 'o
   shouldAutoFocus?: boolean;
 
   /**
-   * Accessible name for the group
-   */
-  'aria-label'?: React.AriaAttributes['aria-label'];
-
-  /**
-   * References element that labels the group
-   */
-  'aria-labelledby'?: React.AriaAttributes['aria-labelledby'];
-
-  /**
-   * References element that describes the group
-   */
-  'aria-describedby'?: React.AriaAttributes['aria-describedby'];
-
-  /**
    * Polymorphic root element
    * @defaultValue 'div'
    */
   as?: ElementType;
-
-  /**
-   * Radio.Item components
-   */
-  children?: ReactNode;
 }
 
 /**
  * Props for RadioItem component
  * @remarks Individual radio option within a RadioGroup
  */
-export interface RadioItemProps
-  extends Omit<React.LabelHTMLAttributes<HTMLLabelElement>, 'onChange'> {
-  /**
-   * Ref forwarded to the root element
-   */
-  ref?: Ref<HTMLLabelElement>;
+export interface RadioItemProps extends Omit<ComponentProps<'label'>, 'onChange'> {
   /**
    * Unique value for this radio item
    */
@@ -112,25 +83,10 @@ export interface RadioItemProps
   disabled?: boolean;
 
   /**
-   * Accessible name when children insufficient
-   */
-  'aria-label'?: React.AriaAttributes['aria-label'];
-
-  /**
-   * References element that describes this item
-   */
-  'aria-describedby'?: React.AriaAttributes['aria-describedby'];
-
-  /**
    * Polymorphic root element
    * @defaultValue 'label'
    */
   as?: ElementType;
-
-  /**
-   * Label content for the radio item
-   */
-  children?: ReactNode;
 }
 
 /**

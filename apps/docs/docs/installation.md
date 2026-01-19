@@ -34,9 +34,14 @@ import TabItem from '@theme/TabItem';
     yarn add @turkish-technology/spar
     ```
   </TabItem>
-    <TabItem value="pnpm" label="pnpm">
+  <TabItem value="pnpm" label="pnpm">
     ```bash
     pnpm add @turkish-technology/spar
+    ```
+  </TabItem>
+  <TabItem value="bun" label="bun">
+    ```bash
+    bun add @turkish-technology/spar
     ```
   </TabItem>
 </Tabs>

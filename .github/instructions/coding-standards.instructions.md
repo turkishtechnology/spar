@@ -9,32 +9,50 @@ applyTo: '**/components/**/*.tsx'
 ### Component Props Pattern
 
 ```typescript
-// ALWAYS: Extend appropriate HTML element props
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+// ALWAYS: Use ComponentProps<'element'> to extend HTML element props
+// This includes all HTML attributes, event handlers, ref, className, style, children, etc.
+interface ButtonProps extends ComponentProps<'button'> {
   orientation?: Orientation;
 }
 
-// ALWAYS: children is inherited from HTMLAttributes/ButtonHTMLAttributes
-interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
+// ALWAYS: children, ref, className, style, disabled, etc. are inherited from ComponentProps
+interface TabsProps extends ComponentProps<'div'> {
   value?: string;
   orientation?: 'horizontal' | 'vertical';
-  // children is already available - no need to declare
+  // children, ref, className, disabled, etc. are already available - no need to declare
 }
 
-// NEVER: Redundant children declaration
-interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
+// NEVER: Redundant prop declarations
+interface TabsProps extends ComponentProps<'div'> {
   value?: string;
-  children: React.ReactNode; // Unnecessary - already in HTMLAttributes
+  children: React.ReactNode; // Unnecessary - already in ComponentProps
+  disabled?: boolean; // Unnecessary - already in ComponentProps
+  className?: string; // Unnecessary - already in ComponentProps
+  ref?: React.Ref<HTMLDivElement>; // Unnecessary - already in ComponentProps
 }
 ```
 
-**Rule:** Never explicitly declare `children: React.ReactNode` when extending:
-- `React.HTMLAttributes<T>`
-- `React.ButtonHTMLAttributes<T>`
-- `React.LabelHTMLAttributes<T>`
-- Any other React HTML element attributes
+**Rule:** Never explicitly declare props that are already included in `ComponentProps<'element'>`:
+- `children?: ReactNode`
+- `ref?: Ref<HTMLElement>`
+- `className?: string`
+- `style?: CSSProperties`
+- `disabled?: boolean` (for form elements)
+- Event handlers like `onClick`, `onKeyDown`, etc.
+- All HTML attributes for the specific element
 
-These interfaces already include `children?: ReactNode`.
+**Available ComponentProps patterns:**
+- `ComponentProps<'button'>` - button elements
+- `ComponentProps<'div'>` - div elements
+- `ComponentProps<'span'>` - span elements
+- `ComponentProps<'input'>` - input elements
+- `ComponentProps<'label'>` - label elements
+- `ComponentProps<'a'>` - anchor elements
+- `ComponentProps<'nav'>` - nav elements
+- `ComponentProps<'li'>` - list item elements
+- `ComponentProps<'ol'>` - ordered list elements
+- `ComponentProps<'h1'>` through `ComponentProps<'h6'>` - heading elements
+- `ComponentProps<'p'>` - paragraph elements
 
 ## React Patterns
 
@@ -42,9 +60,8 @@ These interfaces already include `children?: ReactNode`.
 
 ```typescript
 // MODERN: React 19+ pattern (no forwardRef needed)
-interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
-  ref?: React.Ref<HTMLLabelElement>;
-}
+// ref is already included in ComponentProps
+interface LabelProps extends ComponentProps<'label'> {}
 
 export const Label = ({ ref, ...props }: LabelProps) => {
   return <label ref={ref} {...props} />;
@@ -150,12 +167,15 @@ Component.displayName = 'Component';
 ### Props Interface Template
 
 ```typescript
+import type { ComponentProps } from 'react';
+
 export type Orientation = 'vertical' | 'horizontal';
+
 /**
  * Props for Component
  * @remarks Fully accessible, headless component
  */
-export interface ComponentProps extends React.HTMLAttributes<HTMLElement> {
+export interface MyComponentProps extends ComponentProps<'div'> {
   /**
    * Visual variant affecting behavior
    * @defaultValue 'horizontal'
@@ -163,26 +183,13 @@ export interface ComponentProps extends React.HTMLAttributes<HTMLElement> {
   orientation?: Orientation;
 
   /**
-   * Disabled state - properly announced to screen readers
-   * @defaultValue false
-   */
-  disabled?: boolean;
-
-  /**
    * Loading state with screen reader support
    * @defaultValue false
    */
   isLoading?: boolean;
 
-  /**
-   * Required for icon-only variants
-   */
-  'aria-label'?: React.AriaAttributes['aria-label'];
-
-  /**
-   * Component content
-   */
-  children?: React.ReactNode;
+  // Note: disabled, children, ref, className, style, aria-label, etc.
+  // are already included via ComponentProps<'div'>
 }
 ```
 

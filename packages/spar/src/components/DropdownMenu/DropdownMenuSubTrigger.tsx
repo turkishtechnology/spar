@@ -38,7 +38,7 @@ export const DropdownMenuSubTrigger = ({
   }, [disabled, subContext.setFocusStrategy, subContext.onOpenChange]);
 
   const handlePointerMove = useCallback(
-    (event: ReactPointerEvent<HTMLElement>) => {
+    (event: ReactPointerEvent<HTMLDivElement>) => {
       onPointerMove?.(event);
       if (event.defaultPrevented || disabled) {
         return;
@@ -50,7 +50,7 @@ export const DropdownMenuSubTrigger = ({
   );
 
   const handleKeyDown = useCallback(
-    (event: ReactKeyboardEvent<HTMLElement>) => {
+    (event: ReactKeyboardEvent<HTMLDivElement>) => {
       onKeyDown?.(event);
       if (event.defaultPrevented) {
         return;
@@ -80,7 +80,7 @@ export const DropdownMenuSubTrigger = ({
   );
 
   const handleClick = useCallback(
-    (event: ReactMouseEvent<HTMLElement>) => {
+    (event: ReactMouseEvent<HTMLDivElement>) => {
       onClick?.(event);
       if (event.defaultPrevented) {
         return;
