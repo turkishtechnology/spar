@@ -66,9 +66,35 @@ export interface TabsListProps extends ComponentProps<'div'> {
 }
 
 /**
+ * Render props provided to children function for TabsTrigger
+ */
+export interface TabsTriggerRenderProps {
+  /**
+   * Whether this tab is currently selected
+   */
+  isSelected: boolean;
+  /**
+   * Function to select this tab programmatically
+   */
+  select: () => void;
+  /**
+   * Whether this tab is disabled
+   */
+  disabled: boolean;
+  /**
+   * Whether this tab is currently focused
+   */
+  isFocused: boolean;
+  /**
+   * The tab's orientation
+   */
+  orientation: Orientation;
+}
+
+/**
  * Props for TabsTrigger component
  */
-export interface TabsTriggerProps extends ComponentProps<'button'> {
+export interface TabsTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
   /**
    * Unique identifier for the tab
    */
@@ -81,16 +107,21 @@ export interface TabsTriggerProps extends ComponentProps<'button'> {
   shouldAutoFocus?: boolean;
 
   /**
-   * Render as child element instead of button (for advanced composition)
+   * Disables this specific tab
    * @defaultValue false
    */
-  asChild?: boolean;
+  disabled?: boolean;
 
   /**
    * Polymorphic component type
    * @defaultValue 'button'
    */
   as?: ElementType;
+
+  /**
+   * Children content or render function
+   */
+  children?: React.ReactNode | ((state: TabsTriggerRenderProps) => React.ReactNode);
 }
 
 /**

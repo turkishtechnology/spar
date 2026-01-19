@@ -57,9 +57,17 @@ The Tabs component provides a set of layered sections of content, known as tab p
 |------|------|----------|---------|-------------|
 | `value` | `string` | Yes | - | Unique identifier for the tab |
 | `disabled` | `boolean` | No | `false` | Disables this specific tab |
-| `asChild` | `boolean` | No | `false` | Render as child element instead of button (for advanced composition) |
 | `as` | `React.ElementType` | No | `"button"` | Polymorphic component type |
-| `children` | `React.ReactNode` | Yes | - | Tab trigger content (label text) |
+| `children` | `ReactNode \| ((state: TabsTriggerRenderProps) => ReactNode)` | Yes | - | Tab trigger content or render function |
+
+### TabsTriggerRenderProps
+| Property | Type | Description |
+|----------|------|-------------|
+| `isSelected` | `boolean` | Whether this tab is currently selected |
+| `select` | `() => void` | Function to select this tab programmatically |
+| `disabled` | `boolean` | Whether this tab is disabled |
+| `isFocused` | `boolean` | Whether this tab is currently focused |
+| `orientation` | `Orientation` | The tab's orientation |
 
 ### TabsContent
 | Prop | Type | Required | Default | Description |
