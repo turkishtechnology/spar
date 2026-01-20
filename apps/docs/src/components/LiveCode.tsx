@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // @ts-ignore
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
-import * as prettier from 'prettier/standalone';
+import { format } from 'prettier/standalone';
 import prettierPluginBabel from 'prettier/plugins/babel';
 import prettierPluginEstree from 'prettier/plugins/estree';
 import prettierPluginPostcss from 'prettier/plugins/postcss';
@@ -123,7 +123,7 @@ const LiveCode: React.FC<LiveCodeProps> = ({ code, cssCode }) => {
 
     const formatCode = async () => {
       try {
-        const formatted = await prettier.format(code, {
+        const formatted = await format(code, {
           parser: 'babel',
           plugins: [prettierPluginBabel, prettierPluginEstree],
           semi: true,
@@ -161,7 +161,7 @@ const LiveCode: React.FC<LiveCodeProps> = ({ code, cssCode }) => {
 
     const formatCode = async () => {
       try {
-        const formatted = await prettier.format(cssCode, {
+        const formatted = await format(cssCode, {
           parser: 'css',
           plugins: [prettierPluginPostcss],
           printWidth: 100,
