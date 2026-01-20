@@ -57,13 +57,24 @@ export const CollapsibleContent = ({
     return undefined;
   }, [isOpen]);
 
-  const handleBeforeMatch = (event: Event) => {
-    // When content is found via browser search, open the collapsible
-    if (forceMount && !isOpen) {
+  // Handle beforematch event for hidden="until-found" support
+  // This must be attached via addEventListener since React doesn't support onBeforeMatch
+  useEffect(() => {
+    const element = contentRef.current;
+    if (!element || !forceMount || isOpen) return undefined;
+
+    const handleBeforeMatch = (event: Event) => {
+      // When content is found via browser search, open the collapsible
       toggle();
-    }
-    onBeforeMatch?.(event);
-  };
+      onBeforeMatch?.(event);
+    };
+
+    element.addEventListener('beforematch', handleBeforeMatch);
+
+    return () => {
+      element.removeEventListener('beforematch', handleBeforeMatch);
+    };
+  }, [forceMount, isOpen, toggle, onBeforeMatch]);
 
   // Don't render content if closed and not force mounted
   if (!isOpen && !forceMount) {
@@ -87,7 +98,6 @@ export const CollapsibleContent = ({
       data-state={dataState}
       data-disabled={disabled ? '' : undefined}
       style={combinedStyle}
-      onBeforeMatch={forceMount && !isOpen ? handleBeforeMatch : undefined}
       {...props}
     >
       {children}
