@@ -5,6 +5,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "dev:react": "pnpm --filter @turkish-technology/spar build && pnpm --filter @turkish-technology/react-app dev",
     "dev:docs": "pnpm --filter @turkish-technology/spar build && pnpm --filter @turkish-technology/docs start",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
