@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCollapsibleContext } from './Collapsible';
-import type { CollapsibleTriggerProps } from './types';
+import type { CollapsibleTriggerProps, CollapsibleTriggerRenderProps } from './types';
 
 /**
  * Collapsible trigger component that toggles the visibility of collapsible content.
@@ -12,7 +12,7 @@ export const CollapsibleTrigger = ({
   onKeyDown,
   ...props
 }: CollapsibleTriggerProps) => {
-  const { isOpen, toggle, disabled, triggerId, contentId } = useCollapsibleContext();
+  const { isOpen, open, close, toggle, disabled, triggerId, contentId } = useCollapsibleContext();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (disabled) return;
@@ -33,6 +33,15 @@ export const CollapsibleTrigger = ({
     }
 
     onKeyDown?.(event);
+  };
+
+  // Render props for children function
+  const renderProps: CollapsibleTriggerRenderProps = {
+    isOpen,
+    disabled,
+    open,
+    close,
+    toggle,
   };
 
   // Get data attributes for styling
@@ -59,7 +68,11 @@ export const CollapsibleTrigger = ({
     }),
   };
 
-  return <Component {...triggerProps}>{children}</Component>;
+  return (
+    <Component {...triggerProps}>
+      {typeof children === 'function' ? children(renderProps) : children}
+    </Component>
+  );
 };
 
 CollapsibleTrigger.displayName = 'CollapsibleTrigger';

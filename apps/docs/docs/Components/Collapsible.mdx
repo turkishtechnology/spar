@@ -323,7 +323,17 @@ Interactive element that toggles the content visibility with full accessibility 
 | Name        | Type                | Default    | Description                            |
 | ----------- | ------------------- | ---------- | -------------------------------------- |
 | `as?`       | `React.ElementType` | `"button"` | Element type for polymorphic rendering |
-| `children?` | `ReactNode`         | -          | Trigger content                        |
+| `children?` | `ReactNode \| ((state: CollapsibleTriggerRenderProps) => ReactNode)` | - | Trigger content or render props function |
+
+**Render Props (CollapsibleTriggerRenderProps)**
+
+| Property   | Type         | Description                                          |
+| ---------- | ------------ | ---------------------------------------------------- |
+| `isOpen`   | `boolean`    | Whether the collapsible content is currently visible |
+| `disabled` | `boolean`    | Whether the trigger is disabled                      |
+| `open`     | `() => void` | Function to programmatically open the collapsible    |
+| `close`    | `() => void` | Function to programmatically close the collapsible   |
+| `toggle`   | `() => void` | Function to programmatically toggle the collapsible  |
 
 **Events**
 

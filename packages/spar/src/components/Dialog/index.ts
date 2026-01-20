@@ -50,11 +50,13 @@ export {
 export type {
   DialogRootProps,
   DialogTriggerProps,
+  DialogTriggerRenderProps,
   DialogPortalProps,
   DialogOverlayProps,
   DialogContentProps,
   DialogTitleProps,
   DialogDescriptionProps,
   DialogCloseProps,
+  DialogCloseRenderProps,
   DialogContextValue,
 } from './types';

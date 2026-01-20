@@ -370,7 +370,16 @@ Individual radio option within a Radio.Group that handles selection and accessib
 | `aria-label?`       | `string`            | `undefined` | Accessible name when children insufficient  |
 | `aria-describedby?` | `string`            | `undefined` | References element that describes this item |
 | `as?`               | `React.ElementType` | `'label'`   | Polymorphic root element                    |
-| `children?`         | `React.ReactNode`   | `undefined` | Label content for the radio item            |
+| `children?`         | `React.ReactNode \| ((state: RadioItemRenderProps) => React.ReactNode)` | `undefined` | Label content or render props function |
+
+**Render Props (RadioItemRenderProps)**
+
+| Property    | Type         | Description                                       |
+| ----------- | ------------ | ------------------------------------------------- |
+| `isChecked` | `boolean`    | Whether this radio item is currently selected     |
+| `disabled`  | `boolean`    | Whether this radio item is disabled               |
+| `isFocused` | `boolean`    | Whether this radio item currently has focus       |
+| `select`    | `() => void` | Function to programmatically select this radio item |
 
 **Events**
 

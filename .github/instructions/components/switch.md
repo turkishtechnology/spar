@@ -42,6 +42,19 @@ The Switch follows a simple single-component pattern rather than compound struct
 | `aria-label` | `string` | No | `undefined` | Accessible name for the switch |
 | `aria-labelledby` | `string` | No | `undefined` | ID of element that labels the switch |
 | `aria-describedby` | `string` | No | `undefined` | ID of element that describes the switch |
+| `children` | `ReactNode \| ((state: SwitchRenderProps) => ReactNode)` | No | `undefined` | Content to display inside the switch or render function for render props pattern |
+
+### SwitchRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `checked` | `boolean` | Whether the switch is currently checked |
+| `setChecked` | `(checked: boolean) => void` | Function to programmatically set the checked state |
+| `disabled` | `boolean` | Whether the switch is disabled |
+| `readOnly` | `boolean` | Whether the switch is read-only |
+| `isFocused` | `boolean` | Whether the switch currently has focus |
+| `isHovered` | `boolean` | Whether the switch is being hovered |
+| `isPressed` | `boolean` | Whether the switch is being pressed |
 
 ### Polymorphic Support
 - Supports `as` prop for rendering as different elements

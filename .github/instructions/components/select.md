@@ -74,6 +74,18 @@ The button that toggles the dropdown.
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `button` | Polymorphic component type |
 | `ref` | `RefObject` | No | - | Forward ref support |
+| `children` | `ReactNode \| ((state: SelectTriggerRenderProps) => ReactNode)` | No | - | Trigger content or render function for render props pattern |
+
+### SelectTriggerRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the dropdown is currently visible |
+| `value` | `string \| undefined` | The currently selected value |
+| `disabled` | `boolean` | Whether the trigger is disabled |
+| `open` | `() => void` | Function to programmatically open the dropdown |
+| `close` | `() => void` | Function to programmatically close the dropdown |
+| `toggle` | `() => void` | Function to programmatically toggle the dropdown |
 
 **Data Attributes:**
 - `data-state`: `"open" | "closed"`
@@ -151,6 +163,16 @@ Individual selectable option.
 | `textValue` | `string` | No | - | Text for type-ahead (auto-detected if not provided) |
 | `as` | `ElementType` | No | `div` | Polymorphic component type |
 | `ref` | `RefObject` | No | - | Forward ref support |
+| `children` | `ReactNode \| ((state: SelectItemRenderProps) => ReactNode)` | No | - | Item content or render function for render props pattern |
+
+### SelectItemRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isSelected` | `boolean` | Whether this item is currently selected |
+| `isHighlighted` | `boolean` | Whether this item is currently highlighted |
+| `disabled` | `boolean` | Whether this item is disabled |
+| `select` | `() => void` | Function to programmatically select this item |
 
 **Data Attributes:**
 - `data-state`: `"checked" | "unchecked"`

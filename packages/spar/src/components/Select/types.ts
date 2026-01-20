@@ -84,15 +84,50 @@ export interface SelectRootProps extends Omit<ComponentProps<'div'>, 'defaultVal
 }
 
 /**
+ * Render props provided to children function for SelectTrigger
+ */
+export interface SelectTriggerRenderProps {
+  /**
+   * Whether the dropdown is currently open
+   */
+  isOpen: boolean;
+  /**
+   * The currently selected value
+   */
+  value: string | undefined;
+  /**
+   * Whether the select is disabled
+   */
+  disabled: boolean;
+  /**
+   * Function to open the dropdown
+   */
+  open: () => void;
+  /**
+   * Function to close the dropdown
+   */
+  close: () => void;
+  /**
+   * Function to toggle the dropdown open/closed state
+   */
+  toggle: () => void;
+}
+
+/**
  * Props for SelectTrigger component
  * @remarks Button that toggles the dropdown
  */
-export interface SelectTriggerProps extends ComponentProps<'button'> {
+export interface SelectTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
   /**
    * Polymorphic component type
    * @defaultValue 'button'
    */
   as?: ElementType;
+
+  /**
+   * Children content or render function
+   */
+  children?: ReactNode | ((state: SelectTriggerRenderProps) => ReactNode);
 }
 
 /**
@@ -245,10 +280,32 @@ export interface SelectViewportProps extends ComponentProps<'div'> {
 }
 
 /**
+ * Render props provided to children function for SelectItem
+ */
+export interface SelectItemRenderProps {
+  /**
+   * Whether this item is currently selected
+   */
+  isSelected: boolean;
+  /**
+   * Whether this item is currently highlighted
+   */
+  isHighlighted: boolean;
+  /**
+   * Function to select this item
+   */
+  select: () => void;
+  /**
+   * Whether this item is disabled
+   */
+  disabled: boolean;
+}
+
+/**
  * Props for SelectItem component
  * @remarks Individual selectable option
  */
-export interface SelectItemProps extends ComponentProps<'div'> {
+export interface SelectItemProps extends Omit<ComponentProps<'div'>, 'children'> {
   /**
    * Option value
    */
@@ -270,6 +327,11 @@ export interface SelectItemProps extends ComponentProps<'div'> {
    * @defaultValue 'div'
    */
   as?: ElementType;
+
+  /**
+   * Children content or render function
+   */
+  children?: ReactNode | ((state: SelectItemRenderProps) => ReactNode);
 }
 
 /**

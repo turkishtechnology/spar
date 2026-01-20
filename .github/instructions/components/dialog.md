@@ -53,8 +53,17 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'button'` | Polymorphic element type |
 | `disabled` | `boolean` | No | `false` | Disables trigger interaction |
-| `children` | `ReactNode` | Yes | - | Trigger content |
+| `children` | `ReactNode \| ((state: DialogTriggerRenderProps) => ReactNode)` | Yes | - | Trigger content or render function for render props pattern |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
+
+### DialogTriggerRenderProps
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the dialog is currently visible |
+| `disabled` | `boolean` | Whether the trigger is disabled |
+| `open` | `() => void` | Function to programmatically open the dialog |
+| `close` | `() => void` | Function to programmatically close the dialog |
+| `toggle` | `() => void` | Function to programmatically toggle the dialog |
 
 ### DialogPortal Props
 | Name | Type | Required | Default | Description |
@@ -107,8 +116,14 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'button'` | Polymorphic element type |
-| `children` | `ReactNode` | Yes | - | Close button content |
+| `children` | `ReactNode \| ((state: DialogCloseRenderProps) => ReactNode)` | Yes | - | Close button content or render function for render props pattern |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
+
+### DialogCloseRenderProps
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the dialog is currently visible |
+| `close` | `() => void` | Function to programmatically close the dialog |
 
 ### Controlled/Uncontrolled Support
 - **Controlled**: Use `open` + `onOpenChange`

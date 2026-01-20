@@ -686,7 +686,18 @@ The button that toggles the dropdown open and closed.
 | ---------- | ------------- | ----------- | -------------------------- |
 | `as?`      | `ElementType` | `'button'`  | Polymorphic component type |
 | `ref?`     | `RefObject`   | `undefined` | Forward ref support        |
-| `children` | `ReactNode`   | -           | Trigger content            |
+| `children` | `ReactNode \| ((state: SelectTriggerRenderProps) => ReactNode)` | - | Trigger content or render props function |
+
+**Render Props (SelectTriggerRenderProps)**
+
+| Property   | Type                  | Description                                     |
+| ---------- | --------------------- | ----------------------------------------------- |
+| `isOpen`   | `boolean`             | Whether the dropdown is currently visible       |
+| `value`    | `string \| undefined` | The currently selected value                    |
+| `disabled` | `boolean`             | Whether the trigger is disabled                 |
+| `open`     | `() => void`          | Function to programmatically open the dropdown  |
+| `close`    | `() => void`          | Function to programmatically close the dropdown |
+| `toggle`   | `() => void`          | Function to programmatically toggle the dropdown |
 
 **Events**
 
@@ -865,7 +876,16 @@ Individual selectable option within the dropdown.
 | `textValue?` | `string`      | `undefined` | Text for type-ahead (auto-detected if not provided) |
 | `as?`        | `ElementType` | `'div'`     | Polymorphic component type                          |
 | `ref?`       | `RefObject`   | `undefined` | Forward ref support                                 |
-| `children`   | `ReactNode`   | -           | Item content                                        |
+| `children`   | `ReactNode \| ((state: SelectItemRenderProps) => ReactNode)` | - | Item content or render props function |
+
+**Render Props (SelectItemRenderProps)**
+
+| Property        | Type         | Description                                       |
+| --------------- | ------------ | ------------------------------------------------- |
+| `isSelected`    | `boolean`    | Whether this item is currently selected           |
+| `isHighlighted` | `boolean`    | Whether this item is currently highlighted        |
+| `disabled`      | `boolean`    | Whether this item is disabled                     |
+| `select`        | `() => void` | Function to programmatically select this item     |
 
 **Events**
 

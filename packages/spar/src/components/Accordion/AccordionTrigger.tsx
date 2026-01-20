@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import type { AccordionTriggerProps } from './types';
+import type { AccordionTriggerProps, AccordionTriggerRenderProps } from './types';
 import { useAccordionContext } from './Accordion';
 import { useAccordionItemContext } from './AccordionItem';
 import { CollapsibleTrigger } from '../Collapsible';
@@ -76,6 +76,15 @@ export const AccordionTrigger = ({
     [accordionContext, itemContext.value, onKeyDown],
   );
 
+  // Render props for children function
+  const renderProps: AccordionTriggerRenderProps = {
+    isOpen: itemContext.isOpen,
+    disabled: itemContext.disabled,
+    open: itemContext.open,
+    close: itemContext.close,
+    toggle: itemContext.toggle,
+  };
+
   return (
     <CollapsibleTrigger
       as={Component}
@@ -85,7 +94,7 @@ export const AccordionTrigger = ({
       data-value={itemContext.value}
       {...props}
     >
-      {children}
+      {typeof children === 'function' ? children(renderProps) : children}
     </CollapsibleTrigger>
   );
 };

@@ -40,15 +40,60 @@ export interface DialogRootProps {
 }
 
 /**
+ * Render props provided to children function for DialogTrigger
+ */
+export interface DialogTriggerRenderProps {
+  /**
+   * Whether the dialog is currently open
+   */
+  isOpen: boolean;
+  /**
+   * Whether the dialog trigger is disabled
+   */
+  disabled: boolean;
+  /**
+   * Function to open the dialog
+   */
+  open: () => void;
+  /**
+   * Function to close the dialog
+   */
+  close: () => void;
+  /**
+   * Function to toggle the dialog open/closed state
+   */
+  toggle: () => void;
+}
+
+/**
  * Props for DialogTrigger
  * @remarks Fully accessible, headless component
  */
-export interface DialogTriggerProps extends ComponentProps<'button'> {
+export interface DialogTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
   /**
    * Polymorphic element type
    * @defaultValue 'button'
    */
   as?: ElementType;
+
+  /**
+   * Children content or render function
+   */
+  children?: ReactNode | ((state: DialogTriggerRenderProps) => ReactNode);
+}
+
+/**
+ * Render props provided to children function for DialogClose
+ */
+export interface DialogCloseRenderProps {
+  /**
+   * Whether the dialog is currently open
+   */
+  isOpen: boolean;
+  /**
+   * Function to close the dialog
+   */
+  close: () => void;
 }
 
 /**
@@ -191,12 +236,17 @@ export interface DialogDescriptionProps extends ComponentProps<'p'> {
  * Props for DialogClose
  * @remarks Fully accessible, headless component
  */
-export interface DialogCloseProps extends ComponentProps<'button'> {
+export interface DialogCloseProps extends Omit<ComponentProps<'button'>, 'children'> {
   /**
    * Polymorphic element type
    * @defaultValue 'button'
    */
   as?: ElementType;
+
+  /**
+   * Children content or render function
+   */
+  children?: ReactNode | ((state: DialogCloseRenderProps) => ReactNode);
 }
 
 /**
