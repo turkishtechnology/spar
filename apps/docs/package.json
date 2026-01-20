@@ -22,6 +22,7 @@
     "@mdx-js/react": "^3.0.0",
     "@turkish-technology/spar": "workspace:*",
     "clsx": "^2.0.0",
+    "prettier": "^3.6.2",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
