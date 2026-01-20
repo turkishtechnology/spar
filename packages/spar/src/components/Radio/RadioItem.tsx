@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import type { RadioItemProps } from './types';
+import type { RadioItemProps, RadioItemRenderProps } from './types';
 import { useRadioGroupContext } from './RadioGroup';
 import { useFocusItem, useMergedRef } from '@/hooks';
 
@@ -33,6 +33,7 @@ export const RadioItem = ({
   const itemRef = useRef<HTMLElement>(null);
   const isChecked = groupValue === itemValue;
   const isDisabled = groupDisabled || itemDisabled;
+  const isFocused = focusedValue === itemValue;
 
   // Determine if this item should be focusable (tabIndex={0})
   const isFocusable =
@@ -78,11 +79,19 @@ export const RadioItem = ({
   // Merge refs
   const mergedRef = useMergedRef(itemRef, ref);
 
+  // Render props for children function
+  const renderProps: RadioItemRenderProps = {
+    isChecked,
+    select: handleClick,
+    disabled: isDisabled,
+    isFocused,
+  };
+
   // Data attributes for styling
   const dataAttributes = {
     'data-state': isChecked ? 'checked' : 'unchecked',
     'data-disabled': isDisabled ? '' : undefined,
-    'data-focused': focusedValue === itemValue ? '' : undefined,
+    'data-focused': isFocused ? '' : undefined,
   };
 
   return (
@@ -99,7 +108,7 @@ export const RadioItem = ({
       {...dataAttributes}
       {...rest}
     >
-      {children}
+      {typeof children === 'function' ? children(renderProps) : children}
       {/* Hidden radio input for form submission and accessibility */}
       <input
         type='radio'

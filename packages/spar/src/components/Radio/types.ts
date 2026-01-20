@@ -1,4 +1,4 @@
-import type { ComponentProps, ElementType } from 'react';
+import type { ComponentProps, ElementType, ReactNode } from 'react';
 import type { Orientation } from '../../types';
 
 /**
@@ -67,10 +67,32 @@ export interface RadioGroupProps extends Omit<ComponentProps<'div'>, 'onChange'>
 }
 
 /**
+ * Render props provided to children function for RadioItem
+ */
+export interface RadioItemRenderProps {
+  /**
+   * Whether this radio item is currently checked
+   */
+  isChecked: boolean;
+  /**
+   * Function to select this radio item
+   */
+  select: () => void;
+  /**
+   * Whether this radio item is disabled
+   */
+  disabled: boolean;
+  /**
+   * Whether this radio item is currently focused
+   */
+  isFocused: boolean;
+}
+
+/**
  * Props for RadioItem component
  * @remarks Individual radio option within a RadioGroup
  */
-export interface RadioItemProps extends Omit<ComponentProps<'label'>, 'onChange'> {
+export interface RadioItemProps extends Omit<ComponentProps<'label'>, 'onChange' | 'children'> {
   /**
    * Unique value for this radio item
    */
@@ -87,6 +109,11 @@ export interface RadioItemProps extends Omit<ComponentProps<'label'>, 'onChange'
    * @defaultValue 'label'
    */
   as?: ElementType;
+
+  /**
+   * Children content or render function
+   */
+  children?: ReactNode | ((state: RadioItemRenderProps) => ReactNode);
 }
 
 /**

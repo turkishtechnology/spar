@@ -515,10 +515,20 @@ Interactive element that opens the dialog when activated.
 
 | Name          | Type                     | Default     | Description                      |
 | ------------- | ------------------------ | ----------- | -------------------------------- |
-| `children`    | `ReactNode`              | -           | Trigger content                  |
+| `children`    | `ReactNode \| ((state: DialogTriggerRenderProps) => ReactNode)` | - | Trigger content or render props function |
 | `as?`         | `ElementType`            | `'button'`  | Polymorphic element type         |
 | `disabled?` | `boolean`                | `false`     | Disables trigger interaction     |
 | `ref?`        | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to trigger element |
+
+**Render Props (DialogTriggerRenderProps)**
+
+| Property   | Type         | Description                                     |
+| ---------- | ------------ | ----------------------------------------------- |
+| `isOpen`   | `boolean`    | Whether the dialog is currently visible         |
+| `disabled` | `boolean`    | Whether the trigger is disabled                 |
+| `open`     | `() => void` | Function to programmatically open the dialog    |
+| `close`    | `() => void` | Function to programmatically close the dialog   |
+| `toggle`   | `() => void` | Function to programmatically toggle the dialog  |
 
 **Events**
 
@@ -678,9 +688,16 @@ Button that closes the dialog when activated.
 
 | Name       | Type                     | Default     | Description                           |
 | ---------- | ------------------------ | ----------- | ------------------------------------- |
-| `children` | `ReactNode`              | -           | Close button content                  |
+| `children` | `ReactNode \| ((state: DialogCloseRenderProps) => ReactNode)` | - | Close button content or render props function |
 | `as?`      | `ElementType`            | `'button'`  | Polymorphic element type              |
 | `ref?`     | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to close button element |
+
+**Render Props (DialogCloseRenderProps)**
+
+| Property | Type         | Description                                   |
+| -------- | ------------ | --------------------------------------------- |
+| `isOpen` | `boolean`    | Whether the dialog is currently visible       |
+| `close`  | `() => void` | Function to programmatically close the dialog |
 
 **Events**
 

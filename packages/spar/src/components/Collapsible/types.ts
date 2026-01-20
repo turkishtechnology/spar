@@ -1,4 +1,30 @@
-import type { ComponentProps, ElementType } from 'react';
+import type { ComponentProps, ElementType, ReactNode } from 'react';
+
+/**
+ * Render props provided to children function for CollapsibleTrigger
+ */
+export interface CollapsibleTriggerRenderProps {
+  /**
+   * Whether the collapsible is currently open
+   */
+  isOpen: boolean;
+  /**
+   * Whether the collapsible is disabled
+   */
+  disabled: boolean;
+  /**
+   * Function to open the collapsible
+   */
+  open: () => void;
+  /**
+   * Function to close the collapsible
+   */
+  close: () => void;
+  /**
+   * Function to toggle the open state
+   */
+  toggle: () => void;
+}
 
 /**
  * Props for Collapsible root component
@@ -50,12 +76,17 @@ export interface CollapsibleProps extends ComponentProps<'div'> {
  * Props for CollapsibleTrigger component
  * @remarks Button element that toggles visibility
  */
-export interface CollapsibleTriggerProps extends ComponentProps<'button'> {
+export interface CollapsibleTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
   /**
    * Element type for polymorphic rendering
    * @defaultValue 'button'
    */
   as?: ElementType;
+
+  /**
+   * Children content or render function
+   */
+  children?: ReactNode | ((state: CollapsibleTriggerRenderProps) => ReactNode);
 }
 
 /**
@@ -90,6 +121,16 @@ export interface CollapsibleContextValue {
    * Current open state
    */
   isOpen: boolean;
+
+  /**
+   * Function to open the collapsible
+   */
+  open: () => void;
+
+  /**
+   * Function to close the collapsible
+   */
+  close: () => void;
 
   /**
    * Toggle function to change open state

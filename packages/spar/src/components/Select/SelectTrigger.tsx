@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import type { SelectTriggerProps } from './types';
+import type { SelectTriggerProps, SelectTriggerRenderProps } from './types';
 import { useSelectContext } from './SelectRoot';
 import { useMergedRef, useAutoFocus } from '../../hooks';
 
@@ -69,6 +69,16 @@ export const SelectTrigger = ({
     [context, onKeyDown],
   );
 
+  // Render props for children function
+  const renderProps: SelectTriggerRenderProps = {
+    isOpen: context.open,
+    value: context.value,
+    disabled: context.disabled,
+    open: () => context.onOpenChange(true),
+    close: () => context.onOpenChange(false),
+    toggle: () => context.onOpenChange(!context.open),
+  };
+
   return (
     <Component
       ref={mergedRef}
@@ -89,7 +99,7 @@ export const SelectTrigger = ({
       onKeyDown={handleKeyDown}
       {...props}
     >
-      {children}
+      {typeof children === 'function' ? children(renderProps) : children}
     </Component>
   );
 };

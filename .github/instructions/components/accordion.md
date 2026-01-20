@@ -66,7 +66,16 @@ The Accordion component provides a vertically stacked set of interactive heading
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `React.ElementType` | No | `"button"` | Polymorphic component type |
-| `children` | `React.ReactNode` | Yes | - | Trigger content (heading text) |
+| `children` | `React.ReactNode \| ((state: AccordionTriggerRenderProps) => React.ReactNode)` | Yes | - | Trigger content or render function for render props pattern |
+
+### AccordionTriggerRenderProps
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the accordion item is currently expanded |
+| `disabled` | `boolean` | Whether the trigger is disabled |
+| `open` | `() => void` | Function to programmatically open the accordion item |
+| `close` | `() => void` | Function to programmatically close the accordion item |
+| `toggle` | `() => void` | Function to programmatically toggle the accordion item |
 
 ### AccordionContent
 | Prop | Type | Required | Default | Description |

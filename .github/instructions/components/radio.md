@@ -51,10 +51,19 @@
 |------|------|----------|---------|-------------|
 | `value` | `string` | Yes | — | Unique value for this radio item |
 | `disabled` | `boolean` | No | `false` | Disables this specific radio item |
-| `children` | `React.ReactNode` | Yes | — | Label content for the radio item |
+| `children` | `React.ReactNode \| ((state: RadioItemRenderProps) => React.ReactNode)` | Yes | — | Label content or render function for render props pattern |
 | `aria-label` | `string` | No | `undefined` | Accessible name when children insufficient |
 | `aria-describedby` | `string` | No | `undefined` | References element that describes this item |
 | `as` | `React.ElementType` | No | `'label'` | Polymorphic root element |
+
+### RadioItemRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isChecked` | `boolean` | Whether this radio item is currently selected |
+| `disabled` | `boolean` | Whether this radio item is disabled |
+| `isFocused` | `boolean` | Whether this radio item currently has focus |
+| `select` | `() => void` | Function to programmatically select this radio item |
 
 ### Ref Forwarding
 - **Radio.Group**: Forwards ref to root element (div by default)

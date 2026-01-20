@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useMergedRef } from '@/hooks';
 import { useDialogContext } from './DialogRoot';
-import type { DialogTriggerProps } from './types';
+import type { DialogTriggerProps, DialogTriggerRenderProps } from './types';
 
 /**
  * Trigger button that opens the dialog when activated.
@@ -50,6 +50,15 @@ export const DialogTrigger = ({
     [disabled, isOpen, setIsOpen, onKeyDown],
   );
 
+  // Render props for children function
+  const renderProps: DialogTriggerRenderProps = {
+    isOpen,
+    disabled,
+    open: () => setIsOpen(true),
+    close: () => setIsOpen(false),
+    toggle: () => setIsOpen(!isOpen),
+  };
+
   const dataState = isOpen ? 'open' : 'closed';
 
   // Build props with conditional logic for button vs non-button elements
@@ -73,7 +82,11 @@ export const DialogTrigger = ({
     }),
   };
 
-  return <Element {...triggerProps}>{children}</Element>;
+  return (
+    <Element {...triggerProps}>
+      {typeof children === 'function' ? children(renderProps) : children}
+    </Element>
+  );
 };
 
 DialogTrigger.displayName = 'DialogTrigger';

@@ -448,12 +448,22 @@ Button that toggles the visibility of the associated content panel.
 
 **Props**
 
-| Name         | Type                                   | Default     | Description                    |
-| ------------ | -------------------------------------- | ----------- | ------------------------------ |
-| `as?`        | `React.ElementType`                    | `"button"`  | Polymorphic component type     |
-| `children`   | `React.ReactNode`                      | -           | Trigger content (heading text) |
-| `onClick?`   | `(event: React.MouseEvent) => void`    | `undefined` | Custom click handler           |
-| `onKeyDown?` | `(event: React.KeyboardEvent) => void` | `undefined` | Custom keydown handler         |
+| Name         | Type                                                                         | Default     | Description                                   |
+| ------------ | ---------------------------------------------------------------------------- | ----------- | --------------------------------------------- |
+| `as?`        | `React.ElementType`                                                          | `"button"`  | Polymorphic component type                    |
+| `children`   | `React.ReactNode \| ((state: AccordionTriggerRenderProps) => React.ReactNode)` | -         | Trigger content or render props function      |
+| `onClick?`   | `(event: React.MouseEvent) => void`                                          | `undefined` | Custom click handler                          |
+| `onKeyDown?` | `(event: React.KeyboardEvent) => void`                                       | `undefined` | Custom keydown handler                        |
+
+**Render Props (AccordionTriggerRenderProps)**
+
+| Property   | Type         | Description                                            |
+| ---------- | ------------ | ------------------------------------------------------ |
+| `isOpen`   | `boolean`    | Whether the accordion item is currently expanded       |
+| `disabled` | `boolean`    | Whether the trigger is disabled                        |
+| `open`     | `() => void` | Function to programmatically open the accordion item   |
+| `close`    | `() => void` | Function to programmatically close the accordion item  |
+| `toggle`   | `() => void` | Function to programmatically toggle the accordion item |
 
 **Events**
 
