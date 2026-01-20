@@ -28,7 +28,7 @@ The Checkbox component provides a headless, accessible checkbox implementation t
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `"span"` | The element or component to render as |
+| `as` | `PolymorphicAs` | No | `"span"` | The element or component to render as |
 | `checked` | `boolean \| "indeterminate"` | No | `undefined` | Controlled checked state. When provided, component becomes controlled |
 | `defaultChecked` | `boolean \| "indeterminate"` | No | `false` | Default checked state for uncontrolled usage |
 | `onChange` | `(checked: boolean \| "indeterminate") => void` | No | `undefined` | Callback fired when checked state changes |

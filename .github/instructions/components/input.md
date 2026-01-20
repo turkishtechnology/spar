@@ -39,7 +39,7 @@ The Input component provides accessible form input primitives with zero styling 
 
 | Name   | Type          | Required | Default   | Description                   |
 | ------ | ------------- | -------- | --------- | ----------------------------- |
-| `as`   | `ElementType` | No       | `"input"` | Element type (input/textarea) |
+| `as`   | `PolymorphicAs` | No       | `"input"` | Element type (input/textarea) |
 | `type` | `string`      | No       | `"text"`  | HTML input type               |
 
 ### Input.Label Props

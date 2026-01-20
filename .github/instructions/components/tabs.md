@@ -40,7 +40,7 @@ The Tabs component provides a set of layered sections of content, known as tab p
 | `orientation` | `"horizontal" \| "vertical"` | No | `"horizontal"` | Tabs orientation affecting keyboard navigation |
 | `dir` | `"ltr" \| "rtl"` | No | `"ltr"` | Text direction for arrow key navigation |
 | `activationMode` | `"automatic" \| "manual"` | No | `"automatic"` | Whether tabs activate on focus or require explicit activation |
-| `as` | `React.ElementType` | No | `"div"` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `"div"` | Polymorphic component type |
 | `children` | `React.ReactNode` | Yes | - | TabsList and TabsContent components |
 
 **Note**: All components also accept standard HTML attributes (className, style, data-*, aria-*, etc.) which are forwarded to the underlying element.
@@ -49,7 +49,7 @@ The Tabs component provides a set of layered sections of content, known as tab p
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `loop` | `boolean` | No | `true` | Whether arrow key navigation wraps around |
-| `as` | `React.ElementType` | No | `"div"` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `"div"` | Polymorphic component type |
 | `children` | `React.ReactNode` | Yes | - | TabsTrigger components |
 
 ### TabsTrigger
@@ -57,7 +57,7 @@ The Tabs component provides a set of layered sections of content, known as tab p
 |------|------|----------|---------|-------------|
 | `value` | `string` | Yes | - | Unique identifier for the tab |
 | `disabled` | `boolean` | No | `false` | Disables this specific tab |
-| `as` | `React.ElementType` | No | `"button"` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `"button"` | Polymorphic component type |
 | `children` | `ReactNode \| ((state: TabsTriggerRenderProps) => ReactNode)` | Yes | - | Tab trigger content or render function |
 
 ### TabsTriggerRenderProps
@@ -74,7 +74,7 @@ The Tabs component provides a set of layered sections of content, known as tab p
 |------|------|----------|---------|-------------|
 | `value` | `string` | Yes | - | Unique identifier matching a TabsTrigger value |
 | `forceMount` | `boolean` | No | `false` | Force content to remain mounted when not active |
-| `as` | `React.ElementType` | No | `"div"` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `"div"` | Polymorphic component type |
 | `children` | `React.ReactNode` | Yes | - | Tab panel content |
 
 ## 3. Behavior Matrix

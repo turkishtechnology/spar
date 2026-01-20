@@ -321,7 +321,7 @@ function ForceMountTabs() {
 | `orientation`    | `'horizontal' \| 'vertical'`           | `'horizontal'` | Tabs orientation affecting keyboard navigation                |
 | `dir`            | `'ltr' \| 'rtl'`                       | `'ltr'`        | Text direction for arrow key navigation                       |
 | `activationMode` | `'automatic' \| 'manual'`              | `'automatic'`  | Whether tabs activate on focus or require explicit activation |
-| `as`             | `React.ElementType`                    | `'div'`        | Polymorphic component type                                    |
+| `as`             | `PolymorphicAs`                    | `'div'`        | Polymorphic component type                                    |
 
 #### Events
 
@@ -343,7 +343,7 @@ function ForceMountTabs() {
 | Name   | Type                | Default | Description                               |
 | ------ | ------------------- | ------- | ----------------------------------------- |
 | `loop` | `boolean`           | `true`  | Whether arrow key navigation wraps around |
-| `as`   | `React.ElementType` | `'div'` | Polymorphic component type                |
+| `as`   | `PolymorphicAs` | `'div'` | Polymorphic component type                |
 
 #### ARIA
 
@@ -362,7 +362,7 @@ function ForceMountTabs() {
 | `value`           | `string`                                                      | —          | Unique identifier for the tab              |
 | `disabled`        | `boolean`                                                     | `false`    | Disables this specific tab                 |
 | `shouldAutoFocus` | `boolean`                                                     | `false`    | Whether to focus this tab trigger on mount |
-| `as`              | `React.ElementType`                                           | `'button'` | Polymorphic component type                 |
+| `as`              | `PolymorphicAs`                                           | `'button'` | Polymorphic component type                 |
 | `children`        | `ReactNode \| ((state: TabsTriggerRenderProps) => ReactNode)` | —          | Children content or render function        |
 
 #### TabsTriggerRenderProps
@@ -406,7 +406,7 @@ function ForceMountTabs() {
 | ------------ | ------------------- | ------- | ----------------------------------------------- |
 | `value`      | `string`            | —       | Unique identifier matching a TabsTrigger value  |
 | `forceMount` | `boolean`           | `false` | Force content to remain mounted when not active |
-| `as`         | `React.ElementType` | `'div'` | Polymorphic component type                      |
+| `as`         | `PolymorphicAs` | `'div'` | Polymorphic component type                      |
 
 #### ARIA
 

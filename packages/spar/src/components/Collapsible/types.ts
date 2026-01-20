@@ -1,4 +1,5 @@
-import type { ComponentProps, ElementType, ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
+import type { PolymorphicAs } from '../../types';
 
 /**
  * Render props provided to children function for CollapsibleTrigger
@@ -35,7 +36,7 @@ export interface CollapsibleProps extends ComponentProps<'div'> {
    * Element type for polymorphic rendering
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Unique identifier for the trigger element.
@@ -81,7 +82,7 @@ export interface CollapsibleTriggerProps extends Omit<ComponentProps<'button'>, 
    * Element type for polymorphic rendering
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Children content or render function
@@ -98,7 +99,7 @@ export interface CollapsibleContentProps extends ComponentProps<'div'> {
    * Element type for polymorphic rendering
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Force content to remain mounted when closed

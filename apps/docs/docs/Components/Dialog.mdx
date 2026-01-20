@@ -516,7 +516,7 @@ Interactive element that opens the dialog when activated.
 | Name          | Type                     | Default     | Description                      |
 | ------------- | ------------------------ | ----------- | -------------------------------- |
 | `children`    | `ReactNode \| ((state: DialogTriggerRenderProps) => ReactNode)` | - | Trigger content or render props function |
-| `as?`         | `ElementType`            | `'button'`  | Polymorphic element type         |
+| `as?`         | `PolymorphicAs`            | `'button'`  | Polymorphic element type         |
 | `disabled?` | `boolean`                | `false`     | Disables trigger interaction     |
 | `ref?`        | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to trigger element |
 
@@ -578,7 +578,7 @@ Background overlay that appears behind dialog content and handles click-outside 
 | Name          | Type                     | Default     | Description                           |
 | ------------- | ------------------------ | ----------- | ------------------------------------- |
 | `children?`   | `ReactNode`              | `undefined` | Overlay content (usually none)        |
-| `as?`         | `ElementType`            | `'div'`     | Polymorphic element type              |
+| `as?`         | `PolymorphicAs`            | `'div'`     | Polymorphic element type              |
 | `forceMount?` | `boolean`                | `false`     | Always render for animation libraries |
 | `ref?`        | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to overlay element      |
 
@@ -603,7 +603,7 @@ Main dialog container that handles focus management and keyboard interactions.
 | Name            | Type                                 | Default     | Description                           |
 | --------------- | ------------------------------------ | ----------- | ------------------------------------- |
 | `children`      | `ReactNode`                          | -           | Dialog content                        |
-| `as?`           | `ElementType`                        | `'div'`     | Polymorphic element type              |
+| `as?`           | `PolymorphicAs`                        | `'div'`     | Polymorphic element type              |
 | `role?`         | `React.AriaRole`                     | `'dialog'`  | ARIA role for dialog type             |
 | `forceMount?`   | `boolean`                            | `false`     | Always render for animation libraries |
 | `trapFocus?`    | `boolean`                            | `true`      | Enable focus trapping                 |
@@ -640,7 +640,7 @@ Dialog title that provides an accessible name for the dialog.
 | Name       | Type                     | Default     | Description                    |
 | ---------- | ------------------------ | ----------- | ------------------------------ |
 | `children` | `ReactNode`              | -           | Title content                  |
-| `as?`      | `ElementType`            | `'h2'`      | Polymorphic element type       |
+| `as?`      | `PolymorphicAs`            | `'h2'`      | Polymorphic element type       |
 | `level?`   | `number`                 | `2`         | Heading level (1-6)            |
 | `ref?`     | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to title element |
 
@@ -665,7 +665,7 @@ Dialog description that provides additional accessible information about the dia
 | Name       | Type                     | Default     | Description                          |
 | ---------- | ------------------------ | ----------- | ------------------------------------ |
 | `children` | `ReactNode`              | -           | Description content                  |
-| `as?`      | `ElementType`            | `'p'`       | Polymorphic element type             |
+| `as?`      | `PolymorphicAs`            | `'p'`       | Polymorphic element type             |
 | `ref?`     | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to description element |
 
 **Events**
@@ -689,7 +689,7 @@ Button that closes the dialog when activated.
 | Name       | Type                     | Default     | Description                           |
 | ---------- | ------------------------ | ----------- | ------------------------------------- |
 | `children` | `ReactNode \| ((state: DialogCloseRenderProps) => ReactNode)` | - | Close button content or render props function |
-| `as?`      | `ElementType`            | `'button'`  | Polymorphic element type              |
+| `as?`      | `PolymorphicAs`            | `'button'`  | Polymorphic element type              |
 | `ref?`     | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to close button element |
 
 **Render Props (DialogCloseRenderProps)**

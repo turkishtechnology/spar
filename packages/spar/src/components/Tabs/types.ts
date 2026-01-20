@@ -1,5 +1,5 @@
-import type { ComponentProps, ElementType, RefObject } from 'react';
-import type { Direction, Orientation } from '../../types';
+import type { ComponentProps, RefObject } from 'react';
+import type { Direction, Orientation, PolymorphicAs } from '../../types';
 
 export type TabsActivationMode = 'automatic' | 'manual';
 
@@ -45,7 +45,7 @@ export interface TabsProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -62,7 +62,7 @@ export interface TabsListProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -116,7 +116,7 @@ export interface TabsTriggerProps extends Omit<ComponentProps<'button'>, 'childr
    * Polymorphic component type
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Children content or render function
@@ -143,7 +143,7 @@ export interface TabsContentProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**

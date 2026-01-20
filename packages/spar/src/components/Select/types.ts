@@ -1,6 +1,6 @@
-import type { ComponentProps, ElementType, ReactNode, RefObject } from 'react';
+import type { ComponentProps, ReactNode, RefObject } from 'react';
 import type { Placement, Strategy, Middleware, VirtualElement } from '@floating-ui/react-dom';
-import type { Direction } from '../../types';
+import type { Direction, PolymorphicAs } from '../../types';
 
 // Re-export Floating UI types for public API
 export type { Placement, Strategy, Middleware, VirtualElement };
@@ -80,7 +80,7 @@ export interface SelectRootProps extends Omit<ComponentProps<'div'>, 'defaultVal
   /**
    * Polymorphic component type
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -122,7 +122,7 @@ export interface SelectTriggerProps extends Omit<ComponentProps<'button'>, 'chil
    * Polymorphic component type
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Children content or render function
@@ -144,7 +144,7 @@ export interface SelectValueProps extends ComponentProps<'span'> {
    * Polymorphic component type
    * @defaultValue 'span'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -156,7 +156,7 @@ export interface SelectIconProps extends ComponentProps<'span'> {
    * Polymorphic component type
    * @defaultValue 'span'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -264,7 +264,7 @@ export interface SelectContentProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -276,7 +276,7 @@ export interface SelectViewportProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -326,7 +326,7 @@ export interface SelectItemProps extends Omit<ComponentProps<'div'>, 'children'>
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Children content or render function
@@ -343,7 +343,7 @@ export interface SelectItemTextProps extends ComponentProps<'span'> {
    * Polymorphic component type
    * @defaultValue 'span'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -361,7 +361,7 @@ export interface SelectItemIndicatorProps extends ComponentProps<'span'> {
    * Polymorphic component type
    * @defaultValue 'span'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -373,7 +373,7 @@ export interface SelectGroupProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -385,7 +385,7 @@ export interface SelectLabelProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -397,7 +397,7 @@ export interface SelectSeparatorProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -421,7 +421,7 @@ export interface SelectArrowProps extends ComponentProps<'svg'> {
    * Polymorphic component type
    * @defaultValue 'svg'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 // Internal context types

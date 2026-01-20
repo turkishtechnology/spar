@@ -1,6 +1,5 @@
 import type {
   ComponentProps,
-  ElementType,
   AriaAttributes,
   CSSProperties,
   KeyboardEvent,
@@ -9,6 +8,7 @@ import type {
   PointerEvent,
   ReactNode,
 } from 'react';
+import type { PolymorphicAs } from '../../types';
 
 /**
  * Render props provided to children function for Switch
@@ -54,7 +54,7 @@ export interface SwitchProps
    * The element or component to render as
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Controlled checked state

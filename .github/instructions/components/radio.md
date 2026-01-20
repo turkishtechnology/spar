@@ -43,7 +43,7 @@
 | `aria-label` | `string` | No | `undefined` | Accessible name for the group |
 | `aria-labelledby` | `string` | No | `undefined` | References element that labels the group |
 | `aria-describedby` | `string` | No | `undefined` | References element that describes the group |
-| `as` | `React.ElementType` | No | `'div'` | Polymorphic root element |
+| `as` | `PolymorphicAs` | No | `'div'` | Polymorphic root element |
 
 ### Radio.Item Props
 
@@ -54,7 +54,7 @@
 | `children` | `React.ReactNode \| ((state: RadioItemRenderProps) => React.ReactNode)` | Yes | — | Label content or render function for render props pattern |
 | `aria-label` | `string` | No | `undefined` | Accessible name when children insufficient |
 | `aria-describedby` | `string` | No | `undefined` | References element that describes this item |
-| `as` | `React.ElementType` | No | `'label'` | Polymorphic root element |
+| `as` | `PolymorphicAs` | No | `'label'` | Polymorphic root element |
 
 ### RadioItemRenderProps
 

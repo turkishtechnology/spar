@@ -1,5 +1,5 @@
-import type { ComponentProps, ElementType, ReactNode } from 'react';
-import type { Orientation } from '../../types';
+import type { ComponentProps, ReactNode } from 'react';
+import type { Orientation, PolymorphicAs } from '../../types';
 
 /**
  * Props for RadioGroup component
@@ -63,7 +63,7 @@ export interface RadioGroupProps extends Omit<ComponentProps<'div'>, 'onChange'>
    * Polymorphic root element
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -108,7 +108,7 @@ export interface RadioItemProps extends Omit<ComponentProps<'label'>, 'onChange'
    * Polymorphic root element
    * @defaultValue 'label'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Children content or render function
