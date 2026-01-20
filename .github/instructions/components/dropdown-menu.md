@@ -57,7 +57,7 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 ### DropdownMenu.Trigger Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'button'` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `'button'` | Polymorphic component type |
 | `disabled` | `boolean` | No | `false` | Whether trigger is disabled |
 | `children` | `ReactNode \| ((state: DropdownMenuTriggerRenderProps) => ReactNode)` | No | - | Trigger content or render function for render props pattern |
 | Common button props | Various | No | - | Native button attributes |
@@ -74,7 +74,7 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 ### DropdownMenu.Content Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'div'` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `'div'` | Polymorphic component type |
 | `side` | `'top' | 'right' | 'bottom' | 'left'` | No | `'bottom'` | Preferred placement side |
 | `align` | `'start' | 'center' | 'end'` | No | `'start'` | Alignment on placement side |
 | `sideOffset` | `number` | No | `8` | Offset from trigger |
@@ -89,7 +89,7 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 ### DropdownMenu.Item Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'div'` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `'div'` | Polymorphic component type |
 | `disabled` | `boolean` | No | `false` | Whether item is disabled (disabled items are skipped in focus order) |
 | `onSelect` | `(event: Event) => void` | No | `undefined` | Selection handler |
 | `textValue` | `string` | No | `undefined` | Value for typeahead search |
@@ -116,17 +116,17 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 ### DropdownMenu.Separator Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'div'` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `'div'` | Polymorphic component type |
 
 ### DropdownMenu.Label Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'div'` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `'div'` | Polymorphic component type |
 
 ### DropdownMenu.Group Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'div'` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `'div'` | Polymorphic component type |
 
 ### DropdownMenu.Sub Props
 | Name | Type | Required | Default | Description |

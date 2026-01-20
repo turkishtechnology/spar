@@ -1,4 +1,5 @@
-import type { ComponentProps, ElementType } from 'react';
+import type { ComponentProps } from 'react';
+import type { PolymorphicAs } from '../../types';
 
 /**
  * Props for Label component
@@ -30,5 +31,5 @@ export interface LabelProps extends ComponentProps<'label'> {
    * @remarks Using non-label elements breaks native association - use aria-labelledby on control
    * @defaultValue 'label'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }

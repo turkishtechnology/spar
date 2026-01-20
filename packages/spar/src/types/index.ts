@@ -1,3 +1,11 @@
+import type { ElementType, JSXElementConstructor } from 'react';
+
+/**
+ * Type for the `as` prop allowing polymorphic component rendering
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type PolymorphicAs = ElementType | JSXElementConstructor<any>;
+
 /**
  * Possible checked states for checkbox-like components
  */

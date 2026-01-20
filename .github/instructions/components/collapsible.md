@@ -40,7 +40,7 @@ The Collapsible component implements the WAI-ARIA disclosure pattern, providing 
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'button'` | Element type for polymorphic rendering |
+| `as` | `PolymorphicAs` | No | `'button'` | Element type for polymorphic rendering |
 | `children` | `ReactNode \| ((state: CollapsibleTriggerRenderProps) => ReactNode)` | No | - | Trigger content or render function for render props pattern |
 | `aria-expanded` | `boolean` | No | Auto-managed | Current open/closed state (automatically set) |
 | `aria-controls` | `string` | No | Auto-generated | ID of controlled content (automatically set) |
@@ -66,7 +66,7 @@ The Collapsible component implements the WAI-ARIA disclosure pattern, providing 
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'div'` | Element type for polymorphic rendering |
+| `as` | `PolymorphicAs` | No | `'div'` | Element type for polymorphic rendering |
 | `forceMount` | `boolean` | No | `false` | Force content to remain mounted when closed |
 | `id` | `string` | No | Auto-generated | Content element ID (automatically set for ARIA) |
 | `hidden` | `boolean \| 'until-found'` | No | Auto-managed | Visibility state (automatically managed) |

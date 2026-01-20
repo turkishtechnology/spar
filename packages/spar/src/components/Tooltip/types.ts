@@ -1,5 +1,5 @@
-import type { ComponentProps, ReactNode, ElementType, RefObject, SVGProps } from 'react';
-import { Side, Align } from '../../types';
+import type { ComponentProps, ReactNode, RefObject, SVGProps } from 'react';
+import { Side, Align, PolymorphicAs } from '../../types';
 
 export type Sticky = 'partial' | 'always';
 
@@ -116,7 +116,7 @@ export interface TooltipTriggerProps extends Omit<ComponentProps<'button'>, 'chi
    * Element type when not using render props
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -128,7 +128,7 @@ export interface TooltipContentProps extends ComponentProps<'div'> {
    * Element type for tooltip content container
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Whether tooltip provides primary label or auxiliary description
@@ -254,7 +254,7 @@ export interface TooltipArrowProps extends SVGProps<SVGSVGElement> {
    * Element type for arrow
    * @defaultValue 'svg'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 // Internal context types

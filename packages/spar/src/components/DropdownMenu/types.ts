@@ -1,5 +1,5 @@
-import type { ComponentProps, ElementType, ReactNode, SyntheticEvent, RefObject } from 'react';
-import type { CheckedState, Side, Align, Direction } from '../../types';
+import type { ComponentProps, ReactNode, SyntheticEvent, RefObject } from 'react';
+import type { CheckedState, Side, Align, Direction, PolymorphicAs } from '../../types';
 
 export type DropdownMenuFocusStrategy = 'first' | 'last' | 'none';
 
@@ -87,7 +87,7 @@ export interface DropdownMenuTriggerProps extends Omit<ComponentProps<'button'>,
    * Polymorphic component type
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Children content or render function for render props pattern
@@ -103,7 +103,7 @@ export interface DropdownMenuContentProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Preferred placement side
@@ -177,7 +177,7 @@ export interface DropdownMenuItemProps extends Omit<ComponentProps<'div'>, 'onSe
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Whether item is disabled
@@ -245,7 +245,7 @@ export interface DropdownMenuSeparatorProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -256,7 +256,7 @@ export interface DropdownMenuLabelProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -267,7 +267,7 @@ export interface DropdownMenuGroupProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**

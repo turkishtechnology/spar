@@ -27,7 +27,7 @@ The Switch follows a simple single-component pattern rather than compound struct
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `React.ElementType` | No | `"button"` | The element or component to render as |
+| `as` | `PolymorphicAs` | No | `"button"` | The element or component to render as |
 | `checked` | `boolean` | No | `undefined` | Controlled checked state |
 | `defaultChecked` | `boolean` | No | `false` | Default checked state for uncontrolled usage |
 | `onChange` | `(checked: boolean) => void` | No | `undefined` | Callback fired when the checked state changes |

@@ -553,7 +553,7 @@ The content that displays in the tooltip popup with smart positioning.
 | Name                    | Type                                      | Default     | Description                                     |
 | ----------------------- | ----------------------------------------- | ----------- | ----------------------------------------------- |
 | `children`              | `React.ReactNode`                         | -           | Content to display in tooltip                   |
-| `as?`                   | `React.ElementType`                       | `"div"`     | Element type for tooltip content container      |
+| `as?`                   | `PolymorphicAs`                       | `"div"`     | Element type for tooltip content container      |
 | `asLabel?`              | `boolean`                                 | `false`     | Whether tooltip is primary label vs description |
 | `side?`                 | `"top" \| "bottom" \| "left" \| "right"`  | `"top"`     | Preferred placement relative to trigger         |
 | `sideOffset?`           | `number`                                  | `8`         | Distance in pixels from the trigger             |
@@ -599,7 +599,7 @@ Optional arrow pointing to the trigger element.
 | ------------ | --------------------- | ------- | --------------------------- |
 | `width?`     | `number`              | `10`    | Arrow width in pixels       |
 | `height?`    | `number`              | `5`     | Arrow height in pixels      |
-| `as?`        | `React.ElementType`   | `"svg"` | Element type for arrow      |
+| `as?`        | `PolymorphicAs`   | `"svg"` | Element type for arrow      |
 | `className?` | `string`              | -       | CSS class names for styling |
 | `style?`     | `React.CSSProperties` | -       | Inline styles               |
 

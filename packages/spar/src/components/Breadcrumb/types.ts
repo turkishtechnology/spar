@@ -1,4 +1,5 @@
-import type { ComponentProps, ElementType, MouseEvent, KeyboardEvent } from 'react';
+import type { ComponentProps, MouseEvent, KeyboardEvent } from 'react';
+import type { PolymorphicAs } from '../../types';
 
 /**
  * Event handler types for breadcrumb navigation
@@ -28,7 +29,7 @@ export interface BreadcrumbRootProps extends ComponentProps<'nav'> {
    * Polymorphic element type
    * @defaultValue 'nav'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
   /**
    * Navigation event handler for routing integration
    */
@@ -49,7 +50,7 @@ export interface BreadcrumbListProps extends ComponentProps<'ol'> {
    * Polymorphic element type
    * @defaultValue 'ol'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -61,7 +62,7 @@ export interface BreadcrumbItemProps extends ComponentProps<'li'> {
    * Polymorphic element type
    * @defaultValue 'li'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
   /**
    * Position of this item in the breadcrumb trail
    * @internal Automatically calculated by BreadcrumbList
@@ -83,7 +84,7 @@ export interface BreadcrumbLinkProps extends ComponentProps<'a'> {
    * Polymorphic element type
    * @defaultValue 'a'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
   /**
    * Link destination
    */
@@ -113,7 +114,7 @@ export interface BreadcrumbPageProps extends ComponentProps<'span'> {
    * Polymorphic element type
    * @defaultValue 'span'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -125,5 +126,5 @@ export interface BreadcrumbSeparatorProps extends ComponentProps<'li'> {
    * Polymorphic element type
    * @defaultValue 'li'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }

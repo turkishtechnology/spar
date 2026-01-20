@@ -1,5 +1,5 @@
-import type { ComponentProps, ElementType, ReactNode } from 'react';
-import type { Orientation } from '../../types';
+import type { ComponentProps, ReactNode } from 'react';
+import type { Orientation, PolymorphicAs } from '../../types';
 
 export type AccordionType = 'single' | 'multiple';
 
@@ -51,7 +51,7 @@ export interface AccordionProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -74,7 +74,7 @@ export interface AccordionItemProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -92,7 +92,7 @@ export interface AccordionHeaderProps extends ComponentProps<'h3'> {
    * Polymorphic component type (heading element)
    * @defaultValue 'h3'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -130,7 +130,7 @@ export interface AccordionTriggerProps extends Omit<ComponentProps<'button'>, 'c
    * Polymorphic component type
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Children content or render function
@@ -153,7 +153,7 @@ export interface AccordionContentProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 // Internal context types

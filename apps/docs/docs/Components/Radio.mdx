@@ -337,7 +337,7 @@ The root container that manages the radio group state and provides keyboard navi
 | `aria-label?`       | `string`                     | `undefined`  | Accessible name for the group                         |
 | `aria-labelledby?`  | `string`                     | `undefined`  | References element that labels the group              |
 | `aria-describedby?` | `string`                     | `undefined`  | References element that describes the group           |
-| `as?`               | `React.ElementType`          | `'div'`      | Polymorphic root element                              |
+| `as?`               | `PolymorphicAs`          | `'div'`      | Polymorphic root element                              |
 | `children?`         | `React.ReactNode`            | `undefined`  | Radio.Item components                                 |
 
 **Events**
@@ -369,7 +369,7 @@ Individual radio option within a Radio.Group that handles selection and accessib
 | `disabled?`         | `boolean`           | `false`     | Disables this specific radio item           |
 | `aria-label?`       | `string`            | `undefined` | Accessible name when children insufficient  |
 | `aria-describedby?` | `string`            | `undefined` | References element that describes this item |
-| `as?`               | `React.ElementType` | `'label'`   | Polymorphic root element                    |
+| `as?`               | `PolymorphicAs` | `'label'`   | Polymorphic root element                    |
 | `children?`         | `React.ReactNode \| ((state: RadioItemRenderProps) => React.ReactNode)` | `undefined` | Label content or render props function |
 
 **Render Props (RadioItemRenderProps)**

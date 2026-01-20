@@ -1,4 +1,5 @@
-import type { ComponentProps, ElementType, ReactNode, AriaRole, RefObject } from 'react';
+import type { ComponentProps, ReactNode, AriaRole, RefObject } from 'react';
+import type { PolymorphicAs } from '../../types';
 
 /**
  * Props for DialogRoot
@@ -74,7 +75,7 @@ export interface DialogTriggerProps extends Omit<ComponentProps<'button'>, 'chil
    * Polymorphic element type
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Children content or render function
@@ -122,7 +123,7 @@ export interface DialogOverlayProps extends ComponentProps<'div'> {
    * Polymorphic element type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Always render (for animation libraries)
@@ -140,7 +141,7 @@ export interface DialogContentProps extends ComponentProps<'div'> {
    * Polymorphic element type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * ARIA role for dialog type
@@ -211,7 +212,7 @@ export interface DialogTitleProps extends ComponentProps<'h2'> {
    * Polymorphic element type
    * @defaultValue 'h2'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Heading level (1-6)
@@ -229,7 +230,7 @@ export interface DialogDescriptionProps extends ComponentProps<'p'> {
    * Polymorphic element type
    * @defaultValue 'p'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -241,7 +242,7 @@ export interface DialogCloseProps extends Omit<ComponentProps<'button'>, 'childr
    * Polymorphic element type
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Children content or render function
