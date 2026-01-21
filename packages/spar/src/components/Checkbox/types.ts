@@ -1,5 +1,5 @@
-import type { ComponentProps, ElementType, ReactNode } from 'react';
-import type { CheckedState } from '../../types';
+import type { ComponentProps, ReactNode } from 'react';
+import type { CheckedState, PolymorphicAs } from '../../types';
 
 /**
  * Render props provided to children function
@@ -41,7 +41,7 @@ export interface CheckboxProps
    * The element or component to render as
    * @defaultValue 'span'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Controlled checked state. When provided, component becomes controlled

@@ -51,10 +51,19 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 ### DialogTrigger Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'button'` | Polymorphic element type |
+| `as` | `PolymorphicAs` | No | `'button'` | Polymorphic element type |
 | `disabled` | `boolean` | No | `false` | Disables trigger interaction |
-| `children` | `ReactNode` | Yes | - | Trigger content |
+| `children` | `ReactNode \| ((state: DialogTriggerRenderProps) => ReactNode)` | Yes | - | Trigger content or render function for render props pattern |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
+
+### DialogTriggerRenderProps
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the dialog is currently visible |
+| `disabled` | `boolean` | Whether the trigger is disabled |
+| `open` | `() => void` | Function to programmatically open the dialog |
+| `close` | `() => void` | Function to programmatically close the dialog |
+| `toggle` | `() => void` | Function to programmatically toggle the dialog |
 
 ### DialogPortal Props
 | Name | Type | Required | Default | Description |
@@ -65,7 +74,7 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 ### DialogOverlay Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'div'` | Polymorphic element type |
+| `as` | `PolymorphicAs` | No | `'div'` | Polymorphic element type |
 | `forceMount` | `boolean` | No | `false` | Always render (for animation libraries) |
 | `children` | `ReactNode` | No | - | Optional overlay content |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
@@ -73,7 +82,7 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 ### DialogContent Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'div'` | Polymorphic element type |
+| `as` | `PolymorphicAs` | No | `'div'` | Polymorphic element type |
 | `role` | `'dialog' \| 'alertdialog'` | No | `'dialog'` | ARIA role for dialog type |
 | `forceMount` | `boolean` | No | `false` | Always render (for animation libraries) |
 | `trapFocus` | `boolean` | No | `true` | Enable focus trapping |
@@ -91,7 +100,7 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 ### DialogTitle Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'h2'` | Polymorphic element type |
+| `as` | `PolymorphicAs` | No | `'h2'` | Polymorphic element type |
 | `level` | `number` | No | `2` | Heading level (1-6) |
 | `children` | `ReactNode` | Yes | - | Title content |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
@@ -99,16 +108,22 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 ### DialogDescription Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'p'` | Polymorphic element type |
+| `as` | `PolymorphicAs` | No | `'p'` | Polymorphic element type |
 | `children` | `ReactNode` | Yes | - | Description content |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
 
 ### DialogClose Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'button'` | Polymorphic element type |
-| `children` | `ReactNode` | Yes | - | Close button content |
+| `as` | `PolymorphicAs` | No | `'button'` | Polymorphic element type |
+| `children` | `ReactNode \| ((state: DialogCloseRenderProps) => ReactNode)` | Yes | - | Close button content or render function for render props pattern |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
+
+### DialogCloseRenderProps
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the dialog is currently visible |
+| `close` | `() => void` | Function to programmatically close the dialog |
 
 ### Controlled/Uncontrolled Support
 - **Controlled**: Use `open` + `onOpenChange`

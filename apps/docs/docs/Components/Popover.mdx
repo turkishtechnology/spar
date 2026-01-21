@@ -518,18 +518,28 @@ The root container that provides context and manages state for all popover compo
 
 ### PopoverTrigger
 
-Button element that toggles the popover visibility.
+Button element that toggles the popover visibility. Always renders as a `button` element.
 
 **Props**
 
-| Name          | Type                                                      | Default     | Description                               |
-| ------------- | --------------------------------------------------------- | ----------- | ----------------------------------------- |
-| `asChild?`    | `boolean`                                                 | `false`     | Render as child element instead of button |
-| `disabled?` | `boolean`                                                 | `false`     | Whether trigger is disabled               |
-| `onClick?`    | `(event: React.MouseEvent<HTMLButtonElement>) => void`    | `undefined` | Custom click handler                      |
-| `onKeyDown?`  | `(event: React.KeyboardEvent<HTMLButtonElement>) => void` | `undefined` | Custom keydown handler                    |
-| `ref?`        | `React.Ref<HTMLButtonElement>`                            | `undefined` | Ref to the trigger element                |
-| `children`    | `ReactNode`                                               | -           | Trigger content                           |
+| Name        | Type                                                                          | Default     | Description                                            |
+| ----------- | ----------------------------------------------------------------------------- | ----------- | ------------------------------------------------------ |
+| `children`  | `ReactNode \| ((state: PopoverTriggerRenderProps) => ReactNode)`              | -           | Trigger content or render props function               |
+| `disabled?` | `boolean`                                                                     | `false`     | Whether trigger is disabled                            |
+| `onClick?`  | `(event: React.MouseEvent<HTMLButtonElement>) => void`                        | `undefined` | Custom click handler                                   |
+| `onKeyDown?`| `(event: React.KeyboardEvent<HTMLButtonElement>) => void`                     | `undefined` | Custom keydown handler                                 |
+| `ref?`      | `React.Ref<HTMLButtonElement>`                                                | `undefined` | Ref to the trigger element                             |
+| `...props`  | `ComponentProps<'button'>`                                                    | -           | All standard button attributes                         |
+
+**Render Props (PopoverTriggerRenderProps)**
+
+| Property   | Type         | Description                                      |
+| ---------- | ------------ | ------------------------------------------------ |
+| `isOpen`   | `boolean`    | Whether the popover is currently visible         |
+| `disabled` | `boolean`    | Whether the trigger is disabled                  |
+| `open`     | `() => void` | Function to programmatically open the popover    |
+| `close`    | `() => void` | Function to programmatically close the popover   |
+| `toggle`   | `() => void` | Function to programmatically toggle the popover  |
 
 **Events**
 
@@ -629,15 +639,21 @@ Optional decorative arrow element that points to the trigger.
 
 ### PopoverAnchor
 
-Optional element used as positioning reference instead of the trigger.
+Optional element used as positioning reference instead of the trigger. Always renders as a `div` element.
 
 **Props**
 
-| Name       | Type                        | Default     | Description                            |
-| ---------- | --------------------------- | ----------- | -------------------------------------- |
-| `asChild?` | `boolean`                   | `false`     | Render as child element instead of div |
-| `ref?`     | `React.Ref<HTMLDivElement>` | `undefined` | Ref to the anchor element              |
-| `children` | `ReactNode`                 | -           | Anchor content                         |
+| Name       | Type                                                               | Default     | Description                              |
+| ---------- | ------------------------------------------------------------------ | ----------- | ---------------------------------------- |
+| `children` | `ReactNode \| ((state: PopoverAnchorRenderProps) => ReactNode)`    | -           | Anchor content or render props function  |
+| `ref?`     | `React.Ref<HTMLDivElement>`                                        | `undefined` | Ref to the anchor element                |
+| `...props` | `ComponentProps<'div'>`                                            | -           | All standard div attributes              |
+
+**Render Props (PopoverAnchorRenderProps)**
+
+| Property | Type      | Description                              |
+| -------- | --------- | ---------------------------------------- |
+| `isOpen` | `boolean` | Whether the popover is currently visible |
 
 **Events**
 
@@ -676,16 +692,23 @@ Optional portal component for rendering content in a different DOM location.
 
 ### PopoverClose
 
-Close button component that automatically closes the popover when clicked.
+Close button component that automatically closes the popover when clicked. Always renders as a `button` element.
 
 **Props**
 
-| Name       | Type                                                   | Default     | Description                               |
-| ---------- | ------------------------------------------------------ | ----------- | ----------------------------------------- |
-| `asChild?` | `boolean`                                              | `false`     | Render as child element instead of button |
-| `onClick?` | `(event: React.MouseEvent<HTMLButtonElement>) => void` | `undefined` | Custom click handler                      |
-| `ref?`     | `React.Ref<HTMLButtonElement>`                         | `undefined` | Ref to the close element                  |
-| `children` | `ReactNode`                                            | -           | Close button content                      |
+| Name       | Type                                                                | Default     | Description                               |
+| ---------- | ------------------------------------------------------------------- | ----------- | ----------------------------------------- |
+| `children` | `ReactNode \| ((state: PopoverCloseRenderProps) => ReactNode)`      | -           | Close button content or render props      |
+| `onClick?` | `(event: React.MouseEvent<HTMLButtonElement>) => void`              | `undefined` | Custom click handler                      |
+| `ref?`     | `React.Ref<HTMLButtonElement>`                                      | `undefined` | Ref to the close element                  |
+| `...props` | `ComponentProps<'button'>`                                          | -           | All standard button attributes            |
+
+**Render Props (PopoverCloseRenderProps)**
+
+| Property | Type         | Description                              |
+| -------- | ------------ | ---------------------------------------- |
+| `isOpen` | `boolean`    | Whether the popover is currently visible |
+| `close`  | `() => void` | Function to close the popover            |
 
 **Events**
 

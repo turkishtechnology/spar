@@ -40,6 +40,7 @@ export type {
   AccordionItemProps,
   AccordionHeaderProps,
   AccordionTriggerProps,
+  AccordionTriggerRenderProps,
   AccordionContentProps,
   AccordionType,
 } from './types';

@@ -27,4 +27,9 @@ export {
 };
 
 // Export types
-export type { CollapsibleProps, CollapsibleTriggerProps, CollapsibleContentProps } from './types';
+export type {
+  CollapsibleProps,
+  CollapsibleTriggerProps,
+  CollapsibleTriggerRenderProps,
+  CollapsibleContentProps,
+} from './types';

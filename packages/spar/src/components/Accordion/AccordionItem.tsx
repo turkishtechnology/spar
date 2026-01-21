@@ -34,7 +34,7 @@ export const AccordionItem = ({
   }, [accordionContext, value]);
 
   // Determine if this item is expanded
-  const isExpanded = useMemo(() => {
+  const isOpen = useMemo(() => {
     if (accordionContext.type === 'single') {
       return accordionContext.value === value;
     } else {
@@ -46,29 +46,43 @@ export const AccordionItem = ({
   // Determine if this item is disabled
   const isItemDisabled = accordionContext.disabled || itemDisabled;
 
-  const handleToggle = useCallback(() => {
+  const toggle = useCallback(() => {
     if (!isItemDisabled) {
       accordionContext.onItemToggle(value);
     }
   }, [isItemDisabled, value, accordionContext.onItemToggle]);
 
+  const open = useCallback(() => {
+    if (!isItemDisabled && !isOpen) {
+      accordionContext.onItemToggle(value);
+    }
+  }, [isItemDisabled, isOpen, value, accordionContext.onItemToggle]);
+
+  const close = useCallback(() => {
+    if (!isItemDisabled && isOpen) {
+      accordionContext.onItemToggle(value);
+    }
+  }, [isItemDisabled, isOpen, value, accordionContext.onItemToggle]);
+
   const itemContextValue = useMemo<AccordionItemContextValue>(
     () => ({
       value,
-      isExpanded,
+      isOpen,
       disabled: isItemDisabled,
       triggerId,
       contentId,
-      onToggle: handleToggle,
+      open,
+      close,
+      toggle,
     }),
-    [value, isExpanded, isItemDisabled, triggerId, contentId, handleToggle],
+    [value, isOpen, isItemDisabled, triggerId, contentId, open, close, toggle],
   );
 
   return (
     <AccordionItemContext.Provider value={itemContextValue}>
       <Collapsible
-        open={isExpanded}
-        onOpenChange={handleToggle}
+        open={isOpen}
+        onOpenChange={toggle}
         disabled={isItemDisabled}
         triggerId={triggerId}
         contentId={contentId}

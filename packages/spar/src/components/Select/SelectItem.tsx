@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import type { SelectItemProps, SelectItemContextValue } from './types';
+import type { SelectItemProps, SelectItemContextValue, SelectItemRenderProps } from './types';
 import { useSelectContext } from './SelectRoot';
 import { useMergedRef } from '@/hooks';
 
@@ -118,6 +118,14 @@ export const SelectItem = ({
     [value, isSelected, disabled, isHighlighted, textValue, handleSelect, registerItemText],
   );
 
+  // Render props for children function
+  const renderProps: SelectItemRenderProps = {
+    isSelected,
+    isHighlighted,
+    select: handleSelect,
+    disabled,
+  };
+
   return (
     <SelectItemContext.Provider value={itemContextValue}>
       <Component
@@ -132,7 +140,7 @@ export const SelectItem = ({
         onClick={handleClick}
         {...props}
       >
-        {children}
+        {typeof children === 'function' ? children(renderProps) : children}
       </Component>
     </SelectItemContext.Provider>
   );

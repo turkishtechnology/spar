@@ -21,7 +21,7 @@ Single component pattern - Button is a self-contained primitive that doesn't req
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `"button"` | The element type to render as |
+| `as` | `PolymorphicAs` | No | `"button"` | The element type to render as |
 | `type` | `"button" \| "submit" \| "reset"` | No | `"button"` | Button type (only applies when `as="button"`) |
 | `disabled` | `boolean` | No | `false` | Disables the button and makes it non-interactive |
 | `autoFocus` | `boolean` | No | `false` | Whether the button should receive focus when first rendered |

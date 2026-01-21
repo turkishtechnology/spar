@@ -1,25 +1,60 @@
 import type {
   ComponentProps,
-  ElementType,
   AriaAttributes,
   CSSProperties,
   KeyboardEvent,
   MouseEvent,
   FocusEvent,
   PointerEvent,
+  ReactNode,
 } from 'react';
+import type { PolymorphicAs } from '../../types';
+
+/**
+ * Render props provided to children function for Switch
+ */
+export interface SwitchRenderProps {
+  /**
+   * Current checked state
+   */
+  checked: boolean;
+  /**
+   * Function to programmatically set the checked state
+   */
+  setChecked: (checked: boolean) => void;
+  /**
+   * Whether the switch is disabled
+   */
+  disabled: boolean;
+  /**
+   * Whether the switch is read-only
+   */
+  readOnly: boolean;
+  /**
+   * Whether the switch is currently focused
+   */
+  isFocused: boolean;
+  /**
+   * Whether the switch is currently hovered
+   */
+  isHovered: boolean;
+  /**
+   * Whether the switch is currently being pressed
+   */
+  isPressed: boolean;
+}
 
 /**
  * Props for Switch component
  * @remarks Fully accessible, headless switch component providing binary toggle functionality
  */
 export interface SwitchProps
-  extends Omit<ComponentProps<'button'>, 'onChange' | 'checked' | 'defaultChecked'> {
+  extends Omit<ComponentProps<'button'>, 'onChange' | 'checked' | 'defaultChecked' | 'children'> {
   /**
    * The element or component to render as
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Controlled checked state
@@ -72,6 +107,11 @@ export interface SwitchProps
    * ID of element that describes the switch
    */
   'aria-describedby'?: AriaAttributes['aria-describedby'];
+
+  /**
+   * Children content or render function
+   */
+  children?: ReactNode | ((state: SwitchRenderProps) => ReactNode);
 }
 
 /**
@@ -92,6 +132,10 @@ export interface UseSwitchReturn {
   checked: boolean;
   disabled: boolean;
   readOnly: boolean;
+  isFocused: boolean;
+  isHovered: boolean;
+  isActive: boolean;
+  setChecked: (checked: boolean) => void;
   switchProps: {
     role: 'switch';
     'aria-checked': boolean;

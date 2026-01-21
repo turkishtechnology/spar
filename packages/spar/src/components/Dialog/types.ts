@@ -1,4 +1,5 @@
-import type { ComponentProps, ElementType, ReactNode, AriaRole, RefObject } from 'react';
+import type { ComponentProps, ReactNode, AriaRole, RefObject } from 'react';
+import type { PolymorphicAs } from '../../types';
 
 /**
  * Props for DialogRoot
@@ -40,15 +41,60 @@ export interface DialogRootProps {
 }
 
 /**
+ * Render props provided to children function for DialogTrigger
+ */
+export interface DialogTriggerRenderProps {
+  /**
+   * Whether the dialog is currently open
+   */
+  isOpen: boolean;
+  /**
+   * Whether the dialog trigger is disabled
+   */
+  disabled: boolean;
+  /**
+   * Function to open the dialog
+   */
+  open: () => void;
+  /**
+   * Function to close the dialog
+   */
+  close: () => void;
+  /**
+   * Function to toggle the dialog open/closed state
+   */
+  toggle: () => void;
+}
+
+/**
  * Props for DialogTrigger
  * @remarks Fully accessible, headless component
  */
-export interface DialogTriggerProps extends ComponentProps<'button'> {
+export interface DialogTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
   /**
    * Polymorphic element type
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
+
+  /**
+   * Children content or render function
+   */
+  children?: ReactNode | ((state: DialogTriggerRenderProps) => ReactNode);
+}
+
+/**
+ * Render props provided to children function for DialogClose
+ */
+export interface DialogCloseRenderProps {
+  /**
+   * Whether the dialog is currently open
+   */
+  isOpen: boolean;
+  /**
+   * Function to close the dialog
+   */
+  close: () => void;
 }
 
 /**
@@ -77,7 +123,7 @@ export interface DialogOverlayProps extends ComponentProps<'div'> {
    * Polymorphic element type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Always render (for animation libraries)
@@ -95,7 +141,7 @@ export interface DialogContentProps extends ComponentProps<'div'> {
    * Polymorphic element type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * ARIA role for dialog type
@@ -166,7 +212,7 @@ export interface DialogTitleProps extends ComponentProps<'h2'> {
    * Polymorphic element type
    * @defaultValue 'h2'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Heading level (1-6)
@@ -184,19 +230,24 @@ export interface DialogDescriptionProps extends ComponentProps<'p'> {
    * Polymorphic element type
    * @defaultValue 'p'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
  * Props for DialogClose
  * @remarks Fully accessible, headless component
  */
-export interface DialogCloseProps extends ComponentProps<'button'> {
+export interface DialogCloseProps extends Omit<ComponentProps<'button'>, 'children'> {
   /**
    * Polymorphic element type
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
+
+  /**
+   * Children content or render function
+   */
+  children?: ReactNode | ((state: DialogCloseRenderProps) => ReactNode);
 }
 
 /**

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useDialogContext } from './DialogRoot';
-import type { DialogCloseProps } from './types';
+import type { DialogCloseProps, DialogCloseRenderProps } from './types';
 
 /**
  * Close button component that closes the dialog when activated.
@@ -15,7 +15,7 @@ export const DialogClose = ({
   ...props
 }: DialogCloseProps) => {
   const context = useDialogContext();
-  const { setIsOpen } = context;
+  const { isOpen, setIsOpen } = context;
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -38,6 +38,12 @@ export const DialogClose = ({
     [setIsOpen, onKeyDown],
   );
 
+  // Render props for children function
+  const renderProps: DialogCloseRenderProps = {
+    isOpen,
+    close: () => setIsOpen(false),
+  };
+
   return (
     <Component
       ref={ref}
@@ -46,7 +52,7 @@ export const DialogClose = ({
       onKeyDown={handleKeyDown}
       {...props}
     >
-      {children}
+      {typeof children === 'function' ? children(renderProps) : children}
     </Component>
   );
 };

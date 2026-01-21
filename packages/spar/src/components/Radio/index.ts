@@ -14,4 +14,4 @@ export {
 };
 
 // Export types
-export type { RadioGroupProps, RadioItemProps } from './types';
+export type { RadioGroupProps, RadioItemProps, RadioItemRenderProps } from './types';

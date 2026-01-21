@@ -1,6 +1,6 @@
 import { useState, useCallback, useId, useRef } from 'react';
 import { useMergedRef, useAutoFocus } from '../../hooks';
-import type { SwitchProps, UseSwitchProps, UseSwitchReturn } from './types';
+import type { SwitchProps, SwitchRenderProps, UseSwitchProps, UseSwitchReturn } from './types';
 
 /**
  * Custom hook for managing switch state and behavior
@@ -154,6 +154,16 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
     checked,
     disabled,
     readOnly,
+    isFocused,
+    isHovered,
+    isActive,
+    setChecked: (newChecked: boolean) => {
+      if (disabled || readOnly) return;
+      if (!isControlled) {
+        setInternalChecked(newChecked);
+      }
+      onChange?.(newChecked);
+    },
     switchProps,
     hiddenInputProps,
   };
@@ -190,13 +200,32 @@ export const Switch = ({
   useAutoFocus(internalRef, shouldAutoFocus);
 
   // Use the switch hook
-  const { switchProps, hiddenInputProps } = useSwitch({
+  const {
+    checked: checkedState,
+    isFocused,
+    isHovered,
+    isActive,
+    setChecked,
+    switchProps,
+    hiddenInputProps,
+  } = useSwitch({
     ...(checked !== undefined && { checked }),
     ...(defaultChecked !== undefined && { defaultChecked }),
     ...(onChange && { onChange }),
     disabled,
     readOnly,
   });
+
+  // Render props for children function
+  const renderProps: SwitchRenderProps = {
+    checked: checkedState,
+    setChecked,
+    disabled,
+    readOnly,
+    isFocused,
+    isHovered,
+    isPressed: isActive,
+  };
 
   // Extract known props to prevent conflicts
   const {
@@ -240,7 +269,9 @@ export const Switch = ({
   }
   return (
     <>
-      <Component {...componentProps}>{children}</Component>
+      <Component {...componentProps}>
+        {typeof children === 'function' ? children(renderProps) : children}
+      </Component>
       {name && (
         <input {...hiddenInputProps} name={name} value={value} form={form} required={required} />
       )}
