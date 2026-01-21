@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 // @ts-ignore
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
+import { format } from 'prettier/standalone';
+import prettierPluginBabel from 'prettier/plugins/babel';
+import prettierPluginEstree from 'prettier/plugins/estree';
+import prettierPluginPostcss from 'prettier/plugins/postcss';
 import { Highlight, themes } from 'prism-react-renderer';
 import { useColorMode } from '@docusaurus/theme-common';
 import {
@@ -107,6 +111,74 @@ const LiveCode: React.FC<LiveCodeProps> = ({ code, cssCode }) => {
   const selectedTheme = colorMode === 'dark' ? themes.vsDark : themes.github;
   const [activeTab, setActiveTab] = useState<'js' | 'css'>('js');
   const [isCopied, setIsCopied] = useState(false);
+  const [formattedCode, setFormattedCode] = useState(code || '');
+  const [formattedCssCode, setFormattedCssCode] = useState(cssCode || '');
+
+  // Format JSX code with Prettier
+  React.useEffect(() => {
+    if (!code) {
+      setFormattedCode('');
+      return;
+    }
+
+    const formatCode = async () => {
+      try {
+        const formatted = await format(code, {
+          parser: 'babel',
+          plugins: [prettierPluginBabel, prettierPluginEstree],
+          semi: true,
+          singleQuote: true,
+          trailingComma: 'all',
+          printWidth: 100,
+          tabWidth: 2,
+          useTabs: false,
+          arrowParens: 'always',
+          endOfLine: 'lf',
+          bracketSpacing: true,
+          bracketSameLine: false,
+          jsxSingleQuote: true,
+          quoteProps: 'as-needed',
+          proseWrap: 'preserve',
+          htmlWhitespaceSensitivity: 'css',
+          embeddedLanguageFormatting: 'auto',
+        });
+        setFormattedCode(formatted);
+      } catch (error) {
+        console.warn('Failed to format JSX code:', error);
+        setFormattedCode(code); // Fallback to original code
+      }
+    };
+
+    formatCode();
+  }, [code]);
+
+  // Format CSS code with Prettier
+  React.useEffect(() => {
+    if (!cssCode) {
+      setFormattedCssCode('');
+      return;
+    }
+
+    const formatCode = async () => {
+      try {
+        const formatted = await format(cssCode, {
+          parser: 'css',
+          plugins: [prettierPluginPostcss],
+          printWidth: 100,
+          tabWidth: 2,
+          useTabs: false,
+          singleQuote: true,
+          endOfLine: 'lf',
+        });
+        setFormattedCssCode(formatted);
+      } catch (error) {
+        console.warn('Failed to format CSS code:', error);
+        setFormattedCssCode(cssCode); // Fallback to original code
+      }
+    };
+
+    formatCode();
+  }, [cssCode]);
 
   // React Live scope - burada kullanılabilir değişkenler ve bileşenler
   const scope = {
@@ -173,7 +245,7 @@ const LiveCode: React.FC<LiveCodeProps> = ({ code, cssCode }) => {
   };
 
   const handleCopy = async () => {
-    const textToCopy = activeTab === 'js' ? code : cssCode;
+    const textToCopy = activeTab === 'js' ? formattedCode : formattedCssCode;
     if (textToCopy) {
       try {
         await navigator.clipboard.writeText(textToCopy);
@@ -187,7 +259,7 @@ const LiveCode: React.FC<LiveCodeProps> = ({ code, cssCode }) => {
 
   return (
     <div className='live-code-container'>
-      <LiveProvider code={code} scope={scope} noInline={false}>
+      <LiveProvider code={formattedCode} scope={scope} noInline={false}>
         <div className='live-preview-wrapper'>
           <LivePreview className='live-preview' />
           <LiveError className='live-error' />
@@ -317,12 +389,21 @@ const LiveCode: React.FC<LiveCodeProps> = ({ code, cssCode }) => {
             </div>
 
             {activeTab === 'js' ? (
-              <LiveEditor theme={selectedTheme} className='live-editor' code={code} />
+              <LiveEditor theme={selectedTheme} className='live-editor' code={formattedCode} />
             ) : (
               // @ts-ignore
-              <Highlight theme={selectedTheme} code={cssCode} language='css'>
+              <Highlight theme={selectedTheme} code={formattedCssCode} language='css'>
                 {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                  <pre className={`live-editor ${className}`} style={style}>
+                  <pre
+                    className={`live-editor ${className}`}
+                    style={{
+                      ...style,
+                      overflowX: 'auto',
+                      overflowY: 'auto',
+                      whiteSpace: 'pre',
+                      wordWrap: 'normal',
+                    }}
+                  >
                     {tokens.map((line, i) => (
                       <div key={i} {...getLineProps({ line, key: i })}>
                         {line.map((token, key) => (
