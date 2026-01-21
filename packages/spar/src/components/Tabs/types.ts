@@ -1,5 +1,6 @@
 import type { ComponentProps, RefObject } from 'react';
 import type { Direction, Orientation, PolymorphicAs } from '../../types';
+import type { PrimitiveButtonProps } from '../Primitives/PrimitiveButton/types';
 
 export type TabsActivationMode = 'automatic' | 'manual';
 
@@ -94,29 +95,17 @@ export interface TabsTriggerRenderProps {
 /**
  * Props for TabsTrigger component
  */
-export interface TabsTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
+export interface TabsTriggerProps extends Omit<PrimitiveButtonProps, 'children'> {
   /**
    * Unique identifier for the tab
    */
   value: string;
 
   /**
-   * Whether to focus this tab trigger on mount
-   * @defaultValue false
-   */
-  shouldAutoFocus?: boolean;
-
-  /**
    * Disables this specific tab
    * @defaultValue false
    */
   disabled?: boolean;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'button'
-   */
-  as?: PolymorphicAs;
 
   /**
    * Children content or render function
