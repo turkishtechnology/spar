@@ -75,6 +75,28 @@ export interface SwitchProps
   onChange?: (checked: boolean) => void;
 
   /**
+   * Disabled state - prevents interaction and is properly announced to screen readers
+   * @defaultValue false
+   */
+  disabled?: boolean;
+
+  /**
+   * Name attribute for form submission
+   */
+  name?: string;
+
+  /**
+   * Value sent in form data when checked
+   * @defaultValue 'on'
+   */
+  value?: string;
+
+  /**
+   * ID of the form this switch belongs to
+   */
+  form?: string;
+
+  /**
    * Required state for form validation
    * @defaultValue false
    */

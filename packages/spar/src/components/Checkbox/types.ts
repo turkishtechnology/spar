@@ -1,8 +1,8 @@
-import type { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps, AriaAttributes, ReactNode } from 'react';
 import type { CheckedState, PolymorphicAs } from '../../types';
 
 /**
- * Render props provided to children function
+ * Render props provided to children function for Checkbox
  */
 export interface CheckboxRenderProps {
   /**
@@ -18,22 +18,26 @@ export interface CheckboxRenderProps {
    */
   disabled: boolean;
   /**
-   * Whether the checkbox is focused
+   * Whether the checkbox is read-only
+   */
+  readOnly: boolean;
+  /**
+   * Whether the checkbox is currently focused
    */
   isFocused: boolean;
   /**
-   * Whether the checkbox is hovered
+   * Whether the checkbox is currently hovered
    */
   isHovered: boolean;
   /**
-   * Whether the checkbox is being pressed
+   * Whether the checkbox is currently being pressed
    */
   isPressed: boolean;
 }
 
 /**
  * Props for Checkbox component
- * @remarks Fully accessible, headless checkbox component
+ * @remarks Fully accessible, headless checkbox component providing dual-state and tri-state functionality
  */
 export interface CheckboxProps
   extends Omit<ComponentProps<'span'>, 'defaultChecked' | 'children' | 'onChange'> {
@@ -44,7 +48,8 @@ export interface CheckboxProps
   as?: PolymorphicAs;
 
   /**
-   * Controlled checked state. When provided, component becomes controlled
+   * Controlled checked state
+   * @remarks When provided, component operates in controlled mode
    */
   checked?: CheckedState;
 
@@ -55,27 +60,16 @@ export interface CheckboxProps
   defaultChecked?: CheckedState;
 
   /**
-   * Callback fired when checked state changes
+   * Callback fired when the checked state changes
+   * @param checked - The new checked state
    */
   onChange?: (checked: CheckedState) => void;
 
   /**
-   * Whether the checkbox is disabled
+   * Disabled state - prevents interaction and is properly announced to screen readers
    * @defaultValue false
    */
   disabled?: boolean;
-
-  /**
-   * Whether the checkbox is read-only
-   * @defaultValue false
-   */
-  readOnly?: boolean;
-
-  /**
-   * Whether the checkbox is required in forms
-   * @defaultValue false
-   */
-  required?: boolean;
 
   /**
    * Name attribute for form submission
@@ -94,10 +88,38 @@ export interface CheckboxProps
   form?: string;
 
   /**
-   * Whether to focus the checkbox on mount
+   * Required state for form validation
+   * @defaultValue false
+   */
+  required?: boolean;
+
+  /**
+   * Read-only state - prevents interaction
+   * @defaultValue false
+   */
+  readOnly?: boolean;
+
+  /**
+   * Auto-focus on mount
    * @defaultValue false
    */
   shouldAutoFocus?: boolean;
+
+  /**
+   * Accessible name for the checkbox
+   * @remarks Required when checkbox has no visible label
+   */
+  'aria-label'?: AriaAttributes['aria-label'];
+
+  /**
+   * ID of element that labels the checkbox
+   */
+  'aria-labelledby'?: AriaAttributes['aria-labelledby'];
+
+  /**
+   * ID of element that describes the checkbox
+   */
+  'aria-describedby'?: AriaAttributes['aria-describedby'];
 
   /**
    * Children content or render function
