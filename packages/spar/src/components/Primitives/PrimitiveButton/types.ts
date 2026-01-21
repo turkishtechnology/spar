@@ -1,3 +1,4 @@
+import { PolymorphicAs } from '@/types';
 import type { ElementType, ComponentPropsWithRef } from 'react';
 
 /**
@@ -19,7 +20,7 @@ interface BasePrimitiveButtonProps {
    * <PrimitiveButton as={CustomLink}>Click me</PrimitiveButton>
    * ```
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Whether the button should receive focus when first rendered
