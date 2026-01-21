@@ -1,6 +1,5 @@
-import { useState, useCallback, useId, useRef } from 'react';
+import { useState, useCallback, useId } from 'react';
 import { PrimitiveButton } from '../Primitives/PrimitiveButton';
-import { useMergedRef } from '../../hooks';
 import type { SwitchProps, SwitchRenderProps, UseSwitchProps, UseSwitchReturn } from './types';
 
 /**
@@ -193,10 +192,6 @@ export const Switch = ({
   const internalId = useId();
   const id = providedId || internalId;
 
-  // Refs
-  const internalRef = useRef<HTMLElement>(null);
-  const mergedRef = useMergedRef(internalRef, ref as React.Ref<HTMLElement>);
-
   // Use the switch hook
   const {
     checked: checkedState,
@@ -240,7 +235,7 @@ export const Switch = ({
         type='button'
         disabled={disabled}
         shouldAutoFocus={shouldAutoFocus}
-        ref={mergedRef}
+        ref={ref}
         id={id}
         role='switch'
         aria-checked={checkedState}
