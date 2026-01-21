@@ -50,16 +50,42 @@ export const Collapsible = ({
     onOpenChange?.(nextOpen);
   }, [disabled, isOpen, isControlled, onOpenChange]);
 
+  const open = useCallback(() => {
+    if (disabled || isOpen) return;
+
+    // Update internal state for uncontrolled usage
+    if (!isControlled) {
+      setInternalOpen(true);
+    }
+
+    // Call callback for both controlled and uncontrolled
+    onOpenChange?.(true);
+  }, [disabled, isOpen, isControlled, onOpenChange]);
+
+  const close = useCallback(() => {
+    if (disabled || !isOpen) return;
+
+    // Update internal state for uncontrolled usage
+    if (!isControlled) {
+      setInternalOpen(false);
+    }
+
+    // Call callback for both controlled and uncontrolled
+    onOpenChange?.(false);
+  }, [disabled, isOpen, isControlled, onOpenChange]);
+
   // Memoize context value to prevent unnecessary re-renders
   const contextValue = useMemo(
     () => ({
       isOpen,
+      open,
+      close,
       toggle,
       disabled,
       triggerId,
       contentId,
     }),
-    [isOpen, toggle, disabled, triggerId, contentId],
+    [isOpen, open, close, toggle, disabled, triggerId, contentId],
   );
 
   // Get data attributes for styling

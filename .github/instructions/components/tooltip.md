@@ -44,9 +44,18 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `children` | `React.ReactNode` | No | - | The trigger element (must be single focusable element) |
-| `asChild` | `boolean` | No | `false` | Compose with child element instead of rendering button |
-| `as` | `React.ElementType` | No | `'button'` | Element type when not using asChild |
+| `children` | `ReactNode \| ((state: TooltipTriggerRenderProps) => ReactNode)` | No | - | The trigger element or render function for render props pattern |
+| `as` | `PolymorphicAs` | No | `'button'` | Element type for the trigger |
+
+#### TooltipTriggerRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the tooltip is currently visible |
+| `disabled` | `boolean` | Whether the tooltip is disabled |
+| `placement` | `Side` | Current placement side of the tooltip |
+| `show` | `() => void` | Function to show the tooltip |
+| `hide` | `() => void` | Function to hide the tooltip |
 
 #### Tooltip.Content Props
 
@@ -55,7 +64,7 @@
 | `children` | `React.ReactNode` | No | - | Content to display in tooltip |
 | `className` | `string` | No | - | CSS class names for styling |
 | `style` | `React.CSSProperties` | No | - | Inline styles |
-| `as` | `React.ElementType` | No | `'div'` | Element type for tooltip content container |
+| `as` | `PolymorphicAs` | No | `'div'` | Element type for tooltip content container |
 | `asLabel` | `boolean` | No | `false` | Whether tooltip provides primary label or auxiliary description |
 | `side` | `'top' \| 'bottom' \| 'left' \| 'right'` | No | `'top'` | Preferred placement relative to trigger |
 | `sideOffset` | `number` | No | `8` | Distance in pixels from the trigger |
@@ -85,7 +94,7 @@
 |------|------|----------|---------|-------------|
 | `width` | `number` | No | `10` | Arrow width in pixels |
 | `height` | `number` | No | `5` | Arrow height in pixels |
-| `as` | `React.ElementType` | No | `'svg'` | Element type for arrow |
+| `as` | `PolymorphicAs` | No | `'svg'` | Element type for arrow |
 
 ### Ref Support
 - Forwards ref to trigger element

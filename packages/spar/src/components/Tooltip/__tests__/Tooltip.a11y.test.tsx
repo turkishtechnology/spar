@@ -50,9 +50,7 @@ const AccessibleTooltip = ({
 }: AccessibleTooltipProps) => (
   <TooltipProvider>
     <TooltipRoot defaultOpen={defaultOpen} disabled={disabled} {...props}>
-      <TooltipTrigger asChild>
-        <button>{triggerContent}</button>
-      </TooltipTrigger>
+      <TooltipTrigger>{triggerContent}</TooltipTrigger>
       <TooltipPortal>
         <TooltipContent asLabel={asLabel}>
           {tooltipContent}
@@ -293,9 +291,7 @@ describe('Tooltip Accessibility', () => {
       render(
         <TooltipProvider>
           <TooltipRoot defaultOpen>
-            <TooltipTrigger asChild>
-              <button aria-label='Settings'>⚙️</button>
-            </TooltipTrigger>
+            <TooltipTrigger aria-label='Settings'>⚙️</TooltipTrigger>
             <TooltipPortal>
               <TooltipContent asLabel>Settings menu</TooltipContent>
             </TooltipPortal>
@@ -330,9 +326,7 @@ describe('Tooltip Accessibility', () => {
       render(
         <TooltipProvider>
           <TooltipRoot defaultOpen>
-            <TooltipTrigger asChild>
-              <button>Complex action</button>
-            </TooltipTrigger>
+            <TooltipTrigger>Complex action</TooltipTrigger>
             <TooltipPortal>
               <TooltipContent>
                 <div>
@@ -536,9 +530,7 @@ describe('Tooltip Accessibility', () => {
       const { container } = render(
         <TooltipProvider>
           <TooltipRoot defaultOpen>
-            <TooltipTrigger asChild>
-              <button>Empty tooltip</button>
-            </TooltipTrigger>
+            <TooltipTrigger>Empty tooltip</TooltipTrigger>
             <TooltipPortal>
               <TooltipContent>Empty tooltip content</TooltipContent>
             </TooltipPortal>
@@ -558,17 +550,13 @@ describe('Tooltip Accessibility', () => {
         <TooltipProvider>
           <div>
             <TooltipRoot>
-              <TooltipTrigger asChild>
-                <button>First trigger</button>
-              </TooltipTrigger>
+              <TooltipTrigger>First trigger</TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent>First tooltip</TooltipContent>
               </TooltipPortal>
             </TooltipRoot>
             <TooltipRoot>
-              <TooltipTrigger asChild>
-                <button>Second trigger</button>
-              </TooltipTrigger>
+              <TooltipTrigger>Second trigger</TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent>Second tooltip</TooltipContent>
               </TooltipPortal>
@@ -583,13 +571,13 @@ describe('Tooltip Accessibility', () => {
       jest.useFakeTimers();
     }, 15000);
 
-    it('maintains accessibility with custom trigger elements', async () => {
+    it('maintains accessibility with render props pattern', async () => {
       jest.useRealTimers();
       const { container } = render(
         <TooltipProvider>
           <TooltipRoot defaultOpen>
-            <TooltipTrigger asChild>
-              <input type='text' placeholder='Custom input' aria-label='Search' />
+            <TooltipTrigger aria-label='Search'>
+              {({ isOpen }) => <span>Search: {isOpen ? 'showing help' : 'hover for help'}</span>}
             </TooltipTrigger>
             <TooltipPortal>
               <TooltipContent>Search help text</TooltipContent>
@@ -604,9 +592,9 @@ describe('Tooltip Accessibility', () => {
       jest.useFakeTimers();
       expect(results).toHaveNoViolations();
 
-      const input = screen.getByRole('textbox', { name: 'Search' });
+      const trigger = screen.getByRole('button', { name: 'Search' });
       const tooltip = screen.getByRole('tooltip');
-      expect(input).toHaveAttribute('aria-describedby', tooltip.id);
+      expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
     }, 15000);
   });
 });

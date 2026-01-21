@@ -1,4 +1,5 @@
-import type { ComponentProps, ElementType } from 'react';
+import type { ComponentProps } from 'react';
+import type { PolymorphicAs } from '../../types';
 
 /**
  * Props for Button component
@@ -9,7 +10,7 @@ export interface ButtonProps extends ComponentProps<'button'> {
    * The element type to render as
    * @defaultValue "button"
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Whether the button should receive focus when first rendered

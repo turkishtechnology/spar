@@ -65,15 +65,27 @@ The main container that manages all select state and behavior.
 | `required` | `boolean` | No | `false` | Makes the select required for forms |
 | `name` | `string` | No | - | Form field name |
 | `dir` | `'ltr' \| 'rtl'` | No | `'ltr'` | Reading direction |
-| `as` | `ElementType` | No | - | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | - | Polymorphic component type |
 
 ### Select.Trigger
 The button that toggles the dropdown.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `button` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `button` | Polymorphic component type |
 | `ref` | `RefObject` | No | - | Forward ref support |
+| `children` | `ReactNode \| ((state: SelectTriggerRenderProps) => ReactNode)` | No | - | Trigger content or render function for render props pattern |
+
+### SelectTriggerRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the dropdown is currently visible |
+| `value` | `string \| undefined` | The currently selected value |
+| `disabled` | `boolean` | Whether the trigger is disabled |
+| `open` | `() => void` | Function to programmatically open the dropdown |
+| `close` | `() => void` | Function to programmatically close the dropdown |
+| `toggle` | `() => void` | Function to programmatically toggle the dropdown |
 
 **Data Attributes:**
 - `data-state`: `"open" | "closed"`
@@ -86,14 +98,14 @@ Displays the selected value or placeholder.
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `placeholder` | `ReactNode` | No | - | Text shown when no value selected |
-| `as` | `ElementType` | No | `span` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `span` | Polymorphic component type |
 
 ### Select.Icon
 Optional visual indicator (chevron, arrow).
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `span` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `span` | Polymorphic component type |
 
 ### Select.Portal
 Portal container for dropdown rendering.
@@ -119,7 +131,7 @@ The dropdown container that appears when open.
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Escape key handler |
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | - | Outside click handler |
 | `onCloseAutoFocus` | `(event: FocusEvent) => void` | No | - | Focus handler on close |
-| `as` | `ElementType` | No | `div` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `div` | Polymorphic component type |
 | `ref` | `RefObject` | No | - | Forward ref support |
 
 **Data Attributes:**
@@ -139,7 +151,7 @@ Scrollable container for select items.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `div` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `div` | Polymorphic component type |
 
 ### Select.Item
 Individual selectable option.
@@ -149,8 +161,18 @@ Individual selectable option.
 | `value` | `string` | Yes | - | Option value |
 | `disabled` | `boolean` | No | `false` | Disables the option |
 | `textValue` | `string` | No | - | Text for type-ahead (auto-detected if not provided) |
-| `as` | `ElementType` | No | `div` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `div` | Polymorphic component type |
 | `ref` | `RefObject` | No | - | Forward ref support |
+| `children` | `ReactNode \| ((state: SelectItemRenderProps) => ReactNode)` | No | - | Item content or render function for render props pattern |
+
+### SelectItemRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isSelected` | `boolean` | Whether this item is currently selected |
+| `isHighlighted` | `boolean` | Whether this item is currently highlighted |
+| `disabled` | `boolean` | Whether this item is disabled |
+| `select` | `() => void` | Function to programmatically select this item |
 
 **Data Attributes:**
 - `data-state`: `"checked" | "unchecked"`
@@ -162,7 +184,7 @@ The text content of an item.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `span` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `span` | Polymorphic component type |
 
 ### Select.ItemIndicator
 Visual indicator for selected state (checkmark, etc).
@@ -170,28 +192,28 @@ Visual indicator for selected state (checkmark, etc).
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `forceMount` | `boolean` | No | `false` | Force mount for animation |
-| `as` | `ElementType` | No | `span` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `span` | Polymorphic component type |
 
 ### Select.Group
 Groups related items together.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `div` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `div` | Polymorphic component type |
 
 ### Select.Label
 Label for a group of items.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `div` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `div` | Polymorphic component type |
 
 ### Select.Separator
 Visual separator between items or groups.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `div` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `div` | Polymorphic component type |
 
 ### Select.Arrow
 Optional arrow pointing to trigger.
@@ -200,7 +222,7 @@ Optional arrow pointing to trigger.
 |------|------|----------|---------|-------------|
 | `width` | `number` | No | `10` | Arrow width |
 | `height` | `number` | No | `5` | Arrow height |
-| `as` | `ElementType` | No | `svg` | Polymorphic component type |
+| `as` | `PolymorphicAs` | No | `svg` | Polymorphic component type |
 
 ## 3. Behavior Matrix
 

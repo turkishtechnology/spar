@@ -1,5 +1,5 @@
-import type { ComponentProps, ElementType } from 'react';
-import type { Orientation } from '../../types';
+import type { ComponentProps, ReactNode } from 'react';
+import type { Orientation, PolymorphicAs } from '../../types';
 
 export type AccordionType = 'single' | 'multiple';
 
@@ -51,7 +51,7 @@ export interface AccordionProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -74,7 +74,7 @@ export interface AccordionItemProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -92,19 +92,50 @@ export interface AccordionHeaderProps extends ComponentProps<'h3'> {
    * Polymorphic component type (heading element)
    * @defaultValue 'h3'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
+}
+
+/**
+ * Render props provided to children function for AccordionTrigger
+ */
+export interface AccordionTriggerRenderProps {
+  /**
+   * Whether the accordion item is currently open/expanded
+   */
+  isOpen: boolean;
+  /**
+   * Whether the accordion item is disabled
+   */
+  disabled: boolean;
+  /**
+   * Function to open the accordion item
+   */
+  open: () => void;
+  /**
+   * Function to close the accordion item
+   */
+  close: () => void;
+  /**
+   * Function to toggle the open state
+   */
+  toggle: () => void;
 }
 
 /**
  * Props for AccordionTrigger component
  * @remarks Button that toggles panel visibility
  */
-export interface AccordionTriggerProps extends ComponentProps<'button'> {
+export interface AccordionTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
   /**
    * Polymorphic component type
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
+
+  /**
+   * Children content or render function
+   */
+  children?: ReactNode | ((state: AccordionTriggerRenderProps) => ReactNode);
 }
 
 /**
@@ -122,7 +153,7 @@ export interface AccordionContentProps extends ComponentProps<'div'> {
    * Polymorphic component type
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 // Internal context types
@@ -144,9 +175,11 @@ export interface AccordionContextValue {
 
 export interface AccordionItemContextValue {
   value: string;
-  isExpanded: boolean;
+  isOpen: boolean;
   disabled: boolean;
   triggerId: string;
   contentId: string;
-  onToggle: () => void;
+  open: () => void;
+  close: () => void;
+  toggle: () => void;
 }

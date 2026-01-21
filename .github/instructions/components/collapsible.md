@@ -40,13 +40,23 @@ The Collapsible component implements the WAI-ARIA disclosure pattern, providing 
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'button'` | Element type for polymorphic rendering |
-| `children` | `ReactNode` | No | - | Trigger content |
+| `as` | `PolymorphicAs` | No | `'button'` | Element type for polymorphic rendering |
+| `children` | `ReactNode \| ((state: CollapsibleTriggerRenderProps) => ReactNode)` | No | - | Trigger content or render function for render props pattern |
 | `aria-expanded` | `boolean` | No | Auto-managed | Current open/closed state (automatically set) |
 | `aria-controls` | `string` | No | Auto-generated | ID of controlled content (automatically set) |
 | `aria-disabled` | `boolean` | No | Auto-managed | Disabled state for non-semantic elements |
 | `disabled` | `boolean` | No | Auto-managed | Native disabled for semantic button elements |
 | `...rest` | `HTMLAttributes` | No | - | Additional HTML attributes |
+
+### CollapsibleTriggerRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the collapsible content is currently visible |
+| `disabled` | `boolean` | Whether the trigger is disabled |
+| `open` | `() => void` | Function to programmatically open the collapsible |
+| `close` | `() => void` | Function to programmatically close the collapsible |
+| `toggle` | `() => void` | Function to programmatically toggle the collapsible |
 
 **Disabled Semantics:**
 - For semantic `<button>` elements: Uses native `disabled` attribute
@@ -56,7 +66,7 @@ The Collapsible component implements the WAI-ARIA disclosure pattern, providing 
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'div'` | Element type for polymorphic rendering |
+| `as` | `PolymorphicAs` | No | `'div'` | Element type for polymorphic rendering |
 | `forceMount` | `boolean` | No | `false` | Force content to remain mounted when closed |
 | `id` | `string` | No | Auto-generated | Content element ID (automatically set for ARIA) |
 | `hidden` | `boolean \| 'until-found'` | No | Auto-managed | Visibility state (automatically managed) |

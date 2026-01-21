@@ -537,19 +537,28 @@ The root container that manages the dropdown menu state and provides context to 
 
 ### DropdownMenu.Trigger
 
-The button or element that toggles the dropdown menu visibility.
+The button element that toggles the dropdown menu visibility. Always renders as a `button` element.
 
 **Props**
 
-| Name         | Type                             | Default     | Description                                        |
-| ------------ | -------------------------------- | ----------- | -------------------------------------------------- |
-| `as?`        | `ElementType`                    | `'button'`  | Polymorphic element type to render                 |
-| `asChild?`   | `boolean`                        | `false`     | Merge props with child element instead of wrapping |
-| `disabled?`  | `boolean`                        | `false`     | Whether the trigger is disabled                    |
-| `ref?`       | `Ref<HTMLElement \| null>`       | `undefined` | Forwarded ref to trigger element                   |
-| `onClick?`   | `(event: MouseEvent) => void`    | `undefined` | Click event handler                                |
-| `onKeyDown?` | `(event: KeyboardEvent) => void` | `undefined` | Keyboard event handler                             |
-| `children?`  | `ReactNode`                      | `undefined` | Trigger content                                    |
+| Name         | Type                                                                  | Default     | Description                              |
+| ------------ | --------------------------------------------------------------------- | ----------- | ---------------------------------------- |
+| `children`   | `ReactNode \| ((state: DropdownMenuTriggerRenderProps) => ReactNode)` | `undefined` | Trigger content or render props function |
+| `disabled?`  | `boolean`                                                             | `false`     | Whether the trigger is disabled          |
+| `ref?`       | `Ref<HTMLButtonElement \| null>`                                      | `undefined` | Forwarded ref to trigger element         |
+| `onClick?`   | `(event: MouseEvent) => void`                                         | `undefined` | Click event handler                      |
+| `onKeyDown?` | `(event: KeyboardEvent) => void`                                      | `undefined` | Keyboard event handler                   |
+| `...props`   | `ComponentProps<'button'>`                                            | -           | All standard button attributes           |
+
+**Render Props (DropdownMenuTriggerRenderProps)**
+
+| Property   | Type         | Description                          |
+| ---------- | ------------ | ------------------------------------ |
+| `isOpen`   | `boolean`    | Whether the dropdown menu is open    |
+| `disabled` | `boolean`    | Whether the trigger is disabled      |
+| `open`     | `() => void` | Function to open the dropdown menu   |
+| `close`    | `() => void` | Function to close the dropdown menu  |
+| `toggle`   | `() => void` | Function to toggle the dropdown menu |
 
 **Events**
 
@@ -560,14 +569,14 @@ The button or element that toggles the dropdown menu visibility.
 
 **ARIA Attributes**
 
-| Attribute       | Value                | Purpose                            | Applied To                                                |
-| --------------- | -------------------- | ---------------------------------- | --------------------------------------------------------- |
-| `aria-haspopup` | `'menu'`             | Indicates element has a popup menu | Trigger element                                           |
-| `aria-expanded` | `boolean`            | Indicates whether menu is expanded | Trigger element                                           |
-| `aria-controls` | `string`             | References controlled menu content | Trigger element (when open)                               |
-| `data-state`    | `'open' \| 'closed'` | Current state for styling          | Trigger element                                           |
-| `data-disabled` | `''`                 | Present when disabled              | Trigger element (when disabled)                           |
-| `aria-disabled` | `true`               | Indicates disabled state           | Trigger element (asChild or non-native button + disabled) |
+| Attribute       | Value                | Purpose                            | Applied To                      |
+| --------------- | -------------------- | ---------------------------------- | ------------------------------- |
+| `aria-haspopup` | `'menu'`             | Indicates element has a popup menu | Trigger element                 |
+| `aria-expanded` | `boolean`            | Indicates whether menu is expanded | Trigger element                 |
+| `aria-controls` | `string`             | References controlled menu content | Trigger element (when open)     |
+| `data-state`    | `'open' \| 'closed'` | Current state for styling          | Trigger element                 |
+| `data-disabled` | `''`                 | Present when disabled              | Trigger element (when disabled) |
+| `aria-disabled` | `true`               | Indicates disabled state           | Trigger element (when disabled) |
 
 ### DropdownMenu.Content
 
@@ -577,7 +586,7 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 
 | Name                    | Type                                     | Default     | Description                                           |
 | ----------------------- | ---------------------------------------- | ----------- | ----------------------------------------------------- |
-| `as?`                   | `ElementType`                            | `'div'`     | Polymorphic element type to render                    |
+| `as?`                   | `PolymorphicAs`                            | `'div'`     | Polymorphic element type to render                    |
 | `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`  | Preferred side for positioning                        |
 | `align?`                | `'start' \| 'center' \| 'end'`           | `'start'`   | Alignment relative to trigger                         |
 | `sideOffset?`           | `number`                                 | `8`         | Distance in pixels from trigger                       |
@@ -621,7 +630,7 @@ A selectable menu item.
 
 | Name         | Type                              | Default     | Description                                                           |
 | ------------ | --------------------------------- | ----------- | --------------------------------------------------------------------- |
-| `as?`        | `ElementType`                     | `'div'`     | Polymorphic element type to render                                    |
+| `as?`        | `PolymorphicAs`                     | `'div'`     | Polymorphic element type to render                                    |
 | `disabled?`  | `boolean`                         | `false`     | Whether item is disabled                                              |
 | `onSelect?`  | `(event: SyntheticEvent) => void` | `undefined` | Selection handler                                                     |
 | `textValue?` | `string`                          | `undefined` | Text value for typeahead (auto-detected from content if not provided) |
@@ -656,7 +665,7 @@ A menu item with checkbox functionality for toggleable options.
 
 | Name               | Type                              | Default     | Description                        |
 | ------------------ | --------------------------------- | ----------- | ---------------------------------- |
-| `as?`              | `ElementType`                     | `'div'`     | Polymorphic element type to render |
+| `as?`              | `PolymorphicAs`                     | `'div'`     | Polymorphic element type to render |
 | `checked?`         | `boolean \| 'indeterminate'`      | `false`     | Checked state                      |
 | `onCheckedChange?` | `(checked: boolean) => void`      | `undefined` | Checked state change handler       |
 | `disabled?`        | `boolean`                         | `false`     | Whether item is disabled           |
@@ -714,7 +723,7 @@ A radio menu item for mutually exclusive selections within a RadioGroup.
 | Name         | Type                              | Default      | Description                        |
 | ------------ | --------------------------------- | ------------ | ---------------------------------- |
 | `value`      | `string`                          | **required** | Unique value for this radio item   |
-| `as?`        | `ElementType`                     | `'div'`      | Polymorphic element type to render |
+| `as?`        | `PolymorphicAs`                     | `'div'`      | Polymorphic element type to render |
 | `disabled?`  | `boolean`                         | `false`      | Whether item is disabled           |
 | `onSelect?`  | `(event: SyntheticEvent) => void` | `undefined`  | Selection handler                  |
 | `textValue?` | `string`                          | `undefined`  | Text value for typeahead           |
@@ -744,7 +753,7 @@ A visual separator between menu sections.
 
 | Name   | Type                       | Default     | Description                        |
 | ------ | -------------------------- | ----------- | ---------------------------------- |
-| `as?`  | `ElementType`              | `'div'`     | Polymorphic element type to render |
+| `as?`  | `PolymorphicAs`              | `'div'`     | Polymorphic element type to render |
 | `ref?` | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to separator element |
 
 **Events**
@@ -768,7 +777,7 @@ A non-interactive label for menu sections.
 
 | Name        | Type                       | Default     | Description                        |
 | ----------- | -------------------------- | ----------- | ---------------------------------- |
-| `as?`       | `ElementType`              | `'div'`     | Polymorphic element type to render |
+| `as?`       | `PolymorphicAs`              | `'div'`     | Polymorphic element type to render |
 | `ref?`      | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to label element     |
 | `children?` | `ReactNode`                | `undefined` | Label content                      |
 
@@ -792,7 +801,7 @@ A logical grouping container for related menu items.
 
 | Name        | Type                       | Default     | Description                        |
 | ----------- | -------------------------- | ----------- | ---------------------------------- |
-| `as?`       | `ElementType`              | `'div'`     | Polymorphic element type to render |
+| `as?`       | `PolymorphicAs`              | `'div'`     | Polymorphic element type to render |
 | `ref?`      | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to group element     |
 | `children?` | `ReactNode`                | `undefined` | Menu items or labels               |
 
@@ -841,7 +850,7 @@ A menu item that triggers a nested submenu.
 
 | Name         | Type                              | Default     | Description                         |
 | ------------ | --------------------------------- | ----------- | ----------------------------------- |
-| `as?`        | `ElementType`                     | `'div'`     | Polymorphic element type to render  |
+| `as?`        | `PolymorphicAs`                     | `'div'`     | Polymorphic element type to render  |
 | `disabled?`  | `boolean`                         | `false`     | Whether subtrigger is disabled      |
 | `onSelect?`  | `(event: SyntheticEvent) => void` | `undefined` | Selection handler                   |
 | `textValue?` | `string`                          | `undefined` | Text value for typeahead            |

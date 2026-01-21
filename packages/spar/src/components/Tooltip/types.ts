@@ -1,7 +1,33 @@
-import type { ComponentProps, ReactNode, ElementType, RefObject, SVGProps } from 'react';
-import { Side, Align } from '../../types';
+import type { ComponentProps, ReactNode, RefObject, SVGProps } from 'react';
+import { Side, Align, PolymorphicAs } from '../../types';
 
 export type Sticky = 'partial' | 'always';
+
+/**
+ * Render props provided to TooltipTrigger children function
+ */
+export interface TooltipTriggerRenderProps {
+  /**
+   * Whether the tooltip is currently visible
+   */
+  isOpen: boolean;
+  /**
+   * Whether the tooltip is disabled
+   */
+  disabled: boolean;
+  /**
+   * Current placement side of the tooltip
+   */
+  placement: Side;
+  /**
+   * Function to show the tooltip
+   */
+  show: () => void;
+  /**
+   * Function to hide the tooltip
+   */
+  hide: () => void;
+}
 
 /**
  * Props for TooltipProvider
@@ -80,23 +106,17 @@ export interface TooltipRootProps {
  * Props for TooltipTrigger
  * @remarks The trigger element that shows/hides the tooltip
  */
-export interface TooltipTriggerProps extends ComponentProps<'button'> {
+export interface TooltipTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
   /**
-   * The trigger element (must be single focusable element)
+   * Children content or render function for render props pattern
    */
-  children?: ReactNode;
+  children?: ReactNode | ((state: TooltipTriggerRenderProps) => ReactNode);
 
   /**
-   * Compose with child element instead of rendering button
-   * @defaultValue false
-   */
-  asChild?: boolean;
-
-  /**
-   * Element type when not using asChild
+   * Element type when not using render props
    * @defaultValue 'button'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 /**
@@ -108,7 +128,7 @@ export interface TooltipContentProps extends ComponentProps<'div'> {
    * Element type for tooltip content container
    * @defaultValue 'div'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 
   /**
    * Whether tooltip provides primary label or auxiliary description
@@ -234,7 +254,7 @@ export interface TooltipArrowProps extends SVGProps<SVGSVGElement> {
    * Element type for arrow
    * @defaultValue 'svg'
    */
-  as?: ElementType;
+  as?: PolymorphicAs;
 }
 
 // Internal context types

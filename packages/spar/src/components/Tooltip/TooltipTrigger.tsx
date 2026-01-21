@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import type { TooltipTriggerProps } from './types';
+import type { TooltipTriggerProps, TooltipTriggerRenderProps } from './types';
 import { useTooltip } from './useTooltip';
 import { useTooltipProvider } from './useTooltipProvider';
 
@@ -8,7 +8,6 @@ import { useTooltipProvider } from './useTooltipProvider';
  */
 export const TooltipTrigger = ({
   children,
-  asChild = false,
   as: Component = 'button',
   onPointerEnter,
   onPointerLeave,
@@ -173,12 +172,20 @@ export const TooltipTrigger = ({
     onKeyDown: context.disabled ? undefined : handleKeyDown,
   };
 
-  if (asChild && React.isValidElement(children)) {
-    // Clone the child and add our props
-    return React.cloneElement(children, triggerProps);
-  }
+  // Render props for children function
+  const renderProps: TooltipTriggerRenderProps = {
+    isOpen: context.isOpen,
+    disabled: context.disabled,
+    placement: context.placement,
+    show: () => showTooltip(true),
+    hide: () => hideTooltip(true),
+  };
 
-  return React.createElement(Component, triggerProps, children);
+  return React.createElement(
+    Component,
+    triggerProps,
+    typeof children === 'function' ? children(renderProps) : children,
+  );
 };
 
 TooltipTrigger.displayName = 'TooltipTrigger';

@@ -43,11 +43,7 @@ const FormWithTooltips = () => {
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
           <TooltipRoot>
-            <TooltipTrigger asChild>
-              <button type='button' aria-label='Name help'>
-                ?
-              </button>
-            </TooltipTrigger>
+            <TooltipTrigger aria-label='Name help'>?</TooltipTrigger>
             <TooltipPortal>
               <TooltipContent>
                 Enter your full legal name as it appears on official documents
@@ -65,11 +61,7 @@ const FormWithTooltips = () => {
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
           <TooltipRoot>
-            <TooltipTrigger asChild>
-              <button type='button' aria-label='Email help'>
-                ?
-              </button>
-            </TooltipTrigger>
+            <TooltipTrigger aria-label='Email help'>?</TooltipTrigger>
             <TooltipPortal>
               <TooltipContent>
                 We'll use this email for important account notifications
@@ -92,9 +84,7 @@ const ControlledTooltipDemo = () => {
     <TooltipProvider>
       <div>
         <TooltipRoot open={open} onOpenChange={setOpen}>
-          <TooltipTrigger asChild>
-            <button>Controlled tooltip trigger</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Controlled tooltip trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent>This tooltip is controlled externally</TooltipContent>
           </TooltipPortal>
@@ -120,27 +110,21 @@ const MultipleTooltipDemo = () => {
     <TooltipProvider delayDuration={500} skipDelayDuration={200}>
       <div style={{ display: 'flex', gap: '1rem' }}>
         <TooltipRoot>
-          <TooltipTrigger asChild>
-            <button>First</button>
-          </TooltipTrigger>
+          <TooltipTrigger>First</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent>First tooltip content</TooltipContent>
           </TooltipPortal>
         </TooltipRoot>
 
         <TooltipRoot>
-          <TooltipTrigger asChild>
-            <button>Second</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Second</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent>Second tooltip content</TooltipContent>
           </TooltipPortal>
         </TooltipRoot>
 
         <TooltipRoot>
-          <TooltipTrigger asChild>
-            <button>Third</button>
-          </TooltipTrigger>
+          <TooltipTrigger>Third</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent>Third tooltip content</TooltipContent>
           </TooltipPortal>
@@ -154,16 +138,12 @@ const NestedTooltipDemo = () => {
   return (
     <TooltipProvider>
       <TooltipRoot>
-        <TooltipTrigger asChild>
-          <button>Outer tooltip</button>
-        </TooltipTrigger>
+        <TooltipTrigger>Outer tooltip</TooltipTrigger>
         <TooltipPortal>
           <TooltipContent>
             This tooltip contains another trigger
             <TooltipRoot>
-              <TooltipTrigger asChild>
-                <button style={{ marginLeft: '8px' }}>Inner</button>
-              </TooltipTrigger>
+              <TooltipTrigger>Inner</TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent>Nested tooltip content</TooltipContent>
               </TooltipPortal>
@@ -245,9 +225,7 @@ describe('Tooltip Integration Tests', () => {
         <form onSubmit={handleSubmit}>
           <TooltipProvider>
             <TooltipRoot defaultOpen>
-              <TooltipTrigger asChild>
-                <button type='button'>Help</button>
-              </TooltipTrigger>
+              <TooltipTrigger>Help</TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent>Form help</TooltipContent>
               </TooltipPortal>
@@ -430,9 +408,7 @@ describe('Tooltip Integration Tests', () => {
         return (
           <TooltipProvider>
             <TooltipRoot defaultOpen>
-              <TooltipTrigger asChild>
-                <button onClick={() => setCount((c) => c + 1)}>Count: {count}</button>
-              </TooltipTrigger>
+              <TooltipTrigger onClick={() => setCount((c) => c + 1)}>Count: {count}</TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent>Current count is {count}</TooltipContent>
               </TooltipPortal>
@@ -465,9 +441,7 @@ describe('Tooltip Integration Tests', () => {
         return (
           <TooltipProvider>
             <TooltipRoot defaultOpen>
-              <TooltipTrigger asChild>
-                <button>Conditional trigger</button>
-              </TooltipTrigger>
+              <TooltipTrigger>Conditional trigger</TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent>Conditional content</TooltipContent>
               </TooltipPortal>
@@ -495,9 +469,7 @@ describe('Tooltip Integration Tests', () => {
       const { unmount } = render(
         <TooltipProvider>
           <TooltipRoot>
-            <TooltipTrigger asChild>
-              <button>Cleanup test</button>
-            </TooltipTrigger>
+            <TooltipTrigger>Cleanup test</TooltipTrigger>
             <TooltipPortal>
               <TooltipContent>Content</TooltipContent>
             </TooltipPortal>
@@ -533,18 +505,14 @@ describe('Tooltip Integration Tests', () => {
         <TooltipProvider>
           <nav>
             <TooltipRoot>
-              <TooltipTrigger asChild>
-                <button aria-label='Home'>🏠</button>
-              </TooltipTrigger>
+              <TooltipTrigger aria-label='Home'>🏠</TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent asLabel>Home</TooltipContent>
               </TooltipPortal>
             </TooltipRoot>
 
             <TooltipRoot>
-              <TooltipTrigger asChild>
-                <button aria-label='Settings'>⚙️</button>
-              </TooltipTrigger>
+              <TooltipTrigger aria-label='Settings'>⚙️</TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent asLabel>Settings</TooltipContent>
               </TooltipPortal>
@@ -553,9 +521,7 @@ describe('Tooltip Integration Tests', () => {
 
           <main>
             <TooltipRoot>
-              <TooltipTrigger asChild>
-                <button>Action Button</button>
-              </TooltipTrigger>
+              <TooltipTrigger>Action Button</TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent>
                   This action will process your data
@@ -598,9 +564,7 @@ describe('Tooltip Integration Tests', () => {
                   <td>Row {i + 1}</td>
                   <td>
                     <TooltipRoot>
-                      <TooltipTrigger asChild>
-                        <button>Edit</button>
-                      </TooltipTrigger>
+                      <TooltipTrigger>Edit</TooltipTrigger>
                       <TooltipPortal>
                         <TooltipContent>Edit row {i + 1}</TooltipContent>
                       </TooltipPortal>
