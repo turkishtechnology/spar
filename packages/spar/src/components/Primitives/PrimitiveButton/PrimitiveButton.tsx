@@ -39,48 +39,39 @@ export const PrimitiveButton = ({
   // Merge refs using the useMergedRef hook
   const mergedRef = useMergedRef(internalRef, ref);
 
-  // Handle disabled state: use native disabled for buttons, aria-disabled for others
-  const disabledProps = disabled && !isNativeButton ? { 'aria-disabled': true } : {};
-
   // Set tabIndex
   const elementTabIndex = disabled ? -1 : (tabIndex ?? 0);
 
-  // Build props for the element
-  const elementProps: Record<string, unknown> = {
+  // Common props for all elements
+  const baseProps = {
     ref: mergedRef,
     tabIndex: elementTabIndex,
-    ...props,
-    ...disabledProps,
+    ...(shouldAutoFocus && { 'data-autofocus': '' }),
+    ...(disabled && { 'data-disabled': '' }),
   };
 
-  // Add data attribute for autofocus if enabled
-  if (shouldAutoFocus) {
-    elementProps['data-autofocus'] = '';
-  }
-
-  // Add data-disabled attribute when disabled
-  if (disabled) {
-    elementProps['data-disabled'] = '';
-  }
-
-  // Add button-specific props when rendering as button
+  // Handle native button elements
   if (isNativeButton) {
-    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).type = type;
-    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = disabled;
-  } else {
-    // For non-native buttons, remove button-specific props that shouldn't be on the DOM
-    // (consumers might pass them, but they're invalid for div/span elements)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { type: _type, disabled: _disabled, ...filteredProps } = elementProps;
-    elementProps.role = elementProps.role || 'button';
     return (
-      <Element {...filteredProps} role={elementProps.role}>
+      <Element {...baseProps} {...props} type={type} disabled={disabled}>
         {children}
       </Element>
     );
   }
 
-  return <Element {...elementProps}>{children}</Element>;
+  // Handle non-button elements (div, span, etc.)
+  // Props might contain button-specific attributes, we just pass them through
+  // and let the browser ignore invalid attributes for non-button elements
+  return (
+    <Element
+      {...baseProps}
+      {...props}
+      role={props.role || 'button'}
+      aria-disabled={disabled || undefined}
+    >
+      {children}
+    </Element>
+  );
 };
 
 PrimitiveButton.displayName = 'PrimitiveButton';
