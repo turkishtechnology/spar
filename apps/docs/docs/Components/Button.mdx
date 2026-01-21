@@ -235,25 +235,14 @@ A headless, accessible button component with complete keyboard support and toggl
 | `onKeyDown`       | `(event: KeyboardEvent<HTMLButtonElement>)` | Keyboard event      | User presses a key while button is focused               |
 | `onPressedChange` | `(pressed: boolean)`                        | Toggle state change | Toggle button state changes (controlled or uncontrolled) |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value      | Purpose                             | Applied To                                                         |
-| --------------- | ---------- | ----------------------------------- | ------------------------------------------------------------------ |
-| `aria-pressed`  | `boolean`  | Indicates toggle state              | Button element (only for toggle buttons)                           |
-| `aria-busy`     | `true`     | Indicates loading state             | Button element (when loading)                                      |
-| `aria-disabled` | `true`     | Indicates disabled state            | Non-native button elements only (when `as != "button"` + disabled) |
-| `aria-live`     | `"polite"` | Announces loading text              | Screen reader content (when loading)                               |
-| `aria-atomic`   | `true`     | Entire loading message is announced | Screen reader content (when loading)                               |
-| `role`          | `"button"` | Identifies as button                | Non-button elements (when as != "button")                          |
-
-**Data Attributes**
-
-| Attribute        | Value               | Purpose                               | Applied To                           |
-| ---------------- | ------------------- | ------------------------------------- | ------------------------------------ |
-| `data-disabled`  | `""`                | Styling hook for disabled state       | Button element                       |
-| `data-loading`   | `""`                | Styling hook for loading state        | Button element                       |
-| `data-pressed`   | `"true" \| "false"` | Styling hook for toggle state         | Button element (toggle buttons only) |
-| `data-autofocus` | `""`                | Styling hook for auto-focused buttons | Button element                       |
+| Attribute        | Value               | Purpose                               |
+| ---------------- | ------------------- | ------------------------------------- |
+| `data-disabled`  | `""`                | Styling hook for disabled state       |
+| `data-loading`   | `""`                | Styling hook for loading state        |
+| `data-pressed`   | `"true" \| "false"` | Styling hook for toggle state         |
+| `data-autofocus` | `""`                | Styling hook for auto-focused buttons |
 
 ## Keyboard Interactions
 

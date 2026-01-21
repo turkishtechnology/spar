@@ -501,11 +501,11 @@ The root container that manages dialog state and provides context to all child c
 | -------------- | ----------------- | ------------------ | --------------------------------------- |
 | `onOpenChange` | `(open: boolean)` | Open state changes | User interaction or programmatic change |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value      | Purpose                   | Applied To      |
-| --------- | ---------- | ------------------------- | --------------- |
-| `role`    | `"dialog"` | Identifies dialog content | Content element |
+| Attribute       | Value                | Purpose              |
+| --------------- | -------------------- | -------------------- |
+| `data-state`    | `"open" \| "closed"` | Current dialog state |
 
 ### Dialog.Trigger
 
@@ -537,14 +537,12 @@ Interactive element that opens the dialog when activated.
 | `onClick`   | `(event: MouseEvent)`    | Trigger clicked        | Mouse click          |
 | `onKeyDown` | `(event: KeyboardEvent)` | Key pressed on trigger | Keyboard interaction |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value                 | Purpose                        | Applied To      |
-| --------------- | --------------------- | ------------------------------ | --------------- |
-| `aria-haspopup` | `"dialog"`            | Indicates trigger opens dialog | Trigger element |
-| `aria-expanded` | `boolean`             | Indicates if dialog is open    | Trigger element |
-| `data-state`    | `"open" \| "closed"`  | Current dialog state           | Trigger element |
-| `data-disabled` | `string \| undefined` | Disabled state indicator       | Trigger element |
+| Attribute       | Value                 | Purpose                  |
+| --------------- | --------------------- | ------------------------ |
+| `data-state`    | `"open" \| "closed"`  | Current dialog state     |
+| `data-disabled` | `string \| undefined` | Disabled state indicator |
 
 ### Dialog.Portal
 
@@ -563,11 +561,9 @@ Portal container that renders overlay and content outside the normal DOM tree.
 | ---- | ---------- | ----------- | -------------- |
 | -    | -          | No events   | -              |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value | Purpose            | Applied To |
-| --------- | ----- | ------------------ | ---------- |
-| -         | -     | No ARIA attributes | -          |
+_(No specific HTML attributes - portal container element)_
 
 ### Dialog.Overlay
 
@@ -588,11 +584,11 @@ Background overlay that appears behind dialog content and handles click-outside 
 | --------- | --------------------- | --------------- | --------------------------- |
 | `onClick` | `(event: MouseEvent)` | Overlay clicked | Click on overlay background |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute    | Value                | Purpose              | Applied To      |
-| ------------ | -------------------- | -------------------- | --------------- |
-| `data-state` | `"open" \| "closed"` | Current dialog state | Overlay element |
+| Attribute    | Value                | Purpose              |
+| ------------ | -------------------- | -------------------- |
+| `data-state` | `"open" \| "closed"` | Current dialog state |
 
 ### Dialog.Content
 
@@ -622,14 +618,11 @@ Main dialog container that handles focus management and keyboard interactions.
 | `onPointerDownOutside` | `(event: PointerEvent)`  | Pointer down outside content  | Outside interaction                     |
 | `onInteractOutside`    | `(event: PointerEvent)`  | Interaction outside content   | Outside interaction with preventDefault |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute          | Value                | Purpose                       | Applied To      |
-| ------------------ | -------------------- | ----------------------------- | --------------- |
-| `role`             | `"dialog"`           | Identifies dialog content     | Content element |
-| `aria-labelledby`  | `string`             | References dialog title       | Content element |
-| `aria-describedby` | `string`             | References dialog description | Content element |
-| `data-state`       | `"open" \| "closed"` | Current dialog state          | Content element |
+| Attribute    | Value                | Purpose              |
+| ------------ | -------------------- | -------------------- |
+| `data-state` | `"open" \| "closed"` | Current dialog state |
 
 ### Dialog.Title
 
@@ -650,11 +643,11 @@ Dialog title that provides an accessible name for the dialog.
 | ---- | ---------- | ----------- | -------------- |
 | -    | -          | No events   | -              |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value    | Purpose                               | Applied To    |
-| --------- | -------- | ------------------------------------- | ------------- |
-| `id`      | `string` | Unique identifier for aria-labelledby | Title element |
+| Attribute | Value    | Purpose           |
+| --------- | -------- | ----------------- |
+| `id`      | `string` | Unique identifier |
 
 ### Dialog.Description
 
@@ -674,11 +667,11 @@ Dialog description that provides additional accessible information about the dia
 | ---- | ---------- | ----------- | -------------- |
 | -    | -          | No events   | -              |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value    | Purpose                                | Applied To          |
-| --------- | -------- | -------------------------------------- | ------------------- |
-| `id`      | `string` | Unique identifier for aria-describedby | Description element |
+| Attribute | Value    | Purpose           |
+| --------- | -------- | ----------------- |
+| `id`      | `string` | Unique identifier |
 
 ### Dialog.Close
 
@@ -706,11 +699,11 @@ Button that closes the dialog when activated.
 | `onClick`   | `(event: MouseEvent)`    | Close button clicked        | Mouse click          |
 | `onKeyDown` | `(event: KeyboardEvent)` | Key pressed on close button | Keyboard interaction |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value      | Purpose                                    | Applied To     |
-| --------- | ---------- | ------------------------------------------ | -------------- |
-| `type`    | `"button"` | Button type for form submission prevention | Button element |
+| Attribute | Value      | Purpose                                    |
+| --------- | ---------- | ------------------------------------------ |
+| `type`    | `"button"` | Button type for form submission prevention |
 
 ## Keyboard Interactions
 

@@ -37,21 +37,21 @@ cssCode={`.input {
 }
 
 [data-theme='dark'] .input {
-  border: 1px solid #2b303b;
-  background: rgba(255, 255, 255, 0.12);
+border: 1px solid #2b303b;
+background: rgba(255, 255, 255, 0.12);
 }
 
 .label {
-  color: #222530;
-  display: block;
-  font-size: 9px;
-  line-height: 13px;
-  padding-left: 5px;
-  margin-bottom: 2px;
+color: #222530;
+display: block;
+font-size: 9px;
+line-height: 13px;
+padding-left: 5px;
+margin-bottom: 2px;
 }
 
 [data-theme='dark'] .label {
-  color: #f2f5f8;
+color: #f2f5f8;
 }`}
 />
 
@@ -532,7 +532,7 @@ Direct input component function that returns an `InputField` without wrapper. De
 
 | Name           | Type                                              | Default     | Description                                 |
 | -------------- | ------------------------------------------------- | ----------- | ------------------------------------------- |
-| `as?`          | `PolymorphicAs`                                     | `'input'`   | Element type for polymorphic rendering      |
+| `as?`          | `PolymorphicAs`                                   | `'input'`   | Element type for polymorphic rendering      |
 | `ref?`         | `React.ComponentPropsWithRef<T>['ref']`           | `undefined` | Ref for the input element                   |
 | `type?`        | `string`                                          | `'text'`    | Input type attribute                        |
 | `placeholder?` | `string`                                          | `undefined` | Input placeholder text                      |
@@ -556,21 +556,21 @@ The root container that provides context and state management for all input comp
 
 **Props**
 
-| Name          | Type        | Default | Description             |
-| ------------- | ----------- | ------- | ----------------------- |
-| `children`    | `ReactNode` | -       | Compound input elements |
-| `isInvalid?`  | `boolean`   | `false` | Input validation state  |
-| `disabled?` | `boolean`   | `false` | Input disabled state    |
-| `required?` | `boolean`   | `false` | Input required state    |
+| Name         | Type        | Default | Description             |
+| ------------ | ----------- | ------- | ----------------------- |
+| `children`   | `ReactNode` | -       | Compound input elements |
+| `isInvalid?` | `boolean`   | `false` | Input validation state  |
+| `disabled?`  | `boolean`   | `false` | Input disabled state    |
+| `required?`  | `boolean`   | `false` | Input required state    |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute          | Value               | Purpose                         | Applied To   |
-| ------------------ | ------------------- | ------------------------------- | ------------ |
-| `data-spar-input` | `""`                | Identifies input root container | Root element |
-| `data-invalid`     | `""` \| `undefined` | Indicates validation state      | Root element |
-| `data-disabled`    | `""` \| `undefined` | Indicates disabled state        | Root element |
-| `data-required`    | `""` \| `undefined` | Indicates required state        | Root element |
+| Attribute         | Value               | Purpose                         |
+| ----------------- | ------------------- | ------------------------------- |
+| `data-spar-input` | `""`                | Identifies input root container |
+| `data-invalid`    | `""` \| `undefined` | Indicates validation state      |
+| `data-disabled`   | `""` \| `undefined` | Indicates disabled state        |
+| `data-required`   | `""` \| `undefined` | Indicates required state        |
 
 ### Input.Field
 
@@ -580,7 +580,7 @@ The core input element with polymorphic rendering support. Handles focus states,
 
 | Name               | Type                                             | Default     | Description                            |
 | ------------------ | ------------------------------------------------ | ----------- | -------------------------------------- |
-| `as?`              | `PolymorphicAs`                                    | `'input'`   | Element type for polymorphic rendering |
+| `as?`              | `PolymorphicAs`                                  | `'input'`   | Element type for polymorphic rendering |
 | `ref?`             | `React.ComponentPropsWithRef<T>['ref']`          | `undefined` | Ref for the input element              |
 | `shouldAutoFocus?` | `boolean`                                        | `false`     | Whether to focus the input on mount    |
 | `onFocus?`         | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Focus event handler                    |
@@ -594,18 +594,14 @@ The core input element with polymorphic rendering support. Handles focus states,
 | `onBlur`   | `(event: React.FocusEvent<HTMLElement>)`  | Input loses focus   | User clicks away or tabs to next element |
 | `onChange` | `(event: React.ChangeEvent<HTMLElement>)` | Input value changes | User types or modifies input content     |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute                | Value               | Purpose                         | Applied To    |
-| ------------------------ | ------------------- | ------------------------------- | ------------- |
-| `id`                     | `string`            | Unique field identifier         | Field element |
-| `aria-labelledby`        | `string`            | References associated label     | Field element |
-| `aria-describedby`       | `string`            | References description or error | Field element |
-| `aria-required`          | `boolean`           | Indicates required state        | Field element |
-| `aria-invalid`           | `boolean`           | Indicates validation state      | Field element |
-| `data-spar-input-field` | `""`                | Identifies input field element  | Field element |
-| `data-focused`           | `""` \| `undefined` | Indicates focus state           | Field element |
-| `data-autofocus`         | `""` \| `undefined` | Indicates auto-focus state      | Field element |
+| Attribute               | Value               | Purpose                        |
+| ----------------------- | ------------------- | ------------------------------ |
+| `id`                    | `string`            | Unique field identifier        |
+| `data-spar-input-field` | `""`                | Identifies input field element |
+| `data-focused`          | `""` \| `undefined` | Indicates focus state          |
+| `data-autofocus`        | `""` \| `undefined` | Indicates auto-focus state     |
 
 ### Input.Label
 
@@ -618,13 +614,13 @@ The label element that provides accessible labeling for the input field. Automat
 | `children` | `ReactNode`                   | -           | Label content             |
 | `ref?`     | `React.Ref<HTMLLabelElement>` | `undefined` | Ref for the label element |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute                | Value    | Purpose                        | Applied To    |
-| ------------------------ | -------- | ------------------------------ | ------------- |
-| `id`                     | `string` | Unique label identifier        | Label element |
-| `htmlFor`                | `string` | Associates with input field    | Label element |
-| `data-spar-input-label` | `""`     | Identifies input label element | Label element |
+| Attribute               | Value    | Purpose                        |
+| ----------------------- | -------- | ------------------------------ |
+| `id`                    | `string` | Unique label identifier        |
+| `htmlFor`               | `string` | Associates with input field    |
+| `data-spar-input-label` | `""`     | Identifies input label element |
 
 ### Input.Description
 
@@ -637,12 +633,12 @@ The description element that provides helper text for the input field. Automatic
 | `children` | `ReactNode`                 | -           | Description content             |
 | `ref?`     | `React.Ref<HTMLDivElement>` | `undefined` | Ref for the description element |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute                      | Value    | Purpose                              | Applied To          |
-| ------------------------------ | -------- | ------------------------------------ | ------------------- |
-| `id`                           | `string` | Unique description identifier        | Description element |
-| `data-spar-input-description` | `""`     | Identifies input description element | Description element |
+| Attribute                     | Value    | Purpose                              |
+| ----------------------------- | -------- | ------------------------------------ |
+| `id`                          | `string` | Unique description identifier        |
+| `data-spar-input-description` | `""`     | Identifies input description element |
 
 ### Input.ErrorMessage
 
@@ -655,14 +651,12 @@ The error message element that announces validation errors to screen readers. Us
 | `children` | `ReactNode`                 | -           | Error content             |
 | `ref?`     | `React.Ref<HTMLDivElement>` | `undefined` | Ref for the error element |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute                | Value         | Purpose                           | Applied To    |
-| ------------------------ | ------------- | --------------------------------- | ------------- |
-| `id`                     | `string`      | Unique error identifier           | Error element |
-| `role`                   | `"alert"`     | Announces errors immediately      | Error element |
-| `aria-live`              | `"assertive"` | Forces screen reader announcement | Error element |
-| `data-spar-input-error` | `""`          | Identifies input error element    | Error element |
+| Attribute               | Value    | Purpose                        |
+| ----------------------- | -------- | ------------------------------ |
+| `id`                    | `string` | Unique error identifier        |
+| `data-spar-input-error` | `""`     | Identifies input error element |
 
 ## Keyboard Interactions
 

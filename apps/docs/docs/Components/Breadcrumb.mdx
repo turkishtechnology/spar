@@ -571,10 +571,10 @@ Navigation landmark container that provides context and manages shared state for
 | Name          | Type                | Default        | Description                                      |
 | ------------- | ------------------- | -------------- | ------------------------------------------------ |
 | `children`    | `ReactNode`         | -              | Breadcrumb content                               |
-| `as?`         | `PolymorphicAs`       | `'nav'`        | Polymorphic element type                         |
+| `as?`         | `PolymorphicAs`     | `'nav'`        | Polymorphic element type                         |
 | `aria-label?` | `string`            | `'Breadcrumb'` | Accessible name for navigation landmark          |
 | `onNavigate?` | `NavigationHandler` | `undefined`    | Navigation event handler for routing integration |
-| `disabled?` | `boolean`           | `false`        | Disable all breadcrumb navigation                |
+| `disabled?`   | `boolean`           | `false`        | Disable all breadcrumb navigation                |
 
 **Events**
 
@@ -582,12 +582,11 @@ Navigation landmark container that provides context and manages shared state for
 | ------------ | ---------------------------------------------------- | -------------------------------------------------- | --------------------------------- |
 | `onNavigate` | `(href: string, event: MouseEvent \| KeyboardEvent)` | Navigation handler called when links are activated | Link click or keyboard activation |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value     | Purpose                                          | Applied To       |
-| --------------- | --------- | ------------------------------------------------ | ---------------- |
-| `aria-label`    | `string`  | Provides accessible name for navigation region   | Root nav element |
-| `aria-disabled` | `boolean` | Indicates disabled state to assistive technology | Root nav element |
+| Attribute       | Value | Purpose               |
+| --------------- | ----- | --------------------- |
+| `data-disabled` | `""`  | Present when disabled |
 
 ### BreadcrumbList
 
@@ -595,9 +594,9 @@ Ordered list container that provides semantic structure and automatically calcul
 
 **Props**
 
-| Name       | Type          | Default | Description              |
-| ---------- | ------------- | ------- | ------------------------ |
-| `children` | `ReactNode`   | -       | List items content       |
+| Name       | Type            | Default | Description              |
+| ---------- | --------------- | ------- | ------------------------ |
+| `children` | `ReactNode`     | -       | List items content       |
 | `as?`      | `PolymorphicAs` | `'ol'`  | Polymorphic element type |
 
 **Events**
@@ -606,11 +605,9 @@ Ordered list container that provides semantic structure and automatically calcul
 | ---------------------- | ---------- | ----------------------------- | ------------------------- |
 | _(No specific events)_ | -          | Inherits standard HTML events | Standard DOM interactions |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value    | Purpose                            | Applied To           |
-| --------- | -------- | ---------------------------------- | -------------------- |
-| `role`    | `"list"` | Semantic list structure (implicit) | Ordered list element |
+_(No specific HTML attributes - uses semantic `<ol>` element)_
 
 ### BreadcrumbItem
 
@@ -621,7 +618,7 @@ List item wrapper that receives position and current state from parent Breadcrum
 | Name         | Type                 | Default    | Description                                             |
 | ------------ | -------------------- | ---------- | ------------------------------------------------------- |
 | `children`   | `ReactNode`          | -          | Item content (Link or Page)                             |
-| `as?`        | `PolymorphicAs`        | `'li'`     | Polymorphic element type                                |
+| `as?`        | `PolymorphicAs`      | `'li'`     | Polymorphic element type                                |
 | `position?`  | `BreadcrumbPosition` | `'middle'` | Position in trail (automatically calculated)            |
 | `isCurrent?` | `boolean`            | `false`    | Whether this is current page (automatically calculated) |
 
@@ -631,11 +628,12 @@ List item wrapper that receives position and current state from parent Breadcrum
 | ---------------------- | ---------- | ----------------------------- | ------------------------- |
 | _(No specific events)_ | -          | Inherits standard HTML events | Standard DOM interactions |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value        | Purpose                       | Applied To        |
-| --------- | ------------ | ----------------------------- | ----------------- |
-| `role`    | `"listitem"` | Semantic list item (implicit) | List item element |
+| Attribute       | Value                           | Purpose                               |
+| --------------- | ------------------------------- | ------------------------------------- |
+| `data-position` | `"first" \| "middle" \| "last"` | Indicates position in breadcrumb      |
+| `data-current`  | `""`                            | Present when this is the current page |
 
 ### BreadcrumbLink
 
@@ -646,9 +644,9 @@ Interactive link component with accessibility features, routing integration, and
 | Name          | Type                          | Default     | Description                                                        |
 | ------------- | ----------------------------- | ----------- | ------------------------------------------------------------------ |
 | `children`    | `ReactNode`                   | -           | Link text content                                                  |
-| `as?`         | `PolymorphicAs`                 | `'a'`       | Polymorphic element type                                           |
+| `as?`         | `PolymorphicAs`               | `'a'`       | Polymorphic element type                                           |
 | `href?`       | `string`                      | `undefined` | Link destination                                                   |
-| `disabled?` | `boolean`                     | `false`     | Disable this specific link                                         |
+| `disabled?`   | `boolean`                     | `false`     | Disable this specific link                                         |
 | `isExternal?` | `boolean`                     | `false`     | Indicates external link (adds security attributes)                 |
 | `onPress?`    | `(event: PressEvent) => void` | `undefined` | Press event handler (overrides default navigation)                 |
 | `target?`     | `string`                      | `undefined` | Link target (auto-set to '\_blank' for external links)             |
@@ -662,13 +660,13 @@ Interactive link component with accessibility features, routing integration, and
 | `onClick`   | `(event: MouseEvent)`                  | Standard click handler                         | Mouse click (if onPress not provided) |
 | `onKeyDown` | `(event: KeyboardEvent)`               | Standard keyboard handler                      | Key press (if onPress not provided)   |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value     | Purpose                                         | Applied To   |
-| --------------- | --------- | ----------------------------------------------- | ------------ |
-| `aria-disabled` | `boolean` | Indicates disabled state                        | Link element |
-| `tabIndex`      | `number`  | Controls focusability (-1 when disabled)        | Link element |
-| `role`          | `"link"`  | Semantic link role (implicit when href present) | Link element |
+| Attribute       | Value    | Purpose                                  |
+| --------------- | -------- | ---------------------------------------- |
+| `data-disabled` | `""`     | Present when disabled                    |
+| `data-external` | `""`     | Present when link is external            |
+| `tabIndex`      | `number` | Controls focusability (-1 when disabled) |
 
 ### BreadcrumbPage
 
@@ -676,9 +674,9 @@ Non-interactive current page indicator with proper semantic marking for screen r
 
 **Props**
 
-| Name       | Type          | Default  | Description              |
-| ---------- | ------------- | -------- | ------------------------ |
-| `children` | `ReactNode`   | -        | Current page name        |
+| Name       | Type            | Default  | Description              |
+| ---------- | --------------- | -------- | ------------------------ |
+| `children` | `ReactNode`     | -        | Current page name        |
 | `as?`      | `PolymorphicAs` | `'span'` | Polymorphic element type |
 
 **Events**
@@ -687,11 +685,11 @@ Non-interactive current page indicator with proper semantic marking for screen r
 | ---------------------- | ---------- | ----------------------------- | ------------------------- |
 | _(No specific events)_ | -          | Inherits standard HTML events | Standard DOM interactions |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute      | Value    | Purpose                                    | Applied To   |
-| -------------- | -------- | ------------------------------------------ | ------------ |
-| `aria-current` | `"page"` | Indicates current page in breadcrumb trail | Page element |
+| Attribute      | Value | Purpose                 |
+| -------------- | ----- | ----------------------- |
+| `data-current` | `""`  | Present on current page |
 
 ### BreadcrumbSeparator
 
@@ -699,11 +697,11 @@ Visual separator between breadcrumb items, hidden from screen readers to prevent
 
 **Props**
 
-| Name           | Type          | Default     | Description              |
-| -------------- | ------------- | ----------- | ------------------------ |
-| `children?`    | `ReactNode`   | `undefined` | Custom separator content |
+| Name           | Type            | Default     | Description              |
+| -------------- | --------------- | ----------- | ------------------------ |
+| `children?`    | `ReactNode`     | `undefined` | Custom separator content |
 | `as?`          | `PolymorphicAs` | `'li'`      | Polymorphic element type |
-| `aria-hidden?` | `boolean`     | `true`      | Hide from screen readers |
+| `aria-hidden?` | `boolean`       | `true`      | Hide from screen readers |
 
 **Events**
 
@@ -711,11 +709,9 @@ Visual separator between breadcrumb items, hidden from screen readers to prevent
 | ---------------------- | ---------- | ----------------------------- | ------------------------- |
 | _(No specific events)_ | -          | Inherits standard HTML events | Standard DOM interactions |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute     | Value     | Purpose                                              | Applied To        |
-| ------------- | --------- | ---------------------------------------------------- | ----------------- |
-| `aria-hidden` | `boolean` | Hides decorative separator from assistive technology | Separator element |
+_(No specific HTML attributes - decorative separator element)_
 
 ## Keyboard Interactions
 

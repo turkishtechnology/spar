@@ -670,11 +670,11 @@ The main container that manages all select state and behavior.
 | `onValueChange` | `(value: string)` | Selection changes  | User selects an item or programmatic change  |
 | `onOpenChange`  | `(open: boolean)` | Open state changes | User toggles dropdown or programmatic change |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute        | Value     | Purpose                        | Applied To   |
-| ---------------- | --------- | ------------------------------ | ------------ |
-| `data-autofocus` | `boolean` | Marks auto-focus configuration | Root element |
+| Attribute        | Value     | Purpose                        |
+| ---------------- | --------- | ------------------------------ |
+| `data-autofocus` | `boolean` | Marks auto-focus configuration |
 
 ### Select.Trigger
 
@@ -708,15 +708,10 @@ The button that toggles the dropdown open and closed.
 | `onFocus`   | `(event: FocusEvent)`    | Trigger receives focus | Tab navigation or programmatic focus |
 | `onBlur`    | `(event: FocusEvent)`    | Trigger loses focus    | Focus moves away                     |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value        | Purpose                                 | Applied To                                         |
-| --------------- | ------------ | --------------------------------------- | -------------------------------------------------- |
-| `role`          | `"combobox"` | Identifies interactive dropdown trigger | Trigger element                                    |
-| `aria-haspopup` | `"listbox"`  | Indicates trigger opens a listbox       | Trigger element                                    |
-| `aria-expanded` | `boolean`    | Current open/closed state               | Trigger element                                    |
-| `aria-controls` | `string`     | References content element ID           | Trigger element                                    |
-| `aria-disabled` | `boolean`    | Disabled state                          | Trigger element (when disabled + `as != "button"`) |
+| Attribute | Value | Purpose |
+| --------- | ----- | ------- |
 
 **Data Attributes**
 
@@ -740,11 +735,11 @@ Displays the currently selected value or placeholder text.
 
 No specific events.
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value    | Purpose                  | Applied To    |
-| --------- | -------- | ------------------------ | ------------- |
-| `id`      | `string` | Identifies value element | Value element |
+| Attribute | Value    | Purpose                  |
+| --------- | -------- | ------------------------ |
+| `id`      | `string` | Identifies value element |
 
 ### Select.Icon
 
@@ -761,11 +756,9 @@ Optional visual indicator element (typically a chevron or arrow).
 
 No specific events.
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute     | Value    | Purpose                                   | Applied To   |
-| ------------- | -------- | ----------------------------------------- | ------------ |
-| `aria-hidden` | `"true"` | Hides decorative icon from screen readers | Icon element |
+_(No specific HTML attributes - decorative icon element)_
 
 ### Select.Portal
 
@@ -783,9 +776,9 @@ Portal container for rendering dropdown outside DOM hierarchy.
 
 No specific events.
 
-**ARIA Attributes**
+**HTML Attributes**
 
-No ARIA attributes - rendering mechanism only.
+_(No specific HTML attributes - rendering mechanism only)_
 
 ### Select.Content
 
@@ -817,13 +810,11 @@ The dropdown container that appears when select is open. Uses Floating UI for in
 | `onPointerDownOutside` | `(event: PointerEvent)`  | Click outside content  | User clicks outside the dropdown             |
 | `onCloseAutoFocus`     | `(event: FocusEvent)`    | Focus returns on close | Dropdown closes and focus restoration occurs |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute         | Value       | Purpose                                | Applied To      |
-| ----------------- | ----------- | -------------------------------------- | --------------- |
-| `role`            | `"listbox"` | Identifies as selectable list          | Content element |
-| `id`              | `string`    | Unique content identifier              | Content element |
-| `aria-labelledby` | `string`    | References trigger for accessible name | Content element |
+| Attribute | Value    | Purpose                   |
+| --------- | -------- | ------------------------- |
+| `id`      | `string` | Unique content identifier |
 
 **Data Attributes**
 
@@ -859,9 +850,9 @@ Scrollable container for select items within the content.
 
 No specific events.
 
-**ARIA Attributes**
+**HTML Attributes**
 
-No specific ARIA attributes - scrollable container.
+_(No specific HTML attributes - scrollable container)_
 
 ### Select.Item
 
@@ -895,14 +886,11 @@ Individual selectable option within the dropdown.
 | `onPointerMove` | `(event: PointerEvent)` | Pointer moves over item | Mouse/pointer enters item        |
 | `onFocus`       | `(event: FocusEvent)`   | Item receives focus     | Keyboard navigation focuses item |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value      | Purpose                         | Applied To                   |
-| --------------- | ---------- | ------------------------------- | ---------------------------- |
-| `role`          | `"option"` | Identifies as selectable option | Item element                 |
-| `aria-selected` | `boolean`  | Indicates selected state        | Item element                 |
-| `aria-disabled` | `boolean`  | Indicates disabled state        | Item element (when disabled) |
-| `id`            | `string`   | Unique item identifier          | Item element                 |
+| Attribute | Value    | Purpose                |
+| --------- | -------- | ---------------------- |
+| `id`      | `string` | Unique item identifier |
 
 **Data Attributes**
 
@@ -925,9 +913,9 @@ The text content of a select item.
 
 No specific events.
 
-**ARIA Attributes**
+**HTML Attributes**
 
-No specific ARIA attributes - text container.
+_(No specific HTML attributes - text container)_
 
 ### Select.ItemIndicator
 
@@ -945,11 +933,11 @@ Visual indicator for selected state (checkmark, icon, etc).
 
 No specific events.
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute     | Value    | Purpose                                        | Applied To        |
-| ------------- | -------- | ---------------------------------------------- | ----------------- |
-| `aria-hidden` | `"true"` | Hides decorative indicator from screen readers | Indicator element |
+| Attribute      | Value  | Purpose                   |
+| -------------- | ------ | ------------------------- |
+| `data-checked` | `""`   | Present when item checked |
 
 **Note**: Only renders when parent item is selected.
 
@@ -968,12 +956,9 @@ Groups related select items together.
 
 No specific events.
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute         | Value     | Purpose                     | Applied To    |
-| ----------------- | --------- | --------------------------- | ------------- |
-| `role`            | `"group"` | Groups related elements     | Group element |
-| `aria-labelledby` | `string`  | References associated label | Group element |
+_(No specific HTML attributes - groups related elements)_
 
 ### Select.Label
 
@@ -990,11 +975,11 @@ Label for a group of select items.
 
 No specific events.
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value    | Purpose                 | Applied To    |
-| --------- | -------- | ----------------------- | ------------- |
-| `id`      | `string` | Unique label identifier | Label element |
+| Attribute | Value    | Purpose                 |
+| --------- | -------- | ----------------------- |
+| `id`      | `string` | Unique label identifier |
 
 ### Select.Separator
 
@@ -1011,11 +996,11 @@ Visual separator between items or groups.
 
 No specific events.
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value         | Purpose                        | Applied To        |
-| --------- | ------------- | ------------------------------ | ----------------- |
-| `role`    | `"separator"` | Identifies as visual separator | Separator element |
+| Attribute          | Value          | Purpose               |
+| ------------------ | -------------- | --------------------- |
+| `data-orientation` | `"horizontal"` | Indicates orientation |
 
 ### Select.Arrow
 
@@ -1035,11 +1020,11 @@ Optional arrow element pointing to the trigger. Automatically positioned by Floa
 
 No specific events.
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute     | Value    | Purpose                                    | Applied To    |
-| ------------- | -------- | ------------------------------------------ | ------------- |
-| `aria-hidden` | `"true"` | Hides decorative arrow from screen readers | Arrow element |
+| Attribute   | Value                                    | Purpose              |
+| ----------- | ---------------------------------------- | -------------------- |
+| `data-side` | `"top" \| "bottom" \| "left" \| "right"` | Indicates arrow side |
 
 **Arrow Positioning**
 
