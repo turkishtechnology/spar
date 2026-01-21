@@ -50,25 +50,13 @@ export const PrimitiveButton = ({
     ...(disabled && { 'data-disabled': '' }),
   };
 
-  // Handle native button elements
-  if (isNativeButton) {
-    return (
-      <Element {...baseProps} {...props} type={type} disabled={disabled}>
-        {children}
-      </Element>
-    );
-  }
+  // Conditional props based on element type
+  const conditionalProps = isNativeButton
+    ? { type, disabled }
+    : { role: props.role || 'button', 'aria-disabled': disabled || undefined };
 
-  // Handle non-button elements (div, span, etc.)
-  // Props might contain button-specific attributes, we just pass them through
-  // and let the browser ignore invalid attributes for non-button elements
   return (
-    <Element
-      {...baseProps}
-      {...props}
-      role={props.role || 'button'}
-      aria-disabled={disabled || undefined}
-    >
+    <Element {...baseProps} {...props} {...conditionalProps}>
       {children}
     </Element>
   );
