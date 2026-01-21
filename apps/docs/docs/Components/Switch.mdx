@@ -321,32 +321,19 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
 | `onMouseDown`  | `(event: MouseEvent)`    | Mouse button pressed      | User starts clicking switch (unless disabled or read-only)      |
 | `onMouseUp`    | `(event: MouseEvent)`    | Mouse button released     | User releases click on switch                                   |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute          | Value      | Purpose                                                  | Applied To           |
-| ------------------ | ---------- | -------------------------------------------------------- | -------------------- |
-| `role`             | `"switch"` | Identifies element as a switch control                   | Switch element       |
-| `aria-checked`     | `boolean`  | Indicates the current state of the switch                | Switch element       |
-| `aria-disabled`    | `boolean`  | Indicates switch is disabled (when `disabled={true}`)  | Switch element       |
-| `aria-readonly`    | `boolean`  | Indicates switch is read-only (when `readOnly={true}`) | Switch element       |
-| `aria-label`       | `string`   | Provides accessible name when no visible label exists    | Switch element       |
-| `aria-labelledby`  | `string`   | References element that labels the switch                | Switch element       |
-| `aria-describedby` | `string`   | References element that describes the switch             | Switch element       |
-| `aria-hidden`      | `true`     | Hides hidden form input from assistive technology        | Hidden input element |
-
-**Data Attributes**
-
-| Attribute       | Value                      | Purpose                                             | Applied To     |
-| --------------- | -------------------------- | --------------------------------------------------- | -------------- |
-| `data-switch`   | `""`                       | Identifies the element as a switch                  | Switch element |
-| `data-state`    | `"checked" \| "unchecked"` | Indicates current checked state                     | Switch element |
-| `data-checked`  | `""`                       | Present when switch is checked                      | Switch element |
-| `data-disabled` | `""`                       | Present when switch is disabled                     | Switch element |
-| `data-readonly` | `""`                       | Present when switch is read-only                    | Switch element |
-| `data-focus`    | `""`                       | Present when switch has focus                       | Switch element |
-| `data-hover`    | `""`                       | Present when switch is hovered (unless disabled)    | Switch element |
-| `data-active`   | `""`                       | Present when switch is being pressed                | Switch element |
-| `data-required` | `""`                       | Present when switch is required for form validation | Switch element |
+| Attribute       | Value                      | Purpose                                             |
+| --------------- | -------------------------- | --------------------------------------------------- |
+| `data-switch`   | `""`                       | Identifies the element as a switch                  |
+| `data-state`    | `"checked" \| "unchecked"` | Indicates current checked state                     |
+| `data-checked`  | `""`                       | Present when switch is checked                      |
+| `data-disabled` | `""`                       | Present when switch is disabled                     |
+| `data-readonly` | `""`                       | Present when switch is read-only                    |
+| `data-focus`    | `""`                       | Present when switch has focus                       |
+| `data-hover`    | `""`                       | Present when switch is hovered (unless disabled)    |
+| `data-active`   | `""`                       | Present when switch is being pressed                |
+| `data-required` | `""`                       | Present when switch is required for form validation |
 
 ## Keyboard Interactions
 

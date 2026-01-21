@@ -529,11 +529,9 @@ The root container that manages the dropdown menu state and provides context to 
 | -------------- | ----------------- | ------------------------- | --------------------------------------------- |
 | `onOpenChange` | `(open: boolean)` | Open state change handler | User interaction or programmatic state change |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value | Purpose                                             | Applied To |
-| --------- | ----- | --------------------------------------------------- | ---------- |
-| N/A       | N/A   | Root is a context provider with no rendered element | N/A        |
+_(No specific HTML attributes - Root is a context provider with no rendered element)_
 
 ### DropdownMenu.Trigger
 
@@ -567,16 +565,12 @@ The button element that toggles the dropdown menu visibility. Always renders as 
 | `onClick`   | `(event: MouseEvent)`    | Mouse click handler    | User clicks trigger            |
 | `onKeyDown` | `(event: KeyboardEvent)` | Keyboard event handler | User presses key while focused |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value                | Purpose                            | Applied To                      |
-| --------------- | -------------------- | ---------------------------------- | ------------------------------- |
-| `aria-haspopup` | `'menu'`             | Indicates element has a popup menu | Trigger element                 |
-| `aria-expanded` | `boolean`            | Indicates whether menu is expanded | Trigger element                 |
-| `aria-controls` | `string`             | References controlled menu content | Trigger element (when open)     |
-| `data-state`    | `'open' \| 'closed'` | Current state for styling          | Trigger element                 |
-| `data-disabled` | `''`                 | Present when disabled              | Trigger element (when disabled) |
-| `aria-disabled` | `true`               | Indicates disabled state           | Trigger element (when disabled) |
+| Attribute       | Value                | Purpose                   |
+| --------------- | -------------------- | ------------------------- |
+| `data-state`    | `'open' \| 'closed'` | Current state for styling |
+| `data-disabled` | `''`                 | Present when disabled     |
 
 ### DropdownMenu.Content
 
@@ -586,7 +580,7 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 
 | Name                    | Type                                     | Default     | Description                                           |
 | ----------------------- | ---------------------------------------- | ----------- | ----------------------------------------------------- |
-| `as?`                   | `PolymorphicAs`                            | `'div'`     | Polymorphic element type to render                    |
+| `as?`                   | `PolymorphicAs`                          | `'div'`     | Polymorphic element type to render                    |
 | `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`  | Preferred side for positioning                        |
 | `align?`                | `'start' \| 'center' \| 'end'`           | `'start'`   | Alignment relative to trigger                         |
 | `sideOffset?`           | `number`                                 | `8`         | Distance in pixels from trigger                       |
@@ -611,16 +605,14 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 | `onFocusOutside`       | `(event: FocusEvent)`    | Focus leaves menu   | Focus moves outside menu (non-modal mode)  |
 | `onKeyDown`            | `(event: KeyboardEvent)` | Key pressed in menu | User presses any key while menu is focused |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute         | Value    | Purpose                                | Applied To      |
-| ----------------- | -------- | -------------------------------------- | --------------- |
-| `role`            | `'menu'` | Identifies as menu widget              | Content element |
-| `aria-labelledby` | `string` | References trigger for accessible name | Content element |
-| `data-state`      | `'open'` | Indicates open state                   | Content element |
-| `data-side`       | Side     | Current placement side                 | Content element |
-| `data-align`      | Align    | Current alignment                      | Content element |
-| `tabIndex`        | `-1`     | Manages focus programmatically         | Content element |
+| Attribute    | Value    | Purpose                        |
+| ------------ | -------- | ------------------------------ |
+| `data-state` | `'open'` | Indicates open state           |
+| `data-side`  | Side     | Current placement side         |
+| `data-align` | Align    | Current alignment              |
+| `tabIndex`   | `-1`     | Manages focus programmatically |
 
 ### DropdownMenu.Item
 
@@ -630,7 +622,7 @@ A selectable menu item.
 
 | Name         | Type                              | Default     | Description                                                           |
 | ------------ | --------------------------------- | ----------- | --------------------------------------------------------------------- |
-| `as?`        | `PolymorphicAs`                     | `'div'`     | Polymorphic element type to render                                    |
+| `as?`        | `PolymorphicAs`                   | `'div'`     | Polymorphic element type to render                                    |
 | `disabled?`  | `boolean`                         | `false`     | Whether item is disabled                                              |
 | `onSelect?`  | `(event: SyntheticEvent) => void` | `undefined` | Selection handler                                                     |
 | `textValue?` | `string`                          | `undefined` | Text value for typeahead (auto-detected from content if not provided) |
@@ -647,15 +639,13 @@ A selectable menu item.
 | `onPointerMove` | `(event: PointerEvent)`   | Pointer movement    | Pointer moves over item                     |
 | `onFocus`       | `(event: FocusEvent)`     | Item receives focus | Item gains focus                            |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute          | Value        | Purpose                                                    | Applied To                      |
-| ------------------ | ------------ | ---------------------------------------------------------- | ------------------------------- |
-| `role`             | `'menuitem'` | Identifies as menu item                                    | Item element                    |
-| `tabIndex`         | `0 \| -1`    | Controls keyboard focus (0 when highlighted, -1 otherwise) | Item element                    |
-| `aria-disabled`    | `true`       | Indicates disabled state                                   | Item element (when disabled)    |
-| `data-disabled`    | `''`         | Present when disabled                                      | Item element (when disabled)    |
-| `data-highlighted` | `''`         | Present when highlighted                                   | Item element (when highlighted) |
+| Attribute          | Value     | Purpose                                                    |
+| ------------------ | --------- | ---------------------------------------------------------- |
+| `tabIndex`         | `0 \| -1` | Controls keyboard focus (0 when highlighted, -1 otherwise) |
+| `data-disabled`    | `''`      | Present when disabled                                      |
+| `data-highlighted` | `''`      | Present when highlighted                                   |
 
 ### DropdownMenu.CheckboxItem
 
@@ -665,7 +655,7 @@ A menu item with checkbox functionality for toggleable options.
 
 | Name               | Type                              | Default     | Description                        |
 | ------------------ | --------------------------------- | ----------- | ---------------------------------- |
-| `as?`              | `PolymorphicAs`                     | `'div'`     | Polymorphic element type to render |
+| `as?`              | `PolymorphicAs`                   | `'div'`     | Polymorphic element type to render |
 | `checked?`         | `boolean \| 'indeterminate'`      | `false`     | Checked state                      |
 | `onCheckedChange?` | `(checked: boolean) => void`      | `undefined` | Checked state change handler       |
 | `disabled?`        | `boolean`                         | `false`     | Whether item is disabled           |
@@ -681,14 +671,12 @@ A menu item with checkbox functionality for toggleable options.
 | `onCheckedChange` | `(checked: boolean)`      | Checked state changes | User toggles checkbox |
 | `onSelect`        | `(event: SyntheticEvent)` | Item selected         | User activates item   |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute      | Value                                  | Purpose                                             | Applied To   |
-| -------------- | -------------------------------------- | --------------------------------------------------- | ------------ |
-| `role`         | `'menuitemcheckbox'`                   | Identifies as checkbox menu item                    | Item element |
-| `aria-checked` | `boolean \| 'mixed'`                   | Indicates checked state ('mixed' for indeterminate) | Item element |
-| `data-checked` | `'true' \| 'false' \| 'indeterminate'` | Current checked state for styling                   | Item element |
-| `tabIndex`     | `0 \| -1`                              | Controls keyboard focus                             | Item element |
+| Attribute      | Value                                  | Purpose                           |
+| -------------- | -------------------------------------- | --------------------------------- |
+| `data-checked` | `'true' \| 'false' \| 'indeterminate'` | Current checked state for styling |
+| `tabIndex`     | `0 \| -1`                              | Controls keyboard focus           |
 
 ### DropdownMenu.RadioGroup
 
@@ -708,11 +696,9 @@ Container for radio menu items to manage mutually exclusive selection.
 | --------------- | ----------------- | ---------------------- | ------------------------- |
 | `onValueChange` | `(value: string)` | Selected value changes | User selects a radio item |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value     | Purpose                    | Applied To    |
-| --------- | --------- | -------------------------- | ------------- |
-| `role`    | `'group'` | Groups related radio items | Group element |
+_(No specific HTML attributes - context provider for radio state)_
 
 ### DropdownMenu.RadioItem
 
@@ -723,7 +709,7 @@ A radio menu item for mutually exclusive selections within a RadioGroup.
 | Name         | Type                              | Default      | Description                        |
 | ------------ | --------------------------------- | ------------ | ---------------------------------- |
 | `value`      | `string`                          | **required** | Unique value for this radio item   |
-| `as?`        | `PolymorphicAs`                     | `'div'`      | Polymorphic element type to render |
+| `as?`        | `PolymorphicAs`                   | `'div'`      | Polymorphic element type to render |
 | `disabled?`  | `boolean`                         | `false`      | Whether item is disabled           |
 | `onSelect?`  | `(event: SyntheticEvent) => void` | `undefined`  | Selection handler                  |
 | `textValue?` | `string`                          | `undefined`  | Text value for typeahead           |
@@ -736,14 +722,12 @@ A radio menu item for mutually exclusive selections within a RadioGroup.
 | ---------- | ------------------------- | ------------- | ------------------- |
 | `onSelect` | `(event: SyntheticEvent)` | Item selected | User activates item |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute      | Value               | Purpose                           | Applied To   |
-| -------------- | ------------------- | --------------------------------- | ------------ |
-| `role`         | `'menuitemradio'`   | Identifies as radio menu item     | Item element |
-| `aria-checked` | `boolean`           | Indicates selected state          | Item element |
-| `data-checked` | `'true' \| 'false'` | Current checked state for styling | Item element |
-| `tabIndex`     | `0 \| -1`           | Controls keyboard focus           | Item element |
+| Attribute      | Value               | Purpose                           |
+| -------------- | ------------------- | --------------------------------- |
+| `data-checked` | `'true' \| 'false'` | Current checked state for styling |
+| `tabIndex`     | `0 \| -1`           | Controls keyboard focus           |
 
 ### DropdownMenu.Separator
 
@@ -753,7 +737,7 @@ A visual separator between menu sections.
 
 | Name   | Type                       | Default     | Description                        |
 | ------ | -------------------------- | ----------- | ---------------------------------- |
-| `as?`  | `PolymorphicAs`              | `'div'`     | Polymorphic element type to render |
+| `as?`  | `PolymorphicAs`            | `'div'`     | Polymorphic element type to render |
 | `ref?` | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to separator element |
 
 **Events**
@@ -762,12 +746,11 @@ A visual separator between menu sections.
 | ---- | ---------- | --------------------- | ---------------------------- |
 | N/A  | N/A        | No interactive events | Separator is non-interactive |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute          | Value          | Purpose                 | Applied To        |
-| ------------------ | -------------- | ----------------------- | ----------------- |
-| `role`             | `'separator'`  | Identifies as separator | Separator element |
-| `data-orientation` | `'horizontal'` | Indicates orientation   | Separator element |
+| Attribute          | Value          | Purpose               |
+| ------------------ | -------------- | --------------------- |
+| `data-orientation` | `'horizontal'` | Indicates orientation |
 
 ### DropdownMenu.Label
 
@@ -777,7 +760,7 @@ A non-interactive label for menu sections.
 
 | Name        | Type                       | Default     | Description                        |
 | ----------- | -------------------------- | ----------- | ---------------------------------- |
-| `as?`       | `PolymorphicAs`              | `'div'`     | Polymorphic element type to render |
+| `as?`       | `PolymorphicAs`            | `'div'`     | Polymorphic element type to render |
 | `ref?`      | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to label element     |
 | `children?` | `ReactNode`                | `undefined` | Label content                      |
 
@@ -787,11 +770,9 @@ A non-interactive label for menu sections.
 | ---- | ---------- | --------------------- | ------------------------ |
 | N/A  | N/A        | No interactive events | Label is non-interactive |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value | Purpose                     | Applied To    |
-| --------- | ----- | --------------------------- | ------------- |
-| N/A       | N/A   | No specific ARIA attributes | Label element |
+_(No specific HTML attributes - Label is non-interactive)_
 
 ### DropdownMenu.Group
 
@@ -801,7 +782,7 @@ A logical grouping container for related menu items.
 
 | Name        | Type                       | Default     | Description                        |
 | ----------- | -------------------------- | ----------- | ---------------------------------- |
-| `as?`       | `PolymorphicAs`              | `'div'`     | Polymorphic element type to render |
+| `as?`       | `PolymorphicAs`            | `'div'`     | Polymorphic element type to render |
 | `ref?`      | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to group element     |
 | `children?` | `ReactNode`                | `undefined` | Menu items or labels               |
 
@@ -811,11 +792,9 @@ A logical grouping container for related menu items.
 | ---- | ---------- | --------------------- | ---------------------------------- |
 | N/A  | N/A        | No interactive events | Group is non-interactive container |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value     | Purpose                   | Applied To    |
-| --------- | --------- | ------------------------- | ------------- |
-| `role`    | `'group'` | Groups related menu items | Group element |
+_(No specific HTML attributes - groups related menu items)_
 
 ### DropdownMenu.Sub
 
@@ -836,11 +815,9 @@ Container for nested submenu functionality.
 | -------------- | ----------------- | -------------------------- | ------------------------- |
 | `onOpenChange` | `(open: boolean)` | Submenu open state changes | User opens/closes submenu |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value | Purpose                                            | Applied To |
-| --------- | ----- | -------------------------------------------------- | ---------- |
-| N/A       | N/A   | Sub is a context provider with no rendered element | N/A        |
+_(No specific HTML attributes - Sub is a context provider with no rendered element)_
 
 ### DropdownMenu.SubTrigger
 
@@ -850,7 +827,7 @@ A menu item that triggers a nested submenu.
 
 | Name         | Type                              | Default     | Description                         |
 | ------------ | --------------------------------- | ----------- | ----------------------------------- |
-| `as?`        | `PolymorphicAs`                     | `'div'`     | Polymorphic element type to render  |
+| `as?`        | `PolymorphicAs`                   | `'div'`     | Polymorphic element type to render  |
 | `disabled?`  | `boolean`                         | `false`     | Whether subtrigger is disabled      |
 | `onSelect?`  | `(event: SyntheticEvent) => void` | `undefined` | Selection handler                   |
 | `textValue?` | `string`                          | `undefined` | Text value for typeahead            |
@@ -865,16 +842,12 @@ A menu item that triggers a nested submenu.
 | `onKeyDown`     | `(event: KeyboardEvent)` | Key pressed                | Handles arrow keys for submenu navigation |
 | `onClick`       | `(event: MouseEvent)`    | Mouse click                | Opens submenu                             |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value                | Purpose                           | Applied To                     |
-| --------------- | -------------------- | --------------------------------- | ------------------------------ |
-| `role`          | `'menuitem'`         | Identifies as menu item           | SubTrigger element             |
-| `aria-haspopup` | `'menu'`             | Indicates submenu presence        | SubTrigger element             |
-| `aria-expanded` | `boolean`            | Indicates submenu expansion state | SubTrigger element             |
-| `aria-controls` | `string`             | References controlled submenu     | SubTrigger element (when open) |
-| `data-state`    | `'open' \| 'closed'` | Current state for styling         | SubTrigger element             |
-| `tabIndex`      | `0 \| -1`            | Controls keyboard focus           | SubTrigger element             |
+| Attribute    | Value                | Purpose                   |
+| ------------ | -------------------- | ------------------------- |
+| `data-state` | `'open' \| 'closed'` | Current state for styling |
+| `tabIndex`   | `0 \| -1`            | Controls keyboard focus   |
 
 ### DropdownMenu.SubContent
 
@@ -893,7 +866,7 @@ Inherits all props from `DropdownMenu.Content`. Default `side` is `'right'` inst
 
 Same as `DropdownMenu.Content`.
 
-**ARIA Attributes**
+**HTML Attributes**
 
 Same as `DropdownMenu.Content`.
 

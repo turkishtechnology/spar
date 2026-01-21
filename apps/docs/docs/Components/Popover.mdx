@@ -48,84 +48,84 @@ A floating panel component anchored to a trigger element with smart positioning,
   font-weight: 400;
   border: none;
 
-  /* Light mode styles */
-  background-color: rgba(0, 0, 0, 0.08);
-  color: #222530;
-  font-size: 13px;
+/_ Light mode styles _/
+background-color: rgba(0, 0, 0, 0.08);
+color: #222530;
+font-size: 13px;
 }
 
 [data-theme='dark'] .popover-trigger {
-  /* Dark mode styles */
-  background-color: rgba(255, 255, 255, 0.12);
-  color: #f2f5f8;
+/_ Dark mode styles _/
+background-color: rgba(255, 255, 255, 0.12);
+color: #f2f5f8;
 }
 
 .popover-content {
-  width: 200px;
-  border-radius: 5px;
-  border: 0.625px solid #e1e4ea;
-  background-color: #ebebeb;
+width: 200px;
+border-radius: 5px;
+border: 0.625px solid #e1e4ea;
+background-color: #ebebeb;
 }
 
 [data-theme='dark'] .popover-content {
-  border-color: #2b303b;
-  background-color: #222;
+border-color: #2b303b;
+background-color: #222;
 }
 
 .popover-header {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 7.5px;
+display: flex;
+align-items: center;
+gap: 5px;
+padding: 7.5px;
 }
 
 .popover-icon {
-  width: 12.5px;
-  height: 12.5px;
-  border-radius: 2.5px;
-  border: 0.625px solid #cacfd8;
-  background: rgba(0, 0, 0, 0.72);
+width: 12.5px;
+height: 12.5px;
+border-radius: 2.5px;
+border: 0.625px solid #cacfd8;
+background: rgba(0, 0, 0, 0.72);
 }
 
 [data-theme='dark'] .popover-icon {
-  border-color: #525866;
-  background-color: #c0c0c0;
+border-color: #525866;
+background-color: #c0c0c0;
 }
 
 .popover-title {
-  color: #222530;
-  font-size: 8.757px;
+color: #222530;
+font-size: 8.757px;
 }
 
 [data-theme='dark'] .popover-title {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .popover-close {
-  margin-left: auto;
-  border: none;
-  cursor: pointer;
-  background-color: transparent;
+margin-left: auto;
+border: none;
+cursor: pointer;
+background-color: transparent;
 }
 
 .popover-close path {
-  fill: #222530;
+fill: #222530;
 }
 
 [data-theme='dark'] path {
-  fill: #f2f5f8;
+fill: #f2f5f8;
 }
 
 .popover-paragraph {
-  color: #717784;
-  font-size: 7.5px;
-  padding: 7.5px;
-  padding-top: 2.5px;
-  margin-bottom: 0px;
+color: #717784;
+font-size: 7.5px;
+padding: 7.5px;
+padding-top: 2.5px;
+margin-bottom: 0px;
 }
 
 [data-theme='dark'] .popover-paragraph {
-  color: #99a0ae;
+color: #99a0ae;
 }`}
 />
 
@@ -492,17 +492,17 @@ The root container that provides context and manages state for all popover compo
 
 **Props**
 
-| Name            | Type                                     | Default     | Description                                    |
-| --------------- | ---------------------------------------- | ----------- | ---------------------------------------------- |
-| `open?`       | `boolean`                                | `undefined` | Controlled state for popover visibility        |
-| `onOpenChange?` | `(open: boolean) => void`                | `undefined` | Callback when popover open state changes       |
-| `defaultOpen?`  | `boolean`                                | `false`     | Initial open state for uncontrolled mode       |
-| `modal?`        | `boolean`                                | `false`     | Whether popover should behave modally          |
+| Name            | Type                                     | Default     | Description                                      |
+| --------------- | ---------------------------------------- | ----------- | ------------------------------------------------ |
+| `open?`         | `boolean`                                | `undefined` | Controlled state for popover visibility          |
+| `onOpenChange?` | `(open: boolean) => void`                | `undefined` | Callback when popover open state changes         |
+| `defaultOpen?`  | `boolean`                                | `false`     | Initial open state for uncontrolled mode         |
+| `modal?`        | `boolean`                                | `false`     | Whether popover should behave modally            |
 | `disabled?`     | `boolean`                                | `false`     | Disables all popover triggers (prevents opening) |
-| `side?`         | `"top" \| "bottom" \| "left" \| "right"` | `"bottom"`  | Preferred side for popover positioning         |
-| `align?`        | `"start" \| "center" \| "end"`           | `"center"`  | Preferred alignment relative to trigger        |
-| `sideOffset?`   | `number`                                 | `8`         | Distance in pixels between trigger and popover |
-| `children`      | `ReactNode`                              | -           | PopoverTrigger and PopoverContent components   |
+| `side?`         | `"top" \| "bottom" \| "left" \| "right"` | `"bottom"`  | Preferred side for popover positioning           |
+| `align?`        | `"start" \| "center" \| "end"`           | `"center"`  | Preferred alignment relative to trigger          |
+| `sideOffset?`   | `number`                                 | `8`         | Distance in pixels between trigger and popover   |
+| `children`      | `ReactNode`                              | -           | PopoverTrigger and PopoverContent components     |
 
 **Events**
 
@@ -510,11 +510,11 @@ The root container that provides context and manages state for all popover compo
 | -------------- | ----------------- | -------------------------------- | --------------------------------------- |
 | `onOpenChange` | `(open: boolean)` | State changes when opened/closed | User interaction or programmatic change |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute    | Value                | Purpose                 | Applied To   |
-| ------------ | -------------------- | ----------------------- | ------------ |
-| `data-state` | `"open" \| "closed"` | Indicates popover state | Root element |
+| Attribute    | Value                | Purpose                 |
+| ------------ | -------------------- | ----------------------- |
+| `data-state` | `"open" \| "closed"` | Indicates popover state |
 
 ### PopoverTrigger
 
@@ -522,24 +522,24 @@ Button element that toggles the popover visibility. Always renders as a `button`
 
 **Props**
 
-| Name        | Type                                                                          | Default     | Description                                            |
-| ----------- | ----------------------------------------------------------------------------- | ----------- | ------------------------------------------------------ |
-| `children`  | `ReactNode \| ((state: PopoverTriggerRenderProps) => ReactNode)`              | -           | Trigger content or render props function               |
-| `disabled?` | `boolean`                                                                     | `false`     | Whether trigger is disabled                            |
-| `onClick?`  | `(event: React.MouseEvent<HTMLButtonElement>) => void`                        | `undefined` | Custom click handler                                   |
-| `onKeyDown?`| `(event: React.KeyboardEvent<HTMLButtonElement>) => void`                     | `undefined` | Custom keydown handler                                 |
-| `ref?`      | `React.Ref<HTMLButtonElement>`                                                | `undefined` | Ref to the trigger element                             |
-| `...props`  | `ComponentProps<'button'>`                                                    | -           | All standard button attributes                         |
+| Name         | Type                                                             | Default     | Description                              |
+| ------------ | ---------------------------------------------------------------- | ----------- | ---------------------------------------- |
+| `children`   | `ReactNode \| ((state: PopoverTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function |
+| `disabled?`  | `boolean`                                                        | `false`     | Whether trigger is disabled              |
+| `onClick?`   | `(event: React.MouseEvent<HTMLButtonElement>) => void`           | `undefined` | Custom click handler                     |
+| `onKeyDown?` | `(event: React.KeyboardEvent<HTMLButtonElement>) => void`        | `undefined` | Custom keydown handler                   |
+| `ref?`       | `React.Ref<HTMLButtonElement>`                                   | `undefined` | Ref to the trigger element               |
+| `...props`   | `ComponentProps<'button'>`                                       | -           | All standard button attributes           |
 
 **Render Props (PopoverTriggerRenderProps)**
 
-| Property   | Type         | Description                                      |
-| ---------- | ------------ | ------------------------------------------------ |
-| `isOpen`   | `boolean`    | Whether the popover is currently visible         |
-| `disabled` | `boolean`    | Whether the trigger is disabled                  |
-| `open`     | `() => void` | Function to programmatically open the popover    |
-| `close`    | `() => void` | Function to programmatically close the popover   |
-| `toggle`   | `() => void` | Function to programmatically toggle the popover  |
+| Property   | Type         | Description                                     |
+| ---------- | ------------ | ----------------------------------------------- |
+| `isOpen`   | `boolean`    | Whether the popover is currently visible        |
+| `disabled` | `boolean`    | Whether the trigger is disabled                 |
+| `open`     | `() => void` | Function to programmatically open the popover   |
+| `close`    | `() => void` | Function to programmatically close the popover  |
+| `toggle`   | `() => void` | Function to programmatically toggle the popover |
 
 **Events**
 
@@ -548,16 +548,13 @@ Button element that toggles the popover visibility. Always renders as a `button`
 | `onClick`   | `(event: React.MouseEvent<HTMLButtonElement>)`    | Trigger clicked        | Mouse click on trigger |
 | `onKeyDown` | `(event: React.KeyboardEvent<HTMLButtonElement>)` | Key pressed on trigger | Keyboard interaction   |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value                | Purpose                          | Applied To                    |
-| --------------- | -------------------- | -------------------------------- | ----------------------------- |
-| `aria-expanded` | `boolean`            | Indicates if popover is visible  | Trigger element               |
-| `aria-controls` | `string`             | References controlled content ID | Trigger element when open     |
-| `aria-haspopup` | `"dialog"`           | Indicates trigger opens popover  | Trigger element               |
-| `data-state`    | `"open" \| "closed"` | Indicates popover state          | Trigger element               |
-| `data-disabled` | `string`             | Indicates disabled state         | Trigger element when disabled |
-| `disabled`      | `boolean`            | Native disabled attribute        | Trigger element when disabled |
+| Attribute       | Value                | Purpose                   |
+| --------------- | -------------------- | ------------------------- |
+| `data-state`    | `"open" \| "closed"` | Indicates popover state   |
+| `data-disabled` | `string`             | Indicates disabled state  |
+| `disabled`      | `boolean`            | Native disabled attribute |
 
 ### PopoverContent
 
@@ -598,17 +595,15 @@ Floating panel container that holds the popover content.
 | `onInteractOutside`    | `(event: PointerEvent \| FocusEvent)`          | Any interaction outside content   | Click, touch, or focus outside      |
 | `onKeyDown`            | `(event: React.KeyboardEvent<HTMLDivElement>)` | Key pressed within content        | Keyboard interaction inside popover |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute    | Value                                    | Purpose                                    | Applied To      |
-| ------------ | ---------------------------------------- | ------------------------------------------ | --------------- |
-| `id`         | `string`                                 | Unique identifier referenced by trigger    | Content element |
-| `role`       | `"dialog"`                               | Identifies as dialog (when modal=true)     | Content element |
-| `aria-modal` | `"true"`                                 | Indicates modal behavior (when modal=true) | Content element |
-| `tabIndex`   | `-1`                                     | Allows programmatic focus                  | Content element |
-| `data-state` | `"open"`                                 | Always open when rendered                  | Content element |
-| `data-side`  | `"top" \| "bottom" \| "left" \| "right"` | Actual positioned side                     | Content element |
-| `data-align` | `"start" \| "center" \| "end"`           | Actual alignment                           | Content element |
+| Attribute    | Value                                    | Purpose                   |
+| ------------ | ---------------------------------------- | ------------------------- |
+| `id`         | `string`                                 | Unique identifier         |
+| `tabIndex`   | `-1`                                     | Allows programmatic focus |
+| `data-state` | `"open"`                                 | Always open when rendered |
+| `data-side`  | `"top" \| "bottom" \| "left" \| "right"` | Actual positioned side    |
+| `data-align` | `"start" \| "center" \| "end"`           | Actual alignment          |
 
 ### PopoverArrow
 
@@ -630,12 +625,11 @@ Optional decorative arrow element that points to the trigger.
 | ---- | ---------- | -------------------------- | -------------- |
 | None | -          | Arrow is purely decorative | -              |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute   | Value                                    | Purpose                      | Applied To    |
-| ----------- | ---------------------------------------- | ---------------------------- | ------------- |
-| `role`      | `"presentation"`                         | Indicates decorative element | Arrow element |
-| `data-side` | `"top" \| "bottom" \| "left" \| "right"` | Indicates positioned side    | Arrow element |
+| Attribute   | Value                                    | Purpose                   |
+| ----------- | ---------------------------------------- | ------------------------- |
+| `data-side` | `"top" \| "bottom" \| "left" \| "right"` | Indicates positioned side |
 
 ### PopoverAnchor
 
@@ -643,11 +637,11 @@ Optional element used as positioning reference instead of the trigger. Always re
 
 **Props**
 
-| Name       | Type                                                               | Default     | Description                              |
-| ---------- | ------------------------------------------------------------------ | ----------- | ---------------------------------------- |
-| `children` | `ReactNode \| ((state: PopoverAnchorRenderProps) => ReactNode)`    | -           | Anchor content or render props function  |
-| `ref?`     | `React.Ref<HTMLDivElement>`                                        | `undefined` | Ref to the anchor element                |
-| `...props` | `ComponentProps<'div'>`                                            | -           | All standard div attributes              |
+| Name       | Type                                                            | Default     | Description                             |
+| ---------- | --------------------------------------------------------------- | ----------- | --------------------------------------- |
+| `children` | `ReactNode \| ((state: PopoverAnchorRenderProps) => ReactNode)` | -           | Anchor content or render props function |
+| `ref?`     | `React.Ref<HTMLDivElement>`                                     | `undefined` | Ref to the anchor element               |
+| `...props` | `ComponentProps<'div'>`                                         | -           | All standard div attributes             |
 
 **Render Props (PopoverAnchorRenderProps)**
 
@@ -661,11 +655,11 @@ Optional element used as positioning reference instead of the trigger. Always re
 | ---- | ---------- | ------------------------- | -------------- |
 | None | -          | Anchor is for positioning | -              |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute             | Value    | Purpose                      | Applied To     |
-| --------------------- | -------- | ---------------------------- | -------------- |
-| `data-popover-anchor` | `string` | Identifies as anchor element | Anchor element |
+| Attribute             | Value    | Purpose                      |
+| --------------------- | -------- | ---------------------------- |
+| `data-popover-anchor` | `string` | Identifies as anchor element |
 
 ### PopoverPortal
 
@@ -684,11 +678,9 @@ Optional portal component for rendering content in a different DOM location.
 | ---- | ---------- | ------------------------ | -------------- |
 | None | -          | Portal manages rendering | -              |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value | Purpose                       | Applied To |
-| --------- | ----- | ----------------------------- | ---------- |
-| None      | -     | Portal doesn't add attributes | -          |
+_(No specific HTML attributes - Portal manages rendering)_
 
 ### PopoverClose
 
@@ -696,12 +688,12 @@ Close button component that automatically closes the popover when clicked. Alway
 
 **Props**
 
-| Name       | Type                                                                | Default     | Description                               |
-| ---------- | ------------------------------------------------------------------- | ----------- | ----------------------------------------- |
-| `children` | `ReactNode \| ((state: PopoverCloseRenderProps) => ReactNode)`      | -           | Close button content or render props      |
-| `onClick?` | `(event: React.MouseEvent<HTMLButtonElement>) => void`              | `undefined` | Custom click handler                      |
-| `ref?`     | `React.Ref<HTMLButtonElement>`                                      | `undefined` | Ref to the close element                  |
-| `...props` | `ComponentProps<'button'>`                                          | -           | All standard button attributes            |
+| Name       | Type                                                           | Default     | Description                          |
+| ---------- | -------------------------------------------------------------- | ----------- | ------------------------------------ |
+| `children` | `ReactNode \| ((state: PopoverCloseRenderProps) => ReactNode)` | -           | Close button content or render props |
+| `onClick?` | `(event: React.MouseEvent<HTMLButtonElement>) => void`         | `undefined` | Custom click handler                 |
+| `ref?`     | `React.Ref<HTMLButtonElement>`                                 | `undefined` | Ref to the close element             |
+| `...props` | `ComponentProps<'button'>`                                     | -           | All standard button attributes       |
 
 **Render Props (PopoverCloseRenderProps)**
 
@@ -716,12 +708,12 @@ Close button component that automatically closes the popover when clicked. Alway
 | --------- | ---------------------------------------------- | -------------------- | --------------------------- |
 | `onClick` | `(event: React.MouseEvent<HTMLButtonElement>)` | Close button clicked | Mouse click on close button |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute            | Value      | Purpose                    | Applied To    |
-| -------------------- | ---------- | -------------------------- | ------------- |
-| `data-popover-close` | `string`   | Identifies as close button | Close element |
-| `type`               | `"button"` | Native button type         | Close element |
+| Attribute            | Value      | Purpose                    |
+| -------------------- | ---------- | -------------------------- |
+| `data-popover-close` | `string`   | Identifies as close button |
+| `type`               | `"button"` | Native button type         |
 
 ## Keyboard Interactions
 

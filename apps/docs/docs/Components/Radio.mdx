@@ -36,23 +36,23 @@ cssCode={`input[type='radio'] {
 }
 
 input[type='radio']:checked:before {
-  content: '';
-  width: 24px;
-  height: 24px;
-  background-color: rgba(0, 0, 0, 0.72);
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+content: '';
+width: 24px;
+height: 24px;
+background-color: rgba(0, 0, 0, 0.72);
+border-radius: 50%;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
 }
 
 [data-theme='dark'] input[type='radio'] {
-  border-color: rgba(255, 255, 255, 0.16);
+border-color: rgba(255, 255, 255, 0.16);
 }
 
 [data-theme='dark'] input[type='radio']:checked:before {
-  background-color: rgba(255, 255, 255, 0.72);
+background-color: rgba(255, 255, 255, 0.72);
 }
 `}
 />
@@ -323,22 +323,22 @@ The root container that manages the radio group state and provides keyboard navi
 
 **Props**
 
-| Name                | Type                         | Default      | Description                                           |
-| ------------------- | ---------------------------- | ------------ | ----------------------------------------------------- |
-| `value?`            | `string`                     | `undefined`  | Controlled selected value                             |
-| `defaultValue?`     | `string`                     | `undefined`  | Uncontrolled initial value                            |
-| `onValueChange?`    | `(value: string) => void`    | `undefined`  | Selection change handler                              |
-| `name?`             | `string`                     | `undefined`  | HTML name for form submission                         |
-| `disabled?`         | `boolean`                    | `false`      | Disables entire radio group                           |
-| `required?`         | `boolean`                    | `false`      | Marks group as required for forms                     |
-| `orientation?`      | `'horizontal' \| 'vertical'` | `'vertical'` | Layout direction for keyboard navigation              |
-| `isInToolbar?`      | `boolean`                    | `false`      | Changes keyboard behavior per WAI-ARIA guidelines     |
-| `shouldAutoFocus?`  | `boolean`                    | `false`      | Whether to focus the first focusable item on mount    |
-| `aria-label?`       | `string`                     | `undefined`  | Accessible name for the group                         |
-| `aria-labelledby?`  | `string`                     | `undefined`  | References element that labels the group              |
-| `aria-describedby?` | `string`                     | `undefined`  | References element that describes the group           |
-| `as?`               | `PolymorphicAs`          | `'div'`      | Polymorphic root element                              |
-| `children?`         | `React.ReactNode`            | `undefined`  | Radio.Item components                                 |
+| Name                | Type                         | Default      | Description                                        |
+| ------------------- | ---------------------------- | ------------ | -------------------------------------------------- |
+| `value?`            | `string`                     | `undefined`  | Controlled selected value                          |
+| `defaultValue?`     | `string`                     | `undefined`  | Uncontrolled initial value                         |
+| `onValueChange?`    | `(value: string) => void`    | `undefined`  | Selection change handler                           |
+| `name?`             | `string`                     | `undefined`  | HTML name for form submission                      |
+| `disabled?`         | `boolean`                    | `false`      | Disables entire radio group                        |
+| `required?`         | `boolean`                    | `false`      | Marks group as required for forms                  |
+| `orientation?`      | `'horizontal' \| 'vertical'` | `'vertical'` | Layout direction for keyboard navigation           |
+| `isInToolbar?`      | `boolean`                    | `false`      | Changes keyboard behavior per WAI-ARIA guidelines  |
+| `shouldAutoFocus?`  | `boolean`                    | `false`      | Whether to focus the first focusable item on mount |
+| `aria-label?`       | `string`                     | `undefined`  | Accessible name for the group                      |
+| `aria-labelledby?`  | `string`                     | `undefined`  | References element that labels the group           |
+| `aria-describedby?` | `string`                     | `undefined`  | References element that describes the group        |
+| `as?`               | `PolymorphicAs`              | `'div'`      | Polymorphic root element                           |
+| `children?`         | `React.ReactNode`            | `undefined`  | Radio.Item components                              |
 
 **Events**
 
@@ -347,15 +347,12 @@ The root container that manages the radio group state and provides keyboard navi
 | `onValueChange` | `(value: string)`        | Selection state changes | User selects different radio item |
 | `onKeyDown`     | `(event: KeyboardEvent)` | Key pressed on group    | Keyboard navigation occurs        |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute          | Value          | Purpose                               | Applied To   |
-| ------------------ | -------------- | ------------------------------------- | ------------ |
-| `role`             | `"radiogroup"` | Identifies the group of radio buttons | Root element |
-| `aria-label`       | `string`       | Provides accessible name              | Root element |
-| `aria-labelledby`  | `string`       | References labeling element           | Root element |
-| `aria-describedby` | `string`       | References describing element         | Root element |
-| `aria-required`    | `boolean`      | Indicates if selection is required    | Root element |
+| Attribute          | Value                        | Purpose                     |
+| ------------------ | ---------------------------- | --------------------------- |
+| `data-orientation` | `"horizontal" \| "vertical"` | Indicates layout direction  |
+| `data-disabled`    | `""`                         | Present when group disabled |
 
 ### Radio.Item
 
@@ -363,22 +360,22 @@ Individual radio option within a Radio.Group that handles selection and accessib
 
 **Props**
 
-| Name                | Type                | Default     | Description                                 |
-| ------------------- | ------------------- | ----------- | ------------------------------------------- |
-| `value`             | `string`            | -           | Unique identifier for this radio option     |
-| `disabled?`         | `boolean`           | `false`     | Disables this specific radio item           |
-| `aria-label?`       | `string`            | `undefined` | Accessible name when children insufficient  |
-| `aria-describedby?` | `string`            | `undefined` | References element that describes this item |
-| `as?`               | `PolymorphicAs` | `'label'`   | Polymorphic root element                    |
-| `children?`         | `React.ReactNode \| ((state: RadioItemRenderProps) => React.ReactNode)` | `undefined` | Label content or render props function |
+| Name                | Type                                                                    | Default     | Description                                 |
+| ------------------- | ----------------------------------------------------------------------- | ----------- | ------------------------------------------- |
+| `value`             | `string`                                                                | -           | Unique identifier for this radio option     |
+| `disabled?`         | `boolean`                                                               | `false`     | Disables this specific radio item           |
+| `aria-label?`       | `string`                                                                | `undefined` | Accessible name when children insufficient  |
+| `aria-describedby?` | `string`                                                                | `undefined` | References element that describes this item |
+| `as?`               | `PolymorphicAs`                                                         | `'label'`   | Polymorphic root element                    |
+| `children?`         | `React.ReactNode \| ((state: RadioItemRenderProps) => React.ReactNode)` | `undefined` | Label content or render props function      |
 
 **Render Props (RadioItemRenderProps)**
 
-| Property    | Type         | Description                                       |
-| ----------- | ------------ | ------------------------------------------------- |
-| `isChecked` | `boolean`    | Whether this radio item is currently selected     |
-| `disabled`  | `boolean`    | Whether this radio item is disabled               |
-| `isFocused` | `boolean`    | Whether this radio item currently has focus       |
+| Property    | Type         | Description                                         |
+| ----------- | ------------ | --------------------------------------------------- |
+| `isChecked` | `boolean`    | Whether this radio item is currently selected       |
+| `disabled`  | `boolean`    | Whether this radio item is disabled                 |
+| `isFocused` | `boolean`    | Whether this radio item currently has focus         |
 | `select`    | `() => void` | Function to programmatically select this radio item |
 
 **Events**
@@ -389,15 +386,14 @@ Individual radio option within a Radio.Group that handles selection and accessib
 | `onKeyDown` | `(event: KeyboardEvent)` | Key pressed on item | Keyboard interaction      |
 | `onFocus`   | `(event: FocusEvent)`    | Item receives focus | Focus management          |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute          | Value     | Purpose                            | Applied To   |
-| ------------------ | --------- | ---------------------------------- | ------------ |
-| `role`             | `"radio"` | Identifies as radio button         | Root element |
-| `aria-checked`     | `boolean` | Indicates selection state          | Root element |
-| `aria-label`       | `string`  | Provides accessible name           | Root element |
-| `aria-describedby` | `string`  | References describing element      | Root element |
-| `tabindex`         | `0 \| -1` | Manages focus with roving tabindex | Root element |
+| Attribute       | Value                      | Purpose                            |
+| --------------- | -------------------------- | ---------------------------------- |
+| `data-state`    | `"checked" \| "unchecked"` | Indicates selection state          |
+| `data-disabled` | `""`                       | Present when item disabled         |
+| `data-focused`  | `""`                       | Present when item has focus        |
+| `tabIndex`      | `0 \| -1`                  | Manages focus with roving tabindex |
 
 ## Keyboard Interactions
 
