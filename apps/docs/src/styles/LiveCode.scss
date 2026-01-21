@@ -113,27 +113,43 @@
         border: none;
       }
       .live-editor {
-        overflow-x: auto;
-        overflow-y: auto;
+        overflow: visible;
         max-height: 600px;
 
-        // Scrollbar styling
-        &::-webkit-scrollbar {
-          height: 8px;
-          width: 8px;
+        // Prevent line wrapping
+        pre {
+          white-space: pre !important;
+          word-wrap: normal !important;
+          overflow-x: auto;
+          overflow-y: auto;
+          max-height: 600px;
+
+          // Scrollbar styling for pre element
+          &::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+          }
+
+          &::-webkit-scrollbar-track {
+            background: transparent;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            background-color: transparent;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+          }
         }
 
-        &::-webkit-scrollbar-track {
-          background: transparent;
+        textarea {
+          white-space: pre !important;
+          word-wrap: normal !important;
         }
+      }
 
-        &::-webkit-scrollbar-thumb {
-          background-color: transparent;
-          border-radius: 4px;
-          transition: background-color 0.2s ease;
-        }
-
-        &:hover::-webkit-scrollbar-thumb {
+      // Hover on parent shows scrollbar on pre
+      .live-editor:hover {
+        pre::-webkit-scrollbar-thumb {
           background-color: rgba(0, 0, 0, 0.2);
 
           [data-theme='dark'] & {
@@ -141,16 +157,47 @@
           }
         }
 
-        // Prevent line wrapping
-        pre {
-          white-space: pre !important;
-          word-wrap: normal !important;
-          overflow-x: auto;
-        }
+        pre::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.05);
 
-        textarea {
-          white-space: pre !important;
-          word-wrap: normal !important;
+          [data-theme='dark'] & {
+            background: rgba(255, 255, 255, 0.05);
+          }
+        }
+      }
+    }
+
+    // Also trigger scrollbar on collapsible-content hover
+    &:hover .live-editor {
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+
+        [data-theme='dark'] & {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+      }
+
+      &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+
+        [data-theme='dark'] & {
+          background: rgba(255, 255, 255, 0.05);
+        }
+      }
+
+      pre::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+
+        [data-theme='dark'] & {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+      }
+
+      pre::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+
+        [data-theme='dark'] & {
+          background: rgba(255, 255, 255, 0.05);
         }
       }
     }
@@ -279,7 +326,6 @@
     overflow-x: auto;
     overflow-y: auto;
 
-    // Scrollbar styling
     &::-webkit-scrollbar {
       height: 8px;
       width: 8px;
@@ -295,18 +341,8 @@
       transition: background-color 0.2s ease;
     }
 
-    &:hover::-webkit-scrollbar-thumb {
-      background-color: rgba(0, 0, 0, 0.2);
-
-      [data-theme='dark'] & {
-        background-color: rgba(255, 255, 255, 0.2);
-      }
-    }
-
     pre[class*='language-'] {
       border-radius: 0 0 12px 12px;
-      overflow-x: auto;
-      overflow-y: auto;
       white-space: pre !important;
       word-wrap: normal !important;
     }
@@ -314,6 +350,22 @@
     textarea {
       white-space: pre !important;
       word-wrap: normal !important;
+    }
+  }
+
+  &:hover .live-editor::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+
+    [data-theme='dark'] & {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  &:hover .live-editor::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+
+    [data-theme='dark'] & {
+      background: rgba(255, 255, 255, 0.05);
     }
   }
 }
