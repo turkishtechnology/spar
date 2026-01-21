@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { PrimitiveButton } from '../Primitives/PrimitiveButton';
 import { useTabsContext } from './Tabs';
+import { useMergedRef } from '../../hooks';
 import type { TabsTriggerProps, TabsTriggerRenderProps } from './types';
 
 /**
@@ -16,11 +17,13 @@ export const TabsTrigger = ({
   onClick,
   onFocus,
   onBlur,
+  ref,
   ...props
 }: TabsTriggerProps) => {
   const { selectedValue, onValueChange, orientation, registerTab, unregisterTab, tabsListId } =
     useTabsContext();
   const internalRef = useRef<HTMLButtonElement>(null);
+  const mergedRef = useMergedRef(internalRef, ref);
   const triggerId = `${tabsListId}-trigger-${value}`;
   const panelId = `${tabsListId}-panel-${value}`;
   const [isFocused, setIsFocused] = useState(false);
@@ -84,7 +87,7 @@ export const TabsTrigger = ({
       type='button'
       disabled={disabled}
       shouldAutoFocus={shouldAutoFocus}
-      ref={internalRef}
+      ref={mergedRef}
       id={triggerId}
       role='tab'
       aria-selected={isSelected}
