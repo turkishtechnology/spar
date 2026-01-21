@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { PrimitiveButton } from '../Primitives/PrimitiveButton';
 import { PopoverTriggerProps, PopoverTriggerRenderProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 
@@ -82,7 +83,7 @@ export const PopoverTrigger = ({
   };
 
   return (
-    <button
+    <PrimitiveButton
       type='button'
       disabled={disabled}
       ref={triggerRefCallback}
@@ -92,11 +93,10 @@ export const PopoverTrigger = ({
       aria-controls={state.isOpen ? state.contentId : undefined}
       aria-haspopup='dialog'
       data-state={state.isOpen ? 'open' : 'closed'}
-      data-disabled={disabled ? '' : undefined}
       {...props}
     >
       {typeof children === 'function' ? children(renderProps) : children}
-    </button>
+    </PrimitiveButton>
   );
 };
 

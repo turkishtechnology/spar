@@ -1,5 +1,6 @@
 import { useState, useCallback, useId, useRef } from 'react';
-import { useMergedRef, useAutoFocus } from '../../hooks';
+import { PrimitiveButton } from '../Primitives/PrimitiveButton';
+import { useMergedRef } from '../../hooks';
 import type { SwitchProps, SwitchRenderProps, UseSwitchProps, UseSwitchReturn } from './types';
 
 /**
@@ -173,7 +174,7 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
  * Headless switch component for boolean toggle controls. Provides accessible switch semantics with form integration.
  */
 export const Switch = ({
-  as: Component = 'button',
+  as = 'button',
   checked,
   defaultChecked,
   onChange,
@@ -195,9 +196,6 @@ export const Switch = ({
   // Refs
   const internalRef = useRef<HTMLElement>(null);
   const mergedRef = useMergedRef(internalRef, ref as React.Ref<HTMLElement>);
-
-  // Auto focus handling
-  useAutoFocus(internalRef, shouldAutoFocus);
 
   // Use the switch hook
   const {
@@ -232,46 +230,46 @@ export const Switch = ({
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
     'aria-describedby': ariaDescribedBy,
-    className,
-    style,
     ...safeProps
   } = restProps;
 
-  const isNativeButton = Component === 'button';
-  // Remove native disabled/type for non-button
-  const componentProps: Record<string, unknown> = {
-    ...switchProps,
-    ...safeProps,
-    ref: mergedRef,
-    id,
-    'aria-label': ariaLabel,
-    'aria-labelledby': ariaLabelledBy,
-    'aria-describedby': ariaDescribedBy,
-    className,
-    style,
-    ...(required && { 'aria-required': true }),
-    ...(required && { 'data-required': '' }),
-  };
-  if (isNativeButton) {
-    componentProps['disabled'] = disabled;
-    componentProps['type'] = 'button';
-  } else {
-    componentProps['role'] = 'switch';
-    if (disabled) {
-      componentProps['aria-disabled'] = true;
-    }
-    if ('disabled' in componentProps) {
-      delete componentProps['disabled'];
-    }
-    if ('type' in componentProps) {
-      delete componentProps['type'];
-    }
-  }
   return (
     <>
-      <Component {...componentProps}>
+      <PrimitiveButton
+        as={as}
+        type='button'
+        disabled={disabled}
+        shouldAutoFocus={shouldAutoFocus}
+        ref={mergedRef}
+        id={id}
+        role='switch'
+        aria-checked={checkedState}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
+        aria-readonly={readOnly || undefined}
+        aria-required={required || undefined}
+        data-switch=''
+        data-state={checkedState ? 'checked' : 'unchecked'}
+        data-checked={checkedState ? '' : undefined}
+        data-readonly={readOnly ? '' : undefined}
+        data-required={required ? '' : undefined}
+        data-focus={isFocused ? '' : undefined}
+        data-hover={isHovered ? '' : undefined}
+        data-active={isActive ? '' : undefined}
+        onClick={switchProps.onClick}
+        onKeyDown={switchProps.onKeyDown}
+        onFocus={switchProps.onFocus}
+        onBlur={switchProps.onBlur}
+        onPointerEnter={switchProps.onPointerEnter}
+        onPointerLeave={switchProps.onPointerLeave}
+        onPointerDown={switchProps.onPointerDown}
+        onPointerUp={switchProps.onPointerUp}
+        onPointerCancel={switchProps.onPointerCancel}
+        {...safeProps}
+      >
         {typeof children === 'function' ? children(renderProps) : children}
-      </Component>
+      </PrimitiveButton>
       {name && (
         <input {...hiddenInputProps} name={name} value={value} form={form} required={required} />
       )}

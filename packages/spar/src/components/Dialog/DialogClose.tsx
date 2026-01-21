@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { PrimitiveButton } from '../Primitives/PrimitiveButton';
 import { useDialogContext } from './DialogRoot';
 import type { DialogCloseProps, DialogCloseRenderProps } from './types';
 
@@ -7,7 +8,7 @@ import type { DialogCloseProps, DialogCloseRenderProps } from './types';
  * Supports keyboard navigation and proper event handling.
  */
 export const DialogClose = ({
-  as: Component = 'button',
+  as = 'button',
   ref,
   onClick,
   onKeyDown,
@@ -45,15 +46,16 @@ export const DialogClose = ({
   };
 
   return (
-    <Component
+    <PrimitiveButton
+      as={as}
+      type='button'
       ref={ref}
-      type={Component === 'button' ? 'button' : undefined}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       {...props}
     >
       {typeof children === 'function' ? children(renderProps) : children}
-    </Component>
+    </PrimitiveButton>
   );
 };
 
