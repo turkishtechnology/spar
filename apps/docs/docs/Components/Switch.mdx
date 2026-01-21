@@ -283,10 +283,10 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
 | `checked?`          | `boolean`                    | `undefined` | Controlled checked state. When provided, component operates in controlled mode |
 | `defaultChecked?`   | `boolean`                    | `false`     | Default checked state for uncontrolled usage                                   |
 | `onChange?`         | `(checked: boolean) => void` | `undefined` | Callback fired when the checked state changes                                  |
-| `disabled?`       | `boolean`                    | `false`     | Disabled state - properly announced to screen readers                          |
-| `name?`             | `string`                     | `undefined` | Form input name for form integration                                           |
-| `value?`            | `string`                     | `'on'`      | Form input value when checked                                                  |
-| `form?`             | `string`                     | `undefined` | Form ID to associate with                                                      |
+| `disabled?`       | `boolean`                    | `false`     | Disabled state - prevents interaction and is properly announced to screen readers                          |
+| `name?`             | `string`                     | `undefined` | Name attribute for form submission                                           |
+| `value?`            | `string`                     | `'on'`      | Value sent in form data when checked                                                  |
+| `form?`             | `string`                     | `undefined` | ID of the form this switch belongs to                                                      |
 | `required?`       | `boolean`                    | `false`     | Required state for form validation                                             |
 | `readOnly?`       | `boolean`                    | `false`     | Read-only state - prevents interaction                                         |
 | `shouldAutoFocus?`  | `boolean`                    | `false`     | Auto-focus on mount                                                            |

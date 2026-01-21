@@ -28,21 +28,21 @@ The Switch follows a simple single-component pattern rather than compound struct
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `PolymorphicAs` | No | `"button"` | The element or component to render as |
-| `checked` | `boolean` | No | `undefined` | Controlled checked state |
+| `checked` | `boolean` | No | `undefined` | Controlled checked state. When provided, component operates in controlled mode |
 | `defaultChecked` | `boolean` | No | `false` | Default checked state for uncontrolled usage |
 | `onChange` | `(checked: boolean) => void` | No | `undefined` | Callback fired when the checked state changes |
-| `disabled` | `boolean` | No | `false` | Whether the switch is disabled |
-| `name` | `string` | No | `undefined` | Form input name for form integration |
-| `value` | `string` | No | `"on"` | Form input value when checked |
-| `form` | `string` | No | `undefined` | Form ID to associate with |
-| `required` | `boolean` | No | `false` | Whether the switch is required in forms |
-| `readOnly` | `boolean` | No | `false` | Whether the switch is read-only |
-| `autoFocus` | `boolean` | No | `false` | Whether to auto-focus on mount |
+| `disabled` | `boolean` | No | `false` | Disabled state - prevents interaction and is properly announced to screen readers |
+| `name` | `string` | No | `undefined` | Name attribute for form submission |
+| `value` | `string` | No | `"on"` | Value sent in form data when checked |
+| `form` | `string` | No | `undefined` | ID of the form this switch belongs to |
+| `required` | `boolean` | No | `false` | Required state for form validation |
+| `readOnly` | `boolean` | No | `false` | Read-only state - prevents interaction |
+| `shouldAutoFocus` | `boolean` | No | `false` | Auto-focus on mount |
 | `id` | `string` | No | `undefined` | HTML id attribute |
-| `aria-label` | `string` | No | `undefined` | Accessible name for the switch |
+| `aria-label` | `string` | No | `undefined` | Accessible name for the switch. Required when switch has no visible label |
 | `aria-labelledby` | `string` | No | `undefined` | ID of element that labels the switch |
 | `aria-describedby` | `string` | No | `undefined` | ID of element that describes the switch |
-| `children` | `ReactNode \| ((state: SwitchRenderProps) => ReactNode)` | No | `undefined` | Content to display inside the switch or render function for render props pattern |
+| `children` | `ReactNode \| ((state: SwitchRenderProps) => ReactNode)` | No | `undefined` | Content to display inside the switch, or render props function |
 
 ### SwitchRenderProps
 

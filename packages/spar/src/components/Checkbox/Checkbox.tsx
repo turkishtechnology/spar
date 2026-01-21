@@ -152,6 +152,7 @@ export const Checkbox = ({
     checked,
     setChecked: setCheckedState,
     disabled,
+    readOnly,
     isFocused,
     isHovered,
     isPressed,
