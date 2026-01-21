@@ -4,6 +4,7 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent,
 } from 'react';
+import { PrimitiveButton } from '../Primitives/PrimitiveButton';
 import type {
   DropdownMenuTriggerProps,
   DropdownMenuFocusStrategy,
@@ -13,7 +14,7 @@ import { useDropdownMenuRootContext } from './contexts';
 import { composeRefs } from './utils';
 
 export const DropdownMenuTrigger = ({
-  as: Component = 'button',
+  as = 'button',
   disabled: disabledProp,
   onClick,
   onKeyDown,
@@ -87,8 +88,6 @@ export const DropdownMenuTrigger = ({
     [onKeyDown, disabled, handleOpen, menu],
   );
 
-  const isNativeButton = Component === 'button';
-
   // Render props for children function
   const renderProps: DropdownMenuTriggerRenderProps = {
     isOpen: menu.open,
@@ -105,24 +104,22 @@ export const DropdownMenuTrigger = ({
   };
 
   return (
-    <Component
-      {...props}
+    <PrimitiveButton
+      as={as}
+      type='button'
+      disabled={disabled}
       ref={triggerRefCallback}
       id={menu.triggerId}
       aria-haspopup='menu'
       aria-expanded={menu.open}
       aria-controls={menu.open ? menu.contentId : undefined}
       data-state={menu.open ? 'open' : 'closed'}
-      {...(disabled ? { 'data-disabled': '' } : {})}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      role={isNativeButton ? undefined : 'button'}
-      tabIndex={isNativeButton ? props.tabIndex : disabled ? -1 : (props.tabIndex ?? 0)}
-      disabled={isNativeButton ? disabled : undefined}
-      {...(!isNativeButton && disabled ? { 'aria-disabled': true } : {})}
+      {...props}
     >
       {typeof children === 'function' ? children(renderProps) : children}
-    </Component>
+    </PrimitiveButton>
   );
 };
 
