@@ -72,13 +72,17 @@ export const TabsList = ({
           break;
 
         case 'ArrowDown':
-          nextValue = getNextTab(currentValue, 1);
-          event.preventDefault();
+          if (orientation === 'vertical') {
+            nextValue = getNextTab(currentValue, 1);
+            event.preventDefault();
+          }
           break;
 
         case 'ArrowUp':
-          nextValue = getNextTab(currentValue, -1);
-          event.preventDefault();
+          if (orientation === 'vertical') {
+            nextValue = getNextTab(currentValue, -1);
+            event.preventDefault();
+          }
           break;
 
         case 'Home': {
