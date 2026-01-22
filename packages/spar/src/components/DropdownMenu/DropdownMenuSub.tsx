@@ -72,6 +72,7 @@ export const DropdownMenuSub = ({
       setFocusStrategy,
       triggerRef,
       closeMenu,
+      closeRootMenu: rootContext.closeMenu,
     }),
     [
       isOpen,
@@ -81,6 +82,7 @@ export const DropdownMenuSub = ({
       rootContext.modal,
       rootContext.dir,
       rootContext.closeOnSelect,
+      rootContext.closeMenu,
       focusStrategy,
       setFocusStrategy,
       triggerRef,

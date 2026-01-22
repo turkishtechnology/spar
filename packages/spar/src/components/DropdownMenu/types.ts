@@ -347,4 +347,5 @@ export interface DropdownMenuSubContextValue {
   setFocusStrategy: (strategy: DropdownMenuFocusStrategy) => void;
   triggerRef: RefObject<HTMLElement | null>;
   closeMenu: (options?: { focusTrigger?: boolean }) => void;
+  closeRootMenu: (options?: { focusTrigger?: boolean }) => void;
 }
