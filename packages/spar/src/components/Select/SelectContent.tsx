@@ -186,9 +186,9 @@ export const SelectContent = ({
 
       switch (key) {
         case 'Escape':
-          event.preventDefault();
           onEscapeKeyDown?.(event.nativeEvent);
           if (!event.defaultPrevented) {
+            event.preventDefault();
             context.onOpenChange(false);
             context.triggerRef.current?.focus();
           }
