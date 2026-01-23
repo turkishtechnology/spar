@@ -67,6 +67,9 @@ export const DropdownMenuContent = ({
   const menu = useMenuScope();
   const parentSubContext = useContext(DropdownMenuSubContext);
   const isSubmenu = parentSubContext === menu;
+  // Get closeRootMenu for submenus - this closes the entire menu hierarchy
+  const closeRootMenu =
+    isSubmenu && parentSubContext ? parentSubContext.closeRootMenu : menu.closeMenu;
   // Auto-determine side based on menu type
   const side = sideProp ?? (isSubmenu ? 'right' : 'bottom');
   const contentRef = useRef<HTMLElement | null>(null);
@@ -383,7 +386,8 @@ export const DropdownMenuContent = ({
         case 'Escape':
           event.preventDefault();
           onEscapeKeyDown?.(event.nativeEvent);
-          menu.closeMenu();
+          // Escape closes the entire menu hierarchy, not just the current level
+          closeRootMenu();
           return;
         case 'Tab':
           if (menu.modal) {
@@ -414,6 +418,7 @@ export const DropdownMenuContent = ({
       highlightFirst,
       highlightLast,
       onEscapeKeyDown,
+      closeRootMenu,
       menu.dir,
       menu.closeMenu,
       menu.modal,

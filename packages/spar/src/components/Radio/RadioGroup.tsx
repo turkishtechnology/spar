@@ -85,21 +85,32 @@ export const RadioGroup = ({
         return;
       }
 
-      event.preventDefault();
-
       if (items.length === 0) return;
 
       const currentIndex = focusedValue ? items.indexOf(focusedValue) : -1;
-      let nextIndex: number;
+      let nextIndex: number | undefined;
+      const isVertical = orientation === 'vertical';
 
       switch (event.key) {
         case 'ArrowUp':
-        case 'ArrowLeft':
-          nextIndex = currentIndex <= 0 ? items.length - 1 : currentIndex - 1;
+          if (isVertical) {
+            nextIndex = currentIndex <= 0 ? items.length - 1 : currentIndex - 1;
+          }
           break;
         case 'ArrowDown':
+          if (isVertical) {
+            nextIndex = currentIndex >= items.length - 1 ? 0 : currentIndex + 1;
+          }
+          break;
+        case 'ArrowLeft':
+          if (!isVertical) {
+            nextIndex = currentIndex <= 0 ? items.length - 1 : currentIndex - 1;
+          }
+          break;
         case 'ArrowRight':
-          nextIndex = currentIndex >= items.length - 1 ? 0 : currentIndex + 1;
+          if (!isVertical) {
+            nextIndex = currentIndex >= items.length - 1 ? 0 : currentIndex + 1;
+          }
           break;
         case 'Home':
           nextIndex = 0;
@@ -111,18 +122,21 @@ export const RadioGroup = ({
           return;
       }
 
-      const nextValue = items[nextIndex];
-      if (nextValue) {
-        handleFocusMove(nextValue);
+      if (nextIndex !== undefined) {
+        event.preventDefault();
+        const nextValue = items[nextIndex];
+        if (nextValue) {
+          handleFocusMove(nextValue);
 
-        // In normal mode (not toolbar), arrow keys also change selection
-        // In toolbar mode, only Space/Enter changes selection
-        if (!isInToolbar) {
-          handleValueChange(nextValue);
+          // In normal mode (not toolbar), arrow keys also change selection
+          // In toolbar mode, only Space/Enter changes selection
+          if (!isInToolbar) {
+            handleValueChange(nextValue);
+          }
         }
       }
     },
-    [items, focusedValue, handleFocusMove, isInToolbar, handleValueChange],
+    [items, focusedValue, orientation, handleFocusMove, isInToolbar, handleValueChange],
   );
 
   // Focus management: Only set focus on user interaction (Tab into group)

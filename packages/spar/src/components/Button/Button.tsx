@@ -44,8 +44,8 @@ export const Button = ({
         }
       }
 
-      // Fire click handler - only for mouse events
-      if (onClick && event.type === 'click') {
+      // Fire click handler for both mouse and keyboard activation
+      if (onClick) {
         onClick(event as React.MouseEvent<HTMLButtonElement>);
       }
     },
