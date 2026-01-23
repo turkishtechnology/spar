@@ -1,4 +1,5 @@
 import React from 'react';
+import { PrimitiveButton } from '../Primitives/PrimitiveButton';
 import { useCollapsibleContext } from './Collapsible';
 import type { CollapsibleTriggerProps, CollapsibleTriggerRenderProps } from './types';
 
@@ -6,7 +7,7 @@ import type { CollapsibleTriggerProps, CollapsibleTriggerRenderProps } from './t
  * Collapsible trigger component that toggles the visibility of collapsible content.
  */
 export const CollapsibleTrigger = ({
-  as: Component = 'button',
+  as = 'button',
   children,
   onClick,
   onKeyDown,
@@ -47,31 +48,21 @@ export const CollapsibleTrigger = ({
   // Get data attributes for styling
   const dataState = isOpen ? 'open' : 'closed';
 
-  // Build props with conditional logic for button vs non-button elements
-  const isButton = Component === 'button';
-  const triggerProps = {
-    id: triggerId,
-    'aria-expanded': isOpen,
-    'aria-controls': contentId,
-    'data-state': dataState,
-    'data-disabled': disabled ? '' : undefined,
-    onClick: handleClick,
-    onKeyDown: handleKeyDown,
-    ...props,
-    // Button-specific props
-    ...(isButton && { type: 'button' as const, disabled }),
-    // Non-button props for accessibility
-    ...(!isButton && {
-      role: 'button',
-      'aria-disabled': disabled,
-      tabIndex: disabled ? -1 : 0,
-    }),
-  };
-
   return (
-    <Component {...triggerProps}>
+    <PrimitiveButton
+      as={as}
+      type='button'
+      disabled={disabled}
+      id={triggerId}
+      aria-expanded={isOpen}
+      aria-controls={contentId}
+      data-state={dataState}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      {...props}
+    >
       {typeof children === 'function' ? children(renderProps) : children}
-    </Component>
+    </PrimitiveButton>
   );
 };
 

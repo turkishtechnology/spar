@@ -1,4 +1,5 @@
 import type { ComponentProps, ReactNode, RefObject, CSSProperties } from 'react';
+import type { PrimitiveButtonProps } from '../Primitives/PrimitiveButton/types';
 
 export type PopoverSide = 'top' | 'bottom' | 'left' | 'right';
 export type PopoverAlign = 'start' | 'center' | 'end';
@@ -114,7 +115,7 @@ export interface PopoverRootProps {
  * Props for PopoverTrigger component
  * @remarks Fully accessible, headless popover trigger
  */
-export interface PopoverTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
+export interface PopoverTriggerProps extends Omit<PrimitiveButtonProps, 'children'> {
   /**
    * Children content or render function for render props pattern
    */
@@ -260,7 +261,7 @@ export interface PopoverPortalProps {
  * Props for PopoverClose component
  * @remarks Close trigger that automatically closes the popover
  */
-export interface PopoverCloseProps extends Omit<ComponentProps<'button'>, 'children'> {
+export interface PopoverCloseProps extends Omit<PrimitiveButtonProps, 'children'> {
   /**
    * Children content or render function for render props pattern
    */
