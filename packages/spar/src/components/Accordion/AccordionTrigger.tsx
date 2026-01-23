@@ -22,13 +22,35 @@ export const AccordionTrigger = ({
       const { key } = event;
       const currentIndex = accordionContext.getItemIndex(itemContext.value);
       const totalItems = accordionContext.itemCount;
+      const isHorizontal = accordionContext.orientation === 'horizontal';
 
       switch (key) {
         case 'ArrowDown':
         case 'ArrowUp': {
+          if (isHorizontal) break;
           event.preventDefault();
           const isDown = key === 'ArrowDown';
           const nextIndex = isDown
+            ? (currentIndex + 1) % totalItems
+            : (currentIndex - 1 + totalItems) % totalItems;
+
+          const nextItemValue = accordionContext.getItemAtIndex(nextIndex);
+          if (nextItemValue) {
+            // Focus the next trigger
+            const nextTrigger = document.querySelector(
+              `[data-accordion-trigger][data-value="${nextItemValue}"]`,
+            ) as HTMLElement;
+            nextTrigger?.focus();
+          }
+          break;
+        }
+
+        case 'ArrowRight':
+        case 'ArrowLeft': {
+          if (!isHorizontal) break;
+          event.preventDefault();
+          const isRight = key === 'ArrowRight';
+          const nextIndex = isRight
             ? (currentIndex + 1) % totalItems
             : (currentIndex - 1 + totalItems) % totalItems;
 

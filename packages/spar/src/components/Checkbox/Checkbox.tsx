@@ -87,7 +87,15 @@ export const Checkbox = ({
       event.preventDefault();
       handleToggleChecked();
     }
+
     // Enter key submits form (if in form) - no state change
+    if (event.key === 'Enter') {
+      const form = elementRef.current?.closest('form');
+      if (form) {
+        event.preventDefault();
+        form.requestSubmit();
+      }
+    }
 
     onKeyDown?.(event);
   };
