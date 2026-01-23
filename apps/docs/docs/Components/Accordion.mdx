@@ -384,12 +384,11 @@ The root container that provides context and manages the state for all accordion
 | --------------- | ----------------------------- | ----------------------------------------- | --------------------------------------- |
 | `onValueChange` | `(value: string \| string[])` | State changes when panels expand/collapse | User interaction or programmatic change |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute          | Value                        | Purpose                          | Applied To   |
-| ------------------ | ---------------------------- | -------------------------------- | ------------ |
-| `role`             | `"region"`                   | Groups related accordion items   | Root element |
-| `data-orientation` | `"vertical" \| "horizontal"` | Indicates navigation orientation | Root element |
+| Attribute          | Value                        | Purpose                          |
+| ------------------ | ---------------------------- | -------------------------------- |
+| `data-orientation` | `"vertical" \| "horizontal"` | Indicates navigation orientation |
 
 ### AccordionItem
 
@@ -410,12 +409,12 @@ Individual accordion item that contains a header and content panel.
 | ---- | ---------- | ------------------------------------------- | -------------- |
 | None | -          | Item manages internal state through context | -              |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value                | Purpose                   | Applied To                 |
-| --------------- | -------------------- | ------------------------- | -------------------------- |
-| `data-state`    | `"open" \| "closed"` | Indicates expansion state | Item element               |
-| `data-disabled` | `boolean`            | Indicates disabled state  | Item element when disabled |
+| Attribute       | Value                | Purpose                   |
+| --------------- | -------------------- | ------------------------- |
+| `data-state`    | `"open" \| "closed"` | Indicates expansion state |
+| `data-disabled` | `boolean`            | Indicates disabled state  |
 
 ### AccordionHeader
 
@@ -435,12 +434,11 @@ Semantic heading wrapper for the accordion trigger button.
 | ---- | ---------- | ------------------------- | -------------- |
 | None | -          | Header is purely semantic | -              |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute    | Value       | Purpose                       | Applied To     |
-| ------------ | ----------- | ----------------------------- | -------------- |
-| `role`       | `"heading"` | Identifies as heading element | Header element |
-| `aria-level` | `number`    | Specifies heading level       | Header element |
+| Attribute | Value    | Purpose           |
+| --------- | -------- | ----------------- |
+| `id`      | `string` | Unique identifier |
 
 ### AccordionTrigger
 
@@ -472,14 +470,13 @@ Button that toggles the visibility of the associated content panel.
 | `onClick`   | `(event: React.MouseEvent)`    | Trigger clicked        | Mouse click on trigger |
 | `onKeyDown` | `(event: React.KeyboardEvent)` | Key pressed on trigger | Keyboard interaction   |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value     | Purpose                          | Applied To                    |
-| --------------- | --------- | -------------------------------- | ----------------------------- |
-| `aria-expanded` | `boolean` | Indicates if content is expanded | Trigger element               |
-| `aria-controls` | `string`  | References controlled content ID | Trigger element               |
-| `aria-disabled` | `boolean` | Indicates disabled state         | Trigger element when disabled |
-| `id`            | `string`  | Unique identifier for trigger    | Trigger element               |
+| Attribute       | Value                | Purpose                   |
+| --------------- | -------------------- | ------------------------- |
+| `id`            | `string`             | Unique identifier         |
+| `data-state`    | `"open" \| "closed"` | Indicates expansion state |
+| `data-disabled` | `""`                 | Present when disabled     |
 
 ### AccordionContent
 
@@ -499,14 +496,12 @@ Collapsible panel containing the accordion item content.
 | ---- | ---------- | ------------------------------------- | -------------- |
 | None | -          | Content visibility managed by context | -              |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute         | Value                | Purpose                           | Applied To      |
-| ----------------- | -------------------- | --------------------------------- | --------------- |
-| `role`            | `"region"`           | Identifies as content region      | Content element |
-| `aria-labelledby` | `string`             | References controlling trigger ID | Content element |
-| `id`              | `string`             | Unique identifier for content     | Content element |
-| `data-state`      | `"open" \| "closed"` | Indicates visibility state        | Content element |
+| Attribute    | Value                | Purpose                    |
+| ------------ | -------------------- | -------------------------- |
+| `id`         | `string`             | Unique identifier          |
+| `data-state` | `"open" \| "closed"` | Indicates visibility state |
 
 ## Keyboard Interactions
 

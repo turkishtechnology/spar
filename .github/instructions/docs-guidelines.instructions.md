@@ -97,7 +97,7 @@ Every component documentation page MUST follow this exact structure:
 - **Props Table Columns**: Name, Type, Default, Description
 - **Events Table Columns**: Name, Parameters, Description, When Triggered
 - **Methods Table Columns**: Name, Parameters, Returns, Description
-- **ARIA Table Columns**: Attribute, Value, Purpose, Applied To
+- **HTML Attributes Table Columns**: Attribute, Value, Purpose
 - **Clear Types**: Use exact TypeScript notation (e.g., `string | number | undefined`)
 - **Required Indicators**: Use TypeScript `?` syntax in Name column (`prop?` for optional)
 - **Default Values**: Show actual default values, use `undefined` when applicable
@@ -416,12 +416,11 @@ The [ComponentName] component is built as a compound component with multiple par
 |------|------------|-------------|----------------|
 | `onOpenChange` | `(open: boolean)` | Open state changes | User interaction or programmatic change |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value | Purpose | Applied To |
-|-----------|-------|---------|------------|
-| `aria-expanded` | `boolean` | Indicates expansion state | Root element |
-| `role` | `"group"` | Groups related elements | Root element |
+| Attribute | Value | Purpose |
+|-----------|-------|---------|
+| `data-state` | `"open" \| "closed"` | Indicates expansion state |
 
 ### ComponentName.Trigger
 
@@ -451,12 +450,12 @@ The [ComponentName] component is built as a compound component with multiple par
 | `onClick` | `(event: MouseEvent)` | Trigger clicked | Mouse click |
 | `onKeyDown` | `(event: KeyboardEvent)` | Key pressed | Keyboard interaction |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value | Purpose | Applied To |
-|-----------|-------|---------|------------|
-| `aria-expanded` | `boolean` | Indicates if content is expanded | Trigger element |
-| `aria-controls` | `string` | References controlled content | Trigger element |
+| Attribute | Value | Purpose |
+|-----------|-------|---------|
+| `data-state` | `"open" \| "closed"` | Indicates expansion state |
+| `data-disabled` | `""` | Present when disabled |
 
 
 [Continue this pattern for EVERY compound part that exists]
@@ -485,7 +484,7 @@ Complete keyboard behavior for the entire component:
 ### FOR EACH COMPOUND PART - Include These 3 Tables
 - **Props Table**: All props with TypeScript types
 - **Events Table**: Event handlers with parameters  
-- **ARIA Table**: Accessibility attributes
+- **HTML Attributes Table**: Data attributes for styling hooks
 
 ### MUST Include
 - All compound parts documented separately
@@ -508,7 +507,7 @@ Complete keyboard behavior for the entire component:
 ### Quality Check FOR EACH COMPOUND PART
 - [ ] Props table complete with TypeScript types
 - [ ] Events table with all handlers
-- [ ] ARIA table with accessibility attributes
+- [ ] HTML Attributes table with data attributes
 - [ ] Optional props marked with `?` syntax
 - [ ] Real default values shown
 
@@ -533,14 +532,13 @@ Complete keyboard behavior for the entire component:
 ## Compound Components Strategy
 - **Find all parts**: Root, Trigger, Content, Item, etc.
 - **Document each separately**: Every part gets own section
-- **Complete tables**: Each part needs all 3 tables
+- **Complete tables**: Each part needs Props, Events, and HTML Attributes tables
 - **Use real implementation**: Only document what exists
 - **Start simple**: Root first, then child parts
 - **End with keyboard**: Global keyboard interactions as final section
 
 ### Accessibility Documentation
-- Document ARIA roles and properties for each compound part
-- Document ARIA roles and properties
+- Document keyboard interactions
 - Explain screen reader behavior
 - Show focus management
 

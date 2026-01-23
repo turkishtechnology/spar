@@ -45,49 +45,49 @@ cssCode={`.tabs {
 }
 
 [data-theme='dark'] .tabs {
-  border: 0.732px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.12);
+border: 0.732px solid rgba(255, 255, 255, 0.16);
+background: rgba(255, 255, 255, 0.12);
 }
 
 .tabs-list {
-  display: flex;
-  align-items: center;
-  gap: 5.858px;
+display: flex;
+align-items: center;
+gap: 5.858px;
 }
 
 .tab {
-  border: none;
-  background: transparent;
-  color: #717784;
-  font-size: 10.251px;
-  height: 100%;
+border: none;
+background: transparent;
+color: #717784;
+font-size: 10.251px;
+height: 100%;
 }
 
 [data-theme='dark'] .tab {
-  color: #99a0ae;
+color: #99a0ae;
 }
 
 .tab[data-state='active'] {
-  color: #222530;
+color: #222530;
 }
 
 [data-theme='dark'] .tab[data-state='active'] {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .tab-label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100%;
 }
 
 .tab[data-state='active'] .tab-label {
-  border-bottom: 1.464px solid rgba(0, 0, 0, 0.72);
+border-bottom: 1.464px solid rgba(0, 0, 0, 0.72);
 }
 
 [data-theme='dark'] .tab[data-state='active'] .tab-label {
-  border-color: rgba(255, 255, 255, 0.72);
+border-color: rgba(255, 255, 255, 0.72);
 }
 `}
 />
@@ -321,7 +321,7 @@ function ForceMountTabs() {
 | `orientation`    | `'horizontal' \| 'vertical'`           | `'horizontal'` | Tabs orientation affecting keyboard navigation                |
 | `dir`            | `'ltr' \| 'rtl'`                       | `'ltr'`        | Text direction for arrow key navigation                       |
 | `activationMode` | `'automatic' \| 'manual'`              | `'automatic'`  | Whether tabs activate on focus or require explicit activation |
-| `as`             | `PolymorphicAs`                    | `'div'`        | Polymorphic component type                                    |
+| `as`             | `PolymorphicAs`                        | `'div'`        | Polymorphic component type                                    |
 
 #### Events
 
@@ -331,27 +331,27 @@ function ForceMountTabs() {
 
 #### ARIA
 
-| Attribute          | Value                    | Purpose                   | Applied To   |
-| ------------------ | ------------------------ | ------------------------- | ------------ |
-| `data-orientation` | `horizontal \| vertical` | Indicates tab orientation | Root element |
-| `data-dir`         | `ltr \| rtl`             | Indicates text direction  | Root element |
+| Attribute          | Value                    | Purpose                   |
+| ------------------ | ------------------------ | ------------------------- |
+| `data-orientation` | `horizontal \| vertical` | Indicates tab orientation |
+| `data-dir`         | `ltr \| rtl`             | Indicates text direction  |
 
 ### TabsList
 
 #### Props
 
-| Name   | Type                | Default | Description                               |
-| ------ | ------------------- | ------- | ----------------------------------------- |
-| `loop` | `boolean`           | `true`  | Whether arrow key navigation wraps around |
+| Name   | Type            | Default | Description                               |
+| ------ | --------------- | ------- | ----------------------------------------- |
+| `loop` | `boolean`       | `true`  | Whether arrow key navigation wraps around |
 | `as`   | `PolymorphicAs` | `'div'` | Polymorphic component type                |
 
 #### ARIA
 
-| Attribute          | Value                    | Purpose                              | Applied To       |
-| ------------------ | ------------------------ | ------------------------------------ | ---------------- |
-| `role`             | `tablist`                | Identifies the element as a tab list | TabsList element |
-| `aria-orientation` | `horizontal \| vertical` | Indicates tab list orientation       | TabsList element |
-| `data-orientation` | `horizontal \| vertical` | Indicates tab list orientation       | TabsList element |
+| Attribute          | Value                    | Purpose                              |
+| ------------------ | ------------------------ | ------------------------------------ |
+| `role`             | `tablist`                | Identifies the element as a tab list |
+| `aria-orientation` | `horizontal \| vertical` | Indicates tab list orientation       |
+| `data-orientation` | `horizontal \| vertical` | Indicates tab list orientation       |
 
 ### TabsTrigger
 
@@ -362,7 +362,7 @@ function ForceMountTabs() {
 | `value`           | `string`                                                      | —          | Unique identifier for the tab              |
 | `disabled`        | `boolean`                                                     | `false`    | Disables this specific tab                 |
 | `shouldAutoFocus` | `boolean`                                                     | `false`    | Whether to focus this tab trigger on mount |
-| `as`              | `PolymorphicAs`                                           | `'button'` | Polymorphic component type                 |
+| `as`              | `PolymorphicAs`                                               | `'button'` | Polymorphic component type                 |
 | `children`        | `ReactNode \| ((state: TabsTriggerRenderProps) => ReactNode)` | —          | Children content or render function        |
 
 #### TabsTriggerRenderProps
@@ -385,39 +385,39 @@ function ForceMountTabs() {
 
 #### ARIA
 
-| Attribute          | Value                    | Purpose                         | Applied To          |
-| ------------------ | ------------------------ | ------------------------------- | ------------------- |
-| `role`             | `tab`                    | Identifies the element as a tab | TabsTrigger element |
-| `aria-selected`    | `true \| false`          | Indicates if tab is selected    | TabsTrigger element |
-| `aria-controls`    | `string`                 | References controlled tabpanel  | TabsTrigger element |
-| `aria-disabled`    | `true \| false`          | Indicates if tab is disabled    | TabsTrigger element |
-| `tabindex`         | `0 \| -1`                | Manages focus in tab list       | TabsTrigger element |
-| `data-state`       | `active \| inactive`     | Indicates tab state             | TabsTrigger element |
-| `data-disabled`    | `'' \| undefined`        | Indicates disabled state        | TabsTrigger element |
-| `data-orientation` | `horizontal \| vertical` | Indicates tab orientation       | TabsTrigger element |
-| `data-value`       | `string`                 | Tab's unique value              | TabsTrigger element |
-| `data-autofocus`   | `'' \| undefined`        | Indicates auto-focus state      | TabsTrigger element |
+| Attribute          | Value                    | Purpose                         |
+| ------------------ | ------------------------ | ------------------------------- |
+| `role`             | `tab`                    | Identifies the element as a tab |
+| `aria-selected`    | `true \| false`          | Indicates if tab is selected    |
+| `aria-controls`    | `string`                 | References controlled tabpanel  |
+| `aria-disabled`    | `true \| false`          | Indicates if tab is disabled    |
+| `tabIndex`         | `0 \| -1`                | Manages focus in tab list       |
+| `data-state`       | `active \| inactive`     | Indicates tab state             |
+| `data-disabled`    | `'' \| undefined`        | Indicates disabled state        |
+| `data-orientation` | `horizontal \| vertical` | Indicates tab orientation       |
+| `data-value`       | `string`                 | Tab's unique value              |
+| `data-autofocus`   | `'' \| undefined`        | Indicates auto-focus state      |
 
 ### TabsContent
 
 #### Props
 
-| Name         | Type                | Default | Description                                     |
-| ------------ | ------------------- | ------- | ----------------------------------------------- |
-| `value`      | `string`            | —       | Unique identifier matching a TabsTrigger value  |
-| `forceMount` | `boolean`           | `false` | Force content to remain mounted when not active |
+| Name         | Type            | Default | Description                                     |
+| ------------ | --------------- | ------- | ----------------------------------------------- |
+| `value`      | `string`        | —       | Unique identifier matching a TabsTrigger value  |
+| `forceMount` | `boolean`       | `false` | Force content to remain mounted when not active |
 | `as`         | `PolymorphicAs` | `'div'` | Polymorphic component type                      |
 
 #### ARIA
 
-| Attribute          | Value                    | Purpose                               | Applied To          |
-| ------------------ | ------------------------ | ------------------------------------- | ------------------- |
-| `role`             | `tabpanel`               | Identifies the element as a tab panel | TabsContent element |
-| `aria-labelledby`  | `string`                 | References controlling tab            | TabsContent element |
-| `tabindex`         | `0`                      | Makes panel focusable                 | TabsContent element |
-| `hidden`           | `true \| false`          | Hides inactive panels                 | TabsContent element |
-| `data-state`       | `active \| inactive`     | Indicates panel state                 | TabsContent element |
-| `data-orientation` | `horizontal \| vertical` | Indicates tab orientation             | TabsContent element |
+| Attribute          | Value                    | Purpose                               |
+| ------------------ | ------------------------ | ------------------------------------- |
+| `role`             | `tabpanel`               | Identifies the element as a tab panel |
+| `aria-labelledby`  | `string`                 | References controlling tab            |
+| `tabIndex`         | `0`                      | Makes panel focusable                 |
+| `hidden`           | `true \| false`          | Hides inactive panels                 |
+| `data-state`       | `active \| inactive`     | Indicates panel state                 |
+| `data-orientation` | `horizontal \| vertical` | Indicates tab orientation             |
 
 ## Keyboard Interactions
 

@@ -442,12 +442,12 @@ Optional provider for sharing configuration across multiple tooltip instances.
 | ---- | ---------- | -------------------------------- | -------------- |
 | None | -          | Provider manages internal timers | -              |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute               | Value     | Purpose                     | Applied To         |
-| ----------------------- | --------- | --------------------------- | ------------------ |
-| `data-tooltip-provider` | `""`      | Identifies provider wrapper | Provider container |
-| `data-skip-delay`       | `boolean` | Indicates skip delay mode   | Provider container |
+| Attribute               | Value     | Purpose                     |
+| ----------------------- | --------- | --------------------------- |
+| `data-tooltip-provider` | `""`      | Identifies provider wrapper |
+| `data-skip-delay`       | `boolean` | Indicates skip delay mode   |
 
 ### TooltipRoot
 
@@ -471,11 +471,9 @@ Root component that manages tooltip state and provides context to child componen
 | -------------- | ----------------- | -------------------------- | --------------------------- |
 | `onOpenChange` | `(open: boolean)` | Tooltip visibility changes | User interaction or control |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value | Purpose                   | Applied To   |
-| --------- | ----- | ------------------------- | ------------ |
-| None      | -     | Root manages context only | Context only |
+_(No specific HTML attributes - Root manages context only)_
 
 ### TooltipTrigger
 
@@ -509,16 +507,14 @@ The trigger element that shows/hides the tooltip on hover or focus. Always rende
 | `onBlur`         | `(event: React.FocusEvent)`    | Trigger loses focus    | Focus removed              |
 | `onKeyDown`      | `(event: React.KeyboardEvent)` | Key pressed on trigger | Keyboard interaction       |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute          | Value                | Purpose                       | Applied To      |
-| ------------------ | -------------------- | ----------------------------- | --------------- |
-| `id`               | `string`             | Unique identifier for trigger | Trigger element |
-| `aria-describedby` | `string`             | References tooltip content ID | When not label  |
-| `aria-labelledby`  | `string`             | References tooltip as label   | When asLabel    |
-| `data-state`       | `"open" \| "closed"` | Indicates tooltip state       | Trigger element |
-| `data-placement`   | `Side`               | Indicates tooltip placement   | Trigger element |
-| `data-disabled`    | `boolean`            | Indicates disabled state      | Trigger element |
+| Attribute        | Value                | Purpose                     |
+| ---------------- | -------------------- | --------------------------- |
+| `id`             | `string`             | Unique identifier           |
+| `data-state`     | `"open" \| "closed"` | Indicates tooltip state     |
+| `data-placement` | `Side`               | Indicates tooltip placement |
+| `data-disabled`  | `boolean`            | Indicates disabled state    |
 
 ### TooltipPortal
 
@@ -538,11 +534,9 @@ Portal component for rendering tooltip outside normal DOM tree.
 | ---- | ---------- | ----------------------------- | -------------- |
 | None | -          | Portal manages rendering only | -              |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute | Value | Purpose                       | Applied To |
-| --------- | ----- | ----------------------------- | ---------- |
-| None      | -     | Portal is transparent wrapper | Container  |
+_(No specific HTML attributes - Portal is transparent wrapper)_
 
 ### TooltipContent
 
@@ -579,15 +573,14 @@ The content that displays in the tooltip popup with smart positioning.
 | `onPointerLeave`       | `(event: React.PointerEvent)`  | Pointer leaves content       | Mouse exit or touch end         |
 | `onKeyDown`            | `(event: React.KeyboardEvent)` | Key pressed in content       | Keyboard interaction            |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute        | Value                | Purpose                        | Applied To      |
-| ---------------- | -------------------- | ------------------------------ | --------------- |
-| `id`             | `string`             | Unique identifier for content  | Content element |
-| `role`           | `"tooltip"`          | Identifies as tooltip          | Content element |
-| `data-state`     | `"open" \| "closed"` | Indicates visibility state     | Content element |
-| `data-placement` | `Placement`          | Indicates actual placement     | Content element |
-| `data-as-label`  | `boolean`            | Indicates label vs description | Content element |
+| Attribute        | Value                | Purpose                        |
+| ---------------- | -------------------- | ------------------------------ |
+| `id`             | `string`             | Unique identifier for content  |
+| `data-state`     | `"open" \| "closed"` | Indicates visibility state     |
+| `data-placement` | `Placement`          | Indicates actual placement     |
+| `data-as-label`  | `boolean`            | Indicates label vs description |
 
 ### TooltipArrow
 
@@ -609,11 +602,11 @@ Optional arrow pointing to the trigger element.
 | ---- | ---------- | ---------------------- | -------------- |
 | None | -          | Arrow is purely visual | -              |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute        | Value  | Purpose                  | Applied To    |
-| ---------------- | ------ | ------------------------ | ------------- |
-| `data-placement` | `Side` | Indicates placement side | Arrow element |
+| Attribute        | Value  | Purpose                  |
+| ---------------- | ------ | ------------------------ |
+| `data-placement` | `Side` | Indicates placement side |
 
 ---
 
