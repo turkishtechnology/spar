@@ -1,23 +1,10 @@
-import type { ComponentProps } from 'react';
-import type { PolymorphicAs } from '../../types';
+import type { PrimitiveButtonProps } from '../Primitives/PrimitiveButton/types';
 
 /**
  * Props for Button component
  * @remarks Fully accessible, headless component
  */
-export interface ButtonProps extends ComponentProps<'button'> {
-  /**
-   * The element type to render as
-   * @defaultValue "button"
-   */
-  as?: PolymorphicAs;
-
-  /**
-   * Whether the button should receive focus when first rendered
-   * @defaultValue false
-   */
-  shouldAutoFocus?: boolean;
-
+export interface ButtonProps extends PrimitiveButtonProps {
   /**
    * Loading state with screen reader support
    * @defaultValue false

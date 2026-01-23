@@ -1,5 +1,4 @@
 import type {
-  ComponentProps,
   AriaAttributes,
   CSSProperties,
   KeyboardEvent,
@@ -8,7 +7,7 @@ import type {
   PointerEvent,
   ReactNode,
 } from 'react';
-import type { PolymorphicAs } from '../../types';
+import type { PrimitiveButtonProps } from '../Primitives/PrimitiveButton/types';
 
 /**
  * Render props provided to children function for Switch
@@ -49,13 +48,7 @@ export interface SwitchRenderProps {
  * @remarks Fully accessible, headless switch component providing binary toggle functionality
  */
 export interface SwitchProps
-  extends Omit<ComponentProps<'button'>, 'onChange' | 'checked' | 'defaultChecked' | 'children'> {
-  /**
-   * The element or component to render as
-   * @defaultValue 'button'
-   */
-  as?: PolymorphicAs;
-
+  extends Omit<PrimitiveButtonProps, 'onChange' | 'checked' | 'defaultChecked' | 'children'> {
   /**
    * Controlled checked state
    * @remarks When provided, component operates in controlled mode
@@ -107,12 +100,6 @@ export interface SwitchProps
    * @defaultValue false
    */
   readOnly?: boolean;
-
-  /**
-   * Auto-focus on mount
-   * @defaultValue false
-   */
-  shouldAutoFocus?: boolean;
 
   /**
    * Accessible name for the switch
