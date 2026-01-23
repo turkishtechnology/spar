@@ -292,7 +292,7 @@ The root component that provides context and state management for the collapsibl
 
 | Name            | Type                      | Default | Description                               |
 | --------------- | ------------------------- | ------- | ----------------------------------------- |
-| `as?`           | `PolymorphicAs`       | `"div"` | Polymorphic component type                |
+| `as?`           | `PolymorphicAs`           | `"div"` | Polymorphic component type                |
 | `open?`         | `boolean`                 | -       | Controlled open state                     |
 | `defaultOpen?`  | `boolean`                 | `false` | Default open state for uncontrolled usage |
 | `onOpenChange?` | `(open: boolean) => void` | -       | Callback fired when open state changes    |
@@ -307,12 +307,12 @@ The root component that provides context and state management for the collapsibl
 | -------------- | ----------------- | ------------------ | --------------------------------------- |
 | `onOpenChange` | `(open: boolean)` | Open state changes | User interaction or programmatic change |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value                | Purpose                  | Applied To   |
-| --------------- | -------------------- | ------------------------ | ------------ |
-| `data-state`    | `"open" \| "closed"` | Indicates current state  | Root element |
-| `data-disabled` | `""` (when disabled) | Indicates disabled state | Root element |
+| Attribute       | Value                | Purpose                  |
+| --------------- | -------------------- | ------------------------ |
+| `data-state`    | `"open" \| "closed"` | Indicates current state  |
+| `data-disabled` | `""` (when disabled) | Indicates disabled state |
 
 ### CollapsibleTrigger
 
@@ -320,10 +320,10 @@ Interactive element that toggles the content visibility with full accessibility 
 
 **Props**
 
-| Name        | Type                | Default    | Description                            |
-| ----------- | ------------------- | ---------- | -------------------------------------- |
-| `as?`       | `PolymorphicAs` | `"button"` | Element type for polymorphic rendering |
-| `children?` | `ReactNode \| ((state: CollapsibleTriggerRenderProps) => ReactNode)` | - | Trigger content or render props function |
+| Name        | Type                                                                 | Default    | Description                              |
+| ----------- | -------------------------------------------------------------------- | ---------- | ---------------------------------------- |
+| `as?`       | `PolymorphicAs`                                                      | `"button"` | Element type for polymorphic rendering   |
+| `children?` | `ReactNode \| ((state: CollapsibleTriggerRenderProps) => ReactNode)` | -          | Trigger content or render props function |
 
 **Render Props (CollapsibleTriggerRenderProps)**
 
@@ -342,18 +342,14 @@ Interactive element that toggles the content visibility with full accessibility 
 | `onClick`   | `(event: React.MouseEvent)`    | Trigger clicked        | Mouse click interaction |
 | `onKeyDown` | `(event: React.KeyboardEvent)` | Key pressed on trigger | Keyboard interaction    |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value                | Purpose                                        | Applied To         |
-| --------------- | -------------------- | ---------------------------------------------- | ------------------ |
-| `aria-expanded` | `boolean`            | Indicates if content is expanded               | Trigger element    |
-| `aria-controls` | `string`             | References the controlled content              | Trigger element    |
-| `aria-disabled` | `boolean`            | Indicates disabled state (non-button elements) | Trigger element    |
-| `disabled`      | `boolean`            | Native disabled attribute (button elements)    | Button trigger     |
-| `role`          | `"button"`           | Semantic button role (non-button elements)     | Non-button trigger |
-| `tabIndex`      | `0 \| -1`            | Focus management (non-button elements)         | Non-button trigger |
-| `data-state`    | `"open" \| "closed"` | Indicates current state                        | Trigger element    |
-| `data-disabled` | `""` (when disabled) | Indicates disabled state                       | Trigger element    |
+| Attribute       | Value                | Purpose                                     |
+| --------------- | -------------------- | ------------------------------------------- |
+| `disabled`      | `boolean`            | Native disabled attribute (button elements) |
+| `tabIndex`      | `0 \| -1`            | Focus management (non-button elements)      |
+| `data-state`    | `"open" \| "closed"` | Indicates current state                     |
+| `data-disabled` | `""` (when disabled) | Indicates disabled state                    |
 
 ### CollapsibleContent
 
@@ -363,7 +359,7 @@ Container that shows/hides based on the collapsible state with advanced features
 
 | Name             | Type                     | Default | Description                                             |
 | ---------------- | ------------------------ | ------- | ------------------------------------------------------- |
-| `as?`            | `PolymorphicAs`      | `"div"` | Element type for polymorphic rendering                  |
+| `as?`            | `PolymorphicAs`          | `"div"` | Element type for polymorphic rendering                  |
 | `forceMount?`    | `boolean`                | `false` | Force content to remain mounted when closed             |
 | `children?`      | `ReactNode`              | -       | Content to be shown/hidden                              |
 | `onBeforeMatch?` | `(event: Event) => void` | -       | Callback fired when content is found via browser search |
@@ -374,13 +370,13 @@ Container that shows/hides based on the collapsible state with advanced features
 | --------------- | ---------------- | -------------------------------- | ------------------------------------------------ |
 | `onBeforeMatch` | `(event: Event)` | Content found via browser search | Browser's "find on page" feature locates content |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value                   | Purpose                             | Applied To      |
-| --------------- | ----------------------- | ----------------------------------- | --------------- |
-| `hidden`        | `true \| "until-found"` | Controls visibility and findability | Content element |
-| `data-state`    | `"open" \| "closed"`    | Indicates current state             | Content element |
-| `data-disabled` | `""` (when disabled)    | Indicates disabled state            | Content element |
+| Attribute       | Value                   | Purpose                             |
+| --------------- | ----------------------- | ----------------------------------- |
+| `hidden`        | `true \| "until-found"` | Controls visibility and findability |
+| `data-state`    | `"open" \| "closed"`    | Indicates current state             |
+| `data-disabled` | `""` (when disabled)    | Indicates disabled state            |
 
 **CSS Custom Properties**
 

@@ -589,19 +589,22 @@ A headless checkbox component that provides complete accessibility and behavior 
 
 | Name               | Type                                                       | Default          | Description                                                           |
 | ------------------ | ---------------------------------------------------------- | ---------------- | --------------------------------------------------------------------- |
-| `as?`              | `PolymorphicAs`                                              | `'span'`         | The element or component to render as                                 |
+| `as?`              | `PolymorphicAs`                                            | `'span'`         | The element or component to render as                                 |
 | `ref?`             | `React.Ref<HTMLElement>`                                   | `undefined`      | Ref to the underlying DOM element                                     |
-| `checked?`         | `CheckedState`                                             | `undefined`      | Controlled checked state. When provided, component becomes controlled |
+| `checked?`         | `CheckedState`                                             | `undefined`      | Controlled checked state. When provided, component operates in controlled mode |
 | `defaultChecked?`  | `CheckedState`                                             | `false`          | Default checked state for uncontrolled usage                          |
-| `onChange?`        | `(checked: CheckedState) => void`                          | `undefined`      | Callback fired when checked state changes                             |
-| `disabled?`      | `boolean`                                                  | `false`          | Whether the checkbox is disabled                                      |
-| `readOnly?`      | `boolean`                                                  | `false`          | Whether the checkbox is read-only                                     |
-| `required?`      | `boolean`                                                  | `false`          | Whether the checkbox is required in forms                             |
+| `onChange?`        | `(checked: CheckedState) => void`                          | `undefined`      | Callback fired when the checked state changes                             |
+| `disabled?`        | `boolean`                                                  | `false`          | Disabled state - prevents interaction and is properly announced to screen readers                                           |
 | `name?`            | `string`                                                   | `undefined`      | Name attribute for form submission                                    |
 | `value?`           | `string`                                                   | `'on'`           | Value sent in form data when checked                                  |
 | `form?`            | `string`                                                   | `undefined`      | ID of the form this checkbox belongs to                               |
-| `shouldAutoFocus?` | `boolean`                                                  | `false`          | Whether to focus the checkbox on mount                                |
-| `children?`        | `ReactNode \| ((state: CheckboxRenderProps) => ReactNode)` | `undefined`      | Children content or render function                                   |
+| `required?`        | `boolean`                                                  | `false`          | Required state for form validation                             |
+| `readOnly?`        | `boolean`                                                  | `false`          | Read-only state - prevents interaction                                         |
+| `shouldAutoFocus?` | `boolean`                                                  | `false`          | Auto-focus on mount                                |
+| `aria-label?`      | `string`                                                   | `undefined`      | Accessible name for the checkbox. Required when checkbox has no visible label      |
+| `aria-labelledby?` | `string`                                                   | `undefined`      | ID of element that labels the checkbox                                           |
+| `aria-describedby?`| `string`                                                   | `undefined`      | ID of element that describes the checkbox                                        |
+| `children?`        | `ReactNode \| ((state: CheckboxRenderProps) => ReactNode)` | `undefined`      | Content to display inside the checkbox, or render props function                                   |
 | `id?`              | `string`                                                   | `auto-generated` | Unique identifier for the checkbox                                    |
 | `className?`       | `string`                                                   | `undefined`      | CSS class name                                                        |
 | `style?`           | `React.CSSProperties`                                      | `undefined`      | Inline styles                                                         |
@@ -611,14 +614,15 @@ A headless checkbox component that provides complete accessibility and behavior 
 
 When using the render props pattern, the following state properties are passed to the children function:
 
-| Property     | Type                                  | Description                                         |
-| ------------ | ------------------------------------- | --------------------------------------------------- |
-| `checked`    | `CheckedState`                        | Current checked state (`true`, `false`, or `'indeterminate'`) |
-| `setChecked` | `(checked: CheckedState) => void`     | Function to programmatically set the checked state  |
-| `disabled`   | `boolean`                             | Whether the checkbox is disabled                    |
-| `isFocused`  | `boolean`                             | Whether the checkbox is currently focused           |
-| `isHovered`  | `boolean`                             | Whether the checkbox is being hovered               |
-| `isPressed`  | `boolean`                             | Whether the checkbox is being pressed               |
+| Property     | Type                              | Description                                                   |
+| ------------ | --------------------------------- | ------------------------------------------------------------- |
+| `checked`    | `CheckedState`                    | Current checked state (`true`, `false`, or `'indeterminate'`) |
+| `setChecked` | `(checked: CheckedState) => void` | Function to programmatically set the checked state            |
+| `disabled`   | `boolean`                         | Whether the checkbox is disabled                              |
+| `readOnly`   | `boolean`                         | Whether the checkbox is read-only                             |
+| `isFocused`  | `boolean`                         | Whether the checkbox currently has focus                      |
+| `isHovered`  | `boolean`                         | Whether the checkbox is being hovered                         |
+| `isPressed`  | `boolean`                         | Whether the checkbox is being pressed                         |
 
 **Events**
 
@@ -630,16 +634,15 @@ When using the render props pattern, the following state properties are passed t
 | `onFocus`   | `(event: FocusEvent)`     | Element gains focus   | Focus enters checkbox                              |
 | `onBlur`    | `(event: FocusEvent)`     | Element loses focus   | Focus leaves checkbox                              |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value                 | Purpose                                           | Applied To   |
-| --------------- | --------------------- | ------------------------------------------------- | ------------ |
-| `role`          | `"checkbox"`          | Identifies element as checkbox                    | Root element |
-| `aria-checked`  | `boolean \| "mixed"`  | Indicates checked state (mixed for indeterminate) | Root element |
-| `aria-disabled` | `"true" \| undefined` | Indicates disabled state                          | Root element |
-| `aria-invalid`  | `"true" \| undefined` | Indicates validation error state                  | Root element |
-| `aria-required` | `"true" \| undefined` | Indicates required field                          | Root element |
-| `tabindex`      | `number`              | Controls keyboard focus (-1 when disabled)        | Root element |
+| Attribute       | Value                                         | Purpose                                    |
+| --------------- | --------------------------------------------- | ------------------------------------------ |
+| `data-state`    | `"checked" \| "unchecked" \| "indeterminate"` | Indicates checked state                    |
+| `data-disabled` | `""`                                          | Present when disabled                      |
+| `data-invalid`  | `""`                                          | Present when validation error              |
+| `data-required` | `""`                                          | Present when required field                |
+| `tabIndex`      | `number`                                      | Controls keyboard focus (-1 when disabled) |
 
 ## Keyboard Interactions
 
