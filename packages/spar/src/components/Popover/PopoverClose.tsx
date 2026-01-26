@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { PrimitiveButton } from '../Primitives/PrimitiveButton';
 import { PopoverCloseProps, PopoverCloseRenderProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 
@@ -24,9 +23,9 @@ export const PopoverClose = ({ children, onClick, ref, ...props }: PopoverCloseP
   };
 
   return (
-    <PrimitiveButton type='button' ref={ref} onClick={handleClick} data-popover-close='' {...props}>
+    <button type='button' ref={ref} onClick={handleClick} data-popover-close='' {...props}>
       {typeof children === 'function' ? children(renderProps) : children}
-    </PrimitiveButton>
+    </button>
   );
 };
 
