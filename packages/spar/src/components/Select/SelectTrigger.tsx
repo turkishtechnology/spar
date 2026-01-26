@@ -1,24 +1,35 @@
-import React, { useCallback } from 'react';
-import { PrimitiveButton } from '../Primitives/PrimitiveButton';
+import React, { useCallback, useEffect, useRef } from 'react';
 import type { SelectTriggerProps, SelectTriggerRenderProps } from './types';
 import { useSelectContext } from './SelectRoot';
-import { useMergedRef } from '../../hooks';
+import { useMergedRef, useAutoFocus } from '../../hooks';
 
 /**
  * Trigger button that toggles the select dropdown. Handles keyboard navigation and accessibility attributes.
  */
 export const SelectTrigger = ({
   ref,
-  as = 'button',
+  as: Component = 'button',
   onClick,
   onKeyDown,
   children,
   ...props
 }: SelectTriggerProps) => {
   const context = useSelectContext();
+  const internalRef = useRef<HTMLButtonElement>(null);
+  const mergedRef = useMergedRef(internalRef, ref);
 
-  // Merge context triggerRef with user's ref
-  const mergedRef = useMergedRef(context.triggerRef, ref);
+  // Auto focus on mount (controlled by context from Root)
+  useAutoFocus(internalRef, context.shouldAutoFocus);
+
+  // Merge external ref with internal ref
+  useEffect(() => {
+    if (context.triggerRef) {
+      if (typeof context.triggerRef === 'object' && context.triggerRef !== null) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (context.triggerRef as any).current = internalRef.current;
+      }
+    }
+  }, [context.triggerRef, internalRef]);
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -69,27 +80,27 @@ export const SelectTrigger = ({
   };
 
   return (
-    <PrimitiveButton
-      as={as}
-      type='button'
-      disabled={context.disabled}
-      shouldAutoFocus={context.shouldAutoFocus}
+    <Component
       ref={mergedRef}
+      type={Component === 'button' ? 'button' : undefined}
       role='combobox'
       aria-haspopup='listbox'
       aria-expanded={context.open}
       aria-controls={context.open ? context.contentId : undefined}
       aria-labelledby={context.valueId}
+      aria-disabled={Component !== 'button' ? context.disabled || undefined : undefined}
       aria-required={context.required || undefined}
+      {...(Component === 'button' ? { disabled: context.disabled } : {})}
       data-state={context.open ? 'open' : 'closed'}
+      data-disabled={context.disabled ? '' : undefined}
       data-required={context.required ? '' : undefined}
-      data-placeholder={context.value ? undefined : ''}
+      data-placeholder={!context.value ? '' : undefined}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       {...props}
     >
       {typeof children === 'function' ? children(renderProps) : children}
-    </PrimitiveButton>
+    </Component>
   );
 };
 

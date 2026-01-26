@@ -1,6 +1,5 @@
 import type { ComponentProps, ReactNode } from 'react';
 import type { Orientation, PolymorphicAs } from '../../types';
-import type { PrimitiveButtonProps } from '../Primitives/PrimitiveButton/types';
 
 export type AccordionType = 'single' | 'multiple';
 
@@ -126,7 +125,13 @@ export interface AccordionTriggerRenderProps {
  * Props for AccordionTrigger component
  * @remarks Button that toggles panel visibility
  */
-export interface AccordionTriggerProps extends Omit<PrimitiveButtonProps, 'children'> {
+export interface AccordionTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
+  /**
+   * Polymorphic component type
+   * @defaultValue 'button'
+   */
+  as?: PolymorphicAs;
+
   /**
    * Children content or render function
    */
