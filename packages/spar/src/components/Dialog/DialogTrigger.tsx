@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { useMergedRef } from '@/hooks';
-import { PrimitiveButton } from '../Primitives/PrimitiveButton';
 import { useDialogContext } from './DialogRoot';
 import type { DialogTriggerProps, DialogTriggerRenderProps } from './types';
 
@@ -9,7 +8,7 @@ import type { DialogTriggerProps, DialogTriggerRenderProps } from './types';
  * Supports keyboard navigation and proper ARIA attributes.
  */
 export const DialogTrigger = ({
-  as = 'button',
+  as: Element = 'button',
   disabled: disabledProp,
   ref,
   onClick,
@@ -62,21 +61,31 @@ export const DialogTrigger = ({
 
   const dataState = isOpen ? 'open' : 'closed';
 
+  // Build props with conditional logic for button vs non-button elements
+  const isButton = Element === 'button';
+  const triggerProps = {
+    ref: mergedRef,
+    'aria-haspopup': 'dialog' as const,
+    'aria-expanded': isOpen,
+    'data-state': dataState,
+    'data-disabled': disabled ? '' : undefined,
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    ...props,
+    // Button-specific props
+    ...(isButton && { type: 'button' as const, disabled }),
+    // Non-button props for accessibility
+    ...(!isButton && {
+      role: 'button',
+      'aria-disabled': disabled,
+      tabIndex: disabled ? -1 : 0,
+    }),
+  };
+
   return (
-    <PrimitiveButton
-      as={as}
-      type='button'
-      disabled={disabled}
-      ref={mergedRef}
-      aria-haspopup='dialog'
-      aria-expanded={isOpen}
-      data-state={dataState}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      {...props}
-    >
+    <Element {...triggerProps}>
       {typeof children === 'function' ? children(renderProps) : children}
-    </PrimitiveButton>
+    </Element>
   );
 };
 

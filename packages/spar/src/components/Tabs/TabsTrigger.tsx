@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { PrimitiveButton } from '../Primitives/PrimitiveButton';
 import { useTabsContext } from './Tabs';
-import { useMergedRef } from '../../hooks';
 import type { TabsTriggerProps, TabsTriggerRenderProps } from './types';
+import { useAutoFocus } from '../../hooks';
 
 /**
  * TabsTrigger component representing a clickable tab button with full accessibility support.
@@ -12,23 +11,24 @@ export const TabsTrigger = ({
   value,
   disabled = false,
   shouldAutoFocus = false,
-  as = 'button',
+  as: Component = 'button',
   children,
   onClick,
   onFocus,
   onBlur,
-  ref,
   ...props
 }: TabsTriggerProps) => {
   const { selectedValue, onValueChange, orientation, registerTab, unregisterTab, tabsListId } =
     useTabsContext();
-  const internalRef = useRef<HTMLButtonElement>(null);
-  const mergedRef = useMergedRef(internalRef, ref);
+  const internalRef = useRef<HTMLElement>(null);
   const triggerId = `${tabsListId}-trigger-${value}`;
   const panelId = `${tabsListId}-panel-${value}`;
   const [isFocused, setIsFocused] = useState(false);
 
   const isSelected = selectedValue === value;
+
+  // Auto focus on mount
+  useAutoFocus(internalRef, shouldAutoFocus);
 
   useEffect(() => {
     const element = internalRef.current;
@@ -44,7 +44,7 @@ export const TabsTrigger = ({
       if (!disabled) {
         onValueChange(value);
       }
-      onClick?.(event);
+      onClick?.(event as React.MouseEvent<HTMLButtonElement>);
     },
     [disabled, onValueChange, value, onClick],
   );
@@ -52,7 +52,7 @@ export const TabsTrigger = ({
   const handleFocus = useCallback(
     (event: React.FocusEvent<HTMLButtonElement>) => {
       setIsFocused(true);
-      onFocus?.(event);
+      onFocus?.(event as React.FocusEvent<HTMLButtonElement>);
     },
     [onFocus],
   );
@@ -60,7 +60,7 @@ export const TabsTrigger = ({
   const handleBlur = useCallback(
     (event: React.FocusEvent<HTMLButtonElement>) => {
       setIsFocused(false);
-      onBlur?.(event);
+      onBlur?.(event as React.FocusEvent<HTMLButtonElement>);
     },
     [onBlur],
   );
@@ -82,27 +82,28 @@ export const TabsTrigger = ({
   };
 
   return (
-    <PrimitiveButton
-      as={as}
-      type='button'
-      disabled={disabled}
-      shouldAutoFocus={shouldAutoFocus}
-      ref={mergedRef}
+    <Component
+      ref={internalRef}
       id={triggerId}
       role='tab'
+      type={Component === 'button' ? 'button' : undefined}
       aria-selected={isSelected}
       aria-controls={panelId}
-      tabIndex={isSelected ? 0 : -1}
+      {...(Component !== 'button' && disabled ? { 'aria-disabled': true } : {})}
       data-state={isSelected ? 'active' : 'inactive'}
+      data-disabled={disabled ? '' : undefined}
       data-orientation={orientation}
       data-value={value}
+      data-autofocus={shouldAutoFocus ? '' : undefined}
+      tabIndex={isSelected ? 0 : -1}
+      disabled={Component === 'button' ? disabled : undefined}
       onClick={handleClick}
       onFocus={handleFocus}
       onBlur={handleBlur}
       {...props}
     >
       {typeof children === 'function' ? children(renderProps) : children}
-    </PrimitiveButton>
+    </Component>
   );
 };
 

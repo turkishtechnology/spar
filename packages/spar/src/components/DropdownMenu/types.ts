@@ -1,6 +1,5 @@
 import type { ComponentProps, ReactNode, SyntheticEvent, RefObject } from 'react';
 import type { CheckedState, Side, Align, Direction, PolymorphicAs } from '../../types';
-import type { PrimitiveButtonProps } from '../Primitives/PrimitiveButton/types';
 
 export type DropdownMenuFocusStrategy = 'first' | 'last' | 'none';
 
@@ -83,7 +82,13 @@ export interface DropdownMenuProps {
 /**
  * Props for DropdownMenu.Trigger component
  */
-export interface DropdownMenuTriggerProps extends Omit<PrimitiveButtonProps, 'children'> {
+export interface DropdownMenuTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
+  /**
+   * Polymorphic component type
+   * @defaultValue 'button'
+   */
+  as?: PolymorphicAs;
+
   /**
    * Children content or render function for render props pattern
    */
