@@ -38,15 +38,19 @@ The Collapsible component implements the WAI-ARIA disclosure pattern, providing 
 
 ### Collapsible.Trigger Props
 
+Extends all `ButtonProps` from the Button component.
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `PolymorphicAs` | No | `'button'` | Element type for polymorphic rendering |
 | `children` | `ReactNode \| ((state: CollapsibleTriggerRenderProps) => ReactNode)` | No | - | Trigger content or render function for render props pattern |
+| `shouldAutoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
+| `isLoading` | `boolean` | No | `false` | Loading state with screen reader support |
+| `isPressed` | `boolean` | No | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange` | `(pressed: boolean) => void` | No | `undefined` | Callback fired when toggle state changes |
 | `aria-expanded` | `boolean` | No | Auto-managed | Current open/closed state (automatically set) |
 | `aria-controls` | `string` | No | Auto-generated | ID of controlled content (automatically set) |
-| `aria-disabled` | `boolean` | No | Auto-managed | Disabled state for non-semantic elements |
-| `disabled` | `boolean` | No | Auto-managed | Native disabled for semantic button elements |
-| `...rest` | `HTMLAttributes` | No | - | Additional HTML attributes |
+| `...rest` | `ButtonProps` | No | - | All standard Button component attributes |
 
 ### CollapsibleTriggerRenderProps
 

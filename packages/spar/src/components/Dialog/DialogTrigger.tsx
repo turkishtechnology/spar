@@ -2,17 +2,17 @@ import { useCallback } from 'react';
 import { useMergedRef } from '@/hooks';
 import { useDialogContext } from './DialogRoot';
 import type { DialogTriggerProps, DialogTriggerRenderProps } from './types';
+import { Button } from '../Button';
 
 /**
  * Trigger button that opens the dialog when activated.
  * Supports keyboard navigation and proper ARIA attributes.
  */
 export const DialogTrigger = ({
-  as: Element = 'button',
+  as = 'button',
   disabled: disabledProp,
   ref,
   onClick,
-  onKeyDown,
   children,
   ...props
 }: DialogTriggerProps) => {
@@ -35,21 +35,6 @@ export const DialogTrigger = ({
     [disabled, isOpen, setIsOpen, onClick],
   );
 
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLElement>) => {
-      if (disabled) return;
-
-      // Handle Enter and Space keys for button activation
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        setIsOpen(!isOpen);
-      }
-
-      onKeyDown?.(event as React.KeyboardEvent<HTMLButtonElement>);
-    },
-    [disabled, isOpen, setIsOpen, onKeyDown],
-  );
-
   // Render props for children function
   const renderProps: DialogTriggerRenderProps = {
     isOpen,
@@ -61,31 +46,19 @@ export const DialogTrigger = ({
 
   const dataState = isOpen ? 'open' : 'closed';
 
-  // Build props with conditional logic for button vs non-button elements
-  const isButton = Element === 'button';
-  const triggerProps = {
-    ref: mergedRef,
-    'aria-haspopup': 'dialog' as const,
-    'aria-expanded': isOpen,
-    'data-state': dataState,
-    'data-disabled': disabled ? '' : undefined,
-    onClick: handleClick,
-    onKeyDown: handleKeyDown,
-    ...props,
-    // Button-specific props
-    ...(isButton && { type: 'button' as const, disabled }),
-    // Non-button props for accessibility
-    ...(!isButton && {
-      role: 'button',
-      'aria-disabled': disabled,
-      tabIndex: disabled ? -1 : 0,
-    }),
-  };
-
   return (
-    <Element {...triggerProps}>
+    <Button
+      as={as}
+      ref={mergedRef}
+      disabled={disabled}
+      aria-haspopup='dialog'
+      aria-expanded={isOpen}
+      data-state={dataState}
+      onClick={handleClick}
+      {...props}
+    >
       {typeof children === 'function' ? children(renderProps) : children}
-    </Element>
+    </Button>
   );
 };
 

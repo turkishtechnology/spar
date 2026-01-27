@@ -1,5 +1,6 @@
 import type { ComponentProps, ReactNode, AriaRole, RefObject } from 'react';
 import type { PolymorphicAs } from '../../types';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * Props for DialogRoot
@@ -70,13 +71,7 @@ export interface DialogTriggerRenderProps {
  * Props for DialogTrigger
  * @remarks Fully accessible, headless component
  */
-export interface DialogTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
-  /**
-   * Polymorphic element type
-   * @defaultValue 'button'
-   */
-  as?: PolymorphicAs;
-
+export interface DialogTriggerProps extends Omit<ButtonProps, 'children'> {
   /**
    * Children content or render function
    */
@@ -237,13 +232,7 @@ export interface DialogDescriptionProps extends ComponentProps<'p'> {
  * Props for DialogClose
  * @remarks Fully accessible, headless component
  */
-export interface DialogCloseProps extends Omit<ComponentProps<'button'>, 'children'> {
-  /**
-   * Polymorphic element type
-   * @defaultValue 'button'
-   */
-  as?: PolymorphicAs;
-
+export interface DialogCloseProps extends Omit<ButtonProps, 'children'> {
   /**
    * Children content or render function
    */

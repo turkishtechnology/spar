@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTabsContext } from './Tabs';
 import type { TabsTriggerProps, TabsTriggerRenderProps } from './types';
-import { useAutoFocus } from '../../hooks';
+import { Button } from '../Button';
 
 /**
  * TabsTrigger component representing a clickable tab button with full accessibility support.
@@ -11,7 +11,7 @@ export const TabsTrigger = ({
   value,
   disabled = false,
   shouldAutoFocus = false,
-  as: Component = 'button',
+  as = 'button',
   children,
   onClick,
   onFocus,
@@ -20,15 +20,12 @@ export const TabsTrigger = ({
 }: TabsTriggerProps) => {
   const { selectedValue, onValueChange, orientation, registerTab, unregisterTab, tabsListId } =
     useTabsContext();
-  const internalRef = useRef<HTMLElement>(null);
+  const internalRef = useRef<HTMLButtonElement>(null);
   const triggerId = `${tabsListId}-trigger-${value}`;
   const panelId = `${tabsListId}-panel-${value}`;
   const [isFocused, setIsFocused] = useState(false);
 
   const isSelected = selectedValue === value;
-
-  // Auto focus on mount
-  useAutoFocus(internalRef, shouldAutoFocus);
 
   useEffect(() => {
     const element = internalRef.current;
@@ -82,28 +79,26 @@ export const TabsTrigger = ({
   };
 
   return (
-    <Component
+    <Button
+      as={as}
       ref={internalRef}
       id={triggerId}
+      disabled={disabled}
+      shouldAutoFocus={shouldAutoFocus}
       role='tab'
-      type={Component === 'button' ? 'button' : undefined}
       aria-selected={isSelected}
       aria-controls={panelId}
-      {...(Component !== 'button' && disabled ? { 'aria-disabled': true } : {})}
       data-state={isSelected ? 'active' : 'inactive'}
-      data-disabled={disabled ? '' : undefined}
       data-orientation={orientation}
       data-value={value}
-      data-autofocus={shouldAutoFocus ? '' : undefined}
       tabIndex={isSelected ? 0 : -1}
-      disabled={Component === 'button' ? disabled : undefined}
       onClick={handleClick}
       onFocus={handleFocus}
       onBlur={handleBlur}
       {...props}
     >
       {typeof children === 'function' ? children(renderProps) : children}
-    </Component>
+    </Button>
   );
 };
 

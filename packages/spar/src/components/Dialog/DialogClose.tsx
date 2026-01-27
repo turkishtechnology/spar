@@ -1,16 +1,16 @@
 import { useCallback } from 'react';
 import { useDialogContext } from './DialogRoot';
 import type { DialogCloseProps, DialogCloseRenderProps } from './types';
+import { Button } from '../Button';
 
 /**
  * Close button component that closes the dialog when activated.
  * Supports keyboard navigation and proper event handling.
  */
 export const DialogClose = ({
-  as: Component = 'button',
+  as = 'button',
   ref,
   onClick,
-  onKeyDown,
   children,
   ...props
 }: DialogCloseProps) => {
@@ -25,19 +25,6 @@ export const DialogClose = ({
     [setIsOpen, onClick],
   );
 
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLButtonElement>) => {
-      // Handle Enter and Space keys for button activation
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        setIsOpen(false);
-      }
-
-      onKeyDown?.(event);
-    },
-    [setIsOpen, onKeyDown],
-  );
-
   // Render props for children function
   const renderProps: DialogCloseRenderProps = {
     isOpen,
@@ -45,15 +32,9 @@ export const DialogClose = ({
   };
 
   return (
-    <Component
-      ref={ref}
-      type={Component === 'button' ? 'button' : undefined}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      {...props}
-    >
+    <Button as={as} ref={ref} onClick={handleClick} {...props}>
       {typeof children === 'function' ? children(renderProps) : children}
-    </Component>
+    </Button>
   );
 };
 

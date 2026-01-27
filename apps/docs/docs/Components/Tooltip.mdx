@@ -46,38 +46,38 @@ cssCode={`.tooltip-trigger {
   font-weight: 400;
   border: none;
 
-/_ Light mode styles _/
-background-color: rgba(0, 0, 0, 0.08);
-color: #222530;
-font-size: 13px;
+/* Light mode styles */
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #222530;
+  font-size: 13px;
 }
 
 [data-theme='dark'] .tooltip-trigger {
-/_ Dark mode styles _/
-background-color: rgba(255, 255, 255, 0.12);
-color: #f2f5f8;
+/* Dark mode styles */
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #f2f5f8;
 }
 
 .tooltip-content {
-padding: 8px 12px;
-border-radius: 8px;
-border: 1px solid rgba(0, 0, 0, 0.08);
-background-color: #ddd;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: #ddd;
 
-box-shadow:
-0 2px 2px -1px rgba(82, 88, 102, 0.04),
-0 6px 12px -2px rgba(82, 88, 102, 0.04),
-0 8px 20px 0 rgba(82, 88, 102, 0.04);
+  box-shadow:
+  0 2px 2px -1px rgba(82, 88, 102, 0.04),
+  0 6px 12px -2px rgba(82, 88, 102, 0.04),
+  0 8px 20px 0 rgba(82, 88, 102, 0.04);
 }
 
 [data-theme='dark'] .tooltip-content {
-border-color: rgba(0, 0, 0, 0.08);
-background-color: #222;
+  border-color: rgba(0, 0, 0, 0.08);
+  background-color: #222;
 
-box-shadow:
-0 2px 2px -1px rgba(82, 88, 102, 0.04),
-0 6px 12px -2px rgba(82, 88, 102, 0.04),
-0 8px 20px 0 rgba(82, 88, 102, 0.04);
+  box-shadow:
+  0 2px 2px -1px rgba(82, 88, 102, 0.04),
+  0 6px 12px -2px rgba(82, 88, 102, 0.04),
+  0 8px 20px 0 rgba(82, 88, 102, 0.04);
 }`}
 />
 
@@ -477,15 +477,20 @@ _(No specific HTML attributes - Root manages context only)_
 
 ### TooltipTrigger
 
-The trigger element that shows/hides the tooltip on hover or focus. Always renders as a `button` element.
+The trigger element that shows/hides the tooltip on hover or focus. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
 **Props**
 
-| Name       | Type                                                                         | Default | Description                                               |
-| ---------- | ---------------------------------------------------------------------------- | ------- | --------------------------------------------------------- |
-| `children` | `React.ReactNode \| ((state: TooltipTriggerRenderProps) => React.ReactNode)` | -       | Trigger content or render props function for state access |
-| `disabled` | `boolean`                                                                    | `false` | Disables the trigger                                      |
-| `...props` | `ComponentProps<'button'>`                                                   | -       | All standard button attributes                            |
+| Name               | Type                                                                         | Default     | Description                                         |
+| ------------------ | ---------------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
+| `as?`              | `PolymorphicAs`                                                                | `"button"`  | Element type to render as                           |
+| `children`         | `React.ReactNode \| ((state: TooltipTriggerRenderProps) => React.ReactNode)` | -           | Trigger content or render props function            |
+| `disabled?`        | `boolean`                                                                    | `false`     | Disables the trigger                                |
+| `shouldAutoFocus?` | `boolean`                                                                    | `false`     | Whether the button should receive focus on mount    |
+| `isLoading?`       | `boolean`                                                                    | `false`     | Loading state with screen reader support            |
+| `isPressed?`       | `boolean`                                                                    | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange?` | `(pressed: boolean) => void`                                                 | `undefined` | Callback fired when toggle state changes            |
+| `...props`         | `ButtonProps`                                                                | -           | All standard Button component attributes            |
 
 **Render Props (TooltipTriggerRenderProps)**
 
@@ -547,7 +552,7 @@ The content that displays in the tooltip popup with smart positioning.
 | Name                    | Type                                      | Default     | Description                                     |
 | ----------------------- | ----------------------------------------- | ----------- | ----------------------------------------------- |
 | `children`              | `React.ReactNode`                         | -           | Content to display in tooltip                   |
-| `as?`                   | `PolymorphicAs`                       | `"div"`     | Element type for tooltip content container      |
+| `as?`                   | `PolymorphicAs`                           | `"div"`     | Element type for tooltip content container      |
 | `asLabel?`              | `boolean`                                 | `false`     | Whether tooltip is primary label vs description |
 | `side?`                 | `"top" \| "bottom" \| "left" \| "right"`  | `"top"`     | Preferred placement relative to trigger         |
 | `sideOffset?`           | `number`                                  | `8`         | Distance in pixels from the trigger             |
@@ -592,7 +597,7 @@ Optional arrow pointing to the trigger element.
 | ------------ | --------------------- | ------- | --------------------------- |
 | `width?`     | `number`              | `10`    | Arrow width in pixels       |
 | `height?`    | `number`              | `5`     | Arrow height in pixels      |
-| `as?`        | `PolymorphicAs`   | `"svg"` | Element type for arrow      |
+| `as?`        | `PolymorphicAs`       | `"svg"` | Element type for arrow      |
 | `className?` | `string`              | -       | CSS class names for styling |
 | `style?`     | `React.CSSProperties` | -       | Inline styles               |
 

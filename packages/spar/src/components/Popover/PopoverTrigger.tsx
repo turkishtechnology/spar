@@ -1,11 +1,13 @@
 import { useCallback, useMemo } from 'react';
 import { PopoverTriggerProps, PopoverTriggerRenderProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
+import { Button } from '../Button';
 
 /**
  * Trigger element that opens/closes the popover
  */
 export const PopoverTrigger = ({
+  as = 'button',
   children,
   disabled: disabledProp,
   onClick,
@@ -41,11 +43,6 @@ export const PopoverTrigger = ({
       if (disabled) return;
 
       switch (event.key) {
-        case 'Enter':
-        case ' ':
-          event.preventDefault();
-          togglePopover();
-          break;
         case 'ArrowDown':
           event.preventDefault();
           if (!state.isOpen) {
@@ -55,18 +52,18 @@ export const PopoverTrigger = ({
       }
       onKeyDown?.(event);
     },
-    [disabled, state.isOpen, togglePopover, openPopover, onKeyDown],
+    [disabled, state.isOpen, openPopover, onKeyDown],
   );
 
   const triggerRefCallback = useMemo(
-    () => (element: HTMLButtonElement | null) => {
+    () => (element: HTMLElement | null) => {
       if (triggerRef && 'current' in triggerRef) {
         triggerRef.current = element;
       }
       if (typeof ref === 'function') {
-        ref(element);
+        ref(element as HTMLButtonElement | null);
       } else if (ref) {
-        ref.current = element;
+        ref.current = element as HTMLButtonElement | null;
       }
     },
     [triggerRef, ref],
@@ -82,8 +79,8 @@ export const PopoverTrigger = ({
   };
 
   return (
-    <button
-      type='button'
+    <Button
+      as={as}
       disabled={disabled}
       ref={triggerRefCallback}
       onClick={handleClick}
@@ -92,11 +89,10 @@ export const PopoverTrigger = ({
       aria-controls={state.isOpen ? state.contentId : undefined}
       aria-haspopup='dialog'
       data-state={state.isOpen ? 'open' : 'closed'}
-      data-disabled={disabled ? '' : undefined}
       {...props}
     >
       {typeof children === 'function' ? children(renderProps) : children}
-    </button>
+    </Button>
   );
 };
 

@@ -1,14 +1,15 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import type { SelectTriggerProps, SelectTriggerRenderProps } from './types';
 import { useSelectContext } from './SelectRoot';
-import { useMergedRef, useAutoFocus } from '../../hooks';
+import { useMergedRef } from '../../hooks';
+import { Button } from '../Button';
 
 /**
  * Trigger button that toggles the select dropdown. Handles keyboard navigation and accessibility attributes.
  */
 export const SelectTrigger = ({
   ref,
-  as: Component = 'button',
+  as = 'button',
   onClick,
   onKeyDown,
   children,
@@ -17,9 +18,6 @@ export const SelectTrigger = ({
   const context = useSelectContext();
   const internalRef = useRef<HTMLButtonElement>(null);
   const mergedRef = useMergedRef(internalRef, ref);
-
-  // Auto focus on mount (controlled by context from Root)
-  useAutoFocus(internalRef, context.shouldAutoFocus);
 
   // Merge external ref with internal ref
   useEffect(() => {
@@ -35,10 +33,8 @@ export const SelectTrigger = ({
     (event: React.MouseEvent<HTMLButtonElement>) => {
       if (context.disabled) return;
 
-      onClick?.(event);
-      if (event.defaultPrevented) return;
-
       context.onOpenChange(!context.open);
+      onClick?.(event);
     },
     [context, onClick],
   );
@@ -47,13 +43,10 @@ export const SelectTrigger = ({
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
       if (context.disabled) return;
 
-      onKeyDown?.(event);
-      if (event.defaultPrevented) return;
-
       const { key } = event;
 
-      // Open on Space, Enter, ArrowDown, ArrowUp
-      if ([' ', 'Enter', 'ArrowDown', 'ArrowUp'].includes(key)) {
+      // Open on ArrowDown, ArrowUp (Enter/Space handled by Button)
+      if (['ArrowDown', 'ArrowUp'].includes(key)) {
         event.preventDefault();
         if (!context.open) {
           context.onOpenChange(true);
@@ -65,6 +58,8 @@ export const SelectTrigger = ({
           context.setHighlightedIndex(selectedIndex !== -1 ? selectedIndex : 0);
         }
       }
+
+      onKeyDown?.(event);
     },
     [context, onKeyDown],
   );
@@ -80,19 +75,18 @@ export const SelectTrigger = ({
   };
 
   return (
-    <Component
+    <Button
+      as={as}
       ref={mergedRef}
-      type={Component === 'button' ? 'button' : undefined}
+      disabled={context.disabled}
+      shouldAutoFocus={context.shouldAutoFocus}
       role='combobox'
       aria-haspopup='listbox'
       aria-expanded={context.open}
       aria-controls={context.open ? context.contentId : undefined}
       aria-labelledby={context.valueId}
-      aria-disabled={Component !== 'button' ? context.disabled || undefined : undefined}
       aria-required={context.required || undefined}
-      {...(Component === 'button' ? { disabled: context.disabled } : {})}
       data-state={context.open ? 'open' : 'closed'}
-      data-disabled={context.disabled ? '' : undefined}
       data-required={context.required ? '' : undefined}
       data-placeholder={!context.value ? '' : undefined}
       onClick={handleClick}
@@ -100,7 +94,7 @@ export const SelectTrigger = ({
       {...props}
     >
       {typeof children === 'function' ? children(renderProps) : children}
-    </Component>
+    </Button>
   );
 };
 
