@@ -489,7 +489,7 @@ The root container that manages dialog state and provides context to all child c
 | Name            | Type                      | Default     | Description                                          |
 | --------------- | ------------------------- | ----------- | ---------------------------------------------------- |
 | `children`      | `ReactNode`               | -           | Dialog trigger and portal components                 |
-| `open?`       | `boolean`                 | `undefined` | Controlled open state                                |
+| `open?`         | `boolean`                 | `undefined` | Controlled open state                                |
 | `onOpenChange?` | `(open: boolean) => void` | `undefined` | Callback when open state changes                     |
 | `defaultOpen?`  | `boolean`                 | `false`     | Initial open state for uncontrolled usage            |
 | `modal?`        | `boolean`                 | `true`      | Whether dialog is modal (blocks interaction outside) |
@@ -503,32 +503,36 @@ The root container that manages dialog state and provides context to all child c
 
 **HTML Attributes**
 
-| Attribute       | Value                | Purpose              |
-| --------------- | -------------------- | -------------------- |
-| `data-state`    | `"open" \| "closed"` | Current dialog state |
+| Attribute    | Value                | Purpose              |
+| ------------ | -------------------- | -------------------- |
+| `data-state` | `"open" \| "closed"` | Current dialog state |
 
 ### Dialog.Trigger
 
-Interactive element that opens the dialog when activated.
+Interactive element that opens the dialog when activated. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
 **Props**
 
-| Name          | Type                     | Default     | Description                      |
-| ------------- | ------------------------ | ----------- | -------------------------------- |
-| `children`    | `ReactNode \| ((state: DialogTriggerRenderProps) => ReactNode)` | - | Trigger content or render props function |
-| `as?`         | `PolymorphicAs`            | `'button'`  | Polymorphic element type         |
-| `disabled?` | `boolean`                | `false`     | Disables trigger interaction     |
-| `ref?`        | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to trigger element |
+| Name               | Type                                                            | Default     | Description                                         |
+| ------------------ | --------------------------------------------------------------- | ----------- | --------------------------------------------------- |
+| `children`         | `ReactNode \| ((state: DialogTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function            |
+| `disabled?`        | `boolean`                                                       | `false`     | Disables trigger interaction                        |
+| `shouldAutoFocus?` | `boolean`                                                       | `false`     | Whether the button should receive focus on mount    |
+| `isLoading?`       | `boolean`                                                       | `false`     | Loading state with screen reader support            |
+| `isPressed?`       | `boolean`                                                       | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange?` | `(pressed: boolean) => void`                                    | `undefined` | Callback fired when toggle state changes            |
+| `ref?`             | `React.Ref<HTMLElement>`                                        | `undefined` | Ref forwarded to trigger element                    |
+| `...props`         | `ButtonProps`                                                   | -           | All standard Button component attributes            |
 
 **Render Props (DialogTriggerRenderProps)**
 
-| Property   | Type         | Description                                     |
-| ---------- | ------------ | ----------------------------------------------- |
-| `isOpen`   | `boolean`    | Whether the dialog is currently visible         |
-| `disabled` | `boolean`    | Whether the trigger is disabled                 |
-| `open`     | `() => void` | Function to programmatically open the dialog    |
-| `close`    | `() => void` | Function to programmatically close the dialog   |
-| `toggle`   | `() => void` | Function to programmatically toggle the dialog  |
+| Property   | Type         | Description                                    |
+| ---------- | ------------ | ---------------------------------------------- |
+| `isOpen`   | `boolean`    | Whether the dialog is currently visible        |
+| `disabled` | `boolean`    | Whether the trigger is disabled                |
+| `open`     | `() => void` | Function to programmatically open the dialog   |
+| `close`    | `() => void` | Function to programmatically close the dialog  |
+| `toggle`   | `() => void` | Function to programmatically toggle the dialog |
 
 **Events**
 
@@ -574,7 +578,7 @@ Background overlay that appears behind dialog content and handles click-outside 
 | Name          | Type                     | Default     | Description                           |
 | ------------- | ------------------------ | ----------- | ------------------------------------- |
 | `children?`   | `ReactNode`              | `undefined` | Overlay content (usually none)        |
-| `as?`         | `PolymorphicAs`            | `'div'`     | Polymorphic element type              |
+| `as?`         | `PolymorphicAs`          | `'div'`     | Polymorphic element type              |
 | `forceMount?` | `boolean`                | `false`     | Always render for animation libraries |
 | `ref?`        | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to overlay element      |
 
@@ -599,7 +603,7 @@ Main dialog container that handles focus management and keyboard interactions.
 | Name            | Type                                 | Default     | Description                           |
 | --------------- | ------------------------------------ | ----------- | ------------------------------------- |
 | `children`      | `ReactNode`                          | -           | Dialog content                        |
-| `as?`           | `PolymorphicAs`                        | `'div'`     | Polymorphic element type              |
+| `as?`           | `PolymorphicAs`                      | `'div'`     | Polymorphic element type              |
 | `role?`         | `React.AriaRole`                     | `'dialog'`  | ARIA role for dialog type             |
 | `forceMount?`   | `boolean`                            | `false`     | Always render for animation libraries |
 | `trapFocus?`    | `boolean`                            | `true`      | Enable focus trapping                 |
@@ -633,7 +637,7 @@ Dialog title that provides an accessible name for the dialog.
 | Name       | Type                     | Default     | Description                    |
 | ---------- | ------------------------ | ----------- | ------------------------------ |
 | `children` | `ReactNode`              | -           | Title content                  |
-| `as?`      | `PolymorphicAs`            | `'h2'`      | Polymorphic element type       |
+| `as?`      | `PolymorphicAs`          | `'h2'`      | Polymorphic element type       |
 | `level?`   | `number`                 | `2`         | Heading level (1-6)            |
 | `ref?`     | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to title element |
 
@@ -658,7 +662,7 @@ Dialog description that provides additional accessible information about the dia
 | Name       | Type                     | Default     | Description                          |
 | ---------- | ------------------------ | ----------- | ------------------------------------ |
 | `children` | `ReactNode`              | -           | Description content                  |
-| `as?`      | `PolymorphicAs`            | `'p'`       | Polymorphic element type             |
+| `as?`      | `PolymorphicAs`          | `'p'`       | Polymorphic element type             |
 | `ref?`     | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to description element |
 
 **Events**
@@ -675,15 +679,21 @@ Dialog description that provides additional accessible information about the dia
 
 ### Dialog.Close
 
-Button that closes the dialog when activated.
+Button that closes the dialog when activated. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
 **Props**
 
-| Name       | Type                     | Default     | Description                           |
-| ---------- | ------------------------ | ----------- | ------------------------------------- |
-| `children` | `ReactNode \| ((state: DialogCloseRenderProps) => ReactNode)` | - | Close button content or render props function |
+| Name               | Type                                                          | Default     | Description                                         |
+| ------------------ | ------------------------------------------------------------- | ----------- | --------------------------------------------------- |
 | `as?`      | `PolymorphicAs`            | `'button'`  | Polymorphic element type              |
-| `ref?`     | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to close button element |
+| `children`         | `ReactNode \| ((state: DialogCloseRenderProps) => ReactNode)` | -           | Close button content or render props function       |
+| `disabled?`        | `boolean`                                                     | `false`     | Whether close button is disabled                    |
+| `shouldAutoFocus?` | `boolean`                                                     | `false`     | Whether the button should receive focus on mount    |
+| `isLoading?`       | `boolean`                                                     | `false`     | Loading state with screen reader support            |
+| `isPressed?`       | `boolean`                                                     | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange?` | `(pressed: boolean) => void`                                  | `undefined` | Callback fired when toggle state changes            |
+| `ref?`             | `React.Ref<HTMLElement>`                                      | `undefined` | Ref forwarded to close button element               |
+| `...props`         | `ButtonProps`                                                 | -           | All standard Button component attributes            |
 
 **Render Props (DialogCloseRenderProps)**
 

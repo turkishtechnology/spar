@@ -1,5 +1,6 @@
 import type { ComponentProps, ReactNode } from 'react';
 import type { PolymorphicAs } from '../../types';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * Render props provided to children function for CollapsibleTrigger
@@ -77,13 +78,7 @@ export interface CollapsibleProps extends ComponentProps<'div'> {
  * Props for CollapsibleTrigger component
  * @remarks Button element that toggles visibility
  */
-export interface CollapsibleTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
-  /**
-   * Element type for polymorphic rendering
-   * @defaultValue 'button'
-   */
-  as?: PolymorphicAs;
-
+export interface CollapsibleTriggerProps extends Omit<ButtonProps, 'children'> {
   /**
    * Children content or render function
    */

@@ -11,9 +11,10 @@ import type {
 } from './types';
 import { useDropdownMenuRootContext } from './contexts';
 import { composeRefs } from './utils';
+import { Button } from '../Button';
 
 export const DropdownMenuTrigger = ({
-  as: Component = 'button',
+  as = 'button',
   disabled: disabledProp,
   onClick,
   onKeyDown,
@@ -42,8 +43,8 @@ export const DropdownMenuTrigger = ({
 
   const handleClick = useCallback(
     (event: ReactMouseEvent<HTMLButtonElement>) => {
-      onClick?.(event);
-      if (event.defaultPrevented || disabled) {
+      if (disabled) {
+        onClick?.(event);
         return;
       }
 
@@ -52,6 +53,7 @@ export const DropdownMenuTrigger = ({
       } else {
         handleOpen('first');
       }
+      onClick?.(event);
     },
     [onClick, disabled, menu, handleOpen],
   );
@@ -74,20 +76,9 @@ export const DropdownMenuTrigger = ({
         handleOpen('last');
         return;
       }
-
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        if (menu.open) {
-          menu.closeMenu();
-        } else {
-          handleOpen('first');
-        }
-      }
     },
-    [onKeyDown, disabled, handleOpen, menu],
+    [onKeyDown, disabled, handleOpen],
   );
-
-  const isNativeButton = Component === 'button';
 
   // Render props for children function
   const renderProps: DropdownMenuTriggerRenderProps = {
@@ -105,24 +96,21 @@ export const DropdownMenuTrigger = ({
   };
 
   return (
-    <Component
-      {...props}
+    <Button
+      as={as}
       ref={triggerRefCallback}
       id={menu.triggerId}
+      disabled={disabled}
       aria-haspopup='menu'
       aria-expanded={menu.open}
       aria-controls={menu.open ? menu.contentId : undefined}
       data-state={menu.open ? 'open' : 'closed'}
-      {...(disabled ? { 'data-disabled': '' } : {})}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      role={isNativeButton ? undefined : 'button'}
-      tabIndex={isNativeButton ? props.tabIndex : disabled ? -1 : (props.tabIndex ?? 0)}
-      disabled={isNativeButton ? disabled : undefined}
-      {...(!isNativeButton && disabled ? { 'aria-disabled': true } : {})}
+      {...props}
     >
       {typeof children === 'function' ? children(renderProps) : children}
-    </Component>
+    </Button>
   );
 };
 

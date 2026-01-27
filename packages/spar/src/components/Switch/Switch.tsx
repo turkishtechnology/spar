@@ -1,5 +1,6 @@
 import { useState, useCallback, useId, useRef } from 'react';
-import { useMergedRef, useAutoFocus } from '../../hooks';
+import { useMergedRef } from '../../hooks';
+import { Button } from '../Button';
 import type { SwitchProps, SwitchRenderProps, UseSwitchProps, UseSwitchReturn } from './types';
 
 /**
@@ -173,7 +174,7 @@ const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
  * Headless switch component for boolean toggle controls. Provides accessible switch semantics with form integration.
  */
 export const Switch = ({
-  as: Component = 'button',
+  as = 'button',
   checked,
   defaultChecked,
   onChange,
@@ -193,11 +194,8 @@ export const Switch = ({
   const id = providedId || internalId;
 
   // Refs
-  const internalRef = useRef<HTMLElement>(null);
-  const mergedRef = useMergedRef(internalRef, ref as React.Ref<HTMLElement>);
-
-  // Auto focus handling
-  useAutoFocus(internalRef, shouldAutoFocus);
+  const internalRef = useRef<HTMLButtonElement>(null);
+  const mergedRef = useMergedRef(internalRef, ref as React.Ref<HTMLButtonElement>);
 
   // Use the switch hook
   const {
@@ -237,41 +235,57 @@ export const Switch = ({
     ...safeProps
   } = restProps;
 
-  const isNativeButton = Component === 'button';
-  // Remove native disabled/type for non-button
-  const componentProps: Record<string, unknown> = {
-    ...switchProps,
-    ...safeProps,
-    ref: mergedRef,
-    id,
-    'aria-label': ariaLabel,
-    'aria-labelledby': ariaLabelledBy,
-    'aria-describedby': ariaDescribedBy,
-    className,
-    style,
-    ...(required && { 'aria-required': true }),
-    ...(required && { 'data-required': '' }),
-  };
-  if (isNativeButton) {
-    componentProps['disabled'] = disabled;
-    componentProps['type'] = 'button';
-  } else {
-    componentProps['role'] = 'switch';
-    if (disabled) {
-      componentProps['aria-disabled'] = true;
-    }
-    if ('disabled' in componentProps) {
-      delete componentProps['disabled'];
-    }
-    if ('type' in componentProps) {
-      delete componentProps['type'];
-    }
-  }
+  // Extract event handlers from switchProps
+  // Note: We don't pass onKeyDown because Button already handles Space/Enter
+  // and calls onClick, which triggers handleToggle
+  const {
+    onClick,
+    onFocus,
+    onBlur,
+    onPointerEnter,
+    onPointerLeave,
+    onPointerDown,
+    onPointerUp,
+    onPointerCancel,
+  } = switchProps;
+
   return (
     <>
-      <Component {...componentProps}>
+      <Button
+        as={as}
+        ref={mergedRef}
+        id={id}
+        disabled={disabled}
+        shouldAutoFocus={shouldAutoFocus}
+        role='switch'
+        aria-checked={checkedState}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
+        aria-required={required || undefined}
+        aria-readonly={readOnly || undefined}
+        data-switch=''
+        data-state={checkedState ? 'checked' : 'unchecked'}
+        data-checked={checkedState ? '' : undefined}
+        data-readonly={readOnly ? '' : undefined}
+        data-required={required ? '' : undefined}
+        data-focus={isFocused ? '' : undefined}
+        data-hover={isHovered ? '' : undefined}
+        data-active={isActive ? '' : undefined}
+        className={className}
+        style={style}
+        onClick={onClick}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onPointerEnter={onPointerEnter}
+        onPointerLeave={onPointerLeave}
+        onPointerDown={onPointerDown}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerCancel}
+        {...safeProps}
+      >
         {typeof children === 'function' ? children(renderProps) : children}
-      </Component>
+      </Button>
       {name && (
         <input {...hiddenInputProps} name={name} value={value} form={form} required={required} />
       )}
