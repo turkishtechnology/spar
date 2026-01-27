@@ -49,12 +49,19 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 | `children` | `ReactNode` | Yes | - | Dialog trigger and portal components |
 
 ### DialogTrigger Props
+
+Extends all `ButtonProps` from the Button component.
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `PolymorphicAs` | No | `'button'` | Polymorphic element type |
 | `disabled` | `boolean` | No | `false` | Disables trigger interaction |
+| `shouldAutoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
+| `isLoading` | `boolean` | No | `false` | Loading state with screen reader support |
+| `isPressed` | `boolean` | No | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange` | `(pressed: boolean) => void` | No | `undefined` | Callback fired when toggle state changes |
 | `children` | `ReactNode \| ((state: DialogTriggerRenderProps) => ReactNode)` | Yes | - | Trigger content or render function for render props pattern |
-| `...props` | `HTMLAttributes` | No | - | Additional HTML props |
+| `...props` | `ButtonProps` | No | - | All standard Button component attributes |
 
 ### DialogTriggerRenderProps
 | Name | Type | Description |
@@ -113,11 +120,17 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
 
 ### DialogClose Props
+
+Extends all `ButtonProps` from the Button component.
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `PolymorphicAs` | No | `'button'` | Polymorphic element type |
+| `disabled` | `boolean` | No | `false` | Disables close button interaction |
+| `shouldAutoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
+| `isLoading` | `boolean` | No | `false` | Loading state with screen reader support |
 | `children` | `ReactNode \| ((state: DialogCloseRenderProps) => ReactNode)` | Yes | - | Close button content or render function for render props pattern |
-| `...props` | `HTMLAttributes` | No | - | Additional HTML props |
+| `...props` | `ButtonProps` | No | - | All standard Button component attributes |
 
 ### DialogCloseRenderProps
 | Name | Type | Description |

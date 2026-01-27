@@ -126,11 +126,15 @@ export const Button = ({
     style,
     onClick: handleClick,
     onKeyDown: handleKeyDown,
-    tabIndex: isNativeButton ? (disabled ? -1 : 0) : disabled ? -1 : 0,
     ...dataAttributes,
     ...ariaAttributes,
     ...htmlProps,
   };
+
+  // Set tabIndex if not already provided
+  if (!('tabIndex' in htmlProps)) {
+    elementProps.tabIndex = disabled ? -1 : 0;
+  }
 
   // Add button-specific props when rendering as button
   if (isNativeButton) {
@@ -138,10 +142,12 @@ export const Button = ({
     (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = disabled;
   }
 
-  // Add role and aria-disabled when not rendering as button
+  // Add role and aria-disabled when not rendering as button (only if not already set)
   if (!isNativeButton) {
-    elementProps.role = 'button';
-    if (disabled) {
+    if (!('role' in htmlProps)) {
+      elementProps.role = 'button';
+    }
+    if (disabled && !('aria-disabled' in htmlProps)) {
       elementProps['aria-disabled'] = true;
     }
     // Remove native disabled and type if present, using Record<string, unknown>

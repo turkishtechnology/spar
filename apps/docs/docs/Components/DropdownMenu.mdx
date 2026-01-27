@@ -535,18 +535,23 @@ _(No specific HTML attributes - Root is a context provider with no rendered elem
 
 ### DropdownMenu.Trigger
 
-The button element that toggles the dropdown menu visibility. Always renders as a `button` element.
+The button element that toggles the dropdown menu visibility. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
 **Props**
 
-| Name         | Type                                                                  | Default     | Description                              |
-| ------------ | --------------------------------------------------------------------- | ----------- | ---------------------------------------- |
-| `children`   | `ReactNode \| ((state: DropdownMenuTriggerRenderProps) => ReactNode)` | `undefined` | Trigger content or render props function |
-| `disabled?`  | `boolean`                                                             | `false`     | Whether the trigger is disabled          |
-| `ref?`       | `Ref<HTMLButtonElement \| null>`                                      | `undefined` | Forwarded ref to trigger element         |
-| `onClick?`   | `(event: MouseEvent) => void`                                         | `undefined` | Click event handler                      |
-| `onKeyDown?` | `(event: KeyboardEvent) => void`                                      | `undefined` | Keyboard event handler                   |
-| `...props`   | `ComponentProps<'button'>`                                            | -           | All standard button attributes           |
+| Name               | Type                                                                  | Default     | Description                                         |
+| ------------------ | --------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
+| `as?`              | `PolymorphicAs`                                                         | `"button"`  | Element type to render as                           |
+| `children`         | `ReactNode \| ((state: DropdownMenuTriggerRenderProps) => ReactNode)` | `undefined` | Trigger content or render props function            |
+| `disabled?`        | `boolean`                                                             | `false`     | Whether the trigger is disabled                     |
+| `shouldAutoFocus?` | `boolean`                                                             | `false`     | Whether the button should receive focus on mount    |
+| `isLoading?`       | `boolean`                                                             | `false`     | Loading state with screen reader support            |
+| `isPressed?`       | `boolean`                                                             | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange?` | `(pressed: boolean) => void`                                          | `undefined` | Callback fired when toggle state changes            |
+| `ref?`             | `Ref<HTMLButtonElement \| null>`                                      | `undefined` | Forwarded ref to trigger element                    |
+| `onClick?`         | `(event: MouseEvent) => void`                                         | `undefined` | Click event handler                                 |
+| `onKeyDown?`       | `(event: KeyboardEvent) => void`                                      | `undefined` | Keyboard event handler                              |
+| `...props`         | `ButtonProps`                                                         | -           | All standard Button component attributes            |
 
 **Render Props (DropdownMenuTriggerRenderProps)**
 

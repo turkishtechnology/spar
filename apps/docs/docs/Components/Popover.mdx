@@ -48,84 +48,84 @@ A floating panel component anchored to a trigger element with smart positioning,
   font-weight: 400;
   border: none;
 
-/_ Light mode styles _/
-background-color: rgba(0, 0, 0, 0.08);
-color: #222530;
-font-size: 13px;
+/* Light mode styles */
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #222530;
+  font-size: 13px;
 }
 
 [data-theme='dark'] .popover-trigger {
-/_ Dark mode styles _/
-background-color: rgba(255, 255, 255, 0.12);
-color: #f2f5f8;
+/* Dark mode styles */
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #f2f5f8;
 }
 
 .popover-content {
-width: 200px;
-border-radius: 5px;
-border: 0.625px solid #e1e4ea;
-background-color: #ebebeb;
+  width: 200px;
+  border-radius: 5px;
+  border: 0.625px solid #e1e4ea;
+  background-color: #ebebeb;
 }
 
 [data-theme='dark'] .popover-content {
-border-color: #2b303b;
-background-color: #222;
+  border-color: #2b303b;
+  background-color: #222;
 }
 
 .popover-header {
-display: flex;
-align-items: center;
-gap: 5px;
-padding: 7.5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7.5px;
 }
 
 .popover-icon {
-width: 12.5px;
-height: 12.5px;
-border-radius: 2.5px;
-border: 0.625px solid #cacfd8;
-background: rgba(0, 0, 0, 0.72);
+  width: 12.5px;
+  height: 12.5px;
+  border-radius: 2.5px;
+  border: 0.625px solid #cacfd8;
+  background: rgba(0, 0, 0, 0.72);
 }
 
 [data-theme='dark'] .popover-icon {
-border-color: #525866;
-background-color: #c0c0c0;
+  border-color: #525866;
+  background-color: #c0c0c0;
 }
 
 .popover-title {
-color: #222530;
-font-size: 8.757px;
+  color: #222530;
+  font-size: 8.757px;
 }
 
 [data-theme='dark'] .popover-title {
-color: #f2f5f8;
+  color: #f2f5f8;
 }
 
 .popover-close {
-margin-left: auto;
-border: none;
-cursor: pointer;
-background-color: transparent;
+  margin-left: auto;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
 }
 
 .popover-close path {
-fill: #222530;
+  fill: #222530;
 }
 
 [data-theme='dark'] path {
-fill: #f2f5f8;
+  fill: #f2f5f8;
 }
 
 .popover-paragraph {
-color: #717784;
-font-size: 7.5px;
-padding: 7.5px;
-padding-top: 2.5px;
-margin-bottom: 0px;
+  color: #717784;
+  font-size: 7.5px;
+  padding: 7.5px;
+  padding-top: 2.5px;
+  margin-bottom: 0px;
 }
 
 [data-theme='dark'] .popover-paragraph {
-color: #99a0ae;
+  color: #99a0ae;
 }`}
 />
 
@@ -518,18 +518,23 @@ The root container that provides context and manages state for all popover compo
 
 ### PopoverTrigger
 
-Button element that toggles the popover visibility. Always renders as a `button` element.
+Button element that toggles the popover visibility. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
 **Props**
 
-| Name         | Type                                                             | Default     | Description                              |
-| ------------ | ---------------------------------------------------------------- | ----------- | ---------------------------------------- |
-| `children`   | `ReactNode \| ((state: PopoverTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function |
-| `disabled?`  | `boolean`                                                        | `false`     | Whether trigger is disabled              |
-| `onClick?`   | `(event: React.MouseEvent<HTMLButtonElement>) => void`           | `undefined` | Custom click handler                     |
-| `onKeyDown?` | `(event: React.KeyboardEvent<HTMLButtonElement>) => void`        | `undefined` | Custom keydown handler                   |
-| `ref?`       | `React.Ref<HTMLButtonElement>`                                   | `undefined` | Ref to the trigger element               |
-| `...props`   | `ComponentProps<'button'>`                                       | -           | All standard button attributes           |
+| Name               | Type                                                             | Default     | Description                                         |
+| ------------------ | ---------------------------------------------------------------- | ----------- | --------------------------------------------------- |
+| `as?`              | `PolymorphicAs`                                                    | `"button"`  | Element type to render as                           |
+| `children`         | `ReactNode \| ((state: PopoverTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function            |
+| `disabled?`        | `boolean`                                                        | `false`     | Whether trigger is disabled                         |
+| `shouldAutoFocus?` | `boolean`                                                        | `false`     | Whether the button should receive focus on mount    |
+| `isLoading?`       | `boolean`                                                        | `false`     | Loading state with screen reader support            |
+| `isPressed?`       | `boolean`                                                        | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange?` | `(pressed: boolean) => void`                                     | `undefined` | Callback fired when toggle state changes            |
+| `onClick?`         | `(event: React.MouseEvent<HTMLButtonElement>) => void`           | `undefined` | Custom click handler                                |
+| `onKeyDown?`       | `(event: React.KeyboardEvent<HTMLButtonElement>) => void`        | `undefined` | Custom keydown handler                              |
+| `ref?`             | `React.Ref<HTMLButtonElement>`                                   | `undefined` | Ref to the trigger element                          |
+| `...props`         | `ButtonProps`                                                    | -           | All standard Button component attributes            |
 
 **Render Props (PopoverTriggerRenderProps)**
 
@@ -684,16 +689,22 @@ _(No specific HTML attributes - Portal manages rendering)_
 
 ### PopoverClose
 
-Close button component that automatically closes the popover when clicked. Always renders as a `button` element.
+Close button component that automatically closes the popover when clicked. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
 **Props**
 
-| Name       | Type                                                           | Default     | Description                          |
-| ---------- | -------------------------------------------------------------- | ----------- | ------------------------------------ |
-| `children` | `ReactNode \| ((state: PopoverCloseRenderProps) => ReactNode)` | -           | Close button content or render props |
-| `onClick?` | `(event: React.MouseEvent<HTMLButtonElement>) => void`         | `undefined` | Custom click handler                 |
-| `ref?`     | `React.Ref<HTMLButtonElement>`                                 | `undefined` | Ref to the close element             |
-| `...props` | `ComponentProps<'button'>`                                     | -           | All standard button attributes       |
+| Name               | Type                                                           | Default     | Description                                         |
+| ------------------ | -------------------------------------------------------------- | ----------- | --------------------------------------------------- |
+| `as?`              | `PolymorphicAs`                                                  | `"button"`  | Element type to render as                           |
+| `children`         | `ReactNode \| ((state: PopoverCloseRenderProps) => ReactNode)` | -           | Close button content or render props                |
+| `disabled?`        | `boolean`                                                      | `false`     | Whether close button is disabled                    |
+| `shouldAutoFocus?` | `boolean`                                                      | `false`     | Whether the button should receive focus on mount    |
+| `isLoading?`       | `boolean`                                                      | `false`     | Loading state with screen reader support            |
+| `isPressed?`       | `boolean`                                                      | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange?` | `(pressed: boolean) => void`                                   | `undefined` | Callback fired when toggle state changes            |
+| `onClick?`         | `(event: React.MouseEvent<HTMLButtonElement>) => void`         | `undefined` | Custom click handler                                |
+| `ref?`             | `React.Ref<HTMLButtonElement>`                                 | `undefined` | Ref to the close element                            |
+| `...props`         | `ButtonProps`                                                  | -           | All standard Button component attributes            |
 
 **Render Props (PopoverCloseRenderProps)**
 

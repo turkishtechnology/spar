@@ -1,15 +1,15 @@
 import React from 'react';
 import { useCollapsibleContext } from './Collapsible';
 import type { CollapsibleTriggerProps, CollapsibleTriggerRenderProps } from './types';
+import { Button } from '../Button';
 
 /**
  * Collapsible trigger component that toggles the visibility of collapsible content.
  */
 export const CollapsibleTrigger = ({
-  as: Component = 'button',
+  as = 'button',
   children,
   onClick,
-  onKeyDown,
   ...props
 }: CollapsibleTriggerProps) => {
   const { isOpen, open, close, toggle, disabled, triggerId, contentId } = useCollapsibleContext();
@@ -18,21 +18,6 @@ export const CollapsibleTrigger = ({
     if (disabled) return;
     toggle();
     onClick?.(event);
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (disabled) {
-      onKeyDown?.(event);
-      return;
-    }
-
-    // Handle Enter and Space keys
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault(); // Prevent space from scrolling page
-      toggle();
-    }
-
-    onKeyDown?.(event);
   };
 
   // Render props for children function
@@ -47,31 +32,19 @@ export const CollapsibleTrigger = ({
   // Get data attributes for styling
   const dataState = isOpen ? 'open' : 'closed';
 
-  // Build props with conditional logic for button vs non-button elements
-  const isButton = Component === 'button';
-  const triggerProps = {
-    id: triggerId,
-    'aria-expanded': isOpen,
-    'aria-controls': contentId,
-    'data-state': dataState,
-    'data-disabled': disabled ? '' : undefined,
-    onClick: handleClick,
-    onKeyDown: handleKeyDown,
-    ...props,
-    // Button-specific props
-    ...(isButton && { type: 'button' as const, disabled }),
-    // Non-button props for accessibility
-    ...(!isButton && {
-      role: 'button',
-      'aria-disabled': disabled,
-      tabIndex: disabled ? -1 : 0,
-    }),
-  };
-
   return (
-    <Component {...triggerProps}>
+    <Button
+      as={as}
+      id={triggerId}
+      disabled={disabled}
+      aria-expanded={isOpen}
+      aria-controls={contentId}
+      data-state={dataState}
+      onClick={handleClick}
+      {...props}
+    >
       {typeof children === 'function' ? children(renderProps) : children}
-    </Component>
+    </Button>
   );
 };
 

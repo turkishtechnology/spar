@@ -316,14 +316,20 @@ The root component that provides context and state management for the collapsibl
 
 ### CollapsibleTrigger
 
-Interactive element that toggles the content visibility with full accessibility support.
+Interactive element that toggles the content visibility with full accessibility support. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
 **Props**
 
-| Name        | Type                                                                 | Default    | Description                              |
-| ----------- | -------------------------------------------------------------------- | ---------- | ---------------------------------------- |
-| `as?`       | `PolymorphicAs`                                                      | `"button"` | Element type for polymorphic rendering   |
-| `children?` | `ReactNode \| ((state: CollapsibleTriggerRenderProps) => ReactNode)` | -          | Trigger content or render props function |
+| Name               | Type                                                                 | Default     | Description                                         |
+| ------------------ | -------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
+| `as?`              | `PolymorphicAs`                                                      | `"button"`  | Element type for polymorphic rendering              |
+| `children?`        | `ReactNode \| ((state: CollapsibleTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function            |
+| `disabled?`        | `boolean`                                                            | `false`     | Whether trigger is disabled                         |
+| `shouldAutoFocus?` | `boolean`                                                            | `false`     | Whether the button should receive focus on mount    |
+| `isLoading?`       | `boolean`                                                            | `false`     | Loading state with screen reader support            |
+| `isPressed?`       | `boolean`                                                            | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange?` | `(pressed: boolean) => void`                                         | `undefined` | Callback fired when toggle state changes            |
+| `...props`         | `ButtonProps`                                                        | -           | All standard Button component attributes            |
 
 **Render Props (CollapsibleTriggerRenderProps)**
 
