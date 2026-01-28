@@ -571,7 +571,7 @@ Navigation landmark container that provides context and manages shared state for
 | Name          | Type                | Default        | Description                                      |
 | ------------- | ------------------- | -------------- | ------------------------------------------------ |
 | `children`    | `ReactNode`         | -              | Breadcrumb content                               |
-| `as?`         | `PolymorphicAs`     | `'nav'`        | Polymorphic element type                         |
+| `as?`         | `ElementType`     | `'nav'`        | Polymorphic element type                         |
 | `aria-label?` | `string`            | `'Breadcrumb'` | Accessible name for navigation landmark          |
 | `onNavigate?` | `NavigationHandler` | `undefined`    | Navigation event handler for routing integration |
 | `disabled?`   | `boolean`           | `false`        | Disable all breadcrumb navigation                |
@@ -597,7 +597,7 @@ Ordered list container that provides semantic structure and automatically calcul
 | Name       | Type            | Default | Description              |
 | ---------- | --------------- | ------- | ------------------------ |
 | `children` | `ReactNode`     | -       | List items content       |
-| `as?`      | `PolymorphicAs` | `'ol'`  | Polymorphic element type |
+| `as?`      | `ElementType` | `'ol'`  | Polymorphic element type |
 
 **Events**
 
@@ -618,7 +618,7 @@ List item wrapper that receives position and current state from parent Breadcrum
 | Name         | Type                 | Default    | Description                                             |
 | ------------ | -------------------- | ---------- | ------------------------------------------------------- |
 | `children`   | `ReactNode`          | -          | Item content (Link or Page)                             |
-| `as?`        | `PolymorphicAs`      | `'li'`     | Polymorphic element type                                |
+| `as?`        | `ElementType`      | `'li'`     | Polymorphic element type                                |
 | `position?`  | `BreadcrumbPosition` | `'middle'` | Position in trail (automatically calculated)            |
 | `isCurrent?` | `boolean`            | `false`    | Whether this is current page (automatically calculated) |
 
@@ -644,7 +644,7 @@ Interactive link component with accessibility features, routing integration, and
 | Name          | Type                          | Default     | Description                                                        |
 | ------------- | ----------------------------- | ----------- | ------------------------------------------------------------------ |
 | `children`    | `ReactNode`                   | -           | Link text content                                                  |
-| `as?`         | `PolymorphicAs`               | `'a'`       | Polymorphic element type                                           |
+| `as?`         | `ElementType`               | `'a'`       | Polymorphic element type                                           |
 | `href?`       | `string`                      | `undefined` | Link destination                                                   |
 | `disabled?`   | `boolean`                     | `false`     | Disable this specific link                                         |
 | `isExternal?` | `boolean`                     | `false`     | Indicates external link (adds security attributes)                 |
@@ -677,7 +677,7 @@ Non-interactive current page indicator with proper semantic marking for screen r
 | Name       | Type            | Default  | Description              |
 | ---------- | --------------- | -------- | ------------------------ |
 | `children` | `ReactNode`     | -        | Current page name        |
-| `as?`      | `PolymorphicAs` | `'span'` | Polymorphic element type |
+| `as?`      | `ElementType` | `'span'` | Polymorphic element type |
 
 **Events**
 
@@ -700,7 +700,7 @@ Visual separator between breadcrumb items, hidden from screen readers to prevent
 | Name           | Type            | Default     | Description              |
 | -------------- | --------------- | ----------- | ------------------------ |
 | `children?`    | `ReactNode`     | `undefined` | Custom separator content |
-| `as?`          | `PolymorphicAs` | `'li'`      | Polymorphic element type |
+| `as?`          | `ElementType` | `'li'`      | Polymorphic element type |
 | `aria-hidden?` | `boolean`       | `true`      | Hide from screen readers |
 
 **Events**

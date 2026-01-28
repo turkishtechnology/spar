@@ -321,7 +321,7 @@ function ForceMountTabs() {
 | `orientation`    | `'horizontal' \| 'vertical'`           | `'horizontal'` | Tabs orientation affecting keyboard navigation                |
 | `dir`            | `'ltr' \| 'rtl'`                       | `'ltr'`        | Text direction for arrow key navigation                       |
 | `activationMode` | `'automatic' \| 'manual'`              | `'automatic'`  | Whether tabs activate on focus or require explicit activation |
-| `as`             | `PolymorphicAs`                        | `'div'`        | Polymorphic component type                                    |
+| `as`             | `ElementType`                        | `'div'`        | Polymorphic component type                                    |
 
 #### Events
 
@@ -343,7 +343,7 @@ function ForceMountTabs() {
 | Name   | Type            | Default | Description                               |
 | ------ | --------------- | ------- | ----------------------------------------- |
 | `loop` | `boolean`       | `true`  | Whether arrow key navigation wraps around |
-| `as`   | `PolymorphicAs` | `'div'` | Polymorphic component type                |
+| `as`   | `ElementType` | `'div'` | Polymorphic component type                |
 
 #### ARIA
 
@@ -412,7 +412,7 @@ Extends all `Button` component props including polymorphic rendering via the `as
 | ------------ | --------------- | ------- | ----------------------------------------------- |
 | `value`      | `string`        | —       | Unique identifier matching a TabsTrigger value  |
 | `forceMount` | `boolean`       | `false` | Force content to remain mounted when not active |
-| `as`         | `PolymorphicAs` | `'div'` | Polymorphic component type                      |
+| `as`         | `ElementType` | `'div'` | Polymorphic component type                      |
 
 #### ARIA
 

@@ -532,7 +532,7 @@ Direct input component function that returns an `InputField` without wrapper. De
 
 | Name           | Type                                              | Default     | Description                                 |
 | -------------- | ------------------------------------------------- | ----------- | ------------------------------------------- |
-| `as?`          | `PolymorphicAs`                                   | `'input'`   | Element type for polymorphic rendering      |
+| `as?`          | `ElementType`                                   | `'input'`   | Element type for polymorphic rendering      |
 | `ref?`         | `React.ComponentPropsWithRef<T>['ref']`           | `undefined` | Ref for the input element                   |
 | `type?`        | `string`                                          | `'text'`    | Input type attribute                        |
 | `placeholder?` | `string`                                          | `undefined` | Input placeholder text                      |
@@ -580,7 +580,7 @@ The core input element with polymorphic rendering support. Handles focus states,
 
 | Name               | Type                                             | Default     | Description                            |
 | ------------------ | ------------------------------------------------ | ----------- | -------------------------------------- |
-| `as?`              | `PolymorphicAs`                                  | `'input'`   | Element type for polymorphic rendering |
+| `as?`              | `ElementType`                                  | `'input'`   | Element type for polymorphic rendering |
 | `ref?`             | `React.ComponentPropsWithRef<T>['ref']`          | `undefined` | Ref for the input element              |
 | `shouldAutoFocus?` | `boolean`                                        | `false`     | Whether to focus the input on mount    |
 | `onFocus?`         | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Focus event handler                    |
