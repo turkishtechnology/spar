@@ -226,8 +226,8 @@ describe('Button Accessibility', () => {
   });
 
   describe('Focus Management', () => {
-    it('should auto-focus when shouldAutoFocus is true', async () => {
-      render(<Button shouldAutoFocus>Auto Focus</Button>);
+    it('should auto-focus when autoFocus is true', async () => {
+      render(<Button autoFocus>Auto Focus</Button>);
       const button = screen.getByRole('button');
       await waitFor(() => {
         expect(button).toHaveFocus();

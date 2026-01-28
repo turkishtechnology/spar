@@ -75,7 +75,7 @@ export interface SelectRootOwnProps {
    * Whether to focus the trigger on mount
    * @defaultValue false
    */
-  shouldAutoFocus?: boolean;
+  autoFocus?: boolean;
 }
 
 /**
@@ -472,7 +472,7 @@ export interface SelectContextValue {
   disabled: boolean;
   required: boolean;
   dir: Direction;
-  shouldAutoFocus: boolean;
+  autoFocus: boolean;
 
   // Actions
   onValueChange: (value: string) => void;

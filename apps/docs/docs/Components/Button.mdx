@@ -190,7 +190,7 @@ function AccessibilityExample() {
 
   return (
     <>
-      <Button shouldAutoFocus disabled={disabled}>
+      <Button autoFocus disabled={disabled}>
         {disabled ? 'Cannot click' : 'Auto-focused button'}
       </Button>
 
@@ -215,7 +215,7 @@ A headless, accessible button component with complete keyboard support and toggl
 | `as?`              | `ElementType`                             | `"button"`  | The element type to render as                               |
 | `type?`            | `"button" \| "submit" \| "reset"`         | `"button"`  | Button type (only applies when as="button")                 |
 | `disabled?`        | `boolean`                                 | `false`     | Disabled state - properly announced to screen readers       |
-| `shouldAutoFocus?` | `boolean`                                 | `false`     | Whether the button should receive focus when first rendered |
+| `autoFocus?` | `boolean`                                 | `false`     | Whether the button should receive focus when first rendered |
 | `isLoading?`       | `boolean`                                 | `false`     | Loading state with screen reader support                    |
 | `isPressed?`       | `boolean`                                 | `undefined` | Toggle state - when defined, creates a toggle button        |
 | `onPressedChange?` | `(pressed: boolean) => void`              | `undefined` | Callback fired when toggle state changes                    |

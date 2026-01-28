@@ -56,7 +56,7 @@ export interface RadioGroupOwnProps {
    * Whether to focus the first focusable radio item on mount
    * @defaultValue false
    */
-  shouldAutoFocus?: boolean;
+  autoFocus?: boolean;
 }
 
 /**

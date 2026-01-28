@@ -37,7 +37,7 @@ The Switch follows a simple single-component pattern rather than compound struct
 | `form` | `string` | No | `undefined` | ID of the form this switch belongs to |
 | `required` | `boolean` | No | `false` | Required state for form validation |
 | `readOnly` | `boolean` | No | `false` | Read-only state - prevents interaction |
-| `shouldAutoFocus` | `boolean` | No | `false` | Auto-focus on mount |
+| `autoFocus` | `boolean` | No | `false` | Auto-focus on mount |
 | `id` | `string` | No | `undefined` | HTML id attribute |
 | `aria-label` | `string` | No | `undefined` | Accessible name for the switch. Required when switch has no visible label |
 | `aria-labelledby` | `string` | No | `undefined` | ID of element that labels the switch |

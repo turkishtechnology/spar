@@ -35,7 +35,7 @@ export const SelectRoot = <T extends ElementType = 'div'>({
   required = false,
   name,
   dir = 'ltr',
-  shouldAutoFocus = false,
+  autoFocus = false,
   as,
   children,
   ...props
@@ -109,7 +109,7 @@ export const SelectRoot = <T extends ElementType = 'div'>({
       disabled,
       required,
       dir,
-      shouldAutoFocus,
+      autoFocus,
 
       // Actions
       onValueChange: handleValueChange,
@@ -144,7 +144,7 @@ export const SelectRoot = <T extends ElementType = 'div'>({
       disabled,
       required,
       dir,
-      shouldAutoFocus,
+      autoFocus,
       handleValueChange,
       handleOpenChange,
       triggerId,
@@ -162,7 +162,7 @@ export const SelectRoot = <T extends ElementType = 'div'>({
       <Component
         {...props}
         data-disabled={disabled ? '' : undefined}
-        data-autofocus={shouldAutoFocus ? '' : undefined}
+        data-autofocus={autoFocus ? '' : undefined}
       >
         {children}
       </Component>

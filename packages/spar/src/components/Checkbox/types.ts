@@ -95,7 +95,7 @@ export interface CheckboxOwnProps {
    * Auto-focus on mount
    * @defaultValue false
    */
-  shouldAutoFocus?: boolean;
+  autoFocus?: boolean;
 
   /**
    * Accessible name for the checkbox

@@ -311,11 +311,11 @@ describe('Input Accessibility', () => {
       expect(field).toHaveValue('');
     });
 
-    it('should auto-focus when shouldAutoFocus is true', async () => {
+    it('should auto-focus when autoFocus is true', async () => {
       render(
         <Input.Root>
           <Input.Label>Username</Input.Label>
-          <Input.Field shouldAutoFocus />
+          <Input.Field autoFocus />
         </Input.Root>,
       );
 
@@ -339,7 +339,7 @@ describe('Input Accessibility', () => {
     });
 
     it('should auto-focus standalone input', async () => {
-      render(<Input.Field shouldAutoFocus aria-label='Standalone input' />);
+      render(<Input.Field autoFocus aria-label='Standalone input' />);
 
       const field = screen.getByRole('textbox');
       await waitFor(() => {

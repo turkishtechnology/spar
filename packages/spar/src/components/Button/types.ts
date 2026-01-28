@@ -9,7 +9,7 @@ export interface ButtonOwnProps {
    * Whether the button should receive focus when first rendered
    * @defaultValue false
    */
-  shouldAutoFocus?: boolean;
+  autoFocus?: boolean;
 
   /**
    * Loading state with screen reader support

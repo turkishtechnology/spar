@@ -206,9 +206,9 @@ describe('Radio Accessibility', () => {
       expect(labels[2]).toHaveAttribute('tabindex', '0');
     });
 
-    it('should auto-focus when shouldAutoFocus is true', async () => {
+    it('should auto-focus when autoFocus is true', async () => {
       const { container } = render(
-        <Radio.Group shouldAutoFocus>
+        <Radio.Group autoFocus>
           <Radio.Item value='option1'>Option 1</Radio.Item>
           <Radio.Item value='option2'>Option 2</Radio.Item>
           <Radio.Item value='option3'>Option 3</Radio.Item>
@@ -223,9 +223,9 @@ describe('Radio Accessibility', () => {
       expect(radioGroup).toHaveAttribute('data-autofocus', '');
     });
 
-    it('should auto-focus selected item when shouldAutoFocus is true', async () => {
+    it('should auto-focus selected item when autoFocus is true', async () => {
       const { container } = render(
-        <Radio.Group shouldAutoFocus value='option2'>
+        <Radio.Group autoFocus value='option2'>
           <Radio.Item value='option1'>Option 1</Radio.Item>
           <Radio.Item value='option2'>Option 2</Radio.Item>
           <Radio.Item value='option3'>Option 3</Radio.Item>

@@ -184,7 +184,7 @@ export const Switch = ({
   form,
   required = false,
   readOnly = false,
-  shouldAutoFocus = false,
+  autoFocus = false,
   id: providedId,
   children,
   ref,
@@ -256,7 +256,7 @@ export const Switch = ({
         ref={mergedRef}
         id={id}
         disabled={disabled}
-        shouldAutoFocus={shouldAutoFocus}
+        autoFocus={autoFocus}
         role='switch'
         aria-checked={checkedState}
         aria-label={ariaLabel}

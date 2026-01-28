@@ -44,7 +44,7 @@ Extends all `ButtonProps` from the Button component.
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'button'` | Element type for polymorphic rendering |
 | `children` | `ReactNode \| ((state: CollapsibleTriggerRenderProps) => ReactNode)` | No | - | Trigger content or render function for render props pattern |
-| `shouldAutoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
+| `autoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
 | `isLoading` | `boolean` | No | `false` | Loading state with screen reader support |
 | `isPressed` | `boolean` | No | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange` | `(pressed: boolean) => void` | No | `undefined` | Callback fired when toggle state changes |
