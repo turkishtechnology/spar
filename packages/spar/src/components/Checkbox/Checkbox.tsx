@@ -19,7 +19,7 @@ export const Checkbox = <T extends ElementType = 'span'>({
   name,
   value = 'on',
   form,
-  shouldAutoFocus = false,
+  autoFocus = false,
   children,
   id: providedId,
   className,
@@ -52,7 +52,7 @@ export const Checkbox = <T extends ElementType = 'span'>({
   const mergedRef = useMergedRef(elementRef, ref);
 
   // Auto focus on mount
-  useAutoFocus(elementRef, shouldAutoFocus);
+  useAutoFocus(elementRef, autoFocus);
 
   // Sync hidden input with checkbox state
   useEffect(() => {

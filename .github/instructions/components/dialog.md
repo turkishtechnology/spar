@@ -56,7 +56,7 @@ Extends all `ButtonProps` from the Button component.
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'button'` | Polymorphic element type |
 | `disabled` | `boolean` | No | `false` | Disables trigger interaction |
-| `shouldAutoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
+| `autoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
 | `isLoading` | `boolean` | No | `false` | Loading state with screen reader support |
 | `isPressed` | `boolean` | No | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange` | `(pressed: boolean) => void` | No | `undefined` | Callback fired when toggle state changes |
@@ -127,7 +127,7 @@ Extends all `ButtonProps` from the Button component.
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'button'` | Polymorphic element type |
 | `disabled` | `boolean` | No | `false` | Disables close button interaction |
-| `shouldAutoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
+| `autoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
 | `isLoading` | `boolean` | No | `false` | Loading state with screen reader support |
 | `children` | `ReactNode \| ((state: DialogCloseRenderProps) => ReactNode)` | Yes | - | Close button content or render function for render props pattern |
 | `...props` | `ButtonProps` | No | - | All standard Button component attributes |

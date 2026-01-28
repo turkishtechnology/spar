@@ -58,7 +58,7 @@ export interface InputFieldProps<T extends ElementType = 'input'> {
    * Whether to focus the input on mount
    * @defaultValue false
    */
-  shouldAutoFocus?: boolean;
+  autoFocus?: boolean;
 }
 
 /**

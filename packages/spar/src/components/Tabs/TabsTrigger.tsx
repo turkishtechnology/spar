@@ -11,7 +11,7 @@ import { Button } from '../Button';
 export const TabsTrigger = ({
   value,
   disabled = false,
-  shouldAutoFocus = false,
+  autoFocus = false,
   as = 'button',
   children,
   onClick,
@@ -87,7 +87,7 @@ export const TabsTrigger = ({
       ref={mergedRef}
       id={triggerId}
       disabled={disabled}
-      shouldAutoFocus={shouldAutoFocus}
+      autoFocus={autoFocus}
       role='tab'
       aria-selected={isSelected}
       aria-controls={panelId}

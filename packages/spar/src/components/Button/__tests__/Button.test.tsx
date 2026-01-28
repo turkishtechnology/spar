@@ -345,10 +345,10 @@ describe('Button', () => {
       expect(button).toHaveAttribute('tabIndex', '-1');
     });
 
-    it('auto-focuses when shouldAutoFocus is true', () => {
+    it('auto-focuses when autoFocus is true', () => {
       const ref = React.createRef<HTMLButtonElement>();
       render(
-        <Button ref={ref} shouldAutoFocus>
+        <Button ref={ref} autoFocus>
           Auto focus
         </Button>,
       );
@@ -368,7 +368,7 @@ describe('Button', () => {
       expect(button).not.toHaveAttribute('data-autofocus');
 
       rerender(
-        <Button disabled isLoading isPressed={true} shouldAutoFocus>
+        <Button disabled isLoading isPressed={true} autoFocus>
           All states
         </Button>,
       );

@@ -10,7 +10,7 @@ import { useMergedRef, useAutoFocus } from '../../hooks';
 export const InputField = <T extends ElementType = 'input'>({
   as,
   ref,
-  shouldAutoFocus = false,
+  autoFocus = false,
   onFocus,
   onBlur,
   ...props
@@ -22,7 +22,7 @@ export const InputField = <T extends ElementType = 'input'>({
   const mergedRef = useMergedRef(internalRef, ref);
 
   // Auto focus on mount
-  useAutoFocus(internalRef, shouldAutoFocus);
+  useAutoFocus(internalRef, autoFocus);
 
   const handleFocus = (event: React.FocusEvent<HTMLElement>) => {
     setFocused(true);
@@ -46,7 +46,7 @@ export const InputField = <T extends ElementType = 'input'>({
         onFocus={handleFocus}
         onBlur={handleBlur}
         data-spar-input
-        data-autofocus={shouldAutoFocus ? '' : undefined}
+        data-autofocus={autoFocus ? '' : undefined}
         data-focused={focused ? '' : undefined}
         data-disabled={props.disabled ? '' : undefined}
         data-required={props.required ? '' : undefined}
@@ -74,7 +74,7 @@ export const InputField = <T extends ElementType = 'input'>({
       onFocus={handleFocus}
       onBlur={handleBlur}
       data-spar-input-field
-      data-autofocus={shouldAutoFocus ? '' : undefined}
+      data-autofocus={autoFocus ? '' : undefined}
       data-focused={focused ? '' : undefined}
       data-disabled={context.disabled ? '' : undefined}
       data-required={context.required ? '' : undefined}

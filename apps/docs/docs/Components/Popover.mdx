@@ -527,7 +527,7 @@ Button element that toggles the popover visibility. Extends all `Button` compone
 | `as?`              | `ElementType`                                                    | `"button"`  | Element type to render as                           |
 | `children`         | `ReactNode \| ((state: PopoverTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function            |
 | `disabled?`        | `boolean`                                                        | `false`     | Whether trigger is disabled                         |
-| `shouldAutoFocus?` | `boolean`                                                        | `false`     | Whether the button should receive focus on mount    |
+| `autoFocus?` | `boolean`                                                        | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                        | `false`     | Loading state with screen reader support            |
 | `isPressed?`       | `boolean`                                                        | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange?` | `(pressed: boolean) => void`                                     | `undefined` | Callback fired when toggle state changes            |
@@ -698,7 +698,7 @@ Close button component that automatically closes the popover when clicked. Exten
 | `as?`              | `ElementType`                                                  | `"button"`  | Element type to render as                           |
 | `children`         | `ReactNode \| ((state: PopoverCloseRenderProps) => ReactNode)` | -           | Close button content or render props                |
 | `disabled?`        | `boolean`                                                      | `false`     | Whether close button is disabled                    |
-| `shouldAutoFocus?` | `boolean`                                                      | `false`     | Whether the button should receive focus on mount    |
+| `autoFocus?` | `boolean`                                                      | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                      | `false`     | Loading state with screen reader support            |
 | `isPressed?`       | `boolean`                                                      | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange?` | `(pressed: boolean) => void`                                   | `undefined` | Callback fired when toggle state changes            |

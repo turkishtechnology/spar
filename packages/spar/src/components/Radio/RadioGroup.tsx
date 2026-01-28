@@ -36,7 +36,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
   required = false,
   orientation = 'vertical',
   isInToolbar = false,
-  shouldAutoFocus = false,
+  autoFocus = false,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
   'aria-describedby': ariaDescribedBy,
@@ -55,7 +55,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
 
   // Auto focus first item on mount
   useEffect(() => {
-    if (shouldAutoFocus && !disabled && items.length > 0 && !hasAutoFocused.current) {
+    if (autoFocus && !disabled && items.length > 0 && !hasAutoFocused.current) {
       hasAutoFocused.current = true;
       // Focus the selected item, or the first item if none selected
       const itemToFocus = value || items[0];
@@ -63,7 +63,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
         setFocusedValue(itemToFocus);
       }
     }
-  }, [shouldAutoFocus, disabled, items, value]);
+  }, [autoFocus, disabled, items, value]);
 
   // Handle value changes
   const handleValueChange = useCallback(
@@ -174,7 +174,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
     'data-disabled': disabled ? '' : undefined,
     'data-required': required ? '' : undefined,
     'data-toolbar': isInToolbar ? '' : undefined,
-    'data-autofocus': shouldAutoFocus ? '' : undefined,
+    'data-autofocus': autoFocus ? '' : undefined,
   };
 
   return (

@@ -9,7 +9,7 @@ export const Button = <T extends ElementType = 'button'>({
   as,
   type = 'button',
   disabled = false,
-  shouldAutoFocus = false,
+  autoFocus = false,
   isLoading = false,
   isPressed,
   onPressedChange,
@@ -37,7 +37,7 @@ export const Button = <T extends ElementType = 'button'>({
   const mergedRef = useMergedRef(internalRef, ref);
 
   // Auto focus handling
-  useAutoFocus(internalRef, shouldAutoFocus);
+  useAutoFocus(internalRef, autoFocus);
 
   // Unified activation handler for click and keyboard
   const handleActivation = useCallback(
@@ -91,9 +91,9 @@ export const Button = <T extends ElementType = 'button'>({
       'data-disabled': disabled ? '' : undefined,
       'data-loading': isLoading ? '' : undefined,
       'data-pressed': isToggle ? String(currentPressed) : undefined,
-      'data-autofocus': shouldAutoFocus ? '' : undefined,
+      'data-autofocus': autoFocus ? '' : undefined,
     }),
-    [disabled, isLoading, isToggle, currentPressed, shouldAutoFocus],
+    [disabled, isLoading, isToggle, currentPressed, autoFocus],
   );
 
   // Determine ARIA attributes

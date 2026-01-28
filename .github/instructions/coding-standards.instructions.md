@@ -379,11 +379,11 @@ const click = () => {}; // Unclear
 ### Boolean Props
 
 ```typescript
-// ALWAYS: is/has/should/can prefix
-(hasError, shouldAutoFocus, canSubmit);
+// ALWAYS: is/has/can prefix
+(hasError, canSubmit);
 
 // NEVER: Ambiguous names
-(error, focus, submit);
+(error, submit);
 ```
 
 ## Performance Guidelines

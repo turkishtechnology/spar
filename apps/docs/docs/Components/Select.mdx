@@ -659,7 +659,7 @@ The main container that manages all select state and behavior.
 | `required?`        | `boolean`                 | `false`     | Makes the select required for forms   |
 | `name?`            | `string`                  | `undefined` | Form field name                       |
 | `dir?`             | `'ltr' \| 'rtl'`          | `'ltr'`     | Reading direction                     |
-| `shouldAutoFocus?` | `boolean`                 | `false`     | Whether to focus the trigger on mount |
+| `autoFocus?` | `boolean`                 | `false`     | Whether to focus the trigger on mount |
 | `as?`              | `ElementType`           | `undefined` | Polymorphic component type            |
 | `children`         | `ReactNode`               | -           | Select component children             |
 
@@ -687,7 +687,7 @@ The button that toggles the dropdown open and closed. Extends all `Button` compo
 | `as?`              | `ElementType`                                                   | `"button"`  | Element type to render as                           |
 | `children`         | `ReactNode \| ((state: SelectTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function            |
 | `disabled?`        | `boolean`                                                       | `false`     | Whether trigger is disabled                         |
-| `shouldAutoFocus?` | `boolean`                                                       | `false`     | Whether the button should receive focus on mount    |
+| `autoFocus?` | `boolean`                                                       | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                       | `false`     | Loading state with screen reader support            |
 | `isPressed?`       | `boolean`                                                       | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange?` | `(pressed: boolean) => void`                                    | `undefined` | Callback fired when toggle state changes            |

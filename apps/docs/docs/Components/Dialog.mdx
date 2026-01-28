@@ -517,7 +517,7 @@ Interactive element that opens the dialog when activated. Extends all `Button` c
 | ------------------ | --------------------------------------------------------------- | ----------- | --------------------------------------------------- |
 | `children`         | `ReactNode \| ((state: DialogTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function            |
 | `disabled?`        | `boolean`                                                       | `false`     | Disables trigger interaction                        |
-| `shouldAutoFocus?` | `boolean`                                                       | `false`     | Whether the button should receive focus on mount    |
+| `autoFocus?` | `boolean`                                                       | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                       | `false`     | Loading state with screen reader support            |
 | `isPressed?`       | `boolean`                                                       | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange?` | `(pressed: boolean) => void`                                    | `undefined` | Callback fired when toggle state changes            |
@@ -688,7 +688,7 @@ Button that closes the dialog when activated. Extends all `Button` component pro
 | `as?`      | `ElementType`            | `'button'`  | Polymorphic element type              |
 | `children`         | `ReactNode \| ((state: DialogCloseRenderProps) => ReactNode)` | -           | Close button content or render props function       |
 | `disabled?`        | `boolean`                                                     | `false`     | Whether close button is disabled                    |
-| `shouldAutoFocus?` | `boolean`                                                     | `false`     | Whether the button should receive focus on mount    |
+| `autoFocus?` | `boolean`                                                     | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                     | `false`     | Loading state with screen reader support            |
 | `isPressed?`       | `boolean`                                                     | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange?` | `(pressed: boolean) => void`                                  | `undefined` | Callback fired when toggle state changes            |
