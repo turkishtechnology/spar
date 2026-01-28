@@ -1,9 +1,11 @@
+import type { ElementType } from 'react';
 import type { DropdownMenuSeparatorProps } from './types';
 
-export const DropdownMenuSeparator = ({
-  as: Component = 'div',
+export const DropdownMenuSeparator = <T extends ElementType = 'div'>({
+  as,
   ...props
-}: DropdownMenuSeparatorProps) => {
+}: DropdownMenuSeparatorProps<T>) => {
+  const Component = as || 'div';
   return <Component {...props} role='separator' data-orientation='horizontal' />;
 };
 

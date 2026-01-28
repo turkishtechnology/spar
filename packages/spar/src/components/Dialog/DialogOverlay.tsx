@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, ElementType } from 'react';
 import { useDialogContext } from './DialogRoot';
 import type { DialogOverlayProps } from './types';
 
@@ -6,14 +6,15 @@ import type { DialogOverlayProps } from './types';
  * Overlay backdrop that covers the screen behind the dialog.
  * Handles outside clicks for modal dialogs and provides styling hooks.
  */
-export const DialogOverlay = ({
-  as: Component = 'div',
+export const DialogOverlay = <T extends ElementType = 'div'>({
+  as,
   forceMount = false,
   ref,
   onClick,
   children,
   ...props
-}: DialogOverlayProps) => {
+}: DialogOverlayProps<T>) => {
+  const Component = as || 'div';
   const context = useDialogContext();
   const { isOpen, setIsOpen, modal } = context;
 

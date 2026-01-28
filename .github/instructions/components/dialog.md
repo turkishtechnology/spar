@@ -54,7 +54,7 @@ Extends all `ButtonProps` from the Button component.
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'button'` | Polymorphic element type |
+| `as` | `ElementType` | No | `'button'` | Polymorphic element type |
 | `disabled` | `boolean` | No | `false` | Disables trigger interaction |
 | `shouldAutoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
 | `isLoading` | `boolean` | No | `false` | Loading state with screen reader support |
@@ -81,7 +81,7 @@ Extends all `ButtonProps` from the Button component.
 ### DialogOverlay Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'div'` | Polymorphic element type |
+| `as` | `ElementType` | No | `'div'` | Polymorphic element type |
 | `forceMount` | `boolean` | No | `false` | Always render (for animation libraries) |
 | `children` | `ReactNode` | No | - | Optional overlay content |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
@@ -89,7 +89,7 @@ Extends all `ButtonProps` from the Button component.
 ### DialogContent Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'div'` | Polymorphic element type |
+| `as` | `ElementType` | No | `'div'` | Polymorphic element type |
 | `role` | `'dialog' \| 'alertdialog'` | No | `'dialog'` | ARIA role for dialog type |
 | `forceMount` | `boolean` | No | `false` | Always render (for animation libraries) |
 | `trapFocus` | `boolean` | No | `true` | Enable focus trapping |
@@ -107,7 +107,7 @@ Extends all `ButtonProps` from the Button component.
 ### DialogTitle Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'h2'` | Polymorphic element type |
+| `as` | `ElementType` | No | `'h2'` | Polymorphic element type |
 | `level` | `number` | No | `2` | Heading level (1-6) |
 | `children` | `ReactNode` | Yes | - | Title content |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
@@ -115,7 +115,7 @@ Extends all `ButtonProps` from the Button component.
 ### DialogDescription Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'p'` | Polymorphic element type |
+| `as` | `ElementType` | No | `'p'` | Polymorphic element type |
 | `children` | `ReactNode` | Yes | - | Description content |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
 
@@ -125,7 +125,7 @@ Extends all `ButtonProps` from the Button component.
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'button'` | Polymorphic element type |
+| `as` | `ElementType` | No | `'button'` | Polymorphic element type |
 | `disabled` | `boolean` | No | `false` | Disables close button interaction |
 | `shouldAutoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
 | `isLoading` | `boolean` | No | `false` | Loading state with screen reader support |

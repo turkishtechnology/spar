@@ -1,17 +1,18 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, type ElementType } from 'react';
 import type { TooltipArrowProps } from './types';
 import { useTooltip } from './useTooltip';
 
 /**
  * Optional arrow pointing to the trigger element
  */
-export const TooltipArrow = ({
+export const TooltipArrow = <T extends ElementType = 'svg'>({
   width = 10,
   height = 5,
-  as: Component = 'svg',
+  as,
   style,
   ...props
-}: TooltipArrowProps) => {
+}: TooltipArrowProps<T>) => {
+  const Component = as || 'svg';
   const context = useTooltip();
 
   // Ref callback to attach arrow ref

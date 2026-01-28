@@ -1,16 +1,18 @@
+import type { ElementType } from 'react';
 import type { SelectItemIndicatorProps } from './types';
 import { useSelectItemContext } from './SelectItem';
 
 /**
  * Visual indicator for the selected state of an item. Only renders when item is selected unless forceMount is true.
  */
-export const SelectItemIndicator = ({
+export const SelectItemIndicator = <T extends ElementType = 'span'>({
   forceMount = false,
-  as: Component = 'span',
+  as,
   children,
   style,
   ...props
-}: SelectItemIndicatorProps) => {
+}: SelectItemIndicatorProps<T>) => {
+  const Component = as || 'span';
   const itemContext = useSelectItemContext();
 
   // Only render when item is selected (or forceMount is true)

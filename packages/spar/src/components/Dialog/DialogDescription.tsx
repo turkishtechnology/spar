@@ -1,3 +1,4 @@
+import { ElementType } from 'react';
 import { useDialogContext } from './DialogRoot';
 import type { DialogDescriptionProps } from './types';
 
@@ -5,12 +6,13 @@ import type { DialogDescriptionProps } from './types';
  * Dialog description component that provides additional context for the dialog.
  * Automatically associates with the dialog via aria-describedby.
  */
-export const DialogDescription = ({
-  as: Component = 'p',
+export const DialogDescription = <T extends ElementType = 'p'>({
+  as,
   ref,
   children,
   ...props
-}: DialogDescriptionProps) => {
+}: DialogDescriptionProps<T>) => {
+  const Component = as || 'p';
   const context = useDialogContext();
   const { descriptionId } = context;
 

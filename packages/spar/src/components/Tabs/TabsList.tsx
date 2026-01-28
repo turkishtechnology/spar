@@ -1,17 +1,18 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, type ElementType } from 'react';
 import { useTabsContext } from './Tabs';
 import type { TabsListProps } from './types';
 
 /**
  * TabsList component that contains TabsTrigger elements and handles keyboard navigation
  */
-export const TabsList = ({
+export const TabsList = <T extends ElementType = 'div'>({
   loop = true,
-  as: Component = 'div',
+  as,
   children,
   onKeyDown,
   ...props
-}: TabsListProps) => {
+}: TabsListProps<T>) => {
+  const Component = as || 'div';
   const context = useTabsContext();
   const { orientation, dir, activationMode, tabRefs, onValueChange, focusTab } = context;
 

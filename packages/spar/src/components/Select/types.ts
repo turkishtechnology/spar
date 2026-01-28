@@ -1,6 +1,6 @@
-import type { ComponentProps, ReactNode, RefObject } from 'react';
+import type { ComponentProps, ElementType, ReactNode, RefObject } from 'react';
 import type { Placement, Strategy, Middleware, VirtualElement } from '@floating-ui/react-dom';
-import type { Direction, PolymorphicAs } from '../../types';
+import type { Direction, PolymorphicProps } from '../../types';
 import type { ButtonProps } from '../Button/types';
 
 // Re-export Floating UI types for public API
@@ -14,10 +14,9 @@ export interface Padding {
 }
 
 /**
- * Props for Select root component
- * @remarks Fully accessible, headless select component
+ * Own props for Select root component
  */
-export interface SelectRootProps extends Omit<ComponentProps<'div'>, 'defaultValue' | 'onChange'> {
+export interface SelectRootOwnProps {
   /**
    * Controlled selected value
    */
@@ -77,12 +76,17 @@ export interface SelectRootProps extends Omit<ComponentProps<'div'>, 'defaultVal
    * @defaultValue false
    */
   shouldAutoFocus?: boolean;
-
-  /**
-   * Polymorphic component type
-   */
-  as?: PolymorphicAs;
 }
+
+/**
+ * Props for Select root component
+ * @remarks Fully accessible, headless select component
+ */
+export type SelectRootProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  SelectRootOwnProps
+>;
 
 /**
  * Render props provided to children function for SelectTrigger
@@ -126,33 +130,39 @@ export interface SelectTriggerProps extends Omit<ButtonProps, 'children'> {
 }
 
 /**
- * Props for SelectValue component
- * @remarks Displays the selected value or placeholder
+ * Own props for SelectValue component
  */
-export interface SelectValueProps extends ComponentProps<'span'> {
+export interface SelectValueOwnProps {
   /**
    * Text shown when no value selected
    */
   placeholder?: ReactNode;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'span'
-   */
-  as?: PolymorphicAs;
 }
+
+/**
+ * Props for SelectValue component
+ * @remarks Displays the selected value or placeholder
+ */
+export type SelectValueProps<T extends ElementType = 'span'> = PolymorphicProps<
+  'span',
+  T,
+  SelectValueOwnProps
+>;
+
+/**
+ * Own props for SelectIcon component
+ */
+export interface SelectIconOwnProps {}
 
 /**
  * Props for SelectIcon component
  * @remarks Optional visual indicator (chevron, arrow)
  */
-export interface SelectIconProps extends ComponentProps<'span'> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'span'
-   */
-  as?: PolymorphicAs;
-}
+export type SelectIconProps<T extends ElementType = 'span'> = PolymorphicProps<
+  'span',
+  T,
+  SelectIconOwnProps
+>;
 
 /**
  * Props for SelectPortal component
@@ -178,10 +188,9 @@ export interface SelectPortalProps {
 }
 
 /**
- * Props for SelectContent component
- * @remarks The dropdown container that appears when open
+ * Own props for SelectContent component
  */
-export interface SelectContentProps extends ComponentProps<'div'> {
+export interface SelectContentOwnProps {
   /**
    * Placement of the floating content relative to the trigger
    * @defaultValue 'bottom-start'
@@ -254,25 +263,32 @@ export interface SelectContentProps extends ComponentProps<'div'> {
    * Focus handler on close
    */
   onCloseAutoFocus?: (event: FocusEvent) => void;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
 }
+
+/**
+ * Props for SelectContent component
+ * @remarks The dropdown container that appears when open
+ */
+export type SelectContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  SelectContentOwnProps
+>;
+
+/**
+ * Own props for SelectViewport component
+ */
+export interface SelectViewportOwnProps {}
 
 /**
  * Props for SelectViewport component
  * @remarks Scrollable container for select items
  */
-export interface SelectViewportProps extends ComponentProps<'div'> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
-}
+export type SelectViewportProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  SelectViewportOwnProps
+>;
 
 /**
  * Render props provided to children function for SelectItem
@@ -297,10 +313,9 @@ export interface SelectItemRenderProps {
 }
 
 /**
- * Props for SelectItem component
- * @remarks Individual selectable option
+ * Own props for SelectItem component
  */
-export interface SelectItemProps extends Omit<ComponentProps<'div'>, 'children'> {
+export interface SelectItemOwnProps {
   /**
    * Option value
    */
@@ -318,88 +333,106 @@ export interface SelectItemProps extends Omit<ComponentProps<'div'>, 'children'>
   textValue?: string;
 
   /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
-
-  /**
    * Children content or render function
    */
   children?: ReactNode | ((state: SelectItemRenderProps) => ReactNode);
 }
 
 /**
+ * Props for SelectItem component
+ * @remarks Individual selectable option
+ */
+export type SelectItemProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  SelectItemOwnProps
+>;
+
+/**
+ * Own props for SelectItemText component
+ */
+export interface SelectItemTextOwnProps {}
+
+/**
  * Props for SelectItemText component
  * @remarks The text content of an item
  */
-export interface SelectItemTextProps extends ComponentProps<'span'> {
+export type SelectItemTextProps<T extends ElementType = 'span'> = PolymorphicProps<
+  'span',
+  T,
+  SelectItemTextOwnProps
+>;
+
+/**
+ * Own props for SelectItemIndicator component
+ */
+export interface SelectItemIndicatorOwnProps {
   /**
-   * Polymorphic component type
-   * @defaultValue 'span'
+   * Force mount for animation
+   * @defaultValue false
    */
-  as?: PolymorphicAs;
+  forceMount?: boolean;
 }
 
 /**
  * Props for SelectItemIndicator component
  * @remarks Visual indicator for selected state (checkmark, etc)
  */
-export interface SelectItemIndicatorProps extends ComponentProps<'span'> {
-  /**
-   * Force mount for animation
-   * @defaultValue false
-   */
-  forceMount?: boolean;
+export type SelectItemIndicatorProps<T extends ElementType = 'span'> = PolymorphicProps<
+  'span',
+  T,
+  SelectItemIndicatorOwnProps
+>;
 
-  /**
-   * Polymorphic component type
-   * @defaultValue 'span'
-   */
-  as?: PolymorphicAs;
-}
+/**
+ * Own props for SelectGroup component
+ */
+export interface SelectGroupOwnProps {}
 
 /**
  * Props for SelectGroup component
  * @remarks Groups related items together
  */
-export interface SelectGroupProps extends ComponentProps<'div'> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
-}
+export type SelectGroupProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  SelectGroupOwnProps
+>;
+
+/**
+ * Own props for SelectLabel component
+ */
+export interface SelectLabelOwnProps {}
 
 /**
  * Props for SelectLabel component
  * @remarks Label for a group of items
  */
-export interface SelectLabelProps extends ComponentProps<'div'> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
-}
+export type SelectLabelProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  SelectLabelOwnProps
+>;
+
+/**
+ * Own props for SelectSeparator component
+ */
+export interface SelectSeparatorOwnProps {}
 
 /**
  * Props for SelectSeparator component
  * @remarks Visual separator between items or groups
  */
-export interface SelectSeparatorProps extends ComponentProps<'div'> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
-}
+export type SelectSeparatorProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  SelectSeparatorOwnProps
+>;
 
 /**
- * Props for SelectArrow component
- * @remarks Optional arrow pointing to trigger
+ * Own props for SelectArrow component
  */
-export interface SelectArrowProps extends ComponentProps<'svg'> {
+export interface SelectArrowOwnProps {
   /**
    * Arrow width
    * @defaultValue 10
@@ -411,13 +444,17 @@ export interface SelectArrowProps extends ComponentProps<'svg'> {
    * @defaultValue 5
    */
   height?: number;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'svg'
-   */
-  as?: PolymorphicAs;
 }
+
+/**
+ * Props for SelectArrow component
+ * @remarks Optional arrow pointing to trigger
+ */
+export type SelectArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<
+  'svg',
+  T,
+  SelectArrowOwnProps
+>;
 
 // Internal context types
 

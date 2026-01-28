@@ -1,12 +1,12 @@
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef, ElementType } from 'react';
 import { useMergedRef, useAutoFocus } from '../../hooks';
 import type { ButtonProps } from './types';
 
 /**
  * A headless, accessible button component that provides complete keyboard support and toggle functionality.
  */
-export const Button = ({
-  as: Element = 'button',
+export const Button = <T extends ElementType = 'button'>({
+  as,
   type = 'button',
   disabled = false,
   shouldAutoFocus = false,
@@ -20,7 +20,8 @@ export const Button = ({
   style,
   ref,
   ...htmlProps
-}: ButtonProps) => {
+}: ButtonProps<T>) => {
+  const Element = as || 'button';
   // Internal state for uncontrolled toggle
   const [internalPressed, setInternalPressed] = useState<boolean>(false);
 

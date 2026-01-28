@@ -1,13 +1,12 @@
-import type { ComponentProps, ReactNode } from 'react';
-import type { Orientation, PolymorphicAs } from '../../types';
+import type { ElementType, ReactNode } from 'react';
+import type { Orientation, PolymorphicProps } from '../../types';
 
 export type AccordionType = 'single' | 'multiple';
 
 /**
- * Props for Accordion root component
- * @remarks Fully accessible, headless component
+ * Own props for Accordion root component
  */
-export interface AccordionProps extends ComponentProps<'div'> {
+export interface AccordionOwnProps {
   /**
    * Single panel or multiple panels can be expanded
    * @defaultValue 'single'
@@ -46,19 +45,22 @@ export interface AccordionProps extends ComponentProps<'div'> {
    * @defaultValue 'vertical'
    */
   orientation?: Orientation;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
 }
 
 /**
- * Props for AccordionItem component
- * @remarks Individual item within accordion
+ * Props for Accordion root component
+ * @remarks Fully accessible, headless component
  */
-export interface AccordionItemProps extends ComponentProps<'div'> {
+export type AccordionProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  AccordionOwnProps
+>;
+
+/**
+ * Own props for AccordionItem component
+ */
+export interface AccordionItemOwnProps {
   /**
    * Unique identifier for the item
    */
@@ -69,31 +71,38 @@ export interface AccordionItemProps extends ComponentProps<'div'> {
    * @defaultValue false
    */
   disabled?: boolean;
+}
 
+/**
+ * Props for AccordionItem component
+ * @remarks Individual item within accordion
+ */
+export type AccordionItemProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  AccordionItemOwnProps
+>;
+
+/**
+ * Own props for AccordionHeader component
+ */
+export interface AccordionHeaderOwnProps {
   /**
-   * Polymorphic component type
-   * @defaultValue 'div'
+   * Heading level (1-6) for document hierarchy
+   * @defaultValue 3
    */
-  as?: PolymorphicAs;
+  level?: number;
 }
 
 /**
  * Props for AccordionHeader component
  * @remarks Semantic heading wrapper for trigger
  */
-export interface AccordionHeaderProps extends ComponentProps<'h3'> {
-  /**
-   * Heading level (1-6) for document hierarchy
-   * @defaultValue 3
-   */
-  level?: number;
-
-  /**
-   * Polymorphic component type (heading element)
-   * @defaultValue 'h3'
-   */
-  as?: PolymorphicAs;
-}
+export type AccordionHeaderProps<T extends ElementType = 'h3'> = PolymorphicProps<
+  'h3',
+  T,
+  AccordionHeaderOwnProps
+>;
 
 /**
  * Render props provided to children function for AccordionTrigger
@@ -122,16 +131,9 @@ export interface AccordionTriggerRenderProps {
 }
 
 /**
- * Props for AccordionTrigger component
- * @remarks Button that toggles panel visibility
+ * Own props for AccordionTrigger component
  */
-export interface AccordionTriggerProps extends Omit<ComponentProps<'button'>, 'children'> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'button'
-   */
-  as?: PolymorphicAs;
-
+export interface AccordionTriggerOwnProps {
   /**
    * Children content or render function
    */
@@ -139,22 +141,35 @@ export interface AccordionTriggerProps extends Omit<ComponentProps<'button'>, 'c
 }
 
 /**
- * Props for AccordionContent component
- * @remarks Collapsible panel content
+ * Props for AccordionTrigger component
+ * @remarks Button that toggles panel visibility
  */
-export interface AccordionContentProps extends ComponentProps<'div'> {
+export type AccordionTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  AccordionTriggerOwnProps
+>;
+
+/**
+ * Own props for AccordionContent component
+ */
+export interface AccordionContentOwnProps {
   /**
    * Force content to remain mounted when collapsed
    * @defaultValue false
    */
   forceMount?: boolean;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
 }
+
+/**
+ * Props for AccordionContent component
+ * @remarks Collapsible panel content
+ */
+export type AccordionContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  AccordionContentOwnProps
+>;
 
 // Internal context types
 export interface AccordionContextValue {

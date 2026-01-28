@@ -1,11 +1,10 @@
-import type { ComponentProps, ReactNode } from 'react';
-import type { Orientation, PolymorphicAs } from '../../types';
+import type { ElementType, ReactNode } from 'react';
+import type { Orientation, PolymorphicProps } from '../../types';
 
 /**
- * Props for RadioGroup component
- * @remarks Fully accessible, headless radio group component
+ * Own props for RadioGroup component
  */
-export interface RadioGroupProps extends Omit<ComponentProps<'div'>, 'onChange'> {
+export interface RadioGroupOwnProps {
   /**
    * Controlled value of selected radio item
    */
@@ -58,13 +57,17 @@ export interface RadioGroupProps extends Omit<ComponentProps<'div'>, 'onChange'>
    * @defaultValue false
    */
   shouldAutoFocus?: boolean;
-
-  /**
-   * Polymorphic root element
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
 }
+
+/**
+ * Props for RadioGroup component
+ * @remarks Fully accessible, headless radio group component
+ */
+export type RadioGroupProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  RadioGroupOwnProps
+>;
 
 /**
  * Render props provided to children function for RadioItem
@@ -89,10 +92,9 @@ export interface RadioItemRenderProps {
 }
 
 /**
- * Props for RadioItem component
- * @remarks Individual radio option within a RadioGroup
+ * Own props for RadioItem component
  */
-export interface RadioItemProps extends Omit<ComponentProps<'label'>, 'onChange' | 'children'> {
+export interface RadioItemOwnProps {
   /**
    * Unique value for this radio item
    */
@@ -105,16 +107,20 @@ export interface RadioItemProps extends Omit<ComponentProps<'label'>, 'onChange'
   disabled?: boolean;
 
   /**
-   * Polymorphic root element
-   * @defaultValue 'label'
-   */
-  as?: PolymorphicAs;
-
-  /**
    * Children content or render function
    */
   children?: ReactNode | ((state: RadioItemRenderProps) => ReactNode);
 }
+
+/**
+ * Props for RadioItem component
+ * @remarks Individual radio option within a RadioGroup
+ */
+export type RadioItemProps<T extends ElementType = 'label'> = PolymorphicProps<
+  'label',
+  T,
+  RadioItemOwnProps
+>;
 
 /**
  * Internal context interface for RadioGroup

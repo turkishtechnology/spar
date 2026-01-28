@@ -2,6 +2,7 @@ import {
   useId,
   useLayoutEffect,
   useRef,
+  type ElementType,
   type FocusEvent as ReactFocusEvent,
   type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent,
@@ -13,17 +14,17 @@ import { composeRefs } from './utils';
 
 type MenuItemType = 'item' | 'checkbox' | 'radio' | 'subtrigger';
 
-interface MenuItemPrimitiveProps extends DropdownMenuItemProps {
+type MenuItemPrimitiveProps<T extends ElementType = 'div'> = DropdownMenuItemProps<T> & {
   itemType: MenuItemType;
   closeBehavior: 'close' | 'persist';
   role: string;
   onSelectImpl?: (
     event: React.MouseEvent<HTMLDivElement> | ReactKeyboardEvent<HTMLDivElement>,
   ) => void;
-}
+};
 
-export const MenuItemPrimitive = ({
-  as: Component = 'div',
+export const MenuItemPrimitive = <T extends ElementType = 'div'>({
+  as,
   itemType,
   closeBehavior,
   role,
@@ -39,7 +40,8 @@ export const MenuItemPrimitive = ({
   ref,
   id: idProp,
   ...props
-}: MenuItemPrimitiveProps) => {
+}: MenuItemPrimitiveProps<T>) => {
+  const Component = as || 'div';
   const collection = useDropdownMenuCollectionContext();
   const fallbackId = useId();
   const itemId = idProp ?? fallbackId;

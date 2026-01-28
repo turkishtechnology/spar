@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState, useCallback, useId } from 'react';
+import React, { createContext, useContext, useMemo, useState, useCallback, useId, ElementType } from 'react';
 import type { CollapsibleProps, CollapsibleContextValue } from './types';
 
 const CollapsibleContext = createContext<CollapsibleContextValue | null>(null);
@@ -14,17 +14,18 @@ export const useCollapsibleContext = () => {
 /**
  * Collapsible root component providing context and state management for show/hide content functionality.
  */
-export const Collapsible = ({
+export const Collapsible = <T extends ElementType = 'div'>({
   open: controlledOpen,
   defaultOpen = false,
   onOpenChange,
   disabled = false,
   children,
-  as: Component = 'div',
+  as,
   triggerId: propsTriggerId,
   contentId: propsContentId,
   ...props
-}: CollapsibleProps) => {
+}: CollapsibleProps<T>) => {
+  const Component = as || 'div';
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
 
   // Generate stable IDs for ARIA relationships

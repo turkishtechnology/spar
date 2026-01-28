@@ -6,6 +6,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type ElementType,
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
 import { useInteractOutside } from '@/hooks';
@@ -47,8 +48,8 @@ const getPlacement = (side: Side, align: Align): Placement => {
   return 'bottom';
 };
 
-export const DropdownMenuContent = ({
-  as: Component = 'div',
+export const DropdownMenuContent = <T extends ElementType = 'div'>({
+  as,
   side: sideProp,
   align = 'start',
   sideOffset = 8,
@@ -63,7 +64,8 @@ export const DropdownMenuContent = ({
   onKeyDown,
   ref,
   ...props
-}: DropdownMenuContentProps) => {
+}: DropdownMenuContentProps<T>) => {
+  const Component = as || 'div';
   const menu = useMenuScope();
   const parentSubContext = useContext(DropdownMenuSubContext);
   const isSubmenu = parentSubContext === menu;

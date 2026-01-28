@@ -1,5 +1,5 @@
-import type { ComponentProps, ReactNode, SyntheticEvent, RefObject } from 'react';
-import type { CheckedState, Side, Align, Direction, PolymorphicAs } from '../../types';
+import type { ComponentProps, ElementType, ReactNode, SyntheticEvent, RefObject } from 'react';
+import type { CheckedState, Side, Align, Direction, PolymorphicProps } from '../../types';
 import type { ButtonProps } from '../Button/types';
 
 export type DropdownMenuFocusStrategy = 'first' | 'last' | 'none';
@@ -91,15 +91,9 @@ export interface DropdownMenuTriggerProps extends Omit<ButtonProps, 'children'> 
 }
 
 /**
- * Props for DropdownMenu.Content component
+ * Own props for DropdownMenu.Content component
  */
-export interface DropdownMenuContentProps extends ComponentProps<'div'> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
-
+export interface DropdownMenuContentOwnProps {
   /**
    * Preferred placement side
    * @defaultValue 'bottom'
@@ -165,15 +159,18 @@ export interface DropdownMenuContentProps extends ComponentProps<'div'> {
 }
 
 /**
- * Props for DropdownMenu.Item component
+ * Props for DropdownMenu.Content component
  */
-export interface DropdownMenuItemProps extends Omit<ComponentProps<'div'>, 'onSelect'> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
+export type DropdownMenuContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DropdownMenuContentOwnProps
+>;
 
+/**
+ * Own props for DropdownMenu.Item component
+ */
+export interface DropdownMenuItemOwnProps {
   /**
    * Whether item is disabled
    * @defaultValue false
@@ -192,9 +189,18 @@ export interface DropdownMenuItemProps extends Omit<ComponentProps<'div'>, 'onSe
 }
 
 /**
- * Props for DropdownMenu.CheckboxItem component
+ * Props for DropdownMenu.Item component
  */
-export interface DropdownMenuCheckboxItemProps extends DropdownMenuItemProps {
+export type DropdownMenuItemProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DropdownMenuItemOwnProps
+>;
+
+/**
+ * Own props for DropdownMenu.CheckboxItem component
+ */
+export interface DropdownMenuCheckboxItemOwnProps extends DropdownMenuItemOwnProps {
   /**
    * Controlled checked state
    * @defaultValue false
@@ -206,6 +212,15 @@ export interface DropdownMenuCheckboxItemProps extends DropdownMenuItemProps {
    */
   onCheckedChange?: (checked: boolean) => void;
 }
+
+/**
+ * Props for DropdownMenu.CheckboxItem component
+ */
+export type DropdownMenuCheckboxItemProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DropdownMenuCheckboxItemOwnProps
+>;
 
 /**
  * Props for DropdownMenu.RadioGroup component
@@ -223,9 +238,9 @@ export interface DropdownMenuRadioGroupProps extends ComponentProps<'div'> {
 }
 
 /**
- * Props for DropdownMenu.RadioItem component
+ * Own props for DropdownMenu.RadioItem component
  */
-export interface DropdownMenuRadioItemProps extends DropdownMenuItemProps {
+export interface DropdownMenuRadioItemOwnProps extends DropdownMenuItemOwnProps {
   /**
    * Unique value for this radio item
    */
@@ -233,37 +248,55 @@ export interface DropdownMenuRadioItemProps extends DropdownMenuItemProps {
 }
 
 /**
+ * Props for DropdownMenu.RadioItem component
+ */
+export type DropdownMenuRadioItemProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DropdownMenuRadioItemOwnProps
+>;
+
+/**
+ * Own props for DropdownMenu.Separator component
+ */
+export interface DropdownMenuSeparatorOwnProps {}
+
+/**
  * Props for DropdownMenu.Separator component
  */
-export interface DropdownMenuSeparatorProps extends ComponentProps<'div'> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
-}
+export type DropdownMenuSeparatorProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DropdownMenuSeparatorOwnProps
+>;
+
+/**
+ * Own props for DropdownMenu.Label component
+ */
+export interface DropdownMenuLabelOwnProps {}
 
 /**
  * Props for DropdownMenu.Label component
  */
-export interface DropdownMenuLabelProps extends ComponentProps<'div'> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
-}
+export type DropdownMenuLabelProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DropdownMenuLabelOwnProps
+>;
+
+/**
+ * Own props for DropdownMenu.Group component
+ */
+export interface DropdownMenuGroupOwnProps {}
 
 /**
  * Props for DropdownMenu.Group component
  */
-export interface DropdownMenuGroupProps extends ComponentProps<'div'> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
-}
+export type DropdownMenuGroupProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DropdownMenuGroupOwnProps
+>;
 
 /**
  * Props for DropdownMenu.Sub component
@@ -292,14 +325,32 @@ export interface DropdownMenuSubProps {
 }
 
 /**
+ * Own props for DropdownMenu.SubTrigger component
+ */
+export interface DropdownMenuSubTriggerOwnProps extends DropdownMenuItemOwnProps {}
+
+/**
  * Props for DropdownMenu.SubTrigger component
  */
-export interface DropdownMenuSubTriggerProps extends DropdownMenuItemProps {}
+export type DropdownMenuSubTriggerProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DropdownMenuSubTriggerOwnProps
+>;
+
+/**
+ * Own props for DropdownMenu.SubContent component
+ */
+export interface DropdownMenuSubContentOwnProps extends DropdownMenuContentOwnProps {}
 
 /**
  * Props for DropdownMenu.SubContent component
  */
-export interface DropdownMenuSubContentProps extends DropdownMenuContentProps {}
+export type DropdownMenuSubContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DropdownMenuSubContentOwnProps
+>;
 
 /**
  * Internal context value for DropdownMenu
