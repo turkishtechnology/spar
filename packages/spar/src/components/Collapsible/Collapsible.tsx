@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useMemo, useState, useCallback, useId, ElementType } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  useCallback,
+  useId,
+  ElementType,
+} from 'react';
 import type { CollapsibleProps, CollapsibleContextValue } from './types';
 
 const CollapsibleContext = createContext<CollapsibleContextValue | null>(null);

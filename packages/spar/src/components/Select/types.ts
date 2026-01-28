@@ -1,4 +1,4 @@
-import type { ComponentProps, ElementType, ReactNode, RefObject } from 'react';
+import type { ElementType, ReactNode, RefObject } from 'react';
 import type { Placement, Strategy, Middleware, VirtualElement } from '@floating-ui/react-dom';
 import type { Direction, PolymorphicProps } from '../../types';
 import type { ButtonProps } from '../Button/types';

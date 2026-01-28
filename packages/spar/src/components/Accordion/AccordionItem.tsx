@@ -1,4 +1,12 @@
-import { createContext, useContext, useEffect, useMemo, useCallback, useId, ElementType } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useCallback,
+  useId,
+  ElementType,
+} from 'react';
 import type { AccordionItemProps, AccordionItemContextValue } from './types';
 import { useAccordionContext } from './Accordion';
 import { Collapsible } from '../Collapsible';
