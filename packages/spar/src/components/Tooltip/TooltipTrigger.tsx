@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react';
+import { useMergedRef } from '@/hooks';
 import type { TooltipTriggerProps, TooltipTriggerRenderProps } from './types';
 import { useTooltip } from './useTooltip';
 import { useTooltipProvider } from './useTooltipProvider';
@@ -15,11 +16,14 @@ export const TooltipTrigger = ({
   onFocus,
   onBlur,
   onKeyDown,
+  ref,
   ...props
 }: TooltipTriggerProps) => {
   const context = useTooltip();
   const provider = useTooltipProvider();
   const showTimeoutRef = useRef<number | null>(null);
+
+  const mergedRef = useMergedRef(context.triggerRef, ref);
 
   // Clear timeouts
   const clearTimeouts = useCallback(() => {
@@ -146,11 +150,6 @@ export const TooltipTrigger = ({
     };
   }, [clearTimeouts]);
 
-  // Ref callback to merge refs
-  const refCallback = (node: HTMLButtonElement | null) => {
-    context.triggerRef.current = node;
-  };
-
   // Render props for children function
   const renderProps: TooltipTriggerRenderProps = {
     isOpen: context.isOpen,
@@ -163,7 +162,7 @@ export const TooltipTrigger = ({
   return (
     <Button
       as={as}
-      ref={refCallback}
+      ref={mergedRef}
       id={context.triggerId}
       disabled={context.disabled}
       aria-describedby={

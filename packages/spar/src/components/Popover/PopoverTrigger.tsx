@@ -1,4 +1,5 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
+import { useMergedRef } from '@/hooks';
 import { PopoverTriggerProps, PopoverTriggerRenderProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 import { Button } from '../Button';
@@ -55,19 +56,7 @@ export const PopoverTrigger = ({
     [disabled, state.isOpen, openPopover, onKeyDown],
   );
 
-  const triggerRefCallback = useMemo(
-    () => (element: HTMLElement | null) => {
-      if (triggerRef && 'current' in triggerRef) {
-        triggerRef.current = element;
-      }
-      if (typeof ref === 'function') {
-        ref(element as HTMLButtonElement | null);
-      } else if (ref) {
-        ref.current = element as HTMLButtonElement | null;
-      }
-    },
-    [triggerRef, ref],
-  );
+  const mergedRef = useMergedRef(triggerRef as React.RefObject<HTMLElement | null>, ref);
 
   // Render props for children function
   const renderProps: PopoverTriggerRenderProps = {
@@ -82,7 +71,7 @@ export const PopoverTrigger = ({
     <Button
       as={as}
       disabled={disabled}
-      ref={triggerRefCallback}
+      ref={mergedRef}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       aria-expanded={state.isOpen}

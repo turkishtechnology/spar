@@ -31,6 +31,7 @@ export const Collapsible = <T extends ElementType = 'div'>({
   as,
   triggerId: propsTriggerId,
   contentId: propsContentId,
+  ref,
   ...props
 }: CollapsibleProps<T>) => {
   const Component = as || 'div';
@@ -102,7 +103,12 @@ export const Collapsible = <T extends ElementType = 'div'>({
 
   return (
     <CollapsibleContext.Provider value={contextValue}>
-      <Component data-state={dataState} data-disabled={disabled ? '' : undefined} {...props}>
+      <Component
+        ref={ref}
+        data-state={dataState}
+        data-disabled={disabled ? '' : undefined}
+        {...props}
+      >
         {children}
       </Component>
     </CollapsibleContext.Provider>

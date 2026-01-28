@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { useInteractOutside } from '@/hooks';
+import { useInteractOutside, useMergedRef } from '@/hooks';
 import { PopoverContentProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 import { getFocusableElements } from './utils';
@@ -40,6 +40,8 @@ export const PopoverContent = ({
 
   const { state, triggerRef, contentRef, floatingStyles, modal, closePopover } =
     usePopoverContext();
+
+  const mergedRef = useMergedRef(contentRef as React.RefObject<HTMLDivElement | null>, ref);
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -162,16 +164,7 @@ export const PopoverContent = ({
 
   const contentElement = (
     <div
-      ref={(element: HTMLDivElement | null) => {
-        if (contentRef && 'current' in contentRef) {
-          contentRef.current = element;
-        }
-        if (typeof ref === 'function') {
-          ref(element);
-        } else if (ref) {
-          ref.current = element;
-        }
-      }}
+      ref={mergedRef}
       id={state.contentId}
       role={modal ? 'dialog' : undefined}
       aria-modal={modal ? 'true' : undefined}

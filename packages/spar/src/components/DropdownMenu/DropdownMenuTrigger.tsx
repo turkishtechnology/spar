@@ -1,6 +1,5 @@
 import {
   useCallback,
-  useMemo,
   type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent,
 } from 'react';
@@ -10,7 +9,7 @@ import type {
   DropdownMenuTriggerRenderProps,
 } from './types';
 import { useDropdownMenuRootContext } from './contexts';
-import { composeRefs } from './utils';
+import { useMergedRef } from '@/hooks';
 import { Button } from '../Button';
 
 export const DropdownMenuTrigger = ({
@@ -27,10 +26,7 @@ export const DropdownMenuTrigger = ({
   // Use prop if explicitly provided, otherwise use context
   const disabled = disabledProp ?? menu.disabled;
 
-  const triggerRefCallback = useMemo(
-    () => composeRefs<HTMLElement | null>(menu.triggerRef, ref),
-    [menu.triggerRef, ref],
-  );
+  const mergedRef = useMergedRef(menu.triggerRef, ref);
 
   const handleOpen = useCallback(
     (strategy: DropdownMenuFocusStrategy) => {
@@ -98,7 +94,7 @@ export const DropdownMenuTrigger = ({
   return (
     <Button
       as={as}
-      ref={triggerRefCallback}
+      ref={mergedRef}
       id={menu.triggerId}
       disabled={disabled}
       aria-haspopup='menu'

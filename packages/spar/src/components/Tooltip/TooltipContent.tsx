@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, type ElementType } from 'react';
+import React, { useEffect, useCallback, useRef, type ElementType } from 'react';
 import {
   useFloating,
   autoUpdate,
@@ -11,6 +11,7 @@ import {
   type Placement,
   type Middleware,
 } from '@floating-ui/react-dom';
+import { useMergedRef } from '@/hooks';
 import type { TooltipContentProps } from './types';
 import type { Side, Align } from '../../types';
 import { useTooltip } from './useTooltip';
@@ -41,10 +42,13 @@ export const TooltipContent = <T extends ElementType = 'div'>({
   collisionPadding = 8,
   hideWhenDetached = false,
   onEscapeKeyDown,
+  ref,
   ...props
 }: TooltipContentProps<T>) => {
   const Component = as || 'div';
   const context = useTooltip();
+  const internalRef = useRef<HTMLElement>(null);
+  const mergedRef = useMergedRef(internalRef, ref);
 
   // Update placement
   useEffect(() => {
@@ -194,11 +198,15 @@ export const TooltipContent = <T extends ElementType = 'div'>({
     return null;
   }
 
-  // Ref callback
-  const refCallback = (node: HTMLElement | null) => {
-    context.contentRef.current = node;
-    refs.setFloating(node);
-  };
+  // Ref callback that combines mergedRef with context and floating refs
+  const refCallback = useCallback(
+    (node: HTMLElement | null) => {
+      mergedRef(node);
+      context.contentRef.current = node;
+      refs.setFloating(node);
+    },
+    [mergedRef, context.contentRef, refs],
+  );
 
   // Get arrow data
   const arrowX = middlewareData.arrow?.x;

@@ -32,6 +32,7 @@ export const Accordion = <T extends ElementType = 'div'>({
   orientation = 'vertical',
   as,
   children,
+  ref,
   ...props
 }: AccordionProps<T>) => {
   const Component = as || 'div';
@@ -121,7 +122,7 @@ export const Accordion = <T extends ElementType = 'div'>({
 
   return (
     <AccordionContext.Provider value={contextValue}>
-      <Component {...props} data-orientation={orientation} data-type={type}>
+      <Component ref={ref} {...props} data-orientation={orientation} data-type={type}>
         {children}
       </Component>
     </AccordionContext.Provider>
