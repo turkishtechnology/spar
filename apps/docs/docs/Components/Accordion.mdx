@@ -375,7 +375,7 @@ The root container that provides context and manages the state for all accordion
 | `onValueChange?` | `(value: string \| string[]) => void` | `undefined`  | Callback when state changes                            |
 | `disabled?`      | `boolean`                             | `false`      | Disables all accordion items                           |
 | `orientation?`   | `"vertical" \| "horizontal"`          | `"vertical"` | Orientation for keyboard navigation                    |
-| `as?`            | `PolymorphicAs`                   | `"div"`      | Polymorphic component type                             |
+| `as?`            | `ElementType`                   | `"div"`      | Polymorphic component type                             |
 | `children`       | `React.ReactNode`                     | -            | AccordionItem components                               |
 
 **Events**
@@ -400,7 +400,7 @@ Individual accordion item that contains a header and content panel.
 | ----------- | ------------------- | ------- | ----------------------------------------------- |
 | `value`     | `string`            | -       | Unique identifier for the item                  |
 | `disabled?` | `boolean`           | `false` | Disables this specific item                     |
-| `as?`       | `PolymorphicAs` | `"div"` | Polymorphic component type                      |
+| `as?`       | `ElementType` | `"div"` | Polymorphic component type                      |
 | `children`  | `React.ReactNode`   | -       | AccordionHeader and AccordionContent components |
 
 **Events**
@@ -425,7 +425,7 @@ Semantic heading wrapper for the accordion trigger button.
 | Name       | Type                | Default | Description                                  |
 | ---------- | ------------------- | ------- | -------------------------------------------- |
 | `level?`   | `number`            | `3`     | Heading level (1-6) for document hierarchy   |
-| `as?`      | `PolymorphicAs` | `"h3"`  | Polymorphic component type (heading element) |
+| `as?`      | `ElementType` | `"h3"`  | Polymorphic component type (heading element) |
 | `children` | `React.ReactNode`   | -       | AccordionTrigger component                   |
 
 **Events**
@@ -448,7 +448,7 @@ Button that toggles the visibility of the associated content panel.
 
 | Name         | Type                                                                         | Default     | Description                                   |
 | ------------ | ---------------------------------------------------------------------------- | ----------- | --------------------------------------------- |
-| `as?`        | `PolymorphicAs`                                                          | `"button"`  | Polymorphic component type                    |
+| `as?`        | `ElementType`                                                          | `"button"`  | Polymorphic component type                    |
 | `children`   | `React.ReactNode \| ((state: AccordionTriggerRenderProps) => React.ReactNode)` | -         | Trigger content or render props function      |
 | `onClick?`   | `(event: React.MouseEvent) => void`                                          | `undefined` | Custom click handler                          |
 | `onKeyDown?` | `(event: React.KeyboardEvent) => void`                                       | `undefined` | Custom keydown handler                        |
@@ -487,7 +487,7 @@ Collapsible panel containing the accordion item content.
 | Name          | Type                | Default | Description                                    |
 | ------------- | ------------------- | ------- | ---------------------------------------------- |
 | `forceMount?` | `boolean`           | `false` | Force content to remain mounted when collapsed |
-| `as?`         | `PolymorphicAs` | `"div"` | Polymorphic component type                     |
+| `as?`         | `ElementType` | `"div"` | Polymorphic component type                     |
 | `children`    | `React.ReactNode`   | -       | Panel content                                  |
 
 **Events**

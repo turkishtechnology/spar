@@ -541,7 +541,7 @@ The button element that toggles the dropdown menu visibility. Extends all `Butto
 
 | Name               | Type                                                                  | Default     | Description                                         |
 | ------------------ | --------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `as?`              | `PolymorphicAs`                                                         | `"button"`  | Element type to render as                           |
+| `as?`              | `ElementType`                                                         | `"button"`  | Element type to render as                           |
 | `children`         | `ReactNode \| ((state: DropdownMenuTriggerRenderProps) => ReactNode)` | `undefined` | Trigger content or render props function            |
 | `disabled?`        | `boolean`                                                             | `false`     | Whether the trigger is disabled                     |
 | `shouldAutoFocus?` | `boolean`                                                             | `false`     | Whether the button should receive focus on mount    |
@@ -585,7 +585,7 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 
 | Name                    | Type                                     | Default     | Description                                           |
 | ----------------------- | ---------------------------------------- | ----------- | ----------------------------------------------------- |
-| `as?`                   | `PolymorphicAs`                          | `'div'`     | Polymorphic element type to render                    |
+| `as?`                   | `ElementType`                          | `'div'`     | Polymorphic element type to render                    |
 | `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`  | Preferred side for positioning                        |
 | `align?`                | `'start' \| 'center' \| 'end'`           | `'start'`   | Alignment relative to trigger                         |
 | `sideOffset?`           | `number`                                 | `8`         | Distance in pixels from trigger                       |
@@ -627,7 +627,7 @@ A selectable menu item.
 
 | Name         | Type                              | Default     | Description                                                           |
 | ------------ | --------------------------------- | ----------- | --------------------------------------------------------------------- |
-| `as?`        | `PolymorphicAs`                   | `'div'`     | Polymorphic element type to render                                    |
+| `as?`        | `ElementType`                   | `'div'`     | Polymorphic element type to render                                    |
 | `disabled?`  | `boolean`                         | `false`     | Whether item is disabled                                              |
 | `onSelect?`  | `(event: SyntheticEvent) => void` | `undefined` | Selection handler                                                     |
 | `textValue?` | `string`                          | `undefined` | Text value for typeahead (auto-detected from content if not provided) |
@@ -660,7 +660,7 @@ A menu item with checkbox functionality for toggleable options.
 
 | Name               | Type                              | Default     | Description                        |
 | ------------------ | --------------------------------- | ----------- | ---------------------------------- |
-| `as?`              | `PolymorphicAs`                   | `'div'`     | Polymorphic element type to render |
+| `as?`              | `ElementType`                   | `'div'`     | Polymorphic element type to render |
 | `checked?`         | `boolean \| 'indeterminate'`      | `false`     | Checked state                      |
 | `onCheckedChange?` | `(checked: boolean) => void`      | `undefined` | Checked state change handler       |
 | `disabled?`        | `boolean`                         | `false`     | Whether item is disabled           |
@@ -714,7 +714,7 @@ A radio menu item for mutually exclusive selections within a RadioGroup.
 | Name         | Type                              | Default      | Description                        |
 | ------------ | --------------------------------- | ------------ | ---------------------------------- |
 | `value`      | `string`                          | **required** | Unique value for this radio item   |
-| `as?`        | `PolymorphicAs`                   | `'div'`      | Polymorphic element type to render |
+| `as?`        | `ElementType`                   | `'div'`      | Polymorphic element type to render |
 | `disabled?`  | `boolean`                         | `false`      | Whether item is disabled           |
 | `onSelect?`  | `(event: SyntheticEvent) => void` | `undefined`  | Selection handler                  |
 | `textValue?` | `string`                          | `undefined`  | Text value for typeahead           |
@@ -742,7 +742,7 @@ A visual separator between menu sections.
 
 | Name   | Type                       | Default     | Description                        |
 | ------ | -------------------------- | ----------- | ---------------------------------- |
-| `as?`  | `PolymorphicAs`            | `'div'`     | Polymorphic element type to render |
+| `as?`  | `ElementType`            | `'div'`     | Polymorphic element type to render |
 | `ref?` | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to separator element |
 
 **Events**
@@ -765,7 +765,7 @@ A non-interactive label for menu sections.
 
 | Name        | Type                       | Default     | Description                        |
 | ----------- | -------------------------- | ----------- | ---------------------------------- |
-| `as?`       | `PolymorphicAs`            | `'div'`     | Polymorphic element type to render |
+| `as?`       | `ElementType`            | `'div'`     | Polymorphic element type to render |
 | `ref?`      | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to label element     |
 | `children?` | `ReactNode`                | `undefined` | Label content                      |
 
@@ -787,7 +787,7 @@ A logical grouping container for related menu items.
 
 | Name        | Type                       | Default     | Description                        |
 | ----------- | -------------------------- | ----------- | ---------------------------------- |
-| `as?`       | `PolymorphicAs`            | `'div'`     | Polymorphic element type to render |
+| `as?`       | `ElementType`            | `'div'`     | Polymorphic element type to render |
 | `ref?`      | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to group element     |
 | `children?` | `ReactNode`                | `undefined` | Menu items or labels               |
 
@@ -832,7 +832,7 @@ A menu item that triggers a nested submenu.
 
 | Name         | Type                              | Default     | Description                         |
 | ------------ | --------------------------------- | ----------- | ----------------------------------- |
-| `as?`        | `PolymorphicAs`                   | `'div'`     | Polymorphic element type to render  |
+| `as?`        | `ElementType`                   | `'div'`     | Polymorphic element type to render  |
 | `disabled?`  | `boolean`                         | `false`     | Whether subtrigger is disabled      |
 | `onSelect?`  | `(event: SyntheticEvent) => void` | `undefined` | Selection handler                   |
 | `textValue?` | `string`                          | `undefined` | Text value for typeahead            |

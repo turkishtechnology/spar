@@ -372,7 +372,7 @@ The Label component creates accessible labels for form controls with support for
 | `required?`   | `boolean`     | `false`     | Marks label for a required field (exposed via `data-required` attribute). Does NOT add required functionality - set `required` on the control itself |
 | `isOptional?` | `boolean`     | `false`     | Marks label for an optional field (exposed via `data-optional` attribute for styling)                                                                |
 | `disabled?`   | `boolean`     | `false`     | Marks label for a disabled field (exposed via `data-disabled` attribute). Does NOT disable the control - set `disabled` on the control itself        |
-| `as?`         | `PolymorphicAs` | `'label'`   | Polymorphic element type to render as. Using non-label elements breaks native association - use `aria-labelledby` on control                         |
+| `as?`         | `ElementType` | `'label'`   | Polymorphic element type to render as. Using non-label elements breaks native association - use `aria-labelledby` on control                         |
 | `children?`   | `ReactNode`   | `undefined` | Label content (text, icons, or form controls for implicit association)                                                                               |
 
 **Note**: All standard HTML label attributes (`htmlFor`, `className`, `style`, `ref`, etc.) are supported via `React.LabelHTMLAttributes<HTMLLabelElement>`.

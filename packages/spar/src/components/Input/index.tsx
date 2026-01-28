@@ -1,15 +1,15 @@
-import React from 'react';
 import { InputRoot } from './InputRoot';
 import { InputField } from './InputField';
 import { InputLabel } from './InputLabel';
 import { InputDescription } from './InputDescription';
 import { InputErrorMessage } from './InputErrorMessage';
+import type { ElementType } from 'react';
 import type { PolymorphicInputFieldProps } from './types';
 
 // Create callable compound component with default behavior
 const Input = Object.assign(
   // Default function behavior for simple usage (no wrapper div!)
-  <T extends React.ElementType = 'input'>(props: PolymorphicInputFieldProps<T>) => (
+  <T extends ElementType = 'input'>(props: PolymorphicInputFieldProps<T>) => (
     <InputField {...props} />
   ),
   // Compound component methods
