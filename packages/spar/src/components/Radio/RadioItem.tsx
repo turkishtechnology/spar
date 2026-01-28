@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, ElementType } from 'react';
 import type { RadioItemProps, RadioItemRenderProps } from './types';
 import { useRadioGroupContext } from './RadioGroup';
 import { useFocusItem, useMergedRef } from '@/hooks';
@@ -7,16 +7,17 @@ import { useFocusItem, useMergedRef } from '@/hooks';
  * RadioItem component representing individual radio options within a RadioGroup.
  * Implements roving tabindex and full accessibility features.
  */
-export const RadioItem = ({
+export const RadioItem = <T extends ElementType = 'label'>({
   ref,
   value: itemValue,
   disabled: itemDisabled = false,
   'aria-label': ariaLabel,
   'aria-describedby': ariaDescribedBy,
-  as: Component = 'label',
+  as,
   children,
   ...rest
-}: RadioItemProps) => {
+}: RadioItemProps<T>) => {
+  const Component = as || 'label';
   const context = useRadioGroupContext();
   const {
     value: groupValue,

@@ -45,7 +45,7 @@ Single component pattern - Label is a simple primitive that wraps label content 
 | `required` | `boolean` | No | `false` | Marks label for a required field (exposed via data attribute) |
 | `isOptional` | `boolean` | No | `false` | Marks label for an optional field (exposed via data attribute) |
 | `disabled` | `boolean` | No | `false` | Marks label for a disabled field (exposed via data attribute) |
-| `as` | `PolymorphicAs` | No | `'label'` | Polymorphic element type |
+| `as` | `ElementType` | No | `'label'` | Polymorphic element type |
 | `children` | `React.ReactNode` | Yes | — | Label content (text, icons, form controls) |
 
 **Note**: All standard HTML label attributes (`htmlFor`, `className`, `style`, `ref`, etc.) are inherited from `React.LabelHTMLAttributes<HTMLLabelElement>`.

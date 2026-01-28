@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useCallback, useId } from 'react';
+import { createContext, useContext, useEffect, useMemo, useCallback, useId, ElementType } from 'react';
 import type { AccordionItemProps, AccordionItemContextValue } from './types';
 import { useAccordionContext } from './Accordion';
 import { Collapsible } from '../Collapsible';
@@ -16,13 +16,14 @@ export const useAccordionItemContext = () => {
 /**
  * Individual accordion item providing context for trigger and content components. Manages item registration and expansion state.
  */
-export const AccordionItem = ({
+export const AccordionItem = <T extends ElementType = 'div'>({
   value,
   disabled: itemDisabled = false,
-  as: Component = 'div',
+  as,
   children,
   ...props
-}: AccordionItemProps) => {
+}: AccordionItemProps<T>) => {
+  const Component = as || 'div';
   const accordionContext = useAccordionContext();
   const triggerId = useId();
   const contentId = useId();

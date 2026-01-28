@@ -42,7 +42,7 @@ Extends all `ButtonProps` from the Button component.
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'button'` | Element type for polymorphic rendering |
+| `as` | `ElementType` | No | `'button'` | Element type for polymorphic rendering |
 | `children` | `ReactNode \| ((state: CollapsibleTriggerRenderProps) => ReactNode)` | No | - | Trigger content or render function for render props pattern |
 | `shouldAutoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
 | `isLoading` | `boolean` | No | `false` | Loading state with screen reader support |
@@ -70,7 +70,7 @@ Extends all `ButtonProps` from the Button component.
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'div'` | Element type for polymorphic rendering |
+| `as` | `ElementType` | No | `'div'` | Element type for polymorphic rendering |
 | `forceMount` | `boolean` | No | `false` | Force content to remain mounted when closed |
 | `id` | `string` | No | Auto-generated | Content element ID (automatically set for ARIA) |
 | `hidden` | `boolean \| 'until-found'` | No | Auto-managed | Visibility state (automatically managed) |

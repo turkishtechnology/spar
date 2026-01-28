@@ -6,6 +6,7 @@ import React, {
   useId,
   useRef,
   useEffect,
+  ElementType,
 } from 'react';
 import { useControlledState, useItemRegistry } from '@/hooks';
 import type { RadioGroupProps, RadioGroupContextValue } from './types';
@@ -25,7 +26,7 @@ export const useRadioGroupContext = () => {
  * RadioGroup component for creating mutually exclusive radio button groups.
  * Implements WCAG 2.2 AA standards with full keyboard navigation and accessibility features.
  */
-export const RadioGroup = ({
+export const RadioGroup = <T extends ElementType = 'div'>({
   ref,
   value: controlledValue,
   defaultValue,
@@ -39,10 +40,11 @@ export const RadioGroup = ({
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
   'aria-describedby': ariaDescribedBy,
-  as: Component = 'div',
+  as,
   children,
   ...rest
-}: RadioGroupProps) => {
+}: RadioGroupProps<T>) => {
+  const Component = as || 'div';
   const [value, setValue] = useControlledState(controlledValue, defaultValue, onValueChange);
   const [focusedValue, setFocusedValue] = useState<string | null>(null);
   const { registerItem, unregisterItem, getItemIds } = useItemRegistry<void>();

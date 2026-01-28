@@ -1,15 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, type ElementType } from 'react';
 import type { SelectItemTextProps } from './types';
 import { useSelectItemContext } from './SelectItem';
 
 /**
  * Text content of a select item. Automatically registers text value for type-ahead search.
  */
-export const SelectItemText = ({
-  as: Component = 'span',
+export const SelectItemText = <T extends ElementType = 'span'>({
+  as,
   children,
   ...props
-}: SelectItemTextProps) => {
+}: SelectItemTextProps<T>) => {
+  const Component = as || 'span';
   const itemContext = useSelectItemContext();
   const textRef = useRef<HTMLSpanElement>(null);
 

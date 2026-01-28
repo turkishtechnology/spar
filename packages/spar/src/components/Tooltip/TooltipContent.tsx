@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, type ElementType } from 'react';
 import {
   useFloating,
   autoUpdate,
@@ -26,11 +26,11 @@ const toPlacement = (side: Side, align?: Align): Placement => {
 /**
  * The content that displays in the tooltip popup
  */
-export const TooltipContent = ({
+export const TooltipContent = <T extends ElementType = 'div'>({
   children,
   className,
   style,
-  as: Component = 'div',
+  as,
   asLabel = false,
   side = 'top',
   sideOffset = 8,
@@ -42,7 +42,8 @@ export const TooltipContent = ({
   hideWhenDetached = false,
   onEscapeKeyDown,
   ...props
-}: TooltipContentProps) => {
+}: TooltipContentProps<T>) => {
+  const Component = as || 'div';
   const context = useTooltip();
 
   // Update placement

@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { type ElementType } from 'react';
 import type { SelectIconProps } from './types';
 import { useSelectContext } from './SelectRoot';
 
 /**
  * Optional visual indicator (chevron, arrow) that displays the select state.
  */
-export const SelectIcon = ({ as: Component = 'span', children, ...props }: SelectIconProps) => {
+export const SelectIcon = <T extends ElementType = 'span'>({
+  as,
+  children,
+  ...props
+}: SelectIconProps<T>) => {
+  const Component = as || 'span';
   const context = useSelectContext();
 
   return (

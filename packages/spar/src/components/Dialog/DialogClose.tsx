@@ -1,19 +1,20 @@
-import { useCallback } from 'react';
+import { useCallback, ElementType } from 'react';
 import { useDialogContext } from './DialogRoot';
 import type { DialogCloseProps, DialogCloseRenderProps } from './types';
 import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * Close button component that closes the dialog when activated.
  * Supports keyboard navigation and proper event handling.
  */
-export const DialogClose = ({
-  as = 'button',
+export const DialogClose = <T extends ElementType = 'button'>({
+  as,
   ref,
   onClick,
   children,
   ...props
-}: DialogCloseProps) => {
+}: DialogCloseProps<T>) => {
   const context = useDialogContext();
   const { isOpen, setIsOpen } = context;
 
@@ -31,8 +32,15 @@ export const DialogClose = ({
     close: () => setIsOpen(false),
   };
 
+  const buttonProps = {
+    ...(as && { as }),
+    ...(ref && { ref }),
+    onClick: handleClick,
+    ...props,
+  } as ButtonProps<T>;
+
   return (
-    <Button as={as} ref={ref} onClick={handleClick} {...props}>
+    <Button {...buttonProps}>
       {typeof children === 'function' ? children(renderProps) : children}
     </Button>
   );

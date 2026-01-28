@@ -1,17 +1,10 @@
-import type { ComponentProps } from 'react';
-import type { PolymorphicAs } from '../../types';
+import type { ElementType } from 'react';
+import type { PolymorphicProps } from '../../types';
 
 /**
- * Props for Button component
- * @remarks Fully accessible, headless component
+ * Own props for Button component
  */
-export interface ButtonProps extends ComponentProps<'button'> {
-  /**
-   * The element type to render as
-   * @defaultValue "button"
-   */
-  as?: PolymorphicAs;
-
+export interface ButtonOwnProps {
   /**
    * Whether the button should receive focus when first rendered
    * @defaultValue false
@@ -35,3 +28,13 @@ export interface ButtonProps extends ComponentProps<'button'> {
    */
   onPressedChange?: (pressed: boolean) => void;
 }
+
+/**
+ * Props for Button component
+ * @remarks Fully accessible, headless component
+ */
+export type ButtonProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  ButtonOwnProps
+>;

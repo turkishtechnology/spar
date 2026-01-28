@@ -1,6 +1,6 @@
-import type { ComponentProps, ReactNode } from 'react';
-import type { PolymorphicAs } from '../../types';
-import type { ButtonProps } from '../Button/types';
+import type { ElementType, ReactNode } from 'react';
+import type { PolymorphicProps } from '../../types';
+import type { ButtonOwnProps } from '../Button/types';
 
 /**
  * Render props provided to children function for CollapsibleTrigger
@@ -29,16 +29,9 @@ export interface CollapsibleTriggerRenderProps {
 }
 
 /**
- * Props for Collapsible root component
- * @remarks Fully accessible, headless component
+ * Own props for Collapsible root component
  */
-export interface CollapsibleProps extends ComponentProps<'div'> {
-  /**
-   * Element type for polymorphic rendering
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
-
+export interface CollapsibleOwnProps {
   /**
    * Unique identifier for the trigger element.
    * IF not provided, one will be generated automatically.
@@ -75,10 +68,19 @@ export interface CollapsibleProps extends ComponentProps<'div'> {
 }
 
 /**
- * Props for CollapsibleTrigger component
- * @remarks Button element that toggles visibility
+ * Props for Collapsible root component
+ * @remarks Fully accessible, headless component
  */
-export interface CollapsibleTriggerProps extends Omit<ButtonProps, 'children'> {
+export type CollapsibleProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  CollapsibleOwnProps
+>;
+
+/**
+ * Own props for CollapsibleTrigger component
+ */
+export interface CollapsibleTriggerOwnProps extends ButtonOwnProps {
   /**
    * Children content or render function
    */
@@ -86,16 +88,19 @@ export interface CollapsibleTriggerProps extends Omit<ButtonProps, 'children'> {
 }
 
 /**
- * Props for CollapsibleContent component
- * @remarks Panel containing the collapsible content
+ * Props for CollapsibleTrigger component
+ * @remarks Button element that toggles visibility
  */
-export interface CollapsibleContentProps extends ComponentProps<'div'> {
-  /**
-   * Element type for polymorphic rendering
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
+export type CollapsibleTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  CollapsibleTriggerOwnProps
+>;
 
+/**
+ * Own props for CollapsibleContent component
+ */
+export interface CollapsibleContentOwnProps {
   /**
    * Force content to remain mounted when closed
    * @defaultValue false
@@ -107,6 +112,16 @@ export interface CollapsibleContentProps extends ComponentProps<'div'> {
    */
   onBeforeMatch?: (event: Event) => void;
 }
+
+/**
+ * Props for CollapsibleContent component
+ * @remarks Panel containing the collapsible content
+ */
+export type CollapsibleContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  CollapsibleContentOwnProps
+>;
 
 /**
  * Context value shared between Collapsible components

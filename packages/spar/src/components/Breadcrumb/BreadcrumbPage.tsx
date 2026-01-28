@@ -1,13 +1,19 @@
-import { createElement } from 'react';
+import { createElement, ElementType } from 'react';
 import type { BreadcrumbPageProps } from './types';
 
 /**
  * Current page indicator (non-interactive). Marks the current location in the breadcrumb trail.
  * @remarks Fully accessible, headless component
  */
-export const BreadcrumbPage = ({ as = 'span', children, ...props }: BreadcrumbPageProps) => {
+export const BreadcrumbPage = <T extends ElementType = 'span'>({
+  as,
+  children,
+  ...props
+}: BreadcrumbPageProps<T>) => {
+  const Component = as || 'span';
+
   return createElement(
-    as,
+    Component,
     {
       ...props,
       'aria-current': 'page',

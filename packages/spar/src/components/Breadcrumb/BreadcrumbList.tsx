@@ -5,6 +5,7 @@ import {
   isValidElement,
   Fragment,
   type ReactElement,
+  ElementType,
 } from 'react';
 import type { BreadcrumbListProps, BreadcrumbItemProps, BreadcrumbPosition } from './types';
 
@@ -13,11 +14,16 @@ import type { BreadcrumbListProps, BreadcrumbItemProps, BreadcrumbPosition } fro
  * Calculates and passes position data to child items.
  * @remarks Fully accessible, headless component
  */
-export const BreadcrumbList = ({ as = 'ol', children, ...props }: BreadcrumbListProps) => {
+export const BreadcrumbList = <T extends ElementType = 'ol'>({
+  as,
+  children,
+  ...props
+}: BreadcrumbListProps<T>) => {
+  const Component = as || 'ol';
   const childCount = Children.count(children);
 
   return createElement(
-    as,
+    Component,
     {
       ...props,
       'data-spar-breadcrumb-list': '',

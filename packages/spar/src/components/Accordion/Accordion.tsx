@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState, useCallback } from 'react';
+import React, { createContext, useContext, useMemo, useState, useCallback, ElementType } from 'react';
 import { useItemRegistry } from '@/hooks';
 import type { AccordionProps, AccordionContextValue } from './types';
 
@@ -15,7 +15,7 @@ export const useAccordionContext = () => {
 /**
  * Accordion root component providing context and state management for accordion items. Supports single or multiple panel expansion with full keyboard navigation.
  */
-export const Accordion = ({
+export const Accordion = <T extends ElementType = 'div'>({
   type = 'single',
   isCollapsible = false,
   value: controlledValue,
@@ -23,10 +23,11 @@ export const Accordion = ({
   onValueChange,
   disabled = false,
   orientation = 'vertical',
-  as: Component = 'div',
+  as,
   children,
   ...props
-}: AccordionProps) => {
+}: AccordionProps<T>) => {
+  const Component = as || 'div';
   // Initialize state based on type
   const getInitialValue = (): string | string[] => {
     if (controlledValue !== undefined) return controlledValue;

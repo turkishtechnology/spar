@@ -1,5 +1,5 @@
-import type { ComponentProps, ReactNode, RefObject, SVGProps } from 'react';
-import { Side, Align, PolymorphicAs } from '../../types';
+import type { ComponentProps, ElementType, ReactNode, RefObject, SVGProps } from 'react';
+import { Side, Align, PolymorphicProps } from '../../types';
 import type { ButtonProps } from '../Button/types';
 
 export type Sticky = 'partial' | 'always';
@@ -115,16 +115,9 @@ export interface TooltipTriggerProps extends Omit<ButtonProps, 'children'> {
 }
 
 /**
- * Props for TooltipContent
- * @remarks The content that displays in the tooltip
+ * Own props for TooltipContent
  */
-export interface TooltipContentProps extends ComponentProps<'div'> {
-  /**
-   * Element type for tooltip content container
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
-
+export interface TooltipContentOwnProps {
   /**
    * Whether tooltip provides primary label or auxiliary description
    * @defaultValue false
@@ -206,6 +199,16 @@ export interface TooltipContentProps extends ComponentProps<'div'> {
 }
 
 /**
+ * Props for TooltipContent
+ * @remarks The content that displays in the tooltip
+ */
+export type TooltipContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  TooltipContentOwnProps
+>;
+
+/**
  * Props for TooltipPortal
  * @remarks Portal component for rendering tooltip outside normal DOM tree
  */
@@ -229,10 +232,9 @@ export interface TooltipPortalProps {
 }
 
 /**
- * Props for TooltipArrow
- * @remarks Optional arrow pointing to the trigger element
+ * Own props for TooltipArrow
  */
-export interface TooltipArrowProps extends SVGProps<SVGSVGElement> {
+export interface TooltipArrowOwnProps {
   /**
    * Arrow width in pixels
    * @defaultValue 10
@@ -244,13 +246,17 @@ export interface TooltipArrowProps extends SVGProps<SVGSVGElement> {
    * @defaultValue 5
    */
   height?: number;
-
-  /**
-   * Element type for arrow
-   * @defaultValue 'svg'
-   */
-  as?: PolymorphicAs;
 }
+
+/**
+ * Props for TooltipArrow
+ * @remarks Optional arrow pointing to the trigger element
+ */
+export type TooltipArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<
+  'svg',
+  T,
+  TooltipArrowOwnProps
+>;
 
 // Internal context types
 export interface TooltipContextValue {

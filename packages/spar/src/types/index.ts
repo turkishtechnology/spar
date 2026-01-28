@@ -2,13 +2,19 @@ import type { ComponentPropsWithRef, ElementType } from 'react';
 
 /**
  * Utility for polymorphic component props that merges the `as` element props.
+ * Accepts properties from both the default element and the polymorphic element.
  */
-export type PolymorphicProps<T extends ElementType, Props = {}> = Props & {
+export type PolymorphicProps<
+  TDefaultElement extends ElementType,
+  TElement extends ElementType,
+  Props = {},
+> = Props & {
   /**
    * Polymorphic element type to render as.
    */
-  as?: T;
-} & Omit<ComponentPropsWithRef<T>, keyof Props | 'as'>;
+  as?: TElement;
+} & Omit<ComponentPropsWithRef<TDefaultElement>, keyof Props | 'as'> &
+  Omit<ComponentPropsWithRef<TElement>, keyof Props | 'as'>;
 
 /**
  * Possible checked states for checkbox-like components
