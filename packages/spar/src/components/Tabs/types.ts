@@ -1,4 +1,4 @@
-import type { ComponentProps, ElementType, RefObject } from 'react';
+import type { ElementType, RefObject } from 'react';
 import type { Direction, Orientation, PolymorphicProps } from '../../types';
 import type { ButtonProps } from '../Button/types';
 
