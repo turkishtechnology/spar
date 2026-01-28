@@ -47,6 +47,7 @@ export const Tabs = <T extends ElementType = 'div'>({
   activationMode = 'automatic',
   as,
   children,
+  ref,
   ...props
 }: TabsProps<T>) => {
   const Component = as || 'div';
@@ -165,7 +166,7 @@ export const Tabs = <T extends ElementType = 'div'>({
 
   return (
     <TabsContext.Provider value={contextValue}>
-      <Component data-orientation={orientation} data-dir={dir} {...props}>
+      <Component ref={ref} data-orientation={orientation} data-dir={dir} {...props}>
         {children}
       </Component>
     </TabsContext.Provider>

@@ -10,6 +10,7 @@ export const Label = <T extends ElementType = 'label'>({
   isOptional = false,
   disabled = false,
   children,
+  ref,
   ...htmlProps
 }: LabelProps<T>) => {
   const Element = as || 'label';
@@ -24,7 +25,7 @@ export const Label = <T extends ElementType = 'label'>({
   );
 
   return (
-    <Element {...htmlProps} {...dataAttributes}>
+    <Element ref={ref} {...htmlProps} {...dataAttributes}>
       {children}
     </Element>
   );

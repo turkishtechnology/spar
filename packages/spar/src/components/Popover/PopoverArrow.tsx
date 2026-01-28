@@ -1,3 +1,4 @@
+import { useMergedRef } from '@/hooks';
 import { PopoverArrowProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 
@@ -14,6 +15,8 @@ export const PopoverArrow = ({
 }: PopoverArrowProps) => {
   const { state, arrowRef } = usePopoverContext();
 
+  const mergedRef = useMergedRef(arrowRef as React.RefObject<HTMLDivElement | null>, ref);
+
   // Unused prop for future implementation
   void offset;
 
@@ -21,16 +24,7 @@ export const PopoverArrow = ({
 
   return (
     <div
-      ref={(element: HTMLDivElement | null) => {
-        if (arrowRef && 'current' in arrowRef) {
-          arrowRef.current = element;
-        }
-        if (typeof ref === 'function') {
-          ref(element);
-        } else if (ref) {
-          ref.current = element;
-        }
-      }}
+      ref={mergedRef}
       role='presentation'
       data-side={state.actualSide}
       style={

@@ -10,7 +10,7 @@ import {
 } from 'react';
 import type { DropdownMenuItemProps } from './types';
 import { useDropdownMenuCollectionContext } from './contexts';
-import { composeRefs } from './utils';
+import { useMergedRef } from '@/hooks';
 
 type MenuItemType = 'item' | 'checkbox' | 'radio' | 'subtrigger';
 
@@ -46,9 +46,7 @@ export const MenuItemPrimitive = <T extends ElementType = 'div'>({
   const fallbackId = useId();
   const itemId = idProp ?? fallbackId;
   const itemRef = useRef<HTMLElement | null>(null);
-  const setItemRef = composeRefs<HTMLElement | null>(ref, (node: HTMLElement | null) => {
-    itemRef.current = node;
-  });
+  const mergedRef = useMergedRef(itemRef, ref);
 
   useLayoutEffect(() => {
     const node = itemRef.current;
@@ -142,7 +140,7 @@ export const MenuItemPrimitive = <T extends ElementType = 'div'>({
     <Component
       {...props}
       id={itemId}
-      ref={setItemRef}
+      ref={mergedRef}
       role={role}
       tabIndex={disabled ? -1 : isHighlighted ? 0 : -1}
       aria-disabled={disabled || undefined}
