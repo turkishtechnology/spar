@@ -1,4 +1,4 @@
-import { createElement, type MouseEvent, type KeyboardEvent } from 'react';
+import { createElement, type MouseEvent, type KeyboardEvent, ElementType } from 'react';
 import { useBreadcrumb } from './BreadcrumbContext';
 import type { BreadcrumbLinkProps } from './types';
 
@@ -6,8 +6,8 @@ import type { BreadcrumbLinkProps } from './types';
  * Interactive link for breadcrumb navigation. Handles routing integration and accessibility states.
  * @remarks Fully accessible, headless component
  */
-export const BreadcrumbLink = ({
-  as = 'a',
+export const BreadcrumbLink = <T extends ElementType = 'a'>({
+  as,
   children,
   href,
   disabled = false,
@@ -18,7 +18,8 @@ export const BreadcrumbLink = ({
   onClick,
   onKeyDown,
   ...props
-}: BreadcrumbLinkProps) => {
+}: BreadcrumbLinkProps<T>) => {
+  const Component = as || 'a';
   const { disabled: rootDisabled, onNavigate } = useBreadcrumb();
   const linkIsDisabled = disabled || rootDisabled;
 
@@ -78,7 +79,7 @@ export const BreadcrumbLink = ({
     'data-external': isExternal ? '' : undefined,
   };
 
-  return createElement(as, linkProps, children);
+  return createElement(Component, linkProps, children);
 };
 
 BreadcrumbLink.displayName = 'BreadcrumbLink';

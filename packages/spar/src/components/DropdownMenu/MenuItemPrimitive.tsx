@@ -2,6 +2,7 @@ import {
   useId,
   useLayoutEffect,
   useRef,
+  type ElementType,
   type FocusEvent as ReactFocusEvent,
   type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent,
@@ -9,21 +10,21 @@ import {
 } from 'react';
 import type { DropdownMenuItemProps } from './types';
 import { useDropdownMenuCollectionContext } from './contexts';
-import { composeRefs } from './utils';
+import { useMergedRef } from '@/hooks';
 
 type MenuItemType = 'item' | 'checkbox' | 'radio' | 'subtrigger';
 
-interface MenuItemPrimitiveProps extends DropdownMenuItemProps {
+type MenuItemPrimitiveProps<T extends ElementType = 'div'> = DropdownMenuItemProps<T> & {
   itemType: MenuItemType;
   closeBehavior: 'close' | 'persist';
   role: string;
   onSelectImpl?: (
     event: React.MouseEvent<HTMLDivElement> | ReactKeyboardEvent<HTMLDivElement>,
   ) => void;
-}
+};
 
-export const MenuItemPrimitive = ({
-  as: Component = 'div',
+export const MenuItemPrimitive = <T extends ElementType = 'div'>({
+  as,
   itemType,
   closeBehavior,
   role,
@@ -39,14 +40,13 @@ export const MenuItemPrimitive = ({
   ref,
   id: idProp,
   ...props
-}: MenuItemPrimitiveProps) => {
+}: MenuItemPrimitiveProps<T>) => {
+  const Component = as || 'div';
   const collection = useDropdownMenuCollectionContext();
   const fallbackId = useId();
   const itemId = idProp ?? fallbackId;
   const itemRef = useRef<HTMLElement | null>(null);
-  const setItemRef = composeRefs<HTMLElement | null>(ref, (node: HTMLElement | null) => {
-    itemRef.current = node;
-  });
+  const mergedRef = useMergedRef(itemRef, ref);
 
   useLayoutEffect(() => {
     const node = itemRef.current;
@@ -140,7 +140,7 @@ export const MenuItemPrimitive = ({
     <Component
       {...props}
       id={itemId}
-      ref={setItemRef}
+      ref={mergedRef}
       role={role}
       tabIndex={disabled ? -1 : isHighlighted ? 0 : -1}
       aria-disabled={disabled || undefined}

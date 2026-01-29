@@ -1,15 +1,15 @@
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef, ElementType } from 'react';
 import { useMergedRef, useAutoFocus } from '../../hooks';
 import type { ButtonProps } from './types';
 
 /**
  * A headless, accessible button component that provides complete keyboard support and toggle functionality.
  */
-export const Button = ({
-  as: Element = 'button',
+export const Button = <T extends ElementType = 'button'>({
+  as,
   type = 'button',
   disabled = false,
-  shouldAutoFocus = false,
+  autoFocus = false,
   isLoading = false,
   isPressed,
   onPressedChange,
@@ -20,7 +20,8 @@ export const Button = ({
   style,
   ref,
   ...htmlProps
-}: ButtonProps) => {
+}: ButtonProps<T>) => {
+  const Element = as || 'button';
   // Internal state for uncontrolled toggle
   const [internalPressed, setInternalPressed] = useState<boolean>(false);
 
@@ -36,7 +37,7 @@ export const Button = ({
   const mergedRef = useMergedRef(internalRef, ref);
 
   // Auto focus handling
-  useAutoFocus(internalRef, shouldAutoFocus);
+  useAutoFocus(internalRef, autoFocus);
 
   // Unified activation handler for click and keyboard
   const handleActivation = useCallback(
@@ -90,9 +91,9 @@ export const Button = ({
       'data-disabled': disabled ? '' : undefined,
       'data-loading': isLoading ? '' : undefined,
       'data-pressed': isToggle ? String(currentPressed) : undefined,
-      'data-autofocus': shouldAutoFocus ? '' : undefined,
+      'data-autofocus': autoFocus ? '' : undefined,
     }),
-    [disabled, isLoading, isToggle, currentPressed, shouldAutoFocus],
+    [disabled, isLoading, isToggle, currentPressed, autoFocus],
   );
 
   // Determine ARIA attributes

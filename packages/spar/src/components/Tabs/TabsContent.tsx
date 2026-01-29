@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { type ElementType } from 'react';
 import { useTabsContext } from './Tabs';
 import type { TabsContentProps } from './types';
 
 /**
  * TabsContent component that displays content for the active tab with lazy rendering support
  */
-export const TabsContent = ({
+export const TabsContent = <T extends ElementType = 'div'>({
   value,
   forceMount = false,
-  as: Component = 'div',
+  as,
   children,
   ...props
-}: TabsContentProps) => {
+}: TabsContentProps<T>) => {
+  const Component = as || 'div';
   const { selectedValue, orientation, tabsListId } = useTabsContext();
   const panelId = `${tabsListId}-panel-${value}`;
   const triggerId = `${tabsListId}-trigger-${value}`;

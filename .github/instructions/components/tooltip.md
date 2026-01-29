@@ -45,7 +45,7 @@
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `children` | `ReactNode \| ((state: TooltipTriggerRenderProps) => ReactNode)` | No | - | The trigger element or render function for render props pattern |
-| `as` | `PolymorphicAs` | No | `'button'` | Element type for the trigger |
+| `as` | `ElementType` | No | `'button'` | Element type for the trigger |
 
 #### TooltipTriggerRenderProps
 
@@ -64,7 +64,7 @@
 | `children` | `React.ReactNode` | No | - | Content to display in tooltip |
 | `className` | `string` | No | - | CSS class names for styling |
 | `style` | `React.CSSProperties` | No | - | Inline styles |
-| `as` | `PolymorphicAs` | No | `'div'` | Element type for tooltip content container |
+| `as` | `ElementType` | No | `'div'` | Element type for tooltip content container |
 | `asLabel` | `boolean` | No | `false` | Whether tooltip provides primary label or auxiliary description |
 | `side` | `'top' \| 'bottom' \| 'left' \| 'right'` | No | `'top'` | Preferred placement relative to trigger |
 | `sideOffset` | `number` | No | `8` | Distance in pixels from the trigger |
@@ -94,7 +94,7 @@
 |------|------|----------|---------|-------------|
 | `width` | `number` | No | `10` | Arrow width in pixels |
 | `height` | `number` | No | `5` | Arrow height in pixels |
-| `as` | `PolymorphicAs` | No | `'svg'` | Element type for arrow |
+| `as` | `ElementType` | No | `'svg'` | Element type for arrow |
 
 ### Ref Support
 - Forwards ref to trigger element

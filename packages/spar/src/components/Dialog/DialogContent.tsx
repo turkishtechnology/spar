@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, ElementType } from 'react';
 import { useMergedRef, useInteractOutside } from '@/hooks';
 import { useDialogContext } from './DialogRoot';
 import type { DialogContentProps } from './types';
@@ -7,8 +7,8 @@ import type { DialogContentProps } from './types';
  * Main dialog content container with focus management and keyboard handling.
  * Implements modal focus trapping and ARIA attributes for accessibility.
  */
-export const DialogContent = ({
-  as: Component = 'div',
+export const DialogContent = <T extends ElementType = 'div'>({
+  as,
   role = 'dialog',
   forceMount = false,
   trapFocus = true,
@@ -23,7 +23,8 @@ export const DialogContent = ({
   ref,
   children,
   ...props
-}: DialogContentProps) => {
+}: DialogContentProps<T>) => {
+  const Component = as || 'div';
   const context = useDialogContext();
   const { isOpen, setIsOpen, modal, contentRef, titleId, descriptionId } = context;
 

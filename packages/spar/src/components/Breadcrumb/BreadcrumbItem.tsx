@@ -1,19 +1,21 @@
-import { createElement } from 'react';
+import { createElement, ElementType } from 'react';
 import type { BreadcrumbItemProps } from './types';
 
 /**
  * List item wrapper for breadcrumb content. Receives position from parent BreadcrumbList.
  * @remarks Fully accessible, headless component
  */
-export const BreadcrumbItem = ({
-  as = 'li',
+export const BreadcrumbItem = <T extends ElementType = 'li'>({
+  as,
   children,
   position = 'middle',
   isCurrent = false,
   ...domProps
-}: BreadcrumbItemProps) => {
+}: BreadcrumbItemProps<T>) => {
+  const Component = as || 'li';
+
   return createElement(
-    as,
+    Component,
     {
       ...domProps,
       'data-spar-breadcrumb-item': '',

@@ -333,8 +333,8 @@ describe('Switch Accessibility', () => {
       expect(switchElement).not.toHaveAttribute('data-focus');
     });
 
-    it('should auto-focus when shouldAutoFocus is true', async () => {
-      render(<Switch shouldAutoFocus>Toggle setting</Switch>);
+    it('should auto-focus when autoFocus is true', async () => {
+      render(<Switch autoFocus>Toggle setting</Switch>);
       const switchElement = screen.getByRole('switch');
       await waitFor(() => {
         expect(switchElement).toHaveFocus();
@@ -343,13 +343,13 @@ describe('Switch Accessibility', () => {
 
     it('should not auto-focus when disabled', () => {
       render(
-        <Switch shouldAutoFocus disabled>
+        <Switch autoFocus disabled>
           Toggle setting
         </Switch>,
       );
       const switchElement = screen.getByRole('switch');
 
-      // Even though shouldAutoFocus is true, disabled elements should not be focusable
+      // Even though autoFocus is true, disabled elements should not be focusable
       // The browser will attempt to focus, but tabindex="-1" prevents proper focusing
       expect(switchElement).toHaveAttribute('tabindex', '-1');
       expect(switchElement).toHaveAttribute('disabled');

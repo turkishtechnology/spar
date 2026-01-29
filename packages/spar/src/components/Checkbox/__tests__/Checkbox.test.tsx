@@ -336,8 +336,8 @@ describe('Checkbox - Unit Tests', () => {
       expect(handleBlur).toHaveBeenCalled();
     });
 
-    it('should auto-focus when shouldAutoFocus is true', async () => {
-      render(<Checkbox shouldAutoFocus />);
+    it('should auto-focus when autoFocus is true', async () => {
+      render(<Checkbox autoFocus />);
       const checkbox = screen.getByRole('checkbox');
       await waitFor(() => {
         expect(checkbox).toHaveFocus();

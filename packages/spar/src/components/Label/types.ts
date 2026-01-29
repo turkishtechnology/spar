@@ -1,11 +1,10 @@
-import type { ComponentProps } from 'react';
-import type { PolymorphicAs } from '../../types';
+import type { ElementType } from 'react';
+import type { PolymorphicProps } from '../../types';
 
 /**
- * Props for Label component
- * @remarks Fully accessible, headless label component for form controls
+ * Own props for Label component
  */
-export interface LabelProps extends ComponentProps<'label'> {
+export interface LabelOwnProps {
   /**
    * Marks label for a required field (exposed via data attribute for styling)
    * @remarks Does NOT add required functionality - set `required` on the control itself
@@ -25,11 +24,14 @@ export interface LabelProps extends ComponentProps<'label'> {
    * @defaultValue false
    */
   disabled?: boolean;
-
-  /**
-   * Polymorphic element type to render as
-   * @remarks Using non-label elements breaks native association - use aria-labelledby on control
-   * @defaultValue 'label'
-   */
-  as?: PolymorphicAs;
 }
+
+/**
+ * Props for Label component
+ * @remarks Fully accessible, headless label component for form controls
+ */
+export type LabelProps<T extends ElementType = 'label'> = PolymorphicProps<
+  'label',
+  T,
+  LabelOwnProps
+>;

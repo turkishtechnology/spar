@@ -1,13 +1,13 @@
-import type { ComponentProps, RefObject } from 'react';
-import type { Direction, Orientation, PolymorphicAs } from '../../types';
+import type { ElementType, RefObject } from 'react';
+import type { Direction, Orientation, PolymorphicProps } from '../../types';
 import type { ButtonProps } from '../Button/types';
 
 export type TabsActivationMode = 'automatic' | 'manual';
 
 /**
- * Props for Tabs root component
+ * Own props for Tabs root component
  */
-export interface TabsProps extends ComponentProps<'div'> {
+export interface TabsOwnProps {
   /**
    * Controlled selected tab value
    */
@@ -41,30 +41,32 @@ export interface TabsProps extends ComponentProps<'div'> {
    * @defaultValue 'automatic'
    */
   activationMode?: TabsActivationMode;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
 }
 
 /**
- * Props for TabsList component
+ * Props for Tabs root component
  */
-export interface TabsListProps extends ComponentProps<'div'> {
+export type TabsProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T, TabsOwnProps>;
+
+/**
+ * Own props for TabsList component
+ */
+export interface TabsListOwnProps {
   /**
    * Whether arrow key navigation wraps around
    * @defaultValue true
    */
   loop?: boolean;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
 }
+
+/**
+ * Props for TabsList component
+ */
+export type TabsListProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  TabsListOwnProps
+>;
 
 /**
  * Render props provided to children function for TabsTrigger
@@ -114,9 +116,9 @@ export interface TabsTriggerProps extends Omit<ButtonProps, 'children'> {
 }
 
 /**
- * Props for TabsContent component
+ * Own props for TabsContent component
  */
-export interface TabsContentProps extends ComponentProps<'div'> {
+export interface TabsContentOwnProps {
   /**
    * Unique identifier matching a TabsTrigger value
    */
@@ -127,13 +129,16 @@ export interface TabsContentProps extends ComponentProps<'div'> {
    * @defaultValue false
    */
   forceMount?: boolean;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
 }
+
+/**
+ * Props for TabsContent component
+ */
+export type TabsContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  TabsContentOwnProps
+>;
 
 /**
  * Context value provided by Tabs root component

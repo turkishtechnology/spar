@@ -5,14 +5,14 @@ import { useEffect } from 'react';
  * Safe for SSR and handles timing issues with requestAnimationFrame.
  *
  * @param ref - The ref to the element to focus
- * @param shouldAutoFocus - Whether to focus the element
+ * @param autoFocus - Whether to focus the element
  */
 export const useAutoFocus = <T extends HTMLElement>(
   ref: React.RefObject<T | null>,
-  shouldAutoFocus: boolean = false,
+  autoFocus: boolean = false,
 ) => {
   useEffect(() => {
-    if (!shouldAutoFocus) return;
+    if (!autoFocus) return;
 
     // Check for browser environment
     if (typeof window === 'undefined') return;
@@ -23,5 +23,5 @@ export const useAutoFocus = <T extends HTMLElement>(
         ref.current?.focus();
       });
     }
-  }, [shouldAutoFocus, ref]);
+  }, [autoFocus, ref]);
 };

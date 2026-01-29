@@ -369,12 +369,12 @@ describe('Tabs Accessibility', () => {
       expect(screen.getByRole('tabpanel')).toHaveFocus();
     });
 
-    it('should auto-focus tab trigger when shouldAutoFocus is true', async () => {
+    it('should auto-focus tab trigger when autoFocus is true', async () => {
       render(
         <Tabs defaultValue='tab1'>
           <Tabs.List>
             <Tabs.Trigger value='tab1'>Tab 1</Tabs.Trigger>
-            <Tabs.Trigger value='tab2' shouldAutoFocus>
+            <Tabs.Trigger value='tab2' autoFocus>
               Tab 2
             </Tabs.Trigger>
           </Tabs.List>

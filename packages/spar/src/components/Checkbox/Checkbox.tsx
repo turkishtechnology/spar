@@ -1,4 +1,4 @@
-import { useId, useState, useRef, useEffect } from 'react';
+import { useId, useState, useRef, useEffect, ElementType } from 'react';
 import { useMergedRef, useAutoFocus } from '../../hooks';
 import type { CheckboxProps, CheckboxRenderProps } from './types';
 import type { CheckedState } from '../../types';
@@ -7,8 +7,8 @@ import type { CheckedState } from '../../types';
  * Headless checkbox component providing accessibility and behavior without styling.
  * Supports dual-state and tri-state functionality with complete ARIA compliance.
  */
-export const Checkbox = ({
-  as: Component = 'span',
+export const Checkbox = <T extends ElementType = 'span'>({
+  as,
   ref,
   checked: controlledChecked,
   defaultChecked = false,
@@ -19,7 +19,7 @@ export const Checkbox = ({
   name,
   value = 'on',
   form,
-  shouldAutoFocus = false,
+  autoFocus = false,
   children,
   id: providedId,
   className,
@@ -30,7 +30,8 @@ export const Checkbox = ({
   onKeyDown,
   tabIndex = 0,
   ...restProps
-}: CheckboxProps) => {
+}: CheckboxProps<T>) => {
+  const Component = as || 'span';
   // Generate stable ID
   const generatedId = useId();
   const id = providedId ?? generatedId;
@@ -51,7 +52,7 @@ export const Checkbox = ({
   const mergedRef = useMergedRef(elementRef, ref);
 
   // Auto focus on mount
-  useAutoFocus(elementRef, shouldAutoFocus);
+  useAutoFocus(elementRef, autoFocus);
 
   // Sync hidden input with checkbox state
   useEffect(() => {

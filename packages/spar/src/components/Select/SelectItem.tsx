@@ -6,6 +6,7 @@ import React, {
   useCallback,
   useRef,
   useState,
+  type ElementType,
 } from 'react';
 import type { SelectItemProps, SelectItemContextValue, SelectItemRenderProps } from './types';
 import { useSelectContext } from './SelectRoot';
@@ -24,17 +25,18 @@ export const useSelectItemContext = () => {
 /**
  * Individual selectable option within the select dropdown. Handles selection state, focus, and accessibility.
  */
-export const SelectItem = ({
+export const SelectItem = <T extends ElementType = 'div'>({
   value,
   disabled = false,
   textValue: providedTextValue,
   ref,
-  as: Component = 'div',
+  as,
   onPointerMove,
   onClick,
   children,
   ...props
-}: SelectItemProps) => {
+}: SelectItemProps<T>) => {
+  const Component = as || 'div';
   const context = useSelectContext();
   const itemRef = useRef<HTMLDivElement>(null);
   const [textValue, setTextValue] = useState(providedTextValue || '');

@@ -483,10 +483,10 @@ The trigger element that shows/hides the tooltip on hover or focus. Extends all 
 
 | Name               | Type                                                                         | Default     | Description                                         |
 | ------------------ | ---------------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `as?`              | `PolymorphicAs`                                                                | `"button"`  | Element type to render as                           |
+| `as?`              | `ElementType`                                                                | `"button"`  | Element type to render as                           |
 | `children`         | `React.ReactNode \| ((state: TooltipTriggerRenderProps) => React.ReactNode)` | -           | Trigger content or render props function            |
 | `disabled?`        | `boolean`                                                                    | `false`     | Disables the trigger                                |
-| `shouldAutoFocus?` | `boolean`                                                                    | `false`     | Whether the button should receive focus on mount    |
+| `autoFocus?` | `boolean`                                                                    | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                                    | `false`     | Loading state with screen reader support            |
 | `isPressed?`       | `boolean`                                                                    | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange?` | `(pressed: boolean) => void`                                                 | `undefined` | Callback fired when toggle state changes            |
@@ -552,7 +552,7 @@ The content that displays in the tooltip popup with smart positioning.
 | Name                    | Type                                      | Default     | Description                                     |
 | ----------------------- | ----------------------------------------- | ----------- | ----------------------------------------------- |
 | `children`              | `React.ReactNode`                         | -           | Content to display in tooltip                   |
-| `as?`                   | `PolymorphicAs`                           | `"div"`     | Element type for tooltip content container      |
+| `as?`                   | `ElementType`                           | `"div"`     | Element type for tooltip content container      |
 | `asLabel?`              | `boolean`                                 | `false`     | Whether tooltip is primary label vs description |
 | `side?`                 | `"top" \| "bottom" \| "left" \| "right"`  | `"top"`     | Preferred placement relative to trigger         |
 | `sideOffset?`           | `number`                                  | `8`         | Distance in pixels from the trigger             |
@@ -597,7 +597,7 @@ Optional arrow pointing to the trigger element.
 | ------------ | --------------------- | ------- | --------------------------- |
 | `width?`     | `number`              | `10`    | Arrow width in pixels       |
 | `height?`    | `number`              | `5`     | Arrow height in pixels      |
-| `as?`        | `PolymorphicAs`       | `"svg"` | Element type for arrow      |
+| `as?`        | `ElementType`       | `"svg"` | Element type for arrow      |
 | `className?` | `string`              | -       | CSS class names for styling |
 | `style?`     | `React.CSSProperties` | -       | Inline styles               |
 

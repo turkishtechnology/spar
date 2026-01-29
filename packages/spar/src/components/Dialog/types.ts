@@ -1,6 +1,6 @@
-import type { ComponentProps, ReactNode, AriaRole, RefObject } from 'react';
-import type { PolymorphicAs } from '../../types';
-import type { ButtonProps } from '../Button/types';
+import type { ElementType, ReactNode, AriaRole, RefObject } from 'react';
+import type { PolymorphicProps } from '../../types';
+import type { ButtonOwnProps } from '../Button/types';
 
 /**
  * Props for DialogRoot
@@ -68,15 +68,24 @@ export interface DialogTriggerRenderProps {
 }
 
 /**
- * Props for DialogTrigger
- * @remarks Fully accessible, headless component
+ * Own props for DialogTrigger
  */
-export interface DialogTriggerProps extends Omit<ButtonProps, 'children'> {
+export interface DialogTriggerOwnProps extends ButtonOwnProps {
   /**
    * Children content or render function
    */
   children?: ReactNode | ((state: DialogTriggerRenderProps) => ReactNode);
 }
+
+/**
+ * Props for DialogTrigger
+ * @remarks Fully accessible, headless component
+ */
+export type DialogTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  DialogTriggerOwnProps
+>;
 
 /**
  * Render props provided to children function for DialogClose
@@ -110,16 +119,9 @@ export interface DialogPortalProps {
 }
 
 /**
- * Props for DialogOverlay
- * @remarks Fully accessible, headless component
+ * Own props for DialogOverlay
  */
-export interface DialogOverlayProps extends ComponentProps<'div'> {
-  /**
-   * Polymorphic element type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
-
+export interface DialogOverlayOwnProps {
   /**
    * Always render (for animation libraries)
    * @defaultValue false
@@ -128,16 +130,19 @@ export interface DialogOverlayProps extends ComponentProps<'div'> {
 }
 
 /**
- * Props for DialogContent
+ * Props for DialogOverlay
  * @remarks Fully accessible, headless component
  */
-export interface DialogContentProps extends ComponentProps<'div'> {
-  /**
-   * Polymorphic element type
-   * @defaultValue 'div'
-   */
-  as?: PolymorphicAs;
+export type DialogOverlayProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DialogOverlayOwnProps
+>;
 
+/**
+ * Own props for DialogContent
+ */
+export interface DialogContentOwnProps {
   /**
    * ARIA role for dialog type
    * @defaultValue 'dialog'
@@ -199,16 +204,19 @@ export interface DialogContentProps extends ComponentProps<'div'> {
 }
 
 /**
- * Props for DialogTitle
+ * Props for DialogContent
  * @remarks Fully accessible, headless component
  */
-export interface DialogTitleProps extends ComponentProps<'h2'> {
-  /**
-   * Polymorphic element type
-   * @defaultValue 'h2'
-   */
-  as?: PolymorphicAs;
+export type DialogContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DialogContentOwnProps
+>;
 
+/**
+ * Own props for DialogTitle
+ */
+export interface DialogTitleOwnProps {
   /**
    * Heading level (1-6)
    * @defaultValue 2
@@ -217,27 +225,40 @@ export interface DialogTitleProps extends ComponentProps<'h2'> {
 }
 
 /**
+ * Props for DialogTitle
+ * @remarks Fully accessible, headless component
+ */
+export type DialogTitleProps<T extends ElementType = 'h2'> = PolymorphicProps<
+  'h2',
+  T,
+  DialogTitleOwnProps
+>;
+
+/**
  * Props for DialogDescription
  * @remarks Fully accessible, headless component
  */
-export interface DialogDescriptionProps extends ComponentProps<'p'> {
+export type DialogDescriptionProps<T extends ElementType = 'p'> = PolymorphicProps<'p', T>;
+
+/**
+ * Own props for DialogClose
+ */
+export interface DialogCloseOwnProps extends ButtonOwnProps {
   /**
-   * Polymorphic element type
-   * @defaultValue 'p'
+   * Children content or render function
    */
-  as?: PolymorphicAs;
+  children?: ReactNode | ((state: DialogCloseRenderProps) => ReactNode);
 }
 
 /**
  * Props for DialogClose
  * @remarks Fully accessible, headless component
  */
-export interface DialogCloseProps extends Omit<ButtonProps, 'children'> {
-  /**
-   * Children content or render function
-   */
-  children?: ReactNode | ((state: DialogCloseRenderProps) => ReactNode);
-}
+export type DialogCloseProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  DialogCloseOwnProps
+>;
 
 /**
  * Context value for Dialog components

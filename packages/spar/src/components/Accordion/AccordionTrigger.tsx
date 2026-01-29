@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, ElementType } from 'react';
 import type { AccordionTriggerProps, AccordionTriggerRenderProps } from './types';
 import { useAccordionContext } from './Accordion';
 import { useAccordionItemContext } from './AccordionItem';
@@ -7,13 +7,14 @@ import { CollapsibleTrigger } from '../Collapsible';
 /**
  * Accordion trigger button that toggles panel visibility. Provides keyboard navigation and screen reader support.
  */
-export const AccordionTrigger = ({
-  as: Component = 'button',
+export const AccordionTrigger = <T extends ElementType = 'button'>({
+  as,
   children,
   onClick,
   onKeyDown,
   ...props
-}: AccordionTriggerProps) => {
+}: AccordionTriggerProps<T>) => {
+  const Component = as || 'button';
   const accordionContext = useAccordionContext();
   const itemContext = useAccordionItemContext();
 

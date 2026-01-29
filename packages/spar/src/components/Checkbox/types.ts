@@ -1,5 +1,5 @@
-import type { ComponentProps, AriaAttributes, ReactNode } from 'react';
-import type { CheckedState, PolymorphicAs } from '../../types';
+import type { ElementType, AriaAttributes, ReactNode } from 'react';
+import type { CheckedState, PolymorphicProps } from '../../types';
 
 /**
  * Render props provided to children function for Checkbox
@@ -36,17 +36,9 @@ export interface CheckboxRenderProps {
 }
 
 /**
- * Props for Checkbox component
- * @remarks Fully accessible, headless checkbox component providing dual-state and tri-state functionality
+ * Own props for Checkbox component
  */
-export interface CheckboxProps
-  extends Omit<ComponentProps<'span'>, 'defaultChecked' | 'children' | 'onChange'> {
-  /**
-   * The element or component to render as
-   * @defaultValue 'span'
-   */
-  as?: PolymorphicAs;
-
+export interface CheckboxOwnProps {
   /**
    * Controlled checked state
    * @remarks When provided, component operates in controlled mode
@@ -103,7 +95,7 @@ export interface CheckboxProps
    * Auto-focus on mount
    * @defaultValue false
    */
-  shouldAutoFocus?: boolean;
+  autoFocus?: boolean;
 
   /**
    * Accessible name for the checkbox
@@ -126,3 +118,13 @@ export interface CheckboxProps
    */
   children?: ReactNode | ((state: CheckboxRenderProps) => ReactNode);
 }
+
+/**
+ * Props for Checkbox component
+ * @remarks Fully accessible, headless checkbox component providing dual-state and tri-state functionality
+ */
+export type CheckboxProps<T extends ElementType = 'span'> = PolymorphicProps<
+  'span',
+  T,
+  CheckboxOwnProps
+>;

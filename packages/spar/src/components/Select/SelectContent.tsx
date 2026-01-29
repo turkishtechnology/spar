@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, type ElementType } from 'react';
 import { useInteractOutside } from '@/hooks';
 import {
   useFloating,
@@ -16,7 +16,7 @@ import { useSelectContext } from './SelectRoot';
 /**
  * Dropdown container that appears when select is open. Handles keyboard navigation, focus management, and outside click detection. Positioned using Floating UI.
  */
-export const SelectContent = ({
+export const SelectContent = <T extends ElementType = 'div'>({
   ref,
   placement = 'bottom-start',
   strategy = 'absolute',
@@ -31,12 +31,13 @@ export const SelectContent = ({
   onEscapeKeyDown,
   onPointerDownOutside,
   onCloseAutoFocus: _onCloseAutoFocus,
-  as: Component = 'div',
+  as,
   onKeyDown,
   style,
   children,
   ...props
-}: SelectContentProps) => {
+}: SelectContentProps<T>) => {
+  const Component = as || 'div';
   const context = useSelectContext();
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 

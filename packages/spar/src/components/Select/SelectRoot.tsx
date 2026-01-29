@@ -1,4 +1,13 @@
-import { createContext, useContext, useId, useMemo, useState, useCallback, useRef } from 'react';
+import {
+  createContext,
+  useContext,
+  useId,
+  useMemo,
+  useState,
+  useCallback,
+  useRef,
+  type ElementType,
+} from 'react';
 import { useItemRegistry } from '@/hooks';
 import type { SelectRootProps, SelectContextValue, SelectItemData } from './types';
 
@@ -15,7 +24,7 @@ export const useSelectContext = () => {
 /**
  * Select root component providing context and state management for all select components. Supports controlled and uncontrolled patterns with full keyboard navigation and accessibility.
  */
-export const SelectRoot = ({
+export const SelectRoot = <T extends ElementType = 'div'>({
   value: controlledValue,
   defaultValue,
   onValueChange,
@@ -26,11 +35,12 @@ export const SelectRoot = ({
   required = false,
   name,
   dir = 'ltr',
-  shouldAutoFocus = false,
-  as: Component = 'div',
+  autoFocus = false,
+  as,
   children,
   ...props
-}: SelectRootProps) => {
+}: SelectRootProps<T>) => {
+  const Component = as || 'div';
   // State management for value
   const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue);
   const isValueControlled = controlledValue !== undefined;
@@ -99,7 +109,7 @@ export const SelectRoot = ({
       disabled,
       required,
       dir,
-      shouldAutoFocus,
+      autoFocus,
 
       // Actions
       onValueChange: handleValueChange,
@@ -134,7 +144,7 @@ export const SelectRoot = ({
       disabled,
       required,
       dir,
-      shouldAutoFocus,
+      autoFocus,
       handleValueChange,
       handleOpenChange,
       triggerId,
@@ -152,7 +162,7 @@ export const SelectRoot = ({
       <Component
         {...props}
         data-disabled={disabled ? '' : undefined}
-        data-autofocus={shouldAutoFocus ? '' : undefined}
+        data-autofocus={autoFocus ? '' : undefined}
       >
         {children}
       </Component>

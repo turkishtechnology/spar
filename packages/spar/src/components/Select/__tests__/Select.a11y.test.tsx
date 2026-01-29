@@ -617,9 +617,9 @@ describe('Select Accessibility', () => {
       expect(trigger).toHaveFocus();
     });
 
-    it('should auto-focus trigger when shouldAutoFocus is true', async () => {
+    it('should auto-focus trigger when autoFocus is true', async () => {
       const { container } = render(
-        <Select shouldAutoFocus>
+        <Select autoFocus>
           <Select.Trigger aria-label='Choose option'>
             <Select.Value placeholder='Select...' />
           </Select.Trigger>

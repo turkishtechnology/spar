@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { type ElementType } from 'react';
 import type { SelectArrowProps } from './types';
 
 /**
  * Optional arrow element that points to the trigger. Provides visual connection between trigger and dropdown. Automatically positioned by Floating UI's arrow middleware when passed to SelectContent via arrowRef prop.
  */
-export const SelectArrow = ({
+export const SelectArrow = <T extends ElementType = 'svg'>({
   width = 10,
   height = 5,
-  as: Component = 'svg',
+  as,
   ref,
   children,
   ...props
-}: SelectArrowProps) => {
+}: SelectArrowProps<T>) => {
+  const Component = as || 'svg';
   const arrowRef = React.useRef<SVGSVGElement>(null);
 
   // Merge external ref with internal ref

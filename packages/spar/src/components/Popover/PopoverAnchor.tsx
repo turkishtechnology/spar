@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMergedRef } from '@/hooks';
 import { PopoverAnchorProps, PopoverAnchorRenderProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 
@@ -8,19 +8,7 @@ import { usePopoverContext } from './hooks/usePopoverContext';
 export const PopoverAnchor = ({ children, ref, ...props }: PopoverAnchorProps) => {
   const { anchorRef, state } = usePopoverContext();
 
-  const anchorRefCallback = useMemo(
-    () => (element: HTMLDivElement | null) => {
-      if (anchorRef && 'current' in anchorRef) {
-        anchorRef.current = element;
-      }
-      if (typeof ref === 'function') {
-        ref(element);
-      } else if (ref) {
-        ref.current = element;
-      }
-    },
-    [anchorRef, ref],
-  );
+  const mergedRef = useMergedRef(anchorRef as React.RefObject<HTMLDivElement | null>, ref);
 
   // Render props for children function
   const renderProps: PopoverAnchorRenderProps = {
@@ -28,7 +16,7 @@ export const PopoverAnchor = ({ children, ref, ...props }: PopoverAnchorProps) =
   };
 
   return (
-    <div ref={anchorRefCallback} data-popover-anchor='' {...props}>
+    <div ref={mergedRef} data-popover-anchor='' {...props}>
       {typeof children === 'function' ? children(renderProps) : children}
     </div>
   );
