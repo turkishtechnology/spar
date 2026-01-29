@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useId, useMemo } from 'react';
+import React, { createContext, useContext, useId, useMemo, type ElementType } from 'react';
 import type { SelectGroupProps, SelectGroupContextValue } from './types';
 
 const SelectGroupContext = createContext<SelectGroupContextValue | null>(null);
@@ -14,7 +14,12 @@ export const useSelectGroupContext = () => {
 /**
  * Groups related select items together with an optional label. Provides semantic structure and accessibility.
  */
-export const SelectGroup = ({ as: Component = 'div', children, ...props }: SelectGroupProps) => {
+export const SelectGroup = <T extends ElementType = 'div'>({
+  as,
+  children,
+  ...props
+}: SelectGroupProps<T>) => {
+  const Component = as || 'div';
   const labelId = useId();
 
   const contextValue = useMemo<SelectGroupContextValue>(

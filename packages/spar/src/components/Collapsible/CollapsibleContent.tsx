@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, ElementType } from 'react';
 import { useCollapsibleContext } from './Collapsible';
 import type { CollapsibleContentProps } from './types';
 
@@ -17,14 +17,15 @@ const getHiddenAttribute = (isOpen: boolean, forceMount: boolean) => {
 /**
  * Collapsible content component containing the collapsible content.
  */
-export const CollapsibleContent = ({
-  as: Component = 'div',
+export const CollapsibleContent = <T extends ElementType = 'div'>({
+  as,
   forceMount = false,
   children,
   style,
   onBeforeMatch,
   ...props
-}: CollapsibleContentProps) => {
+}: CollapsibleContentProps<T>) => {
+  const Component = as || 'div';
   const { isOpen, disabled, contentId, toggle } = useCollapsibleContext();
   const contentRef = useRef<HTMLElement>(null);
 

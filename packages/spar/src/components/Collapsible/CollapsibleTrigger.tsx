@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { ElementType } from 'react';
 import { useCollapsibleContext } from './Collapsible';
 import type { CollapsibleTriggerProps, CollapsibleTriggerRenderProps } from './types';
 import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * Collapsible trigger component that toggles the visibility of collapsible content.
  */
-export const CollapsibleTrigger = ({
-  as = 'button',
+export const CollapsibleTrigger = <T extends ElementType = 'button'>({
+  as,
   children,
   onClick,
   ...props
-}: CollapsibleTriggerProps) => {
+}: CollapsibleTriggerProps<T>) => {
   const { isOpen, open, close, toggle, disabled, triggerId, contentId } = useCollapsibleContext();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -32,17 +33,19 @@ export const CollapsibleTrigger = ({
   // Get data attributes for styling
   const dataState = isOpen ? 'open' : 'closed';
 
+  const buttonProps = {
+    ...(as && { as }),
+    id: triggerId,
+    disabled,
+    'aria-expanded': isOpen,
+    'aria-controls': contentId,
+    'data-state': dataState,
+    onClick: handleClick,
+    ...props,
+  } as ButtonProps<T>;
+
   return (
-    <Button
-      as={as}
-      id={triggerId}
-      disabled={disabled}
-      aria-expanded={isOpen}
-      aria-controls={contentId}
-      data-state={dataState}
-      onClick={handleClick}
-      {...props}
-    >
+    <Button {...buttonProps}>
       {typeof children === 'function' ? children(renderProps) : children}
     </Button>
   );

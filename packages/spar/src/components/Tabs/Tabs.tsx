@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useMemo, useCallback, useRef, useId } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  useCallback,
+  useRef,
+  useId,
+  type ElementType,
+} from 'react';
 import { useControlledState } from '../../hooks/useControlledState';
 import type { TabsProps, TabsContextValue } from './types';
 
@@ -30,17 +38,19 @@ export const useTabsContext = (): TabsContextValue => {
  * Tabs root component providing context and state management for tab navigation.
  * Supports controlled/uncontrolled patterns with full keyboard navigation.
  */
-export const Tabs = ({
+export const Tabs = <T extends ElementType = 'div'>({
   value: controlledValue,
   defaultValue,
   onValueChange,
   orientation = 'horizontal',
   dir = 'ltr',
   activationMode = 'automatic',
-  as: Component = 'div',
+  as,
   children,
+  ref,
   ...props
-}: TabsProps) => {
+}: TabsProps<T>) => {
+  const Component = as || 'div';
   // ============================================================================
   // State Management
   // ============================================================================
@@ -156,7 +166,7 @@ export const Tabs = ({
 
   return (
     <TabsContext.Provider value={contextValue}>
-      <Component data-orientation={orientation} data-dir={dir} {...props}>
+      <Component ref={ref} data-orientation={orientation} data-dir={dir} {...props}>
         {children}
       </Component>
     </TabsContext.Provider>

@@ -333,11 +333,11 @@ The root container that manages the radio group state and provides keyboard navi
 | `required?`         | `boolean`                    | `false`      | Marks group as required for forms                  |
 | `orientation?`      | `'horizontal' \| 'vertical'` | `'vertical'` | Layout direction for keyboard navigation           |
 | `isInToolbar?`      | `boolean`                    | `false`      | Changes keyboard behavior per WAI-ARIA guidelines  |
-| `shouldAutoFocus?`  | `boolean`                    | `false`      | Whether to focus the first focusable item on mount |
+| `autoFocus?`  | `boolean`                    | `false`      | Whether to focus the first focusable item on mount |
 | `aria-label?`       | `string`                     | `undefined`  | Accessible name for the group                      |
 | `aria-labelledby?`  | `string`                     | `undefined`  | References element that labels the group           |
 | `aria-describedby?` | `string`                     | `undefined`  | References element that describes the group        |
-| `as?`               | `PolymorphicAs`              | `'div'`      | Polymorphic root element                           |
+| `as?`               | `ElementType`              | `'div'`      | Polymorphic root element                           |
 | `children?`         | `React.ReactNode`            | `undefined`  | Radio.Item components                              |
 
 **Events**
@@ -366,7 +366,7 @@ Individual radio option within a Radio.Group that handles selection and accessib
 | `disabled?`         | `boolean`                                                               | `false`     | Disables this specific radio item           |
 | `aria-label?`       | `string`                                                                | `undefined` | Accessible name when children insufficient  |
 | `aria-describedby?` | `string`                                                                | `undefined` | References element that describes this item |
-| `as?`               | `PolymorphicAs`                                                         | `'label'`   | Polymorphic root element                    |
+| `as?`               | `ElementType`                                                         | `'label'`   | Polymorphic root element                    |
 | `children?`         | `React.ReactNode \| ((state: RadioItemRenderProps) => React.ReactNode)` | `undefined` | Label content or render props function      |
 
 **Render Props (RadioItemRenderProps)**

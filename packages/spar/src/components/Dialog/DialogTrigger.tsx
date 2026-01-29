@@ -1,21 +1,22 @@
-import { useCallback } from 'react';
+import { useCallback, ElementType } from 'react';
 import { useMergedRef } from '@/hooks';
 import { useDialogContext } from './DialogRoot';
 import type { DialogTriggerProps, DialogTriggerRenderProps } from './types';
 import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * Trigger button that opens the dialog when activated.
  * Supports keyboard navigation and proper ARIA attributes.
  */
-export const DialogTrigger = ({
-  as = 'button',
+export const DialogTrigger = <T extends ElementType = 'button'>({
+  as,
   disabled: disabledProp,
   ref,
   onClick,
   children,
   ...props
-}: DialogTriggerProps) => {
+}: DialogTriggerProps<T>) => {
   const context = useDialogContext();
   const { isOpen, setIsOpen, triggerRef, disabled: contextDisabled } = context;
 
@@ -46,17 +47,19 @@ export const DialogTrigger = ({
 
   const dataState = isOpen ? 'open' : 'closed';
 
+  const buttonProps = {
+    ...(as && { as }),
+    ref: mergedRef,
+    disabled,
+    'aria-haspopup': 'dialog' as const,
+    'aria-expanded': isOpen,
+    'data-state': dataState,
+    onClick: handleClick,
+    ...props,
+  } as ButtonProps<T>;
+
   return (
-    <Button
-      as={as}
-      ref={mergedRef}
-      disabled={disabled}
-      aria-haspopup='dialog'
-      aria-expanded={isOpen}
-      data-state={dataState}
-      onClick={handleClick}
-      {...props}
-    >
+    <Button {...buttonProps}>
       {typeof children === 'function' ? children(renderProps) : children}
     </Button>
   );

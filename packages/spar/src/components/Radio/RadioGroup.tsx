@@ -6,6 +6,7 @@ import React, {
   useId,
   useRef,
   useEffect,
+  ElementType,
 } from 'react';
 import { useControlledState, useItemRegistry } from '@/hooks';
 import type { RadioGroupProps, RadioGroupContextValue } from './types';
@@ -25,7 +26,7 @@ export const useRadioGroupContext = () => {
  * RadioGroup component for creating mutually exclusive radio button groups.
  * Implements WCAG 2.2 AA standards with full keyboard navigation and accessibility features.
  */
-export const RadioGroup = ({
+export const RadioGroup = <T extends ElementType = 'div'>({
   ref,
   value: controlledValue,
   defaultValue,
@@ -35,14 +36,15 @@ export const RadioGroup = ({
   required = false,
   orientation = 'vertical',
   isInToolbar = false,
-  shouldAutoFocus = false,
+  autoFocus = false,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
   'aria-describedby': ariaDescribedBy,
-  as: Component = 'div',
+  as,
   children,
   ...rest
-}: RadioGroupProps) => {
+}: RadioGroupProps<T>) => {
+  const Component = as || 'div';
   const [value, setValue] = useControlledState(controlledValue, defaultValue, onValueChange);
   const [focusedValue, setFocusedValue] = useState<string | null>(null);
   const { registerItem, unregisterItem, getItemIds } = useItemRegistry<void>();
@@ -53,7 +55,7 @@ export const RadioGroup = ({
 
   // Auto focus first item on mount
   useEffect(() => {
-    if (shouldAutoFocus && !disabled && items.length > 0 && !hasAutoFocused.current) {
+    if (autoFocus && !disabled && items.length > 0 && !hasAutoFocused.current) {
       hasAutoFocused.current = true;
       // Focus the selected item, or the first item if none selected
       const itemToFocus = value || items[0];
@@ -61,7 +63,7 @@ export const RadioGroup = ({
         setFocusedValue(itemToFocus);
       }
     }
-  }, [shouldAutoFocus, disabled, items, value]);
+  }, [autoFocus, disabled, items, value]);
 
   // Handle value changes
   const handleValueChange = useCallback(
@@ -172,7 +174,7 @@ export const RadioGroup = ({
     'data-disabled': disabled ? '' : undefined,
     'data-required': required ? '' : undefined,
     'data-toolbar': isInToolbar ? '' : undefined,
-    'data-autofocus': shouldAutoFocus ? '' : undefined,
+    'data-autofocus': autoFocus ? '' : undefined,
   };
 
   return (

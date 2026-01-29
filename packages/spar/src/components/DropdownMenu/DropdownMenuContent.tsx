@@ -6,9 +6,10 @@ import {
   useMemo,
   useRef,
   useState,
+  type ElementType,
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
-import { useInteractOutside } from '@/hooks';
+import { useInteractOutside, useMergedRef } from '@/hooks';
 import {
   useFloating,
   autoUpdate,
@@ -28,7 +29,7 @@ import {
   type DropdownMenuCollectionContextValue,
   type MenuCollectionItem,
 } from './contexts';
-import { composeRefs, isCharacterKey, getCloseKey, TYPEAHEAD_TIMEOUT } from './utils';
+import { isCharacterKey, getCloseKey, TYPEAHEAD_TIMEOUT } from './utils';
 
 /**
  * Convert side and align to Floating UI placement
@@ -47,8 +48,8 @@ const getPlacement = (side: Side, align: Align): Placement => {
   return 'bottom';
 };
 
-export const DropdownMenuContent = ({
-  as: Component = 'div',
+export const DropdownMenuContent = <T extends ElementType = 'div'>({
+  as,
   side: sideProp,
   align = 'start',
   sideOffset = 8,
@@ -63,7 +64,8 @@ export const DropdownMenuContent = ({
   onKeyDown,
   ref,
   ...props
-}: DropdownMenuContentProps) => {
+}: DropdownMenuContentProps<T>) => {
+  const Component = as || 'div';
   const menu = useMenuScope();
   const parentSubContext = useContext(DropdownMenuSubContext);
   const isSubmenu = parentSubContext === menu;
@@ -117,20 +119,19 @@ export const DropdownMenuContent = ({
     }
   }, [menu.triggerRef, refs]);
 
-  // Set floating ref
-  useLayoutEffect(() => {
-    if (contentRef.current) {
-      refs.setFloating(contentRef.current);
-    }
-  }, [refs]);
+  // Merge internal contentRef with external ref
+  const mergedRef = useMergedRef(contentRef, ref);
 
-  // Compose refs
-  const composedRefs = composeRefs<HTMLElement | null>(ref, (node: HTMLElement | null) => {
-    contentRef.current = node;
-    if (node) {
-      refs.setFloating(node);
-    }
-  });
+  // Wrap mergedRef to also update floating ref
+  const floatingRef = useCallback(
+    (node: HTMLElement | null) => {
+      mergedRef(node);
+      if (node) {
+        refs.setFloating(node);
+      }
+    },
+    [mergedRef, refs],
+  );
 
   const [items, setItems] = useState<MenuCollectionItem[]>([]);
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
@@ -480,7 +481,7 @@ export const DropdownMenuContent = ({
     <DropdownMenuCollectionContext.Provider value={collectionValue}>
       <Component
         {...props}
-        ref={composedRefs}
+        ref={floatingRef}
         id={menu.contentId}
         role='menu'
         aria-labelledby={menu.triggerId}

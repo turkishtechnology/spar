@@ -292,7 +292,7 @@ The root component that provides context and state management for the collapsibl
 
 | Name            | Type                      | Default | Description                               |
 | --------------- | ------------------------- | ------- | ----------------------------------------- |
-| `as?`           | `PolymorphicAs`           | `"div"` | Polymorphic component type                |
+| `as?`           | `ElementType`           | `"div"` | Polymorphic component type                |
 | `open?`         | `boolean`                 | -       | Controlled open state                     |
 | `defaultOpen?`  | `boolean`                 | `false` | Default open state for uncontrolled usage |
 | `onOpenChange?` | `(open: boolean) => void` | -       | Callback fired when open state changes    |
@@ -322,10 +322,10 @@ Interactive element that toggles the content visibility with full accessibility 
 
 | Name               | Type                                                                 | Default     | Description                                         |
 | ------------------ | -------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `as?`              | `PolymorphicAs`                                                      | `"button"`  | Element type for polymorphic rendering              |
+| `as?`              | `ElementType`                                                      | `"button"`  | Element type for polymorphic rendering              |
 | `children?`        | `ReactNode \| ((state: CollapsibleTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function            |
 | `disabled?`        | `boolean`                                                            | `false`     | Whether trigger is disabled                         |
-| `shouldAutoFocus?` | `boolean`                                                            | `false`     | Whether the button should receive focus on mount    |
+| `autoFocus?` | `boolean`                                                            | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                            | `false`     | Loading state with screen reader support            |
 | `isPressed?`       | `boolean`                                                            | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange?` | `(pressed: boolean) => void`                                         | `undefined` | Callback fired when toggle state changes            |
@@ -365,7 +365,7 @@ Container that shows/hides based on the collapsible state with advanced features
 
 | Name             | Type                     | Default | Description                                             |
 | ---------------- | ------------------------ | ------- | ------------------------------------------------------- |
-| `as?`            | `PolymorphicAs`          | `"div"` | Element type for polymorphic rendering                  |
+| `as?`            | `ElementType`          | `"div"` | Element type for polymorphic rendering                  |
 | `forceMount?`    | `boolean`                | `false` | Force content to remain mounted when closed             |
 | `children?`      | `ReactNode`              | -       | Content to be shown/hidden                              |
 | `onBeforeMatch?` | `(event: Event) => void` | -       | Callback fired when content is found via browser search |

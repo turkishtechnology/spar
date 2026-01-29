@@ -1,10 +1,20 @@
-import type { ElementType, JSXElementConstructor } from 'react';
+import type { ComponentPropsWithRef, ElementType } from 'react';
 
 /**
- * Type for the `as` prop allowing polymorphic component rendering
+ * Utility for polymorphic component props that merges the `as` element props.
+ * Accepts properties from both the default element and the polymorphic element.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type PolymorphicAs = ElementType | JSXElementConstructor<any>;
+export type PolymorphicProps<
+  TDefaultElement extends ElementType,
+  TElement extends ElementType,
+  Props = {},
+> = Props & {
+  /**
+   * Polymorphic element type to render as.
+   */
+  as?: TElement;
+} & Omit<ComponentPropsWithRef<TDefaultElement>, keyof Props | 'as'> &
+  Omit<ComponentPropsWithRef<TElement>, keyof Props | 'as'>;
 
 /**
  * Possible checked states for checkbox-like components

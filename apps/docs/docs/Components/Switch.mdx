@@ -279,7 +279,7 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
 
 | Name                | Type                                                     | Default     | Description                                                                       |
 | ------------------- | -------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------- |
-| `as?`               | `PolymorphicAs`                                            | `"button"`  | The element or component to render as                                             |
+| `as?`               | `ElementType`                                            | `"button"`  | The element or component to render as                                             |
 | `checked?`          | `boolean`                                                | `undefined` | Controlled checked state. When provided, component operates in controlled mode    |
 | `defaultChecked?`   | `boolean`                                                | `false`     | Default checked state for uncontrolled usage                                      |
 | `onChange?`         | `(checked: boolean) => void`                             | `undefined` | Callback fired when the checked state changes                                     |
@@ -289,7 +289,7 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
 | `form?`             | `string`                                                 | `undefined` | ID of the form this switch belongs to                                             |
 | `required?`         | `boolean`                                                | `false`     | Required state for form validation                                                |
 | `readOnly?`         | `boolean`                                                | `false`     | Read-only state - prevents interaction                                            |
-| `shouldAutoFocus?`  | `boolean`                                                | `false`     | Auto-focus on mount                                                               |
+| `autoFocus?`  | `boolean`                                                | `false`     | Auto-focus on mount                                                               |
 | `isLoading?`        | `boolean`                                                | `false`     | Loading state with screen reader support                                          |
 | `aria-label?`       | `string`                                                 | `undefined` | Accessible name for the switch. Required when switch has no visible label         |
 | `aria-labelledby?`  | `string`                                                 | `undefined` | ID of element that labels the switch                                              |

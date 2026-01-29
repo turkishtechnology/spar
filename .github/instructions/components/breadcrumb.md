@@ -76,7 +76,7 @@ The Breadcrumb component provides a navigation trail showing the hierarchical pa
 ### Breadcrumb.Root
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'nav'` | Polymorphic element type |
+| `as` | `ElementType` | No | `'nav'` | Polymorphic element type |
 | `children` | `ReactNode` | Yes | - | Breadcrumb content |
 | `aria-label` | `string` | No | `'Breadcrumb'` | Accessible name for navigation landmark |
 | `onNavigate` | `(href: string, event: MouseEvent) => void` | No | - | Navigation event handler for routing integration |
@@ -85,19 +85,19 @@ The Breadcrumb component provides a navigation trail showing the hierarchical pa
 ### Breadcrumb.List
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'ol'` | Polymorphic element type |
+| `as` | `ElementType` | No | `'ol'` | Polymorphic element type |
 | `children` | `ReactNode` | Yes | - | List items content |
 
 ### Breadcrumb.Item
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'li'` | Polymorphic element type |
+| `as` | `ElementType` | No | `'li'` | Polymorphic element type |
 | `children` | `ReactNode` | Yes | - | Item content (Link or Page) |
 
 ### Breadcrumb.Link
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'a'` | Polymorphic element type |
+| `as` | `ElementType` | No | `'a'` | Polymorphic element type |
 | `href` | `string` | No | - | Link destination |
 | `children` | `ReactNode` | Yes | - | Link text content |
 | `disabled` | `boolean` | No | `false` | Disable this specific link |
@@ -109,13 +109,13 @@ The Breadcrumb component provides a navigation trail showing the hierarchical pa
 ### Breadcrumb.Page
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'span'` | Polymorphic element type |
+| `as` | `ElementType` | No | `'span'` | Polymorphic element type |
 | `children` | `ReactNode` | Yes | - | Current page name |
 
 ### Breadcrumb.Separator
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `PolymorphicAs` | No | `'li'` | Polymorphic element type |
+| `as` | `ElementType` | No | `'li'` | Polymorphic element type |
 | `children` | `ReactNode` | No | - | Custom separator content |
 | `aria-hidden` | `boolean` | No | `true` | Hide from screen readers |
 

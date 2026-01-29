@@ -105,7 +105,7 @@ export interface SwitchProps
    * Auto-focus on mount
    * @defaultValue false
    */
-  shouldAutoFocus?: boolean;
+  autoFocus?: boolean;
 
   /**
    * Accessible name for the switch
