@@ -52,7 +52,6 @@ packages/**/.rts2_cache*
 
 # Environment variables
 .env
-.env.*
 packages/**.env
 
 # Logs
