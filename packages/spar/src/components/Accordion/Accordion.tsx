@@ -1,11 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-  useCallback,
-  ElementType,
-} from 'react';
+import { createContext, useContext, useMemo, useState, useCallback, ElementType } from 'react';
 import { useItemRegistry } from '@/hooks';
 import type { AccordionProps, AccordionContextValue } from './types';
 
