@@ -21,4 +21,4 @@ export const InputLabel = ({ children, ref, ...props }: InputLabelProps) => {
   );
 };
 
-InputLabel.displayName = 'Input.Label';
+InputLabel.displayName = 'InputLabel';

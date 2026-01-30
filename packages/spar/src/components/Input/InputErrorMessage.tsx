@@ -26,4 +26,4 @@ export const InputErrorMessage = ({ children, ref, ...props }: InputErrorMessage
   );
 };
 
-InputErrorMessage.displayName = 'Input.ErrorMessage';
+InputErrorMessage.displayName = 'InputErrorMessage';

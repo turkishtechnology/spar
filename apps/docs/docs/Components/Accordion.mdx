@@ -7,7 +7,7 @@ import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
 import {
-  Accordion,
+  AccordionRoot,
   AccordionItem,
   AccordionHeader,
   AccordionTrigger,
@@ -26,7 +26,7 @@ A collapsible content component that supports single or multiple panel expansion
 
 <div className='accordion-demo-container'>
 <LiveCode
-  code={`<Accordion className='accordion' defaultValue="2">
+  code={`<AccordionRoot className='accordion' defaultValue="2">
         <AccordionItem className='accordion-item' value="1">
           <AccordionHeader className='accordion-header'>
             <AccordionTrigger className='accordion-trigger'>
@@ -75,7 +75,7 @@ A collapsible content component that supports single or multiple panel expansion
             The accordion component is a customizable area. Users can add content as per their request.
           </AccordionContent>
         </AccordionItem>
-      </Accordion>`}
+      </AccordionRoot>`}
 cssCode={`.accordion {
 width: 420px;
 display: flex;
@@ -218,7 +218,7 @@ The Accordion component is built as a compound component with multiple parts:
   ]}
 >
   <div style={{ width: '500px' }} data-spar-part="root">
-    <Accordion isCollapsible={true} defaultValue="item1" style={{ padding: '12px' }}>
+    <AccordionRoot isCollapsible={true} defaultValue="item1" style={{ padding: '12px' }}>
       <AccordionItem value="item1" data-spar-part="item">
         <AccordionHeader data-spar-part="header">
           <AccordionTrigger
@@ -268,7 +268,7 @@ The Accordion component is built as a compound component with multiple parts:
           {' Simply import the components and compose them together. Add your own CSS for styling. '}
         </AccordionContent>
       </AccordionItem>
-    </Accordion>
+    </AccordionRoot>
 
   </div>
 </AnatomyViewer>
@@ -276,14 +276,14 @@ The Accordion component is built as a compound component with multiple parts:
 ### Structure
 
 ```tsx
-<Accordion>
+<AccordionRoot>
   <AccordionItem value='item-1'>
     <AccordionHeader>
       <AccordionTrigger>...</AccordionTrigger>
     </AccordionHeader>
     <AccordionContent>...</AccordionContent>
   </AccordionItem>
-</Accordion>
+</AccordionRoot>
 ```
 
 **Data Flow:**
@@ -305,7 +305,7 @@ Basic accordion that allows only one panel to be expanded at a time:
 ```tsx
 export function BasicAccordion() {
   return (
-    <Accordion>
+    <AccordionRoot>
       <AccordionItem value='a'>
         <AccordionHeader>
           <AccordionTrigger>Toggle A</AccordionTrigger>
@@ -318,7 +318,7 @@ export function BasicAccordion() {
         </AccordionHeader>
         <AccordionContent>Panel B</AccordionContent>
       </AccordionItem>
-    </Accordion>
+    </AccordionRoot>
   );
 }
 ```
@@ -328,7 +328,7 @@ export function BasicAccordion() {
 Accordion that allows multiple panels to be expanded simultaneously:
 
 ```tsx
-<Accordion type='multiple' defaultValue={['a']}>
+<AccordionRoot type='multiple' defaultValue={['a']}>
   <AccordionItem value='a'>
     <AccordionHeader>
       <AccordionTrigger>Section A</AccordionTrigger>
@@ -341,7 +341,7 @@ Accordion that allows multiple panels to be expanded simultaneously:
     </AccordionHeader>
     <AccordionContent>...</AccordionContent>
   </AccordionItem>
-</Accordion>
+</AccordionRoot>
 ```
 
 ### Controlled State Management
@@ -351,9 +351,9 @@ Accordion with external state control and change handling:
 ```tsx
 const [openItems, setOpenItems] = React.useState<string[]>(['a']);
 
-<Accordion type='multiple' value={openItems} onValueChange={setOpenItems}>
+<AccordionRoot type='multiple' value={openItems} onValueChange={setOpenItems}>
   {/* ...items */}
-</Accordion>;
+</AccordionRoot>;
 ```
 
 ---

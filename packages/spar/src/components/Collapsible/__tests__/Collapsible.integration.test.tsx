@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '../index';
+import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '../index';
 
 // Mock ResizeObserver
 class MockResizeObserver {
@@ -54,7 +54,7 @@ const FormWithCollapsible = () => {
         />
       </div>
 
-      <Collapsible open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
+      <CollapsibleRoot open={isAdvancedOpen} onOpenChange={setIsAdvancedOpen}>
         <CollapsibleTrigger data-testid='advanced-trigger'>
           {isAdvancedOpen ? 'Hide' : 'Show'} Advanced Options
         </CollapsibleTrigger>
@@ -99,7 +99,7 @@ const FormWithCollapsible = () => {
             </label>
           </div>
         </CollapsibleContent>
-      </Collapsible>
+      </CollapsibleRoot>
 
       <button type='submit' data-testid='submit-button'>
         Submit
@@ -112,24 +112,24 @@ const FormWithCollapsible = () => {
 const NestedCollapsible = () => {
   return (
     <div>
-      <Collapsible>
+      <CollapsibleRoot>
         <CollapsibleTrigger data-testid='level1-trigger'>Level 1</CollapsibleTrigger>
         <CollapsibleContent data-testid='level1-content'>
           <p>Level 1 content</p>
-          <Collapsible>
+          <CollapsibleRoot>
             <CollapsibleTrigger data-testid='level2-trigger'>Level 2</CollapsibleTrigger>
             <CollapsibleContent data-testid='level2-content'>
               <p>Level 2 content</p>
-              <Collapsible>
+              <CollapsibleRoot>
                 <CollapsibleTrigger data-testid='level3-trigger'>Level 3</CollapsibleTrigger>
                 <CollapsibleContent data-testid='level3-content'>
                   <p>Level 3 content</p>
                 </CollapsibleContent>
-              </Collapsible>
+              </CollapsibleRoot>
             </CollapsibleContent>
-          </Collapsible>
+          </CollapsibleRoot>
         </CollapsibleContent>
-      </Collapsible>
+      </CollapsibleRoot>
     </div>
   );
 };
@@ -149,7 +149,7 @@ const DynamicContentCollapsible = () => {
 
   return (
     <div>
-      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <CollapsibleRoot open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger data-testid='dynamic-trigger'>
           Toggle Dynamic Content ({items.length} items)
         </CollapsibleTrigger>
@@ -172,7 +172,7 @@ const DynamicContentCollapsible = () => {
             ))}
           </ul>
         </CollapsibleContent>
-      </Collapsible>
+      </CollapsibleRoot>
     </div>
   );
 };
@@ -376,12 +376,12 @@ describe('Collapsible Integration Tests', () => {
 
       render(
         <div onClick={parentClickHandler} data-testid='parent'>
-          <Collapsible>
+          <CollapsibleRoot>
             <CollapsibleTrigger onClick={triggerClickHandler} data-testid='trigger'>
               Toggle
             </CollapsibleTrigger>
             <CollapsibleContent>Content</CollapsibleContent>
-          </Collapsible>
+          </CollapsibleRoot>
         </div>,
       );
 
@@ -400,12 +400,12 @@ describe('Collapsible Integration Tests', () => {
 
       render(
         <div onClick={parentClickHandler} data-testid='parent'>
-          <Collapsible>
+          <CollapsibleRoot>
             <CollapsibleTrigger onClick={triggerClickHandler} data-testid='trigger'>
               Toggle
             </CollapsibleTrigger>
             <CollapsibleContent>Content</CollapsibleContent>
-          </Collapsible>
+          </CollapsibleRoot>
         </div>,
       );
 
@@ -436,12 +436,12 @@ describe('Collapsible Integration Tests', () => {
         };
 
         return (
-          <Collapsible open={isOpen} onOpenChange={handleToggle}>
+          <CollapsibleRoot open={isOpen} onOpenChange={handleToggle}>
             <CollapsibleTrigger data-testid='async-trigger'>Load Content</CollapsibleTrigger>
             <CollapsibleContent data-testid='async-content'>
               {loading ? <div data-testid='loading'>Loading...</div> : content}
             </CollapsibleContent>
-          </Collapsible>
+          </CollapsibleRoot>
         );
       };
 
@@ -461,12 +461,12 @@ describe('Collapsible Integration Tests', () => {
   describe('Browser Events and API', () => {
     it('handles force mounted content with proper hidden state', () => {
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger>Toggle</CollapsibleTrigger>
           <CollapsibleContent forceMount data-testid='content'>
             Searchable content that should be findable
           </CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const content = screen.getByTestId('content');
@@ -477,12 +477,12 @@ describe('Collapsible Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible data-testid='collapsible'>
+        <CollapsibleRoot data-testid='collapsible'>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent forceMount data-testid='content'>
             Searchable content
           </CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('collapsible')).toHaveAttribute('data-state', 'closed');
@@ -500,10 +500,10 @@ describe('Collapsible Integration Tests', () => {
       const disconnectSpy = jest.spyOn(MockResizeObserver.prototype, 'disconnect');
 
       const { unmount } = render(
-        <Collapsible defaultOpen>
+        <CollapsibleRoot defaultOpen>
           <CollapsibleTrigger>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Content with ResizeObserver</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       unmount();
@@ -515,10 +515,10 @@ describe('Collapsible Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -539,23 +539,23 @@ describe('Collapsible Integration Tests', () => {
 
       const FAQ = () => (
         <div>
-          <Collapsible>
+          <CollapsibleRoot>
             <CollapsibleTrigger data-testid='faq1-trigger'>
               What is your return policy?
             </CollapsibleTrigger>
             <CollapsibleContent data-testid='faq1-content'>
               We offer a 30-day return policy for all items.
             </CollapsibleContent>
-          </Collapsible>
+          </CollapsibleRoot>
 
-          <Collapsible>
+          <CollapsibleRoot>
             <CollapsibleTrigger data-testid='faq2-trigger'>
               How do I track my order?
             </CollapsibleTrigger>
             <CollapsibleContent data-testid='faq2-content'>
               You can track your order using the tracking number provided.
             </CollapsibleContent>
-          </Collapsible>
+          </CollapsibleRoot>
         </div>
       );
 
@@ -581,22 +581,22 @@ describe('Collapsible Integration Tests', () => {
 
       const Navigation = () => (
         <nav>
-          <Collapsible>
+          <CollapsibleRoot>
             <CollapsibleTrigger data-testid='products-trigger'>Products</CollapsibleTrigger>
             <CollapsibleContent data-testid='products-content'>
               <a href='/laptops'>Laptops</a>
               <a href='/phones'>Phones</a>
               <a href='/tablets'>Tablets</a>
             </CollapsibleContent>
-          </Collapsible>
+          </CollapsibleRoot>
 
-          <Collapsible>
+          <CollapsibleRoot>
             <CollapsibleTrigger data-testid='support-trigger'>Support</CollapsibleTrigger>
             <CollapsibleContent data-testid='support-content'>
               <a href='/help'>Help Center</a>
               <a href='/contact'>Contact Us</a>
             </CollapsibleContent>
-          </Collapsible>
+          </CollapsibleRoot>
         </nav>
       );
 

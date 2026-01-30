@@ -49,14 +49,14 @@ Every component in Spar uses a compound component pattern with granular parts:
 
 ```tsx
 // Simple accordion example
-<Accordion.Root type='single'>
-  <Accordion.Item value='item-1'>
-    <Accordion.Header>
-      <Accordion.Trigger>What is Spar?</Accordion.Trigger>
-    </Accordion.Header>
-    <Accordion.Content>A headless UI library with zero styling opinions.</Accordion.Content>
-  </Accordion.Item>
-</Accordion.Root>
+<AccordionRoot type='single'>
+  <AccordionItem value='item-1'>
+    <AccordionHeader>
+      <AccordionTrigger>What is Spar?</AccordionTrigger>
+    </AccordionHeader>
+    <AccordionContent>A headless UI library with zero styling opinions.</AccordionContent>
+  </AccordionItem>
+</AccordionRoot>
 ```
 
 This pattern provides:
@@ -104,7 +104,7 @@ Spar is designed for optimal bundle size:
 
 ```tsx
 // Import only what you need
-import { Button, Dialog, Tooltip } from '@turkish-technology/spar';
+import { Button, DialogRoot, TooltipRoot } from '@turkish-technology/spar';
 ```
 
 ## What's Included

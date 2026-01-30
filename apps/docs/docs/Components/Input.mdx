@@ -6,7 +6,14 @@ description: A headless input component with compound pattern support, full acce
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Input } from '@turkish-technology/spar';
+import {
+  Input,
+  InputRoot,
+  InputField,
+  InputLabel,
+  InputDescription,
+  InputErrorMessage,
+} from '@turkish-technology/spar';
 
 # Input
 
@@ -62,19 +69,19 @@ color: #f2f5f8;
   const [value, setValue] = React.useState('');
   
   return (
-    <Input.Root style={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px' }}>
-      <Input.Label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+    <InputRoot style={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px' }}>
+      <InputLabel style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
         Username
-      </Input.Label>
-      <Input.Field 
+      </InputLabel>
+      <InputField 
         value={value}
         onChange={(e) => setValue(e.target.value)}
         style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
       />
-      <Input.Description style={{ marginTop: '4px', fontSize: '14px', color: '#666' }}>
+      <InputDescription style={{ marginTop: '4px', fontSize: '14px', color: '#666' }}>
         Enter your username to continue
-      </Input.Description>
-    </Input.Root>
+      </InputDescription>
+    </InputRoot>
   );
 }`}
 />
@@ -93,17 +100,11 @@ color: #f2f5f8;
 ## Installation
 
 ```tsx
-// Compound component (dot notation)
-import { Input } from '@turkish-technology/spar';
+// Compound component (named exports)
+import { InputRoot, InputField, InputLabel, InputDescription, InputErrorMessage } from '@turkish-technology/spar';
 
-// Named imports (tree-shakeable)
-import {
-  InputRoot,
-  InputField,
-  InputLabel,
-  InputDescription,
-  InputErrorMessage,
-} from '@turkish-technology/spar';
+// Simple input component
+import { Input } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -125,7 +126,7 @@ The Input component follows a compound component pattern with context-based stat
     const isInvalid = email.length > 0 && !emailRegex.test(email);
 
     return (
-      <Input.Root
+      <InputRoot
         data-spar-part="root"
         isInvalid={isInvalid}
         required
@@ -135,10 +136,10 @@ The Input component follows a compound component pattern with context-based stat
           borderRadius: '6px'
         }}
       >
-        <Input.Label data-spar-part="label" style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
+        <InputLabel data-spar-part="label" style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
           Email Address
-        </Input.Label>
-        <Input.Field
+        </InputLabel>
+        <InputField
           data-spar-part="field"
           type="email"
           value={email}
@@ -152,15 +153,15 @@ The Input component follows a compound component pattern with context-based stat
             fontSize: '14px'
           }}
         />
-        <Input.Description data-spar-part="description" style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+        <InputDescription data-spar-part="description" style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
           We'll use this to send you important updates
-        </Input.Description>
+        </InputDescription>
         {isInvalid && (
-          <Input.ErrorMessage data-spar-part="errorMessage" style={{ marginTop: '4px', fontSize: '12px', color: '#ff6b6b' }}>
+          <InputErrorMessage data-spar-part="errorMessage" style={{ marginTop: '4px', fontSize: '12px', color: '#ff6b6b' }}>
             Please enter a valid email address
-          </Input.ErrorMessage>
+          </InputErrorMessage>
         )}
-      </Input.Root>
+      </InputRoot>
     );
 
 })()}
@@ -170,21 +171,21 @@ The Input component follows a compound component pattern with context-based stat
 ### Structure
 
 ```tsx
-<Input.Root>
-  <Input.Label />
-  <Input.Field />
-  <Input.Description />
-  <Input.ErrorMessage />
-</Input.Root>
+<InputRoot>
+  <InputLabel />
+  <InputField />
+  <InputDescription />
+  <InputErrorMessage />
+</InputRoot>
 ```
 
 **Data Flow:**
 
-- **Input.Root**: Context provider that manages validation, disabled, and required states
-- **Input.Field**: Core input element with polymorphic support (input/textarea)
-- **Input.Label**: Associated label element with automatic ID linking
-- **Input.Description**: Helper text element for additional guidance
-- **Input.ErrorMessage**: Error announcement element with role="alert"
+- **InputRoot**: Context provider that manages validation, disabled, and required states
+- **InputField**: Core input element with polymorphic support (input/textarea)
+- **InputLabel**: Associated label element with automatic ID linking
+- **InputDescription**: Helper text element for additional guidance
+- **InputErrorMessage**: Error announcement element with role="alert"
 
 ## Code Examples
 
@@ -198,13 +199,13 @@ A simple text input with label and description for user guidance.
 
 return (
 
-<Input.Root style={{ padding: '12px', border: '1px solid #e5e5e5', borderRadius: '6px' }}>
-  <Input.Label
+<InputRoot style={{ padding: '12px', border: '1px solid #e5e5e5', borderRadius: '6px' }}>
+  <InputLabel
     style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}
   >
     Email Address
-  </Input.Label>
-  <Input.Field
+  </InputLabel>
+  <InputField
     type='email'
     value={value}
     onChange={(e) => setValue(e.target.value)}
@@ -217,10 +218,10 @@ return (
       fontSize: '14px',
     }}
   />
-  <Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+  <InputDescription style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
     We'll use this to send you important updates
-  </Input.Description>
-</Input.Root>
+  </InputDescription>
+</InputRoot>
 ); }`} />
 
 ### Input with Validation
@@ -240,14 +241,14 @@ setIsInvalid(!emailRegex.test(email));
 return (
 
 <div>
-<Input.Root
+<InputRoot
 isInvalid={isInvalid}
 required
 style={{ padding: '12px', border: \`1px solid \${isInvalid ? '#ff6b6b' : '#e5e5e5'}\`, borderRadius: '6px' }} >
-<Input.Label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
+<InputLabel style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
 Email Address
-</Input.Label>
-<Input.Field
+</InputLabel>
+<InputField
 type="email"
 value={email}
 onChange={(e) => setEmail(e.target.value)}
@@ -260,13 +261,13 @@ style={{
             fontSize: '14px'
           }}
 />
-<Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+<InputDescription style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
 Enter a valid email address for account verification
-</Input.Description>
-<Input.ErrorMessage style={{ marginTop: '4px', fontSize: '12px', color: '#ff6b6b' }}>
+</InputDescription>
+<InputErrorMessage style={{ marginTop: '4px', fontSize: '12px', color: '#ff6b6b' }}>
 Please enter a valid email address
-</Input.ErrorMessage>
-</Input.Root>
+</InputErrorMessage>
+</InputRoot>
 <button
 type="button"
 onClick={handleSubmit}
@@ -295,11 +296,11 @@ Shows polymorphic rendering capability for multi-line text input with proper acc
   const [message, setMessage] = React.useState('');
   
   return (
-    <Input.Root style={{ padding: '12px', border: '1px solid #e5e5e5', borderRadius: '6px' }}>
-      <Input.Label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
+    <InputRoot style={{ padding: '12px', border: '1px solid #e5e5e5', borderRadius: '6px' }}>
+      <InputLabel style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
         Message
-      </Input.Label>
-      <Input.Field
+      </InputLabel>
+      <InputField
         as="textarea"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
@@ -315,10 +316,10 @@ Shows polymorphic rendering capability for multi-line text input with proper acc
           fontFamily: 'inherit'
         }}
       />
-      <Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+      <InputDescription style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
         Maximum 500 characters ({message.length}/500)
-      </Input.Description>
-    </Input.Root>
+      </InputDescription>
+    </InputRoot>
   );
 }`}
 />
@@ -330,7 +331,7 @@ Demonstrates disabled state with proper accessibility attributes and visual indi
 <LiveCode
   code={`function DisabledInput() {
   return (
-    <Input.Root 
+    <InputRoot 
       disabled 
       style={{ 
         padding: '12px', 
@@ -340,10 +341,10 @@ Demonstrates disabled state with proper accessibility attributes and visual indi
         opacity: 0.6 
       }}
     >
-      <Input.Label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
+      <InputLabel style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
         Account Type
-      </Input.Label>
-      <Input.Field 
+      </InputLabel>
+      <InputField 
         value="Premium Account"
         readOnly
         style={{ 
@@ -356,10 +357,10 @@ Demonstrates disabled state with proper accessibility attributes and visual indi
           cursor: 'not-allowed'
         }}
       />
-      <Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+      <InputDescription style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
         Contact support to change your account type
-      </Input.Description>
-    </Input.Root>
+      </InputDescription>
+    </InputRoot>
   );
 }`}
 />
@@ -449,32 +450,32 @@ marginTop: '8px'
 return (
 
 <form onSubmit={handleSubmit} style={formStyle} noValidate>
-<Input.Root isInvalid={!!errors.name} required style={inputRootStyle(!!errors.name)}>
-<Input.Label style={labelStyle}>Full Name</Input.Label>
-<Input.Field
+<InputRoot isInvalid={!!errors.name} required style={inputRootStyle(!!errors.name)}>
+<InputLabel style={labelStyle}>Full Name</InputLabel>
+<InputField
 name="name"
 value={formData.name}
 onChange={(e) => setFormData({...formData, name: e.target.value})}
 style={fieldStyle(!!errors.name)}
 />
-<Input.ErrorMessage style={errorStyle}>{errors.name}</Input.ErrorMessage>
-</Input.Root>
+<InputErrorMessage style={errorStyle}>{errors.name}</InputErrorMessage>
+</InputRoot>
 
-      <Input.Root isInvalid={!!errors.email} required style={inputRootStyle(!!errors.email)}>
-        <Input.Label style={labelStyle}>Email</Input.Label>
-        <Input.Field
+      <InputRoot isInvalid={!!errors.email} required style={inputRootStyle(!!errors.email)}>
+        <InputLabel style={labelStyle}>Email</InputLabel>
+        <InputField
           type="email"
           name="email"
           value={formData.email}
           onChange={(e) => setFormData({...formData, email: e.target.value})}
           style={fieldStyle(!!errors.email)}
         />
-        <Input.ErrorMessage style={errorStyle}>{errors.email}</Input.ErrorMessage>
-      </Input.Root>
+        <InputErrorMessage style={errorStyle}>{errors.email}</InputErrorMessage>
+      </InputRoot>
 
-      <Input.Root isInvalid={!!errors.message} required style={inputRootStyle(!!errors.message)}>
-        <Input.Label style={labelStyle}>Message</Input.Label>
-        <Input.Field
+      <InputRoot isInvalid={!!errors.message} required style={inputRootStyle(!!errors.message)}>
+        <InputLabel style={labelStyle}>Message</InputLabel>
+        <InputField
           as="textarea"
           name="message"
           rows={4}
@@ -482,8 +483,8 @@ style={fieldStyle(!!errors.name)}
           onChange={(e) => setFormData({...formData, message: e.target.value})}
           style={{...fieldStyle(!!errors.message), resize: 'vertical', fontFamily: 'inherit'}}
         />
-        <Input.ErrorMessage style={errorStyle}>{errors.message}</Input.ErrorMessage>
-      </Input.Root>
+        <InputErrorMessage style={errorStyle}>{errors.message}</InputErrorMessage>
+      </InputRoot>
 
       <button type="submit" style={buttonStyle}>Send Message</button>
     </form>
@@ -548,9 +549,9 @@ Direct input component function that returns an `InputField` without wrapper. De
 - No wrapper `<div>` element created
 - Context-independent, doesn't support compound features
 - Ideal for simple forms, search inputs, or single-field components
-- Use compound pattern (`Input.Root` + `Input.Field`) when needing labels, descriptions, or validation messages
+- Use compound pattern (`InputRoot` + `InputField`) when needing labels, descriptions, or validation messages
 
-### Input.Root
+### InputRoot
 
 The root container that provides context and state management for all input compound components. Manages validation, disabled, and required states with proper ARIA coordination.
 
@@ -572,7 +573,7 @@ The root container that provides context and state management for all input comp
 | `data-disabled`   | `""` \| `undefined` | Indicates disabled state        |
 | `data-required`   | `""` \| `undefined` | Indicates required state        |
 
-### Input.Field
+### InputField
 
 The core input element with polymorphic rendering support. Handles focus states, validation attributes, and ARIA associations automatically.
 
@@ -603,7 +604,7 @@ The core input element with polymorphic rendering support. Handles focus states,
 | `data-focused`          | `""` \| `undefined` | Indicates focus state          |
 | `data-autofocus`        | `""` \| `undefined` | Indicates auto-focus state     |
 
-### Input.Label
+### InputLabel
 
 The label element that provides accessible labeling for the input field. Automatically associates with the input field via ARIA.
 
@@ -622,7 +623,7 @@ The label element that provides accessible labeling for the input field. Automat
 | `htmlFor`               | `string` | Associates with input field    |
 | `data-spar-input-label` | `""`     | Identifies input label element |
 
-### Input.Description
+### InputDescription
 
 The description element that provides helper text for the input field. Automatically linked to the input field via aria-describedby.
 
@@ -640,7 +641,7 @@ The description element that provides helper text for the input field. Automatic
 | `id`                          | `string` | Unique description identifier        |
 | `data-spar-input-description` | `""`     | Identifies input description element |
 
-### Input.ErrorMessage
+### InputErrorMessage
 
 The error message element that announces validation errors to screen readers. Uses role="alert" for immediate announcement and is automatically linked to the input field.
 

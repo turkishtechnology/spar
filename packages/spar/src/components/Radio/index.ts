@@ -1,17 +1,6 @@
-import { Radio, RadioGroup, RadioItem } from './Radio';
+export { Radio } from './Radio';
+export { RadioGroup } from './RadioGroup';
+export { RadioItem } from './RadioItem';
+export { RadioGroup as RadioRoot } from './RadioGroup';
 
-// Export both patterns
-export {
-  // Compound component (with dot notation)
-  Radio,
-
-  // Named exports (tree-shakeable)
-  RadioGroup,
-  RadioItem,
-
-  // Root alias for explicit usage
-  RadioGroup as RadioRoot,
-};
-
-// Export types
 export type { RadioGroupProps, RadioItemProps, RadioItemRenderProps } from './types';

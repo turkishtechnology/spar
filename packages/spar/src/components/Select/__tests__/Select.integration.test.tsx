@@ -1,7 +1,17 @@
 import * as React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Select } from '../index';
+import {
+  SelectRoot,
+  SelectTrigger,
+  SelectValue,
+  SelectPortal,
+  SelectContent,
+  SelectItem,
+  SelectGroup,
+  SelectLabel,
+  SelectSeparator,
+} from '../index';
 
 describe('Select Integration Tests', () => {
   describe('Form Integration', () => {
@@ -16,16 +26,16 @@ describe('Select Integration Tests', () => {
 
       render(
         <form onSubmit={handleSubmit}>
-          <Select name='plan' defaultValue='basic'>
-            <Select.Trigger aria-label='Choose plan'>
-              <Select.Value placeholder='Select...' />
-            </Select.Trigger>
-            <Select.Content>
-              <Select.Item value='basic'>Basic Plan</Select.Item>
-              <Select.Item value='premium'>Premium Plan</Select.Item>
-              <Select.Item value='enterprise'>Enterprise Plan</Select.Item>
-            </Select.Content>
-          </Select>
+          <SelectRoot name='plan' defaultValue='basic'>
+            <SelectTrigger aria-label='Choose plan'>
+              <SelectValue placeholder='Select...' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='basic'>Basic Plan</SelectItem>
+              <SelectItem value='premium'>Premium Plan</SelectItem>
+              <SelectItem value='enterprise'>Enterprise Plan</SelectItem>
+            </SelectContent>
+          </SelectRoot>
           <button type='submit'>Submit</button>
         </form>,
       );
@@ -47,15 +57,15 @@ describe('Select Integration Tests', () => {
 
       render(
         <form onSubmit={handleSubmit}>
-          <Select name='plan'>
-            <Select.Trigger aria-label='Choose plan'>
-              <Select.Value placeholder='Select...' />
-            </Select.Trigger>
-            <Select.Content>
-              <Select.Item value='basic'>Basic Plan</Select.Item>
-              <Select.Item value='premium'>Premium Plan</Select.Item>
-            </Select.Content>
-          </Select>
+          <SelectRoot name='plan'>
+            <SelectTrigger aria-label='Choose plan'>
+              <SelectValue placeholder='Select...' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='basic'>Basic Plan</SelectItem>
+              <SelectItem value='premium'>Premium Plan</SelectItem>
+            </SelectContent>
+          </SelectRoot>
           <button type='submit'>Submit</button>
         </form>,
       );
@@ -96,15 +106,15 @@ describe('Select Integration Tests', () => {
         return (
           <div>
             <form onSubmit={handleSubmit}>
-              <Select name='plan' value={selectedPlan} onValueChange={setSelectedPlan}>
-                <Select.Trigger aria-label='Choose plan'>
-                  <Select.Value placeholder='Select...' />
-                </Select.Trigger>
-                <Select.Content>
-                  <Select.Item value='basic'>Basic Plan</Select.Item>
-                  <Select.Item value='premium'>Premium Plan</Select.Item>
-                </Select.Content>
-              </Select>
+              <SelectRoot name='plan' value={selectedPlan} onValueChange={setSelectedPlan}>
+                <SelectTrigger aria-label='Choose plan'>
+                  <SelectValue placeholder='Select...' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='basic'>Basic Plan</SelectItem>
+                  <SelectItem value='premium'>Premium Plan</SelectItem>
+                </SelectContent>
+              </SelectRoot>
               <button type='submit'>Submit</button>
             </form>
             <div data-testid='submitted-plan'>{submittedPlan}</div>
@@ -144,18 +154,18 @@ describe('Select Integration Tests', () => {
 
         return (
           <form onSubmit={handleSubmit}>
-            <Select name='plan' value={selectedPlan} onValueChange={setSelectedPlan} required>
-              <Select.Trigger
+            <SelectRoot name='plan' value={selectedPlan} onValueChange={setSelectedPlan} required>
+              <SelectTrigger
                 aria-label='Choose plan'
                 aria-describedby={error ? 'error-message' : undefined}
               >
-                <Select.Value placeholder='Select...' />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Item value='basic'>Basic Plan</Select.Item>
-                <Select.Item value='premium'>Premium Plan</Select.Item>
-              </Select.Content>
-            </Select>
+                <SelectValue placeholder='Select...' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='basic'>Basic Plan</SelectItem>
+                <SelectItem value='premium'>Premium Plan</SelectItem>
+              </SelectContent>
+            </SelectRoot>
             {error && (
               <div id='error-message' role='alert'>
                 {error}
@@ -187,37 +197,37 @@ describe('Select Integration Tests', () => {
   });
 
   // SKIPPED: Tests missing SelectItemText wrapper - needs test refactoring
-  // Multiple component interactions work correctly in browser, tests need Select.ItemText usage
-  // TODO: Refactor all tests in this suite to use Select.ItemText for value display
+  // Multiple component interactions work correctly in browser, tests need SelectItemText usage
+  // TODO: Refactor all tests in this suite to use SelectItemText for value display
   describe.skip('Multiple Components', () => {
     // SKIPPED: Missing SelectItemText wrapper - test needs SelectItemText component
-    // TODO: Update test to use Select.ItemText for proper value display
+    // TODO: Update test to use SelectItemText for proper value display
     it.skip('should work with multiple independent selects', async () => {
       const user = userEvent.setup();
 
       render(
         <div>
-          <Select name='size'>
-            <Select.Trigger aria-label='Choose size'>
-              <Select.Value placeholder='Select size...' />
-            </Select.Trigger>
-            <Select.Content>
-              <Select.Item value='small'>Small</Select.Item>
-              <Select.Item value='medium'>Medium</Select.Item>
-              <Select.Item value='large'>Large</Select.Item>
-            </Select.Content>
-          </Select>
+          <SelectRoot name='size'>
+            <SelectTrigger aria-label='Choose size'>
+              <SelectValue placeholder='Select size...' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='small'>Small</SelectItem>
+              <SelectItem value='medium'>Medium</SelectItem>
+              <SelectItem value='large'>Large</SelectItem>
+            </SelectContent>
+          </SelectRoot>
 
-          <Select name='color'>
-            <Select.Trigger aria-label='Choose color'>
-              <Select.Value placeholder='Select color...' />
-            </Select.Trigger>
-            <Select.Content>
-              <Select.Item value='red'>Red</Select.Item>
-              <Select.Item value='blue'>Blue</Select.Item>
-              <Select.Item value='green'>Green</Select.Item>
-            </Select.Content>
-          </Select>
+          <SelectRoot name='color'>
+            <SelectTrigger aria-label='Choose color'>
+              <SelectValue placeholder='Select color...' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='red'>Red</SelectItem>
+              <SelectItem value='blue'>Blue</SelectItem>
+              <SelectItem value='green'>Green</SelectItem>
+            </SelectContent>
+          </SelectRoot>
         </div>,
       );
 
@@ -247,30 +257,30 @@ describe('Select Integration Tests', () => {
       const NestedComponent = () => (
         <div>
           <h3>Preferences</h3>
-          <Select name='notification'>
-            <Select.Trigger aria-label='Notification settings'>
-              <Select.Value placeholder='Select...' />
-            </Select.Trigger>
-            <Select.Content>
-              <Select.Item value='all'>All notifications</Select.Item>
-              <Select.Item value='important'>Important only</Select.Item>
-              <Select.Item value='none'>None</Select.Item>
-            </Select.Content>
-          </Select>
+          <SelectRoot name='notification'>
+            <SelectTrigger aria-label='Notification settings'>
+              <SelectValue placeholder='Select...' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='all'>All notifications</SelectItem>
+              <SelectItem value='important'>Important only</SelectItem>
+              <SelectItem value='none'>None</SelectItem>
+            </SelectContent>
+          </SelectRoot>
         </div>
       );
 
       render(
         <div>
-          <Select name='theme'>
-            <Select.Trigger aria-label='Theme selection'>
-              <Select.Value placeholder='Select...' />
-            </Select.Trigger>
-            <Select.Content>
-              <Select.Item value='light'>Light</Select.Item>
-              <Select.Item value='dark'>Dark</Select.Item>
-            </Select.Content>
-          </Select>
+          <SelectRoot name='theme'>
+            <SelectTrigger aria-label='Theme selection'>
+              <SelectValue placeholder='Select...' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='light'>Light</SelectItem>
+              <SelectItem value='dark'>Dark</SelectItem>
+            </SelectContent>
+          </SelectRoot>
           <NestedComponent />
         </div>,
       );
@@ -306,21 +316,21 @@ describe('Select Integration Tests', () => {
             <button onClick={() => setShowAdditional(!showAdditional)}>
               Toggle Additional Options
             </button>
-            <Select name='options'>
-              <Select.Trigger aria-label='Available options'>
-                <Select.Value placeholder='Select...' />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Item value='option1'>Option 1</Select.Item>
-                <Select.Item value='option2'>Option 2</Select.Item>
+            <SelectRoot name='options'>
+              <SelectTrigger aria-label='Available options'>
+                <SelectValue placeholder='Select...' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='option1'>Option 1</SelectItem>
+                <SelectItem value='option2'>Option 2</SelectItem>
                 {showAdditional && (
                   <>
-                    <Select.Item value='option3'>Option 3</Select.Item>
-                    <Select.Item value='option4'>Option 4</Select.Item>
+                    <SelectItem value='option3'>Option 3</SelectItem>
+                    <SelectItem value='option4'>Option 4</SelectItem>
                   </>
                 )}
-              </Select.Content>
-            </Select>
+              </SelectContent>
+            </SelectRoot>
           </div>
         );
       };
@@ -386,33 +396,33 @@ describe('Select Integration Tests', () => {
 
         return (
           <div>
-            <Select
+            <SelectRoot
               name='theme'
               value={globalState.userPreferences.theme}
               onValueChange={updateTheme}
             >
-              <Select.Trigger aria-label='Theme selection'>
-                <Select.Value placeholder='Select theme...' />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Item value='light'>Light</Select.Item>
-                <Select.Item value='dark'>Dark</Select.Item>
-              </Select.Content>
-            </Select>
+              <SelectTrigger aria-label='Theme selection'>
+                <SelectValue placeholder='Select theme...' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='light'>Light</SelectItem>
+                <SelectItem value='dark'>Dark</SelectItem>
+              </SelectContent>
+            </SelectRoot>
 
-            <Select
+            <SelectRoot
               name='language'
               value={globalState.userPreferences.language}
               onValueChange={updateLanguage}
             >
-              <Select.Trigger aria-label='Language selection'>
-                <Select.Value placeholder='Select language...' />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Item value='en'>English</Select.Item>
-                <Select.Item value='tr'>Turkish</Select.Item>
-              </Select.Content>
-            </Select>
+              <SelectTrigger aria-label='Language selection'>
+                <SelectValue placeholder='Select language...' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='en'>English</SelectItem>
+                <SelectItem value='tr'>Turkish</SelectItem>
+              </SelectContent>
+            </SelectRoot>
 
             <div data-testid='current-state'>{JSON.stringify(globalState.userPreferences)}</div>
           </div>
@@ -462,21 +472,21 @@ describe('Select Integration Tests', () => {
 
         return (
           <div>
-            <Select
+            <SelectRoot
               name='plan'
               value={selectedPlan}
               onValueChange={handlePlanChange}
               disabled={isProcessing}
             >
-              <Select.Trigger aria-label='Plan selection'>
-                <Select.Value placeholder='Select...' />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Item value='basic'>Basic Plan</Select.Item>
-                <Select.Item value='premium'>Premium Plan</Select.Item>
-                <Select.Item value='enterprise'>Enterprise Plan</Select.Item>
-              </Select.Content>
-            </Select>
+              <SelectTrigger aria-label='Plan selection'>
+                <SelectValue placeholder='Select...' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='basic'>Basic Plan</SelectItem>
+                <SelectItem value='premium'>Premium Plan</SelectItem>
+                <SelectItem value='enterprise'>Enterprise Plan</SelectItem>
+              </SelectContent>
+            </SelectRoot>
 
             {isProcessing && <div data-testid='processing'>Processing...</div>}
             {confirmationMessage && <div data-testid='confirmation'>{confirmationMessage}</div>}
@@ -513,17 +523,17 @@ describe('Select Integration Tests', () => {
 
       render(
         <div onClick={containerClick} data-testid='container'>
-          <Select onClick={selectRootClick} name='test'>
-            <Select.Trigger aria-label='Options'>
-              <Select.Value placeholder='Select...' />
-            </Select.Trigger>
-            <Select.Content>
-              <Select.Item value='option1' onClick={itemClick}>
+          <SelectRoot onClick={selectRootClick} name='test'>
+            <SelectTrigger aria-label='Options'>
+              <SelectValue placeholder='Select...' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='option1' onClick={itemClick}>
                 Option 1
-              </Select.Item>
-              <Select.Item value='option2'>Option 2</Select.Item>
-            </Select.Content>
-          </Select>
+              </SelectItem>
+              <SelectItem value='option2'>Option 2</SelectItem>
+            </SelectContent>
+          </SelectRoot>
         </div>,
       );
 
@@ -546,16 +556,16 @@ describe('Select Integration Tests', () => {
 
       render(
         <div onClick={containerClick} data-testid='container'>
-          <Select name='test'>
-            <Select.Trigger aria-label='Options'>
-              <Select.Value placeholder='Select...' />
-            </Select.Trigger>
-            <Select.Content>
-              <Select.Item value='option1' onClick={handleItemClick}>
+          <SelectRoot name='test'>
+            <SelectTrigger aria-label='Options'>
+              <SelectValue placeholder='Select...' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='option1' onClick={handleItemClick}>
                 Option 1
-              </Select.Item>
-            </Select.Content>
-          </Select>
+              </SelectItem>
+            </SelectContent>
+          </SelectRoot>
         </div>,
       );
 
@@ -590,16 +600,20 @@ describe('Select Integration Tests', () => {
 
         return (
           <div>
-            <Select value={selectedValue} onValueChange={handleValueChange} disabled={isLoading}>
-              <Select.Trigger aria-label='Async options'>
-                <Select.Value placeholder='Select...' />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Item value='option1'>Option 1</Select.Item>
-                <Select.Item value='option2'>Option 2</Select.Item>
-                <Select.Item value='option3'>Option 3</Select.Item>
-              </Select.Content>
-            </Select>
+            <SelectRoot
+              value={selectedValue}
+              onValueChange={handleValueChange}
+              disabled={isLoading}
+            >
+              <SelectTrigger aria-label='Async options'>
+                <SelectValue placeholder='Select...' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='option1'>Option 1</SelectItem>
+                <SelectItem value='option2'>Option 2</SelectItem>
+                <SelectItem value='option3'>Option 3</SelectItem>
+              </SelectContent>
+            </SelectRoot>
             {isLoading && <div data-testid='loading'>Loading...</div>}
             {selectedValue && <div data-testid='selected-value'>Selected: {selectedValue}</div>}
           </div>
@@ -651,18 +665,18 @@ describe('Select Integration Tests', () => {
 
         return (
           <div>
-            <Select value={selectedValue} onValueChange={handleValueChange}>
-              <Select.Trigger
+            <SelectRoot value={selectedValue} onValueChange={handleValueChange}>
+              <SelectTrigger
                 aria-label='Validation options'
                 aria-describedby={validationError ? 'error-message' : undefined}
               >
-                <Select.Value placeholder='Select...' />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Item value='valid'>Valid Option</Select.Item>
-                <Select.Item value='invalid'>Invalid Option</Select.Item>
-              </Select.Content>
-            </Select>
+                <SelectValue placeholder='Select...' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='valid'>Valid Option</SelectItem>
+                <SelectItem value='invalid'>Invalid Option</SelectItem>
+              </SelectContent>
+            </SelectRoot>
             {isValidating && <div data-testid='validating'>Validating...</div>}
             {validationError && (
               <div id='error-message' role='alert' data-testid='error'>
@@ -714,56 +728,56 @@ describe('Select Integration Tests', () => {
 
             <section>
               <h2 id='theme-heading'>Theme</h2>
-              <Select
+              <SelectRoot
                 name='theme'
                 value={settings.theme}
                 onValueChange={(value) => updateSetting('theme', value)}
               >
-                <Select.Trigger aria-labelledby='theme-heading'>
-                  <Select.Value />
-                </Select.Trigger>
-                <Select.Content>
-                  <Select.Item value='light'>Light</Select.Item>
-                  <Select.Item value='dark'>Dark</Select.Item>
-                  <Select.Item value='auto'>Auto</Select.Item>
-                </Select.Content>
-              </Select>
+                <SelectTrigger aria-labelledby='theme-heading'>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='light'>Light</SelectItem>
+                  <SelectItem value='dark'>Dark</SelectItem>
+                  <SelectItem value='auto'>Auto</SelectItem>
+                </SelectContent>
+              </SelectRoot>
             </section>
 
             <section>
               <h2 id='notifications-heading'>Notifications</h2>
-              <Select
+              <SelectRoot
                 name='notifications'
                 value={settings.notifications}
                 onValueChange={(value) => updateSetting('notifications', value)}
               >
-                <Select.Trigger aria-labelledby='notifications-heading'>
-                  <Select.Value />
-                </Select.Trigger>
-                <Select.Content>
-                  <Select.Item value='all'>All notifications</Select.Item>
-                  <Select.Item value='important'>Important only</Select.Item>
-                  <Select.Item value='none'>None</Select.Item>
-                </Select.Content>
-              </Select>
+                <SelectTrigger aria-labelledby='notifications-heading'>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='all'>All notifications</SelectItem>
+                  <SelectItem value='important'>Important only</SelectItem>
+                  <SelectItem value='none'>None</SelectItem>
+                </SelectContent>
+              </SelectRoot>
             </section>
 
             <section>
               <h2 id='privacy-heading'>Privacy</h2>
-              <Select
+              <SelectRoot
                 name='privacy'
                 value={settings.privacy}
                 onValueChange={(value) => updateSetting('privacy', value)}
               >
-                <Select.Trigger aria-labelledby='privacy-heading'>
-                  <Select.Value />
-                </Select.Trigger>
-                <Select.Content>
-                  <Select.Item value='public'>Public</Select.Item>
-                  <Select.Item value='friends'>Friends only</Select.Item>
-                  <Select.Item value='private'>Private</Select.Item>
-                </Select.Content>
-              </Select>
+                <SelectTrigger aria-labelledby='privacy-heading'>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='public'>Public</SelectItem>
+                  <SelectItem value='friends'>Friends only</SelectItem>
+                  <SelectItem value='private'>Private</SelectItem>
+                </SelectContent>
+              </SelectRoot>
             </section>
 
             <div data-testid='current-settings'>{JSON.stringify(settings)}</div>
@@ -864,22 +878,22 @@ describe('Select Integration Tests', () => {
             </p>
 
             <h2 id={`step-${step.id}`}>{step.title}</h2>
-            <Select
+            <SelectRoot
               name={step.id}
               value={formData[step.id as keyof typeof formData]}
               onValueChange={(value) => updateFormData(step.id, value)}
             >
-              <Select.Trigger aria-labelledby={`step-${step.id}`}>
-                <Select.Value placeholder='Select...' />
-              </Select.Trigger>
-              <Select.Content>
+              <SelectTrigger aria-labelledby={`step-${step.id}`}>
+                <SelectValue placeholder='Select...' />
+              </SelectTrigger>
+              <SelectContent>
                 {step.options.map((option) => (
-                  <Select.Item key={option.value} value={option.value}>
+                  <SelectItem key={option.value} value={option.value}>
                     {option.label}
-                  </Select.Item>
+                  </SelectItem>
                 ))}
-              </Select.Content>
-            </Select>
+              </SelectContent>
+            </SelectRoot>
 
             {currentStep < steps.length - 1 && (
               <button
@@ -934,30 +948,30 @@ describe('Select Integration Tests', () => {
 
   // SKIPPED: Complex interaction tests need SelectItemText refactoring
   // Component functionality verified manually, tests need structural updates
-  // TODO: Update tests to use Select.ItemText wrapper
+  // TODO: Update tests to use SelectItemText wrapper
   describe.skip('Complex Interactions', () => {
     it('should work with grouped options and separators', async () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose food'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Group>
-              <Select.Label>Fruits</Select.Label>
-              <Select.Item value='apple'>Apple</Select.Item>
-              <Select.Item value='banana'>Banana</Select.Item>
-            </Select.Group>
-            <Select.Separator />
-            <Select.Group>
-              <Select.Label>Vegetables</Select.Label>
-              <Select.Item value='carrot'>Carrot</Select.Item>
-              <Select.Item value='potato'>Potato</Select.Item>
-            </Select.Group>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose food'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Fruits</SelectLabel>
+              <SelectItem value='apple'>Apple</SelectItem>
+              <SelectItem value='banana'>Banana</SelectItem>
+            </SelectGroup>
+            <SelectSeparator />
+            <SelectGroup>
+              <SelectLabel>Vegetables</SelectLabel>
+              <SelectItem value='carrot'>Carrot</SelectItem>
+              <SelectItem value='potato'>Potato</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -974,17 +988,17 @@ describe('Select Integration Tests', () => {
       const { container } = render(
         <div>
           <div id='portal-target' />
-          <Select>
-            <Select.Trigger aria-label='Choose option'>
-              <Select.Value placeholder='Select...' />
-            </Select.Trigger>
-            <Select.Portal container={document.getElementById('portal-target')}>
-              <Select.Content>
-                <Select.Item value='option1'>Option 1</Select.Item>
-                <Select.Item value='option2'>Option 2</Select.Item>
-              </Select.Content>
-            </Select.Portal>
-          </Select>
+          <SelectRoot>
+            <SelectTrigger aria-label='Choose option'>
+              <SelectValue placeholder='Select...' />
+            </SelectTrigger>
+            <SelectPortal container={document.getElementById('portal-target')}>
+              <SelectContent>
+                <SelectItem value='option1'>Option 1</SelectItem>
+                <SelectItem value='option2'>Option 2</SelectItem>
+              </SelectContent>
+            </SelectPortal>
+          </SelectRoot>
         </div>,
       );
 

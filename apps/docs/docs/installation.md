@@ -74,16 +74,16 @@ Spar is fully compatible with Next.js 14+ (App Router & Server Components suppor
 #### Server Component Example
 
 ```tsx title="app/page.tsx"
-import { Breadcrumb } from '@turkish-technology/spar';
+import { BreadcrumbRoot, BreadcrumbItem, BreadcrumbSeparator } from '@turkish-technology/spar';
 
 export default function Home() {
   return (
     <main>
-      <Breadcrumb.Root>
-        <Breadcrumb.Item href='/'>Home</Breadcrumb.Item>
-        <Breadcrumb.Separator />
-        <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-      </Breadcrumb.Root>
+      <BreadcrumbRoot>
+        <BreadcrumbItem href='/'>Home</BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>Dashboard</BreadcrumbItem>
+      </BreadcrumbRoot>
       <h1>Welcome to Spar + Next.js</h1>
     </main>
   );

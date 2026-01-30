@@ -11,11 +11,11 @@
 
 ### Compound Component Structure
 ```tsx
-<Radio.Group>
-  <Radio.Item value="option1">Option 1</Radio.Item>
-  <Radio.Item value="option2">Option 2</Radio.Item>
-  <Radio.Item value="option3">Option 3</Radio.Item>
-</Radio.Group>
+<RadioGroup>
+  <RadioItem value="option1">Option 1</RadioItem>
+  <RadioItem value="option2">Option 2</RadioItem>
+  <RadioItem value="option3">Option 3</RadioItem>
+</RadioGroup>
 ```
 
 ### Key Differentiators
@@ -27,7 +27,7 @@
 
 ## 2. API
 
-### Radio.Group Props
+### RadioGroup Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
@@ -39,13 +39,13 @@
 | `required` | `boolean` | No | `false` | Marks group as required for form validation |
 | `orientation` | `'horizontal' \| 'vertical'` | No | `'vertical'` | Layout direction affecting keyboard navigation |
 | `isInToolbar` | `boolean` | No | `false` | Changes keyboard behavior per WAI-ARIA guidelines |
-| `children` | `React.ReactNode` | Yes | — | Radio.Item components |
+| `children` | `React.ReactNode` | Yes | — | RadioItem components |
 | `aria-label` | `string` | No | `undefined` | Accessible name for the group |
 | `aria-labelledby` | `string` | No | `undefined` | References element that labels the group |
 | `aria-describedby` | `string` | No | `undefined` | References element that describes the group |
 | `as` | `ElementType` | No | `'div'` | Polymorphic root element |
 
-### Radio.Item Props
+### RadioItem Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
@@ -66,8 +66,8 @@
 | `select` | `() => void` | Function to programmatically select this radio item |
 
 ### Ref Forwarding
-- **Radio.Group**: Forwards ref to root element (div by default)
-- **Radio.Item**: Forwards ref to root element (label by default)
+- **RadioGroup**: Forwards ref to root element (div by default)
+- **RadioItem**: Forwards ref to root element (label by default)
 
 ### Controlled/Uncontrolled Support
 - **Controlled**: Provide `value` and `onValueChange` props
@@ -197,7 +197,7 @@ const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
 
 ### Required Data Attributes
 
-#### Radio.Group
+#### RadioGroup
 ```tsx
 data-orientation="horizontal" | "vertical"
 data-disabled="true" | undefined
@@ -205,7 +205,7 @@ data-required="true" | undefined
 data-toolbar="true" | undefined
 ```
 
-#### Radio.Item
+#### RadioItem
 ```tsx
 data-state="checked" | "unchecked"
 data-disabled="true" | undefined
@@ -280,7 +280,7 @@ data-focused="true" | undefined
 ## 9. Migration & Implementation Checklist
 
 ### Migration Guidance
-- **From HTML radios**: Replace `<input type="radio">` with `<Radio.Group>` and `<Radio.Item>`
+- **From HTML radios**: Replace `<input type="radio">` with `<RadioGroup>` and `<RadioItem>`
 - **From other libraries**: Map existing radio group props to new API structure
 - **Form integration**: Use `name` prop for form submission compatibility
 - **Styling migration**: Convert CSS selectors to data attribute selectors
@@ -288,7 +288,7 @@ data-focused="true" | undefined
 ### Implementation Checklist
 
 #### Core Functionality
-- [ ] Create compound component structure (Radio.Group + Radio.Item)
+- [ ] Create compound component structure (RadioGroup + RadioItem)
 - [ ] Implement controlled/uncontrolled state management
 - [ ] Add roving tabindex focus management
 - [ ] Support keyboard navigation (arrows, home/end, space)
