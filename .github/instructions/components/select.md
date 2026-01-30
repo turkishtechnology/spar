@@ -14,29 +14,29 @@ The Select component is a headless, fully accessible dropdown UI pattern that al
 
 ### Compound Component Structure
 ```tsx
-<Select.Root>
-  <Select.Trigger>
-    <Select.Value />
-    <Select.Icon />
-  </Select.Trigger>
+<SelectRoot>
+  <SelectTrigger>
+    <SelectValue />
+    <SelectIcon />
+  </SelectTrigger>
 
-  <Select.Portal>
-    <Select.Content>
-      <Select.Viewport>
-        <Select.Group>
-          <Select.Label />
-          <Select.Item>
-            <Select.ItemText />
-            <Select.ItemIndicator />
-          </Select.Item>
-        </Select.Group>
+  <SelectPortal>
+    <SelectContent>
+      <SelectViewport>
+        <SelectGroup>
+          <SelectLabel />
+          <SelectItem>
+            <SelectItemText />
+            <SelectItemIndicator />
+          </SelectItem>
+        </SelectGroup>
 
-        <Select.Separator />
-        <Select.Arrow />
-      </Select.Viewport>
-    </Select.Content>
-  </Select.Portal>
-</Select.Root>
+        <SelectSeparator />
+        <SelectArrow />
+      </SelectViewport>
+    </SelectContent>
+  </SelectPortal>
+</SelectRoot>
 ```
 
 ### Key Differentiators
@@ -50,7 +50,7 @@ The Select component is a headless, fully accessible dropdown UI pattern that al
 
 ## 2. API
 
-### Select.Root
+### SelectRoot
 The main container that manages all select state and behavior.
 
 | Prop | Type | Required | Default | Description |
@@ -67,7 +67,7 @@ The main container that manages all select state and behavior.
 | `dir` | `'ltr' \| 'rtl'` | No | `'ltr'` | Reading direction |
 | `as` | `ElementType` | No | - | Polymorphic component type |
 
-### Select.Trigger
+### SelectTrigger
 The button that toggles the dropdown.
 
 | Prop | Type | Required | Default | Description |
@@ -92,7 +92,7 @@ The button that toggles the dropdown.
 - `data-disabled`: Present when disabled
 - `data-placeholder`: Present when no value selected
 
-### Select.Value
+### SelectValue
 Displays the selected value or placeholder.
 
 | Prop | Type | Required | Default | Description |
@@ -100,14 +100,14 @@ Displays the selected value or placeholder.
 | `placeholder` | `ReactNode` | No | - | Text shown when no value selected |
 | `as` | `ElementType` | No | `span` | Polymorphic component type |
 
-### Select.Icon
+### SelectIcon
 Optional visual indicator (chevron, arrow).
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `span` | Polymorphic component type |
 
-### Select.Portal
+### SelectPortal
 Portal container for dropdown rendering.
 
 | Prop | Type | Required | Default | Description |
@@ -115,7 +115,7 @@ Portal container for dropdown rendering.
 | `container` | `HTMLElement` | No | `document.body` | Portal target element |
 | `forceMount` | `boolean` | No | `false` | Force mount for animation control |
 
-### Select.Content
+### SelectContent
 The dropdown container that appears when open.
 
 | Prop | Type | Required | Default | Description |
@@ -146,14 +146,14 @@ The dropdown container that appears when open.
 - `--select-trigger-width`: Trigger element width
 - `--select-trigger-height`: Trigger element height
 
-### Select.Viewport
+### SelectViewport
 Scrollable container for select items.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `div` | Polymorphic component type |
 
-### Select.Item
+### SelectItem
 Individual selectable option.
 
 | Prop | Type | Required | Default | Description |
@@ -179,14 +179,14 @@ Individual selectable option.
 - `data-disabled`: Present when disabled
 - `data-highlighted`: Present when keyboard focused
 
-### Select.ItemText
+### SelectItemText
 The text content of an item.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `span` | Polymorphic component type |
 
-### Select.ItemIndicator
+### SelectItemIndicator
 Visual indicator for selected state (checkmark, etc).
 
 | Prop | Type | Required | Default | Description |
@@ -194,28 +194,28 @@ Visual indicator for selected state (checkmark, etc).
 | `forceMount` | `boolean` | No | `false` | Force mount for animation |
 | `as` | `ElementType` | No | `span` | Polymorphic component type |
 
-### Select.Group
+### SelectGroup
 Groups related items together.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `div` | Polymorphic component type |
 
-### Select.Label
+### SelectLabel
 Label for a group of items.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `div` | Polymorphic component type |
 
-### Select.Separator
+### SelectSeparator
 Visual separator between items or groups.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `div` | Polymorphic component type |
 
-### Select.Arrow
+### SelectArrow
 Optional arrow pointing to trigger.
 
 | Prop | Type | Required | Default | Description |
@@ -456,31 +456,31 @@ if (!isMounted) {
 
 ### Required Data Attributes
 
-**Select.Root**
+**SelectRoot**
 - No visual attributes (non-rendering)
 
-**Select.Trigger**
+**SelectTrigger**
 - `data-state`: `"open" | "closed"` - Dropdown open state
 - `data-disabled`: Present when `disabled={true}`
 - `data-placeholder`: Present when no value selected
 
-**Select.Content**
+**SelectContent**
 - `data-state`: `"open" | "closed"` - Dropdown open state
 - `data-side`: `"top" | "right" | "bottom" | "left"` - Placement side (popper mode)
 - `data-align`: `"start" | "center" | "end"` - Alignment (popper mode)
 
-**Select.Item**
+**SelectItem**
 - `data-state`: `"checked" | "unchecked"` - Selection state
 - `data-disabled`: Present when `disabled={true}`
 - `data-highlighted`: Present when focused via keyboard
 
-**Select.ItemIndicator**
+**SelectItemIndicator**
 - Renders only when item is selected (`data-state="checked"`)
 
 ### Variants & Sizes
 No built-in variants. Apply via data attributes:
 ```tsx
-<Select.Trigger data-variant="outline" data-size="md">
+<SelectTrigger data-variant="outline" data-size="md">
 ```
 
 Consumers define styling:
@@ -627,56 +627,56 @@ export * as Select from './index';
 
 **From Radix Select:**
 - ✅ API is similar, minimal changes needed
-- ✅ `Select.Root` replaces `Select`
-- ✅ `Select.Trigger` same
-- ✅ `Select.Content` same (check positioning props)
-- ✅ `Select.Item` same
-- ✅ `Select.Value` same
+- ✅ `SelectRoot` replaces `Select`
+- ✅ `SelectTrigger` same
+- ✅ `SelectContent` same (check positioning props)
+- ✅ `SelectItem` same
+- ✅ `SelectValue` same
 - ✅ Groups and labels work identically
 
 **From Headless UI Listbox:**
 - ⚠️ Different component structure (compound vs single)
-- ⚠️ `Listbox` → `Select.Root`
-- ⚠️ `Listbox.Button` → `Select.Trigger` + `Select.Value`
-- ⚠️ `Listbox.Options` → `Select.Content` + `Select.Viewport`
-- ⚠️ `Listbox.Option` → `Select.Item`
+- ⚠️ `Listbox` → `SelectRoot`
+- ⚠️ `Listbox.Button` → `SelectTrigger` + `SelectValue`
+- ⚠️ `Listbox.Options` → `SelectContent` + `SelectViewport`
+- ⚠️ `Listbox.Option` → `SelectItem`
 - ✅ `value` and `onChange` props map directly
 
 **From React Aria Select:**
 - ⚠️ Less boilerplate (no separate hooks)
-- ⚠️ `useSelectState` → internal state in `Select.Root`
-- ⚠️ `useSelect` → internal in `Select.Trigger`
-- ⚠️ `useListBox` → internal in `Select.Content`
+- ⚠️ `useSelectState` → internal state in `SelectRoot`
+- ⚠️ `useSelect` → internal in `SelectTrigger`
+- ⚠️ `useListBox` → internal in `SelectContent`
 - ✅ Same keyboard interactions
 - ✅ Same ARIA implementation
 
 ### Implementation Checklist
 
 **Phase 1: Core Structure** (Week 1)
-- [ ] Implement `Select.Root` with context provider
-- [ ] Implement `Select.Trigger` with ARIA attributes
-- [ ] Implement `Select.Value` with placeholder support
-- [ ] Implement `Select.Icon` (optional)
+- [ ] Implement `SelectRoot` with context provider
+- [ ] Implement `SelectTrigger` with ARIA attributes
+- [ ] Implement `SelectValue` with placeholder support
+- [ ] Implement `SelectIcon` (optional)
 - [ ] Create internal state management hooks
 - [ ] Implement controlled/uncontrolled patterns
 - [ ] Add ref forwarding to all components
 - [ ] Unit tests for core components
 
 **Phase 2: Dropdown & Items** (Week 2)
-- [ ] Implement `Select.Portal` with container support
-- [ ] Implement `Select.Content` with positioning
-- [ ] Implement `Select.Viewport` (scrollable container)
-- [ ] Implement `Select.Item` with selection logic
-- [ ] Implement `Select.ItemText` and `Select.ItemIndicator`
+- [ ] Implement `SelectPortal` with container support
+- [ ] Implement `SelectContent` with positioning
+- [ ] Implement `SelectViewport` (scrollable container)
+- [ ] Implement `SelectItem` with selection logic
+- [ ] Implement `SelectItemText` and `SelectItemIndicator`
 - [ ] Add keyboard navigation (arrows, home/end)
 - [ ] Add type-ahead search functionality
 - [ ] Implement focus management
 - [ ] Unit tests for dropdown behavior
 
 **Phase 3: Advanced Features** (Week 3)
-- [ ] Implement `Select.Group` and `Select.Label`
-- [ ] Implement `Select.Separator`
-- [ ] Implement `Select.Arrow` (optional)
+- [ ] Implement `SelectGroup` and `SelectLabel`
+- [ ] Implement `SelectSeparator`
+- [ ] Implement `SelectArrow` (optional)
 - [ ] Add collision detection (viewport boundaries)
 - [ ] Add popper positioning mode
 - [ ] Implement RTL support

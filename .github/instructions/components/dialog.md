@@ -13,18 +13,18 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 
 ### Compound Component Structure
 ```tsx
-<Dialog.Root>
-  <Dialog.Trigger />
-  <Dialog.Portal>
-    <Dialog.Overlay />
-    <Dialog.Content>
-      <Dialog.Title />
-      <Dialog.Description />
-      <Dialog.Close />
+<DialogRoot>
+  <DialogTrigger />
+  <DialogPortal>
+    <DialogOverlay />
+    <DialogContent>
+      <DialogTitle />
+      <DialogDescription />
+      <DialogClose />
       {/* Custom content */}
-    </Dialog.Content>
-  </Dialog.Portal>
-</Dialog.Root>
+    </DialogContent>
+  </DialogPortal>
+</DialogRoot>
 ```
 
 ### Key Differentiators
@@ -450,12 +450,12 @@ For teams migrating from other dialog libraries:
 - Keep `open` prop pattern (consistent with Spar standards)
 - Update focus management to use built-in trapping
 - Migrate overlay click handling to `onPointerDownOutside` or `onInteractOutside`
-- Replace custom portal logic with `Dialog.Portal`
+- Replace custom portal logic with `DialogPortal`
 - Add `modal` prop to specify modal vs non-modal behavior
 
 **From Headless UI Dialog:**
 - Similar compound component structure
-- Replace `Dialog.Panel` with `Dialog.Content`
+- Replace `Dialog.Panel` with `DialogContent`
 - Update focus management props if customized
 - Migrate `static` prop usage to `forceMount`
 

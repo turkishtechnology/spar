@@ -21,7 +21,7 @@ export interface BreadcrumbContextValue {
 }
 
 /**
- * Own props for Breadcrumb.Root
+ * Own props for BreadcrumbRoot
  */
 export interface BreadcrumbRootOwnProps {
   /**
@@ -36,7 +36,7 @@ export interface BreadcrumbRootOwnProps {
 }
 
 /**
- * Props for Breadcrumb.Root
+ * Props for BreadcrumbRoot
  * @remarks Navigation landmark container for breadcrumb trail
  */
 export type BreadcrumbRootProps<T extends ElementType = 'nav'> = PolymorphicProps<
@@ -46,13 +46,13 @@ export type BreadcrumbRootProps<T extends ElementType = 'nav'> = PolymorphicProp
 >;
 
 /**
- * Props for Breadcrumb.List
+ * Props for BreadcrumbList
  * @remarks Ordered list container for breadcrumb items
  */
 export type BreadcrumbListProps<T extends ElementType = 'ol'> = PolymorphicProps<'ol', T>;
 
 /**
- * Own props for Breadcrumb.Item
+ * Own props for BreadcrumbItem
  */
 export interface BreadcrumbItemOwnProps {
   /**
@@ -68,7 +68,7 @@ export interface BreadcrumbItemOwnProps {
 }
 
 /**
- * Props for Breadcrumb.Item
+ * Props for BreadcrumbItem
  * @remarks List item wrapper for breadcrumb content
  */
 export type BreadcrumbItemProps<T extends ElementType = 'li'> = PolymorphicProps<
@@ -78,7 +78,7 @@ export type BreadcrumbItemProps<T extends ElementType = 'li'> = PolymorphicProps
 >;
 
 /**
- * Own props for Breadcrumb.Link
+ * Own props for BreadcrumbLink
  */
 export interface BreadcrumbLinkOwnProps {
   /**
@@ -102,7 +102,7 @@ export interface BreadcrumbLinkOwnProps {
 }
 
 /**
- * Props for Breadcrumb.Link
+ * Props for BreadcrumbLink
  * @remarks Interactive link for navigation
  */
 export type BreadcrumbLinkProps<T extends ElementType = 'a'> = PolymorphicProps<
@@ -112,13 +112,13 @@ export type BreadcrumbLinkProps<T extends ElementType = 'a'> = PolymorphicProps<
 >;
 
 /**
- * Props for Breadcrumb.Page
+ * Props for BreadcrumbPage
  * @remarks Current page indicator (non-interactive)
  */
 export type BreadcrumbPageProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
 
 /**
- * Props for Breadcrumb.Separator
+ * Props for BreadcrumbSeparator
  * @remarks Visual separator between breadcrumb items
  */
 export type BreadcrumbSeparatorProps<T extends ElementType = 'li'> = PolymorphicProps<'li', T>;

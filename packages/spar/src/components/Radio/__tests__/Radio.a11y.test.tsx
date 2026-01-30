@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { Radio } from '../Radio';
+import { RadioGroup, RadioItem } from '../index';
 
 expect.extend(toHaveNoViolations);
 
@@ -10,10 +10,10 @@ describe('Radio Accessibility', () => {
   describe('Automated A11y Testing', () => {
     it('should pass accessibility checks for radiogroup structure', async () => {
       const { container } = render(
-        <Radio.Group aria-label='Choose your option'>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup aria-label='Choose your option'>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+        </RadioGroup>,
       );
 
       // Test specific to radiogroup container, excluding the problematic nested elements
@@ -32,10 +32,10 @@ describe('Radio Accessibility', () => {
         <form>
           <fieldset>
             <legend id='group-legend'>Choose your preference</legend>
-            <Radio.Group aria-labelledby='group-legend' name='preference'>
-              <Radio.Item value='yes'>Yes</Radio.Item>
-              <Radio.Item value='no'>No</Radio.Item>
-            </Radio.Group>
+            <RadioGroup aria-labelledby='group-legend' name='preference'>
+              <RadioItem value='yes'>Yes</RadioItem>
+              <RadioItem value='no'>No</RadioItem>
+            </RadioGroup>
           </fieldset>
         </form>,
       );
@@ -55,10 +55,10 @@ describe('Radio Accessibility', () => {
   describe('ARIA Attributes', () => {
     it('should have proper radiogroup role and attributes', () => {
       render(
-        <Radio.Group aria-label='Choose option' required>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup aria-label='Choose option' required>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+        </RadioGroup>,
       );
 
       const radiogroup = screen.getByRole('radiogroup');
@@ -69,10 +69,10 @@ describe('Radio Accessibility', () => {
 
     it('should have proper radio roles and attributes for items', () => {
       const { container } = render(
-        <Radio.Group value='option1'>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup value='option1'>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+        </RadioGroup>,
       );
 
       // Use container to find label elements specifically
@@ -91,10 +91,10 @@ describe('Radio Accessibility', () => {
       const user = userEvent.setup();
 
       const { container } = render(
-        <Radio.Group>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+        </RadioGroup>,
       );
 
       const labels = container.querySelectorAll('label[role="radio"]');
@@ -111,12 +111,12 @@ describe('Radio Accessibility', () => {
 
     it('should handle disabled state correctly', () => {
       const { container } = render(
-        <Radio.Group>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2' disabled>
+        <RadioGroup>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2' disabled>
             Option 2
-          </Radio.Item>
-        </Radio.Group>,
+          </RadioItem>
+        </RadioGroup>,
       );
 
       const labels = container.querySelectorAll('label[role="radio"]');
@@ -130,11 +130,11 @@ describe('Radio Accessibility', () => {
   describe('Keyboard Navigation', () => {
     it('should support keyboard navigation structure', () => {
       const { container } = render(
-        <Radio.Group value='option1'>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-          <Radio.Item value='option3'>Option 3</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup value='option1'>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+          <RadioItem value='option3'>Option 3</RadioItem>
+        </RadioGroup>,
       );
 
       // Verify that the radiogroup has proper keyboard navigation setup
@@ -157,10 +157,10 @@ describe('Radio Accessibility', () => {
       const user = userEvent.setup();
 
       const { container } = render(
-        <Radio.Group>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+        </RadioGroup>,
       );
 
       const labels = container.querySelectorAll('label[role="radio"]');
@@ -175,11 +175,11 @@ describe('Radio Accessibility', () => {
   describe('Focus Management', () => {
     it('should implement roving tabindex', () => {
       const { container } = render(
-        <Radio.Group value='option2'>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-          <Radio.Item value='option3'>Option 3</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup value='option2'>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+          <RadioItem value='option3'>Option 3</RadioItem>
+        </RadioGroup>,
       );
 
       const labels = container.querySelectorAll('label[role="radio"]');
@@ -191,11 +191,11 @@ describe('Radio Accessibility', () => {
 
     it('should handle focus when no option is selected', () => {
       const { container } = render(
-        <Radio.Group>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-          <Radio.Item value='option3'>Option 3</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+          <RadioItem value='option3'>Option 3</RadioItem>
+        </RadioGroup>,
       );
 
       const labels = container.querySelectorAll('label[role="radio"]');
@@ -208,11 +208,11 @@ describe('Radio Accessibility', () => {
 
     it('should auto-focus when autoFocus is true', async () => {
       const { container } = render(
-        <Radio.Group autoFocus>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-          <Radio.Item value='option3'>Option 3</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup autoFocus>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+          <RadioItem value='option3'>Option 3</RadioItem>
+        </RadioGroup>,
       );
 
       const radioGroup = container.querySelector('[role="radiogroup"]');
@@ -225,11 +225,11 @@ describe('Radio Accessibility', () => {
 
     it('should auto-focus selected item when autoFocus is true', async () => {
       const { container } = render(
-        <Radio.Group autoFocus value='option2'>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-          <Radio.Item value='option3'>Option 3</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup autoFocus value='option2'>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+          <RadioItem value='option3'>Option 3</RadioItem>
+        </RadioGroup>,
       );
 
       const labels = container.querySelectorAll('label[role="radio"]');
@@ -240,10 +240,10 @@ describe('Radio Accessibility', () => {
 
     it('should not auto-focus by default', () => {
       const { container } = render(
-        <Radio.Group>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+        </RadioGroup>,
       );
 
       const radioGroup = container.querySelector('[role="radiogroup"]');
@@ -254,10 +254,10 @@ describe('Radio Accessibility', () => {
   describe('Screen Reader Support', () => {
     it('should work with hidden radio inputs for assistive technology', () => {
       const { container } = render(
-        <Radio.Group name='test' value='option1'>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup name='test' value='option1'>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+        </RadioGroup>,
       );
 
       const hiddenInputs = container.querySelectorAll('input[type="radio"]');
@@ -270,10 +270,10 @@ describe('Radio Accessibility', () => {
 
     it('should have proper labeling for screen readers', () => {
       const { container } = render(
-        <Radio.Group aria-label='Choose option'>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup aria-label='Choose option'>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+        </RadioGroup>,
       );
 
       const labels = container.querySelectorAll('label[role="radio"]');
@@ -284,20 +284,20 @@ describe('Radio Accessibility', () => {
 
     it('should work with complex content', () => {
       const { container } = render(
-        <Radio.Group aria-label='Choose plan'>
-          <Radio.Item value='basic'>
+        <RadioGroup aria-label='Choose plan'>
+          <RadioItem value='basic'>
             <div>
               <strong>Basic Plan</strong>
               <p>$10/month</p>
             </div>
-          </Radio.Item>
-          <Radio.Item value='premium'>
+          </RadioItem>
+          <RadioItem value='premium'>
             <div>
               <strong>Premium Plan</strong>
               <p>$20/month</p>
             </div>
-          </Radio.Item>
-        </Radio.Group>,
+          </RadioItem>
+        </RadioGroup>,
       );
 
       const labels = container.querySelectorAll('label[role="radio"]');
@@ -312,10 +312,10 @@ describe('Radio Accessibility', () => {
         <form>
           <fieldset>
             <legend id='group-legend'>Choose your preference</legend>
-            <Radio.Group aria-labelledby='group-legend' name='preference'>
-              <Radio.Item value='yes'>Yes</Radio.Item>
-              <Radio.Item value='no'>No</Radio.Item>
-            </Radio.Group>
+            <RadioGroup aria-labelledby='group-legend' name='preference'>
+              <RadioItem value='yes'>Yes</RadioItem>
+              <RadioItem value='no'>No</RadioItem>
+            </RadioGroup>
           </fieldset>
         </form>,
       );
@@ -330,10 +330,10 @@ describe('Radio Accessibility', () => {
           <p id='error-message' role='alert'>
             Please select an option
           </p>
-          <Radio.Group aria-label='Required choice' aria-describedby='error-message' required>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>
+          <RadioGroup aria-label='Required choice' aria-describedby='error-message' required>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>
         </div>,
       );
 
@@ -344,10 +344,10 @@ describe('Radio Accessibility', () => {
 
     it('should handle invalid state correctly', () => {
       render(
-        <Radio.Group aria-label='Required choice' aria-invalid='true'>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup aria-label='Required choice' aria-invalid='true'>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+        </RadioGroup>,
       );
 
       const radiogroup = screen.getByRole('radiogroup');
@@ -359,10 +359,10 @@ describe('Radio Accessibility', () => {
       const user = userEvent.setup();
 
       const { container } = render(
-        <Radio.Group value='option1' onValueChange={handleChange}>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup value='option1' onValueChange={handleChange}>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+        </RadioGroup>,
       );
 
       const labels = container.querySelectorAll('label[role="radio"]');

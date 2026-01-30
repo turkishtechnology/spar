@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '../index';
+import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '../index';
 import { useCollapsibleContext } from '../Collapsible';
 
 // Mock component to test context access
@@ -23,9 +23,9 @@ describe('Collapsible', () => {
   describe('Basic rendering and structure', () => {
     it('renders children correctly', () => {
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <div data-testid='child'>Child content</div>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('child')).toBeInTheDocument();
@@ -33,9 +33,9 @@ describe('Collapsible', () => {
 
     it('renders with correct default data attributes', () => {
       render(
-        <Collapsible data-testid='collapsible'>
+        <CollapsibleRoot data-testid='collapsible'>
           <div>Content</div>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const collapsible = screen.getByTestId('collapsible');
@@ -45,9 +45,9 @@ describe('Collapsible', () => {
 
     it('renders with data-disabled attribute when disabled', () => {
       render(
-        <Collapsible disabled data-testid='collapsible'>
+        <CollapsibleRoot disabled data-testid='collapsible'>
           <div>Content</div>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const collapsible = screen.getByTestId('collapsible');
@@ -56,9 +56,9 @@ describe('Collapsible', () => {
 
     it('forwards additional props to the root element', () => {
       render(
-        <Collapsible className='custom-class' data-custom='value' data-testid='collapsible'>
+        <CollapsibleRoot className='custom-class' data-custom='value' data-testid='collapsible'>
           <div>Content</div>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const collapsible = screen.getByTestId('collapsible');
@@ -70,9 +70,9 @@ describe('Collapsible', () => {
   describe('Context provider functionality', () => {
     it('provides context to child components', () => {
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('context-open')).toHaveTextContent('false');
@@ -83,18 +83,18 @@ describe('Collapsible', () => {
 
     it('generates consistent IDs across renders', () => {
       const { rerender } = render(
-        <Collapsible>
+        <CollapsibleRoot>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const initialTriggerId = screen.getByTestId('context-trigger-id').textContent;
       const initialContentId = screen.getByTestId('context-content-id').textContent;
 
       rerender(
-        <Collapsible>
+        <CollapsibleRoot>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('context-trigger-id')).toHaveTextContent(initialTriggerId!);
@@ -116,9 +116,9 @@ describe('Collapsible', () => {
   describe('Uncontrolled mode', () => {
     it('defaults to closed state', () => {
       render(
-        <Collapsible data-testid='collapsible'>
+        <CollapsibleRoot data-testid='collapsible'>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('collapsible')).toHaveAttribute('data-state', 'closed');
@@ -127,9 +127,9 @@ describe('Collapsible', () => {
 
     it('respects defaultOpen prop', () => {
       render(
-        <Collapsible defaultOpen data-testid='collapsible'>
+        <CollapsibleRoot defaultOpen data-testid='collapsible'>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('collapsible')).toHaveAttribute('data-state', 'open');
@@ -140,9 +140,9 @@ describe('Collapsible', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible data-testid='collapsible'>
+        <CollapsibleRoot data-testid='collapsible'>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('collapsible')).toHaveAttribute('data-state', 'closed');
@@ -158,9 +158,9 @@ describe('Collapsible', () => {
       const handleOpenChange = jest.fn();
 
       render(
-        <Collapsible onOpenChange={handleOpenChange}>
+        <CollapsibleRoot onOpenChange={handleOpenChange}>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       await user.click(screen.getByTestId('context-toggle'));
@@ -172,9 +172,9 @@ describe('Collapsible', () => {
   describe('Controlled mode', () => {
     it('respects controlled open prop', () => {
       render(
-        <Collapsible open={true} data-testid='collapsible'>
+        <CollapsibleRoot open={true} data-testid='collapsible'>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('collapsible')).toHaveAttribute('data-state', 'open');
@@ -186,9 +186,9 @@ describe('Collapsible', () => {
       const handleOpenChange = jest.fn();
 
       render(
-        <Collapsible open={false} onOpenChange={handleOpenChange} data-testid='collapsible'>
+        <CollapsibleRoot open={false} onOpenChange={handleOpenChange} data-testid='collapsible'>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       await user.click(screen.getByTestId('context-toggle'));
@@ -201,17 +201,17 @@ describe('Collapsible', () => {
 
     it('updates when controlled open prop changes', () => {
       const { rerender } = render(
-        <Collapsible open={false} data-testid='collapsible'>
+        <CollapsibleRoot open={false} data-testid='collapsible'>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('collapsible')).toHaveAttribute('data-state', 'closed');
 
       rerender(
-        <Collapsible open={true} data-testid='collapsible'>
+        <CollapsibleRoot open={true} data-testid='collapsible'>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('collapsible')).toHaveAttribute('data-state', 'open');
@@ -221,9 +221,9 @@ describe('Collapsible', () => {
   describe('Disabled state', () => {
     it('sets disabled in context when disabled', () => {
       render(
-        <Collapsible disabled>
+        <CollapsibleRoot disabled>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('context-disabled')).toHaveTextContent('true');
@@ -234,9 +234,9 @@ describe('Collapsible', () => {
       const handleOpenChange = jest.fn();
 
       render(
-        <Collapsible disabled onOpenChange={handleOpenChange} data-testid='collapsible'>
+        <CollapsibleRoot disabled onOpenChange={handleOpenChange} data-testid='collapsible'>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       await user.click(screen.getByTestId('context-toggle'));
@@ -250,14 +250,14 @@ describe('Collapsible', () => {
       const handleOpenChange = jest.fn();
 
       render(
-        <Collapsible
+        <CollapsibleRoot
           open={false}
           disabled
           onOpenChange={handleOpenChange}
           data-testid='collapsible'
         >
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       await user.click(screen.getByTestId('context-toggle'));
@@ -271,10 +271,10 @@ describe('Collapsible', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent data-testid='content'>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -289,10 +289,10 @@ describe('Collapsible', () => {
 
     it('maintains ARIA relationships between trigger and content', () => {
       render(
-        <Collapsible defaultOpen>
+        <CollapsibleRoot defaultOpen>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent data-testid='content'>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -311,9 +311,9 @@ describe('Collapsible', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible data-testid='collapsible'>
+        <CollapsibleRoot data-testid='collapsible'>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       // Should not throw when onOpenChange is undefined
@@ -326,9 +326,9 @@ describe('Collapsible', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible data-testid='collapsible'>
+        <CollapsibleRoot data-testid='collapsible'>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const toggleButton = screen.getByTestId('context-toggle');
@@ -343,18 +343,18 @@ describe('Collapsible', () => {
 
     it('maintains consistent behavior across prop updates', () => {
       const { rerender } = render(
-        <Collapsible defaultOpen={false}>
+        <CollapsibleRoot defaultOpen={false}>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('context-open')).toHaveTextContent('false');
 
       // Changing defaultOpen should not affect current state
       rerender(
-        <Collapsible defaultOpen={true}>
+        <CollapsibleRoot defaultOpen={true}>
           <TestComponent />
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('context-open')).toHaveTextContent('false');
@@ -363,7 +363,7 @@ describe('Collapsible', () => {
 
   describe('Component display names', () => {
     it('has correct display name', () => {
-      expect(Collapsible.displayName).toBe('Collapsible');
+      expect(CollapsibleRoot.displayName).toBe('Collapsible');
     });
   });
 });

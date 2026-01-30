@@ -9,7 +9,7 @@ import {
 } from 'react';
 import type { AccordionItemProps, AccordionItemContextValue } from './types';
 import { useAccordionContext } from './Accordion';
-import { Collapsible } from '../Collapsible';
+import { CollapsibleRoot } from '../Collapsible';
 
 const AccordionItemContext = createContext<AccordionItemContextValue | null>(null);
 
@@ -89,7 +89,7 @@ export const AccordionItem = <T extends ElementType = 'div'>({
 
   return (
     <AccordionItemContext.Provider value={itemContextValue}>
-      <Collapsible
+      <CollapsibleRoot
         open={isOpen}
         onOpenChange={toggle}
         disabled={isItemDisabled}
@@ -99,7 +99,7 @@ export const AccordionItem = <T extends ElementType = 'div'>({
         {...props}
       >
         {children}
-      </Collapsible>
+      </CollapsibleRoot>
     </AccordionItemContext.Provider>
   );
 };

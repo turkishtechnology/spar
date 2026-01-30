@@ -15,7 +15,7 @@ export interface InputContextValue {
 }
 
 /**
- * Props for Input.Root
+ * Props for InputRoot
  * @remarks Provides state context for compound input elements
  */
 export interface InputRootProps extends ComponentProps<'div'> {
@@ -39,7 +39,7 @@ export interface InputRootProps extends ComponentProps<'div'> {
 }
 
 /**
- * Base props for Input.Field
+ * Base props for InputField
  * @remarks Core input element with polymorphic element support
  */
 export interface InputFieldProps<T extends ElementType = 'input'> {
@@ -62,25 +62,25 @@ export interface InputFieldProps<T extends ElementType = 'input'> {
 }
 
 /**
- * Complete props for Input.Field with polymorphic support
+ * Complete props for InputField with polymorphic support
  */
 export type PolymorphicInputFieldProps<T extends ElementType = 'input'> = InputFieldProps<T> &
   Omit<React.ComponentPropsWithRef<T>, keyof InputFieldProps<T>>;
 
 /**
- * Props for Input.Label
+ * Props for InputLabel
  * @remarks Associated label element with automatic ID linking
  */
 export interface InputLabelProps extends ComponentProps<'label'> {}
 
 /**
- * Props for Input.Description
+ * Props for InputDescription
  * @remarks Helper text element for additional input guidance
  */
 export interface InputDescriptionProps extends ComponentProps<'div'> {}
 
 /**
- * Props for Input.ErrorMessage
+ * Props for InputErrorMessage
  * @remarks Error announcement element with automatic ARIA handling
  */
 export interface InputErrorMessageProps extends ComponentProps<'div'> {}

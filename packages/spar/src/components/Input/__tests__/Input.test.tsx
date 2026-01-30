@@ -1,6 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Input } from '../index';
+import {
+  Input,
+  InputRoot,
+  InputField,
+  InputLabel,
+  InputDescription,
+  InputErrorMessage,
+} from '../index';
 
 describe('Input', () => {
   afterEach(() => {
@@ -56,12 +63,12 @@ describe('Input', () => {
     });
   });
 
-  describe('Input.Root', () => {
+  describe('InputRoot', () => {
     it('renders with default props', () => {
       render(
-        <Input.Root>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot>
+          <InputField />
+        </InputRoot>,
       );
 
       const root = screen.getByRole('textbox').closest('[data-spar-input]');
@@ -73,9 +80,9 @@ describe('Input', () => {
 
     it('renders with invalid state', () => {
       render(
-        <Input.Root isInvalid>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot isInvalid>
+          <InputField />
+        </InputRoot>,
       );
 
       const root = screen.getByRole('textbox').closest('[data-spar-input]');
@@ -84,9 +91,9 @@ describe('Input', () => {
 
     it('renders with disabled state', () => {
       render(
-        <Input.Root disabled>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot disabled>
+          <InputField />
+        </InputRoot>,
       );
 
       const root = screen.getByRole('textbox').closest('[data-spar-input]');
@@ -95,9 +102,9 @@ describe('Input', () => {
 
     it('renders with required state', () => {
       render(
-        <Input.Root required>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot required>
+          <InputField />
+        </InputRoot>,
       );
 
       const root = screen.getByRole('textbox').closest('[data-spar-input]');
@@ -106,18 +113,18 @@ describe('Input', () => {
 
     it('updates state when props change', () => {
       const { rerender } = render(
-        <Input.Root isInvalid={false}>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot isInvalid={false}>
+          <InputField />
+        </InputRoot>,
       );
 
       let root = screen.getByRole('textbox').closest('[data-spar-input]');
       expect(root).not.toHaveAttribute('data-invalid');
 
       rerender(
-        <Input.Root isInvalid={true}>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot isInvalid={true}>
+          <InputField />
+        </InputRoot>,
       );
 
       root = screen.getByRole('textbox').closest('[data-spar-input]');
@@ -126,9 +133,9 @@ describe('Input', () => {
 
     it('passes through additional props', () => {
       render(
-        <Input.Root className='custom-class' data-testid='input-root'>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot className='custom-class' data-testid='input-root'>
+          <InputField />
+        </InputRoot>,
       );
 
       const root = screen.getByTestId('input-root');
@@ -137,12 +144,12 @@ describe('Input', () => {
     });
   });
 
-  describe('Input.Field', () => {
+  describe('InputField', () => {
     it('renders as input by default', () => {
       render(
-        <Input.Root>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot>
+          <InputField />
+        </InputRoot>,
       );
 
       const field = screen.getByRole('textbox');
@@ -152,9 +159,9 @@ describe('Input', () => {
 
     it('renders with custom type', () => {
       render(
-        <Input.Root>
-          <Input.Field type='email' />
-        </Input.Root>,
+        <InputRoot>
+          <InputField type='email' />
+        </InputRoot>,
       );
 
       const field = screen.getByRole('textbox');
@@ -163,9 +170,9 @@ describe('Input', () => {
 
     it('renders as textarea when specified', () => {
       render(
-        <Input.Root>
-          <Input.Field as='textarea' />
-        </Input.Root>,
+        <InputRoot>
+          <InputField as='textarea' />
+        </InputRoot>,
       );
 
       const field = screen.getByRole('textbox');
@@ -175,9 +182,9 @@ describe('Input', () => {
 
     it('applies disabled state from context', () => {
       render(
-        <Input.Root disabled>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot disabled>
+          <InputField />
+        </InputRoot>,
       );
 
       const field = screen.getByRole('textbox');
@@ -186,9 +193,9 @@ describe('Input', () => {
 
     it('applies required state from context', () => {
       render(
-        <Input.Root required>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot required>
+          <InputField />
+        </InputRoot>,
       );
 
       const field = screen.getByRole('textbox');
@@ -197,9 +204,9 @@ describe('Input', () => {
 
     it('applies invalid state from context', () => {
       render(
-        <Input.Root isInvalid>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot isInvalid>
+          <InputField />
+        </InputRoot>,
       );
 
       const field = screen.getByRole('textbox');
@@ -212,9 +219,9 @@ describe('Input', () => {
       const onBlur = jest.fn();
 
       render(
-        <Input.Root>
-          <Input.Field onFocus={onFocus} onBlur={onBlur} />
-        </Input.Root>,
+        <InputRoot>
+          <InputField onFocus={onFocus} onBlur={onBlur} />
+        </InputRoot>,
       );
 
       const field = screen.getByRole('textbox');
@@ -233,9 +240,9 @@ describe('Input', () => {
       const onChange = jest.fn();
 
       render(
-        <Input.Root>
-          <Input.Field onChange={onChange} />
-        </Input.Root>,
+        <InputRoot>
+          <InputField onChange={onChange} />
+        </InputRoot>,
       );
 
       const field = screen.getByRole('textbox');
@@ -247,9 +254,9 @@ describe('Input', () => {
 
     it('passes through additional props', () => {
       render(
-        <Input.Root>
-          <Input.Field placeholder='Enter text' className='custom-input' />
-        </Input.Root>,
+        <InputRoot>
+          <InputField placeholder='Enter text' className='custom-input' />
+        </InputRoot>,
       );
 
       const field = screen.getByRole('textbox');
@@ -258,8 +265,8 @@ describe('Input', () => {
       expect(field).toHaveAttribute('data-spar-input-field');
     });
 
-    it('renders as standalone input when used outside Input.Root', () => {
-      render(<Input.Field data-testid='standalone-field' />);
+    it('renders as standalone input when used outside InputRoot', () => {
+      render(<InputField data-testid='standalone-field' />);
 
       const field = screen.getByTestId('standalone-field');
 
@@ -273,13 +280,13 @@ describe('Input', () => {
     });
   });
 
-  describe('Input.Label', () => {
+  describe('InputLabel', () => {
     it('renders and associates with field', () => {
       render(
-        <Input.Root>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot>
+          <InputLabel>Username</InputLabel>
+          <InputField />
+        </InputRoot>,
       );
 
       const label = screen.getByText('Username');
@@ -293,34 +300,34 @@ describe('Input', () => {
 
     it('passes through additional props', () => {
       render(
-        <Input.Root>
-          <Input.Label className='custom-label'>Username</Input.Label>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot>
+          <InputLabel className='custom-label'>Username</InputLabel>
+          <InputField />
+        </InputRoot>,
       );
 
       const label = screen.getByText('Username');
       expect(label).toHaveClass('custom-label');
     });
 
-    it('throws error when used outside Input.Root', () => {
+    it('throws error when used outside InputRoot', () => {
       jest.spyOn(console, 'error').mockImplementation(() => {});
 
       expect(() => {
-        render(<Input.Label>Username</Input.Label>);
-      }).toThrow('Input compound components must be used within Input.Root');
+        render(<InputLabel>Username</InputLabel>);
+      }).toThrow('Input compound components must be used within InputRoot');
 
       jest.restoreAllMocks();
     });
   });
 
-  describe('Input.Description', () => {
+  describe('InputDescription', () => {
     it('renders and associates with field when valid', () => {
       render(
-        <Input.Root>
-          <Input.Field />
-          <Input.Description>Enter your username</Input.Description>
-        </Input.Root>,
+        <InputRoot>
+          <InputField />
+          <InputDescription>Enter your username</InputDescription>
+        </InputRoot>,
       );
 
       const description = screen.getByText('Enter your username');
@@ -332,34 +339,34 @@ describe('Input', () => {
 
     it('passes through additional props', () => {
       render(
-        <Input.Root>
-          <Input.Field />
-          <Input.Description className='custom-description'>Enter your username</Input.Description>
-        </Input.Root>,
+        <InputRoot>
+          <InputField />
+          <InputDescription className='custom-description'>Enter your username</InputDescription>
+        </InputRoot>,
       );
 
       const description = screen.getByText('Enter your username');
       expect(description).toHaveClass('custom-description');
     });
 
-    it('throws error when used outside Input.Root', () => {
+    it('throws error when used outside InputRoot', () => {
       jest.spyOn(console, 'error').mockImplementation(() => {});
 
       expect(() => {
-        render(<Input.Description>Help text</Input.Description>);
-      }).toThrow('Input compound components must be used within Input.Root');
+        render(<InputDescription>Help text</InputDescription>);
+      }).toThrow('Input compound components must be used within InputRoot');
 
       jest.restoreAllMocks();
     });
   });
 
-  describe('Input.ErrorMessage', () => {
+  describe('InputErrorMessage', () => {
     it('renders when input is invalid', () => {
       render(
-        <Input.Root isInvalid>
-          <Input.Field />
-          <Input.ErrorMessage>Username is required</Input.ErrorMessage>
-        </Input.Root>,
+        <InputRoot isInvalid>
+          <InputField />
+          <InputErrorMessage>Username is required</InputErrorMessage>
+        </InputRoot>,
       );
 
       const error = screen.getByText('Username is required');
@@ -373,10 +380,10 @@ describe('Input', () => {
 
     it('does not render when input is valid', () => {
       render(
-        <Input.Root isInvalid={false}>
-          <Input.Field />
-          <Input.ErrorMessage>Username is required</Input.ErrorMessage>
-        </Input.Root>,
+        <InputRoot isInvalid={false}>
+          <InputField />
+          <InputErrorMessage>Username is required</InputErrorMessage>
+        </InputRoot>,
       );
 
       const error = screen.queryByText('Username is required');
@@ -385,19 +392,19 @@ describe('Input', () => {
 
     it('updates visibility when invalid state changes', () => {
       const { rerender } = render(
-        <Input.Root isInvalid={false}>
-          <Input.Field />
-          <Input.ErrorMessage>Username is required</Input.ErrorMessage>
-        </Input.Root>,
+        <InputRoot isInvalid={false}>
+          <InputField />
+          <InputErrorMessage>Username is required</InputErrorMessage>
+        </InputRoot>,
       );
 
       expect(screen.queryByText('Username is required')).not.toBeInTheDocument();
 
       rerender(
-        <Input.Root isInvalid={true}>
-          <Input.Field />
-          <Input.ErrorMessage>Username is required</Input.ErrorMessage>
-        </Input.Root>,
+        <InputRoot isInvalid={true}>
+          <InputField />
+          <InputErrorMessage>Username is required</InputErrorMessage>
+        </InputRoot>,
       );
 
       expect(screen.getByText('Username is required')).toBeInTheDocument();
@@ -405,22 +412,22 @@ describe('Input', () => {
 
     it('passes through additional props when visible', () => {
       render(
-        <Input.Root isInvalid>
-          <Input.Field />
-          <Input.ErrorMessage className='custom-error'>Username is required</Input.ErrorMessage>
-        </Input.Root>,
+        <InputRoot isInvalid>
+          <InputField />
+          <InputErrorMessage className='custom-error'>Username is required</InputErrorMessage>
+        </InputRoot>,
       );
 
       const error = screen.getByText('Username is required');
       expect(error).toHaveClass('custom-error');
     });
 
-    it('throws error when used outside Input.Root', () => {
+    it('throws error when used outside InputRoot', () => {
       jest.spyOn(console, 'error').mockImplementation(() => {});
 
       expect(() => {
-        render(<Input.ErrorMessage>Error</Input.ErrorMessage>);
-      }).toThrow('Input compound components must be used within Input.Root');
+        render(<InputErrorMessage>Error</InputErrorMessage>);
+      }).toThrow('Input compound components must be used within InputRoot');
 
       jest.restoreAllMocks();
     });
@@ -428,11 +435,11 @@ describe('Input', () => {
 
   describe('Component Display Names', () => {
     it('has correct display names', () => {
-      expect(Input.Root.displayName).toBe('Input.Root');
-      expect(Input.Field.displayName).toBe('Input.Field');
-      expect(Input.Label.displayName).toBe('Input.Label');
-      expect(Input.Description.displayName).toBe('Input.Description');
-      expect(Input.ErrorMessage.displayName).toBe('Input.ErrorMessage');
+      expect(InputRoot.displayName).toBe('InputRoot');
+      expect(InputField.displayName).toBe('InputField');
+      expect(InputLabel.displayName).toBe('InputLabel');
+      expect(InputDescription.displayName).toBe('InputDescription');
+      expect(InputErrorMessage.displayName).toBe('InputErrorMessage');
     });
   });
 });

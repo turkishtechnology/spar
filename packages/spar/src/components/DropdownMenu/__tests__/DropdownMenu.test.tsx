@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
-  DropdownMenu,
+  DropdownMenuRoot,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -17,12 +17,12 @@ import {
 } from '../';
 
 describe('DropdownMenu', () => {
-  describe('DropdownMenu.Root', () => {
+  describe('DropdownMenuRoot', () => {
     it('should render children without crashing', () => {
       render(
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <div>Test content</div>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
       expect(screen.getByText('Test content')).toBeInTheDocument();
     });
@@ -30,12 +30,12 @@ describe('DropdownMenu', () => {
     it('should manage open state when uncontrolled', () => {
       const onOpenChange = jest.fn();
       render(
-        <DropdownMenu defaultOpen={true} onOpenChange={onOpenChange}>
+        <DropdownMenuRoot defaultOpen={true} onOpenChange={onOpenChange}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
@@ -44,23 +44,23 @@ describe('DropdownMenu', () => {
     it('should respect controlled open state', () => {
       const onOpenChange = jest.fn();
       const { rerender } = render(
-        <DropdownMenu open={false} onOpenChange={onOpenChange}>
+        <DropdownMenuRoot open={false} onOpenChange={onOpenChange}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
       rerender(
-        <DropdownMenu open={true} onOpenChange={onOpenChange}>
+        <DropdownMenuRoot open={true} onOpenChange={onOpenChange}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
@@ -71,12 +71,12 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu onOpenChange={onOpenChange}>
+        <DropdownMenuRoot onOpenChange={onOpenChange}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Open Menu' });
@@ -87,9 +87,9 @@ describe('DropdownMenu', () => {
 
     it('should support custom dir prop', () => {
       const { container } = render(
-        <DropdownMenu dir='rtl'>
+        <DropdownMenuRoot dir='rtl'>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(container).toBeInTheDocument();
@@ -100,12 +100,12 @@ describe('DropdownMenu', () => {
       const onOpenChange = jest.fn();
 
       render(
-        <DropdownMenu disabled onOpenChange={onOpenChange}>
+        <DropdownMenuRoot disabled onOpenChange={onOpenChange}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -122,12 +122,12 @@ describe('DropdownMenu', () => {
       const onOpenChange = jest.fn();
 
       render(
-        <DropdownMenu disabled={false} onOpenChange={onOpenChange}>
+        <DropdownMenuRoot disabled={false} onOpenChange={onOpenChange}>
           <DropdownMenuTrigger disabled>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -142,12 +142,12 @@ describe('DropdownMenu', () => {
       const onOpenChange = jest.fn();
 
       render(
-        <DropdownMenu disabled onOpenChange={onOpenChange}>
+        <DropdownMenuRoot disabled onOpenChange={onOpenChange}>
           <DropdownMenuTrigger disabled={false}>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -158,12 +158,12 @@ describe('DropdownMenu', () => {
     });
   });
 
-  describe('DropdownMenu.Trigger', () => {
+  describe('DropdownMenuTrigger', () => {
     it('should render as button by default', () => {
       render(
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -173,12 +173,12 @@ describe('DropdownMenu', () => {
 
     it('should have proper ARIA attributes when closed', () => {
       render(
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -190,12 +190,12 @@ describe('DropdownMenu', () => {
 
     it('should have proper ARIA attributes when open', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -209,12 +209,12 @@ describe('DropdownMenu', () => {
     it('should toggle menu on click', async () => {
       const user = userEvent.setup();
       render(
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -236,12 +236,12 @@ describe('DropdownMenu', () => {
     it('should open menu on Arrow Down key', async () => {
       const user = userEvent.setup();
       render(
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -254,12 +254,12 @@ describe('DropdownMenu', () => {
     it('should open menu on Arrow Up key', async () => {
       const user = userEvent.setup();
       render(
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -272,12 +272,12 @@ describe('DropdownMenu', () => {
     it('should toggle menu on Enter key', async () => {
       const user = userEvent.setup();
       render(
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -295,12 +295,12 @@ describe('DropdownMenu', () => {
     it('should toggle menu on Space key', async () => {
       const user = userEvent.setup();
       render(
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -315,12 +315,12 @@ describe('DropdownMenu', () => {
       const onOpenChange = jest.fn();
 
       render(
-        <DropdownMenu onOpenChange={onOpenChange}>
+        <DropdownMenuRoot onOpenChange={onOpenChange}>
           <DropdownMenuTrigger disabled>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -336,12 +336,12 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <DropdownMenuTrigger onClick={onClick}>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -355,12 +355,12 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <DropdownMenuTrigger onKeyDown={onKeyDown}>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByRole('button');
@@ -372,9 +372,9 @@ describe('DropdownMenu', () => {
 
     it('should support custom component via as prop', () => {
       render(
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <DropdownMenuTrigger as='div'>Open Menu</DropdownMenuTrigger>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const trigger = screen.getByText('Open Menu');
@@ -382,15 +382,15 @@ describe('DropdownMenu', () => {
     });
   });
 
-  describe('DropdownMenu.Content', () => {
+  describe('DropdownMenuContent', () => {
     it('should not render when menu is closed', () => {
       render(
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
@@ -398,12 +398,12 @@ describe('DropdownMenu', () => {
 
     it('should render when menu is open', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const content = screen.getByRole('menu');
@@ -413,12 +413,12 @@ describe('DropdownMenu', () => {
 
     it('should have proper ARIA attributes', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const content = screen.getByRole('menu');
@@ -430,12 +430,12 @@ describe('DropdownMenu', () => {
 
     it('should support side and align props', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent side='top' align='end'>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const content = screen.getByRole('menu');
@@ -445,12 +445,12 @@ describe('DropdownMenu', () => {
 
     it('should close on Escape key', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
@@ -467,12 +467,12 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent onEscapeKeyDown={onEscapeKeyDown}>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       // Focus on content element first
@@ -490,12 +490,12 @@ describe('DropdownMenu', () => {
 
     it('should close on Tab key', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
@@ -508,15 +508,15 @@ describe('DropdownMenu', () => {
     });
   });
 
-  describe('DropdownMenu.Item', () => {
+  describe('DropdownMenuItem', () => {
     it('should render as div by default', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const item = screen.getByRole('menuitem');
@@ -527,13 +527,13 @@ describe('DropdownMenu', () => {
     it('should have proper ARIA attributes', async () => {
       const user = userEvent.setup();
       render(
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
             <DropdownMenuItem disabled>Item 2</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       // Open the menu with multiple approaches to ensure focus strategy is set
@@ -601,12 +601,12 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onSelect={onSelect}>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const item = screen.getByRole('menuitem');
@@ -620,12 +620,12 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onSelect={onSelect}>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const item = screen.getByRole('menuitem');
@@ -640,12 +640,12 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onSelect={onSelect}>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const item = screen.getByRole('menuitem');
@@ -660,14 +660,14 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onSelect={onSelect} disabled>
               Item 1
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const item = screen.getByRole('menuitem');
@@ -680,12 +680,12 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu closeOnSelect={true} defaultOpen={true}>
+        <DropdownMenuRoot closeOnSelect={true} defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
@@ -702,12 +702,12 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu closeOnSelect='auto' defaultOpen={true}>
+        <DropdownMenuRoot closeOnSelect='auto' defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
@@ -724,12 +724,12 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu closeOnSelect={false} defaultOpen={true}>
+        <DropdownMenuRoot closeOnSelect={false} defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
@@ -741,15 +741,15 @@ describe('DropdownMenu', () => {
     });
   });
 
-  describe('DropdownMenu.CheckboxItem', () => {
+  describe('DropdownMenuCheckboxItem', () => {
     it('should render with proper role and attributes', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuCheckboxItem checked={true}>Checkbox Item</DropdownMenuCheckboxItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const item = screen.getByRole('menuitemcheckbox');
@@ -759,14 +759,14 @@ describe('DropdownMenu', () => {
 
     it('should handle indeterminate state', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuCheckboxItem checked='indeterminate'>
               Checkbox Item
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const item = screen.getByRole('menuitemcheckbox');
@@ -779,14 +779,14 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuCheckboxItem checked={false} onCheckedChange={onCheckedChange}>
               Checkbox Item
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const item = screen.getByRole('menuitemcheckbox');
@@ -800,14 +800,14 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuCheckboxItem checked='indeterminate' onCheckedChange={onCheckedChange}>
               Checkbox Item
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const item = screen.getByRole('menuitemcheckbox');
@@ -820,12 +820,12 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu closeOnSelect='auto' defaultOpen={true}>
+        <DropdownMenuRoot closeOnSelect='auto' defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuCheckboxItem>Checkbox Item</DropdownMenuCheckboxItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
@@ -837,10 +837,10 @@ describe('DropdownMenu', () => {
     });
   });
 
-  describe('DropdownMenu.RadioGroup & RadioItem', () => {
+  describe('DropdownMenuRadioGroup & RadioItem', () => {
     it('should render radio group with proper role', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuRadioGroup value='option1'>
@@ -848,7 +848,7 @@ describe('DropdownMenu', () => {
               <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(screen.getByRole('group')).toBeInTheDocument();
@@ -858,7 +858,7 @@ describe('DropdownMenu', () => {
 
     it('should reflect selected value in radio items', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuRadioGroup value='option2'>
@@ -866,7 +866,7 @@ describe('DropdownMenu', () => {
               <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const radioItems = screen.getAllByRole('menuitemradio');
@@ -880,7 +880,7 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuRadioGroup value='option1' onValueChange={onValueChange}>
@@ -888,7 +888,7 @@ describe('DropdownMenu', () => {
               <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const radioItems = screen.getAllByRole('menuitemradio');
@@ -901,7 +901,7 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu closeOnSelect='auto' defaultOpen={true}>
+        <DropdownMenuRoot closeOnSelect='auto' defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuRadioGroup value='option1'>
@@ -909,7 +909,7 @@ describe('DropdownMenu', () => {
               <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
@@ -921,17 +921,17 @@ describe('DropdownMenu', () => {
     });
   });
 
-  describe('DropdownMenu.Separator', () => {
+  describe('DropdownMenuSeparator', () => {
     it('should render with proper role and attributes', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Item 2</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const separator = screen.getByRole('separator');
@@ -940,16 +940,16 @@ describe('DropdownMenu', () => {
     });
   });
 
-  describe('DropdownMenu.Label', () => {
+  describe('DropdownMenuLabel', () => {
     it('should render as div by default', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>Menu Label</DropdownMenuLabel>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const label = screen.getByText('Menu Label');
@@ -958,10 +958,10 @@ describe('DropdownMenu', () => {
     });
   });
 
-  describe('DropdownMenu.Group', () => {
+  describe('DropdownMenuGroup', () => {
     it('should render with proper role', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuGroup>
@@ -969,7 +969,7 @@ describe('DropdownMenu', () => {
               <DropdownMenuItem>Item 2</DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const groups = screen.getAllByRole('group');
@@ -977,10 +977,10 @@ describe('DropdownMenu', () => {
     });
   });
 
-  describe('DropdownMenu.Sub', () => {
+  describe('DropdownMenuSub', () => {
     it('should manage submenu open state', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuSub defaultOpen={true}>
@@ -990,7 +990,7 @@ describe('DropdownMenu', () => {
               </DropdownMenuSubContent>
             </DropdownMenuSub>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       expect(screen.getByText('Sub Item 1')).toBeInTheDocument();
@@ -1001,7 +1001,7 @@ describe('DropdownMenu', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuSub onOpenChange={onOpenChange}>
@@ -1011,7 +1011,7 @@ describe('DropdownMenu', () => {
               </DropdownMenuSubContent>
             </DropdownMenuSub>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const subTrigger = screen.getByText('Submenu Trigger');
@@ -1022,7 +1022,7 @@ describe('DropdownMenu', () => {
 
     it('should show submenu state in trigger', () => {
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenuRoot defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuSub defaultOpen={true}>
@@ -1032,7 +1032,7 @@ describe('DropdownMenu', () => {
               </DropdownMenuSubContent>
             </DropdownMenuSub>
           </DropdownMenuContent>
-        </DropdownMenu>,
+        </DropdownMenuRoot>,
       );
 
       const subTrigger = screen.getByText('Submenu Trigger');
@@ -1046,7 +1046,7 @@ describe('DropdownMenu', () => {
 
       expect(() => {
         render(<DropdownMenuTrigger>Trigger</DropdownMenuTrigger>);
-      }).toThrow('DropdownMenu components must be used within DropdownMenu.Root');
+      }).toThrow('DropdownMenu components must be used within DropdownMenuRoot');
 
       consoleSpy.mockRestore();
     });
@@ -1056,7 +1056,7 @@ describe('DropdownMenu', () => {
 
       expect(() => {
         render(<DropdownMenuContent>Content</DropdownMenuContent>);
-      }).toThrow('DropdownMenu components must be used within DropdownMenu.Root');
+      }).toThrow('DropdownMenu components must be used within DropdownMenuRoot');
 
       consoleSpy.mockRestore();
     });
@@ -1066,7 +1066,7 @@ describe('DropdownMenu', () => {
 
       expect(() => {
         render(<DropdownMenuItem>Item</DropdownMenuItem>);
-      }).toThrow('DropdownMenu items must be rendered within DropdownMenu.Content');
+      }).toThrow('DropdownMenu items must be rendered within DropdownMenuContent');
 
       consoleSpy.mockRestore();
     });

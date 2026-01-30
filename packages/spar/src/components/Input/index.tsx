@@ -6,38 +6,13 @@ import { InputErrorMessage } from './InputErrorMessage';
 import type { ElementType } from 'react';
 import type { PolymorphicInputFieldProps } from './types';
 
-// Create callable compound component with default behavior
-const Input = Object.assign(
-  // Default function behavior for simple usage (no wrapper div!)
-  <T extends ElementType = 'input'>(props: PolymorphicInputFieldProps<T>) => (
-    <InputField {...props} />
-  ),
-  // Compound component methods
-  {
-    Root: InputRoot,
-    Field: InputField,
-    Label: InputLabel,
-    Description: InputDescription,
-    ErrorMessage: InputErrorMessage,
-  },
+// Simple usage component (no wrapper div).
+const Input = <T extends ElementType = 'input'>(props: PolymorphicInputFieldProps<T>) => (
+  <InputField {...props} />
 );
 
-// Export both patterns
-export {
-  // Callable compound component (supports both simple and compound usage)
-  Input,
+export { Input, InputRoot, InputField, InputLabel, InputDescription, InputErrorMessage };
 
-  // Named exports (tree-shakeable)
-  InputField,
-  InputLabel,
-  InputDescription,
-  InputErrorMessage,
-
-  // Root alias for explicit usage
-  InputRoot,
-};
-
-// Export types
 export type {
   InputContextValue,
   InputRootProps,
@@ -51,16 +26,16 @@ export type {
 // Usage examples:
 // 1. Simple usage (most common):
 //    import { Input } from '@spar/components';
-//    <Input placeholder="Enter text" />
+//    <Input placeholder='Enter text' />
 //
 // 2. Compound usage (advanced):
-//    import { Input } from '@spar/components';
-//    <Input.Root>
-//      <Input.Label>Username</Input.Label>
-//      <Input.Field />
-//      <Input.Description>Enter your username</Input.Description>
-//    </Input.Root>
+//    import { InputRoot, InputLabel, InputField, InputDescription } from '@spar/components';
+//    <InputRoot>
+//      <InputLabel>Username</InputLabel>
+//      <InputField />
+//      <InputDescription>Enter your username</InputDescription>
+//    </InputRoot>
 //
 // 3. Named imports (tree-shakeable):
 //    import { InputRoot, InputField } from '@spar/components';
-//    <InputRoot><InputField /></InputRoot>,
+//    <InputRoot><InputField /></InputRoot>

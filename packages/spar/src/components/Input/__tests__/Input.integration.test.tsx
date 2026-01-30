@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Input } from '../index';
+import { InputRoot, InputField, InputLabel, InputDescription, InputErrorMessage } from '../index';
 
 describe('Input Integration', () => {
   afterEach(() => {
@@ -15,10 +15,10 @@ describe('Input Integration', () => {
 
       render(
         <form onSubmit={onSubmit}>
-          <Input.Root>
-            <Input.Label>Username</Input.Label>
-            <Input.Field name='username' />
-          </Input.Root>
+          <InputRoot>
+            <InputLabel>Username</InputLabel>
+            <InputField name='username' />
+          </InputRoot>
           <button type='submit'>Submit</button>
         </form>,
       );
@@ -41,10 +41,10 @@ describe('Input Integration', () => {
 
       render(
         <form onSubmit={onSubmit}>
-          <Input.Root required>
-            <Input.Label>Username</Input.Label>
-            <Input.Field name='username' />
-          </Input.Root>
+          <InputRoot required>
+            <InputLabel>Username</InputLabel>
+            <InputField name='username' />
+          </InputRoot>
           <button type='submit'>Submit</button>
         </form>,
       );
@@ -65,10 +65,10 @@ describe('Input Integration', () => {
 
       render(
         <form>
-          <Input.Root>
-            <Input.Label>Username</Input.Label>
-            <Input.Field name='username' defaultValue='initial' />
-          </Input.Root>
+          <InputRoot>
+            <InputLabel>Username</InputLabel>
+            <InputField name='username' defaultValue='initial' />
+          </InputRoot>
           <button type='reset'>Reset</button>
         </form>,
       );
@@ -97,14 +97,14 @@ describe('Input Integration', () => {
 
       render(
         <form onSubmit={handleSubmit}>
-          <Input.Root>
-            <Input.Label>Username</Input.Label>
-            <Input.Field name='username' />
-          </Input.Root>
-          <Input.Root>
-            <Input.Label>Email</Input.Label>
-            <Input.Field name='email' type='email' />
-          </Input.Root>
+          <InputRoot>
+            <InputLabel>Username</InputLabel>
+            <InputField name='username' />
+          </InputRoot>
+          <InputRoot>
+            <InputLabel>Email</InputLabel>
+            <InputField name='email' type='email' />
+          </InputRoot>
           <button type='submit'>Submit</button>
         </form>,
       );
@@ -147,12 +147,12 @@ describe('Input Integration', () => {
         };
 
         return (
-          <Input.Root isInvalid={!!error}>
-            <Input.Label>Username</Input.Label>
-            <Input.Field value={value} onChange={handleChange} />
-            <Input.Description>Enter at least 3 characters</Input.Description>
-            <Input.ErrorMessage>{error}</Input.ErrorMessage>
-          </Input.Root>
+          <InputRoot isInvalid={!!error}>
+            <InputLabel>Username</InputLabel>
+            <InputField value={value} onChange={handleChange} />
+            <InputDescription>Enter at least 3 characters</InputDescription>
+            <InputErrorMessage>{error}</InputErrorMessage>
+          </InputRoot>
         );
       };
 
@@ -201,18 +201,18 @@ describe('Input Integration', () => {
         };
 
         return (
-          <Input.Root isInvalid={!!error}>
-            <Input.Label>Username</Input.Label>
-            <Input.Field
+          <InputRoot isInvalid={!!error}>
+            <InputLabel>Username</InputLabel>
+            <InputField
               value={value}
               onChange={(e) => setValue(e.target.value)}
               onBlur={handleBlur}
             />
-            <Input.Description>
+            <InputDescription>
               {isValidating ? 'Checking availability...' : 'Choose a unique username'}
-            </Input.Description>
-            <Input.ErrorMessage>{error}</Input.ErrorMessage>
-          </Input.Root>
+            </InputDescription>
+            <InputErrorMessage>{error}</InputErrorMessage>
+          </InputRoot>
         );
       };
 
@@ -258,9 +258,9 @@ describe('Input Integration', () => {
 
         return (
           <div>
-            <Input.Root>
-              <Input.Label>Password</Input.Label>
-              <Input.Field
+            <InputRoot>
+              <InputLabel>Password</InputLabel>
+              <InputField
                 type='password'
                 value={password}
                 onChange={(e) => {
@@ -268,10 +268,10 @@ describe('Input Integration', () => {
                   validatePasswords(e.target.value, confirmPassword);
                 }}
               />
-            </Input.Root>
-            <Input.Root isInvalid={!!error}>
-              <Input.Label>Confirm Password</Input.Label>
-              <Input.Field
+            </InputRoot>
+            <InputRoot isInvalid={!!error}>
+              <InputLabel>Confirm Password</InputLabel>
+              <InputField
                 type='password'
                 value={confirmPassword}
                 onChange={(e) => {
@@ -279,8 +279,8 @@ describe('Input Integration', () => {
                   validatePasswords(password, e.target.value);
                 }}
               />
-              <Input.ErrorMessage>{error}</Input.ErrorMessage>
-            </Input.Root>
+              <InputErrorMessage>{error}</InputErrorMessage>
+            </InputRoot>
           </div>
         );
       };
@@ -314,14 +314,14 @@ describe('Input Integration', () => {
 
       render(
         <div>
-          <Input.Root>
-            <Input.Label>Source</Input.Label>
-            <Input.Field defaultValue='Copy this text' />
-          </Input.Root>
-          <Input.Root>
-            <Input.Label>Destination</Input.Label>
-            <Input.Field />
-          </Input.Root>
+          <InputRoot>
+            <InputLabel>Source</InputLabel>
+            <InputField defaultValue='Copy this text' />
+          </InputRoot>
+          <InputRoot>
+            <InputLabel>Destination</InputLabel>
+            <InputField />
+          </InputRoot>
         </div>,
       );
 
@@ -344,10 +344,10 @@ describe('Input Integration', () => {
       const user = userEvent.setup();
 
       render(
-        <Input.Root>
-          <Input.Label>Text</Input.Label>
-          <Input.Field />
-        </Input.Root>,
+        <InputRoot>
+          <InputLabel>Text</InputLabel>
+          <InputField />
+        </InputRoot>,
       );
 
       const field = screen.getByRole('textbox');
@@ -372,10 +372,10 @@ describe('Input Integration', () => {
       const user = userEvent.setup();
 
       render(
-        <Input.Root>
-          <Input.Label>Email</Input.Label>
-          <Input.Field type='email' autoComplete='email' />
-        </Input.Root>,
+        <InputRoot>
+          <InputLabel>Email</InputLabel>
+          <InputField type='email' autoComplete='email' />
+        </InputRoot>,
       );
 
       const field = screen.getByRole('textbox');
@@ -396,14 +396,14 @@ describe('Input Integration', () => {
       render(
         <div>
           <button>Before</button>
-          <Input.Root>
-            <Input.Label>Field 1</Input.Label>
-            <Input.Field />
-          </Input.Root>
-          <Input.Root>
-            <Input.Label>Field 2</Input.Label>
-            <Input.Field />
-          </Input.Root>
+          <InputRoot>
+            <InputLabel>Field 1</InputLabel>
+            <InputField />
+          </InputRoot>
+          <InputRoot>
+            <InputLabel>Field 2</InputLabel>
+            <InputField />
+          </InputRoot>
           <button>After</button>
         </div>,
       );
@@ -441,10 +441,10 @@ describe('Input Integration', () => {
       const onChange = jest.fn();
 
       render(
-        <Input.Root>
-          <Input.Label>Fast Typing</Input.Label>
-          <Input.Field onChange={onChange} />
-        </Input.Root>,
+        <InputRoot>
+          <InputLabel>Fast Typing</InputLabel>
+          <InputField onChange={onChange} />
+        </InputRoot>,
       );
 
       const field = screen.getByRole('textbox');
@@ -458,11 +458,11 @@ describe('Input Integration', () => {
 
     it('maintains state consistency across re-renders', () => {
       const TestComponent = ({ invalid }: { invalid: boolean }) => (
-        <Input.Root isInvalid={invalid}>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-          <Input.ErrorMessage>Error message</Input.ErrorMessage>
-        </Input.Root>
+        <InputRoot isInvalid={invalid}>
+          <InputLabel>Username</InputLabel>
+          <InputField />
+          <InputErrorMessage>Error message</InputErrorMessage>
+        </InputRoot>
       );
 
       const { rerender } = render(<TestComponent invalid={false} />);

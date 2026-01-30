@@ -83,4 +83,4 @@ export const InputField = <T extends ElementType = 'input'>({
   );
 };
 
-InputField.displayName = 'Input.Field';
+InputField.displayName = 'InputField';

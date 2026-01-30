@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Radio } from '../Radio';
+import { RadioGroup, RadioItem } from '../index';
 
 describe('Radio', () => {
   describe('RadioGroup', () => {
     describe('Rendering', () => {
       it('renders with default props', () => {
         render(
-          <Radio.Group>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const radioGroup = screen.getByRole('radiogroup');
@@ -21,10 +21,10 @@ describe('Radio', () => {
 
       it('renders with custom orientation', () => {
         render(
-          <Radio.Group orientation='horizontal'>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup orientation='horizontal'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const radioGroup = screen.getByRole('radiogroup');
@@ -33,10 +33,10 @@ describe('Radio', () => {
 
       it('renders with aria-label', () => {
         render(
-          <Radio.Group aria-label='Choose an option'>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup aria-label='Choose an option'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const radioGroup = screen.getByRole('radiogroup');
@@ -47,10 +47,10 @@ describe('Radio', () => {
         render(
           <div>
             <h2 id='label-id'>Select Option</h2>
-            <Radio.Group aria-labelledby='label-id'>
-              <Radio.Item value='option1'>Option 1</Radio.Item>
-              <Radio.Item value='option2'>Option 2</Radio.Item>
-            </Radio.Group>
+            <RadioGroup aria-labelledby='label-id'>
+              <RadioItem value='option1'>Option 1</RadioItem>
+              <RadioItem value='option2'>Option 2</RadioItem>
+            </RadioGroup>
           </div>,
         );
 
@@ -62,10 +62,10 @@ describe('Radio', () => {
         render(
           <div>
             <p id='description'>Choose your preferred option</p>
-            <Radio.Group aria-describedby='description'>
-              <Radio.Item value='option1'>Option 1</Radio.Item>
-              <Radio.Item value='option2'>Option 2</Radio.Item>
-            </Radio.Group>
+            <RadioGroup aria-describedby='description'>
+              <RadioItem value='option1'>Option 1</RadioItem>
+              <RadioItem value='option2'>Option 2</RadioItem>
+            </RadioGroup>
           </div>,
         );
 
@@ -75,10 +75,10 @@ describe('Radio', () => {
 
       it('renders as custom element when as prop is provided', () => {
         render(
-          <Radio.Group as='fieldset'>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup as='fieldset'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const radioGroup = screen.getByRole('radiogroup');
@@ -89,11 +89,11 @@ describe('Radio', () => {
     describe('State Management', () => {
       it('handles uncontrolled state with defaultValue', () => {
         const { container } = render(
-          <Radio.Group defaultValue='option2'>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-            <Radio.Item value='option3'>Option 3</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup defaultValue='option2'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+            <RadioItem value='option3'>Option 3</RadioItem>
+          </RadioGroup>,
         );
 
         const hiddenRadio = container.querySelector(
@@ -104,11 +104,11 @@ describe('Radio', () => {
 
       it('handles controlled state with value prop', () => {
         const { rerender, container } = render(
-          <Radio.Group value='option1'>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-            <Radio.Item value='option3'>Option 3</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup value='option1'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+            <RadioItem value='option3'>Option 3</RadioItem>
+          </RadioGroup>,
         );
 
         const labels = container.querySelectorAll('label[role="radio"]');
@@ -116,11 +116,11 @@ describe('Radio', () => {
         expect(option1).toHaveAttribute('aria-checked', 'true');
 
         rerender(
-          <Radio.Group value='option3'>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-            <Radio.Item value='option3'>Option 3</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup value='option3'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+            <RadioItem value='option3'>Option 3</RadioItem>
+          </RadioGroup>,
         );
 
         const labelsAfter = container.querySelectorAll('label[role="radio"]');
@@ -135,10 +135,10 @@ describe('Radio', () => {
         const handleValueChange = jest.fn();
 
         const { container } = render(
-          <Radio.Group onValueChange={handleValueChange}>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup onValueChange={handleValueChange}>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const labels = container.querySelectorAll('label[role="radio"]');
@@ -152,10 +152,10 @@ describe('Radio', () => {
         const user = userEvent.setup();
 
         const { container } = render(
-          <Radio.Group>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const labels = container.querySelectorAll('label[role="radio"]');
@@ -175,10 +175,10 @@ describe('Radio', () => {
     describe('Disabled State', () => {
       it('disables entire group when disabled prop is true', () => {
         const { container } = render(
-          <Radio.Group disabled>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup disabled>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const radioGroup = screen.getByRole('radiogroup');
@@ -195,10 +195,10 @@ describe('Radio', () => {
         const handleValueChange = jest.fn();
 
         const { container } = render(
-          <Radio.Group disabled onValueChange={handleValueChange}>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup disabled onValueChange={handleValueChange}>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const labels = container.querySelectorAll('label[role="radio"]');
@@ -213,10 +213,10 @@ describe('Radio', () => {
     describe('Required State', () => {
       it('sets aria-required when required prop is true', () => {
         render(
-          <Radio.Group required>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup required>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const radioGroup = screen.getByRole('radiogroup');
@@ -228,10 +228,10 @@ describe('Radio', () => {
     describe('Form Integration', () => {
       it('creates hidden input for form submission when value is selected', () => {
         const { container } = render(
-          <Radio.Group name='test-radio' value='option1'>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup name='test-radio' value='option1'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const hiddenInput = container.querySelector('input[type="hidden"]');
@@ -242,10 +242,10 @@ describe('Radio', () => {
 
       it('does not create hidden input when no value is selected', () => {
         const { container } = render(
-          <Radio.Group name='test-radio'>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup name='test-radio'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const hiddenInput = container.querySelector('input[type="hidden"]');
@@ -254,9 +254,9 @@ describe('Radio', () => {
 
       it('generates unique name when not provided', () => {
         const { container } = render(
-          <Radio.Group value='option1'>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup value='option1'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+          </RadioGroup>,
         );
 
         const hiddenInput = container.querySelector('input[type="hidden"]');
@@ -270,9 +270,9 @@ describe('Radio', () => {
     describe('Rendering', () => {
       it('renders with correct attributes', () => {
         const { container } = render(
-          <Radio.Group>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup>
+            <RadioItem value='option1'>Option 1</RadioItem>
+          </RadioGroup>,
         );
 
         const radioItem = container.querySelector('label[role="radio"]') as HTMLElement;
@@ -282,10 +282,10 @@ describe('Radio', () => {
 
       it('renders as checked when selected', () => {
         const { container } = render(
-          <Radio.Group value='option1'>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup value='option1'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const labels = container.querySelectorAll('label[role="radio"]');
@@ -300,11 +300,11 @@ describe('Radio', () => {
 
       it('renders with aria-label', () => {
         const { container } = render(
-          <Radio.Group>
-            <Radio.Item value='option1' aria-label='First option'>
+          <RadioGroup>
+            <RadioItem value='option1' aria-label='First option'>
               Option 1
-            </Radio.Item>
-          </Radio.Group>,
+            </RadioItem>
+          </RadioGroup>,
         );
 
         const radioItem = container.querySelector('label[role="radio"]') as HTMLElement;
@@ -315,11 +315,11 @@ describe('Radio', () => {
         const { container } = render(
           <div>
             <p id='description'>This is the first option</p>
-            <Radio.Group>
-              <Radio.Item value='option1' aria-describedby='description'>
+            <RadioGroup>
+              <RadioItem value='option1' aria-describedby='description'>
                 Option 1
-              </Radio.Item>
-            </Radio.Group>
+              </RadioItem>
+            </RadioGroup>
           </div>,
         );
 
@@ -329,11 +329,11 @@ describe('Radio', () => {
 
       it('renders as custom element when as prop is provided', () => {
         const { container } = render(
-          <Radio.Group>
-            <Radio.Item value='option1' as='div'>
+          <RadioGroup>
+            <RadioItem value='option1' as='div'>
               Option 1
-            </Radio.Item>
-          </Radio.Group>,
+            </RadioItem>
+          </RadioGroup>,
         );
 
         const radioItem = container.querySelector('[role="radio"]') as HTMLElement;
@@ -342,9 +342,9 @@ describe('Radio', () => {
 
       it('contains hidden radio input', () => {
         const { container } = render(
-          <Radio.Group name='test'>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup name='test'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+          </RadioGroup>,
         );
 
         const hiddenRadio = container.querySelector('input[type="radio"]');
@@ -359,12 +359,12 @@ describe('Radio', () => {
     describe('Disabled State', () => {
       it('can be individually disabled', () => {
         const { container } = render(
-          <Radio.Group>
-            <Radio.Item value='option1' disabled>
+          <RadioGroup>
+            <RadioItem value='option1' disabled>
               Option 1
-            </Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+            </RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const labels = container.querySelectorAll('label[role="radio"]');
@@ -381,12 +381,12 @@ describe('Radio', () => {
         const handleValueChange = jest.fn();
 
         const { container } = render(
-          <Radio.Group onValueChange={handleValueChange}>
-            <Radio.Item value='option1' disabled>
+          <RadioGroup onValueChange={handleValueChange}>
+            <RadioItem value='option1' disabled>
               Option 1
-            </Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+            </RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const labels = container.querySelectorAll('label[role="radio"]');
@@ -401,11 +401,11 @@ describe('Radio', () => {
     describe('Focus Management', () => {
       it('implements roving tabindex', () => {
         const { container } = render(
-          <Radio.Group value='option2'>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-            <Radio.Item value='option3'>Option 3</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup value='option2'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+            <RadioItem value='option3'>Option 3</RadioItem>
+          </RadioGroup>,
         );
 
         const labels = container.querySelectorAll('label[role="radio"]');
@@ -421,11 +421,11 @@ describe('Radio', () => {
 
       it('makes first item focusable when no value is selected', () => {
         const { container } = render(
-          <Radio.Group>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-            <Radio.Item value='option3'>Option 3</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+            <RadioItem value='option3'>Option 3</RadioItem>
+          </RadioGroup>,
         );
 
         const labels = container.querySelectorAll('label[role="radio"]');
@@ -445,10 +445,10 @@ describe('Radio', () => {
         const user = userEvent.setup();
 
         const { container } = render(
-          <Radio.Group>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const labels = container.querySelectorAll('label[role="radio"]');
@@ -462,10 +462,10 @@ describe('Radio', () => {
         const user = userEvent.setup();
 
         const { container } = render(
-          <Radio.Group>
-            <Radio.Item value='option1'>Option 1</Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>,
+          <RadioGroup>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>,
         );
 
         const labels = container.querySelectorAll('label[role="radio"]');
@@ -483,7 +483,7 @@ describe('Radio', () => {
       const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
       expect(() => {
-        render(<Radio.Item value='option1'>Option 1</Radio.Item>);
+        render(<RadioItem value='option1'>Option 1</RadioItem>);
       }).toThrow('RadioItem must be used within a RadioGroup');
 
       consoleErrorSpy.mockRestore();
@@ -492,7 +492,7 @@ describe('Radio', () => {
 
   describe('Edge Cases', () => {
     it('handles empty children gracefully', () => {
-      render(<Radio.Group />);
+      render(<RadioGroup />);
 
       const radioGroup = screen.getByRole('radiogroup');
       expect(radioGroup).toBeInTheDocument();
@@ -500,19 +500,19 @@ describe('Radio', () => {
 
     it('handles dynamic children addition/removal', () => {
       const { rerender, container } = render(
-        <Radio.Group>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup>
+          <RadioItem value='option1'>Option 1</RadioItem>
+        </RadioGroup>,
       );
 
       const labels1 = container.querySelectorAll('label[role="radio"]');
       expect(labels1).toHaveLength(1);
 
       rerender(
-        <Radio.Group>
-          <Radio.Item value='option1'>Option 1</Radio.Item>
-          <Radio.Item value='option2'>Option 2</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup>
+          <RadioItem value='option1'>Option 1</RadioItem>
+          <RadioItem value='option2'>Option 2</RadioItem>
+        </RadioGroup>,
       );
 
       const labels2 = container.querySelectorAll('label[role="radio"]');
@@ -521,10 +521,10 @@ describe('Radio', () => {
 
     it('handles duplicate values gracefully', () => {
       const { container } = render(
-        <Radio.Group>
-          <Radio.Item value='same'>Option 1</Radio.Item>
-          <Radio.Item value='same'>Option 2</Radio.Item>
-        </Radio.Group>,
+        <RadioGroup>
+          <RadioItem value='same'>Option 1</RadioItem>
+          <RadioItem value='same'>Option 2</RadioItem>
+        </RadioGroup>,
       );
 
       const labels = container.querySelectorAll('label[role="radio"]');

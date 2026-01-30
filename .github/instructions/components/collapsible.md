@@ -12,9 +12,9 @@ The Collapsible component implements the WAI-ARIA disclosure pattern, providing 
 - Content summaries with expandable details
 
 **Compound component structure:**
-- `Collapsible.Root` - Context provider and state management
-- `Collapsible.Trigger` - Button element that toggles visibility
-- `Collapsible.Content` - Panel containing the collapsible content
+- `CollapsibleRoot` - Context provider and state management
+- `CollapsibleTrigger` - Button element that toggles visibility
+- `CollapsibleContent` - Panel containing the collapsible content
 
 **Key differentiators:**
 - Zero styling opinions (behavior-only)
@@ -26,7 +26,7 @@ The Collapsible component implements the WAI-ARIA disclosure pattern, providing 
 
 ## 2. API
 
-### Collapsible.Root Props
+### CollapsibleRoot Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
@@ -36,7 +36,7 @@ The Collapsible component implements the WAI-ARIA disclosure pattern, providing 
 | `disabled` | `boolean` | No | `false` | Whether the collapsible is disabled |
 | `children` | `ReactNode` | Yes | - | Child components |
 
-### Collapsible.Trigger Props
+### CollapsibleTrigger Props
 
 Extends all `ButtonProps` from the Button component.
 
@@ -66,7 +66,7 @@ Extends all `ButtonProps` from the Button component.
 - For semantic `<button>` elements: Uses native `disabled` attribute
 - For non-semantic elements (via `as` prop): Uses `aria-disabled` + `tabIndex={-1}`
 
-### Collapsible.Content Props
+### CollapsibleContent Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
@@ -370,35 +370,35 @@ These properties are automatically updated and can be used for height/width tran
 ### React Usage Examples
 ```tsx
 // Basic usage
-<Collapsible.Root>
-  <Collapsible.Trigger>
+<CollapsibleRoot>
+  <CollapsibleTrigger>
     Toggle Content
-  </Collapsible.Trigger>
-  <Collapsible.Content>
+  </CollapsibleTrigger>
+  <CollapsibleContent>
     Content to show/hide
-  </Collapsible.Content>
-</Collapsible.Root>
+  </CollapsibleContent>
+</CollapsibleRoot>
 
 // Controlled usage
 const [isOpen, setIsOpen] = useState(false);
-<Collapsible.Root open={isOpen} onOpenChange={setIsOpen}>
-  <Collapsible.Trigger>
+<CollapsibleRoot open={isOpen} onOpenChange={setIsOpen}>
+  <CollapsibleTrigger>
     {isOpen ? 'Hide' : 'Show'} Details
-  </Collapsible.Trigger>
-  <Collapsible.Content>
+  </CollapsibleTrigger>
+  <CollapsibleContent>
     Controlled content
-  </Collapsible.Content>
-</Collapsible.Root>
+  </CollapsibleContent>
+</CollapsibleRoot>
 
 // Polymorphic usage with custom elements
-<Collapsible.Root>
-  <Collapsible.Trigger as="div" role="button" tabIndex={0}>
+<CollapsibleRoot>
+  <CollapsibleTrigger as="div" role="button" tabIndex={0}>
     Custom trigger element
-  </Collapsible.Trigger>
-  <Collapsible.Content as="section">
+  </CollapsibleTrigger>
+  <CollapsibleContent as="section">
     Semantic content section
-  </Collapsible.Content>
-</Collapsible.Root>
+  </CollapsibleContent>
+</CollapsibleRoot>
 ```
 
 ## 7. Test Coverage Plan
@@ -458,7 +458,7 @@ __tests__/
 - No className props needed (external styling responsibility)
 
 ### Tree-Shakeable Exports
-- Named exports only (`Collapsible.Root`, `Collapsible.Trigger`, `Collapsible.Content`)
+- Named exports only (`CollapsibleRoot`, `CollapsibleTrigger`, `CollapsibleContent`)
 - No default exports
 - Each component can be imported individually
 
@@ -534,9 +534,9 @@ From existing disclosure/collapsible implementations:
 4. Migrate state management to controlled/uncontrolled pattern
 
 **From unstyled headless libraries:**
-1. Replace context provider with `Collapsible.Root`
-2. Update trigger component to `Collapsible.Trigger`
-3. Update content wrapper to `Collapsible.Content`
+1. Replace context provider with `CollapsibleRoot`
+2. Update trigger component to `CollapsibleTrigger`
+3. Update content wrapper to `CollapsibleContent`
 4. Verify ARIA attribute mapping
 5. Test keyboard navigation compatibility
 
@@ -545,9 +545,9 @@ From existing disclosure/collapsible implementations:
 #### Core Functionality
 - [ ] `useCollapsibleState` hook with controlled/uncontrolled support
 - [ ] `CollapsibleContext` for state sharing
-- [ ] `Collapsible.Root` context provider component
-- [ ] `Collapsible.Trigger` button component with keyboard handling
-- [ ] `Collapsible.Content` content wrapper with visibility management
+- [ ] `CollapsibleRoot` context provider component
+- [ ] `CollapsibleTrigger` button component with keyboard handling
+- [ ] `CollapsibleContent` content wrapper with visibility management
 
 #### Accessibility Implementation
 - [ ] ARIA attributes (`aria-expanded`, `aria-controls`, `aria-disabled`)

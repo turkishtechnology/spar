@@ -19,7 +19,7 @@
 
 ### Tooltip Props
 
-#### Tooltip.Provider Props
+#### TooltipProvider Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
@@ -28,7 +28,7 @@
 | `skipDelayDuration` | `number` | No | `300` | Duration to skip delay when moving between tooltips |
 | `disableHoverableContent` | `boolean` | No | `false` | Disable hoverable content globally |
 
-#### Tooltip.Root Props
+#### TooltipRoot Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
@@ -40,7 +40,7 @@
 | `hideDelay` | `number` | No | `0` | Override provider hide delay for this tooltip |
 | `disabled` | `boolean` | No | `false` | Whether tooltip is disabled |
 
-#### Tooltip.Trigger Props
+#### TooltipTrigger Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
@@ -57,7 +57,7 @@
 | `show` | `() => void` | Function to show the tooltip |
 | `hide` | `() => void` | Function to hide the tooltip |
 
-#### Tooltip.Content Props
+#### TooltipContent Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
@@ -80,7 +80,7 @@
 | `onOpenAutoFocus` | `(event: Event) => void` | No | - | Called when auto-focusing on open |
 | `onCloseAutoFocus` | `(event: Event) => void` | No | - | Called when auto-focusing on close |
 
-#### Tooltip.Portal Props
+#### TooltipPortal Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
@@ -88,7 +88,7 @@
 | `container` | `HTMLElement` | No | `document.body` | Portal container element |
 | `forceMount` | `boolean` | No | `false` | Force mount regardless of open state |
 
-#### Tooltip.Arrow Props
+#### TooltipArrow Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|

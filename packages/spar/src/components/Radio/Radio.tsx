@@ -2,15 +2,8 @@ import { RadioGroup } from './RadioGroup';
 import { RadioItem } from './RadioItem';
 
 /**
- * Compound Radio component with Group and Item subcomponents.
+ * Alias for RadioGroup to preserve the base component export.
  */
-export const Radio = RadioGroup as typeof RadioGroup & {
-  Group: typeof RadioGroup;
-  Item: typeof RadioItem;
-};
+export const Radio = RadioGroup;
 
-Radio.Group = RadioGroup;
-Radio.Item = RadioItem;
-
-// Named exports
 export { RadioGroup, RadioItem };

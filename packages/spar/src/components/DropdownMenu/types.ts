@@ -31,7 +31,7 @@ export interface DropdownMenuTriggerRenderProps {
 }
 
 /**
- * Props for DropdownMenu.Root component
+ * Props for DropdownMenuRoot component
  */
 export interface DropdownMenuProps {
   /**
@@ -81,7 +81,7 @@ export interface DropdownMenuProps {
 }
 
 /**
- * Props for DropdownMenu.Trigger component
+ * Props for DropdownMenuTrigger component
  */
 export interface DropdownMenuTriggerProps extends Omit<ButtonProps, 'children'> {
   /**
@@ -91,7 +91,7 @@ export interface DropdownMenuTriggerProps extends Omit<ButtonProps, 'children'> 
 }
 
 /**
- * Own props for DropdownMenu.Content component
+ * Own props for DropdownMenuContent component
  */
 export interface DropdownMenuContentOwnProps {
   /**
@@ -159,7 +159,7 @@ export interface DropdownMenuContentOwnProps {
 }
 
 /**
- * Props for DropdownMenu.Content component
+ * Props for DropdownMenuContent component
  */
 export type DropdownMenuContentProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -168,7 +168,7 @@ export type DropdownMenuContentProps<T extends ElementType = 'div'> = Polymorphi
 >;
 
 /**
- * Own props for DropdownMenu.Item component
+ * Own props for DropdownMenuItem component
  */
 export interface DropdownMenuItemOwnProps {
   /**
@@ -189,7 +189,7 @@ export interface DropdownMenuItemOwnProps {
 }
 
 /**
- * Props for DropdownMenu.Item component
+ * Props for DropdownMenuItem component
  */
 export type DropdownMenuItemProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -198,7 +198,7 @@ export type DropdownMenuItemProps<T extends ElementType = 'div'> = PolymorphicPr
 >;
 
 /**
- * Own props for DropdownMenu.CheckboxItem component
+ * Own props for DropdownMenuCheckboxItem component
  */
 export interface DropdownMenuCheckboxItemOwnProps extends DropdownMenuItemOwnProps {
   /**
@@ -214,7 +214,7 @@ export interface DropdownMenuCheckboxItemOwnProps extends DropdownMenuItemOwnPro
 }
 
 /**
- * Props for DropdownMenu.CheckboxItem component
+ * Props for DropdownMenuCheckboxItem component
  */
 export type DropdownMenuCheckboxItemProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -223,7 +223,7 @@ export type DropdownMenuCheckboxItemProps<T extends ElementType = 'div'> = Polym
 >;
 
 /**
- * Props for DropdownMenu.RadioGroup component
+ * Props for DropdownMenuRadioGroup component
  */
 export interface DropdownMenuRadioGroupProps extends ComponentProps<'div'> {
   /**
@@ -238,7 +238,7 @@ export interface DropdownMenuRadioGroupProps extends ComponentProps<'div'> {
 }
 
 /**
- * Own props for DropdownMenu.RadioItem component
+ * Own props for DropdownMenuRadioItem component
  */
 export interface DropdownMenuRadioItemOwnProps extends DropdownMenuItemOwnProps {
   /**
@@ -248,7 +248,7 @@ export interface DropdownMenuRadioItemOwnProps extends DropdownMenuItemOwnProps 
 }
 
 /**
- * Props for DropdownMenu.RadioItem component
+ * Props for DropdownMenuRadioItem component
  */
 export type DropdownMenuRadioItemProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -257,12 +257,12 @@ export type DropdownMenuRadioItemProps<T extends ElementType = 'div'> = Polymorp
 >;
 
 /**
- * Own props for DropdownMenu.Separator component
+ * Own props for DropdownMenuSeparator component
  */
 export interface DropdownMenuSeparatorOwnProps {}
 
 /**
- * Props for DropdownMenu.Separator component
+ * Props for DropdownMenuSeparator component
  */
 export type DropdownMenuSeparatorProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -271,12 +271,12 @@ export type DropdownMenuSeparatorProps<T extends ElementType = 'div'> = Polymorp
 >;
 
 /**
- * Own props for DropdownMenu.Label component
+ * Own props for DropdownMenuLabel component
  */
 export interface DropdownMenuLabelOwnProps {}
 
 /**
- * Props for DropdownMenu.Label component
+ * Props for DropdownMenuLabel component
  */
 export type DropdownMenuLabelProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -285,12 +285,12 @@ export type DropdownMenuLabelProps<T extends ElementType = 'div'> = PolymorphicP
 >;
 
 /**
- * Own props for DropdownMenu.Group component
+ * Own props for DropdownMenuGroup component
  */
 export interface DropdownMenuGroupOwnProps {}
 
 /**
- * Props for DropdownMenu.Group component
+ * Props for DropdownMenuGroup component
  */
 export type DropdownMenuGroupProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -299,7 +299,7 @@ export type DropdownMenuGroupProps<T extends ElementType = 'div'> = PolymorphicP
 >;
 
 /**
- * Props for DropdownMenu.Sub component
+ * Props for DropdownMenuSub component
  */
 export interface DropdownMenuSubProps {
   /**
@@ -325,12 +325,12 @@ export interface DropdownMenuSubProps {
 }
 
 /**
- * Own props for DropdownMenu.SubTrigger component
+ * Own props for DropdownMenuSubTrigger component
  */
 export interface DropdownMenuSubTriggerOwnProps extends DropdownMenuItemOwnProps {}
 
 /**
- * Props for DropdownMenu.SubTrigger component
+ * Props for DropdownMenuSubTrigger component
  */
 export type DropdownMenuSubTriggerProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -339,12 +339,12 @@ export type DropdownMenuSubTriggerProps<T extends ElementType = 'div'> = Polymor
 >;
 
 /**
- * Own props for DropdownMenu.SubContent component
+ * Own props for DropdownMenuSubContent component
  */
 export interface DropdownMenuSubContentOwnProps extends DropdownMenuContentOwnProps {}
 
 /**
- * Props for DropdownMenu.SubContent component
+ * Props for DropdownMenuSubContent component
  */
 export type DropdownMenuSubContentProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -371,7 +371,7 @@ export interface DropdownMenuContextValue {
 }
 
 /**
- * Context value for DropdownMenu.RadioGroup
+ * Context value for DropdownMenuRadioGroup
  */
 export interface DropdownMenuRadioGroupContextValue {
   value: string | undefined;
@@ -379,7 +379,7 @@ export interface DropdownMenuRadioGroupContextValue {
 }
 
 /**
- * Context value for DropdownMenu.Sub
+ * Context value for DropdownMenuSub
  */
 export interface DropdownMenuSubContextValue {
   open: boolean;
