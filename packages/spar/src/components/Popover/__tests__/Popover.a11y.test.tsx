@@ -1,4 +1,4 @@
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { PopoverRoot } from '../Popover';
@@ -271,13 +271,17 @@ describe('Popover Accessibility', () => {
       const trigger = screen.getByRole('button');
 
       // Open with Enter
-      fireEvent.keyDown(trigger, { key: 'Enter' });
+      act(() => {
+        fireEvent.keyDown(trigger, { key: 'Enter' });
+      });
       await waitFor(() => {
         expect(screen.getByText('Content')).toBeInTheDocument();
       });
 
       // Close with Enter
-      fireEvent.keyDown(trigger, { key: 'Enter' });
+      act(() => {
+        fireEvent.keyDown(trigger, { key: 'Enter' });
+      });
       await waitFor(() => {
         expect(screen.queryByText('Content')).not.toBeInTheDocument();
       });
@@ -294,13 +298,17 @@ describe('Popover Accessibility', () => {
       const trigger = screen.getByRole('button');
 
       // Open with Space
-      fireEvent.keyDown(trigger, { key: ' ' });
+      act(() => {
+        fireEvent.keyDown(trigger, { key: ' ' });
+      });
       await waitFor(() => {
         expect(screen.getByText('Content')).toBeInTheDocument();
       });
 
       // Close with Space
-      fireEvent.keyDown(trigger, { key: ' ' });
+      act(() => {
+        fireEvent.keyDown(trigger, { key: ' ' });
+      });
       await waitFor(() => {
         expect(screen.queryByText('Content')).not.toBeInTheDocument();
       });
@@ -317,7 +325,9 @@ describe('Popover Accessibility', () => {
       );
 
       const trigger = screen.getByRole('button');
-      trigger.focus();
+      act(() => {
+        trigger.focus();
+      });
 
       // Open with Arrow Down
       await user.keyboard('{ArrowDown}');
@@ -399,7 +409,9 @@ describe('Popover Accessibility', () => {
 
       await waitFor(() => {
         const middleButton = screen.getByRole('button', { name: 'Middle' });
-        middleButton.focus();
+        act(() => {
+          middleButton.focus();
+        });
       });
 
       // Home key should focus first element
