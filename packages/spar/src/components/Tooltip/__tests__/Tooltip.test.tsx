@@ -13,6 +13,13 @@ import {
 // Mock timer functions
 jest.useFakeTimers();
 
+// Cleanup after each test to prevent act() warnings from pending timers
+afterEach(() => {
+  act(() => {
+    jest.runOnlyPendingTimers();
+  });
+});
+
 // Mock window.matchMedia for JSDOM environment
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -183,7 +190,9 @@ describe('TooltipTrigger', () => {
     await user.hover(trigger);
 
     // Fast-forward past the delay
-    jest.advanceTimersByTime(700);
+    await act(async () => {
+      jest.advanceTimersByTime(700);
+    });
 
     await waitFor(() => {
       expect(trigger).toHaveAttribute('aria-describedby');
@@ -196,7 +205,9 @@ describe('TooltipTrigger', () => {
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
     await user.tab(); // Focus the trigger
-    jest.advanceTimersByTime(100);
+    await act(async () => {
+      jest.advanceTimersByTime(100);
+    });
 
     await waitFor(() => {
       expect(trigger).toHaveAttribute('aria-describedby');
@@ -210,7 +221,9 @@ describe('TooltipTrigger', () => {
     expect(trigger).toHaveAttribute('aria-describedby');
 
     // Try to trigger hiding behavior (this may not fully work due to defaultOpen state management)
-    trigger.blur();
+    act(() => {
+      trigger.blur();
+    });
 
     await act(async () => {
       jest.advanceTimersByTime(1000);
@@ -250,7 +263,9 @@ describe('TooltipTrigger', () => {
     render(<BasicTooltip defaultOpen />);
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
-    trigger.focus();
+    act(() => {
+      trigger.focus();
+    });
     expect(trigger).toHaveAttribute('aria-describedby');
 
     await user.keyboard('{Escape}');

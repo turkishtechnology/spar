@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import {
@@ -15,6 +15,13 @@ expect.extend(toHaveNoViolations);
 
 // Mock timer functions for consistent testing
 jest.useFakeTimers();
+
+// Cleanup after each test to prevent act() warnings from pending timers
+afterEach(() => {
+  act(() => {
+    jest.runOnlyPendingTimers();
+  });
+});
 
 // Mock window.matchMedia for JSDOM environment
 Object.defineProperty(window, 'matchMedia', {
@@ -159,7 +166,9 @@ describe('Tooltip Accessibility', () => {
 
       // Close tooltip
       await user.keyboard('{Escape}');
-      jest.advanceTimersByTime(300);
+      await act(async () => {
+        jest.advanceTimersByTime(300);
+      });
 
       await waitFor(
         () => {
@@ -185,7 +194,9 @@ describe('Tooltip Accessibility', () => {
       render(<AccessibleTooltip />);
 
       await user.tab(); // Focus the trigger
-      jest.advanceTimersByTime(100);
+      await act(async () => {
+        jest.advanceTimersByTime(100);
+      });
 
       await waitFor(
         () => {
@@ -200,11 +211,15 @@ describe('Tooltip Accessibility', () => {
       render(<AccessibleTooltip defaultOpen />);
 
       const trigger = screen.getByRole('button');
-      trigger.focus();
+      act(() => {
+        trigger.focus();
+      });
       expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
       await user.tab(); // Focus out
-      jest.advanceTimersByTime(300);
+      await act(async () => {
+        jest.advanceTimersByTime(300);
+      });
 
       await waitFor(
         () => {
@@ -219,11 +234,15 @@ describe('Tooltip Accessibility', () => {
       render(<AccessibleTooltip defaultOpen />);
 
       const trigger = screen.getByRole('button');
-      trigger.focus();
+      act(() => {
+        trigger.focus();
+      });
       expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
       await user.keyboard('{Escape}');
-      jest.advanceTimersByTime(300);
+      await act(async () => {
+        jest.advanceTimersByTime(300);
+      });
 
       await waitFor(
         () => {
@@ -238,10 +257,14 @@ describe('Tooltip Accessibility', () => {
       render(<AccessibleTooltip defaultOpen />);
 
       const trigger = screen.getByRole('button');
-      trigger.focus();
+      act(() => {
+        trigger.focus();
+      });
 
       await user.keyboard('{Escape}');
-      jest.advanceTimersByTime(100);
+      await act(async () => {
+        jest.advanceTimersByTime(100);
+      });
 
       await waitFor(
         () => {
@@ -258,7 +281,9 @@ describe('Tooltip Accessibility', () => {
       expect(tooltip).not.toHaveAttribute('tabindex');
 
       // Tooltip should not be focusable
-      tooltip.focus();
+      act(() => {
+        tooltip.focus();
+      });
       expect(tooltip).not.toHaveFocus();
     });
 
@@ -277,7 +302,9 @@ describe('Tooltip Accessibility', () => {
       const afterButton = screen.getByRole('button', { name: 'After' });
 
       // Tab through elements
-      beforeButton.focus();
+      act(() => {
+        beforeButton.focus();
+      });
       await user.tab();
       expect(triggerButton).toHaveFocus();
 
@@ -361,7 +388,9 @@ describe('Tooltip Accessibility', () => {
 
       // Dismiss with Escape (without moving mouse)
       await user.keyboard('{Escape}');
-      jest.advanceTimersByTime(300);
+      await act(async () => {
+        jest.advanceTimersByTime(300);
+      });
 
       await waitFor(
         () => {
@@ -378,7 +407,9 @@ describe('Tooltip Accessibility', () => {
       const trigger = screen.getByRole('button');
       // Hover trigger to show tooltip
       await user.hover(trigger);
-      jest.advanceTimersByTime(700);
+      await act(async () => {
+        jest.advanceTimersByTime(700);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('tooltip')).toBeInTheDocument();
@@ -400,19 +431,25 @@ describe('Tooltip Accessibility', () => {
 
       // Show tooltip on hover
       await user.hover(trigger);
-      jest.advanceTimersByTime(700);
+      await act(async () => {
+        jest.advanceTimersByTime(700);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('tooltip')).toBeInTheDocument();
       });
 
       // Tooltip should persist until explicit dismissal
-      jest.advanceTimersByTime(5000); // Wait a long time
+      await act(async () => {
+        jest.advanceTimersByTime(5000); // Wait a long time
+      });
       expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
       // Only dismisses when properly triggered
       await user.unhover(trigger);
-      jest.advanceTimersByTime(100);
+      await act(async () => {
+        jest.advanceTimersByTime(100);
+      });
 
       await waitFor(() => {
         expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
@@ -458,7 +495,9 @@ describe('Tooltip Accessibility', () => {
 
       // Focus should still work on touch devices
       await user.tab();
-      jest.advanceTimersByTime(100);
+      await act(async () => {
+        jest.advanceTimersByTime(100);
+      });
 
       await waitFor(
         () => {
@@ -476,7 +515,9 @@ describe('Tooltip Accessibility', () => {
 
       const trigger = screen.getByRole('button');
       await user.tab();
-      jest.advanceTimersByTime(100);
+      await act(async () => {
+        jest.advanceTimersByTime(100);
+      });
 
       await waitFor(
         () => {
@@ -500,7 +541,9 @@ describe('Tooltip Accessibility', () => {
       const trigger = screen.getByRole('button', { name: 'Trigger button' });
       const nextButton = screen.getByRole('button', { name: 'Next button' });
 
-      trigger.focus();
+      act(() => {
+        trigger.focus();
+      });
       await user.tab();
       jest.advanceTimersByTime(100);
 
@@ -517,7 +560,9 @@ describe('Tooltip Accessibility', () => {
       render(<AccessibleTooltip defaultOpen />);
 
       const trigger = screen.getByRole('button');
-      trigger.focus();
+      act(() => {
+        trigger.focus();
+      });
 
       expect(trigger).toHaveFocus();
       expect(screen.getByRole('tooltip')).toBeInTheDocument();

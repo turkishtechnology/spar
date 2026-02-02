@@ -19,6 +19,12 @@ import {
 
 expect.extend(toHaveNoViolations);
 
+// Cleanup after each test to handle Floating UI state updates
+afterEach(() => {
+  // Allow any pending state updates to complete
+  act(() => {});
+});
+
 describe('DropdownMenu Accessibility', () => {
   describe('WCAG Compliance', () => {
     it('should have no accessibility violations when closed', async () => {
@@ -222,7 +228,9 @@ describe('DropdownMenu Accessibility', () => {
       );
 
       const trigger = screen.getByRole('button');
-      trigger.focus();
+      act(() => {
+        trigger.focus();
+      });
 
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
@@ -244,7 +252,9 @@ describe('DropdownMenu Accessibility', () => {
       );
 
       const trigger = screen.getByRole('button');
-      trigger.focus();
+      act(() => {
+        trigger.focus();
+      });
 
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
@@ -265,7 +275,9 @@ describe('DropdownMenu Accessibility', () => {
       );
 
       const trigger = screen.getByRole('button');
-      trigger.focus();
+      act(() => {
+        trigger.focus();
+      });
 
       // Open menu
       await user.keyboard('[Enter]');
@@ -288,7 +300,9 @@ describe('DropdownMenu Accessibility', () => {
       );
 
       const trigger = screen.getByRole('button');
-      trigger.focus();
+      act(() => {
+        trigger.focus();
+      });
       await user.keyboard(' ');
 
       await waitFor(() => {
@@ -310,7 +324,9 @@ describe('DropdownMenu Accessibility', () => {
       expect(screen.getByRole('menu')).toBeInTheDocument();
 
       const content = screen.getByRole('menu');
-      content.focus();
+      act(() => {
+        content.focus();
+      });
       await user.keyboard('[Escape]');
 
       await waitFor(() => {
@@ -332,7 +348,9 @@ describe('DropdownMenu Accessibility', () => {
       );
 
       const item = screen.getByRole('menuitem');
-      item.focus();
+      act(() => {
+        item.focus();
+      });
 
       await user.keyboard('[Enter]');
 
@@ -353,7 +371,9 @@ describe('DropdownMenu Accessibility', () => {
       );
 
       const item = screen.getByRole('menuitem');
-      item.focus();
+      act(() => {
+        item.focus();
+      });
       await user.keyboard(' ');
 
       expect(onSelect).toHaveBeenCalled();
@@ -417,7 +437,9 @@ describe('DropdownMenu Accessibility', () => {
       );
 
       const trigger = screen.getByRole('button');
-      trigger.focus();
+      act(() => {
+        trigger.focus();
+      });
 
       await user.keyboard('[ArrowDown]');
       await user.keyboard('[Enter]');
@@ -443,7 +465,9 @@ describe('DropdownMenu Accessibility', () => {
       );
 
       const item = screen.getByRole('menuitem');
-      item.focus();
+      act(() => {
+        item.focus();
+      });
 
       await user.keyboard('[Enter]');
       await user.keyboard('{Space}');
@@ -476,7 +500,9 @@ describe('DropdownMenu Accessibility', () => {
       await user.click(trigger); // First open
       await user.keyboard('[Escape]'); // Close
 
-      trigger.focus();
+      act(() => {
+        trigger.focus();
+      });
       await user.keyboard('[ArrowDown]'); // Open with arrow down
 
       // Wait for menu to be fully rendered and items registered
@@ -553,10 +579,14 @@ describe('DropdownMenu Accessibility', () => {
       const items = screen.getAllByRole('menuitem');
 
       // Focus should be manageable within menu items
-      items[0]?.focus();
+      act(() => {
+        items[0]?.focus();
+      });
       expect(document.activeElement).toBe(items[0]);
 
-      items[1]?.focus();
+      act(() => {
+        items[1]?.focus();
+      });
       expect(document.activeElement).toBe(items[1]);
     });
   });

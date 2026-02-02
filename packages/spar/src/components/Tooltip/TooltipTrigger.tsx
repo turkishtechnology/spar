@@ -1,16 +1,17 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, ElementType } from 'react';
 import { useMergedRef } from '@/hooks';
 import type { TooltipTriggerProps, TooltipTriggerRenderProps } from './types';
 import { useTooltip } from './useTooltip';
 import { useTooltipProvider } from './useTooltipProvider';
 import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * The trigger element that shows/hides the tooltip on hover or focus
  */
-export const TooltipTrigger = ({
+export const TooltipTrigger = <T extends ElementType = 'button'>({
   children,
-  as = 'button',
+  as,
   onPointerEnter,
   onPointerLeave,
   onFocus,
@@ -18,7 +19,7 @@ export const TooltipTrigger = ({
   onKeyDown,
   ref,
   ...props
-}: TooltipTriggerProps) => {
+}: TooltipTriggerProps<T>) => {
   const context = useTooltip();
   const provider = useTooltipProvider();
   const showTimeoutRef = useRef<number | null>(null);
@@ -159,27 +160,27 @@ export const TooltipTrigger = ({
     hide: () => hideTooltip(true),
   };
 
+  const buttonProps = {
+    ...(as && { as }),
+    ref: mergedRef,
+    id: context.triggerId,
+    disabled: context.disabled,
+    'aria-describedby':
+      context.isOpen && !context.disabled && !context.asLabel ? context.contentId : undefined,
+    'aria-labelledby':
+      context.isOpen && !context.disabled && context.asLabel ? context.contentId : undefined,
+    'data-state': context.isOpen ? 'open' : 'closed',
+    'data-placement': context.placement,
+    onPointerEnter: context.disabled ? undefined : handlePointerEnter,
+    onPointerLeave: context.disabled ? undefined : handlePointerLeave,
+    onFocus: context.disabled ? undefined : handleFocus,
+    onBlur: context.disabled ? undefined : handleBlur,
+    onKeyDown: context.disabled ? undefined : handleKeyDown,
+    ...props,
+  } as ButtonProps<T>;
+
   return (
-    <Button
-      as={as}
-      ref={mergedRef}
-      id={context.triggerId}
-      disabled={context.disabled}
-      aria-describedby={
-        context.isOpen && !context.disabled && !context.asLabel ? context.contentId : undefined
-      }
-      aria-labelledby={
-        context.isOpen && !context.disabled && context.asLabel ? context.contentId : undefined
-      }
-      data-state={context.isOpen ? 'open' : 'closed'}
-      data-placement={context.placement}
-      onPointerEnter={context.disabled ? undefined : handlePointerEnter}
-      onPointerLeave={context.disabled ? undefined : handlePointerLeave}
-      onFocus={context.disabled ? undefined : handleFocus}
-      onBlur={context.disabled ? undefined : handleBlur}
-      onKeyDown={context.disabled ? undefined : handleKeyDown}
-      {...props}
-    >
+    <Button {...buttonProps}>
       {typeof children === 'function' ? children(renderProps) : children}
     </Button>
   );

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import userEvent from '@testing-library/user-event';
 import { Checkbox } from '../Checkbox';
@@ -163,7 +163,9 @@ describe('Checkbox - Accessibility Tests', () => {
       const beforeButton = screen.getByRole('button', { name: 'Before' });
       const afterButton = screen.getByRole('button', { name: 'After' });
 
-      beforeButton.focus();
+      act(() => {
+        beforeButton.focus();
+      });
       await user.tab();
 
       expect(afterButton).toHaveFocus();
@@ -176,7 +178,9 @@ describe('Checkbox - Accessibility Tests', () => {
       render(<Checkbox onChange={handleChange}>Subscribe to newsletter</Checkbox>);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleChange).toHaveBeenCalledWith(true);
@@ -190,7 +194,9 @@ describe('Checkbox - Accessibility Tests', () => {
       render(<Checkbox onChange={handleChange}>Subscribe to newsletter</Checkbox>);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard('{Enter}');
 
       expect(handleChange).not.toHaveBeenCalled();
@@ -203,7 +209,9 @@ describe('Checkbox - Accessibility Tests', () => {
       render(<Checkbox onKeyDown={handleKeyDown}>Subscribe to newsletter</Checkbox>);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleKeyDown).toHaveBeenCalled();
@@ -234,7 +242,9 @@ describe('Checkbox - Accessibility Tests', () => {
       const checkbox = screen.getByRole('checkbox');
 
       // Focus programmatically since Tab skips disabled elements
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleChange).not.toHaveBeenCalled();
@@ -251,7 +261,9 @@ describe('Checkbox - Accessibility Tests', () => {
       );
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleChange).not.toHaveBeenCalled();

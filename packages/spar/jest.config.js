@@ -7,7 +7,7 @@ export default {
   roots: ['<rootDir>/src'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
-  setupFilesAfterEnv: ['@testing-library/jest-dom'],
+  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   transform: {
     '^.+\\.(ts|tsx)$': [
       'ts-jest',
