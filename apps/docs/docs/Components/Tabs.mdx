@@ -6,7 +6,7 @@ description: A headless, accessible tabs component with full keyboard navigation
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/spar';
+import { TabsRoot, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/spar';
 
 # Tabs
 
@@ -20,7 +20,7 @@ A headless, accessible tabs component that provides complete keyboard navigation
 
 <LiveCode
   code={`<div className='tabs-demo-container'>
-<Tabs defaultValue='trend' className='tabs'>
+<TabsRoot defaultValue='trend' className='tabs'>
         <TabsList className='tabs-list'>
           <TabsTrigger value='recent' className='tab'>
             <span className='tab-label'>Recent</span>
@@ -34,7 +34,7 @@ A headless, accessible tabs component that provides complete keyboard navigation
         </TabsList>
         <TabsContent value='trend'>
         </TabsContent>
-</Tabs>
+</TabsRoot>
 </div>`}
 cssCode={`.tabs {
   height: 29.288px;
@@ -108,7 +108,7 @@ border-color: rgba(255, 255, 255, 0.72);
 ## Installation
 
 ```tsx
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/spar';
+import { TabsRoot, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -140,7 +140,7 @@ The Tabs component consists of multiple compound parts that work together:
   ]}
 >
   <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
-    <Tabs defaultValue='overview' data-spar-part='root'>
+    <TabsRoot defaultValue='overview' data-spar-part='root'>
       <TabsList
         data-spar-part='list'
         style={{ display: 'flex', borderBottom: '1px solid #ddd', marginBottom: '16px' }}
@@ -180,19 +180,19 @@ The Tabs component consists of multiple compound parts that work together:
         <h4>{' Details Panel '}</h4>
         <p>{' This is the details content panel. '}</p>
       </TabsContent>
-    </Tabs>
+    </TabsRoot>
   </div>
 </AnatomyViewer>
 
 ```tsx
-<Tabs>
+<TabsRoot>
   <TabsList>
     <TabsTrigger />
     <TabsTrigger />
   </TabsList>
   <TabsContent />
   <TabsContent />
-</Tabs>
+</TabsRoot>
 ```
 
 ### Data Flow
@@ -211,14 +211,14 @@ function ControlledTabs() {
   const [activeTab, setActiveTab] = useState('profile');
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab}>
+    <TabsRoot value={activeTab} onValueChange={setActiveTab}>
       <TabsList>
         <TabsTrigger value='profile'>Profile</TabsTrigger>
         <TabsTrigger value='settings'>Settings</TabsTrigger>
       </TabsList>
       <TabsContent value='profile'>Profile content here</TabsContent>
       <TabsContent value='settings'>Settings content here</TabsContent>
-    </Tabs>
+    </TabsRoot>
   );
 }
 ```
@@ -228,7 +228,7 @@ function ControlledTabs() {
 ```tsx
 function VerticalTabs() {
   return (
-    <Tabs orientation='vertical' defaultValue='tab1'>
+    <TabsRoot orientation='vertical' defaultValue='tab1'>
       <TabsList>
         <TabsTrigger value='tab1'>First Tab</TabsTrigger>
         <TabsTrigger value='tab2'>Second Tab</TabsTrigger>
@@ -237,7 +237,7 @@ function VerticalTabs() {
       <TabsContent value='tab1'>First content</TabsContent>
       <TabsContent value='tab2'>Second content</TabsContent>
       <TabsContent value='tab3'>Third content</TabsContent>
-    </Tabs>
+    </TabsRoot>
   );
 }
 ```
@@ -247,7 +247,7 @@ function VerticalTabs() {
 ```tsx
 function ManualActivationTabs() {
   return (
-    <Tabs activationMode='manual' defaultValue='home'>
+    <TabsRoot activationMode='manual' defaultValue='home'>
       <TabsList>
         <TabsTrigger value='home'>Home</TabsTrigger>
         <TabsTrigger value='about'>About</TabsTrigger>
@@ -256,7 +256,7 @@ function ManualActivationTabs() {
       <TabsContent value='home'>Home page content</TabsContent>
       <TabsContent value='about'>About page content</TabsContent>
       <TabsContent value='contact'>Contact page content</TabsContent>
-    </Tabs>
+    </TabsRoot>
   );
 }
 ```
@@ -266,7 +266,7 @@ function ManualActivationTabs() {
 ```tsx
 function RenderPropsTabs() {
   return (
-    <Tabs defaultValue='dashboard'>
+    <TabsRoot defaultValue='dashboard'>
       <TabsList>
         <TabsTrigger value='dashboard'>
           {({ isSelected, isFocused }) => (
@@ -283,7 +283,7 @@ function RenderPropsTabs() {
       </TabsList>
       <TabsContent value='dashboard'>Dashboard content</TabsContent>
       <TabsContent value='analytics'>Analytics content</TabsContent>
-    </Tabs>
+    </TabsRoot>
   );
 }
 ```
@@ -293,7 +293,7 @@ function RenderPropsTabs() {
 ```tsx
 function ForceMountTabs() {
   return (
-    <Tabs defaultValue='lazy'>
+    <TabsRoot defaultValue='lazy'>
       <TabsList>
         <TabsTrigger value='lazy'>Lazy Content</TabsTrigger>
         <TabsTrigger value='eager'>Always Mounted</TabsTrigger>
@@ -302,7 +302,7 @@ function ForceMountTabs() {
       <TabsContent value='eager' forceMount>
         This content is always in the DOM (useful for forms, videos, etc.)
       </TabsContent>
-    </Tabs>
+    </TabsRoot>
   );
 }
 ```

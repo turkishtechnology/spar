@@ -6,7 +6,7 @@ description: A headless collapsible component that manages the visibility of con
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
+import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
 
 # Collapsible
 
@@ -19,7 +19,7 @@ A headless collapsible component that manages the visibility of content sections
 ## Live Demo
 
 <LiveCode
-  code={`<Collapsible className="collapsible-demo-container">
+  code={`<CollapsibleRoot className="collapsible-demo-container">
         <CollapsibleTrigger className="collapsible-trigger">
           <svg
             className="collapsible-trigger-icon"
@@ -37,7 +37,7 @@ A headless collapsible component that manages the visibility of content sections
           <div className="collapsible-item"></div>
           <div className="collapsible-item"></div>
         </CollapsibleContent>
-      </Collapsible>
+      </CollapsibleRoot>
   `}
   cssCode={`.collapsible-trigger {
   display: flex;
@@ -105,9 +105,7 @@ pnpm install @turkish-technology/spar
 ```
 
 ```tsx
-import { Collapsible } from '@turkish-technology/spar';
-// or
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
+import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -121,7 +119,7 @@ The Collapsible component consists of three main parts:
     { name: 'content', label: 'CollapsibleContent', description: 'Collapsible content container' },
   ]}
 >
-  <Collapsible data-spar-part='root' style={{ width: '100%' }}>
+  <CollapsibleRoot data-spar-part='root' style={{ width: '100%' }}>
     <CollapsibleTrigger
       data-spar-part='trigger'
       style={{
@@ -151,16 +149,16 @@ The Collapsible component consists of three main parts:
     >
       {' This content can be collapsed and expanded. '}
     </CollapsibleContent>
-  </Collapsible>
+  </CollapsibleRoot>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<Collapsible>
+<CollapsibleRoot>
   <CollapsibleTrigger />
   <CollapsibleContent />
-</Collapsible>
+</CollapsibleRoot>
 ```
 
 **Data Flow:**
@@ -174,7 +172,7 @@ The Collapsible component consists of three main parts:
 ### Basic Usage
 
 ```tsx
-import { Collapsible } from '@turkish-technology/spar';
+import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
 
 function BasicCollapsible() {
   return (
@@ -191,7 +189,7 @@ function BasicCollapsible() {
 ### Controlled State
 
 ```tsx
-import { Collapsible } from '@turkish-technology/spar';
+import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
 import { useState } from 'react';
 
 function ControlledCollapsible() {
@@ -214,7 +212,7 @@ function ControlledCollapsible() {
 ### Default Open State
 
 ```tsx
-import { Collapsible } from '@turkish-technology/spar';
+import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
 
 function DefaultOpenCollapsible() {
   return (
@@ -231,7 +229,7 @@ function DefaultOpenCollapsible() {
 ### Custom Trigger Element
 
 ```tsx
-import { Collapsible } from '@turkish-technology/spar';
+import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
 
 function CustomTriggerCollapsible() {
   return (
@@ -250,7 +248,7 @@ function CustomTriggerCollapsible() {
 ### Force Mount Content
 
 ```tsx
-import { Collapsible } from '@turkish-technology/spar';
+import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
 
 function ForceMountCollapsible() {
   return (
@@ -268,7 +266,7 @@ function ForceMountCollapsible() {
 ### Disabled State
 
 ```tsx
-import { Collapsible } from '@turkish-technology/spar';
+import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
 
 function DisabledCollapsible() {
   return (

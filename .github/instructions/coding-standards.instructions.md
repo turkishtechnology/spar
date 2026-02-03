@@ -318,7 +318,7 @@ export type {
 // Usage examples:
 // 1. Dot notation (compound): 
 //    import { Accordion } from '@spar/components';
-//    <Accordion.Root><Accordion.Trigger /></Accordion.Root>
+//    <AccordionRoot><AccordionTrigger /></AccordionRoot>
 // 
 // 2. Named imports (tree-shakeable): 
 //    import { AccordionRoot, AccordionTrigger } from '@spar/components';

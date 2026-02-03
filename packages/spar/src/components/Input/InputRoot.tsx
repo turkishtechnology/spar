@@ -6,7 +6,7 @@ const InputContext = createContext<InputContextValue | null>(null);
 const useInputContext = () => {
   const context = useContext(InputContext);
   if (!context) {
-    throw new Error('Input compound components must be used within Input.Root');
+    throw new Error('Input compound components must be used within InputRoot');
   }
   return context;
 };
@@ -51,4 +51,4 @@ export const InputRoot = ({
   );
 };
 
-InputRoot.displayName = 'Input.Root';
+InputRoot.displayName = 'InputRoot';

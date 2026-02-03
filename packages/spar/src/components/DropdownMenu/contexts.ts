@@ -39,7 +39,7 @@ export const DropdownMenuCollectionContext =
 export const useDropdownMenuRootContext = () => {
   const context = useContext(DropdownMenuContext);
   if (!context) {
-    throw new Error('DropdownMenu components must be used within DropdownMenu.Root');
+    throw new Error('DropdownMenu components must be used within DropdownMenuRoot');
   }
   return context;
 };
@@ -55,7 +55,7 @@ export const useMenuScope = () => {
 export const useDropdownMenuCollectionContext = () => {
   const context = useContext(DropdownMenuCollectionContext);
   if (!context) {
-    throw new Error('DropdownMenu items must be rendered within DropdownMenu.Content');
+    throw new Error('DropdownMenu items must be rendered within DropdownMenuContent');
   }
   return context;
 };
@@ -63,7 +63,7 @@ export const useDropdownMenuCollectionContext = () => {
 export const useDropdownMenuRadioGroupContext = () => {
   const context = useContext(DropdownMenuRadioGroupContext);
   if (!context) {
-    throw new Error('DropdownMenu.RadioItem must be used within DropdownMenu.RadioGroup');
+    throw new Error('DropdownMenuRadioItem must be used within DropdownMenuRadioGroup');
   }
   return context;
 };
@@ -71,7 +71,7 @@ export const useDropdownMenuRadioGroupContext = () => {
 export const useDropdownMenuSubContext = () => {
   const context = useContext(DropdownMenuSubContext);
   if (!context) {
-    throw new Error('DropdownMenu.Sub components must be used within DropdownMenu.Sub');
+    throw new Error('DropdownMenuSub components must be used within DropdownMenuSub');
   }
   return context;
 };

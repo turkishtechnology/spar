@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../index';
+import { TabsRoot, TabsList, TabsTrigger, TabsContent } from '../index';
 
 // Test setup helper
 const BasicTabs = ({
@@ -13,8 +13,8 @@ const BasicTabs = ({
   activationMode = 'automatic',
   children,
   ...rest
-}: Partial<React.ComponentProps<typeof Tabs>> = {}) => (
-  <Tabs
+}: Partial<React.ComponentProps<typeof TabsRoot>> = {}) => (
+  <TabsRoot
     {...(value !== undefined && { value })}
     {...(defaultValue !== undefined && { defaultValue })}
     {...(onValueChange && { onValueChange })}
@@ -37,7 +37,7 @@ const BasicTabs = ({
         <TabsContent value='tab3'>Content for Tab 3</TabsContent>
       </>
     )}
-  </Tabs>
+  </TabsRoot>
 );
 
 describe('Tabs', () => {

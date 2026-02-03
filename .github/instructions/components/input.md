@@ -12,11 +12,11 @@ The Input component provides accessible form input primitives with zero styling 
 
 **Compound Structure:**
 
-- `Input.Root` - State provider with validation context
-- `Input.Field` - Core input element (polymorphic: input/textarea)
-- `Input.Label` - Associated label element
-- `Input.Description` - Helper text element
-- `Input.ErrorMessage` - Error announcement element
+- `InputRoot` - State provider with validation context
+- `InputField` - Core input element (polymorphic: input/textarea)
+- `InputLabel` - Associated label element
+- `InputDescription` - Helper text element
+- `InputErrorMessage` - Error announcement element
 
 **Unique Value:**
 
@@ -26,7 +26,7 @@ The Input component provides accessible form input primitives with zero styling 
 
 ## 2. API
 
-### Input.Root Props
+### InputRoot Props
 
 | Name       | Type        | Required | Default | Description             |
 | ---------- | ----------- | -------- | ------- | ----------------------- |
@@ -35,26 +35,26 @@ The Input component provides accessible form input primitives with zero styling 
 | `required` | `boolean`   | No       | `false` | Input required state    |
 | `children` | `ReactNode` | Yes      | -       | Compound input elements |
 
-### Input.Field Props
+### InputField Props
 
 | Name   | Type          | Required | Default   | Description                   |
 | ------ | ------------- | -------- | --------- | ----------------------------- |
 | `as`   | `ElementType` | No       | `"input"` | Element type (input/textarea) |
 | `type` | `string`      | No       | `"text"`  | HTML input type               |
 
-### Input.Label Props
+### InputLabel Props
 
 | Name       | Type        | Required | Default | Description   |
 | ---------- | ----------- | -------- | ------- | ------------- |
 | `children` | `ReactNode` | Yes      | -       | Label content |
 
-### Input.Description Props
+### InputDescription Props
 
 | Name       | Type        | Required | Default | Description         |
 | ---------- | ----------- | -------- | ------- | ------------------- |
 | `children` | `ReactNode` | Yes      | -       | Description content |
 
-### Input.ErrorMessage Props
+### InputErrorMessage Props
 
 | Name       | Type        | Required | Default | Description   |
 | ---------- | ----------- | -------- | ------- | ------------- |
@@ -75,14 +75,14 @@ The Input component provides accessible form input primitives with zero styling 
 ### ARIA Implementation
 
 ```tsx
-// Input.Field
+// InputField
 aria-labelledby={labelId}
 aria-describedby={invalid ? errorId : descriptionId}
 aria-required={required}
 aria-invalid={invalid}
 disabled={disabled}
 
-// Input.ErrorMessage
+// InputErrorMessage
 role="alert"
 id={errorId}
 ```
@@ -121,40 +121,40 @@ const useInputContext = () => {
 
 ### Component Structure
 
-- **Input.Root**: Context provider with state management
-- **Input.Field**: Ref forwarding to native input element
-- **Input.Label/Description/ErrorMessage**: ID-based ARIA associations
+- **InputRoot**: Context provider with state management
+- **InputField**: Ref forwarding to native input element
+- **InputLabel/Description/ErrorMessage**: ID-based ARIA associations
 
 ### Events
 
-- All native input events forwarded through Input.Field
+- All native input events forwarded through InputField
 - Context state updates trigger ARIA attribute changes
 
 ## 6. Styling & Data Attributes
 
 ### Data Hooks for Styling
 
-**Input.Root**:
+**InputRoot**:
 
 - `data-spar-input` - Base identifier
 - `data-invalid` - When validation fails
 - `data-disabled` - When input disabled
 - `data-required` - When input required
 
-**Input.Field**:
+**InputField**:
 
 - `data-spar-input-field` - Field identifier
 - `data-focused` - When input focused
 
-**Input.Label**:
+**InputLabel**:
 
 - `data-spar-input-label` - Label identifier
 
-**Input.Description**:
+**InputDescription**:
 
 - `data-spar-input-description` - Description identifier
 
-**Input.ErrorMessage**:
+**InputErrorMessage**:
 
 - `data-spar-input-error` - Error identifier
 
@@ -164,7 +164,7 @@ const useInputContext = () => {
 
 - Context state management and ID generation
 - ARIA attribute presence and values
-- Event forwarding through Input.Field
+- Event forwarding through InputField
 
 ### Accessibility Tests
 

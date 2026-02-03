@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   TooltipProvider,
@@ -12,6 +12,13 @@ import {
 
 // Mock timer functions for consistent testing
 jest.useFakeTimers();
+
+// Cleanup after each test to prevent act() warnings from pending timers
+afterEach(() => {
+  act(() => {
+    jest.runOnlyPendingTimers();
+  });
+});
 
 // Mock window.matchMedia for JSDOM environment
 Object.defineProperty(window, 'matchMedia', {
@@ -175,7 +182,9 @@ describe('Tooltip Integration Tests', () => {
 
       // Show help tooltip
       await user.hover(nameHelp);
-      jest.advanceTimersByTime(700);
+      await act(async () => {
+        jest.advanceTimersByTime(700);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('tooltip')).toHaveTextContent(
@@ -201,7 +210,9 @@ describe('Tooltip Integration Tests', () => {
 
       // Show first tooltip
       await user.hover(nameHelp);
-      jest.advanceTimersByTime(700);
+      await act(async () => {
+        jest.advanceTimersByTime(700);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('tooltip')).toHaveTextContent('legal name');
@@ -210,7 +221,9 @@ describe('Tooltip Integration Tests', () => {
       // Switch to second tooltip
       await user.unhover(nameHelp);
       await user.hover(emailHelp);
-      jest.advanceTimersByTime(100);
+      await act(async () => {
+        jest.advanceTimersByTime(100);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('tooltip')).toHaveTextContent('account notifications');
@@ -303,7 +316,9 @@ describe('Tooltip Integration Tests', () => {
 
       // First tooltip should have normal delay
       await user.hover(first);
-      jest.advanceTimersByTime(500); // Provider delay
+      await act(async () => {
+        jest.advanceTimersByTime(500); // Provider delay
+      });
 
       await waitFor(() => {
         expect(screen.getByText('First tooltip content')).toBeInTheDocument();
@@ -311,7 +326,9 @@ describe('Tooltip Integration Tests', () => {
 
       // Moving to second tooltip should have reduced delay
       await user.hover(second);
-      jest.advanceTimersByTime(200); // Skip delay
+      await act(async () => {
+        jest.advanceTimersByTime(200); // Skip delay
+      });
 
       await waitFor(() => {
         expect(screen.getByText('Second tooltip content')).toBeInTheDocument();
@@ -320,7 +337,9 @@ describe('Tooltip Integration Tests', () => {
 
       // Moving to third should also be quick
       await user.hover(third);
-      jest.advanceTimersByTime(200);
+      await act(async () => {
+        jest.advanceTimersByTime(200);
+      });
 
       await waitFor(() => {
         expect(screen.getByText('Third tooltip content')).toBeInTheDocument();
@@ -335,7 +354,9 @@ describe('Tooltip Integration Tests', () => {
       const first = screen.getByRole('button', { name: 'First' });
 
       // Focus first tooltip
-      first.focus();
+      act(() => {
+        first.focus();
+      });
 
       await waitFor(() => {
         expect(screen.getByText('First tooltip content')).toBeInTheDocument();
@@ -367,7 +388,9 @@ describe('Tooltip Integration Tests', () => {
         const buttonIndex = i % 3;
         const button = buttons[buttonIndex]!;
         await user.hover(button);
-        jest.advanceTimersByTime(50); // Quick movements
+        await act(async () => {
+          jest.advanceTimersByTime(50); // Quick movements
+        });
       }
 
       // Should not have multiple tooltips open
@@ -382,7 +405,9 @@ describe('Tooltip Integration Tests', () => {
       const outerTrigger = screen.getByRole('button', { name: 'Outer tooltip' });
 
       // Focus outer tooltip to open it
-      outerTrigger.focus();
+      act(() => {
+        outerTrigger.focus();
+      });
 
       await waitFor(() => {
         expect(screen.getByText('This tooltip contains another trigger')).toBeInTheDocument();
@@ -391,7 +416,9 @@ describe('Tooltip Integration Tests', () => {
       // Find and interact with inner trigger
       const innerTrigger = screen.getByRole('button', { name: 'Inner' });
       await user.hover(innerTrigger);
-      jest.advanceTimersByTime(700);
+      await act(async () => {
+        jest.advanceTimersByTime(700);
+      });
 
       await waitFor(() => {
         expect(screen.getByText('Nested tooltip content')).toBeInTheDocument();

@@ -2,7 +2,18 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { Select } from '../index';
+import {
+  SelectRoot,
+  SelectTrigger,
+  SelectValue,
+  SelectPortal,
+  SelectContent,
+  SelectItem,
+  SelectItemText,
+  SelectGroup,
+  SelectLabel,
+  SelectSeparator,
+} from '../index';
 
 expect.extend(toHaveNoViolations);
 
@@ -10,15 +21,15 @@ describe('Select Accessibility', () => {
   describe('Automated A11y Testing', () => {
     it('should pass accessibility checks for basic select', async () => {
       const { container } = render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-            <Select.Item value='option2'>Option 2</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+            <SelectItem value='option2'>Option 2</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const results = await axe(container);
@@ -32,17 +43,17 @@ describe('Select Accessibility', () => {
 
       const { container } = render(
         <div>
-          <Select>
-            <Select.Trigger aria-label='Choose option'>
-              <Select.Value placeholder='Select...' />
-            </Select.Trigger>
-            <Select.Portal container={portalContainer}>
-              <Select.Content>
-                <Select.Item value='option1'>Option 1</Select.Item>
-                <Select.Item value='option2'>Option 2</Select.Item>
-              </Select.Content>
-            </Select.Portal>
-          </Select>
+          <SelectRoot>
+            <SelectTrigger aria-label='Choose option'>
+              <SelectValue placeholder='Select...' />
+            </SelectTrigger>
+            <SelectPortal container={portalContainer}>
+              <SelectContent>
+                <SelectItem value='option1'>Option 1</SelectItem>
+                <SelectItem value='option2'>Option 2</SelectItem>
+              </SelectContent>
+            </SelectPortal>
+          </SelectRoot>
         </div>,
       );
 
@@ -61,15 +72,15 @@ describe('Select Accessibility', () => {
 
     it('should pass accessibility checks with selected value', async () => {
       const { container } = render(
-        <Select value='option1'>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-            <Select.Item value='option2'>Option 2</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot value='option1'>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+            <SelectItem value='option2'>Option 2</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const results = await axe(container);
@@ -78,14 +89,14 @@ describe('Select Accessibility', () => {
 
     it('should pass accessibility checks with disabled state', async () => {
       const { container } = render(
-        <Select disabled>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot disabled>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const results = await axe(container);
@@ -96,14 +107,14 @@ describe('Select Accessibility', () => {
   describe('ARIA Attributes', () => {
     it('should have proper combobox role and attributes on trigger', () => {
       render(
-        <Select required>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot required>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -120,14 +131,14 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -144,14 +155,14 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -168,14 +179,14 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -190,15 +201,15 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select value='option1'>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-            <Select.Item value='option2'>Option 2</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot value='option1'>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+            <SelectItem value='option2'>Option 2</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -216,17 +227,17 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1' disabled>
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1' disabled>
               Option 1
-            </Select.Item>
-            <Select.Item value='option2'>Option 2</Select.Item>
-          </Select.Content>
-        </Select>,
+            </SelectItem>
+            <SelectItem value='option2'>Option 2</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -238,14 +249,14 @@ describe('Select Accessibility', () => {
 
     it('should have aria-labelledby connecting trigger to value', () => {
       render(
-        <Select>
-          <Select.Trigger>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -265,14 +276,14 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -286,14 +297,14 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -307,16 +318,16 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-            <Select.Item value='option2'>Option 2</Select.Item>
-            <Select.Item value='option3'>Option 3</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+            <SelectItem value='option2'>Option 2</SelectItem>
+            <SelectItem value='option3'>Option 3</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -335,16 +346,16 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-            <Select.Item value='option2'>Option 2</Select.Item>
-            <Select.Item value='option3'>Option 3</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+            <SelectItem value='option2'>Option 2</SelectItem>
+            <SelectItem value='option3'>Option 3</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -366,15 +377,15 @@ describe('Select Accessibility', () => {
       const handleValueChange = jest.fn();
 
       render(
-        <Select onValueChange={handleValueChange}>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-            <Select.Item value='option2'>Option 2</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot onValueChange={handleValueChange}>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+            <SelectItem value='option2'>Option 2</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -390,15 +401,15 @@ describe('Select Accessibility', () => {
       const handleValueChange = jest.fn();
 
       render(
-        <Select onValueChange={handleValueChange}>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-            <Select.Item value='option2'>Option 2</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot onValueChange={handleValueChange}>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+            <SelectItem value='option2'>Option 2</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -413,14 +424,14 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -437,16 +448,16 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-            <Select.Item value='option2'>Option 2</Select.Item>
-            <Select.Item value='option3'>Option 3</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+            <SelectItem value='option2'>Option 2</SelectItem>
+            <SelectItem value='option3'>Option 3</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -467,16 +478,16 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-            <Select.Item value='option2'>Option 2</Select.Item>
-            <Select.Item value='option3'>Option 3</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+            <SelectItem value='option2'>Option 2</SelectItem>
+            <SelectItem value='option3'>Option 3</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -495,18 +506,18 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-            <Select.Item value='option2' disabled>
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+            <SelectItem value='option2' disabled>
               Option 2
-            </Select.Item>
-            <Select.Item value='option3'>Option 3</Select.Item>
-          </Select.Content>
-        </Select>,
+            </SelectItem>
+            <SelectItem value='option3'>Option 3</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -525,16 +536,16 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='apple'>Apple</Select.Item>
-            <Select.Item value='banana'>Banana</Select.Item>
-            <Select.Item value='cherry'>Cherry</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='apple'>Apple</SelectItem>
+            <SelectItem value='banana'>Banana</SelectItem>
+            <SelectItem value='cherry'>Cherry</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -553,14 +564,14 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -577,14 +588,14 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -598,14 +609,14 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -619,14 +630,14 @@ describe('Select Accessibility', () => {
 
     it('should auto-focus trigger when autoFocus is true', async () => {
       const { container } = render(
-        <Select autoFocus>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot autoFocus>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -640,14 +651,14 @@ describe('Select Accessibility', () => {
 
     it('should not auto-focus trigger by default', () => {
       const { container } = render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const root = container.firstChild;
@@ -658,14 +669,14 @@ describe('Select Accessibility', () => {
   describe('Screen Reader Support', () => {
     it('should work with aria-label on trigger', () => {
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose your preferred option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose your preferred option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -676,16 +687,16 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>
-              <Select.ItemText>Option 1</Select.ItemText>
-            </Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>
+              <SelectItemText>Option 1</SelectItemText>
+            </SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -701,19 +712,19 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose plan'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='basic'>
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose plan'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='basic'>
               <div>
                 <strong>Basic Plan</strong>
                 <p>$10/month</p>
               </div>
-            </Select.Item>
-          </Select.Content>
-        </Select>,
+            </SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -727,24 +738,24 @@ describe('Select Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Select>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Group>
-              <Select.Label>Fruits</Select.Label>
-              <Select.Item value='apple'>Apple</Select.Item>
-              <Select.Item value='banana'>Banana</Select.Item>
-            </Select.Group>
-            <Select.Separator />
-            <Select.Group>
-              <Select.Label>Vegetables</Select.Label>
-              <Select.Item value='carrot'>Carrot</Select.Item>
-              <Select.Item value='potato'>Potato</Select.Item>
-            </Select.Group>
-          </Select.Content>
-        </Select>,
+        <SelectRoot>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Fruits</SelectLabel>
+              <SelectItem value='apple'>Apple</SelectItem>
+              <SelectItem value='banana'>Banana</SelectItem>
+            </SelectGroup>
+            <SelectSeparator />
+            <SelectGroup>
+              <SelectLabel>Vegetables</SelectLabel>
+              <SelectItem value='carrot'>Carrot</SelectItem>
+              <SelectItem value='potato'>Potato</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -760,14 +771,14 @@ describe('Select Accessibility', () => {
       render(
         <form>
           <label htmlFor='my-select'>Choose option</label>
-          <Select name='my-select'>
-            <Select.Trigger id='my-select'>
-              <Select.Value placeholder='Select...' />
-            </Select.Trigger>
-            <Select.Content>
-              <Select.Item value='option1'>Option 1</Select.Item>
-            </Select.Content>
-          </Select>
+          <SelectRoot name='my-select'>
+            <SelectTrigger id='my-select'>
+              <SelectValue placeholder='Select...' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='option1'>Option 1</SelectItem>
+            </SelectContent>
+          </SelectRoot>
         </form>,
       );
 
@@ -779,14 +790,14 @@ describe('Select Accessibility', () => {
 
     it('should work with required state', () => {
       render(
-        <Select required>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot required>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -795,14 +806,14 @@ describe('Select Accessibility', () => {
 
     it('should work with disabled state', () => {
       render(
-        <Select disabled>
-          <Select.Trigger aria-label='Choose option'>
-            <Select.Value placeholder='Select...' />
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Item value='option1'>Option 1</Select.Item>
-          </Select.Content>
-        </Select>,
+        <SelectRoot disabled>
+          <SelectTrigger aria-label='Choose option'>
+            <SelectValue placeholder='Select...' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='option1'>Option 1</SelectItem>
+          </SelectContent>
+        </SelectRoot>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -815,14 +826,14 @@ describe('Select Accessibility', () => {
       render(
         <div>
           <p id='error-message'>Please select a valid option</p>
-          <Select>
-            <Select.Trigger aria-label='Choose option' aria-describedby='error-message'>
-              <Select.Value placeholder='Select...' />
-            </Select.Trigger>
-            <Select.Content>
-              <Select.Item value='option1'>Option 1</Select.Item>
-            </Select.Content>
-          </Select>
+          <SelectRoot>
+            <SelectTrigger aria-label='Choose option' aria-describedby='error-message'>
+              <SelectValue placeholder='Select...' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='option1'>Option 1</SelectItem>
+            </SelectContent>
+          </SelectRoot>
         </div>,
       );
 

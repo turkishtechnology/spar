@@ -15,4 +15,4 @@ export const InputDescription = ({ children, ref, ...props }: InputDescriptionPr
   );
 };
 
-InputDescription.displayName = 'Input.Description';
+InputDescription.displayName = 'InputDescription';

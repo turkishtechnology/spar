@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '../index';
+import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '../index';
 
 expect.extend(toHaveNoViolations);
 
@@ -9,10 +9,10 @@ describe('Collapsible Accessibility', () => {
   describe('WCAG Compliance', () => {
     it('has no accessibility violations in closed state', async () => {
       const { container } = render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger>Toggle content</CollapsibleTrigger>
           <CollapsibleContent>This is the collapsible content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const results = await axe(container);
@@ -21,10 +21,10 @@ describe('Collapsible Accessibility', () => {
 
     it('has no accessibility violations in open state', async () => {
       const { container } = render(
-        <Collapsible defaultOpen>
+        <CollapsibleRoot defaultOpen>
           <CollapsibleTrigger>Toggle content</CollapsibleTrigger>
           <CollapsibleContent>This is the collapsible content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const results = await axe(container);
@@ -33,10 +33,10 @@ describe('Collapsible Accessibility', () => {
 
     it('has no accessibility violations with disabled state', async () => {
       const { container } = render(
-        <Collapsible disabled>
+        <CollapsibleRoot disabled>
           <CollapsibleTrigger>Toggle content</CollapsibleTrigger>
           <CollapsibleContent>This is the collapsible content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const results = await axe(container);
@@ -45,10 +45,10 @@ describe('Collapsible Accessibility', () => {
 
     it('has no accessibility violations with custom elements', async () => {
       const { container } = render(
-        <Collapsible defaultOpen>
+        <CollapsibleRoot defaultOpen>
           <CollapsibleTrigger as='div'>Custom trigger</CollapsibleTrigger>
           <CollapsibleContent as='section'>Custom content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const results = await axe(container);
@@ -57,10 +57,10 @@ describe('Collapsible Accessibility', () => {
 
     it('has no accessibility violations with force mounted content', async () => {
       const { container } = render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger>Toggle content</CollapsibleTrigger>
           <CollapsibleContent forceMount>Force mounted content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const results = await axe(container);
@@ -71,10 +71,10 @@ describe('Collapsible Accessibility', () => {
   describe('ARIA Attributes and Roles', () => {
     it('sets correct ARIA attributes on trigger (button)', () => {
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -85,12 +85,12 @@ describe('Collapsible Accessibility', () => {
 
     it('sets correct ARIA attributes on trigger (custom element)', () => {
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger as='div' data-testid='trigger'>
             Toggle
           </CollapsibleTrigger>
           <CollapsibleContent>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -104,10 +104,10 @@ describe('Collapsible Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -119,10 +119,10 @@ describe('Collapsible Accessibility', () => {
 
     it('sets correct ARIA relationship between trigger and content', () => {
       render(
-        <Collapsible defaultOpen>
+        <CollapsibleRoot defaultOpen>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent data-testid='content'>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -134,10 +134,10 @@ describe('Collapsible Accessibility', () => {
 
     it('handles aria-disabled for button elements when disabled', () => {
       render(
-        <Collapsible disabled>
+        <CollapsibleRoot disabled>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -147,12 +147,12 @@ describe('Collapsible Accessibility', () => {
 
     it('handles aria-disabled for custom elements when disabled', () => {
       render(
-        <Collapsible disabled>
+        <CollapsibleRoot disabled>
           <CollapsibleTrigger as='div' data-testid='trigger'>
             Toggle
           </CollapsibleTrigger>
           <CollapsibleContent>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -166,10 +166,10 @@ describe('Collapsible Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent data-testid='content'>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -186,10 +186,10 @@ describe('Collapsible Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent data-testid='content'>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -206,12 +206,12 @@ describe('Collapsible Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger as='div' data-testid='trigger'>
             Toggle
           </CollapsibleTrigger>
           <CollapsibleContent data-testid='content'>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -228,12 +228,12 @@ describe('Collapsible Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger as='div' data-testid='trigger'>
             Toggle
           </CollapsibleTrigger>
           <CollapsibleContent data-testid='content'>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -250,10 +250,10 @@ describe('Collapsible Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible disabled>
+        <CollapsibleRoot disabled>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent data-testid='content'>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -271,12 +271,12 @@ describe('Collapsible Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible disabled>
+        <CollapsibleRoot disabled>
           <CollapsibleTrigger as='div' data-testid='trigger'>
             Toggle
           </CollapsibleTrigger>
           <CollapsibleContent data-testid='content'>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -295,12 +295,12 @@ describe('Collapsible Accessibility', () => {
       const handleKeyDown = jest.fn();
 
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger data-testid='trigger' onKeyDown={handleKeyDown}>
             Toggle
           </CollapsibleTrigger>
           <CollapsibleContent data-testid='content'>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -317,12 +317,12 @@ describe('Collapsible Accessibility', () => {
       const handleKeyDown = jest.fn();
 
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger data-testid='trigger' onKeyDown={handleKeyDown}>
             Toggle
           </CollapsibleTrigger>
           <CollapsibleContent>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -341,10 +341,10 @@ describe('Collapsible Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -357,10 +357,10 @@ describe('Collapsible Accessibility', () => {
 
     it('allows tabbing to trigger when enabled', () => {
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -369,12 +369,12 @@ describe('Collapsible Accessibility', () => {
 
     it('prevents tabbing to trigger when disabled (custom element)', () => {
       render(
-        <Collapsible disabled>
+        <CollapsibleRoot disabled>
           <CollapsibleTrigger as='div' data-testid='trigger'>
             Toggle
           </CollapsibleTrigger>
           <CollapsibleContent>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -383,10 +383,10 @@ describe('Collapsible Accessibility', () => {
 
     it('prevents interaction when disabled (button)', () => {
       render(
-        <Collapsible disabled>
+        <CollapsibleRoot disabled>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent>Content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -397,10 +397,10 @@ describe('Collapsible Accessibility', () => {
   describe('Screen Reader Support', () => {
     it('provides meaningful labels through content', () => {
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger>Show more details</CollapsibleTrigger>
           <CollapsibleContent>Detailed information here</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByRole('button', { name: 'Show more details' })).toBeInTheDocument();
@@ -410,10 +410,10 @@ describe('Collapsible Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger data-testid='trigger'>Toggle details</CollapsibleTrigger>
           <CollapsibleContent>Details content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const trigger = screen.getByTestId('trigger');
@@ -427,12 +427,12 @@ describe('Collapsible Accessibility', () => {
 
     it('works with explicit aria labels', () => {
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger aria-label='Toggle additional options'>
             <span aria-hidden='true'>⚙️</span>
           </CollapsibleTrigger>
           <CollapsibleContent>Options content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByRole('button', { name: 'Toggle additional options' })).toBeInTheDocument();
@@ -442,10 +442,10 @@ describe('Collapsible Accessibility', () => {
   describe('Content Visibility and Hidden State', () => {
     it('properly handles content visibility for screen readers', () => {
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger>Toggle</CollapsibleTrigger>
           <CollapsibleContent data-testid='content'>Hidden content</CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       // Content should not be in DOM when closed and not force mounted
@@ -454,12 +454,12 @@ describe('Collapsible Accessibility', () => {
 
     it('properly handles force mounted content with hidden attribute', () => {
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger>Toggle</CollapsibleTrigger>
           <CollapsibleContent forceMount data-testid='content'>
             Force mounted content
           </CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const content = screen.getByTestId('content');
@@ -471,12 +471,12 @@ describe('Collapsible Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible>
+        <CollapsibleRoot>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent forceMount data-testid='content'>
             Content
           </CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       const content = screen.getByTestId('content');
@@ -491,12 +491,12 @@ describe('Collapsible Accessibility', () => {
   describe('Data Attributes for Styling', () => {
     it('provides data-state attribute for styling hooks', () => {
       render(
-        <Collapsible data-testid='collapsible'>
+        <CollapsibleRoot data-testid='collapsible'>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent data-testid='content' forceMount>
             Content
           </CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('collapsible')).toHaveAttribute('data-state', 'closed');
@@ -508,12 +508,12 @@ describe('Collapsible Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <Collapsible data-testid='collapsible'>
+        <CollapsibleRoot data-testid='collapsible'>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent data-testid='content' forceMount>
             Content
           </CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       await user.click(screen.getByTestId('trigger'));
@@ -525,12 +525,12 @@ describe('Collapsible Accessibility', () => {
 
     it('provides data-disabled attribute when disabled', () => {
       render(
-        <Collapsible disabled data-testid='collapsible'>
+        <CollapsibleRoot disabled data-testid='collapsible'>
           <CollapsibleTrigger data-testid='trigger'>Toggle</CollapsibleTrigger>
           <CollapsibleContent data-testid='content' forceMount>
             Content
           </CollapsibleContent>
-        </Collapsible>,
+        </CollapsibleRoot>,
       );
 
       expect(screen.getByTestId('collapsible')).toHaveAttribute('data-disabled', '');

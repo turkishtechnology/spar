@@ -1,6 +1,5 @@
 import type { ElementType, ReactNode, RefObject } from 'react';
 import { Side, Align, PolymorphicProps } from '../../types';
-import type { ButtonProps } from '../Button/types';
 
 export type Sticky = 'partial' | 'always';
 
@@ -104,15 +103,24 @@ export interface TooltipRootProps {
 }
 
 /**
- * Props for TooltipTrigger
- * @remarks The trigger element that shows/hides the tooltip
+ * Own props for TooltipTrigger
  */
-export interface TooltipTriggerProps extends Omit<ButtonProps, 'children'> {
+export interface TooltipTriggerOwnProps {
   /**
    * Children content or render function for render props pattern
    */
   children?: ReactNode | ((state: TooltipTriggerRenderProps) => ReactNode);
 }
+
+/**
+ * Props for TooltipTrigger
+ * @remarks The trigger element that shows/hides the tooltip
+ */
+export type TooltipTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  TooltipTriggerOwnProps
+>;
 
 /**
  * Own props for TooltipContent
