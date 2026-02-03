@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// @ts-ignore
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { format } from 'prettier/standalone';
@@ -491,9 +490,9 @@ const LiveCode: React.FC<LiveCodeProps> = ({ code, cssCode }) => {
                     }}
                   >
                     {tokens.map((line, i) => (
-                      <div key={i} {...getLineProps({ line, key: i })}>
-                        {line.map((token, key) => (
-                          <span key={key} {...getTokenProps({ token, key })} />
+                      <div key={i} {...getLineProps({ line })}>
+                        {line.map((token, tokenIndex) => (
+                          <span key={tokenIndex} {...getTokenProps({ token })} />
                         ))}
                       </div>
                     ))}

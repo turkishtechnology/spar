@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useId, useMemo, type ElementType } from 'react';
+import { createContext, useContext, useId, useMemo, type ElementType } from 'react';
 import type { SelectGroupProps, SelectGroupContextValue } from './types';
 
 const SelectGroupContext = createContext<SelectGroupContextValue | null>(null);

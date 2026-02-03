@@ -83,12 +83,7 @@ export default function LandingHeader() {
                 landing.description
               </Translate>
             </div>
-            <Button
-              as={Link}
-              // @ts-expect-error: Button is polymorphic but types are strict
-              to='/docs/introduction'
-              className='landing-header-getstarted'
-            >
+            <Button as={Link} to='/docs/introduction' className='landing-header-getstarted'>
               <Translate description='Get Started'>landing.get.started</Translate>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
