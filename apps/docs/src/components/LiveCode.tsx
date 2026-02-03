@@ -405,9 +405,9 @@ const LiveCode: React.FC<LiveCodeProps> = ({ code, cssCode }) => {
                     }}
                   >
                     {tokens.map((line, i) => (
-                      <div key={i} {...getLineProps({ line, key: i })}>
-                        {line.map((token, key) => (
-                          <span key={key} {...getTokenProps({ token, key })} />
+                      <div key={i} {...getLineProps({ line })}>
+                        {line.map((token, tokenIndex) => (
+                          <span key={tokenIndex} {...getTokenProps({ token })} />
                         ))}
                       </div>
                     ))}
