@@ -15,7 +15,7 @@
   font-family: 'Geologica', sans-serif;
 }
 
-* {
+*:not(pre):not(code):not(.live-editor):not(.live-editor *) {
   font-family: 'Geologica', sans-serif;
 }
 
