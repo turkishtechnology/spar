@@ -15,12 +15,6 @@ Every component documentation page MUST follow this exact structure:
 ### 1. Component Name & Brief Description
 - Clear, concise component title
 - One-sentence description of the component's purpose
-- Badge indicators in this exact format:
-  ```markdown
-  ![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
-  ![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
-  ![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
-  ```
  
 ### 2. Live Demo
 - Single interactive example using the `LiveCode` component
