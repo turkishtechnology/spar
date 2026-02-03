@@ -1,29 +1,34 @@
-# @turkish-technology/spar
+# Spar
 
-A minimal React 19 + TypeScript library scaffold.
+An open-source Headless React UI library delivering unstyled, behavior-first primitives.
+Zero styling opinions, full accessibility built-in.
+
+![Spar UI Hero](../../apps/docs/static/img/design-example.png)
+
+[![npm version](https://img.shields.io/npm/v/@turkish-technology/spar.svg)](https://www.npmjs.com/package/@turkish-technology/spar)
+[![npm downloads](https://img.shields.io/npm/dm/@turkish-technology/spar.svg)](https://www.npmjs.com/package/@turkish-technology/spar)
+[![License](https://img.shields.io/npm/l/@turkish-technology/spar.svg)](https://github.com/turkishtechnology/spar/blob/develop/LICENSE)
 
 ## Installation
 
 ```bash
 pnpm add @turkish-technology/spar
+# or
+yarn add @turkish-technology/spar
+# or
+npm install @turkish-technology/spar
+# or
+bun add @turkish-technology/spar
 ```
 
-## Usage
+## Documentation
 
-```tsx
-// Public API is currently minimal. Extend via `src/hooks`, `src/utils`, and `src/types`.
-import * as Spar from '@turkish-technology/spar';
+For full documentation, visit [Documentation Guide](https://spar.app.turkishtechlab.com/).
 
-console.log(Spar);
-```
+## Contributing
 
-## Development
+Please see [CONTRIBUTING.md](../../CONTRIBUTING.md) for contribution guidelines.
 
-- Build: `pnpm -w run build`
-- Type-check: `pnpm -w run check-types`
-- Lint: `pnpm -w run lint`
+## License
 
-## Requirements
-
-- Node >=22.18.0
-- pnpm >= 9.15.0
+See [LICENSE](../../LICENSE) for details.
