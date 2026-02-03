@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Radio } from '../Radio';
+import { RadioGroup, RadioItem } from '../index';
 
 // Helper function to get visible radio buttons (labels, not hidden inputs)
 const getVisibleRadio = (name: string) => {
@@ -34,11 +34,11 @@ describe('Radio Integration Tests', () => {
 
       render(
         <form onSubmit={handleSubmit}>
-          <Radio.Group name='plan' defaultValue='basic'>
-            <Radio.Item value='basic'>Basic Plan</Radio.Item>
-            <Radio.Item value='premium'>Premium Plan</Radio.Item>
-            <Radio.Item value='enterprise'>Enterprise Plan</Radio.Item>
-          </Radio.Group>
+          <RadioGroup name='plan' defaultValue='basic'>
+            <RadioItem value='basic'>Basic Plan</RadioItem>
+            <RadioItem value='premium'>Premium Plan</RadioItem>
+            <RadioItem value='enterprise'>Enterprise Plan</RadioItem>
+          </RadioGroup>
           <button type='submit'>Submit</button>
         </form>,
       );
@@ -60,10 +60,10 @@ describe('Radio Integration Tests', () => {
 
       render(
         <form onSubmit={handleSubmit}>
-          <Radio.Group name='plan'>
-            <Radio.Item value='basic'>Basic Plan</Radio.Item>
-            <Radio.Item value='premium'>Premium Plan</Radio.Item>
-          </Radio.Group>
+          <RadioGroup name='plan'>
+            <RadioItem value='basic'>Basic Plan</RadioItem>
+            <RadioItem value='premium'>Premium Plan</RadioItem>
+          </RadioGroup>
           <button type='submit'>Submit</button>
         </form>,
       );
@@ -102,10 +102,10 @@ describe('Radio Integration Tests', () => {
         return (
           <div>
             <form onSubmit={handleSubmit}>
-              <Radio.Group name='plan' value={selectedPlan} onValueChange={setSelectedPlan}>
-                <Radio.Item value='basic'>Basic Plan</Radio.Item>
-                <Radio.Item value='premium'>Premium Plan</Radio.Item>
-              </Radio.Group>
+              <RadioGroup name='plan' value={selectedPlan} onValueChange={setSelectedPlan}>
+                <RadioItem value='basic'>Basic Plan</RadioItem>
+                <RadioItem value='premium'>Premium Plan</RadioItem>
+              </RadioGroup>
               <button type='submit'>Submit</button>
             </form>
             <div data-testid='submitted-plan'>{submittedPlan}</div>
@@ -142,16 +142,16 @@ describe('Radio Integration Tests', () => {
 
         return (
           <form onSubmit={handleSubmit}>
-            <Radio.Group
+            <RadioGroup
               name='plan'
               value={selectedPlan}
               onValueChange={setSelectedPlan}
               aria-describedby={error ? 'error-message' : undefined}
               required
             >
-              <Radio.Item value='basic'>Basic Plan</Radio.Item>
-              <Radio.Item value='premium'>Premium Plan</Radio.Item>
-            </Radio.Group>
+              <RadioItem value='basic'>Basic Plan</RadioItem>
+              <RadioItem value='premium'>Premium Plan</RadioItem>
+            </RadioGroup>
             {error && (
               <div id='error-message' role='alert'>
                 {error}
@@ -185,17 +185,17 @@ describe('Radio Integration Tests', () => {
 
       render(
         <div>
-          <Radio.Group name='size' aria-label='Choose size'>
-            <Radio.Item value='small'>Small</Radio.Item>
-            <Radio.Item value='medium'>Medium</Radio.Item>
-            <Radio.Item value='large'>Large</Radio.Item>
-          </Radio.Group>
+          <RadioGroup name='size' aria-label='Choose size'>
+            <RadioItem value='small'>Small</RadioItem>
+            <RadioItem value='medium'>Medium</RadioItem>
+            <RadioItem value='large'>Large</RadioItem>
+          </RadioGroup>
 
-          <Radio.Group name='color' aria-label='Choose color'>
-            <Radio.Item value='red'>Red</Radio.Item>
-            <Radio.Item value='blue'>Blue</Radio.Item>
-            <Radio.Item value='green'>Green</Radio.Item>
-          </Radio.Group>
+          <RadioGroup name='color' aria-label='Choose color'>
+            <RadioItem value='red'>Red</RadioItem>
+            <RadioItem value='blue'>Blue</RadioItem>
+            <RadioItem value='green'>Green</RadioItem>
+          </RadioGroup>
         </div>,
       );
 
@@ -223,20 +223,20 @@ describe('Radio Integration Tests', () => {
       const NestedComponent = () => (
         <div>
           <h3>Preferences</h3>
-          <Radio.Group name='notification' aria-label='Notification settings'>
-            <Radio.Item value='all'>All notifications</Radio.Item>
-            <Radio.Item value='important'>Important only</Radio.Item>
-            <Radio.Item value='none'>None</Radio.Item>
-          </Radio.Group>
+          <RadioGroup name='notification' aria-label='Notification settings'>
+            <RadioItem value='all'>All notifications</RadioItem>
+            <RadioItem value='important'>Important only</RadioItem>
+            <RadioItem value='none'>None</RadioItem>
+          </RadioGroup>
         </div>
       );
 
       render(
         <div>
-          <Radio.Group name='theme' aria-label='Theme selection'>
-            <Radio.Item value='light'>Light</Radio.Item>
-            <Radio.Item value='dark'>Dark</Radio.Item>
-          </Radio.Group>
+          <RadioGroup name='theme' aria-label='Theme selection'>
+            <RadioItem value='light'>Light</RadioItem>
+            <RadioItem value='dark'>Dark</RadioItem>
+          </RadioGroup>
           <NestedComponent />
         </div>,
       );
@@ -262,16 +262,16 @@ describe('Radio Integration Tests', () => {
             <button onClick={() => setShowAdditional(!showAdditional)}>
               Toggle Additional Options
             </button>
-            <Radio.Group name='options' aria-label='Available options'>
-              <Radio.Item value='option1'>Option 1</Radio.Item>
-              <Radio.Item value='option2'>Option 2</Radio.Item>
+            <RadioGroup name='options' aria-label='Available options'>
+              <RadioItem value='option1'>Option 1</RadioItem>
+              <RadioItem value='option2'>Option 2</RadioItem>
               {showAdditional && (
                 <>
-                  <Radio.Item value='option3'>Option 3</Radio.Item>
-                  <Radio.Item value='option4'>Option 4</Radio.Item>
+                  <RadioItem value='option3'>Option 3</RadioItem>
+                  <RadioItem value='option4'>Option 4</RadioItem>
                 </>
               )}
-            </Radio.Group>
+            </RadioGroup>
           </div>
         );
       };
@@ -332,25 +332,25 @@ describe('Radio Integration Tests', () => {
 
         return (
           <div>
-            <Radio.Group
+            <RadioGroup
               name='theme'
               value={globalState.userPreferences.theme}
               onValueChange={updateTheme}
               aria-label='Theme selection'
             >
-              <Radio.Item value='light'>Light</Radio.Item>
-              <Radio.Item value='dark'>Dark</Radio.Item>
-            </Radio.Group>
+              <RadioItem value='light'>Light</RadioItem>
+              <RadioItem value='dark'>Dark</RadioItem>
+            </RadioGroup>
 
-            <Radio.Group
+            <RadioGroup
               name='language'
               value={globalState.userPreferences.language}
               onValueChange={updateLanguage}
               aria-label='Language selection'
             >
-              <Radio.Item value='en'>English</Radio.Item>
-              <Radio.Item value='tr'>Turkish</Radio.Item>
-            </Radio.Group>
+              <RadioItem value='en'>English</RadioItem>
+              <RadioItem value='tr'>Turkish</RadioItem>
+            </RadioGroup>
 
             <div data-testid='current-state'>{JSON.stringify(globalState.userPreferences)}</div>
           </div>
@@ -390,17 +390,17 @@ describe('Radio Integration Tests', () => {
 
         return (
           <div>
-            <Radio.Group
+            <RadioGroup
               name='plan'
               value={selectedPlan}
               onValueChange={handlePlanChange}
               disabled={isProcessing}
               aria-label='Plan selection'
             >
-              <Radio.Item value='basic'>Basic Plan</Radio.Item>
-              <Radio.Item value='premium'>Premium Plan</Radio.Item>
-              <Radio.Item value='enterprise'>Enterprise Plan</Radio.Item>
-            </Radio.Group>
+              <RadioItem value='basic'>Basic Plan</RadioItem>
+              <RadioItem value='premium'>Premium Plan</RadioItem>
+              <RadioItem value='enterprise'>Enterprise Plan</RadioItem>
+            </RadioGroup>
 
             {isProcessing && <div data-testid='processing'>Processing...</div>}
             {confirmationMessage && <div data-testid='confirmation'>{confirmationMessage}</div>}
@@ -434,12 +434,12 @@ describe('Radio Integration Tests', () => {
 
       render(
         <div onClick={containerClick} data-testid='container'>
-          <Radio.Group onClick={radioGroupClick} aria-label='Options' name='test-group'>
-            <Radio.Item value='option1' onClick={radioItemClick}>
+          <RadioGroup onClick={radioGroupClick} aria-label='Options' name='test-group'>
+            <RadioItem value='option1' onClick={radioItemClick}>
               Option 1
-            </Radio.Item>
-            <Radio.Item value='option2'>Option 2</Radio.Item>
-          </Radio.Group>
+            </RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+          </RadioGroup>
         </div>,
       );
 
@@ -461,11 +461,11 @@ describe('Radio Integration Tests', () => {
 
       render(
         <div onClick={containerClick} data-testid='container'>
-          <Radio.Group aria-label='Options' name='test-group-2'>
-            <Radio.Item value='option1' onClick={handleItemClick}>
+          <RadioGroup aria-label='Options' name='test-group-2'>
+            <RadioItem value='option1' onClick={handleItemClick}>
               Option 1
-            </Radio.Item>
-          </Radio.Group>
+            </RadioItem>
+          </RadioGroup>
         </div>,
       );
 
@@ -496,16 +496,16 @@ describe('Radio Integration Tests', () => {
 
         return (
           <div>
-            <Radio.Group
+            <RadioGroup
               value={selectedValue}
               onValueChange={handleValueChange}
               disabled={isLoading}
               aria-label='Async options'
             >
-              <Radio.Item value='option1'>Option 1</Radio.Item>
-              <Radio.Item value='option2'>Option 2</Radio.Item>
-              <Radio.Item value='option3'>Option 3</Radio.Item>
-            </Radio.Group>
+              <RadioItem value='option1'>Option 1</RadioItem>
+              <RadioItem value='option2'>Option 2</RadioItem>
+              <RadioItem value='option3'>Option 3</RadioItem>
+            </RadioGroup>
             {isLoading && <div data-testid='loading'>Loading...</div>}
             {selectedValue && <div data-testid='selected-value'>Selected: {selectedValue}</div>}
           </div>
@@ -555,15 +555,15 @@ describe('Radio Integration Tests', () => {
 
         return (
           <div>
-            <Radio.Group
+            <RadioGroup
               value={selectedValue}
               onValueChange={handleValueChange}
               aria-describedby={validationError ? 'error-message' : undefined}
               aria-label='Validation options'
             >
-              <Radio.Item value='valid'>Valid Option</Radio.Item>
-              <Radio.Item value='invalid'>Invalid Option</Radio.Item>
-            </Radio.Group>
+              <RadioItem value='valid'>Valid Option</RadioItem>
+              <RadioItem value='invalid'>Invalid Option</RadioItem>
+            </RadioGroup>
             {isValidating && <div data-testid='validating'>Validating...</div>}
             {validationError && (
               <div id='error-message' role='alert' data-testid='error'>
@@ -613,44 +613,44 @@ describe('Radio Integration Tests', () => {
 
             <section>
               <h2 id='theme-heading'>Theme</h2>
-              <Radio.Group
+              <RadioGroup
                 name='theme'
                 value={settings.theme}
                 onValueChange={(value) => updateSetting('theme', value)}
                 aria-labelledby='theme-heading'
               >
-                <Radio.Item value='light'>Light</Radio.Item>
-                <Radio.Item value='dark'>Dark</Radio.Item>
-                <Radio.Item value='auto'>Auto</Radio.Item>
-              </Radio.Group>
+                <RadioItem value='light'>Light</RadioItem>
+                <RadioItem value='dark'>Dark</RadioItem>
+                <RadioItem value='auto'>Auto</RadioItem>
+              </RadioGroup>
             </section>
 
             <section>
               <h2 id='notifications-heading'>Notifications</h2>
-              <Radio.Group
+              <RadioGroup
                 name='notifications'
                 value={settings.notifications}
                 onValueChange={(value) => updateSetting('notifications', value)}
                 aria-labelledby='notifications-heading'
               >
-                <Radio.Item value='all'>All notifications</Radio.Item>
-                <Radio.Item value='important'>Important only</Radio.Item>
-                <Radio.Item value='none'>None</Radio.Item>
-              </Radio.Group>
+                <RadioItem value='all'>All notifications</RadioItem>
+                <RadioItem value='important'>Important only</RadioItem>
+                <RadioItem value='none'>None</RadioItem>
+              </RadioGroup>
             </section>
 
             <section>
               <h2 id='privacy-heading'>Privacy</h2>
-              <Radio.Group
+              <RadioGroup
                 name='privacy'
                 value={settings.privacy}
                 onValueChange={(value) => updateSetting('privacy', value)}
                 aria-labelledby='privacy-heading'
               >
-                <Radio.Item value='public'>Public</Radio.Item>
-                <Radio.Item value='friends'>Friends only</Radio.Item>
-                <Radio.Item value='private'>Private</Radio.Item>
-              </Radio.Group>
+                <RadioItem value='public'>Public</RadioItem>
+                <RadioItem value='friends'>Friends only</RadioItem>
+                <RadioItem value='private'>Private</RadioItem>
+              </RadioGroup>
             </section>
 
             <div data-testid='current-settings'>{JSON.stringify(settings)}</div>
@@ -729,7 +729,7 @@ describe('Radio Integration Tests', () => {
             </p>
 
             <h2 id={`question-${question.id}`}>{question.text}</h2>
-            <Radio.Group
+            <RadioGroup
               name={question.id}
               value={answers[question.id] || ''}
               onValueChange={(value) => updateAnswer(question.id, value)}
@@ -737,11 +737,11 @@ describe('Radio Integration Tests', () => {
               required
             >
               {question.options.map((option) => (
-                <Radio.Item key={option.value} value={option.value}>
+                <RadioItem key={option.value} value={option.value}>
                   {option.label}
-                </Radio.Item>
+                </RadioItem>
               ))}
-            </Radio.Group>
+            </RadioGroup>
 
             {currentQuestion < questions.length - 1 && (
               <button

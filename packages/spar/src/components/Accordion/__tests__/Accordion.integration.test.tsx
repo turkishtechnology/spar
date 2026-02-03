@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
-  Accordion,
+  AccordionRoot,
   AccordionItem,
   AccordionHeader,
   AccordionTrigger,
@@ -13,7 +13,7 @@ import {
 const FAQAccordion = () => (
   <div>
     <h1>Frequently Asked Questions</h1>
-    <Accordion type='single' isCollapsible={true}>
+    <AccordionRoot type='single' isCollapsible={true}>
       <AccordionItem value='faq-1'>
         <AccordionHeader>
           <AccordionTrigger>How do I get started?</AccordionTrigger>
@@ -83,7 +83,7 @@ const FAQAccordion = () => (
           </form>
         </AccordionContent>
       </AccordionItem>
-    </Accordion>
+    </AccordionRoot>
   </div>
 );
 
@@ -91,13 +91,13 @@ const FAQAccordion = () => (
 const SettingsAccordion = () => (
   <div>
     <h1>Settings</h1>
-    <Accordion type='multiple'>
+    <AccordionRoot type='multiple'>
       <AccordionItem value='account'>
         <AccordionHeader>
           <AccordionTrigger>Account Settings</AccordionTrigger>
         </AccordionHeader>
         <AccordionContent>
-          <Accordion type='single'>
+          <AccordionRoot type='single'>
             <AccordionItem value='profile'>
               <AccordionHeader level={4}>
                 <AccordionTrigger>Profile Information</AccordionTrigger>
@@ -119,7 +119,7 @@ const SettingsAccordion = () => (
                 <button type='button'>Enable 2FA</button>
               </AccordionContent>
             </AccordionItem>
-          </Accordion>
+          </AccordionRoot>
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value='notifications'>
@@ -143,7 +143,7 @@ const SettingsAccordion = () => (
           </div>
         </AccordionContent>
       </AccordionItem>
-    </Accordion>
+    </AccordionRoot>
   </div>
 );
 
@@ -327,7 +327,7 @@ describe('Accordion Integration Tests', () => {
             <button type='button' onClick={() => setItems([...items, `item-${items.length + 1}`])}>
               Add Item
             </button>
-            <Accordion type='multiple'>
+            <AccordionRoot type='multiple'>
               {items.map((itemId, index) => (
                 <AccordionItem key={itemId} value={itemId}>
                   <AccordionHeader>
@@ -336,7 +336,7 @@ describe('Accordion Integration Tests', () => {
                   <AccordionContent>Content for item {index + 1}</AccordionContent>
                 </AccordionItem>
               ))}
-            </Accordion>
+            </AccordionRoot>
           </div>
         );
       };
@@ -374,7 +374,7 @@ describe('Accordion Integration Tests', () => {
             <button type='button' onClick={() => setCount(count + 1)}>
               Re-render ({count})
             </button>
-            <Accordion type='multiple' defaultValue={['item-1']}>
+            <AccordionRoot type='multiple' defaultValue={['item-1']}>
               <AccordionItem value='item-1'>
                 <AccordionHeader>
                   <AccordionTrigger>Persistent Item 1</AccordionTrigger>
@@ -387,7 +387,7 @@ describe('Accordion Integration Tests', () => {
                 </AccordionHeader>
                 <AccordionContent>Persistent content 2</AccordionContent>
               </AccordionItem>
-            </Accordion>
+            </AccordionRoot>
           </div>
         );
       };
@@ -455,7 +455,7 @@ describe('Accordion Integration Tests', () => {
             <button type='button' onClick={() => setShowSecondItem(!showSecondItem)}>
               Toggle Second Item
             </button>
-            <Accordion type='single'>
+            <AccordionRoot type='single'>
               <AccordionItem value='item-1'>
                 <AccordionHeader>
                   <AccordionTrigger>Always Visible</AccordionTrigger>
@@ -470,7 +470,7 @@ describe('Accordion Integration Tests', () => {
                   <AccordionContent>Conditionally visible content</AccordionContent>
                 </AccordionItem>
               )}
-            </Accordion>
+            </AccordionRoot>
           </div>
         );
       };
@@ -505,7 +505,7 @@ describe('Accordion Integration Tests', () => {
   describe('Performance and Accessibility Integration', () => {
     it('should maintain performance with large number of accordion items', () => {
       const LargeAccordion = () => (
-        <Accordion type='single'>
+        <AccordionRoot type='single'>
           {Array.from({ length: 50 }, (_, i) => (
             <AccordionItem key={i} value={`item-${i}`}>
               <AccordionHeader>
@@ -514,7 +514,7 @@ describe('Accordion Integration Tests', () => {
               <AccordionContent>Content for item {i + 1}</AccordionContent>
             </AccordionItem>
           ))}
-        </Accordion>
+        </AccordionRoot>
       );
 
       const startTime = performance.now();
@@ -535,13 +535,13 @@ describe('Accordion Integration Tests', () => {
       const ComplexAccordion = () => (
         <div>
           <nav aria-label='Table of contents'>
-            <Accordion type='multiple'>
+            <AccordionRoot type='multiple'>
               <AccordionItem value='chapter-1'>
                 <AccordionHeader level={2}>
                   <AccordionTrigger>Chapter 1: Introduction</AccordionTrigger>
                 </AccordionHeader>
                 <AccordionContent>
-                  <Accordion type='single'>
+                  <AccordionRoot type='single'>
                     <AccordionItem value='section-1-1'>
                       <AccordionHeader level={3}>
                         <AccordionTrigger>1.1 Overview</AccordionTrigger>
@@ -564,7 +564,7 @@ describe('Accordion Integration Tests', () => {
                         </ol>
                       </AccordionContent>
                     </AccordionItem>
-                  </Accordion>
+                  </AccordionRoot>
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value='chapter-2'>
@@ -575,7 +575,7 @@ describe('Accordion Integration Tests', () => {
                   <p>Advanced content...</p>
                 </AccordionContent>
               </AccordionItem>
-            </Accordion>
+            </AccordionRoot>
           </nav>
         </div>
       );

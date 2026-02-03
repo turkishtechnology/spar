@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
-  Dialog,
   DialogRoot,
   DialogTrigger,
   DialogPortal,
@@ -770,32 +769,21 @@ describe('Dialog', () => {
     });
   });
 
-  describe('Compound Component API', () => {
-    it('should support dot notation access', () => {
-      expect(Dialog.Root).toBe(DialogRoot);
-      expect(Dialog.Trigger).toBe(DialogTrigger);
-      expect(Dialog.Portal).toBe(DialogPortal);
-      expect(Dialog.Overlay).toBe(DialogOverlay);
-      expect(Dialog.Content).toBe(DialogContent);
-      expect(Dialog.Title).toBe(DialogTitle);
-      expect(Dialog.Description).toBe(DialogDescription);
-      expect(Dialog.Close).toBe(DialogClose);
-    });
-
-    it('should work with dot notation', () => {
+  describe('Named Component API', () => {
+    it('should work with named exports', () => {
       render(
-        <Dialog defaultOpen={true}>
-          <Dialog.Trigger>Open</Dialog.Trigger>
-          <Dialog.Portal>
-            <Dialog.Overlay>
-              <Dialog.Content>
-                <Dialog.Title>Title</Dialog.Title>
-                <Dialog.Description>Description</Dialog.Description>
-                <Dialog.Close>Close</Dialog.Close>
-              </Dialog.Content>
-            </Dialog.Overlay>
-          </Dialog.Portal>
-        </Dialog>,
+        <DialogRoot defaultOpen={true}>
+          <DialogTrigger>Open</DialogTrigger>
+          <DialogPortal>
+            <DialogOverlay>
+              <DialogContent>
+                <DialogTitle>Title</DialogTitle>
+                <DialogDescription>Description</DialogDescription>
+                <DialogClose>Close</DialogClose>
+              </DialogContent>
+            </DialogOverlay>
+          </DialogPortal>
+        </DialogRoot>,
       );
 
       expect(screen.getByRole('dialog')).toBeInTheDocument();

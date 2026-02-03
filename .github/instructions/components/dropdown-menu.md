@@ -11,27 +11,27 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 
 ### Compound Component Structure
 ```tsx
-<DropdownMenu.Root>
-  <DropdownMenu.Trigger />
-  <DropdownMenu.Content>
-    <DropdownMenu.Item />
-    <DropdownMenu.CheckboxItem />
-    <DropdownMenu.RadioGroup>
-      <DropdownMenu.RadioItem />
-    </DropdownMenu.RadioGroup>
-    <DropdownMenu.Separator />
-    <DropdownMenu.Group>
-      <DropdownMenu.Label />
-      <DropdownMenu.Item />
-    </DropdownMenu.Group>
-    <DropdownMenu.Sub>
-      <DropdownMenu.SubTrigger />
-      <DropdownMenu.SubContent>
-        <DropdownMenu.Item />
-      </DropdownMenu.SubContent>
-    </DropdownMenu.Sub>
-  </DropdownMenu.Content>
-</DropdownMenu.Root>
+<DropdownMenuRoot>
+  <DropdownMenuTrigger />
+  <DropdownMenuContent>
+    <DropdownMenuItem />
+    <DropdownMenuCheckboxItem />
+    <DropdownMenuRadioGroup>
+      <DropdownMenuRadioItem />
+    </DropdownMenuRadioGroup>
+    <DropdownMenuSeparator />
+    <DropdownMenuGroup>
+      <DropdownMenuLabel />
+      <DropdownMenuItem />
+    </DropdownMenuGroup>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger />
+      <DropdownMenuSubContent>
+        <DropdownMenuItem />
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+  </DropdownMenuContent>
+</DropdownMenuRoot>
 ```
 
 ### Key Differentiators
@@ -43,7 +43,7 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 
 ## 2. API
 
-### DropdownMenu.Root Props
+### DropdownMenuRoot Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `open` | `boolean` | No | `undefined` | Controlled open state |
@@ -54,7 +54,7 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 | `dir` | `'ltr' | 'rtl'` | No | `'ltr'` | Reading direction for positioning |
 | `closeOnSelect` | `boolean | 'auto'` | No | `'auto'` | Selection close policy: true=always close, false=never close, 'auto'=close normal items; keep open for checkbox/radio |
 
-### DropdownMenu.Trigger Props
+### DropdownMenuTrigger Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'button'` | Polymorphic component type |
@@ -71,7 +71,7 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 | `close` | `() => void` | Function to close the dropdown menu |
 | `toggle` | `() => void` | Function to toggle the dropdown menu open/closed state |
 
-### DropdownMenu.Content Props
+### DropdownMenuContent Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
@@ -86,7 +86,7 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | `undefined` | Outside click handler |
 | `onFocusOutside` | `(event: FocusEvent) => void` | No | `undefined` | Outside focus handler |
 
-### DropdownMenu.Item Props
+### DropdownMenuItem Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
@@ -94,54 +94,54 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 | `onSelect` | `(event: Event) => void` | No | `undefined` | Selection handler |
 | `textValue` | `string` | No | `undefined` | Value for typeahead search |
 
-### DropdownMenu.CheckboxItem Props
+### DropdownMenuCheckboxItem Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `checked` | `boolean | 'indeterminate'` | No | `false` | Controlled checked state |
 | `onCheckedChange` | `(checked: boolean) => void` | No | `undefined` | Checked state change handler |
 | All Item props | - | - | - | Inherits from Item |
 
-### DropdownMenu.RadioGroup Props
+### DropdownMenuRadioGroup Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `value` | `string` | No | `undefined` | Controlled selected value |
 | `onValueChange` | `(value: string) => void` | No | `undefined` | Value change handler |
 
-### DropdownMenu.RadioItem Props
+### DropdownMenuRadioItem Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `value` | `string` | Yes | - | Unique value for this radio item |
 | All Item props | - | - | - | Inherits from Item |
 
-### DropdownMenu.Separator Props
+### DropdownMenuSeparator Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
 
-### DropdownMenu.Label Props
+### DropdownMenuLabel Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
 
-### DropdownMenu.Group Props
+### DropdownMenuGroup Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
 
-### DropdownMenu.Sub Props
+### DropdownMenuSub Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `open` | `boolean` | No | `undefined` | Controlled submenu open state |
 | `defaultOpen` | `boolean` | No | `false` | Default submenu open state |
 | `onOpenChange` | `(open: boolean) => void` | No | `undefined` | Submenu open change handler |
 
-### DropdownMenu.SubTrigger Props
+### DropdownMenuSubTrigger Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `disabled` | `boolean` | No | `false` | Whether subtrigger is disabled |
 | All Item props | - | - | - | Inherits from Item |
 
-### DropdownMenu.SubContent Props
+### DropdownMenuSubContent Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | All Content props | - | - | - | Inherits from Content |

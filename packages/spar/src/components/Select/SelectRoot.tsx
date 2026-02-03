@@ -16,7 +16,7 @@ const SelectContext = createContext<SelectContextValue | null>(null);
 export const useSelectContext = () => {
   const context = useContext(SelectContext);
   if (!context) {
-    throw new Error('Select components must be used within a Select.Root');
+    throw new Error('Select components must be used within a SelectRoot');
   }
   return context;
 };

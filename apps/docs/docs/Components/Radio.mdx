@@ -6,7 +6,7 @@ description: Accessible radio group component for mutually exclusive selections 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Radio, RadioGroup, RadioItem } from '@turkish-technology/spar';
+import { RadioGroup, RadioItem } from '@turkish-technology/spar';
 
 # Radio
 
@@ -20,11 +20,11 @@ Accessible radio group component for creating mutually exclusive selections with
 
 <div className="radio-demo-container">
 <LiveCode
-  code={`<Radio.Group>
-        <Radio.Item value="option1"></Radio.Item>
-        <Radio.Item value='option2' className='radio-item'></Radio.Item>
-        <Radio.Item value='option3' className='radio-item'></Radio.Item>
-</Radio.Group>`}
+  code={`<RadioGroup>
+        <RadioItem value="option1"></RadioItem>
+        <RadioItem value='option2' className='radio-item'></RadioItem>
+        <RadioItem value='option3' className='radio-item'></RadioItem>
+</RadioGroup>`}
 cssCode={`input[type='radio'] {
   position: relative;
   appearance: none;
@@ -74,9 +74,6 @@ background-color: rgba(255, 255, 255, 0.72);
 
 ```tsx
 // Compound component (recommended)
-import { Radio } from '@turkish-technology/spar';
-
-// Named imports (tree-shakeable)
 import { RadioGroup, RadioItem } from '@turkish-technology/spar';
 ```
 
@@ -86,11 +83,11 @@ The Radio component is built as a compound component with two main parts:
 
 <AnatomyViewer
   parts={[
-    { name: 'group', label: 'Radio.Group', description: 'Context and state provider' },
-    { name: 'item', label: 'Radio.Item', description: 'Individual radio option' },
+    { name: 'group', label: 'RadioGroup', description: 'Context and state provider' },
+    { name: 'item', label: 'RadioItem', description: 'Individual radio option' },
   ]}
 >
-  <Radio.Group
+  <RadioGroup
     data-spar-part='group'
     defaultValue='option1'
     aria-label='Basic radio group'
@@ -102,38 +99,38 @@ The Radio component is built as a compound component with two main parts:
       border: '1px solid #ccc',
     }}
   >
-    <Radio.Item
+    <RadioItem
       data-spar-part='item'
       value='option1'
       style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
     >
       {' Option 1 '}
-    </Radio.Item>
-    <Radio.Item
+    </RadioItem>
+    <RadioItem
       data-spar-part='item'
       value='option2'
       style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
     >
       {' Option 2 '}
-    </Radio.Item>
-    <Radio.Item
+    </RadioItem>
+    <RadioItem
       data-spar-part='item'
       value='option3'
       style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
     >
       {' Option 3 '}
-    </Radio.Item>
-  </Radio.Group>
+    </RadioItem>
+  </RadioGroup>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<Radio.Group>
-  <Radio.Item />
-  <Radio.Item />
-  <Radio.Item />
-</Radio.Group>
+<RadioGroup>
+  <RadioItem />
+  <RadioItem />
+  <RadioItem />
+</RadioGroup>
 ```
 
 **Alternative: Tree-shakeable named imports**
@@ -150,8 +147,8 @@ import { RadioGroup, RadioItem } from '@turkish-technology/spar';
 
 **Data Flow:**
 
-- `Radio.Group` manages selection state and provides context
-- `Radio.Item` components register with the group and handle individual interactions
+- `RadioGroup` manages selection state and provides context
+- `RadioItem` components register with the group and handle individual interactions
 - Focus management ensures only one radio is tabbable at a time
 - Hidden inputs provide form integration and accessibility
 
@@ -164,11 +161,11 @@ function ControlledRadio() {
   const [selectedValue, setSelectedValue] = React.useState('medium');
 
   return (
-    <Radio.Group value={selectedValue} onValueChange={setSelectedValue} aria-label='Size selection'>
-      <Radio.Item value='small'>Small</Radio.Item>
-      <Radio.Item value='medium'>Medium</Radio.Item>
-      <Radio.Item value='large'>Large</Radio.Item>
-    </Radio.Group>
+    <RadioGroup value={selectedValue} onValueChange={setSelectedValue} aria-label='Size selection'>
+      <RadioItem value='small'>Small</RadioItem>
+      <RadioItem value='medium'>Medium</RadioItem>
+      <RadioItem value='large'>Large</RadioItem>
+    </RadioGroup>
   );
 }
 ```
@@ -182,15 +179,15 @@ function UncontrolledRadio() {
   };
 
   return (
-    <Radio.Group
+    <RadioGroup
       defaultValue='silver'
       onValueChange={handleValueChange}
       aria-label='Membership tier'
     >
-      <Radio.Item value='bronze'>Bronze Membership</Radio.Item>
-      <Radio.Item value='silver'>Silver Membership</Radio.Item>
-      <Radio.Item value='gold'>Gold Membership</Radio.Item>
-    </Radio.Group>
+      <RadioItem value='bronze'>Bronze Membership</RadioItem>
+      <RadioItem value='silver'>Silver Membership</RadioItem>
+      <RadioItem value='gold'>Gold Membership</RadioItem>
+    </RadioGroup>
   );
 }
 ```
@@ -202,16 +199,16 @@ function HorizontalRadio() {
   const [alignment, setAlignment] = React.useState('left');
 
   return (
-    <Radio.Group
+    <RadioGroup
       value={alignment}
       onValueChange={setAlignment}
       orientation='horizontal'
       aria-label='Text alignment'
     >
-      <Radio.Item value='left'>Left</Radio.Item>
-      <Radio.Item value='center'>Center</Radio.Item>
-      <Radio.Item value='right'>Right</Radio.Item>
-    </Radio.Group>
+      <RadioItem value='left'>Left</RadioItem>
+      <RadioItem value='center'>Center</RadioItem>
+      <RadioItem value='right'>Right</RadioItem>
+    </RadioGroup>
   );
 }
 ```
@@ -223,13 +220,13 @@ function DisabledRadio() {
   const [plan, setPlan] = React.useState('basic');
 
   return (
-    <Radio.Group value={plan} onValueChange={setPlan} aria-label='Subscription plan'>
-      <Radio.Item value='free'>Free Plan</Radio.Item>
-      <Radio.Item value='basic'>Basic Plan</Radio.Item>
-      <Radio.Item value='premium' disabled>
+    <RadioGroup value={plan} onValueChange={setPlan} aria-label='Subscription plan'>
+      <RadioItem value='free'>Free Plan</RadioItem>
+      <RadioItem value='basic'>Basic Plan</RadioItem>
+      <RadioItem value='premium' disabled>
         Premium Plan (Coming Soon)
-      </Radio.Item>
-    </Radio.Group>
+      </RadioItem>
+    </RadioGroup>
   );
 }
 ```
@@ -242,18 +239,18 @@ function ToolbarRadio() {
 
   return (
     <div role='toolbar' aria-label='Text formatting'>
-      <Radio.Group
+      <RadioGroup
         value={alignment}
         onValueChange={setAlignment}
         isInToolbar={true}
         orientation='horizontal'
         aria-label='Text alignment'
       >
-        <Radio.Item value='left'>Align Left</Radio.Item>
-        <Radio.Item value='center'>Align Center</Radio.Item>
-        <Radio.Item value='right'>Align Right</Radio.Item>
-        <Radio.Item value='justify'>Justify</Radio.Item>
-      </Radio.Group>
+        <RadioItem value='left'>Align Left</RadioItem>
+        <RadioItem value='center'>Align Center</RadioItem>
+        <RadioItem value='right'>Align Right</RadioItem>
+        <RadioItem value='justify'>Justify</RadioItem>
+      </RadioGroup>
       {/* Other toolbar controls */}
     </div>
   );
@@ -274,18 +271,18 @@ function FormRadio() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Radio.Group
+      <RadioGroup
         value={paymentMethod}
         onValueChange={setPaymentMethod}
         name='payment'
         required
         aria-label='Payment method'
       >
-        <Radio.Item value='credit'>Credit Card</Radio.Item>
-        <Radio.Item value='debit'>Debit Card</Radio.Item>
-        <Radio.Item value='paypal'>PayPal</Radio.Item>
-        <Radio.Item value='bank'>Bank Transfer</Radio.Item>
-      </Radio.Group>
+        <RadioItem value='credit'>Credit Card</RadioItem>
+        <RadioItem value='debit'>Debit Card</RadioItem>
+        <RadioItem value='paypal'>PayPal</RadioItem>
+        <RadioItem value='bank'>Bank Transfer</RadioItem>
+      </RadioGroup>
       <button type='submit'>Continue</button>
     </form>
   );
@@ -299,25 +296,25 @@ function CustomRadio() {
   const [theme, setTheme] = React.useState('light');
 
   return (
-    <Radio.Group value={theme} onValueChange={setTheme} as='fieldset' aria-label='Theme selection'>
+    <RadioGroup value={theme} onValueChange={setTheme} as='fieldset' aria-label='Theme selection'>
       <legend>Choose Theme</legend>
-      <Radio.Item value='light' as='div'>
+      <RadioItem value='light' as='div'>
         Light Theme
-      </Radio.Item>
-      <Radio.Item value='dark' as='div'>
+      </RadioItem>
+      <RadioItem value='dark' as='div'>
         Dark Theme
-      </Radio.Item>
-      <Radio.Item value='auto' as='div'>
+      </RadioItem>
+      <RadioItem value='auto' as='div'>
         Auto Theme
-      </Radio.Item>
-    </Radio.Group>
+      </RadioItem>
+    </RadioGroup>
   );
 }
 ```
 
 ## API Reference
 
-### Radio.Group
+### RadioGroup
 
 The root container that manages the radio group state and provides keyboard navigation.
 
@@ -338,7 +335,7 @@ The root container that manages the radio group state and provides keyboard navi
 | `aria-labelledby?`  | `string`                     | `undefined`  | References element that labels the group           |
 | `aria-describedby?` | `string`                     | `undefined`  | References element that describes the group        |
 | `as?`               | `ElementType`              | `'div'`      | Polymorphic root element                           |
-| `children?`         | `React.ReactNode`            | `undefined`  | Radio.Item components                              |
+| `children?`         | `React.ReactNode`            | `undefined`  | RadioItem components                              |
 
 **Events**
 
@@ -354,9 +351,9 @@ The root container that manages the radio group state and provides keyboard navi
 | `data-orientation` | `"horizontal" \| "vertical"` | Indicates layout direction  |
 | `data-disabled`    | `""`                         | Present when group disabled |
 
-### Radio.Item
+### RadioItem
 
-Individual radio option within a Radio.Group that handles selection and accessibility.
+Individual radio option within a RadioGroup that handles selection and accessibility.
 
 **Props**
 
