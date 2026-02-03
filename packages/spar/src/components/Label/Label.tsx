@@ -13,7 +13,7 @@ export const Label = <T extends ElementType = 'label'>({
   ref,
   ...htmlProps
 }: LabelProps<T>) => {
-  const Element = as || 'label';
+  const Component = as || 'label';
   // Memoize data attributes to prevent object recreation
   const dataAttributes = useMemo(
     () => ({
@@ -25,9 +25,9 @@ export const Label = <T extends ElementType = 'label'>({
   );
 
   return (
-    <Element ref={ref} {...htmlProps} {...dataAttributes}>
+    <Component ref={ref} {...htmlProps} {...dataAttributes}>
       {children}
-    </Element>
+    </Component>
   );
 };
 
