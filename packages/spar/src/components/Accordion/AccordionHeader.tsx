@@ -1,4 +1,4 @@
-import React, { ElementType } from 'react';
+import { ElementType } from 'react';
 import type { AccordionHeaderProps } from './types';
 import { useAccordionItemContext } from './AccordionItem';
 

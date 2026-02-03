@@ -7,6 +7,8 @@
 
 /* You can override the default Infima variables here. */
 
+@use './Anatomy/index.scss' as *;
+
 @import url('https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap');
 
 .geologica {
@@ -86,5 +88,3 @@
     border-bottom-width: 2px;
   }
 }
-
-@import './Anatomy/index.scss';
