@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, type ElementType } from 'react';
+import { useEffect, useRef, type ElementType } from 'react';
 import type { SelectItemTextProps } from './types';
 import { useSelectItemContext } from './SelectItem';
 

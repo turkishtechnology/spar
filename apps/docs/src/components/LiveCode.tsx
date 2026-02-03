@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// @ts-ignore
 import '../styles/LiveCode.scss';
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import { format } from 'prettier/standalone';
