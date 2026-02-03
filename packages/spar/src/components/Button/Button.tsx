@@ -21,7 +21,7 @@ export const Button = <T extends ElementType = 'button'>({
   ref,
   ...htmlProps
 }: ButtonProps<T>) => {
-  const Element = as || 'button';
+  const Component = as || 'button';
   // Internal state for uncontrolled toggle
   const [internalPressed, setInternalPressed] = useState<boolean>(false);
 
@@ -112,15 +112,15 @@ export const Button = <T extends ElementType = 'button'>({
 
     // Disabled state - only add aria-disabled for non-native button elements
     // Native buttons already communicate disabled state via the disabled attribute
-    if (disabled && Element !== 'button') {
+    if (disabled && Component !== 'button') {
       attrs['aria-disabled'] = true;
     }
 
     return attrs;
-  }, [isToggle, currentPressed, isLoading, disabled, Element]);
+  }, [isToggle, currentPressed, isLoading, disabled, Component]);
 
   // Build props for the element
-  const isNativeButton = Element === 'button';
+  const isNativeButton = Component === 'button';
   const elementProps: Record<string, unknown> = {
     ref: mergedRef,
     className,
@@ -160,7 +160,7 @@ export const Button = <T extends ElementType = 'button'>({
     }
   }
 
-  return <Element {...elementProps}>{children}</Element>;
+  return <Component {...elementProps}>{children}</Component>;
 };
 
 Button.displayName = 'Button';
