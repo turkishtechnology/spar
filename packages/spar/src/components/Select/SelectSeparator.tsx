@@ -1,4 +1,4 @@
-import React, { type ElementType } from 'react';
+import { type ElementType } from 'react';
 import type { SelectSeparatorProps } from './types';
 
 /**
