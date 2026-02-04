@@ -108,6 +108,7 @@ export const Button = <T extends ElementType = 'button'>({
     // Loading state
     if (isLoading) {
       attrs['aria-busy'] = true;
+      attrs['aria-live'] = 'polite';
     }
 
     // Disabled state - only add aria-disabled for non-native button elements
