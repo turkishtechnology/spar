@@ -130,7 +130,7 @@ function ToggleButton() {
 
 ### Loading State
 
-Button with loading state and custom loading text:
+Button with loading state:
 
 ```tsx
 function LoadingButton() {
@@ -146,7 +146,7 @@ function LoadingButton() {
   };
 
   return (
-    <Button onClick={handleSubmit} isLoading={isLoading} loadingText='Submitting form, please wait'>
+    <Button onClick={handleSubmit} isLoading={isLoading}>
       {isLoading ? 'Submitting...' : 'Submit Form'}
     </Button>
   );
@@ -215,7 +215,6 @@ A headless, accessible button component with complete keyboard support and toggl
 | `isLoading?`       | `boolean`                                 | `false`     | Loading state with screen reader support                    |
 | `isPressed?`       | `boolean`                                 | `undefined` | Toggle state - when defined, creates a toggle button        |
 | `onPressedChange?` | `(pressed: boolean) => void`              | `undefined` | Callback fired when toggle state changes                    |
-| `loadingText?`     | `string`                                  | `"Loading"` | Screen reader text announced during loading                 |
 | `children?`        | `ReactNode`                               | `undefined` | Component content                                           |
 | `onClick?`         | `MouseEventHandler<HTMLButtonElement>`    | `undefined` | Click event handler                                         |
 | `onKeyDown?`       | `KeyboardEventHandler<HTMLButtonElement>` | `undefined` | Keyboard event handler                                      |
