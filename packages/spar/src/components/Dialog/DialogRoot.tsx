@@ -22,6 +22,7 @@ export const DialogRoot = ({
   onOpenChange,
   modal = true,
   disabled = false,
+  forceMount = false,
   children,
 }: DialogRootProps) => {
   // Generate unique IDs for ARIA relationships
@@ -42,13 +43,14 @@ export const DialogRoot = ({
       setIsOpen,
       modal,
       disabled,
+      forceMount,
       role: 'dialog',
       triggerRef,
       contentRef,
       titleId,
       descriptionId,
     }),
-    [isOpen, setIsOpen, modal, disabled, titleId, descriptionId],
+    [isOpen, setIsOpen, modal, disabled, forceMount, titleId, descriptionId],
   );
 
   return <DialogContext.Provider value={contextValue}>{children}</DialogContext.Provider>;

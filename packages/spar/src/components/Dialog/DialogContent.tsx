@@ -10,7 +10,6 @@ import type { DialogContentProps } from './types';
 export const DialogContent = <T extends ElementType = 'div'>({
   as,
   role = 'dialog',
-  forceMount = false,
   trapFocus = true,
   restoreFocus = true,
   initialFocus,
@@ -25,8 +24,8 @@ export const DialogContent = <T extends ElementType = 'div'>({
   ...props
 }: DialogContentProps<T>) => {
   const Component = as || 'div';
-  const context = useDialogContext();
-  const { isOpen, setIsOpen, modal, contentRef, titleId, descriptionId } = context;
+  const { isOpen, setIsOpen, modal, forceMount, contentRef, titleId, descriptionId } =
+    useDialogContext();
 
   // Merge external ref with internal ref
   const mergedRef = useMergedRef(contentRef, ref as React.RefObject<HTMLElement | null>);
