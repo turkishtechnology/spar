@@ -363,8 +363,8 @@ describe('Dialog', () => {
 
     it('should render when forceMount is true (without portal)', () => {
       render(
-        <DialogRoot>
-          <DialogOverlay forceMount data-testid='overlay' />
+        <DialogRoot forceMount>
+          <DialogOverlay data-testid='overlay' />
         </DialogRoot>,
       );
 
@@ -511,8 +511,8 @@ describe('Dialog', () => {
 
     it('should render when forceMount is true (without portal)', () => {
       render(
-        <DialogRoot>
-          <DialogContent forceMount data-testid='content'>
+        <DialogRoot forceMount>
+          <DialogContent data-testid='content'>
             <DialogTitle>Title</DialogTitle>
           </DialogContent>
         </DialogRoot>,
