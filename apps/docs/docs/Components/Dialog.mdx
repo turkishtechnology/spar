@@ -303,7 +303,7 @@ The Dialog component is built as a compound component with multiple parts:
 
 Control the dialog's open state externally for integration with other components or form validation.
 
-```tsx {2,4,12}
+```tsx {2,4,11}
 function ControlledDialog() {
   const [open, setOpen] = React.useState(false);
 
@@ -337,7 +337,7 @@ function ControlledDialog() {
 
 Use uncontrolled mode when you don't need to manage the dialog state externally.
 
-```tsx {1}
+```tsx {3}
 function UncontrolledDialog() {
   return (
     <DialogRoot defaultOpen={false}>
@@ -359,7 +359,7 @@ function UncontrolledDialog() {
 
 Create non-modal dialogs that don't block interaction with the underlying page.
 
-```tsx {1,8-10}
+```tsx {3}
 function NonModalDialog() {
   return (
     <DialogRoot modal={false}>
@@ -388,7 +388,7 @@ function NonModalDialog() {
 
 Control initial focus and focus restoration for optimal user experience.
 
-```tsx {6-8,10-12}
+```tsx {3,11-19}
 function CustomFocusDialog() {
   const [open, setOpen] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -434,7 +434,7 @@ function CustomFocusDialog() {
 
 Use the `as` prop to render dialog parts as different HTML elements or custom components.
 
-```tsx {2,7,12,17}
+```tsx {4,8,10,13,14}
 function PolymorphicDialog() {
   return (
     <DialogRoot>
@@ -462,7 +462,7 @@ function PolymorphicDialog() {
 
 Use `forceMount` on the root for animation libraries that need to control mounting and unmounting.
 
-```tsx
+```tsx {5,9-12,15-19}
 function AnimatedDialog() {
   const [open, setOpen] = React.useState(false);
 
