@@ -24,31 +24,72 @@ export const DialogContent = <T extends ElementType = 'div'>({
   ...props
 }: DialogContentProps<T>) => {
   const Component = as || 'div';
-  const { isOpen, setIsOpen, modal, forceMount, contentRef, titleId, descriptionId } =
-    useDialogContext();
+  const {
+    isOpen,
+    setIsOpen,
+    modal,
+    forceMount,
+    contentRef,
+    titleId,
+    descriptionId,
+    restoreFocusRef,
+    onCloseAutoFocusRef,
+    restoreFocusPropRef,
+    finalFocusPropRef,
+  } = useDialogContext();
 
   // Merge external ref with internal ref
   const mergedRef = useMergedRef(contentRef, ref as React.RefObject<HTMLElement | null>);
 
-  // Store previous focus element for restoration
-  const restoreFocusRef = useRef<HTMLElement | null>(null);
+  // Store callbacks in refs to avoid re-running effects when they change
+  const onOpenAutoFocusRef = useRef(onOpenAutoFocus);
+  const initialFocusRef = useRef(initialFocus);
 
-  // Focus management on open
+  // Track whether open focus has already been handled to prevent StrictMode double-fire
+  const hasOpenFocusedRef = useRef(false);
+
+  // Keep refs updated with latest values
+  onOpenAutoFocusRef.current = onOpenAutoFocus;
+  initialFocusRef.current = initialFocus;
+
+  // Sync close-focus props to context refs so DialogRoot can handle close focus
+  onCloseAutoFocusRef.current = onCloseAutoFocus;
+  restoreFocusPropRef.current = restoreFocus;
+  finalFocusPropRef.current = finalFocus;
+
+  // Store active element before dialog opens for focus restoration
   useEffect(() => {
-    if (!isOpen) return;
+    if (isOpen) {
+      if (restoreFocus || finalFocus) {
+        // Only capture if not already captured (prevent StrictMode overwrite)
+        if (!restoreFocusRef.current) {
+          restoreFocusRef.current = document.activeElement as HTMLElement;
+        }
+      }
+    } else {
+      restoreFocusRef.current = null;
+    }
+  }, [isOpen, restoreFocus, finalFocus, restoreFocusRef]);
+
+  // Handle open auto-focus
+  useEffect(() => {
+    if (!isOpen) {
+      hasOpenFocusedRef.current = false;
+      return;
+    }
+
+    // Prevent StrictMode double-fire
+    if (hasOpenFocusedRef.current) return;
+    hasOpenFocusedRef.current = true;
 
     const contentElement = contentRef.current;
     if (!contentElement) return;
 
-    // Store current focus for restoration
-    if (restoreFocus) {
-      restoreFocusRef.current = document.activeElement as HTMLElement;
-    }
-
     // Focus initial element
     const focusElement = (() => {
-      if (initialFocus) {
-        return typeof initialFocus === 'function' ? initialFocus() : initialFocus;
+      const initFocus = initialFocusRef.current;
+      if (initFocus) {
+        return typeof initFocus === 'function' ? initFocus() : initFocus;
       }
 
       // Focus strategies based on role
@@ -70,28 +111,14 @@ export const DialogContent = <T extends ElementType = 'div'>({
     })();
 
     if (focusElement) {
-      onOpenAutoFocus?.(new Event('focus'));
-      focusElement.focus();
-    }
-  }, [isOpen, initialFocus, role, onOpenAutoFocus, restoreFocus]);
+      const event = new Event('focus', { cancelable: true });
+      onOpenAutoFocusRef.current?.(event);
 
-  // Focus restoration on close
-  useEffect(() => {
-    if (isOpen) return;
-
-    if (restoreFocus && restoreFocusRef.current) {
-      const elementToFocus = finalFocus
-        ? typeof finalFocus === 'function'
-          ? finalFocus()
-          : finalFocus
-        : restoreFocusRef.current;
-
-      if (elementToFocus) {
-        onCloseAutoFocus?.(new Event('focus'));
-        elementToFocus.focus();
+      if (!event.defaultPrevented) {
+        focusElement.focus();
       }
     }
-  }, [isOpen, finalFocus, restoreFocus, onCloseAutoFocus]);
+  }, [isOpen, role, contentRef]);
 
   // Focus trap for modal dialogs
   useEffect(() => {
