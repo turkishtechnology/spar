@@ -90,7 +90,7 @@ export const Button = <T extends ElementType = 'button'>({
     () => ({
       'data-disabled': disabled ? '' : undefined,
       'data-loading': isLoading ? '' : undefined,
-      'data-pressed': isToggle ? String(currentPressed) : undefined,
+      'data-pressed': isToggle && currentPressed ? '' : undefined,
       'data-autofocus': autoFocus ? '' : undefined,
     }),
     [disabled, isLoading, isToggle, currentPressed, autoFocus],

@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import React from 'react';
+import * as React from 'react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { Button } from '../Button';
@@ -396,7 +396,7 @@ describe('Button Accessibility', () => {
       render(<Button isPressed={true}>Pressed Toggle</Button>);
       const button = screen.getByRole('button');
 
-      expect(button).toHaveAttribute('data-pressed', 'true');
+      expect(button).toHaveAttribute('data-pressed', '');
     });
   });
 });
