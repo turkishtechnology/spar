@@ -234,7 +234,7 @@ export const TooltipContent = <T extends ElementType = 'div'>({
     ...props,
   };
 
-  return React.createElement(Component, contentProps, children);
+  return <Component {...contentProps}>{children}</Component>;
 };
 
 TooltipContent.displayName = 'TooltipContent';
