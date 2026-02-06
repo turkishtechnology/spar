@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from '../Button';
@@ -176,7 +176,7 @@ describe('Button', () => {
       );
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('aria-pressed', 'false');
-      expect(button).toHaveAttribute('data-pressed', 'false');
+      expect(button).not.toHaveAttribute('data-pressed');
 
       await user.click(button);
       expect(handlePressedChange).toHaveBeenCalledWith(true);
@@ -375,7 +375,7 @@ describe('Button', () => {
       button = screen.getByRole('button');
       expect(button).toHaveAttribute('data-disabled', '');
       expect(button).toHaveAttribute('data-loading', '');
-      expect(button).toHaveAttribute('data-pressed', 'true');
+      expect(button).toHaveAttribute('data-pressed', '');
       expect(button).toHaveAttribute('data-autofocus', '');
     });
   });
