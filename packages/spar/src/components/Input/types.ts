@@ -1,4 +1,5 @@
-import type { ComponentProps, ElementType } from 'react';
+import type { ElementType } from 'react';
+import type { PolymorphicProps } from '../../types';
 
 /**
  * Input context state
@@ -15,10 +16,9 @@ export interface InputContextValue {
 }
 
 /**
- * Props for Input
- * @remarks Provides state context for compound input elements
+ * Own props for Input
  */
-export interface InputProps extends ComponentProps<'div'> {
+export interface InputOwnProps {
   /**
    * Input validation state
    * @defaultValue false
@@ -39,21 +39,16 @@ export interface InputProps extends ComponentProps<'div'> {
 }
 
 /**
- * Base props for InputField
+ * Props for Input
+ * @remarks Provides state context for compound input elements
+ */
+export type InputProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T, InputOwnProps>;
+
+/**
+ * Own props for InputField
  * @remarks Core input element with polymorphic element support
  */
-export interface InputFieldProps<T extends ElementType = 'input'> {
-  /**
-   * Element type for polymorphic rendering
-   * @defaultValue "input"
-   */
-  as?: T;
-
-  /**
-   * Ref for the input element
-   */
-  ref?: React.ComponentPropsWithRef<T>['ref'];
-
+export interface InputFieldOwnProps {
   /**
    * Whether to focus the input on mount
    * @defaultValue false
@@ -62,25 +57,56 @@ export interface InputFieldProps<T extends ElementType = 'input'> {
 }
 
 /**
- * Complete props for InputField with polymorphic support
+ * Props for InputField
+ * @remarks Core input element with polymorphic element support
  */
-export type PolymorphicInputFieldProps<T extends ElementType = 'input'> = InputFieldProps<T> &
-  Omit<React.ComponentPropsWithRef<T>, keyof InputFieldProps<T>>;
+export type InputFieldProps<T extends ElementType = 'input'> = PolymorphicProps<
+  'input',
+  T,
+  InputFieldOwnProps
+>;
+
+/**
+ * Own props for InputLabel
+ */
+export interface InputLabelOwnProps {}
 
 /**
  * Props for InputLabel
  * @remarks Associated label element with automatic ID linking
  */
-export interface InputLabelProps extends ComponentProps<'label'> {}
+export type InputLabelProps<T extends ElementType = 'label'> = PolymorphicProps<
+  'label',
+  T,
+  InputLabelOwnProps
+>;
+
+/**
+ * Own props for InputDescription
+ */
+export interface InputDescriptionOwnProps {}
 
 /**
  * Props for InputDescription
  * @remarks Helper text element for additional input guidance
  */
-export interface InputDescriptionProps extends ComponentProps<'div'> {}
+export type InputDescriptionProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  InputDescriptionOwnProps
+>;
+
+/**
+ * Own props for InputErrorMessage
+ */
+export interface InputErrorMessageOwnProps {}
 
 /**
  * Props for InputErrorMessage
  * @remarks Error announcement element with automatic ARIA handling
  */
-export interface InputErrorMessageProps extends ComponentProps<'div'> {}
+export type InputErrorMessageProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  InputErrorMessageOwnProps
+>;

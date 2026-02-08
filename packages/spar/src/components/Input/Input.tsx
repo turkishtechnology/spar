@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useId, type ElementType } from 'react';
 import { InputContext } from './hooks';
 import type { InputContextValue, InputProps } from './types';
 
@@ -6,13 +6,16 @@ import type { InputContextValue, InputProps } from './types';
  * Input root component that provides state context for compound input elements.
  * Manages validation, disabled, and required states with proper ARIA coordination.
  */
-export const Input = ({
+export const Input = <T extends ElementType = 'div'>({
+  as,
   isInvalid = false,
   disabled = false,
   required = false,
   children,
+  ref,
   ...props
-}: InputProps) => {
+}: InputProps<T>) => {
+  const Component = as || 'div';
   const id = useId();
 
   const contextValue: InputContextValue = {
@@ -27,7 +30,8 @@ export const Input = ({
 
   return (
     <InputContext.Provider value={contextValue}>
-      <div
+      <Component
+        ref={ref}
         {...props}
         data-spar-input
         data-invalid={isInvalid ? '' : undefined}
@@ -35,7 +39,7 @@ export const Input = ({
         data-required={required ? '' : undefined}
       >
         {children}
-      </div>
+      </Component>
     </InputContext.Provider>
   );
 };
