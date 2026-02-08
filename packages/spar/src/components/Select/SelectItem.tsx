@@ -8,8 +8,8 @@ import React, {
   useState,
   type ElementType,
 } from 'react';
+import { useSelectContext } from './hooks';
 import type { SelectItemProps, SelectItemContextValue, SelectItemRenderProps } from './types';
-import { useSelectContext } from './SelectRoot';
 import { useMergedRef } from '@/hooks';
 
 const SelectItemContext = createContext<SelectItemContextValue | null>(null);
