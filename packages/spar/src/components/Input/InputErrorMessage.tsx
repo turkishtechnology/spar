@@ -1,5 +1,5 @@
 import type { InputErrorMessageProps } from './types';
-import { useInputContext } from './InputRoot';
+import { useInputContext } from './hooks';
 
 /**
  * Input error message component that announces validation errors to screen readers.

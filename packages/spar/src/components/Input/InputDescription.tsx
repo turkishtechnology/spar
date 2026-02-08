@@ -1,5 +1,5 @@
 import type { InputDescriptionProps } from './types';
-import { useInputContext } from './InputRoot';
+import { useInputContext } from './hooks';
 
 /**
  * Input description component that provides helper text for the input field.
