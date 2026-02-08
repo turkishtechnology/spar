@@ -14,6 +14,8 @@ export { SelectItemIndicator } from './SelectItemIndicator';
 export { SelectSeparator } from './SelectSeparator';
 export { SelectArrow } from './SelectArrow';
 export { useSelectContext } from './hooks';
+export { useSelectGroupContext } from './hooks';
+export { useSelectItemContext } from './hooks';
 
 export type {
   SelectRootProps,

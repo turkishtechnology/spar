@@ -1,15 +1,6 @@
-import { createContext, useContext, useId, useMemo, type ElementType } from 'react';
+import { useId, useMemo, type ElementType } from 'react';
+import { SelectGroupContext } from './hooks';
 import type { SelectGroupProps, SelectGroupContextValue } from './types';
-
-const SelectGroupContext = createContext<SelectGroupContextValue | null>(null);
-
-export const useSelectGroupContext = () => {
-  const context = useContext(SelectGroupContext);
-  if (!context) {
-    throw new Error('SelectGroup components must be used within a SelectGroup');
-  }
-  return context;
-};
 
 /**
  * Groups related select items together with an optional label. Provides semantic structure and accessibility.

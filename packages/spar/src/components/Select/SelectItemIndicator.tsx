@@ -1,6 +1,6 @@
 import type { ElementType } from 'react';
 import type { SelectItemIndicatorProps } from './types';
-import { useSelectItemContext } from './SelectItem';
+import { useSelectItemContext } from './hooks';
 
 /**
  * Visual indicator for the selected state of an item. Only renders when item is selected unless forceMount is true.

@@ -1,6 +1,6 @@
 import { useEffect, useRef, type ElementType } from 'react';
 import type { SelectItemTextProps } from './types';
-import { useSelectItemContext } from './SelectItem';
+import { useSelectItemContext } from './hooks';
 
 /**
  * Text content of a select item. Automatically registers text value for type-ahead search.
