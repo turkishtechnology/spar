@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { DropdownMenuRadioGroupProps, DropdownMenuRadioGroupContextValue } from './types';
-import { DropdownMenuRadioGroupContext } from './contexts';
+import { DropdownMenuRadioGroupContext } from './hooks';
 
 export const DropdownMenuRadioGroup = ({
   value,

@@ -20,15 +20,13 @@ import {
   type Placement,
   type Middleware,
 } from '@floating-ui/react-dom';
-import type { DropdownMenuContentProps } from './types';
+import type {
+  DropdownMenuContentProps,
+  DropdownMenuCollectionContextValue,
+  MenuCollectionItem,
+} from './types';
 import type { Side, Align } from '../../types';
-import {
-  useMenuScope,
-  DropdownMenuSubContext,
-  DropdownMenuCollectionContext,
-  type DropdownMenuCollectionContextValue,
-  type MenuCollectionItem,
-} from './contexts';
+import { useMenuScope, DropdownMenuSubContext, DropdownMenuCollectionContext } from './hooks';
 import { isCharacterKey, getCloseKey, TYPEAHEAD_TIMEOUT } from './utils';
 
 /**

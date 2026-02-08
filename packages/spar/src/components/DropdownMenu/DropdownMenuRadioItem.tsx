@@ -4,7 +4,7 @@ import {
   type MouseEvent as ReactMouseEvent,
 } from 'react';
 import type { DropdownMenuRadioItemProps } from './types';
-import { useDropdownMenuRadioGroupContext } from './contexts';
+import { useDropdownMenuRadioGroupContext } from './hooks';
 import { MenuItemPrimitive } from './MenuItemPrimitive';
 
 export const DropdownMenuRadioItem = ({ value, ...props }: DropdownMenuRadioItemProps) => {

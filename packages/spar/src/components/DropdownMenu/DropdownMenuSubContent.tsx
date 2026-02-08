@@ -1,5 +1,5 @@
 import type { DropdownMenuSubContentProps } from './types';
-import { useDropdownMenuSubContext } from './contexts';
+import { useDropdownMenuSubContext } from './hooks';
 import { DropdownMenuContent } from './DropdownMenuContent';
 
 export const DropdownMenuSubContent = (props: DropdownMenuSubContentProps) => {

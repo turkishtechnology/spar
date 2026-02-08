@@ -9,7 +9,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from 'react';
 import type { DropdownMenuItemProps } from './types';
-import { useDropdownMenuCollectionContext } from './contexts';
+import { useDropdownMenuCollectionContext } from './hooks';
 import { useMergedRef } from '@/hooks';
 
 type MenuItemType = 'item' | 'checkbox' | 'radio' | 'subtrigger';
