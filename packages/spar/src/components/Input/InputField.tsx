@@ -1,5 +1,5 @@
 import { useState, useContext, useRef, type ElementType } from 'react';
-import type { PolymorphicInputFieldProps } from './types';
+import type { InputFieldProps } from './types';
 import { InputContext } from './hooks';
 import { useMergedRef, useAutoFocus } from '../../hooks';
 
@@ -14,24 +14,24 @@ export const InputField = <T extends ElementType = 'input'>({
   onFocus,
   onBlur,
   ...props
-}: PolymorphicInputFieldProps<T>) => {
+}: InputFieldProps<T>) => {
   const context = useContext(InputContext); // Optional context - can be null
   const [focused, setFocused] = useState(false);
-  const Component = (as || 'input') as ElementType;
+  const Component = as || 'input';
   const internalRef = useRef<HTMLElement>(null);
   const mergedRef = useMergedRef(internalRef, ref);
 
   // Auto focus on mount
   useAutoFocus(internalRef, autoFocus);
 
-  const handleFocus = (event: React.FocusEvent<HTMLElement>) => {
+  const handleFocus = (event: React.FocusEvent) => {
     setFocused(true);
-    onFocus?.(event);
+    onFocus?.(event as React.FocusEvent<HTMLInputElement>);
   };
 
-  const handleBlur = (event: React.FocusEvent<HTMLElement>) => {
+  const handleBlur = (event: React.FocusEvent) => {
     setFocused(false);
-    onBlur?.(event);
+    onBlur?.(event as React.FocusEvent<HTMLInputElement>);
   };
 
   // If no context, render as standalone input (simple usage)

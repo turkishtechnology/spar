@@ -9,10 +9,14 @@ export { useInputContext } from './hooks';
 
 export type {
   InputContextValue,
+  InputOwnProps,
   InputProps,
+  InputFieldOwnProps,
   InputFieldProps,
-  PolymorphicInputFieldProps,
+  InputLabelOwnProps,
   InputLabelProps,
+  InputDescriptionOwnProps,
   InputDescriptionProps,
+  InputErrorMessageOwnProps,
   InputErrorMessageProps,
 } from './types';
