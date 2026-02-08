@@ -8,7 +8,7 @@ import {
   BreadcrumbLink,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '../Breadcrumb';
+} from '../index';
 
 expect.extend(toHaveNoViolations);
 
