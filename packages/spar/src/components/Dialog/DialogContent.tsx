@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useRef, ElementType } from 'react';
 import { useMergedRef, useInteractOutside } from '@/hooks';
-import { useDialogContext } from './DialogRoot';
+import { useDialogContext } from './hooks';
 import type { DialogContentProps } from './types';
 
 /**

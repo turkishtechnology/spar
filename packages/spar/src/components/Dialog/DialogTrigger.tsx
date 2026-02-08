@@ -1,6 +1,6 @@
 import { useCallback, ElementType } from 'react';
 import { useMergedRef } from '@/hooks';
-import { useDialogContext } from './DialogRoot';
+import { useDialogContext } from './hooks';
 import type { DialogTriggerProps, DialogTriggerRenderProps } from './types';
 import { Button } from '../Button';
 import type { ButtonProps } from '../Button/types';

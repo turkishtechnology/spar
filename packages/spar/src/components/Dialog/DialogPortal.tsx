@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { useDialogContext } from './DialogRoot';
+import { useDialogContext } from './hooks';
 import type { DialogPortalProps } from './types';
 
 /**
