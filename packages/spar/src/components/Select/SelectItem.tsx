@@ -1,26 +1,7 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useCallback,
-  useRef,
-  useState,
-  type ElementType,
-} from 'react';
-import { useSelectContext } from './hooks';
+import React, { useEffect, useMemo, useCallback, useRef, useState, type ElementType } from 'react';
+import { useSelectContext, SelectItemContext } from './hooks';
 import type { SelectItemProps, SelectItemContextValue, SelectItemRenderProps } from './types';
 import { useMergedRef } from '@/hooks';
-
-const SelectItemContext = createContext<SelectItemContextValue | null>(null);
-
-export const useSelectItemContext = () => {
-  const context = useContext(SelectItemContext);
-  if (!context) {
-    throw new Error('SelectItem components must be used within a SelectItem');
-  }
-  return context;
-};
 
 /**
  * Individual selectable option within the select dropdown. Handles selection state, focus, and accessibility.

@@ -1,6 +1,6 @@
 import { type ElementType } from 'react';
 import type { SelectLabelProps } from './types';
-import { useSelectGroupContext } from './SelectGroup';
+import { useSelectGroupContext } from './hooks';
 
 /**
  * Label for a group of select items. Provides accessible context for grouped options.
