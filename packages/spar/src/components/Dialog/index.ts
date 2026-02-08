@@ -7,6 +7,7 @@ export { DialogContent } from './DialogContent';
 export { DialogTitle } from './DialogTitle';
 export { DialogDescription } from './DialogDescription';
 export { DialogClose } from './DialogClose';
+export { useDialogContext } from './hooks';
 
 export type {
   DialogRootProps,

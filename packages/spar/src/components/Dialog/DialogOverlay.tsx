@@ -1,5 +1,5 @@
 import { useCallback, ElementType } from 'react';
-import { useDialogContext } from './DialogRoot';
+import { useDialogContext } from './hooks';
 import type { DialogOverlayProps } from './types';
 
 /**

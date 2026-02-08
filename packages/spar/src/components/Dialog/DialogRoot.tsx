@@ -1,16 +1,7 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useId } from 'react';
+import { useEffect, useMemo, useRef, useId } from 'react';
 import { useControlledState } from '@/hooks';
+import { DialogContext } from './hooks';
 import type { DialogRootProps, DialogContextValue } from './types';
-
-const DialogContext = createContext<DialogContextValue | null>(null);
-
-export const useDialogContext = () => {
-  const context = useContext(DialogContext);
-  if (!context) {
-    throw new Error('Dialog components must be used within a DialogRoot');
-  }
-  return context;
-};
 
 /**
  * Root component that manages dialog state and provides context to child components.

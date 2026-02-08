@@ -1,5 +1,5 @@
 import { useCallback, ElementType } from 'react';
-import { useDialogContext } from './DialogRoot';
+import { useDialogContext } from './hooks';
 import type { DialogCloseProps, DialogCloseRenderProps } from './types';
 import { Button } from '../Button';
 import type { ButtonProps } from '../Button/types';

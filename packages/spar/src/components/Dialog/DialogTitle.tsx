@@ -1,5 +1,5 @@
 import { ElementType } from 'react';
-import { useDialogContext } from './DialogRoot';
+import { useDialogContext } from './hooks';
 import type { DialogTitleProps } from './types';
 
 /**
