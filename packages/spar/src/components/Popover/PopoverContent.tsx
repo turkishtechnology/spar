@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { useInteractOutside, useMergedRef } from '@/hooks';
 import { PopoverContentProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
-import { getFocusableElements } from './utils';
+import { getFocusableElements } from './utils/index';
 
 /**
  * Content container that holds the popover content

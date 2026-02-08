@@ -5,7 +5,7 @@ import {
 } from 'react';
 import type { DropdownMenuCheckboxItemProps } from './types';
 import { MenuItemPrimitive } from './MenuItemPrimitive';
-import { mapCheckedStateToDataAttribute, mapCheckedStateToAria } from './utils';
+import { mapCheckedStateToDataAttribute, mapCheckedStateToAria } from './utils/index';
 
 export const DropdownMenuCheckboxItem = ({
   checked = false,

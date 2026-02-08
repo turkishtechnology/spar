@@ -27,7 +27,7 @@ import type {
 } from './types';
 import type { Side, Align } from '../../types';
 import { useMenuScope, DropdownMenuSubContext, DropdownMenuCollectionContext } from './hooks';
-import { isCharacterKey, getCloseKey, TYPEAHEAD_TIMEOUT } from './utils';
+import { isCharacterKey, getCloseKey, TYPEAHEAD_TIMEOUT } from './utils/index';
 
 /**
  * Convert side and align to Floating UI placement
