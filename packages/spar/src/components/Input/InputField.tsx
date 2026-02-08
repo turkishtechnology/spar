@@ -1,6 +1,6 @@
 import { useState, useContext, useRef, type ElementType } from 'react';
 import type { PolymorphicInputFieldProps } from './types';
-import { InputContext } from './InputRoot';
+import { InputContext } from './hooks';
 import { useMergedRef, useAutoFocus } from '../../hooks';
 
 /**

@@ -13,6 +13,8 @@ const Input = <T extends ElementType = 'input'>(props: PolymorphicInputFieldProp
 
 export { Input, InputRoot, InputField, InputLabel, InputDescription, InputErrorMessage };
 
+export { useInputContext } from './hooks';
+
 export type {
   InputContextValue,
   InputRootProps,

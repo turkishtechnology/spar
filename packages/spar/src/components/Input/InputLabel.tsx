@@ -1,5 +1,5 @@
 import type { InputLabelProps } from './types';
-import { useInputContext } from './InputRoot';
+import { useInputContext } from './hooks';
 
 /**
  * Input label component that provides accessible labeling for the input field.
