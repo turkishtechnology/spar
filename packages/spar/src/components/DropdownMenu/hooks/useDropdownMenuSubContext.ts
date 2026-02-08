@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import type { DropdownMenuSubContextValue } from '../types';
-import { useDropdownMenuRootContext } from './useDropdownMenuContext';
+import { useDropdownMenuContext } from './useDropdownMenuContext';
 
 export const DropdownMenuSubContext = createContext<DropdownMenuSubContextValue | null>(null);
 
@@ -17,5 +17,5 @@ export const useMenuScope = () => {
   if (subContext) {
     return subContext;
   }
-  return useDropdownMenuRootContext();
+  return useDropdownMenuContext();
 };

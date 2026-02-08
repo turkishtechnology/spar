@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { TabsRoot, TabsList, TabsTrigger, TabsContent } from '../index';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../index';
 
 // Extend Jest matchers
 expect.extend(toHaveNoViolations);
@@ -13,8 +13,8 @@ const BasicTabs = ({
   activationMode = 'automatic',
   children,
   ...rest
-}: Partial<React.ComponentProps<typeof TabsRoot>> = {}) => (
-  <TabsRoot orientation={orientation} activationMode={activationMode} {...rest}>
+}: Partial<React.ComponentProps<typeof Tabs>> = {}) => (
+  <Tabs orientation={orientation} activationMode={activationMode} {...rest}>
     {children || (
       <>
         <TabsList>
@@ -40,7 +40,7 @@ const BasicTabs = ({
         </TabsContent>
       </>
     )}
-  </TabsRoot>
+  </Tabs>
 );
 
 describe('Tabs Accessibility', () => {
@@ -371,7 +371,7 @@ describe('Tabs Accessibility', () => {
 
     it('should auto-focus tab trigger when autoFocus is true', async () => {
       render(
-        <TabsRoot defaultValue='tab1'>
+        <Tabs defaultValue='tab1'>
           <TabsList>
             <TabsTrigger value='tab1'>Tab 1</TabsTrigger>
             <TabsTrigger value='tab2' autoFocus>
@@ -380,7 +380,7 @@ describe('Tabs Accessibility', () => {
           </TabsList>
           <TabsContent value='tab1'>Content 1</TabsContent>
           <TabsContent value='tab2'>Content 2</TabsContent>
-        </TabsRoot>,
+        </Tabs>,
       );
 
       const tab2 = screen.getByRole('tab', { name: 'Tab 2' });
@@ -392,14 +392,14 @@ describe('Tabs Accessibility', () => {
 
     it('should not auto-focus tab trigger by default', () => {
       render(
-        <TabsRoot defaultValue='tab1'>
+        <Tabs defaultValue='tab1'>
           <TabsList>
             <TabsTrigger value='tab1'>Tab 1</TabsTrigger>
             <TabsTrigger value='tab2'>Tab 2</TabsTrigger>
           </TabsList>
           <TabsContent value='tab1'>Content 1</TabsContent>
           <TabsContent value='tab2'>Content 2</TabsContent>
-        </TabsRoot>,
+        </Tabs>,
       );
 
       const tab1 = screen.getByRole('tab', { name: 'Tab 1' });
@@ -617,7 +617,7 @@ describe('Tabs Accessibility', () => {
         return (
           <div>
             <button onClick={() => setTabs([...tabs, `tab${tabs.length + 1}`])}>Add Tab</button>
-            <TabsRoot>
+            <Tabs>
               <TabsList>
                 {tabs.map((tab) => (
                   <TabsTrigger key={tab} value={tab}>
@@ -630,7 +630,7 @@ describe('Tabs Accessibility', () => {
                   Content for {tab}
                 </TabsContent>
               ))}
-            </TabsRoot>
+            </Tabs>
           </div>
         );
       };
@@ -656,7 +656,7 @@ describe('Tabs Accessibility', () => {
         return (
           <div>
             <button onClick={() => setIsLoading(!isLoading)}>Toggle Loading</button>
-            <TabsRoot>
+            <Tabs>
               <TabsList>
                 <TabsTrigger value='content' aria-busy={isLoading}>
                   {isLoading ? 'Loading...' : 'Content'}
@@ -665,7 +665,7 @@ describe('Tabs Accessibility', () => {
               <TabsContent value='content' aria-busy={isLoading}>
                 {isLoading ? 'Loading content...' : 'Loaded content'}
               </TabsContent>
-            </TabsRoot>
+            </Tabs>
           </div>
         );
       };

@@ -3,10 +3,10 @@ import type { PolymorphicProps } from '../../types';
 import type { ButtonOwnProps } from '../Button/types';
 
 /**
- * Props for DialogRoot
+ * Props for Dialog
  * @remarks Fully accessible, headless component
  */
-export interface DialogRootProps {
+export interface DialogProps {
   /**
    * Controlled open state
    */

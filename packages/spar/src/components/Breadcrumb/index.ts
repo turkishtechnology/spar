@@ -1,5 +1,5 @@
-export { BreadcrumbRoot } from './BreadcrumbRoot';
-export { BreadcrumbRoot as Breadcrumb } from './BreadcrumbRoot';
+export { Breadcrumb } from './Breadcrumb';
+export { Breadcrumb as BreadcrumbRoot } from './Breadcrumb';
 export { BreadcrumbList } from './BreadcrumbList';
 export { BreadcrumbItem } from './BreadcrumbItem';
 export { BreadcrumbLink } from './BreadcrumbLink';
@@ -8,7 +8,7 @@ export { BreadcrumbSeparator } from './BreadcrumbSeparator';
 export { useBreadcrumbContext } from './hooks';
 
 export type {
-  BreadcrumbRootProps,
+  BreadcrumbProps,
   BreadcrumbListProps,
   BreadcrumbItemProps,
   BreadcrumbLinkProps,

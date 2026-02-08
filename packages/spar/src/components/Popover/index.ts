@@ -1,5 +1,6 @@
 // Export components from their separate files
-export { PopoverRoot } from './Popover';
+export { Popover } from './Popover';
+export { Popover as PopoverRoot } from './Popover';
 export { PopoverTrigger } from './PopoverTrigger';
 export { PopoverContent } from './PopoverContent';
 export { PopoverArrow } from './PopoverArrow';
@@ -9,7 +10,7 @@ export { PopoverClose } from './PopoverClose';
 
 // Export types
 export type {
-  PopoverRootProps,
+  PopoverProps,
   PopoverTriggerProps,
   PopoverTriggerRenderProps,
   PopoverContentProps,

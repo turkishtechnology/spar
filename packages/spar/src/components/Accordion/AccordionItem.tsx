@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useCallback, useId, ElementType } from 'react';
 import type { AccordionItemProps, AccordionItemContextValue } from './types';
 import { useAccordionContext, AccordionItemContext } from './hooks';
-import { CollapsibleRoot } from '../Collapsible';
+import { Collapsible } from '../Collapsible';
 
 /**
  * Individual accordion item providing context for trigger and content components. Manages item registration and expansion state.
@@ -71,7 +71,7 @@ export const AccordionItem = <T extends ElementType = 'div'>({
 
   return (
     <AccordionItemContext.Provider value={itemContextValue}>
-      <CollapsibleRoot
+      <Collapsible
         open={isOpen}
         onOpenChange={toggle}
         disabled={isItemDisabled}
@@ -81,7 +81,7 @@ export const AccordionItem = <T extends ElementType = 'div'>({
         {...props}
       >
         {children}
-      </CollapsibleRoot>
+      </Collapsible>
     </AccordionItemContext.Provider>
   );
 };

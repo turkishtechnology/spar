@@ -8,7 +8,7 @@ import type {
   DropdownMenuFocusStrategy,
   DropdownMenuTriggerRenderProps,
 } from './types';
-import { useDropdownMenuRootContext } from './hooks';
+import { useDropdownMenuContext } from './hooks';
 import { useMergedRef } from '@/hooks';
 import { Button } from '../Button';
 
@@ -21,7 +21,7 @@ export const DropdownMenuTrigger = ({
   children,
   ...props
 }: DropdownMenuTriggerProps) => {
-  const menu = useDropdownMenuRootContext();
+  const menu = useDropdownMenuContext();
 
   // Use prop if explicitly provided, otherwise use context
   const disabled = disabledProp ?? menu.disabled;

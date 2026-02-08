@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import userEvent from '@testing-library/user-event';
 import {
-  BreadcrumbRoot,
+  Breadcrumb,
   BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -20,7 +20,7 @@ describe('Breadcrumb Accessibility', () => {
   describe('ARIA and Semantic Structure', () => {
     it('should have no axe violations - basic structure', async () => {
       const { container } = render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -34,7 +34,7 @@ describe('Breadcrumb Accessibility', () => {
               <BreadcrumbPage>Current Page</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       const results = await axe(container);
@@ -43,7 +43,7 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should have no axe violations - disabled state', async () => {
       const { container } = render(
-        <BreadcrumbRoot disabled>
+        <Breadcrumb disabled>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -59,7 +59,7 @@ describe('Breadcrumb Accessibility', () => {
               <BreadcrumbPage>Current Page</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       const results = await axe(container);
@@ -68,7 +68,7 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should have no axe violations - external links', async () => {
       const { container } = render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='https://external.com' isExternal>
@@ -80,7 +80,7 @@ describe('Breadcrumb Accessibility', () => {
               <BreadcrumbPage>Current Page</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       const results = await axe(container);
@@ -89,13 +89,13 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should provide navigation landmark', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       expect(screen.getByRole('navigation', { name: 'Breadcrumb' })).toBeInTheDocument();
@@ -103,13 +103,13 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should provide navigation landmark with custom label', () => {
       render(
-        <BreadcrumbRoot aria-label='Page Navigation'>
+        <Breadcrumb aria-label='Page Navigation'>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       expect(screen.getByRole('navigation', { name: 'Page Navigation' })).toBeInTheDocument();
@@ -117,7 +117,7 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should mark current page with aria-current', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -127,7 +127,7 @@ describe('Breadcrumb Accessibility', () => {
               <BreadcrumbPage>Current Page</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       expect(screen.getByText('Current Page')).toHaveAttribute('aria-current', 'page');
@@ -135,7 +135,7 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should hide separators from screen readers', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -145,7 +145,7 @@ describe('Breadcrumb Accessibility', () => {
               <BreadcrumbPage>Current</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       expect(screen.getByText('/')).toHaveAttribute('aria-hidden', 'true');
@@ -153,7 +153,7 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should have proper list structure', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -162,7 +162,7 @@ describe('Breadcrumb Accessibility', () => {
               <BreadcrumbPage>Current</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       expect(screen.getByRole('list')).toBeInTheDocument();
@@ -173,13 +173,13 @@ describe('Breadcrumb Accessibility', () => {
   describe('Disabled State Accessibility', () => {
     it('should handle root disabled state accessibility', () => {
       render(
-        <BreadcrumbRoot disabled>
+        <Breadcrumb disabled>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/test'>Test</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       expect(screen.getByRole('navigation')).toHaveAttribute('aria-disabled', 'true');
@@ -189,7 +189,7 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should handle individual link disabled state', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -200,7 +200,7 @@ describe('Breadcrumb Accessibility', () => {
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       expect(screen.getByRole('link', { name: 'Home' })).not.toHaveAttribute('aria-disabled');
@@ -210,7 +210,7 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should make disabled links unfocusable', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/test' disabled>
@@ -218,7 +218,7 @@ describe('Breadcrumb Accessibility', () => {
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       // Disabled links lose their link role, so we check by text content
@@ -227,7 +227,7 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should remove href from disabled links', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/test' disabled>
@@ -235,7 +235,7 @@ describe('Breadcrumb Accessibility', () => {
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       // Disabled links lose their link role, so we check by text content
@@ -246,7 +246,7 @@ describe('Breadcrumb Accessibility', () => {
   describe('External Link Accessibility', () => {
     it('should handle external links with security attributes', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='https://external.com' isExternal>
@@ -254,7 +254,7 @@ describe('Breadcrumb Accessibility', () => {
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       const link = screen.getByRole('link');
@@ -264,7 +264,7 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should preserve custom target and rel for external links', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='https://external.com' isExternal target='_self' rel='custom'>
@@ -272,7 +272,7 @@ describe('Breadcrumb Accessibility', () => {
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       const link = screen.getByRole('link');
@@ -286,7 +286,7 @@ describe('Breadcrumb Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -300,7 +300,7 @@ describe('Breadcrumb Accessibility', () => {
               <BreadcrumbPage>Current</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       await user.tab();
@@ -316,7 +316,7 @@ describe('Breadcrumb Accessibility', () => {
       render(
         <div>
           <button>Before</button>
-          <BreadcrumbRoot>
+          <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -330,7 +330,7 @@ describe('Breadcrumb Accessibility', () => {
                 <BreadcrumbLink href='/about'>About</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
-          </BreadcrumbRoot>
+          </Breadcrumb>
           <button>After</button>
         </div>,
       );
@@ -351,13 +351,13 @@ describe('Breadcrumb Accessibility', () => {
       const handleNavigate = jest.fn();
 
       render(
-        <BreadcrumbRoot onNavigate={handleNavigate}>
+        <Breadcrumb onNavigate={handleNavigate}>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       const link = screen.getByRole('link', { name: 'Home' });
@@ -372,13 +372,13 @@ describe('Breadcrumb Accessibility', () => {
       const handleNavigate = jest.fn();
 
       render(
-        <BreadcrumbRoot onNavigate={handleNavigate}>
+        <Breadcrumb onNavigate={handleNavigate}>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       const link = screen.getByRole('link', { name: 'Home' });
@@ -393,7 +393,7 @@ describe('Breadcrumb Accessibility', () => {
       const handleNavigate = jest.fn();
 
       render(
-        <BreadcrumbRoot onNavigate={handleNavigate}>
+        <Breadcrumb onNavigate={handleNavigate}>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home' disabled>
@@ -401,7 +401,7 @@ describe('Breadcrumb Accessibility', () => {
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       // Disabled links lose their link role, so we check by text content
@@ -415,7 +415,7 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should not focus current page element', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -424,7 +424,7 @@ describe('Breadcrumb Accessibility', () => {
               <BreadcrumbPage>Current Page</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       const currentPage = screen.getByText('Current Page');
@@ -435,7 +435,7 @@ describe('Breadcrumb Accessibility', () => {
   describe('Screen Reader Support', () => {
     it('should provide proper accessible names for links', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -446,7 +446,7 @@ describe('Breadcrumb Accessibility', () => {
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
@@ -455,7 +455,7 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should announce disabled state to screen readers', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/products' disabled>
@@ -463,7 +463,7 @@ describe('Breadcrumb Accessibility', () => {
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       // Disabled links lose their link role, so we check by text content
@@ -473,7 +473,7 @@ describe('Breadcrumb Accessibility', () => {
 
     it('should provide context through list structure', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -485,7 +485,7 @@ describe('Breadcrumb Accessibility', () => {
               <BreadcrumbPage>Current</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       // Screen readers will announce this as a list with 3 items
@@ -500,13 +500,13 @@ describe('Breadcrumb Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       await user.tab();
@@ -520,13 +520,13 @@ describe('Breadcrumb Accessibility', () => {
       render(
         <div>
           <button>Before</button>
-          <BreadcrumbRoot>
+          <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
-          </BreadcrumbRoot>
+          </Breadcrumb>
           <button>After</button>
         </div>,
       );
@@ -549,13 +549,13 @@ describe('Breadcrumb Accessibility', () => {
       }) => <button {...props}>{children}</button>;
 
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink as={CustomLink}>Custom Link</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       await user.tab();

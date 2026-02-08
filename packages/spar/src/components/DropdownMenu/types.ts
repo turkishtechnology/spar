@@ -31,7 +31,7 @@ export interface DropdownMenuTriggerRenderProps {
 }
 
 /**
- * Props for DropdownMenuRoot component
+ * Props for DropdownMenu component
  */
 export interface DropdownMenuProps {
   /**

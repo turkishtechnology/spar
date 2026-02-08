@@ -1,7 +1,7 @@
 import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { PopoverRoot } from '../Popover';
+import { Popover } from '../Popover';
 import { PopoverTrigger } from '../PopoverTrigger';
 import { PopoverContent } from '../PopoverContent';
 import { PopoverArrow } from '../PopoverArrow';
@@ -14,14 +14,14 @@ describe('Popover Accessibility', () => {
   describe('ARIA Compliance', () => {
     it('should pass axe accessibility tests - closed state', async () => {
       const { container } = render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open Popover</PopoverTrigger>
           <PopoverContent>
             <h2>Popover Title</h2>
             <p>This is popover content with proper structure.</p>
             <PopoverClose>Close</PopoverClose>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const results = await axe(container);
@@ -32,7 +32,7 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       const { container } = render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open Popover</PopoverTrigger>
           <PopoverContent>
             <h2>Popover Title</h2>
@@ -40,7 +40,7 @@ describe('Popover Accessibility', () => {
             <button>Action Button</button>
             <PopoverClose>Close</PopoverClose>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button', { name: 'Open Popover' }));
@@ -55,14 +55,14 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       const { container } = render(
-        <PopoverRoot modal={true}>
+        <Popover modal={true}>
           <PopoverTrigger>Open Modal Popover</PopoverTrigger>
           <PopoverContent>
             <h2>Modal Popover</h2>
             <p>This is modal popover content.</p>
             <PopoverClose>Close</PopoverClose>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button', { name: 'Open Modal Popover' }));
@@ -77,7 +77,7 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       const { container } = render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open Form Popover</PopoverTrigger>
           <PopoverContent>
             <form>
@@ -91,7 +91,7 @@ describe('Popover Accessibility', () => {
               <PopoverClose>Cancel</PopoverClose>
             </form>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button', { name: 'Open Form Popover' }));
@@ -104,10 +104,10 @@ describe('Popover Accessibility', () => {
 
     it('should pass axe accessibility tests - with disabled trigger', async () => {
       const { container } = render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger disabled>Disabled Trigger</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const results = await axe(container);
@@ -118,13 +118,13 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       const { container } = render(
-        <PopoverRoot>
+        <Popover>
           <PopoverAnchor>
             <div>Anchor Element</div>
           </PopoverAnchor>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>Content positioned relative to anchor</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button'));
@@ -141,10 +141,10 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Toggle</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const trigger = screen.getByRole('button');
@@ -167,10 +167,10 @@ describe('Popover Accessibility', () => {
 
     it('sets aria-haspopup correctly', () => {
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       expect(screen.getByRole('button')).toHaveAttribute('aria-haspopup', 'dialog');
@@ -180,10 +180,10 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const trigger = screen.getByRole('button');
@@ -204,10 +204,10 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot modal={true}>
+        <Popover modal={true}>
           <PopoverTrigger>Open Modal</PopoverTrigger>
           <PopoverContent>Modal Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button'));
@@ -223,10 +223,10 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot modal={false}>
+        <Popover modal={false}>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button'));
@@ -242,13 +242,13 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>
             Content
             <PopoverArrow data-testid='arrow' />
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button'));
@@ -262,10 +262,10 @@ describe('Popover Accessibility', () => {
   describe('Keyboard Navigation', () => {
     it('supports Enter key to open/close', async () => {
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Toggle</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const trigger = screen.getByRole('button');
@@ -289,10 +289,10 @@ describe('Popover Accessibility', () => {
 
     it('supports Space key to open/close', async () => {
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Toggle</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const trigger = screen.getByRole('button');
@@ -318,10 +318,10 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const trigger = screen.getByRole('button');
@@ -344,12 +344,12 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot defaultOpen={true}>
+        <Popover defaultOpen={true}>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>
             <button>Focus target</button>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await waitFor(() => {
@@ -367,14 +367,14 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>
             <button>First</button>
             <button>Second</button>
             <PopoverClose>Close</PopoverClose>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button', { name: 'Open' }));
@@ -395,14 +395,14 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>
             <button>First</button>
             <button>Middle</button>
             <button>Last</button>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button', { name: 'Open' }));
@@ -427,10 +427,10 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger disabled>Disabled</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const trigger = screen.getByRole('button');
@@ -451,13 +451,13 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>
             <button>First focusable</button>
             <button>Second focusable</button>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button', { name: 'Open' }));
@@ -471,12 +471,12 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent data-testid='content'>
             <div>Just text content</div>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button', { name: 'Open' }));
@@ -490,13 +490,13 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>
             <button>Content button</button>
             <PopoverClose>Close</PopoverClose>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Open' });
@@ -516,12 +516,12 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>
             <button>Content button</button>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Open' });
@@ -542,13 +542,13 @@ describe('Popover Accessibility', () => {
 
       render(
         <div>
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger>Open</PopoverTrigger>
             <PopoverContent trapFocus={true}>
               <button>First</button>
               <button>Last</button>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
           <button>Outside button</button>
         </div>,
       );
@@ -576,12 +576,12 @@ describe('Popover Accessibility', () => {
 
       render(
         <div>
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger>Open</PopoverTrigger>
             <PopoverContent trapFocus={false}>
               <button>Content button</button>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
           <button>Outside button</button>
         </div>,
       );
@@ -603,10 +603,10 @@ describe('Popover Accessibility', () => {
   describe('Screen Reader Support', () => {
     it('provides accessible names for triggers', () => {
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger aria-label='Open settings menu'>⚙️</PopoverTrigger>
           <PopoverContent>Settings</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Open settings menu' });
@@ -617,12 +617,12 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger id='settings-trigger'>Settings</PopoverTrigger>
           <PopoverContent aria-labelledby='settings-trigger'>
             <div>Settings panel content</div>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button', { name: 'Settings' }));
@@ -637,12 +637,12 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger aria-describedby='help-text'>Help</PopoverTrigger>
           <PopoverContent id='help-text'>
             This is helpful information about the feature.
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Help' });
@@ -663,12 +663,12 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>
             <button style={{ outline: '2px solid blue' }}>Focused button</button>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button', { name: 'Open' }));
@@ -684,10 +684,10 @@ describe('Popover Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Toggle</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const trigger = screen.getByRole('button');
@@ -704,10 +704,10 @@ describe('Popover Accessibility', () => {
 
     it('indicates disabled state clearly', () => {
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger disabled>Disabled trigger</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const trigger = screen.getByRole('button');

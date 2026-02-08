@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
-  DialogRoot,
+  Dialog,
   DialogTrigger,
   DialogPortal,
   DialogOverlay,
@@ -26,7 +26,7 @@ describe('Dialog Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <DialogRoot onOpenChange={onOpenChange}>
+        <Dialog onOpenChange={onOpenChange}>
           <DialogTrigger>Open Settings</DialogTrigger>
           <DialogPortal>
             <DialogOverlay>
@@ -51,7 +51,7 @@ describe('Dialog Integration Tests', () => {
               </DialogContent>
             </DialogOverlay>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       // Initial state
@@ -97,7 +97,7 @@ describe('Dialog Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger>Delete Item</DialogTrigger>
           <DialogPortal>
             <DialogOverlay>
@@ -125,7 +125,7 @@ describe('Dialog Integration Tests', () => {
               </DialogContent>
             </DialogOverlay>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       // Open confirmation dialog
@@ -151,7 +151,7 @@ describe('Dialog Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Advanced Settings</DialogTitle>
@@ -181,7 +181,7 @@ describe('Dialog Integration Tests', () => {
               <DialogClose>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       // Interact with tabs
@@ -206,7 +206,7 @@ describe('Dialog Integration Tests', () => {
 
       render(
         <div>
-          <DialogRoot>
+          <Dialog>
             <DialogTrigger>Open Dialog 1</DialogTrigger>
             <DialogPortal>
               <DialogContent onInteractOutside={(e) => e.preventDefault()}>
@@ -214,9 +214,9 @@ describe('Dialog Integration Tests', () => {
                 <DialogClose>Close</DialogClose>
               </DialogContent>
             </DialogPortal>
-          </DialogRoot>
+          </Dialog>
 
-          <DialogRoot>
+          <Dialog>
             <DialogTrigger>Open Dialog 2</DialogTrigger>
             <DialogPortal>
               <DialogContent onInteractOutside={(e) => e.preventDefault()}>
@@ -224,7 +224,7 @@ describe('Dialog Integration Tests', () => {
                 <DialogClose>Close</DialogClose>
               </DialogContent>
             </DialogPortal>
-          </DialogRoot>
+          </Dialog>
         </div>,
       );
 
@@ -256,7 +256,7 @@ describe('Dialog Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <DialogRoot onOpenChange={onOpenChange}>
+        <Dialog onOpenChange={onOpenChange}>
           <DialogTrigger>Toggle Dialog</DialogTrigger>
           <DialogPortal>
             <DialogContent>
@@ -264,7 +264,7 @@ describe('Dialog Integration Tests', () => {
               <DialogClose>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Toggle Dialog' });
@@ -285,7 +285,7 @@ describe('Dialog Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogContent>
@@ -294,7 +294,7 @@ describe('Dialog Integration Tests', () => {
               <DialogClose>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Open Dialog' });
@@ -319,7 +319,7 @@ describe('Dialog Integration Tests', () => {
           <div>
             <button onClick={() => setOpen(true)}>External Open</button>
             <button onClick={() => setOpen(false)}>External Close</button>
-            <DialogRoot open={open} onOpenChange={setOpen}>
+            <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger>Internal Toggle</DialogTrigger>
               <DialogPortal>
                 <DialogContent>
@@ -327,7 +327,7 @@ describe('Dialog Integration Tests', () => {
                   <DialogClose>Internal Close</DialogClose>
                 </DialogContent>
               </DialogPortal>
-            </DialogRoot>
+            </Dialog>
           </div>
         );
       };
@@ -358,7 +358,7 @@ describe('Dialog Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogOverlay data-testid='overlay'>
               <DialogContent data-testid='content'>
@@ -372,7 +372,7 @@ describe('Dialog Integration Tests', () => {
               </DialogContent>
             </DialogOverlay>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -400,7 +400,7 @@ describe('Dialog Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger>Sign In</DialogTrigger>
           <DialogPortal>
             <DialogOverlay>
@@ -445,7 +445,7 @@ describe('Dialog Integration Tests', () => {
               </DialogContent>
             </DialogOverlay>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       // Open dialog
@@ -487,7 +487,7 @@ describe('Dialog Integration Tests', () => {
               </button>
             ))}
 
-            <DialogRoot
+            <Dialog
               open={selectedImage !== null}
               onOpenChange={(open) => !open && setSelectedImage(null)}
             >
@@ -533,7 +533,7 @@ describe('Dialog Integration Tests', () => {
                   </DialogContent>
                 </DialogOverlay>
               </DialogPortal>
-            </DialogRoot>
+            </Dialog>
           </div>
         );
       };

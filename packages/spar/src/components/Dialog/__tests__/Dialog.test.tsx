@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
-  DialogRoot,
+  Dialog,
   DialogTrigger,
   DialogPortal,
   DialogOverlay,
@@ -18,21 +18,21 @@ jest.mock('react-dom', () => ({
 }));
 
 describe('Dialog', () => {
-  describe('DialogRoot', () => {
+  describe('Dialog', () => {
     it('should render children without crashing', () => {
       render(
-        <DialogRoot>
+        <Dialog>
           <div>Dialog content</div>
-        </DialogRoot>,
+        </Dialog>,
       );
     });
 
     it('should provide context to child components', () => {
       const TestComponent = () => {
         return (
-          <DialogRoot>
+          <Dialog>
             <DialogTrigger>Open</DialogTrigger>
-          </DialogRoot>
+          </Dialog>
         );
       };
 
@@ -42,15 +42,15 @@ describe('Dialog', () => {
     it('should handle controlled state', () => {
       const onOpenChange = jest.fn();
       const { rerender } = render(
-        <DialogRoot open={false} onOpenChange={onOpenChange}>
+        <Dialog open={false} onOpenChange={onOpenChange}>
           <DialogTrigger>Open</DialogTrigger>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       rerender(
-        <DialogRoot open={true} onOpenChange={onOpenChange}>
+        <Dialog open={true} onOpenChange={onOpenChange}>
           <DialogTrigger>Open</DialogTrigger>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(onOpenChange).not.toHaveBeenCalled();
@@ -58,14 +58,14 @@ describe('Dialog', () => {
 
     it('should handle uncontrolled state with defaultOpen', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogTrigger>Open</DialogTrigger>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -73,11 +73,11 @@ describe('Dialog', () => {
 
     it('should set modal to true by default', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogOverlay data-testid='overlay' />
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.getByTestId('overlay')).toHaveAttribute('data-state', 'open');
@@ -85,11 +85,11 @@ describe('Dialog', () => {
 
     it('should handle non-modal dialogs', () => {
       render(
-        <DialogRoot modal={false} defaultOpen={true}>
+        <Dialog modal={false} defaultOpen={true}>
           <DialogPortal>
             <DialogOverlay data-testid='overlay' />
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.getByTestId('overlay')).toHaveAttribute('data-state', 'open');
@@ -100,14 +100,14 @@ describe('Dialog', () => {
       const onOpenChange = jest.fn();
 
       render(
-        <DialogRoot disabled onOpenChange={onOpenChange}>
+        <Dialog disabled onOpenChange={onOpenChange}>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Dialog Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button');
@@ -124,14 +124,14 @@ describe('Dialog', () => {
       const onOpenChange = jest.fn();
 
       render(
-        <DialogRoot disabled={false} onOpenChange={onOpenChange}>
+        <Dialog disabled={false} onOpenChange={onOpenChange}>
           <DialogTrigger disabled>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Dialog Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button');
@@ -146,14 +146,14 @@ describe('Dialog', () => {
       const onOpenChange = jest.fn();
 
       render(
-        <DialogRoot disabled onOpenChange={onOpenChange}>
+        <Dialog disabled onOpenChange={onOpenChange}>
           <DialogTrigger disabled={false}>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Dialog Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button');
@@ -167,9 +167,9 @@ describe('Dialog', () => {
   describe('DialogTrigger', () => {
     it('should render as button by default', () => {
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger>Open Dialog</DialogTrigger>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Open Dialog' });
@@ -179,9 +179,9 @@ describe('Dialog', () => {
 
     it('should have proper ARIA attributes', () => {
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger>Open Dialog</DialogTrigger>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button');
@@ -193,14 +193,14 @@ describe('Dialog', () => {
     it('should update aria-expanded when dialog opens', async () => {
       const user = userEvent.setup();
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button');
@@ -214,14 +214,14 @@ describe('Dialog', () => {
     it('should open dialog on click', async () => {
       const user = userEvent.setup();
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Dialog Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       await user.click(screen.getByRole('button'));
@@ -231,14 +231,14 @@ describe('Dialog', () => {
     it('should open dialog on Enter key', async () => {
       const user = userEvent.setup();
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Dialog Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button');
@@ -251,14 +251,14 @@ describe('Dialog', () => {
     it('should open dialog on Space key', async () => {
       const user = userEvent.setup();
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Dialog Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button');
@@ -272,7 +272,7 @@ describe('Dialog', () => {
       const user = userEvent.setup();
       const onClick = jest.fn();
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger disabled onClick={onClick}>
             Open Dialog
           </DialogTrigger>
@@ -281,7 +281,7 @@ describe('Dialog', () => {
               <DialogTitle>Dialog Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button');
@@ -295,9 +295,9 @@ describe('Dialog', () => {
 
     it('should support polymorphic as prop', () => {
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger as='div'>Open Dialog</DialogTrigger>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByText('Open Dialog');
@@ -309,9 +309,9 @@ describe('Dialog', () => {
       const user = userEvent.setup();
       const onClick = jest.fn();
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger onClick={onClick}>Open Dialog</DialogTrigger>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       await user.click(screen.getByRole('button'));
@@ -322,9 +322,9 @@ describe('Dialog', () => {
       const user = userEvent.setup();
       const onKeyDown = jest.fn();
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger onKeyDown={onKeyDown}>Open Dialog</DialogTrigger>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button');
@@ -338,11 +338,11 @@ describe('Dialog', () => {
   describe('DialogOverlay', () => {
     it('should not render when dialog is closed', () => {
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogPortal>
             <DialogOverlay data-testid='overlay' />
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.queryByTestId('overlay')).not.toBeInTheDocument();
@@ -350,11 +350,11 @@ describe('Dialog', () => {
 
     it('should render when dialog is open', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogOverlay data-testid='overlay' />
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.getByTestId('overlay')).toBeInTheDocument();
@@ -363,9 +363,9 @@ describe('Dialog', () => {
 
     it('should render when forceMount is true (without portal)', () => {
       render(
-        <DialogRoot forceMount>
+        <Dialog forceMount>
           <DialogOverlay data-testid='overlay' />
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.getByTestId('overlay')).toBeInTheDocument();
@@ -375,7 +375,7 @@ describe('Dialog', () => {
     it('should close dialog on overlay click in modal mode', async () => {
       const user = userEvent.setup();
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogOverlay data-testid='overlay'>
               <DialogContent>
@@ -383,7 +383,7 @@ describe('Dialog', () => {
               </DialogContent>
             </DialogOverlay>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const overlay = screen.getByTestId('overlay');
@@ -398,7 +398,7 @@ describe('Dialog', () => {
     it('should not close dialog on content click', async () => {
       const user = userEvent.setup();
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogOverlay data-testid='overlay'>
               <DialogContent data-testid='content'>
@@ -407,25 +407,23 @@ describe('Dialog', () => {
               </DialogContent>
             </DialogOverlay>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.getByRole('dialog')).toBeInTheDocument();
 
-      // Click on button inside content - should not close dialog
       await user.click(screen.getByRole('button', { name: 'Inside button' }));
 
-      // Dialog should still be open after clicking content
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
     it('should support polymorphic as prop', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogOverlay as='section' data-testid='overlay' />
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const overlay = screen.getByTestId('overlay');
@@ -436,11 +434,11 @@ describe('Dialog', () => {
       const user = userEvent.setup();
       const onClick = jest.fn();
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogOverlay onClick={onClick} data-testid='overlay' />
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       await user.click(screen.getByTestId('overlay'));
@@ -451,14 +449,14 @@ describe('Dialog', () => {
   describe('DialogContent', () => {
     it('should render with proper role', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Title</DialogTitle>
               <p>Content</p>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -466,14 +464,14 @@ describe('Dialog', () => {
 
     it('should have proper ARIA attributes', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Dialog Title</DialogTitle>
               <DialogDescription>Dialog description</DialogDescription>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const dialog = screen.getByRole('dialog');
@@ -483,13 +481,13 @@ describe('Dialog', () => {
 
     it('should support alertdialog role', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent role='alertdialog'>
               <DialogTitle>Alert Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.getByRole('alertdialog')).toBeInTheDocument();
@@ -497,13 +495,13 @@ describe('Dialog', () => {
 
     it('should not render when dialog is closed', () => {
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogPortal>
             <DialogContent data-testid='content'>
               <DialogTitle>Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.queryByTestId('content')).not.toBeInTheDocument();
@@ -511,11 +509,11 @@ describe('Dialog', () => {
 
     it('should render when forceMount is true (without portal)', () => {
       render(
-        <DialogRoot forceMount>
+        <Dialog forceMount>
           <DialogContent data-testid='content'>
             <DialogTitle>Title</DialogTitle>
           </DialogContent>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.getByTestId('content')).toBeInTheDocument();
@@ -524,13 +522,13 @@ describe('Dialog', () => {
 
     it('should support polymorphic as prop', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent as='section' data-testid='content'>
               <DialogTitle>Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const content = screen.getByTestId('content');
@@ -542,13 +540,13 @@ describe('Dialog', () => {
   describe('DialogTitle', () => {
     it('should render as h2 by default', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Dialog Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const title = screen.getByRole('heading', { level: 2 });
@@ -558,13 +556,13 @@ describe('Dialog', () => {
 
     it('should support custom heading level via data attribute', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle level={1}>Dialog Title</DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const title = screen.getByRole('heading', { name: 'Dialog Title' });
@@ -573,7 +571,7 @@ describe('Dialog', () => {
 
     it('should support polymorphic as prop', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle as='div' data-testid='title'>
@@ -581,7 +579,7 @@ describe('Dialog', () => {
               </DialogTitle>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const title = screen.getByTestId('title');
@@ -593,14 +591,14 @@ describe('Dialog', () => {
   describe('DialogDescription', () => {
     it('should render as paragraph by default', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Title</DialogTitle>
               <DialogDescription>This is a description</DialogDescription>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const description = screen.getByText('This is a description');
@@ -610,7 +608,7 @@ describe('Dialog', () => {
 
     it('should support polymorphic as prop', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Title</DialogTitle>
@@ -619,7 +617,7 @@ describe('Dialog', () => {
               </DialogDescription>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const description = screen.getByTestId('description');
@@ -631,14 +629,14 @@ describe('Dialog', () => {
   describe('DialogClose', () => {
     it('should render as button by default', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Title</DialogTitle>
               <DialogClose>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const closeButton = screen.getByRole('button', { name: 'Close' });
@@ -649,14 +647,14 @@ describe('Dialog', () => {
     it('should close dialog on click', async () => {
       const user = userEvent.setup();
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Title</DialogTitle>
               <DialogClose>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -670,14 +668,14 @@ describe('Dialog', () => {
     it('should close dialog on Enter key', async () => {
       const user = userEvent.setup();
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Title</DialogTitle>
               <DialogClose>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const closeButton = screen.getByRole('button', { name: 'Close' });
@@ -692,14 +690,14 @@ describe('Dialog', () => {
     it('should close dialog on Space key', async () => {
       const user = userEvent.setup();
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Title</DialogTitle>
               <DialogClose>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const closeButton = screen.getByRole('button', { name: 'Close' });
@@ -713,7 +711,7 @@ describe('Dialog', () => {
 
     it('should support polymorphic as prop', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Title</DialogTitle>
@@ -722,7 +720,7 @@ describe('Dialog', () => {
               </DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const close = screen.getByTestId('close');
@@ -733,14 +731,14 @@ describe('Dialog', () => {
       const user = userEvent.setup();
       const onClick = jest.fn();
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Title</DialogTitle>
               <DialogClose onClick={onClick}>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       await user.click(screen.getByRole('button', { name: 'Close' }));
@@ -751,14 +749,14 @@ describe('Dialog', () => {
       const user = userEvent.setup();
       const onKeyDown = jest.fn();
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogPortal>
             <DialogContent>
               <DialogTitle>Title</DialogTitle>
               <DialogClose onKeyDown={onKeyDown}>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const closeButton = screen.getByRole('button', { name: 'Close' });
@@ -772,7 +770,7 @@ describe('Dialog', () => {
   describe('Named Component API', () => {
     it('should work with named exports', () => {
       render(
-        <DialogRoot defaultOpen={true}>
+        <Dialog defaultOpen={true}>
           <DialogTrigger>Open</DialogTrigger>
           <DialogPortal>
             <DialogOverlay>
@@ -783,7 +781,7 @@ describe('Dialog', () => {
               </DialogContent>
             </DialogOverlay>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -794,30 +792,27 @@ describe('Dialog', () => {
   });
 
   describe('Error Handling', () => {
-    it('should throw error when DialogTrigger is used outside DialogRoot', () => {
-      // Suppress console.error for this test
+    it('should throw error when DialogTrigger is used outside Dialog', () => {
       jest.spyOn(console, 'error').mockImplementation(() => {});
 
       expect(() => {
         render(<DialogTrigger>Open</DialogTrigger>);
-      }).toThrow('Dialog components must be used within a DialogRoot');
+      }).toThrow('Dialog components must be used within a Dialog');
 
       jest.restoreAllMocks();
     });
 
-    it('should throw error when DialogOverlay is used outside DialogRoot', () => {
-      // Suppress console.error for this test
+    it('should throw error when DialogOverlay is used outside Dialog', () => {
       jest.spyOn(console, 'error').mockImplementation(() => {});
 
       expect(() => {
         render(<DialogOverlay />);
-      }).toThrow('Dialog components must be used within a DialogRoot');
+      }).toThrow('Dialog components must be used within a Dialog');
 
       jest.restoreAllMocks();
     });
 
-    it('should throw error when DialogContent is used outside DialogRoot', () => {
-      // Suppress console.error for this test
+    it('should throw error when DialogContent is used outside Dialog', () => {
       jest.spyOn(console, 'error').mockImplementation(() => {});
 
       expect(() => {
@@ -826,7 +821,7 @@ describe('Dialog', () => {
             <DialogTitle>Title</DialogTitle>
           </DialogContent>,
         );
-      }).toThrow('Dialog components must be used within a DialogRoot');
+      }).toThrow('Dialog components must be used within a Dialog');
 
       jest.restoreAllMocks();
     });

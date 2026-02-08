@@ -4,7 +4,7 @@ import type {
   DropdownMenuSubContextValue,
   DropdownMenuFocusStrategy,
 } from './types';
-import { useDropdownMenuRootContext, DropdownMenuSubContext } from './hooks';
+import { useDropdownMenuContext, DropdownMenuSubContext } from './hooks';
 
 export const DropdownMenuSub = ({
   open,
@@ -12,7 +12,7 @@ export const DropdownMenuSub = ({
   onOpenChange,
   children,
 }: DropdownMenuSubProps) => {
-  const rootContext = useDropdownMenuRootContext();
+  const rootContext = useDropdownMenuContext();
   const isControlled = open !== undefined;
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isOpen = isControlled ? Boolean(open) : internalOpen;

@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { InputRoot, InputField, InputLabel, InputDescription, InputErrorMessage } from '../index';
+import { Input, InputField, InputLabel, InputDescription, InputErrorMessage } from '../index';
 
 expect.extend(toHaveNoViolations);
 
@@ -13,10 +13,10 @@ describe('Input Accessibility', () => {
   describe('ARIA Compliance', () => {
     it('passes accessibility checks with basic setup', async () => {
       const { container } = render(
-        <InputRoot>
+        <Input>
           <InputLabel>Username</InputLabel>
           <InputField />
-        </InputRoot>,
+        </Input>,
       );
 
       const results = await axe(container);
@@ -25,11 +25,11 @@ describe('Input Accessibility', () => {
 
     it('passes accessibility checks with description', async () => {
       const { container } = render(
-        <InputRoot>
+        <Input>
           <InputLabel>Username</InputLabel>
           <InputField />
           <InputDescription>Enter your username</InputDescription>
-        </InputRoot>,
+        </Input>,
       );
 
       const results = await axe(container);
@@ -38,11 +38,11 @@ describe('Input Accessibility', () => {
 
     it('passes accessibility checks with error state', async () => {
       const { container } = render(
-        <InputRoot isInvalid>
+        <Input isInvalid>
           <InputLabel>Username</InputLabel>
           <InputField />
           <InputErrorMessage>Username is required</InputErrorMessage>
-        </InputRoot>,
+        </Input>,
       );
 
       const results = await axe(container);
@@ -51,12 +51,12 @@ describe('Input Accessibility', () => {
 
     it('passes accessibility checks with all elements', async () => {
       const { container } = render(
-        <InputRoot isInvalid required>
+        <Input isInvalid required>
           <InputLabel>Username</InputLabel>
           <InputField />
           <InputDescription>Enter your username</InputDescription>
           <InputErrorMessage>Username is required</InputErrorMessage>
-        </InputRoot>,
+        </Input>,
       );
 
       const results = await axe(container);
@@ -65,11 +65,11 @@ describe('Input Accessibility', () => {
 
     it('passes accessibility checks with textarea', async () => {
       const { container } = render(
-        <InputRoot>
+        <Input>
           <InputLabel>Message</InputLabel>
           <InputField as='textarea' />
           <InputDescription>Enter your message</InputDescription>
-        </InputRoot>,
+        </Input>,
       );
 
       const results = await axe(container);
@@ -78,11 +78,11 @@ describe('Input Accessibility', () => {
 
     it('passes accessibility checks in disabled state', async () => {
       const { container } = render(
-        <InputRoot disabled>
+        <Input disabled>
           <InputLabel>Username</InputLabel>
           <InputField />
           <InputDescription>Enter your username</InputDescription>
-        </InputRoot>,
+        </Input>,
       );
 
       const results = await axe(container);
@@ -93,10 +93,10 @@ describe('Input Accessibility', () => {
   describe('ARIA Attributes', () => {
     it('properly links label to field', () => {
       render(
-        <InputRoot>
+        <Input>
           <InputLabel>Username</InputLabel>
           <InputField />
-        </InputRoot>,
+        </Input>,
       );
 
       const label = screen.getByText('Username');
@@ -108,11 +108,11 @@ describe('Input Accessibility', () => {
 
     it('properly links description to field when valid', () => {
       render(
-        <InputRoot>
+        <Input>
           <InputLabel>Username</InputLabel>
           <InputField />
           <InputDescription>Enter your username</InputDescription>
-        </InputRoot>,
+        </Input>,
       );
 
       const description = screen.getByText('Enter your username');
@@ -123,11 +123,11 @@ describe('Input Accessibility', () => {
 
     it('properly links error message to field when invalid', () => {
       render(
-        <InputRoot isInvalid>
+        <Input isInvalid>
           <InputLabel>Username</InputLabel>
           <InputField />
           <InputErrorMessage>Username is required</InputErrorMessage>
-        </InputRoot>,
+        </Input>,
       );
 
       const error = screen.getByText('Username is required');
@@ -139,12 +139,12 @@ describe('Input Accessibility', () => {
 
     it('prioritizes error message over description in aria-describedby', () => {
       render(
-        <InputRoot isInvalid>
+        <Input isInvalid>
           <InputLabel>Username</InputLabel>
           <InputField />
           <InputDescription>Enter your username</InputDescription>
           <InputErrorMessage>Username is required</InputErrorMessage>
-        </InputRoot>,
+        </Input>,
       );
 
       const error = screen.getByText('Username is required');
@@ -155,10 +155,10 @@ describe('Input Accessibility', () => {
 
     it('sets aria-required correctly', () => {
       render(
-        <InputRoot required>
+        <Input required>
           <InputLabel>Username</InputLabel>
           <InputField />
-        </InputRoot>,
+        </Input>,
       );
 
       const field = screen.getByRole('textbox');
@@ -167,20 +167,20 @@ describe('Input Accessibility', () => {
 
     it('sets aria-invalid correctly', () => {
       const { rerender } = render(
-        <InputRoot isInvalid={false}>
+        <Input isInvalid={false}>
           <InputLabel>Username</InputLabel>
           <InputField />
-        </InputRoot>,
+        </Input>,
       );
 
       const field = screen.getByRole('textbox');
       expect(field).toHaveAttribute('aria-invalid', 'false');
 
       rerender(
-        <InputRoot isInvalid={true}>
+        <Input isInvalid={true}>
           <InputLabel>Username</InputLabel>
           <InputField />
-        </InputRoot>,
+        </Input>,
       );
 
       expect(field).toHaveAttribute('aria-invalid', 'true');
@@ -189,14 +189,14 @@ describe('Input Accessibility', () => {
     it('maintains unique IDs across multiple instances', () => {
       render(
         <div>
-          <InputRoot>
+          <Input>
             <InputLabel>First Name</InputLabel>
             <InputField />
-          </InputRoot>
-          <InputRoot>
+          </Input>
+          <Input>
             <InputLabel>Last Name</InputLabel>
             <InputField />
-          </InputRoot>
+          </Input>
         </div>,
       );
 
@@ -215,10 +215,10 @@ describe('Input Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <InputRoot>
+        <Input>
           <InputLabel>Username</InputLabel>
           <InputField />
-        </InputRoot>,
+        </Input>,
       );
 
       const field = screen.getByRole('textbox');
@@ -238,10 +238,10 @@ describe('Input Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <InputRoot>
+        <Input>
           <InputLabel>Username</InputLabel>
           <InputField />
-        </InputRoot>,
+        </Input>,
       );
 
       const field = screen.getByRole('textbox');
@@ -255,10 +255,10 @@ describe('Input Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <InputRoot>
+        <Input>
           <InputLabel>Username</InputLabel>
           <InputField />
-        </InputRoot>,
+        </Input>,
       );
 
       const field = screen.getByRole('textbox');
@@ -276,10 +276,10 @@ describe('Input Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <InputRoot>
+        <Input>
           <InputLabel>Username</InputLabel>
           <InputField />
-        </InputRoot>,
+        </Input>,
       );
 
       const field = screen.getByRole('textbox');
@@ -294,10 +294,10 @@ describe('Input Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <InputRoot disabled>
+        <Input disabled>
           <InputLabel>Username</InputLabel>
           <InputField />
-        </InputRoot>,
+        </Input>,
       );
 
       const field = screen.getByRole('textbox');
@@ -313,10 +313,10 @@ describe('Input Accessibility', () => {
 
     it('should auto-focus when autoFocus is true', async () => {
       render(
-        <InputRoot>
+        <Input>
           <InputLabel>Username</InputLabel>
           <InputField autoFocus />
-        </InputRoot>,
+        </Input>,
       );
 
       const field = screen.getByRole('textbox');
@@ -328,10 +328,10 @@ describe('Input Accessibility', () => {
 
     it('should not auto-focus by default', () => {
       render(
-        <InputRoot>
+        <Input>
           <InputLabel>Username</InputLabel>
           <InputField />
-        </InputRoot>,
+        </Input>,
       );
 
       const field = screen.getByRole('textbox');
@@ -352,11 +352,11 @@ describe('Input Accessibility', () => {
   describe('Screen Reader Support', () => {
     it('announces error messages immediately via role="alert"', () => {
       render(
-        <InputRoot isInvalid>
+        <Input isInvalid>
           <InputLabel>Username</InputLabel>
           <InputField />
           <InputErrorMessage>Username is required</InputErrorMessage>
-        </InputRoot>,
+        </Input>,
       );
 
       const error = screen.getByText('Username is required');
@@ -365,11 +365,11 @@ describe('Input Accessibility', () => {
 
     it('provides context through aria-describedby', () => {
       render(
-        <InputRoot>
+        <Input>
           <InputLabel>Password</InputLabel>
           <InputField type='password' />
           <InputDescription>Must be at least 8 characters</InputDescription>
-        </InputRoot>,
+        </Input>,
       );
 
       const field = screen.getByLabelText('Password');
@@ -380,10 +380,10 @@ describe('Input Accessibility', () => {
 
     it('announces required state', () => {
       render(
-        <InputRoot required>
+        <Input required>
           <InputLabel>Email</InputLabel>
           <InputField type='email' />
-        </InputRoot>,
+        </Input>,
       );
 
       const field = screen.getByRole('textbox');
@@ -393,10 +393,10 @@ describe('Input Accessibility', () => {
 
     it('announces invalid state', () => {
       render(
-        <InputRoot isInvalid>
+        <Input isInvalid>
           <InputLabel>Email</InputLabel>
           <InputField type='email' />
-        </InputRoot>,
+        </Input>,
       );
 
       const field = screen.getByRole('textbox');
@@ -408,10 +408,10 @@ describe('Input Accessibility', () => {
     it('properly associates with form elements', () => {
       render(
         <form>
-          <InputRoot>
+          <Input>
             <InputLabel>Username</InputLabel>
             <InputField name='username' />
-          </InputRoot>
+          </Input>
         </form>,
       );
 
@@ -421,10 +421,10 @@ describe('Input Accessibility', () => {
 
     it('supports form validation attributes', () => {
       render(
-        <InputRoot required>
+        <Input required>
           <InputLabel>Email</InputLabel>
           <InputField type='email' pattern='[^@]+@[^@]+\.[a-zA-Z]{2,}' />
-        </InputRoot>,
+        </Input>,
       );
 
       const field = screen.getByRole('textbox');

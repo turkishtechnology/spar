@@ -3,7 +3,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import {
-  AccordionRoot,
+  Accordion,
   AccordionItem,
   AccordionHeader,
   AccordionTrigger,
@@ -20,8 +20,8 @@ const BasicAccordion = ({
   orientation = 'vertical',
   children,
   ...rest
-}: Partial<React.ComponentProps<typeof AccordionRoot>> = {}) => (
-  <AccordionRoot type={type} isCollapsible={isCollapsible} orientation={orientation} {...rest}>
+}: Partial<React.ComponentProps<typeof Accordion>> = {}) => (
+  <Accordion type={type} isCollapsible={isCollapsible} orientation={orientation} {...rest}>
     {children || (
       <>
         <AccordionItem value='item-1'>
@@ -52,7 +52,7 @@ const BasicAccordion = ({
         </AccordionItem>
       </>
     )}
-  </AccordionRoot>
+  </Accordion>
 );
 
 describe('Accordion Accessibility', () => {
@@ -191,7 +191,7 @@ describe('Accordion Accessibility', () => {
 
     it('should allow custom heading levels', () => {
       render(
-        <AccordionRoot>
+        <Accordion>
           <AccordionItem value='item-1'>
             <AccordionHeader level={1}>
               <AccordionTrigger>Main Heading</AccordionTrigger>
@@ -204,7 +204,7 @@ describe('Accordion Accessibility', () => {
             </AccordionHeader>
             <AccordionContent>Content</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
@@ -491,7 +491,7 @@ describe('Accordion Accessibility', () => {
   describe('Dynamic Content Accessibility', () => {
     it('should maintain accessibility when content is force mounted', async () => {
       const { container } = render(
-        <AccordionRoot type='single'>
+        <Accordion type='single'>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Always Mounted Content</AccordionTrigger>
@@ -500,7 +500,7 @@ describe('Accordion Accessibility', () => {
               <p>This content is always in the DOM</p>
             </AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       const results = await axe(container);
@@ -514,7 +514,7 @@ describe('Accordion Accessibility', () => {
 
     it('should handle accordion with custom polymorphic elements', async () => {
       const { container } = render(
-        <AccordionRoot as='section' data-testid='custom-accordion'>
+        <Accordion as='section' data-testid='custom-accordion'>
           <AccordionItem value='item-1' as='article'>
             <AccordionHeader as='h1'>
               <AccordionTrigger>Custom Elements</AccordionTrigger>
@@ -523,7 +523,7 @@ describe('Accordion Accessibility', () => {
               <p>Content in custom elements</p>
             </AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       const results = await axe(container);

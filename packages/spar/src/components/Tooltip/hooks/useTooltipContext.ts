@@ -6,7 +6,7 @@ export const TooltipContext = createContext<TooltipContextValue | null>(null);
 export const useTooltipContext = () => {
   const context = useContext(TooltipContext);
   if (!context) {
-    throw new Error('Tooltip components must be used within TooltipRoot');
+    throw new Error('Tooltip components must be used within Tooltip');
   }
   return context;
 };

@@ -16,7 +16,7 @@ export interface Padding {
 /**
  * Own props for Select root component
  */
-export interface SelectRootOwnProps {
+export interface SelectOwnProps {
   /**
    * Controlled selected value
    */
@@ -82,11 +82,7 @@ export interface SelectRootOwnProps {
  * Props for Select root component
  * @remarks Fully accessible, headless select component
  */
-export type SelectRootProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  SelectRootOwnProps
->;
+export type SelectProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T, SelectOwnProps>;
 
 /**
  * Render props provided to children function for SelectTrigger

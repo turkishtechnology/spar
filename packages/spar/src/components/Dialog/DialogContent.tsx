@@ -52,7 +52,7 @@ export const DialogContent = <T extends ElementType = 'div'>({
   onOpenAutoFocusRef.current = onOpenAutoFocus;
   initialFocusRef.current = initialFocus;
 
-  // Sync close-focus props to context refs so DialogRoot can handle close focus
+  // Sync close-focus props to context refs so Dialog can handle close focus
   onCloseAutoFocusRef.current = onCloseAutoFocus;
   restoreFocusPropRef.current = restoreFocus;
   finalFocusPropRef.current = finalFocus;

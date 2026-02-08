@@ -2,7 +2,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React, { useState } from 'react';
 import {
-  BreadcrumbRoot,
+  Breadcrumb,
   BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -25,7 +25,7 @@ describe('Breadcrumb Integration', () => {
       };
 
       const TestApp = () => (
-        <BreadcrumbRoot
+        <Breadcrumb
           onNavigate={(href, event) => {
             event.preventDefault();
             mockRouter.push(href);
@@ -48,7 +48,7 @@ describe('Breadcrumb Integration', () => {
               <BreadcrumbPage>Running Shoes</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>
+        </Breadcrumb>
       );
 
       render(<TestApp />);
@@ -66,7 +66,7 @@ describe('Breadcrumb Integration', () => {
       const currentPage = 'Laptops';
 
       const DynamicBreadcrumb = () => (
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             {routes.map((route, index) => (
               <React.Fragment key={route.href}>
@@ -81,7 +81,7 @@ describe('Breadcrumb Integration', () => {
               <BreadcrumbPage>{currentPage}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>
+        </Breadcrumb>
       );
 
       render(<DynamicBreadcrumb />);
@@ -97,7 +97,7 @@ describe('Breadcrumb Integration', () => {
         const isActive = (href: string) => currentPath === href;
 
         return (
-          <BreadcrumbRoot>
+          <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink href='/' disabled={isActive('/')}>
@@ -115,7 +115,7 @@ describe('Breadcrumb Integration', () => {
                 <BreadcrumbPage>Current</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
-          </BreadcrumbRoot>
+          </Breadcrumb>
         );
       };
 
@@ -143,7 +143,7 @@ describe('Breadcrumb Integration', () => {
             handleSubmit();
           }}
         >
-          <BreadcrumbRoot onNavigate={handleNavigate}>
+          <Breadcrumb onNavigate={handleNavigate}>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
@@ -153,7 +153,7 @@ describe('Breadcrumb Integration', () => {
                 <BreadcrumbPage>Form Page</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
-          </BreadcrumbRoot>
+          </Breadcrumb>
           <button type='submit'>Submit Form</button>
         </form>,
       );
@@ -169,7 +169,7 @@ describe('Breadcrumb Integration', () => {
 
         return (
           <div>
-            <BreadcrumbRoot disabled={hasError}>
+            <Breadcrumb disabled={hasError}>
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink href='/form-step-1'>Step 1</BreadcrumbLink>
@@ -183,7 +183,7 @@ describe('Breadcrumb Integration', () => {
                   <BreadcrumbPage>Step 3 (Current)</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
-            </BreadcrumbRoot>
+            </Breadcrumb>
             <button onClick={() => setHasError(false)}>Fix Errors</button>
           </div>
         );
@@ -206,7 +206,7 @@ describe('Breadcrumb Integration', () => {
   describe('Multi-Component Interaction', () => {
     it('should handle complex nested structures', () => {
       const ComplexBreadcrumb = () => (
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/'>
@@ -243,7 +243,7 @@ describe('Breadcrumb Integration', () => {
               </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>
+        </Breadcrumb>
       );
 
       render(<ComplexBreadcrumb />);
@@ -255,7 +255,7 @@ describe('Breadcrumb Integration', () => {
 
     it('should work with conditional rendering', () => {
       const ConditionalBreadcrumb = ({ showCategory }: { showCategory: boolean }) => (
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/'>Home</BreadcrumbLink>
@@ -273,7 +273,7 @@ describe('Breadcrumb Integration', () => {
               <BreadcrumbPage>Current</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>
+        </Breadcrumb>
       );
 
       const { rerender } = render(<ConditionalBreadcrumb showCategory={false} />);
@@ -290,20 +290,20 @@ describe('Breadcrumb Integration', () => {
 
       render(
         <div>
-          <BreadcrumbRoot onNavigate={handleNavigate1} data-testid='breadcrumb-1'>
+          <Breadcrumb onNavigate={handleNavigate1} data-testid='breadcrumb-1'>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink href='/home'>Home 1</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
-          </BreadcrumbRoot>
-          <BreadcrumbRoot onNavigate={handleNavigate2} data-testid='breadcrumb-2'>
+          </Breadcrumb>
+          <Breadcrumb onNavigate={handleNavigate2} data-testid='breadcrumb-2'>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink href='/home'>Home 2</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
-          </BreadcrumbRoot>
+          </Breadcrumb>
         </div>,
       );
 
@@ -338,7 +338,7 @@ describe('Breadcrumb Integration', () => {
         };
 
         return (
-          <BreadcrumbRoot onNavigate={handleNavigate} disabled={isNavigating}>
+          <Breadcrumb onNavigate={handleNavigate} disabled={isNavigating}>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink href='/home'>{isNavigating ? 'Loading...' : 'Home'}</BreadcrumbLink>
@@ -348,7 +348,7 @@ describe('Breadcrumb Integration', () => {
                 <BreadcrumbPage>Current</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
-          </BreadcrumbRoot>
+          </Breadcrumb>
         );
       };
 
@@ -371,7 +371,7 @@ describe('Breadcrumb Integration', () => {
 
     it('should handle loading states for dynamic breadcrumbs', () => {
       const LoadingBreadcrumb = ({ isLoading }: { isLoading: boolean }) => (
-        <BreadcrumbRoot disabled={isLoading}>
+        <Breadcrumb disabled={isLoading}>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/'>Home</BreadcrumbLink>
@@ -381,7 +381,7 @@ describe('Breadcrumb Integration', () => {
               <BreadcrumbPage>{isLoading ? 'Loading...' : 'Loaded Content'}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>
+        </Breadcrumb>
       );
 
       const { rerender } = render(<LoadingBreadcrumb isLoading={true} />);
@@ -400,7 +400,7 @@ describe('Breadcrumb Integration', () => {
       const mockNavigate = jest.fn();
 
       const EcommerceBreadcrumb = () => (
-        <BreadcrumbRoot onNavigate={mockNavigate}>
+        <Breadcrumb onNavigate={mockNavigate}>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/'>Home</BreadcrumbLink>
@@ -422,7 +422,7 @@ describe('Breadcrumb Integration', () => {
               <BreadcrumbPage>MacBook Pro 16"</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>
+        </Breadcrumb>
       );
 
       render(<EcommerceBreadcrumb />);
@@ -441,7 +441,7 @@ describe('Breadcrumb Integration', () => {
 
     it('should handle admin panel breadcrumb with permissions', () => {
       const AdminBreadcrumb = ({ canAccessUsers }: { canAccessUsers: boolean }) => (
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/admin'>Dashboard</BreadcrumbLink>
@@ -457,7 +457,7 @@ describe('Breadcrumb Integration', () => {
               <BreadcrumbPage>Edit User</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>
+        </Breadcrumb>
       );
 
       const { rerender } = render(<AdminBreadcrumb canAccessUsers={false} />);
@@ -471,7 +471,7 @@ describe('Breadcrumb Integration', () => {
     it('should handle search results breadcrumb with query', () => {
       const searchQuery = 'laptop computers';
       const SearchBreadcrumb = () => (
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/'>Home</BreadcrumbLink>
@@ -485,7 +485,7 @@ describe('Breadcrumb Integration', () => {
               <BreadcrumbPage>Results for "{searchQuery}"</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>
+        </Breadcrumb>
       );
 
       render(<SearchBreadcrumb />);
@@ -498,13 +498,13 @@ describe('Breadcrumb Integration', () => {
   describe('Edge Cases and Error Handling', () => {
     it('should handle empty href gracefully', () => {
       render(
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href=''>Empty Link</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       expect(screen.getByText('Empty Link')).toHaveAttribute('href', '');
@@ -516,13 +516,13 @@ describe('Breadcrumb Integration', () => {
       const specialPath = '/products/café & restaurants';
 
       render(
-        <BreadcrumbRoot onNavigate={handleNavigate}>
+        <Breadcrumb onNavigate={handleNavigate}>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href={specialPath}>Café & Restaurants</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       await user.click(screen.getByRole('link', { name: 'Café & Restaurants' }));
@@ -531,7 +531,7 @@ describe('Breadcrumb Integration', () => {
 
     it('should handle very long breadcrumb paths', () => {
       const LongBreadcrumb = () => (
-        <BreadcrumbRoot>
+        <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/level1'>Level 1</BreadcrumbLink>
@@ -549,7 +549,7 @@ describe('Breadcrumb Integration', () => {
               <BreadcrumbPage>Final Level</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>
+        </Breadcrumb>
       );
 
       render(<LongBreadcrumb />);
@@ -564,13 +564,13 @@ describe('Breadcrumb Integration', () => {
       const handleNavigate = jest.fn();
 
       render(
-        <BreadcrumbRoot onNavigate={handleNavigate}>
+        <Breadcrumb onNavigate={handleNavigate}>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href='/test'>Test</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </BreadcrumbRoot>,
+        </Breadcrumb>,
       );
 
       // Navigation callback should be called with correct params
