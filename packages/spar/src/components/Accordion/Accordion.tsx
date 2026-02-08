@@ -1,16 +1,7 @@
-import { createContext, useContext, useMemo, useState, useCallback, ElementType } from 'react';
+import { useMemo, useState, useCallback, ElementType } from 'react';
 import { useItemRegistry } from '@/hooks';
 import type { AccordionProps, AccordionContextValue } from './types';
-
-const AccordionContext = createContext<AccordionContextValue | null>(null);
-
-export const useAccordionContext = () => {
-  const context = useContext(AccordionContext);
-  if (!context) {
-    throw new Error('Accordion components must be used within an Accordion');
-  }
-  return context;
-};
+import { AccordionContext } from './hooks';
 
 /**
  * Accordion root component providing context and state management for accordion items. Supports single or multiple panel expansion with full keyboard navigation.
