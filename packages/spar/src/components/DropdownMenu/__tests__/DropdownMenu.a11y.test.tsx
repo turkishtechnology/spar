@@ -2,7 +2,7 @@ import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import {
-  DropdownMenuRoot,
+  DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -29,13 +29,13 @@ describe('DropdownMenu Accessibility', () => {
   describe('WCAG Compliance', () => {
     it('should have no accessibility violations when closed', async () => {
       const { container } = render(
-        <DropdownMenuRoot>
+        <DropdownMenu>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
             <DropdownMenuItem>Item 2</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const results = await axe(container);
@@ -44,7 +44,7 @@ describe('DropdownMenu Accessibility', () => {
 
     it('should have no accessibility violations when open', async () => {
       const { container } = render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
@@ -53,7 +53,7 @@ describe('DropdownMenu Accessibility', () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem disabled>Delete</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const results = await axe(container);
@@ -62,7 +62,7 @@ describe('DropdownMenu Accessibility', () => {
 
     it('should have no accessibility violations with checkbox items', async () => {
       const { container } = render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuGroup>
@@ -74,7 +74,7 @@ describe('DropdownMenu Accessibility', () => {
               </DropdownMenuCheckboxItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const results = await axe(container);
@@ -83,7 +83,7 @@ describe('DropdownMenu Accessibility', () => {
 
     it('should have no accessibility violations with radio items', async () => {
       const { container } = render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuRadioGroup value='light'>
@@ -93,7 +93,7 @@ describe('DropdownMenu Accessibility', () => {
               <DropdownMenuRadioItem value='system'>System</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const results = await axe(container);
@@ -102,7 +102,7 @@ describe('DropdownMenu Accessibility', () => {
 
     it('should have no accessibility violations with submenus', async () => {
       const { container } = render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>New File</DropdownMenuItem>
@@ -114,7 +114,7 @@ describe('DropdownMenu Accessibility', () => {
               </DropdownMenuSubContent>
             </DropdownMenuSub>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const results = await axe(container);
@@ -125,14 +125,14 @@ describe('DropdownMenu Accessibility', () => {
   describe('ARIA Attributes', () => {
     it('should have proper ARIA roles for menu structure', () => {
       render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Item 2</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       // Trigger should have proper role and attributes
@@ -156,14 +156,14 @@ describe('DropdownMenu Accessibility', () => {
 
     it('should have proper ARIA attributes for checkbox items', () => {
       render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuCheckboxItem checked={true}>Checked Item</DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem checked={false}>Unchecked Item</DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem checked='indeterminate'>Mixed Item</DropdownMenuCheckboxItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const checkboxItems = screen.getAllByRole('menuitemcheckbox');
@@ -175,7 +175,7 @@ describe('DropdownMenu Accessibility', () => {
 
     it('should have proper ARIA attributes for radio items', () => {
       render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuRadioGroup value='option1'>
@@ -183,7 +183,7 @@ describe('DropdownMenu Accessibility', () => {
               <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const radioItems = screen.getAllByRole('menuitemradio');
@@ -194,13 +194,13 @@ describe('DropdownMenu Accessibility', () => {
 
     it('should have proper disabled state attributes', () => {
       render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger disabled>Disabled Trigger</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Enabled Item</DropdownMenuItem>
             <DropdownMenuItem disabled>Disabled Item</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const trigger = screen.getByRole('button');
@@ -218,13 +218,13 @@ describe('DropdownMenu Accessibility', () => {
     it('should open menu with Arrow Down key', async () => {
       const user = userEvent.setup();
       render(
-        <DropdownMenuRoot>
+        <DropdownMenu>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
             <DropdownMenuItem>Item 2</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const trigger = screen.getByRole('button');
@@ -242,13 +242,13 @@ describe('DropdownMenu Accessibility', () => {
     it('should open menu with Arrow Up key', async () => {
       const user = userEvent.setup();
       render(
-        <DropdownMenuRoot>
+        <DropdownMenu>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
             <DropdownMenuItem>Item 2</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const trigger = screen.getByRole('button');
@@ -266,12 +266,12 @@ describe('DropdownMenu Accessibility', () => {
     it('should toggle menu with Enter key', async () => {
       const user = userEvent.setup();
       render(
-        <DropdownMenuRoot>
+        <DropdownMenu>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const trigger = screen.getByRole('button');
@@ -291,12 +291,12 @@ describe('DropdownMenu Accessibility', () => {
     it('should toggle menu with Space key', async () => {
       const user = userEvent.setup();
       render(
-        <DropdownMenuRoot>
+        <DropdownMenu>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const trigger = screen.getByRole('button');
@@ -313,12 +313,12 @@ describe('DropdownMenu Accessibility', () => {
     it('should close menu with Escape key', async () => {
       const user = userEvent.setup();
       render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
@@ -339,12 +339,12 @@ describe('DropdownMenu Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onSelect={onSelect}>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const item = screen.getByRole('menuitem');
@@ -362,12 +362,12 @@ describe('DropdownMenu Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onSelect={onSelect}>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const item = screen.getByRole('menuitem');
@@ -384,14 +384,14 @@ describe('DropdownMenu Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuCheckboxItem checked={false} onCheckedChange={onCheckedChange}>
               Checkbox Item
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const item = screen.getByRole('menuitemcheckbox');
@@ -405,7 +405,7 @@ describe('DropdownMenu Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuRadioGroup value='option1' onValueChange={onValueChange}>
@@ -413,7 +413,7 @@ describe('DropdownMenu Accessibility', () => {
               <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const radioItems = screen.getAllByRole('menuitemradio');
@@ -428,12 +428,12 @@ describe('DropdownMenu Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenuRoot onOpenChange={onOpenChange}>
+        <DropdownMenu onOpenChange={onOpenChange}>
           <DropdownMenuTrigger disabled>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const trigger = screen.getByRole('button');
@@ -454,14 +454,14 @@ describe('DropdownMenu Accessibility', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem disabled onSelect={onSelect}>
               Disabled Item
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const item = screen.getByRole('menuitem');
@@ -480,7 +480,7 @@ describe('DropdownMenu Accessibility', () => {
     it('should have proper tabIndex values', async () => {
       const user = userEvent.setup();
       render(
-        <DropdownMenuRoot>
+        <DropdownMenu>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Enabled Item</DropdownMenuItem>
@@ -490,7 +490,7 @@ describe('DropdownMenu Accessibility', () => {
               <DropdownMenuRadioItem value='option1'>Option 1</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       // Open the menu with multiple approaches to ensure focus strategy is set
@@ -565,13 +565,13 @@ describe('DropdownMenu Accessibility', () => {
       render(
         <div>
           <button>Before</button>
-          <DropdownMenuRoot defaultOpen={true}>
+          <DropdownMenu defaultOpen={true}>
             <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem>Item 1</DropdownMenuItem>
               <DropdownMenuItem>Item 2</DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenuRoot>
+          </DropdownMenu>
           <button>After</button>
         </div>,
       );
@@ -594,24 +594,24 @@ describe('DropdownMenu Accessibility', () => {
   describe('Screen Reader Support', () => {
     it('should announce menu state changes', () => {
       const { rerender } = render(
-        <DropdownMenuRoot open={false}>
+        <DropdownMenu open={false}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const trigger = screen.getByRole('button');
       expect(trigger).toHaveAttribute('aria-expanded', 'false');
 
       rerender(
-        <DropdownMenuRoot open={true}>
+        <DropdownMenu open={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       expect(trigger).toHaveAttribute('aria-expanded', 'true');
@@ -619,7 +619,7 @@ describe('DropdownMenu Accessibility', () => {
 
     it('should provide proper labels for menu structure', () => {
       render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>File Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuGroup>
@@ -628,7 +628,7 @@ describe('DropdownMenu Accessibility', () => {
               <DropdownMenuItem>Document 2</DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const trigger = screen.getByRole('button', { name: 'File Menu' });
@@ -643,7 +643,7 @@ describe('DropdownMenu Accessibility', () => {
 
     it('should announce checkbox item states', () => {
       render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Options Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuCheckboxItem checked={true}>Checked Option</DropdownMenuCheckboxItem>
@@ -652,7 +652,7 @@ describe('DropdownMenu Accessibility', () => {
               Mixed Option
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const checkboxItems = screen.getAllByRole('menuitemcheckbox');
@@ -664,7 +664,7 @@ describe('DropdownMenu Accessibility', () => {
 
     it('should announce radio item states and group', () => {
       render(
-        <DropdownMenuRoot defaultOpen={true}>
+        <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Theme Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuRadioGroup value='dark'>
@@ -673,7 +673,7 @@ describe('DropdownMenu Accessibility', () => {
               <DropdownMenuRadioItem value='auto'>Auto Theme</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const radioGroup = screen.getByRole('group');

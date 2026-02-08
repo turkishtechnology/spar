@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
-import type { PopoverRootProps, PopoverContextValue } from './types';
+import type { PopoverProps, PopoverContextValue } from './types';
 import { PopoverContext } from './hooks/usePopoverContext';
 import { usePopover } from './hooks/usePopover';
 
 /**
  * Root container component that provides context for popover state
  */
-export const PopoverRoot = ({ children, ...props }: PopoverRootProps) => {
+export const Popover = ({ children, ...props }: PopoverProps) => {
   const popoverState = usePopover(props);
 
   const contextValue: PopoverContextValue = useMemo(
@@ -53,4 +53,4 @@ export const PopoverRoot = ({ children, ...props }: PopoverRootProps) => {
   );
 };
 
-PopoverRoot.displayName = 'PopoverRoot';
+Popover.displayName = 'Popover';

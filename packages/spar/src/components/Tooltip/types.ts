@@ -59,10 +59,10 @@ export interface TooltipProviderProps {
 }
 
 /**
- * Props for TooltipRoot
+ * Props for Tooltip
  * @remarks Root component that manages tooltip state
  */
-export interface TooltipRootProps {
+export interface TooltipProps {
   /**
    * Tooltip trigger and content components
    */

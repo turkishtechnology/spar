@@ -1,5 +1,5 @@
 export { Dialog } from './Dialog';
-export { DialogRoot } from './DialogRoot';
+export { Dialog as DialogRoot } from './Dialog';
 export { DialogTrigger } from './DialogTrigger';
 export { DialogPortal } from './DialogPortal';
 export { DialogOverlay } from './DialogOverlay';
@@ -10,7 +10,7 @@ export { DialogClose } from './DialogClose';
 export { useDialogContext } from './hooks';
 
 export type {
-  DialogRootProps,
+  DialogProps,
   DialogTriggerProps,
   DialogTriggerRenderProps,
   DialogPortalProps,

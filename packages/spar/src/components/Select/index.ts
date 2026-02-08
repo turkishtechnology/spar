@@ -1,5 +1,5 @@
-export { SelectRoot } from './SelectRoot';
-export { SelectRoot as Select } from './SelectRoot';
+export { Select } from './Select';
+export { Select as SelectRoot } from './Select';
 export { SelectTrigger } from './SelectTrigger';
 export { SelectValue } from './SelectValue';
 export { SelectIcon } from './SelectIcon';
@@ -18,7 +18,7 @@ export { useSelectGroupContext } from './hooks';
 export { useSelectItemContext } from './hooks';
 
 export type {
-  SelectRootProps,
+  SelectProps,
   SelectTriggerProps,
   SelectTriggerRenderProps,
   SelectValueProps,

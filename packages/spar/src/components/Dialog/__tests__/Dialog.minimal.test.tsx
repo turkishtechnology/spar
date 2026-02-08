@@ -1,21 +1,21 @@
 import { render } from '@testing-library/react';
-import { DialogRoot } from '../DialogRoot';
+import { Dialog } from '../Dialog';
 import { DialogTrigger } from '../DialogTrigger';
 
 describe('Dialog Minimal Test', () => {
-  it('should render DialogRoot without crashing', () => {
+  it('should render Dialog without crashing', () => {
     render(
-      <DialogRoot>
+      <Dialog>
         <div>Simple child</div>
-      </DialogRoot>,
+      </Dialog>,
     );
   });
 
-  it('should render DialogRoot with DialogTrigger', () => {
+  it('should render Dialog with DialogTrigger', () => {
     render(
-      <DialogRoot>
+      <Dialog>
         <DialogTrigger>Open Dialog</DialogTrigger>
-      </DialogRoot>,
+      </Dialog>,
     );
   });
 });

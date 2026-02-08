@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { PopoverRoot } from '../Popover';
+import { Popover } from '../Popover';
 import { PopoverTrigger } from '../PopoverTrigger';
 import { PopoverContent } from '../PopoverContent';
 import { PopoverArrow } from '../PopoverArrow';
@@ -9,13 +9,13 @@ import { PopoverAnchor } from '../PopoverAnchor';
 import { PopoverPortal } from '../PopoverPortal';
 import { PopoverClose } from '../PopoverClose';
 
-describe('PopoverRoot', () => {
+describe('Popover', () => {
   it('renders children without errors', () => {
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
     expect(screen.getByRole('button', { name: 'Open' })).toBeInTheDocument();
   });
@@ -24,10 +24,10 @@ describe('PopoverRoot', () => {
     const onOpenChange = jest.fn();
 
     render(
-      <PopoverRoot onOpenChange={onOpenChange}>
+      <Popover onOpenChange={onOpenChange}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'false');
@@ -38,10 +38,10 @@ describe('PopoverRoot', () => {
     const onOpenChange = jest.fn();
 
     const { rerender } = render(
-      <PopoverRoot open={false} onOpenChange={onOpenChange}>
+      <Popover open={false} onOpenChange={onOpenChange}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'false');
@@ -51,10 +51,10 @@ describe('PopoverRoot', () => {
     expect(onOpenChange).toHaveBeenCalledWith(true);
 
     rerender(
-      <PopoverRoot open={true} onOpenChange={onOpenChange}>
+      <Popover open={true} onOpenChange={onOpenChange}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await waitFor(() => {
@@ -66,10 +66,10 @@ describe('PopoverRoot', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot defaultOpen={true}>
+      <Popover defaultOpen={true}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await waitFor(() => {
@@ -85,10 +85,10 @@ describe('PopoverRoot', () => {
 
   it('supports custom positioning props', () => {
     render(
-      <PopoverRoot side='top' align='start' sideOffset={16}>
+      <Popover side='top' align='start' sideOffset={16}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     expect(screen.getByRole('button')).toBeInTheDocument();
@@ -98,10 +98,10 @@ describe('PopoverRoot', () => {
     const user = userEvent.setup();
 
     const { container } = render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const root = container.firstChild as HTMLElement;
@@ -119,10 +119,10 @@ describe('PopoverRoot', () => {
     const onOpenChange = jest.fn();
 
     render(
-      <PopoverRoot disabled onOpenChange={onOpenChange}>
+      <Popover disabled onOpenChange={onOpenChange}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const trigger = screen.getByRole('button');
@@ -139,10 +139,10 @@ describe('PopoverRoot', () => {
     const onOpenChange = jest.fn();
 
     render(
-      <PopoverRoot disabled={false} onOpenChange={onOpenChange}>
+      <Popover disabled={false} onOpenChange={onOpenChange}>
         <PopoverTrigger disabled>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const trigger = screen.getByRole('button');
@@ -157,10 +157,10 @@ describe('PopoverRoot', () => {
     const onOpenChange = jest.fn();
 
     render(
-      <PopoverRoot disabled onOpenChange={onOpenChange}>
+      <Popover disabled onOpenChange={onOpenChange}>
         <PopoverTrigger disabled={false}>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const trigger = screen.getByRole('button');
@@ -174,10 +174,10 @@ describe('PopoverRoot', () => {
 describe('PopoverTrigger', () => {
   it('renders as button by default', () => {
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Click me</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const trigger = screen.getByRole('button', { name: 'Click me' });
@@ -187,10 +187,10 @@ describe('PopoverTrigger', () => {
 
   it('supports render props pattern for state access', () => {
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>{({ isOpen }) => <span>{isOpen ? 'Close' : 'Open'}</span>}</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const trigger = screen.getByRole('button');
@@ -201,10 +201,10 @@ describe('PopoverTrigger', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger disabled>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const trigger = screen.getByRole('button');
@@ -219,10 +219,10 @@ describe('PopoverTrigger', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const trigger = screen.getByRole('button');
@@ -244,10 +244,10 @@ describe('PopoverTrigger', () => {
 
   it('supports keyboard interactions', async () => {
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const trigger = screen.getByRole('button');
@@ -294,10 +294,10 @@ describe('PopoverTrigger', () => {
     const handleClick = jest.fn();
 
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger onClick={handleClick}>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await user.click(screen.getByRole('button'));
@@ -306,10 +306,10 @@ describe('PopoverTrigger', () => {
 
   it('sets proper ARIA attributes', () => {
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const trigger = screen.getByRole('button');
@@ -322,10 +322,10 @@ describe('PopoverTrigger', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const trigger = screen.getByRole('button');
@@ -342,10 +342,10 @@ describe('PopoverContent', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Test content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     expect(screen.queryByText('Test content')).not.toBeInTheDocument();
@@ -358,10 +358,10 @@ describe('PopoverContent', () => {
 
   it('does not render when popover is closed', () => {
     render(
-      <PopoverRoot open={false}>
+      <Popover open={false}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Test content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     expect(screen.queryByText('Test content')).not.toBeInTheDocument();
@@ -371,12 +371,12 @@ describe('PopoverContent', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent side='top' align='start'>
           Content
         </PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await user.click(screen.getByRole('button'));
@@ -394,10 +394,10 @@ describe('PopoverContent', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot modal={true}>
+      <Popover modal={true}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Modal content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await user.click(screen.getByRole('button'));
@@ -413,10 +413,10 @@ describe('PopoverContent', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await user.click(screen.getByRole('button'));
@@ -435,10 +435,10 @@ describe('PopoverContent', () => {
 
     render(
       <div>
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>
+        </Popover>
         <div>Outside element</div>
       </div>,
     );
@@ -462,7 +462,7 @@ describe('PopoverContent', () => {
 
     render(
       <div>
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open</PopoverTrigger>
           <PopoverContent
             onEscapeKeyDown={onEscapeKeyDown}
@@ -471,7 +471,7 @@ describe('PopoverContent', () => {
           >
             Content
           </PopoverContent>
-        </PopoverRoot>
+        </Popover>
         <div>Outside</div>
       </div>,
     );
@@ -498,13 +498,13 @@ describe('PopoverContent', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent trapFocus={true}>
           <button>First</button>
           <button>Last</button>
         </PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await user.click(screen.getByRole('button', { name: 'Open' }));
@@ -532,14 +532,14 @@ describe('PopoverContent', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>
           <button>First</button>
           <button>Middle</button>
           <button>Last</button>
         </PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await user.click(screen.getByRole('button', { name: 'Open' }));
@@ -562,13 +562,13 @@ describe('PopoverArrow', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>
           Content
           <PopoverArrow data-testid='arrow' />
         </PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     expect(screen.queryByTestId('arrow')).not.toBeInTheDocument();
@@ -581,13 +581,13 @@ describe('PopoverArrow', () => {
 
   it('does not render when popover is closed', () => {
     render(
-      <PopoverRoot open={false}>
+      <Popover open={false}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>
           Content
           <PopoverArrow data-testid='arrow' />
         </PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     expect(screen.queryByTestId('arrow')).not.toBeInTheDocument();
@@ -597,13 +597,13 @@ describe('PopoverArrow', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>
           Content
           <PopoverArrow width={20} height={10} offset={5} data-testid='arrow' />
         </PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await user.click(screen.getByRole('button'));
@@ -618,13 +618,13 @@ describe('PopoverArrow', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>
           Content
           <PopoverArrow data-testid='arrow' />
         </PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await user.click(screen.getByRole('button'));
@@ -638,11 +638,11 @@ describe('PopoverArrow', () => {
 describe('PopoverAnchor', () => {
   it('renders as div by default', () => {
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverAnchor data-testid='anchor'>Anchor</PopoverAnchor>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const anchor = screen.getByTestId('anchor');
@@ -652,13 +652,13 @@ describe('PopoverAnchor', () => {
 
   it('supports render props pattern for state access', () => {
     render(
-      <PopoverRoot defaultOpen>
+      <Popover defaultOpen>
         <PopoverAnchor data-testid='anchor'>
           {({ isOpen }) => <span>{isOpen ? 'Open' : 'Closed'}</span>}
         </PopoverAnchor>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const anchor = screen.getByTestId('anchor');
@@ -670,12 +670,12 @@ describe('PopoverAnchor', () => {
 describe('PopoverPortal', () => {
   it('renders children in document.body by default', () => {
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverPortal>
           <div data-testid='portal-content'>Portal content</div>
         </PopoverPortal>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const portalContent = screen.getByTestId('portal-content');
@@ -688,12 +688,12 @@ describe('PopoverPortal', () => {
     document.body.appendChild(customContainer);
 
     render(
-      <PopoverRoot>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverPortal container={customContainer}>
           <div data-testid='portal-content'>Portal content</div>
         </PopoverPortal>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     const portalContent = screen.getByTestId('portal-content');
@@ -707,12 +707,12 @@ describe('PopoverPortal', () => {
 describe('PopoverClose', () => {
   it('renders as button by default', async () => {
     render(
-      <PopoverRoot defaultOpen={true}>
+      <Popover defaultOpen={true}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>
           <PopoverClose>Close</PopoverClose>
         </PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await waitFor(() => {
@@ -724,14 +724,14 @@ describe('PopoverClose', () => {
 
   it('supports render props pattern for state access', async () => {
     render(
-      <PopoverRoot defaultOpen={true}>
+      <Popover defaultOpen={true}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>
           <PopoverClose>
             {({ isOpen }) => <span>{isOpen ? 'Close popover' : 'Hidden'}</span>}
           </PopoverClose>
         </PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await waitFor(() => {
@@ -745,13 +745,13 @@ describe('PopoverClose', () => {
     const user = userEvent.setup();
 
     render(
-      <PopoverRoot defaultOpen={true}>
+      <Popover defaultOpen={true}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>
           Content
           <PopoverClose>Close</PopoverClose>
         </PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await waitFor(() => {
@@ -770,12 +770,12 @@ describe('PopoverClose', () => {
     const handleClick = jest.fn();
 
     render(
-      <PopoverRoot defaultOpen={true}>
+      <Popover defaultOpen={true}>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>
           <PopoverClose onClick={handleClick}>Close</PopoverClose>
         </PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await user.click(screen.getByRole('button', { name: 'Close' }));
@@ -784,32 +784,32 @@ describe('PopoverClose', () => {
 });
 
 describe('Error Handling', () => {
-  it('throws error when PopoverTrigger is used outside PopoverRoot', () => {
+  it('throws error when PopoverTrigger is used outside Popover', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
 
     expect(() => {
       render(<PopoverTrigger>Trigger</PopoverTrigger>);
-    }).toThrow('Popover components must be used within PopoverRoot');
+    }).toThrow('Popover components must be used within Popover');
 
     jest.restoreAllMocks();
   });
 
-  it('throws error when PopoverContent is used outside PopoverRoot', () => {
+  it('throws error when PopoverContent is used outside Popover', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
 
     expect(() => {
       render(<PopoverContent>Content</PopoverContent>);
-    }).toThrow('Popover components must be used within PopoverRoot');
+    }).toThrow('Popover components must be used within Popover');
 
     jest.restoreAllMocks();
   });
 
-  it('throws error when PopoverClose is used outside PopoverRoot', () => {
+  it('throws error when PopoverClose is used outside Popover', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
 
     expect(() => {
       render(<PopoverClose>Close</PopoverClose>);
-    }).toThrow('Popover components must be used within PopoverRoot');
+    }).toThrow('Popover components must be used within Popover');
 
     jest.restoreAllMocks();
   });

@@ -3,7 +3,7 @@ import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   TooltipProvider,
-  TooltipRoot,
+  Tooltip,
   TooltipTrigger,
   TooltipContent,
   TooltipPortal,
@@ -49,12 +49,12 @@ const BasicTooltip = ({
   ...props
 }: BasicTooltipProps) => (
   <TooltipProvider>
-    <TooltipRoot defaultOpen={defaultOpen} {...props}>
+    <Tooltip defaultOpen={defaultOpen} {...props}>
       <TooltipTrigger>Trigger</TooltipTrigger>
       <TooltipPortal>
         <TooltipContent asLabel={asLabel}>{children}</TooltipContent>
       </TooltipPortal>
-    </TooltipRoot>
+    </Tooltip>
   </TooltipProvider>
 );
 
@@ -93,7 +93,7 @@ describe('TooltipProvider', () => {
   });
 });
 
-describe('TooltipRoot', () => {
+describe('Tooltip', () => {
   it('provides context to child components', () => {
     render(<BasicTooltip />);
     expect(screen.getByRole('button', { name: 'Trigger' })).toBeInTheDocument();
@@ -126,9 +126,9 @@ describe('TooltipRoot', () => {
   it('overrides provider delay settings', () => {
     render(
       <TooltipProvider delayDuration={1000}>
-        <TooltipRoot delay={100} hideDelay={50}>
+        <Tooltip delay={100} hideDelay={50}>
           <TooltipTrigger>Custom delay trigger</TooltipTrigger>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 
@@ -144,9 +144,9 @@ describe('TooltipTrigger', () => {
   it('renders button by default', () => {
     render(
       <TooltipProvider>
-        <TooltipRoot>
+        <Tooltip>
           <TooltipTrigger>Trigger content</TooltipTrigger>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 
@@ -156,9 +156,9 @@ describe('TooltipTrigger', () => {
   it('supports polymorphic as prop', () => {
     render(
       <TooltipProvider>
-        <TooltipRoot>
+        <Tooltip>
           <TooltipTrigger as='span'>Span trigger</TooltipTrigger>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 
@@ -168,14 +168,14 @@ describe('TooltipTrigger', () => {
   it('supports render props pattern for state access', () => {
     render(
       <TooltipProvider>
-        <TooltipRoot defaultOpen>
+        <Tooltip defaultOpen>
           <TooltipTrigger>
             {({ isOpen }) => <span>{isOpen ? 'Open' : 'Closed'}</span>}
           </TooltipTrigger>
           <TooltipPortal>
             <TooltipContent>Content</TooltipContent>
           </TooltipPortal>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 
@@ -303,12 +303,12 @@ describe('TooltipContent', () => {
   it('supports polymorphic as prop', () => {
     render(
       <TooltipProvider>
-        <TooltipRoot defaultOpen>
+        <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent as='section'>Section content</TooltipContent>
           </TooltipPortal>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 
@@ -349,14 +349,14 @@ describe('TooltipContent', () => {
   it('accepts positioning props', () => {
     render(
       <TooltipProvider>
-        <TooltipRoot defaultOpen>
+        <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent side='bottom' sideOffset={16} align='start'>
               Positioned content
             </TooltipContent>
           </TooltipPortal>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 
@@ -369,14 +369,14 @@ describe('TooltipContent', () => {
     const customStyle = { backgroundColor: 'red' };
     render(
       <TooltipProvider>
-        <TooltipRoot defaultOpen>
+        <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent className='custom-class' style={customStyle}>
               Styled content
             </TooltipContent>
           </TooltipPortal>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 
@@ -390,12 +390,12 @@ describe('TooltipContent', () => {
 
     render(
       <TooltipProvider>
-        <TooltipRoot defaultOpen>
+        <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent onEscapeKeyDown={handleEscape}>Content</TooltipContent>
           </TooltipPortal>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 
@@ -434,12 +434,12 @@ describe('TooltipPortal', () => {
   it('supports forceMount prop', () => {
     render(
       <TooltipProvider>
-        <TooltipRoot>
+        <Tooltip>
           <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal forceMount>
             <TooltipContent>Always mounted</TooltipContent>
           </TooltipPortal>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 
@@ -456,12 +456,12 @@ describe('TooltipPortal', () => {
 
     render(
       <TooltipProvider>
-        <TooltipRoot defaultOpen>
+        <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal container={customContainer}>
             <TooltipContent>Portal content</TooltipContent>
           </TooltipPortal>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 
@@ -474,7 +474,7 @@ describe('TooltipArrow', () => {
   it('renders svg arrow by default', () => {
     render(
       <TooltipProvider>
-        <TooltipRoot defaultOpen>
+        <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent>
@@ -482,7 +482,7 @@ describe('TooltipArrow', () => {
               <TooltipArrow />
             </TooltipContent>
           </TooltipPortal>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 
@@ -494,7 +494,7 @@ describe('TooltipArrow', () => {
   it('supports custom dimensions', () => {
     render(
       <TooltipProvider>
-        <TooltipRoot defaultOpen>
+        <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent>
@@ -502,7 +502,7 @@ describe('TooltipArrow', () => {
               <TooltipArrow width={20} height={10} />
             </TooltipContent>
           </TooltipPortal>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 
@@ -514,7 +514,7 @@ describe('TooltipArrow', () => {
   it('supports polymorphic as prop', () => {
     render(
       <TooltipProvider>
-        <TooltipRoot defaultOpen>
+        <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent>
@@ -522,7 +522,7 @@ describe('TooltipArrow', () => {
               <TooltipArrow as='div' />
             </TooltipContent>
           </TooltipPortal>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 
@@ -533,7 +533,7 @@ describe('TooltipArrow', () => {
   it('forwards style and className props', () => {
     render(
       <TooltipProvider>
-        <TooltipRoot defaultOpen>
+        <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipPortal>
             <TooltipContent>
@@ -541,7 +541,7 @@ describe('TooltipArrow', () => {
               <TooltipArrow className='custom-arrow' style={{ color: 'blue' }} />
             </TooltipContent>
           </TooltipPortal>
-        </TooltipRoot>
+        </Tooltip>
       </TooltipProvider>,
     );
 

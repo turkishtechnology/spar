@@ -1,12 +1,12 @@
 import { useId, useMemo, useState, useCallback, useRef, type ElementType } from 'react';
 import { useItemRegistry } from '@/hooks';
 import { SelectContext } from './hooks';
-import type { SelectRootProps, SelectContextValue, SelectItemData } from './types';
+import type { SelectProps, SelectContextValue, SelectItemData } from './types';
 
 /**
  * Select root component providing context and state management for all select components. Supports controlled and uncontrolled patterns with full keyboard navigation and accessibility.
  */
-export const SelectRoot = <T extends ElementType = 'div'>({
+export const Select = <T extends ElementType = 'div'>({
   value: controlledValue,
   defaultValue,
   onValueChange,
@@ -21,7 +21,7 @@ export const SelectRoot = <T extends ElementType = 'div'>({
   as,
   children,
   ...props
-}: SelectRootProps<T>) => {
+}: SelectProps<T>) => {
   const Component = as || 'div';
   // State management for value
   const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue);
@@ -162,4 +162,4 @@ export const SelectRoot = <T extends ElementType = 'div'>({
   );
 };
 
-SelectRoot.displayName = 'SelectRoot';
+Select.displayName = 'Select';

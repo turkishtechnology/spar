@@ -55,10 +55,10 @@ export interface PopoverCloseRenderProps {
 }
 
 /**
- * Props for PopoverRoot component
+ * Props for Popover component
  * @remarks Fully accessible, headless popover root container
  */
-export interface PopoverRootProps {
+export interface PopoverProps {
   /**
    * Controlled state for popover visibility
    */

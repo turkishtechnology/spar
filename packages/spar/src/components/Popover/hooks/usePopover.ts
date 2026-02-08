@@ -10,13 +10,13 @@ import {
   hide,
   type Strategy,
 } from '@floating-ui/react-dom';
-import type { PopoverRootProps, PopoverState, PopoverSide, PopoverAlign } from '../types';
+import type { PopoverProps, PopoverState, PopoverSide, PopoverAlign } from '../types';
 import { getPlacement } from '../utils';
 
 /**
  * Custom hook for popover state management with Floating UI
  */
-export const usePopover = (props: Omit<PopoverRootProps, 'children'>) => {
+export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   const {
     open: controlledOpen,
     onOpenChange,

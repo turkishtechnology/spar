@@ -15,10 +15,10 @@ export interface InputContextValue {
 }
 
 /**
- * Props for InputRoot
+ * Props for Input
  * @remarks Provides state context for compound input elements
  */
-export interface InputRootProps extends ComponentProps<'div'> {
+export interface InputProps extends ComponentProps<'div'> {
   /**
    * Input validation state
    * @defaultValue false

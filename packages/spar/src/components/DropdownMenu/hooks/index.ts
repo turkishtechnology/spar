@@ -1,4 +1,4 @@
-export { DropdownMenuContext, useDropdownMenuRootContext } from './useDropdownMenuContext';
+export { DropdownMenuContext, useDropdownMenuContext } from './useDropdownMenuContext';
 export {
   DropdownMenuSubContext,
   useDropdownMenuSubContext,

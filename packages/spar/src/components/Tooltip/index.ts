@@ -1,6 +1,6 @@
 export { TooltipProvider } from './TooltipProvider';
-export { TooltipRoot } from './TooltipRoot';
-export { TooltipRoot as Tooltip } from './TooltipRoot';
+export { Tooltip } from './Tooltip';
+export { Tooltip as TooltipRoot } from './Tooltip';
 export { TooltipTrigger } from './TooltipTrigger';
 export { TooltipContent } from './TooltipContent';
 export { TooltipPortal } from './TooltipPortal';
@@ -8,7 +8,7 @@ export { TooltipArrow } from './TooltipArrow';
 
 export type {
   TooltipProviderProps,
-  TooltipRootProps,
+  TooltipProps,
   TooltipTriggerProps,
   TooltipTriggerRenderProps,
   TooltipContentProps,

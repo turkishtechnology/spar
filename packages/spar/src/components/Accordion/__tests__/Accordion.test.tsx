@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
-  AccordionRoot,
+  Accordion,
   AccordionItem,
   AccordionHeader,
   AccordionTrigger,
@@ -20,8 +20,8 @@ const BasicAccordion = ({
   orientation = 'vertical',
   children,
   ...rest
-}: Partial<React.ComponentProps<typeof AccordionRoot>> = {}) => (
-  <AccordionRoot
+}: Partial<React.ComponentProps<typeof Accordion>> = {}) => (
+  <Accordion
     type={type}
     isCollapsible={isCollapsible}
     {...(value !== undefined && { value })}
@@ -53,7 +53,7 @@ const BasicAccordion = ({
         </AccordionItem>
       </>
     )}
-  </AccordionRoot>
+  </Accordion>
 );
 
 describe('Accordion', () => {
@@ -80,14 +80,14 @@ describe('Accordion', () => {
 
     it('should render with custom as prop', () => {
       const { container } = render(
-        <AccordionRoot as='section'>
+        <Accordion as='section'>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       expect(container.firstChild).toHaveProperty('tagName', 'SECTION');
@@ -333,14 +333,14 @@ describe('Accordion', () => {
       const onClick = jest.fn();
 
       render(
-        <AccordionRoot type='single' onValueChange={onValueChange}>
+        <Accordion type='single' onValueChange={onValueChange}>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger onClick={onClick}>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Item 1' });
@@ -381,9 +381,9 @@ describe('Accordion', () => {
 
       expect(() => {
         render(
-          <AccordionRoot>
+          <Accordion>
             <AccordionTrigger>Trigger</AccordionTrigger>
-          </AccordionRoot>,
+          </Accordion>,
         );
       }).toThrow('AccordionItem components must be used within an AccordionItem');
 
@@ -400,14 +400,14 @@ describe('Accordion', () => {
     it('should handle single item accordion', async () => {
       const user = userEvent.setup();
       render(
-        <AccordionRoot type='single'>
+        <Accordion type='single'>
           <AccordionItem value='only-item'>
             <AccordionHeader>
               <AccordionTrigger>Only Item</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Only Content</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Only Item' });
@@ -419,14 +419,14 @@ describe('Accordion', () => {
 
     it('should handle no controlled value gracefully', () => {
       render(
-        <AccordionRoot type='single'>
+        <Accordion type='single'>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       expect(screen.getByRole('button', { name: 'Item 1' })).toHaveAttribute(
@@ -439,7 +439,7 @@ describe('Accordion', () => {
   describe('Polymorphic Component', () => {
     it('should support different element types through as prop', () => {
       const { container } = render(
-        <AccordionRoot as='section' data-testid='accordion' type='single' defaultValue='item-1'>
+        <Accordion as='section' data-testid='accordion' type='single' defaultValue='item-1'>
           <AccordionItem value='item-1' as='article'>
             <AccordionHeader as='h2'>
               <AccordionTrigger as='div' role='button' tabIndex={0}>
@@ -448,7 +448,7 @@ describe('Accordion', () => {
             </AccordionHeader>
             <AccordionContent as='section'>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       expect(screen.getByTestId('accordion')).toHaveProperty('tagName', 'SECTION');
@@ -465,14 +465,14 @@ describe('Accordion', () => {
 
       // Test collapsible single mode - clicking same item SHOULD deselect (line 87 - isExpanded ? '')
       const { rerender } = render(
-        <AccordionRoot type='single' value='item-1' isCollapsible onValueChange={onValueChange}>
+        <Accordion type='single' value='item-1' isCollapsible onValueChange={onValueChange}>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       let trigger = screen.getByRole('button');
@@ -482,14 +482,14 @@ describe('Accordion', () => {
       // Now test expansion case (line 87 - : itemValue)
       onValueChange.mockClear();
       rerender(
-        <AccordionRoot type='single' value='' isCollapsible onValueChange={onValueChange}>
+        <Accordion type='single' value='' isCollapsible onValueChange={onValueChange}>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       trigger = screen.getByRole('button');
@@ -503,14 +503,14 @@ describe('Accordion', () => {
 
       // Test collapsible single mode - line 90 branch (same as above but ensuring we hit line 90)
       render(
-        <AccordionRoot type='single' isCollapsible value='item-1' onValueChange={onValueChange}>
+        <Accordion type='single' isCollapsible value='item-1' onValueChange={onValueChange}>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       const trigger = screen.getByRole('button');
@@ -524,19 +524,14 @@ describe('Accordion', () => {
 
       // Test non-collapsible single mode - should NOT change when clicking expanded item (lines 84-85)
       render(
-        <AccordionRoot
-          type='single'
-          value='item-1'
-          isCollapsible={false}
-          onValueChange={onValueChange}
-        >
+        <Accordion type='single' value='item-1' isCollapsible={false} onValueChange={onValueChange}>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       const trigger = screen.getByRole('button');
@@ -549,42 +544,42 @@ describe('Accordion', () => {
     it('should handle AccordionItem context value branching - line 40 & 49', () => {
       // Test single type with matching value (line 40)
       const { rerender } = render(
-        <AccordionRoot type='single' value='item-1'>
+        <Accordion type='single' value='item-1'>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       expect(screen.getByText('Content 1')).toBeInTheDocument();
 
       // Test multiple type with array value (line 49)
       rerender(
-        <AccordionRoot type='multiple' value={['item-1']}>
+        <Accordion type='multiple' value={['item-1']}>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       expect(screen.getByText('Content 1')).toBeInTheDocument();
 
       // Test multiple type with non-array value - should use Array.isArray branch (line 49)
       rerender(
-        <AccordionRoot type='multiple' value={'item-1' as string}>
+        <Accordion type='multiple' value={'item-1' as string}>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       expect(screen.queryByText('Content 1')).not.toBeInTheDocument();
@@ -594,14 +589,14 @@ describe('Accordion', () => {
       const user = userEvent.setup();
       const onValueChange = jest.fn();
       render(
-        <AccordionRoot type='single' onValueChange={onValueChange}>
+        <Accordion type='single' onValueChange={onValueChange}>
           <AccordionItem value='item-1' disabled>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       const trigger = screen.getByRole('button');
@@ -615,7 +610,7 @@ describe('Accordion', () => {
       // This test specifically targets the uncovered lines in AccordionTrigger
       const onKeyDown = jest.fn();
       render(
-        <AccordionRoot type='single'>
+        <Accordion type='single'>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger onKeyDown={onKeyDown}>Item 1</AccordionTrigger>
@@ -634,7 +629,7 @@ describe('Accordion', () => {
             </AccordionHeader>
             <AccordionContent>Content 3</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       const triggers = screen.getAllByRole('button');
@@ -668,14 +663,14 @@ describe('Accordion', () => {
     it('should cover AccordionContent forceMount behavior', () => {
       // Test forceMount when collapsed (covers lines 17-19 and 27-28)
       const { container } = render(
-        <AccordionRoot type='single' value=''>
+        <Accordion type='single' value=''>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent forceMount>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       // Should render content even when collapsed due to forceMount
@@ -692,14 +687,14 @@ describe('Accordion', () => {
 
       // Test multiple type expansion (line 93-94: [...currentArray, itemValue])
       const { rerender } = render(
-        <AccordionRoot type='multiple' value={[]} onValueChange={onValueChange}>
+        <Accordion type='multiple' value={[]} onValueChange={onValueChange}>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       const trigger = screen.getByRole('button');
@@ -709,14 +704,14 @@ describe('Accordion', () => {
       // Test multiple type collapse (line 92-93: currentArray.filter)
       onValueChange.mockClear();
       rerender(
-        <AccordionRoot type='multiple' value={['item-1']} onValueChange={onValueChange}>
+        <Accordion type='multiple' value={['item-1']} onValueChange={onValueChange}>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
           </AccordionItem>
-        </AccordionRoot>,
+        </Accordion>,
       );
 
       const trigger2 = screen.getByRole('button');

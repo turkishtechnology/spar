@@ -2,7 +2,7 @@ import * as React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
-  SelectRoot,
+  Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
@@ -11,18 +11,18 @@ import {
 } from '../index';
 
 describe('Select', () => {
-  describe('SelectRoot', () => {
+  describe('Select', () => {
     describe('Rendering', () => {
       it('renders with default props', () => {
         render(
-          <SelectRoot>
+          <Select>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const trigger = screen.getByRole('combobox');
@@ -32,11 +32,11 @@ describe('Select', () => {
 
       it('renders with custom as prop', () => {
         const { container } = render(
-          <SelectRoot as='section'>
+          <Select as='section'>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
-          </SelectRoot>,
+          </Select>,
         );
 
         const section = container.querySelector('section');
@@ -45,14 +45,14 @@ describe('Select', () => {
 
       it('renders disabled state correctly', () => {
         render(
-          <SelectRoot disabled>
+          <Select disabled>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const trigger = screen.getByRole('combobox');
@@ -63,14 +63,14 @@ describe('Select', () => {
 
       it('renders required state correctly', () => {
         render(
-          <SelectRoot required>
+          <Select required>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const trigger = screen.getByRole('combobox');
@@ -81,7 +81,7 @@ describe('Select', () => {
     describe('State Management', () => {
       it('handles uncontrolled state with defaultValue', () => {
         const { container } = render(
-          <SelectRoot defaultValue='option2' name='test'>
+          <Select defaultValue='option2' name='test'>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
@@ -90,7 +90,7 @@ describe('Select', () => {
               <SelectItem value='option2'>Option 2</SelectItem>
               <SelectItem value='option3'>Option 3</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const hiddenInput = container.querySelector('input[type="hidden"][value="option2"]');
@@ -107,7 +107,7 @@ describe('Select', () => {
           const [open, setOpen] = React.useState(false);
 
           return (
-            <SelectRoot value={value} open={open} onOpenChange={setOpen}>
+            <Select value={value} open={open} onOpenChange={setOpen}>
               <SelectTrigger>
                 <SelectValue placeholder='Select...' />
               </SelectTrigger>
@@ -119,7 +119,7 @@ describe('Select', () => {
                   <SelectItemText>Option 2</SelectItemText>
                 </SelectItem>
               </SelectContent>
-            </SelectRoot>
+            </Select>
           );
         }
 
@@ -158,7 +158,7 @@ describe('Select', () => {
         const handleValueChange = jest.fn();
 
         render(
-          <SelectRoot onValueChange={handleValueChange}>
+          <Select onValueChange={handleValueChange}>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
@@ -166,7 +166,7 @@ describe('Select', () => {
               <SelectItem value='option1'>Option 1</SelectItem>
               <SelectItem value='option2'>Option 2</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const trigger = screen.getByRole('combobox');
@@ -188,7 +188,7 @@ describe('Select', () => {
       it('updates uncontrolled state when selecting items', async () => {
         const user = userEvent.setup();
         const { container } = render(
-          <SelectRoot name='test'>
+          <Select name='test'>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
@@ -196,7 +196,7 @@ describe('Select', () => {
               <SelectItem value='option1'>Option 1</SelectItem>
               <SelectItem value='option2'>Option 2</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const trigger = screen.getByRole('combobox');
@@ -218,14 +218,14 @@ describe('Select', () => {
         const user = userEvent.setup();
 
         render(
-          <SelectRoot>
+          <Select>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const trigger = screen.getByRole('combobox');
@@ -241,28 +241,28 @@ describe('Select', () => {
 
       it('handles controlled open state', () => {
         const { rerender } = render(
-          <SelectRoot open={false}>
+          <Select open={false}>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const trigger = screen.getByRole('combobox');
         expect(trigger).toHaveAttribute('aria-expanded', 'false');
 
         rerender(
-          <SelectRoot open={true}>
+          <Select open={true}>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         expect(trigger).toHaveAttribute('aria-expanded', 'true');
@@ -273,14 +273,14 @@ describe('Select', () => {
         const handleOpenChange = jest.fn();
 
         render(
-          <SelectRoot onOpenChange={handleOpenChange}>
+          <Select onOpenChange={handleOpenChange}>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const trigger = screen.getByRole('combobox');
@@ -296,14 +296,14 @@ describe('Select', () => {
         const user = userEvent.setup();
 
         render(
-          <SelectRoot>
+          <Select>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const trigger = screen.getByRole('combobox');
@@ -324,14 +324,14 @@ describe('Select', () => {
         const user = userEvent.setup();
 
         render(
-          <SelectRoot disabled>
+          <Select disabled>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const trigger = screen.getByRole('combobox');
@@ -349,14 +349,14 @@ describe('Select', () => {
         const handleValueChange = jest.fn();
 
         render(
-          <SelectRoot disabled onValueChange={handleValueChange}>
+          <Select disabled onValueChange={handleValueChange}>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const trigger = screen.getByRole('combobox');
@@ -373,14 +373,14 @@ describe('Select', () => {
     describe('Form Integration', () => {
       it('creates hidden input when name and value are provided', () => {
         const { container } = render(
-          <SelectRoot name='test-select' value='option1'>
+          <Select name='test-select' value='option1'>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const hiddenInput = container.querySelector('input[type="hidden"]');
@@ -391,14 +391,14 @@ describe('Select', () => {
 
       it('does not create hidden input when no value is selected', () => {
         const { container } = render(
-          <SelectRoot name='test-select'>
+          <Select name='test-select'>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const hiddenInput = container.querySelector('input[type="hidden"]');
@@ -407,14 +407,14 @@ describe('Select', () => {
 
       it('marks hidden input as required when required prop is true', () => {
         const { container } = render(
-          <SelectRoot name='test-select' value='option1' required>
+          <Select name='test-select' value='option1' required>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const hiddenInput = container.querySelector('input[type="hidden"]');
@@ -423,14 +423,14 @@ describe('Select', () => {
 
       it('disables hidden input when disabled prop is true', () => {
         const { container } = render(
-          <SelectRoot name='test-select' value='option1' disabled>
+          <Select name='test-select' value='option1' disabled>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>,
+          </Select>,
         );
 
         const hiddenInput = container.querySelector('input[type="hidden"]');
@@ -442,14 +442,14 @@ describe('Select', () => {
   describe('SelectTrigger', () => {
     it('renders with correct role and attributes', () => {
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -462,14 +462,14 @@ describe('Select', () => {
       const user = userEvent.setup();
 
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -483,14 +483,14 @@ describe('Select', () => {
       const user = userEvent.setup();
 
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -507,14 +507,14 @@ describe('Select', () => {
       const user = userEvent.setup();
 
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -531,14 +531,14 @@ describe('Select', () => {
       const user = userEvent.setup();
 
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -550,14 +550,14 @@ describe('Select', () => {
 
     it('renders as custom element when as prop is provided', () => {
       const { container } = render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger as='div'>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = container.querySelector('[role="combobox"]');
@@ -568,14 +568,14 @@ describe('Select', () => {
   describe('SelectValue', () => {
     it('displays placeholder when no value is selected', () => {
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Choose an option' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -586,7 +586,7 @@ describe('Select', () => {
       const user = userEvent.setup();
 
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
@@ -595,7 +595,7 @@ describe('Select', () => {
               <SelectItemText>Option 1</SelectItemText>
             </SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -612,14 +612,14 @@ describe('Select', () => {
 
     it('renders custom children', () => {
       render(
-        <SelectRoot value='option1'>
+        <Select value='option1'>
           <SelectTrigger>
             <SelectValue placeholder='Select...'>Custom Content</SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -628,14 +628,14 @@ describe('Select', () => {
 
     it('renders as custom element when as prop is provided', () => {
       const { container } = render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue as='div' placeholder='Select...' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const valueElement = container.querySelector('[id]');
@@ -648,14 +648,14 @@ describe('Select', () => {
       const user = userEvent.setup();
 
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -671,14 +671,14 @@ describe('Select', () => {
 
     it('does not render when closed', () => {
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const listbox = screen.queryByRole('listbox');
@@ -692,14 +692,14 @@ describe('Select', () => {
       const user = userEvent.setup();
 
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -724,14 +724,14 @@ describe('Select', () => {
       const user = userEvent.setup();
 
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -750,14 +750,14 @@ describe('Select', () => {
       render(
         <div>
           <button>Outside Button</button>
-          <SelectRoot>
+          <Select>
             <SelectTrigger>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value='option1'>Option 1</SelectItem>
             </SelectContent>
-          </SelectRoot>
+          </Select>
         </div>,
       );
 
@@ -782,14 +782,14 @@ describe('Select', () => {
       const user = userEvent.setup();
 
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='option1'>Option 1</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -807,7 +807,7 @@ describe('Select', () => {
       const user = userEvent.setup();
 
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
@@ -815,7 +815,7 @@ describe('Select', () => {
             <SelectItem value='option1'>Option 1</SelectItem>
             <SelectItem value='option2'>Option 2</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -841,7 +841,7 @@ describe('Select', () => {
       const user = userEvent.setup();
 
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
@@ -851,7 +851,7 @@ describe('Select', () => {
             </SelectItem>
             <SelectItem value='option2'>Option 2</SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -870,7 +870,7 @@ describe('Select', () => {
       const handleValueChange = jest.fn();
 
       render(
-        <SelectRoot onValueChange={handleValueChange}>
+        <Select onValueChange={handleValueChange}>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
@@ -879,7 +879,7 @@ describe('Select', () => {
               Option 1
             </SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -897,7 +897,7 @@ describe('Select', () => {
     it('renders as custom element when as prop is provided', async () => {
       const user = userEvent.setup();
       const { container } = render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
@@ -906,7 +906,7 @@ describe('Select', () => {
               Option 1
             </SelectItem>
           </SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -921,7 +921,7 @@ describe('Select', () => {
   });
 
   describe('Error Handling', () => {
-    it('throws error when Select components are used outside SelectRoot', () => {
+    it('throws error when Select components are used outside Select', () => {
       const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
       expect(() => {
@@ -930,7 +930,7 @@ describe('Select', () => {
             <SelectValue placeholder='Select...' />
           </SelectTrigger>,
         );
-      }).toThrow('Select components must be used within a SelectRoot');
+      }).toThrow('Select components must be used within a Select');
 
       consoleErrorSpy.mockRestore();
     });
@@ -941,12 +941,12 @@ describe('Select', () => {
       const user = userEvent.setup();
 
       render(
-        <SelectRoot>
+        <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
           <SelectContent>{null}</SelectContent>
-        </SelectRoot>,
+        </Select>,
       );
 
       const trigger = screen.getByRole('combobox');
@@ -968,7 +968,7 @@ describe('Select', () => {
         return (
           <div>
             <button onClick={() => setShowExtra(!showExtra)}>Toggle</button>
-            <SelectRoot>
+            <Select>
               <SelectTrigger>
                 <SelectValue placeholder='Select...' />
               </SelectTrigger>
@@ -976,7 +976,7 @@ describe('Select', () => {
                 <SelectItem value='option1'>Option 1</SelectItem>
                 {showExtra && <SelectItem value='option2'>Option 2</SelectItem>}
               </SelectContent>
-            </SelectRoot>
+            </Select>
           </div>
         );
       };
@@ -1004,11 +1004,11 @@ describe('Select', () => {
 
   it('does not set native disabled attribute when as is not button', () => {
     const { container } = render(
-      <SelectRoot disabled>
+      <Select disabled>
         <SelectTrigger as='div'>
           <SelectValue placeholder='Select...' />
         </SelectTrigger>
-      </SelectRoot>,
+      </Select>,
     );
     const trigger = container.querySelector('div[role="combobox"]');
     expect(trigger).not.toHaveAttribute('disabled');

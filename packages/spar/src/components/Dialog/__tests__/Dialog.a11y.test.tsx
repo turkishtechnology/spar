@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import userEvent from '@testing-library/user-event';
 import {
-  DialogRoot,
+  Dialog,
   DialogTrigger,
   DialogPortal,
   DialogOverlay,
@@ -35,7 +35,7 @@ const DialogTestComponent = ({
   trapFocus?: boolean;
   restoreFocus?: boolean;
 }) => (
-  <DialogRoot
+  <Dialog
     {...(open !== undefined && { open })}
     {...(onOpenChange !== undefined && { onOpenChange })}
     modal={modal}
@@ -50,12 +50,12 @@ const DialogTestComponent = ({
         <DialogClose>Close</DialogClose>
       </DialogContent>
     </DialogPortal>
-  </DialogRoot>
+  </Dialog>
 );
 
 // Alert dialog test component
 const AlertDialogTestComponent = () => (
-  <DialogRoot>
+  <Dialog>
     <DialogTrigger>Open Alert</DialogTrigger>
     <DialogPortal>
       <DialogOverlay />
@@ -67,7 +67,7 @@ const AlertDialogTestComponent = () => (
         <DialogClose>Close</DialogClose>
       </DialogContent>
     </DialogPortal>
-  </DialogRoot>
+  </Dialog>
 );
 
 describe('Dialog Accessibility', () => {
@@ -205,7 +205,7 @@ describe('Dialog Accessibility', () => {
     it('should handle keyboard navigation without crashing on disabled trigger', async () => {
       const user = userEvent.setup();
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger disabled>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogOverlay />
@@ -214,7 +214,7 @@ describe('Dialog Accessibility', () => {
               <DialogClose>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Open Dialog' });
@@ -337,7 +337,7 @@ describe('Dialog Accessibility', () => {
       let customFocusElement: HTMLElement | null = null;
 
       const CustomFocusDialog = () => (
-        <DialogRoot open={true}>
+        <Dialog open={true}>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogOverlay />
@@ -354,7 +354,7 @@ describe('Dialog Accessibility', () => {
               <DialogClose>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>
+        </Dialog>
       );
 
       render(<CustomFocusDialog />);
@@ -463,7 +463,7 @@ describe('Dialog Accessibility', () => {
 
     it('should handle disabled state announcements', () => {
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger disabled>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogOverlay />
@@ -472,7 +472,7 @@ describe('Dialog Accessibility', () => {
               <DialogClose>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Open Dialog' });
@@ -504,7 +504,7 @@ describe('Dialog Accessibility', () => {
   describe('Error States', () => {
     it('should handle missing title gracefully for accessibility', async () => {
       const { container } = render(
-        <DialogRoot open={true}>
+        <Dialog open={true}>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogOverlay />
@@ -514,7 +514,7 @@ describe('Dialog Accessibility', () => {
               <DialogClose>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       // Should still render without crashing
@@ -537,7 +537,7 @@ describe('Dialog Accessibility', () => {
 
       // Rerender with different content
       rerender(
-        <DialogRoot open={true}>
+        <Dialog open={true}>
           <DialogTrigger>Open Dialog</DialogTrigger>
           <DialogPortal>
             <DialogOverlay />
@@ -548,7 +548,7 @@ describe('Dialog Accessibility', () => {
               <DialogClose>Close</DialogClose>
             </DialogContent>
           </DialogPortal>
-        </DialogRoot>,
+        </Dialog>,
       );
 
       await waitFor(() => {

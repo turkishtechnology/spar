@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { PopoverRoot } from '../Popover';
+import { Popover } from '../Popover';
 import { PopoverTrigger } from '../PopoverTrigger';
 import { PopoverContent } from '../PopoverContent';
 import { PopoverArrow } from '../PopoverArrow';
@@ -20,7 +20,7 @@ describe('Popover Integration Tests', () => {
         const [theme, setTheme] = useState('light');
 
         return (
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger>⚙️ Settings</PopoverTrigger>
             <PopoverContent>
               <form
@@ -68,7 +68,7 @@ describe('Popover Integration Tests', () => {
                 <PopoverClose>Cancel</PopoverClose>
               </form>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
         );
       };
 
@@ -107,7 +107,7 @@ describe('Popover Integration Tests', () => {
       const onBlock = jest.fn();
 
       const UserProfilePopover = () => (
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>
             <img src='/avatar.jpg' alt='John Doe' width={32} height={32} />
           </PopoverTrigger>
@@ -127,7 +127,7 @@ describe('Popover Integration Tests', () => {
               <PopoverClose>Close</PopoverClose>
             </div>
           </PopoverContent>
-        </PopoverRoot>
+        </Popover>
       );
 
       render(<UserProfilePopover />);
@@ -159,7 +159,7 @@ describe('Popover Integration Tests', () => {
 
       const HelpPopover = () => (
         <div>
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger aria-label='Get help about this feature'>ℹ️</PopoverTrigger>
             <PopoverContent side='top' align='start'>
               <div>
@@ -179,7 +179,7 @@ describe('Popover Integration Tests', () => {
                 <PopoverArrow />
               </div>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
         </div>
       );
 
@@ -212,7 +212,7 @@ describe('Popover Integration Tests', () => {
 
       const AnchoredPopover = () => (
         <div style={{ padding: '100px' }}>
-          <PopoverRoot>
+          <Popover>
             <PopoverAnchor>
               <div
                 data-testid='anchor'
@@ -225,7 +225,7 @@ describe('Popover Integration Tests', () => {
             <PopoverContent>
               <p>This content is positioned relative to the anchor, not the trigger.</p>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
         </div>
       );
 
@@ -249,14 +249,14 @@ describe('Popover Integration Tests', () => {
       document.body.appendChild(customContainer);
 
       const PortalPopover = () => (
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open in portal</PopoverTrigger>
           <PopoverPortal container={customContainer}>
             <div data-testid='portal-content'>
               This content is rendered in a custom portal container.
             </div>
           </PopoverPortal>
-        </PopoverRoot>
+        </Popover>
       );
 
       render(<PortalPopover />);
@@ -280,15 +280,15 @@ describe('Popover Integration Tests', () => {
 
       const MultiplePopovers = () => (
         <div>
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger>Open First</PopoverTrigger>
             <PopoverContent>First popover content</PopoverContent>
-          </PopoverRoot>
+          </Popover>
 
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger>Open Second</PopoverTrigger>
             <PopoverContent>Second popover content</PopoverContent>
-          </PopoverRoot>
+          </Popover>
         </div>
       );
 
@@ -321,19 +321,19 @@ describe('Popover Integration Tests', () => {
     it('handles nested popovers', async () => {
       // Test that nested popover structure can be rendered without errors
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger>Open Parent</PopoverTrigger>
           <PopoverContent>
             <p>Parent popover</p>
-            <PopoverRoot>
+            <Popover>
               <PopoverTrigger>Open Child</PopoverTrigger>
               <PopoverContent>
                 <p>Child popover</p>
                 <PopoverClose>Close Child</PopoverClose>
               </PopoverContent>
-            </PopoverRoot>
+            </Popover>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       // Verify the structure renders without crashing
@@ -386,7 +386,7 @@ describe('Popover Integration Tests', () => {
                 aria-describedby={emailError ? 'email-error' : undefined}
               />
 
-              <PopoverRoot open={showValidation && !!emailError} onOpenChange={setShowValidation}>
+              <Popover open={showValidation && !!emailError} onOpenChange={setShowValidation}>
                 <PopoverTrigger>
                   <span id='email-error' role='alert' aria-live='polite'>
                     {emailError && '⚠️'}
@@ -399,7 +399,7 @@ describe('Popover Integration Tests', () => {
                     <PopoverClose>Dismiss</PopoverClose>
                   </div>
                 </PopoverContent>
-              </PopoverRoot>
+              </Popover>
             </div>
 
             <button type='submit'>Submit</button>
@@ -442,7 +442,7 @@ describe('Popover Integration Tests', () => {
 
       const EventPropagationTest = () => (
         <div data-testid='container'>
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger>Open</PopoverTrigger>
             <PopoverContent>
               <p>Content</p>
@@ -451,7 +451,7 @@ describe('Popover Integration Tests', () => {
               </div>
               <PopoverClose>Close</PopoverClose>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
         </div>
       );
 
@@ -490,14 +490,14 @@ describe('Popover Integration Tests', () => {
 
             <button onClick={() => setCounter((c) => c + 1)}>Increment: {counter}</button>
 
-            <PopoverRoot open={open} onOpenChange={setOpen}>
+            <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger>Internal Toggle</PopoverTrigger>
               <PopoverContent>
                 <p>Counter value: {counter}</p>
                 <button onClick={() => setCounter((c) => c + 1)}>Increment from popover</button>
                 <PopoverClose>Close</PopoverClose>
               </PopoverContent>
-            </PopoverRoot>
+            </Popover>
           </div>
         );
       };
@@ -536,13 +536,13 @@ describe('Popover Integration Tests', () => {
       const onOpenChange = jest.fn();
 
       render(
-        <PopoverRoot onOpenChange={onOpenChange}>
+        <Popover onOpenChange={onOpenChange}>
           <PopoverTrigger>Toggle</PopoverTrigger>
           <PopoverContent>
             <p>Content</p>
             <PopoverClose>Close</PopoverClose>
           </PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Toggle' });
@@ -585,7 +585,7 @@ describe('Popover Integration Tests', () => {
         };
 
         return (
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger onClick={loadData}>Load Data</PopoverTrigger>
             <PopoverContent>
               {isLoading ? (
@@ -597,7 +597,7 @@ describe('Popover Integration Tests', () => {
               )}
               <PopoverClose>Close</PopoverClose>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
         );
       };
 
@@ -626,12 +626,12 @@ describe('Popover Integration Tests', () => {
         if (!show) return null;
 
         return (
-          <PopoverRoot defaultOpen={true}>
+          <Popover defaultOpen={true}>
             <PopoverTrigger>Open</PopoverTrigger>
             <PopoverContent>
               <p>Content that will be unmounted</p>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
         );
       };
 
@@ -671,14 +671,14 @@ describe('Edge Cases and Uncovered Code Paths', () => {
 
       render(
         <div style={{ padding: '100px' }}>
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger style={{ position: 'absolute', left: '300px', top: '200px' }}>
               Test All Alignments
             </PopoverTrigger>
             <PopoverContent side='top' align='end'>
               <div style={{ width: '200px', height: '100px' }}>Top + End alignment content</div>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
         </div>,
       );
 
@@ -699,14 +699,14 @@ describe('Edge Cases and Uncovered Code Paths', () => {
 
       render(
         <div style={{ padding: '50px', position: 'relative' }}>
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger style={{ position: 'absolute', left: '50px', top: '50px' }}>
               Right Side Test
             </PopoverTrigger>
             <PopoverContent side='right' align='start'>
               <div style={{ width: '100px', height: '50px' }}>Right positioned content</div>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
         </div>,
       );
 
@@ -726,7 +726,7 @@ describe('Edge Cases and Uncovered Code Paths', () => {
 
       const PositioningTest = () => (
         <div style={{ padding: '200px', width: '800px', height: '600px' }}>
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger style={{ position: 'absolute', left: '100px', top: '100px' }}>
               Right + End
             </PopoverTrigger>
@@ -735,9 +735,9 @@ describe('Edge Cases and Uncovered Code Paths', () => {
                 Content positioned to the right with end alignment
               </div>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
 
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger style={{ position: 'absolute', left: '400px', top: '300px' }}>
               Bottom + End
             </PopoverTrigger>
@@ -746,9 +746,9 @@ describe('Edge Cases and Uncovered Code Paths', () => {
                 Content positioned bottom with end alignment
               </div>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
 
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger style={{ position: 'absolute', left: '600px', top: '200px' }}>
               Left + End
             </PopoverTrigger>
@@ -757,7 +757,7 @@ describe('Edge Cases and Uncovered Code Paths', () => {
                 Content positioned left with end alignment
               </div>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
         </div>
       );
 
@@ -807,10 +807,10 @@ describe('Edge Cases and Uncovered Code Paths', () => {
       const user = userEvent.setup();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverTrigger ref={triggerRefCallback}>Trigger with function ref</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await user.click(screen.getByRole('button', { name: 'Trigger with function ref' }));
@@ -823,10 +823,10 @@ describe('Edge Cases and Uncovered Code Paths', () => {
       const contentRefCallback = jest.fn();
 
       render(
-        <PopoverRoot defaultOpen>
+        <Popover defaultOpen>
           <PopoverTrigger>Trigger</PopoverTrigger>
           <PopoverContent ref={contentRefCallback}>Content with function ref</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await waitFor(() => {
@@ -841,13 +841,13 @@ describe('Edge Cases and Uncovered Code Paths', () => {
       const anchorRefCallback = jest.fn();
 
       render(
-        <PopoverRoot>
+        <Popover>
           <PopoverAnchor ref={anchorRefCallback}>
             <div>Anchor with function ref</div>
           </PopoverAnchor>
           <PopoverTrigger>Trigger</PopoverTrigger>
           <PopoverContent>Content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       // Function ref should be called with the element (covers lines 622, 624)
@@ -860,7 +860,7 @@ describe('Edge Cases and Uncovered Code Paths', () => {
       const anchorRefCallback = jest.fn();
 
       render(
-        <PopoverRoot defaultOpen>
+        <Popover defaultOpen>
           <PopoverAnchor ref={anchorRefCallback}>
             {({ isOpen }) => <span>Custom anchor: {isOpen ? 'open' : 'closed'}</span>}
           </PopoverAnchor>
@@ -868,7 +868,7 @@ describe('Edge Cases and Uncovered Code Paths', () => {
             {({ isOpen }) => <span>Custom trigger: {isOpen ? 'open' : 'closed'}</span>}
           </PopoverTrigger>
           <PopoverContent ref={contentRefCallback}>Custom content</PopoverContent>
-        </PopoverRoot>,
+        </Popover>,
       );
 
       await waitFor(() => {
@@ -888,23 +888,23 @@ describe('Edge Cases and Uncovered Code Paths', () => {
 
       render(
         <div style={{ padding: '200px' }}>
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger style={{ position: 'absolute', left: '300px', top: '200px' }}>
               Center Aligned
             </PopoverTrigger>
             <PopoverContent side='left' align='center'>
               <div style={{ width: '120px', height: '80px' }}>Left + Center alignment</div>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
 
-          <PopoverRoot>
+          <Popover>
             <PopoverTrigger style={{ position: 'absolute', left: '500px', top: '300px' }}>
               Right Center
             </PopoverTrigger>
             <PopoverContent side='right' align='center'>
               <div style={{ width: '100px', height: '60px' }}>Right + Center alignment</div>
             </PopoverContent>
-          </PopoverRoot>
+          </Popover>
         </div>,
       );
 
@@ -941,13 +941,13 @@ describe('Ref Object Handling Edge Cases', () => {
     const anchorRef = React.createRef<HTMLDivElement>();
 
     render(
-      <PopoverRoot defaultOpen>
+      <Popover defaultOpen>
         <PopoverAnchor ref={anchorRef}>
           <div>Anchor with ref object</div>
         </PopoverAnchor>
         <PopoverTrigger ref={triggerRef}>Trigger with ref object</PopoverTrigger>
         <PopoverContent ref={contentRef}>Content with ref object</PopoverContent>
-      </PopoverRoot>,
+      </Popover>,
     );
 
     await waitFor(() => {

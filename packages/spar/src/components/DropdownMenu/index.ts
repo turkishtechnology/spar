@@ -13,7 +13,7 @@ export { DropdownMenuSub } from './DropdownMenuSub';
 export { DropdownMenuSubTrigger } from './DropdownMenuSubTrigger';
 export { DropdownMenuSubContent } from './DropdownMenuSubContent';
 export {
-  useDropdownMenuRootContext,
+  useDropdownMenuContext,
   useDropdownMenuSubContext,
   useMenuScope,
   useDropdownMenuRadioGroupContext,

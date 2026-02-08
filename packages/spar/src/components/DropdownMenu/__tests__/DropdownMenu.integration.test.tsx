@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import {
-  DropdownMenuRoot,
+  DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -36,7 +36,7 @@ describe('DropdownMenu Integration', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenuRoot>
+        <DropdownMenu>
           <DropdownMenuTrigger>File</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onSelect={onNewFile}>New File</DropdownMenuItem>
@@ -44,7 +44,7 @@ describe('DropdownMenu Integration', () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem onSelect={onSaveFile}>Save File</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       // Open menu
@@ -68,7 +68,7 @@ describe('DropdownMenu Integration', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenuRoot closeOnSelect={false}>
+        <DropdownMenu closeOnSelect={false}>
           <DropdownMenuTrigger>Preferences</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuGroup>
@@ -90,7 +90,7 @@ describe('DropdownMenu Integration', () => {
               </DropdownMenuCheckboxItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       // Open preferences menu
@@ -130,7 +130,7 @@ describe('DropdownMenu Integration', () => {
       render(
         <div>
           <div>Right-click me</div>
-          <DropdownMenuRoot>
+          <DropdownMenu>
             <DropdownMenuTrigger>Context Menu</DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem onSelect={onCopy}>Copy</DropdownMenuItem>
@@ -138,7 +138,7 @@ describe('DropdownMenu Integration', () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem onSelect={onDelete}>Delete</DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenuRoot>
+          </DropdownMenu>
         </div>,
       );
 
@@ -167,7 +167,7 @@ describe('DropdownMenu Integration', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenuRoot>
+        <DropdownMenu>
           <DropdownMenuTrigger>File</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuSub>
@@ -184,7 +184,7 @@ describe('DropdownMenu Integration', () => {
               </DropdownMenuSubContent>
             </DropdownMenuSub>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       // Open main menu
@@ -220,7 +220,7 @@ describe('DropdownMenu Integration', () => {
             <label htmlFor='name'>Name:</label>
             <input id='name' name='name' type='text' />
 
-            <DropdownMenuRoot>
+            <DropdownMenu>
               <DropdownMenuTrigger>Select Priority</DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuRadioGroup value={selectedOption} onValueChange={setSelectedOption}>
@@ -236,7 +236,7 @@ describe('DropdownMenu Integration', () => {
                   Enable Notifications
                 </DropdownMenuCheckboxItem>
               </DropdownMenuContent>
-            </DropdownMenuRoot>
+            </DropdownMenu>
 
             <div>Selected: {selectedOption || 'None'}</div>
             <div>Notifications: {notifications ? 'On' : 'Off'}</div>
@@ -290,12 +290,12 @@ describe('DropdownMenu Integration', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenuRoot onOpenChange={onOpenChange}>
+        <DropdownMenu onOpenChange={onOpenChange}>
           <DropdownMenuTrigger>Rapid Toggle</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const trigger = screen.getByRole('button');
@@ -315,13 +315,13 @@ describe('DropdownMenu Integration', () => {
       const user = userEvent.setup();
 
       render(
-        <DropdownMenuRoot>
+        <DropdownMenu>
           <DropdownMenuTrigger>Mixed Interaction</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onSelect={onSelect}>Item 1</DropdownMenuItem>
             <DropdownMenuItem onSelect={onSelect}>Item 2</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       const trigger = screen.getByRole('button');
@@ -357,14 +357,14 @@ describe('DropdownMenu Integration', () => {
             <button onClick={() => setItems([...items, `Item ${items.length + 1}`])}>
               Add Item
             </button>
-            <DropdownMenuRoot open={open} onOpenChange={handleOpenChange}>
+            <DropdownMenu open={open} onOpenChange={handleOpenChange}>
               <DropdownMenuTrigger>Dynamic Menu</DropdownMenuTrigger>
               <DropdownMenuContent>
                 {items.map((item: string) => (
                   <DropdownMenuItem key={item}>{item}</DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
-            </DropdownMenuRoot>
+            </DropdownMenu>
           </div>
         );
       };
@@ -400,7 +400,7 @@ describe('DropdownMenu Integration', () => {
         return (
           <div>
             <button onClick={() => setIsControlled(!isControlled)}>Toggle Control Mode</button>
-            <DropdownMenuRoot
+            <DropdownMenu
               {...(isControlled
                 ? { open: controlledOpen, onOpenChange: setControlledOpen }
                 : { defaultOpen: false })}
@@ -409,7 +409,7 @@ describe('DropdownMenu Integration', () => {
               <DropdownMenuContent>
                 <DropdownMenuItem>Item 1</DropdownMenuItem>
               </DropdownMenuContent>
-            </DropdownMenuRoot>
+            </DropdownMenu>
             <div>Mode: {isControlled ? 'Controlled' : 'Uncontrolled'}</div>
           </div>
         );
@@ -440,19 +440,19 @@ describe('DropdownMenu Integration', () => {
 
       render(
         <div>
-          <DropdownMenuRoot>
+          <DropdownMenu>
             <DropdownMenuTrigger>Menu 1</DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem onSelect={onSelect1}>Menu 1 Item</DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenuRoot>
+          </DropdownMenu>
 
-          <DropdownMenuRoot>
+          <DropdownMenu>
             <DropdownMenuTrigger>Menu 2</DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem onSelect={onSelect2}>Menu 2 Item</DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenuRoot>
+          </DropdownMenu>
         </div>,
       );
 
@@ -495,12 +495,12 @@ describe('DropdownMenu Integration', () => {
       });
 
       const { unmount } = render(
-        <DropdownMenuRoot>
+        <DropdownMenu>
           <DropdownMenuTrigger>Test Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenuRoot>,
+        </DropdownMenu>,
       );
 
       // Open and close menu

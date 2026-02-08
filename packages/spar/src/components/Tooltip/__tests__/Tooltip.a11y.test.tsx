@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import {
   TooltipProvider,
-  TooltipRoot,
+  Tooltip,
   TooltipTrigger,
   TooltipContent,
   TooltipPortal,
@@ -56,7 +56,7 @@ const AccessibleTooltip = ({
   ...props
 }: AccessibleTooltipProps) => (
   <TooltipProvider>
-    <TooltipRoot defaultOpen={defaultOpen} disabled={disabled} {...props}>
+    <Tooltip defaultOpen={defaultOpen} disabled={disabled} {...props}>
       <TooltipTrigger>{triggerContent}</TooltipTrigger>
       <TooltipPortal>
         <TooltipContent asLabel={asLabel}>
@@ -64,7 +64,7 @@ const AccessibleTooltip = ({
           <TooltipArrow />
         </TooltipContent>
       </TooltipPortal>
-    </TooltipRoot>
+    </Tooltip>
   </TooltipProvider>
 );
 
@@ -317,12 +317,12 @@ describe('Tooltip Accessibility', () => {
     it('provides accessible name for icon-only triggers', () => {
       render(
         <TooltipProvider>
-          <TooltipRoot defaultOpen>
+          <Tooltip defaultOpen>
             <TooltipTrigger aria-label='Settings'>⚙️</TooltipTrigger>
             <TooltipPortal>
               <TooltipContent asLabel>Settings menu</TooltipContent>
             </TooltipPortal>
-          </TooltipRoot>
+          </Tooltip>
         </TooltipProvider>,
       );
 
@@ -352,7 +352,7 @@ describe('Tooltip Accessibility', () => {
     it('handles complex tooltip content', () => {
       render(
         <TooltipProvider>
-          <TooltipRoot defaultOpen>
+          <Tooltip defaultOpen>
             <TooltipTrigger>Complex action</TooltipTrigger>
             <TooltipPortal>
               <TooltipContent>
@@ -361,7 +361,7 @@ describe('Tooltip Accessibility', () => {
                 </div>
               </TooltipContent>
             </TooltipPortal>
-          </TooltipRoot>
+          </Tooltip>
         </TooltipProvider>,
       );
 
@@ -574,12 +574,12 @@ describe('Tooltip Accessibility', () => {
       jest.useRealTimers();
       const { container } = render(
         <TooltipProvider>
-          <TooltipRoot defaultOpen>
+          <Tooltip defaultOpen>
             <TooltipTrigger>Empty tooltip</TooltipTrigger>
             <TooltipPortal>
               <TooltipContent>Empty tooltip content</TooltipContent>
             </TooltipPortal>
-          </TooltipRoot>
+          </Tooltip>
         </TooltipProvider>,
       );
 
@@ -594,18 +594,18 @@ describe('Tooltip Accessibility', () => {
       const { container } = render(
         <TooltipProvider>
           <div>
-            <TooltipRoot>
+            <Tooltip>
               <TooltipTrigger>First trigger</TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent>First tooltip</TooltipContent>
               </TooltipPortal>
-            </TooltipRoot>
-            <TooltipRoot>
+            </Tooltip>
+            <Tooltip>
               <TooltipTrigger>Second trigger</TooltipTrigger>
               <TooltipPortal>
                 <TooltipContent>Second tooltip</TooltipContent>
               </TooltipPortal>
-            </TooltipRoot>
+            </Tooltip>
           </div>
         </TooltipProvider>,
       );
@@ -620,14 +620,14 @@ describe('Tooltip Accessibility', () => {
       jest.useRealTimers();
       const { container } = render(
         <TooltipProvider>
-          <TooltipRoot defaultOpen>
+          <Tooltip defaultOpen>
             <TooltipTrigger aria-label='Search'>
               {({ isOpen }) => <span>Search: {isOpen ? 'showing help' : 'hover for help'}</span>}
             </TooltipTrigger>
             <TooltipPortal>
               <TooltipContent>Search help text</TooltipContent>
             </TooltipPortal>
-          </TooltipRoot>
+          </Tooltip>
         </TooltipProvider>,
       );
 

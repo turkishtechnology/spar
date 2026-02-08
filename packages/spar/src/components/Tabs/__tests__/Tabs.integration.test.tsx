@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { TabsRoot, TabsList, TabsTrigger, TabsContent } from '../index';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../index';
 
 // Complex integration scenarios
 const FormTabs = () => {
@@ -32,7 +32,7 @@ const FormTabs = () => {
 
   return (
     <div>
-      <TabsRoot value={activeTab} onValueChange={setActiveTab}>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
           <TabsTrigger value='personal'>Personal Info</TabsTrigger>
           <TabsTrigger value='address' disabled={!formData.personal.name}>
@@ -148,7 +148,7 @@ const FormTabs = () => {
             </button>
           </div>
         </TabsContent>
-      </TabsRoot>
+      </Tabs>
 
       {formData.review.confirmed && (
         <div role='status' aria-live='polite'>
@@ -175,7 +175,7 @@ const AsyncContentTabs = () => {
   };
 
   return (
-    <TabsRoot
+    <Tabs
       onValueChange={(value) => {
         // Skip loading on initial auto-selection
         if (!hasInitializedRef.current) {
@@ -222,13 +222,13 @@ const AsyncContentTabs = () => {
           <div>{loadedContent.tab3 || 'Click to load content'}</div>
         )}
       </TabsContent>
-    </TabsRoot>
+    </Tabs>
   );
 };
 
 const NestedTabsExample = () => {
   return (
-    <TabsRoot defaultValue='main1'>
+    <Tabs defaultValue='main1'>
       <TabsList>
         <TabsTrigger value='main1'>Main 1</TabsTrigger>
         <TabsTrigger value='main2'>Main 2</TabsTrigger>
@@ -237,31 +237,31 @@ const NestedTabsExample = () => {
       <TabsContent value='main1'>
         <div>
           <h3>Main Content 1</h3>
-          <TabsRoot defaultValue='sub1a'>
+          <Tabs defaultValue='sub1a'>
             <TabsList>
               <TabsTrigger value='sub1a'>Sub 1A</TabsTrigger>
               <TabsTrigger value='sub1b'>Sub 1B</TabsTrigger>
             </TabsList>
             <TabsContent value='sub1a'>Nested content 1A</TabsContent>
             <TabsContent value='sub1b'>Nested content 1B</TabsContent>
-          </TabsRoot>
+          </Tabs>
         </div>
       </TabsContent>
 
       <TabsContent value='main2'>
         <div>
           <h3>Main Content 2</h3>
-          <TabsRoot defaultValue='sub2a'>
+          <Tabs defaultValue='sub2a'>
             <TabsList>
               <TabsTrigger value='sub2a'>Sub 2A</TabsTrigger>
               <TabsTrigger value='sub2b'>Sub 2B</TabsTrigger>
             </TabsList>
             <TabsContent value='sub2a'>Nested content 2A</TabsContent>
             <TabsContent value='sub2b'>Nested content 2B</TabsContent>
-          </TabsRoot>
+          </Tabs>
         </div>
       </TabsContent>
-    </TabsRoot>
+    </Tabs>
   );
 };
 
@@ -458,7 +458,7 @@ describe('Tabs Integration Tests', () => {
 
       render(
         <div onClick={onTabsClick}>
-          <TabsRoot>
+          <Tabs>
             <TabsList onClick={onListClick}>
               <TabsTrigger value='tab1' onClick={onTriggerClick}>
                 Tab 1
@@ -467,7 +467,7 @@ describe('Tabs Integration Tests', () => {
             </TabsList>
             <TabsContent value='tab1'>Content 1</TabsContent>
             <TabsContent value='tab2'>Content 2</TabsContent>
-          </TabsRoot>
+          </Tabs>
         </div>,
       );
 
@@ -485,14 +485,14 @@ describe('Tabs Integration Tests', () => {
 
       render(
         <div onClick={onParentClick}>
-          <TabsRoot>
+          <Tabs>
             <TabsList>
               <TabsTrigger value='tab1' onClick={onTriggerClick}>
                 Tab 1
               </TabsTrigger>
             </TabsList>
             <TabsContent value='tab1'>Content 1</TabsContent>
-          </TabsRoot>
+          </Tabs>
         </div>,
       );
 
@@ -514,7 +514,7 @@ describe('Tabs Integration Tests', () => {
       };
 
       render(
-        <TabsRoot>
+        <Tabs>
           <TabsList>
             <TabsTrigger value='tab1'>Tab 1</TabsTrigger>
             <TabsTrigger value='tab2'>Tab 2</TabsTrigger>
@@ -525,7 +525,7 @@ describe('Tabs Integration Tests', () => {
           <TabsContent value='tab2'>
             <TestContent>Content 2</TestContent>
           </TabsContent>
-        </TabsRoot>,
+        </Tabs>,
       );
 
       const initialRenderCount = renderCount;
@@ -542,7 +542,7 @@ describe('Tabs Integration Tests', () => {
       const onValueChange = jest.fn();
 
       render(
-        <TabsRoot onValueChange={onValueChange}>
+        <Tabs onValueChange={onValueChange}>
           <TabsList>
             <TabsTrigger value='tab1'>Tab 1</TabsTrigger>
             <TabsTrigger value='tab2'>Tab 2</TabsTrigger>
@@ -551,7 +551,7 @@ describe('Tabs Integration Tests', () => {
           <TabsContent value='tab1'>Content 1</TabsContent>
           <TabsContent value='tab2'>Content 2</TabsContent>
           <TabsContent value='tab3'>Content 3</TabsContent>
-        </TabsRoot>,
+        </Tabs>,
       );
 
       // Clear any initial auto-selection calls
@@ -591,7 +591,7 @@ describe('Tabs Integration Tests', () => {
         };
 
         return (
-          <TabsRoot value={currentTab} onValueChange={handleTabChange}>
+          <Tabs value={currentTab} onValueChange={handleTabChange}>
             <TabsList>
               <TabsTrigger value='home'>Home</TabsTrigger>
               <TabsTrigger value='about'>About</TabsTrigger>
@@ -600,7 +600,7 @@ describe('Tabs Integration Tests', () => {
             <TabsContent value='home'>Home page content</TabsContent>
             <TabsContent value='about'>About page content</TabsContent>
             <TabsContent value='contact'>Contact page content</TabsContent>
-          </TabsRoot>
+          </Tabs>
         );
       };
 
@@ -628,7 +628,7 @@ describe('Tabs Integration Tests', () => {
         return (
           <div>
             <button onClick={addItem}>Add Tab</button>
-            <TabsRoot value={selectedTab} onValueChange={setSelectedTab}>
+            <Tabs value={selectedTab} onValueChange={setSelectedTab}>
               <TabsList>
                 {items.map((item, index) => (
                   <TabsTrigger key={index} value={`item-${index}`}>
@@ -641,7 +641,7 @@ describe('Tabs Integration Tests', () => {
                   Content for {item}
                 </TabsContent>
               ))}
-            </TabsRoot>
+            </Tabs>
           </div>
         );
       };

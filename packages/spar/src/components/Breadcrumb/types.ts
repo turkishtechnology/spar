@@ -21,9 +21,9 @@ export interface BreadcrumbContextValue {
 }
 
 /**
- * Own props for BreadcrumbRoot
+ * Own props for Breadcrumb
  */
-export interface BreadcrumbRootOwnProps {
+export interface BreadcrumbOwnProps {
   /**
    * Navigation event handler for routing integration
    */
@@ -36,13 +36,13 @@ export interface BreadcrumbRootOwnProps {
 }
 
 /**
- * Props for BreadcrumbRoot
+ * Props for Breadcrumb
  * @remarks Navigation landmark container for breadcrumb trail
  */
-export type BreadcrumbRootProps<T extends ElementType = 'nav'> = PolymorphicProps<
+export type BreadcrumbProps<T extends ElementType = 'nav'> = PolymorphicProps<
   'nav',
   T,
-  BreadcrumbRootOwnProps
+  BreadcrumbOwnProps
 >;
 
 /**
