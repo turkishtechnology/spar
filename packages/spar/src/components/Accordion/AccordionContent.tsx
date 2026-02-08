@@ -1,7 +1,7 @@
 import { ElementType } from 'react';
 import type { AccordionContentProps } from './types';
 import { CollapsibleContent } from '../Collapsible';
-import { useCollapsibleContext } from '../Collapsible/Collapsible';
+import { useCollapsibleContext } from '../Collapsible/hooks';
 
 /**
  * Accordion content panel that shows/hides based on item state. Provides semantic region with proper labeling for screen readers.
