@@ -11,5 +11,8 @@ export const BreadcrumbContext = createContext<BreadcrumbContextValue | null>(nu
  */
 export const useBreadcrumbContext = () => {
   const context = useContext(BreadcrumbContext);
-  return context || {};
+  if (!context) {
+    throw new Error('Breadcrumb components must be used within a Breadcrumb');
+  }
+  return context;
 };
