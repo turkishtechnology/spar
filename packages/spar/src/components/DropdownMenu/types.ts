@@ -395,3 +395,33 @@ export interface DropdownMenuSubContextValue {
   closeMenu: (options?: { focusTrigger?: boolean }) => void;
   closeRootMenu: (options?: { focusTrigger?: boolean }) => void;
 }
+
+/**
+ * Collection item registered in menu content
+ */
+export interface MenuCollectionItem {
+  id: string;
+  ref: RefObject<HTMLElement | null>;
+  disabled: boolean;
+  textValue: string;
+  type: 'item' | 'checkbox' | 'radio' | 'subtrigger';
+}
+
+/**
+ * Context value for DropdownMenuCollection
+ */
+export interface DropdownMenuCollectionContextValue {
+  registerItem: (item: MenuCollectionItem) => void;
+  unregisterItem: (id: string) => void;
+  highlightItem: (id: string | null) => void;
+  highlightFirst: () => void;
+  highlightLast: () => void;
+  highlightNext: () => void;
+  highlightPrevious: () => void;
+  isItemHighlighted: (id: string) => boolean;
+  highlightedId: string | null;
+  closeOnSelect: boolean | 'auto';
+  closeMenu: (options?: { focusTrigger?: boolean }) => void;
+  loop: boolean;
+  dir: Direction;
+}

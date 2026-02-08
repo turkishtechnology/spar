@@ -4,7 +4,7 @@ import type {
   DropdownMenuSubContextValue,
   DropdownMenuFocusStrategy,
 } from './types';
-import { useDropdownMenuRootContext, DropdownMenuSubContext } from './contexts';
+import { useDropdownMenuRootContext, DropdownMenuSubContext } from './hooks';
 
 export const DropdownMenuSub = ({
   open,

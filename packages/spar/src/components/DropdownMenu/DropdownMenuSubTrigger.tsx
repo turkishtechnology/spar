@@ -7,7 +7,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from 'react';
 import type { DropdownMenuSubTriggerProps } from './types';
-import { useDropdownMenuSubContext, useDropdownMenuCollectionContext } from './contexts';
+import { useDropdownMenuSubContext, useDropdownMenuCollectionContext } from './hooks';
 import { MenuItemPrimitive } from './MenuItemPrimitive';
 import { getOpenKey, getCloseKey } from './utils';
 

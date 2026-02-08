@@ -8,7 +8,7 @@ import type {
   DropdownMenuFocusStrategy,
   DropdownMenuTriggerRenderProps,
 } from './types';
-import { useDropdownMenuRootContext } from './contexts';
+import { useDropdownMenuRootContext } from './hooks';
 import { useMergedRef } from '@/hooks';
 import { Button } from '../Button';
 

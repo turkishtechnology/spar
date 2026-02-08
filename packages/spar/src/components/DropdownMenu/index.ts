@@ -12,6 +12,13 @@ export { DropdownMenuGroup } from './DropdownMenuGroup';
 export { DropdownMenuSub } from './DropdownMenuSub';
 export { DropdownMenuSubTrigger } from './DropdownMenuSubTrigger';
 export { DropdownMenuSubContent } from './DropdownMenuSubContent';
+export {
+  useDropdownMenuRootContext,
+  useDropdownMenuSubContext,
+  useMenuScope,
+  useDropdownMenuRadioGroupContext,
+  useDropdownMenuCollectionContext,
+} from './hooks';
 
 export type {
   DropdownMenuProps,
