@@ -1,23 +1,6 @@
-import {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-  useCallback,
-  useId,
-  ElementType,
-} from 'react';
-import type { CollapsibleProps, CollapsibleContextValue } from './types';
-
-const CollapsibleContext = createContext<CollapsibleContextValue | null>(null);
-
-export const useCollapsibleContext = () => {
-  const context = useContext(CollapsibleContext);
-  if (!context) {
-    throw new Error('Collapsible components must be used within a Collapsible');
-  }
-  return context;
-};
+import { useMemo, useState, useCallback, useId, ElementType } from 'react';
+import { CollapsibleContext } from './hooks';
+import type { CollapsibleProps } from './types';
 
 /**
  * Collapsible root component providing context and state management for show/hide content functionality.

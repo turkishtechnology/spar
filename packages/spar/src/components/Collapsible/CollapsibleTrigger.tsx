@@ -1,5 +1,5 @@
 import React, { ElementType } from 'react';
-import { useCollapsibleContext } from './Collapsible';
+import { useCollapsibleContext } from './hooks';
 import type { CollapsibleTriggerProps, CollapsibleTriggerRenderProps } from './types';
 import { Button } from '../Button';
 import type { ButtonProps } from '../Button/types';

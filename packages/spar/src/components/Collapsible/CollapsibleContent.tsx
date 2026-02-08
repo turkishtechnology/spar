@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, ElementType } from 'react';
-import { useCollapsibleContext } from './Collapsible';
+import { useCollapsibleContext } from './hooks';
 import type { CollapsibleContentProps } from './types';
 
 // Helper function to determine the hidden attribute value

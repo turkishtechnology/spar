@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '../index';
-import { useCollapsibleContext } from '../Collapsible';
+import { useCollapsibleContext } from '../hooks';
 
 // Mock component to test context access
 const TestComponent = () => {
