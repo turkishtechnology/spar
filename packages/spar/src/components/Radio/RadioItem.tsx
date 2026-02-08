@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, ElementType } from 'react';
 import type { RadioItemProps, RadioItemRenderProps } from './types';
-import { useRadioGroupContext } from './RadioGroup';
+import { useRadioGroupContext } from './hooks';
 import { useFocusItem, useMergedRef } from '@/hooks';
 
 /**

@@ -1,26 +1,7 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  useId,
-  useRef,
-  useEffect,
-  ElementType,
-} from 'react';
+import React, { useState, useCallback, useId, useRef, useEffect, ElementType } from 'react';
 import { useControlledState, useItemRegistry } from '@/hooks';
+import { RadioGroupContext } from './hooks';
 import type { RadioGroupProps, RadioGroupContextValue } from './types';
-
-// Context for RadioGroup
-const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
-
-export const useRadioGroupContext = () => {
-  const context = useContext(RadioGroupContext);
-  if (!context) {
-    throw new Error('RadioItem must be used within a RadioGroup');
-  }
-  return context;
-};
 
 /**
  * RadioGroup component for creating mutually exclusive radio button groups.
