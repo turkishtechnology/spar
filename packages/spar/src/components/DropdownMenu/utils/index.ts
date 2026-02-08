@@ -1,5 +1,5 @@
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
-import type { CheckedState } from '../../types';
+import type { CheckedState } from '../../../types';
 
 export const isCharacterKey = (event: ReactKeyboardEvent<HTMLElement>) => {
   return event.key.length === 1 && !event.altKey && !event.ctrlKey && !event.metaKey;

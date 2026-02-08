@@ -9,7 +9,7 @@ import {
 import type { DropdownMenuSubTriggerProps } from './types';
 import { useDropdownMenuSubContext, useDropdownMenuCollectionContext } from './hooks';
 import { MenuItemPrimitive } from './MenuItemPrimitive';
-import { getOpenKey, getCloseKey } from './utils';
+import { getOpenKey, getCloseKey } from './utils/index';
 
 export const DropdownMenuSubTrigger = ({
   disabled = false,
