@@ -36,6 +36,12 @@ export interface DialogRootProps {
   disabled?: boolean;
 
   /**
+   * Always render portal/overlay/content (for animation libraries)
+   * @defaultValue false
+   */
+  forceMount?: boolean;
+
+  /**
    * Dialog trigger and portal components
    */
   children: ReactNode;
@@ -121,13 +127,7 @@ export interface DialogPortalProps {
 /**
  * Own props for DialogOverlay
  */
-export interface DialogOverlayOwnProps {
-  /**
-   * Always render (for animation libraries)
-   * @defaultValue false
-   */
-  forceMount?: boolean;
-}
+export interface DialogOverlayOwnProps {}
 
 /**
  * Props for DialogOverlay
@@ -148,12 +148,6 @@ export interface DialogContentOwnProps {
    * @defaultValue 'dialog'
    */
   role?: AriaRole;
-
-  /**
-   * Always render (for animation libraries)
-   * @defaultValue false
-   */
-  forceMount?: boolean;
 
   /**
    * Enable focus trapping
@@ -268,9 +262,18 @@ export interface DialogContextValue {
   setIsOpen: (open: boolean) => void;
   modal: boolean;
   disabled: boolean;
+  forceMount: boolean;
   role: AriaRole;
   triggerRef: RefObject<HTMLElement | null>;
   contentRef: RefObject<HTMLElement | null>;
   titleId: string;
   descriptionId: string;
+  /** @internal Ref for storing the element to restore focus to on close */
+  restoreFocusRef: RefObject<HTMLElement | null>;
+  /** @internal Ref for close auto-focus callback set by DialogContent */
+  onCloseAutoFocusRef: RefObject<((event: Event) => void) | undefined>;
+  /** @internal Ref for restoreFocus prop value set by DialogContent */
+  restoreFocusPropRef: RefObject<boolean>;
+  /** @internal Ref for finalFocus prop set by DialogContent */
+  finalFocusPropRef: RefObject<HTMLElement | (() => HTMLElement) | undefined>;
 }

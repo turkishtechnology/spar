@@ -10,11 +10,10 @@ export const DialogPortal = ({
   container = typeof document !== 'undefined' ? document.body : null,
   children,
 }: DialogPortalProps) => {
-  const context = useDialogContext();
-  const { isOpen } = context;
+  const { isOpen, forceMount } = useDialogContext();
 
-  // Only render portal if dialog is open and container is available
-  if (!isOpen || !container) {
+  // Only render portal if dialog is open (or force mounted) and container is available
+  if ((!isOpen && !forceMount) || !container) {
     return null;
   }
 

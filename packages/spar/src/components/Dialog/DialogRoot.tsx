@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useRef, useId } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useId } from 'react';
 import { useControlledState } from '@/hooks';
 import type { DialogRootProps, DialogContextValue } from './types';
 
@@ -22,6 +22,7 @@ export const DialogRoot = ({
   onOpenChange,
   modal = true,
   disabled = false,
+  forceMount = false,
   children,
 }: DialogRootProps) => {
   // Generate unique IDs for ARIA relationships
@@ -32,8 +33,46 @@ export const DialogRoot = ({
   const triggerRef = useRef<HTMLElement | null>(null);
   const contentRef = useRef<HTMLElement | null>(null);
 
+  // Refs for close focus management (populated by DialogContent)
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
+  const onCloseAutoFocusRef = useRef<((event: Event) => void) | undefined>(undefined);
+  const restoreFocusPropRef = useRef<boolean>(true);
+  const finalFocusPropRef = useRef<HTMLElement | (() => HTMLElement) | undefined>(undefined);
+
   // Controlled/uncontrolled state management
   const [isOpen, setIsOpen] = useControlledState(controlledOpen, defaultOpen, onOpenChange);
+
+  // Track previous open state for close transition detection
+  const wasOpenRef = useRef(isOpen ?? false);
+
+  // Handle close focus restoration when isOpen transitions from true to false
+  useEffect(() => {
+    const wasOpen = wasOpenRef.current;
+    wasOpenRef.current = isOpen ?? false;
+
+    if (!isOpen && wasOpen) {
+      const finalFocusElement = finalFocusPropRef.current;
+      const elementToFocus = finalFocusElement
+        ? typeof finalFocusElement === 'function'
+          ? finalFocusElement()
+          : finalFocusElement
+        : restoreFocusPropRef.current
+          ? restoreFocusRef.current
+          : null;
+
+      if (elementToFocus) {
+        const event = new Event('focus', { cancelable: true });
+        onCloseAutoFocusRef.current?.(event);
+
+        if (!event.defaultPrevented) {
+          elementToFocus.focus();
+        }
+      }
+
+      // Clear refs
+      restoreFocusRef.current = null;
+    }
+  }, [isOpen]);
 
   // Memoize context value to prevent unnecessary re-renders
   const contextValue = useMemo<DialogContextValue>(
@@ -42,13 +81,18 @@ export const DialogRoot = ({
       setIsOpen,
       modal,
       disabled,
+      forceMount,
       role: 'dialog',
       triggerRef,
       contentRef,
       titleId,
       descriptionId,
+      restoreFocusRef,
+      onCloseAutoFocusRef,
+      restoreFocusPropRef,
+      finalFocusPropRef,
     }),
-    [isOpen, setIsOpen, modal, disabled, titleId, descriptionId],
+    [isOpen, setIsOpen, modal, disabled, forceMount, titleId, descriptionId],
   );
 
   return <DialogContext.Provider value={contextValue}>{children}</DialogContext.Provider>;

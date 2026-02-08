@@ -8,15 +8,13 @@ import type { DialogOverlayProps } from './types';
  */
 export const DialogOverlay = <T extends ElementType = 'div'>({
   as,
-  forceMount = false,
   ref,
   onClick,
   children,
   ...props
 }: DialogOverlayProps<T>) => {
   const Component = as || 'div';
-  const context = useDialogContext();
-  const { isOpen, setIsOpen, modal } = context;
+  const { isOpen, setIsOpen, modal, forceMount } = useDialogContext();
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {

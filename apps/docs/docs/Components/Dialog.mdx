@@ -303,7 +303,7 @@ The Dialog component is built as a compound component with multiple parts:
 
 Control the dialog's open state externally for integration with other components or form validation.
 
-```tsx {2,4,12}
+```tsx {2,4,11}
 function ControlledDialog() {
   const [open, setOpen] = React.useState(false);
 
@@ -337,7 +337,7 @@ function ControlledDialog() {
 
 Use uncontrolled mode when you don't need to manage the dialog state externally.
 
-```tsx {1}
+```tsx {3}
 function UncontrolledDialog() {
   return (
     <DialogRoot defaultOpen={false}>
@@ -359,7 +359,7 @@ function UncontrolledDialog() {
 
 Create non-modal dialogs that don't block interaction with the underlying page.
 
-```tsx {1,8-10}
+```tsx {3}
 function NonModalDialog() {
   return (
     <DialogRoot modal={false}>
@@ -388,7 +388,7 @@ function NonModalDialog() {
 
 Control initial focus and focus restoration for optimal user experience.
 
-```tsx {6-8,10-12}
+```tsx {3,11-19}
 function CustomFocusDialog() {
   const [open, setOpen] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -434,7 +434,7 @@ function CustomFocusDialog() {
 
 Use the `as` prop to render dialog parts as different HTML elements or custom components.
 
-```tsx {2,7,12,17}
+```tsx {4,8,10,13,14}
 function PolymorphicDialog() {
   return (
     <DialogRoot>
@@ -460,25 +460,23 @@ function PolymorphicDialog() {
 
 ### Animation Support
 
-Use `forceMount` for animation libraries that need to control mounting and unmounting.
+Use `forceMount` on the root for animation libraries that need to control mounting and unmounting.
 
-```tsx {4,6-10}
+```tsx {5,9-12,15-19}
 function AnimatedDialog() {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <DialogRoot open={open} onOpenChange={setOpen}>
+    <DialogRoot open={open} onOpenChange={setOpen} forceMount>
       <DialogTrigger>Open Animated Dialog</DialogTrigger>
       <DialogPortal>
         <DialogOverlay
-          forceMount
           style={{
             opacity: open ? 1 : 0,
             transition: 'opacity 0.2s ease',
           }}
         />
         <DialogContent
-          forceMount
           style={{
             transform: open ? 'scale(1)' : 'scale(0.95)',
             opacity: open ? 1 : 0,
@@ -503,14 +501,15 @@ The root container that manages dialog state and provides context to all child c
 
 **Props**
 
-| Name            | Type                      | Default     | Description                                          |
-| --------------- | ------------------------- | ----------- | ---------------------------------------------------- |
-| `children`      | `ReactNode`               | -           | Dialog trigger and portal components                 |
-| `open?`         | `boolean`                 | `undefined` | Controlled open state                                |
-| `onOpenChange?` | `(open: boolean) => void` | `undefined` | Callback when open state changes                     |
-| `defaultOpen?`  | `boolean`                 | `false`     | Initial open state for uncontrolled usage            |
-| `modal?`        | `boolean`                 | `true`      | Whether dialog is modal (blocks interaction outside) |
-| `disabled?`     | `boolean`                 | `false`     | Disables all dialog triggers (prevents opening)      |
+| Name            | Type                      | Default     | Description                                                  |
+| --------------- | ------------------------- | ----------- | ------------------------------------------------------------ |
+| `children`      | `ReactNode`               | -           | Dialog trigger and portal components                         |
+| `open?`         | `boolean`                 | `undefined` | Controlled open state                                        |
+| `onOpenChange?` | `(open: boolean) => void` | `undefined` | Callback when open state changes                             |
+| `defaultOpen?`  | `boolean`                 | `false`     | Initial open state for uncontrolled usage                    |
+| `modal?`        | `boolean`                 | `true`      | Whether dialog is modal (blocks interaction outside)         |
+| `disabled?`     | `boolean`                 | `false`     | Disables all dialog triggers (prevents opening)              |
+| `forceMount?`   | `boolean`                 | `false`     | Always render portal/overlay/content for animation libraries |
 
 **Events**
 
@@ -534,7 +533,7 @@ Interactive element that opens the dialog when activated. Extends all `Button` c
 | ------------------ | --------------------------------------------------------------- | ----------- | --------------------------------------------------- |
 | `children`         | `ReactNode \| ((state: DialogTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function            |
 | `disabled?`        | `boolean`                                                       | `false`     | Disables trigger interaction                        |
-| `autoFocus?` | `boolean`                                                       | `false`     | Whether the button should receive focus on mount    |
+| `autoFocus?`       | `boolean`                                                       | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                       | `false`     | Loading state with screen reader support            |
 | `isPressed?`       | `boolean`                                                       | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange?` | `(pressed: boolean) => void`                                    | `undefined` | Callback fired when toggle state changes            |
@@ -592,12 +591,11 @@ Background overlay that appears behind dialog content and handles click-outside 
 
 **Props**
 
-| Name          | Type                     | Default     | Description                           |
-| ------------- | ------------------------ | ----------- | ------------------------------------- |
-| `children?`   | `ReactNode`              | `undefined` | Overlay content (usually none)        |
-| `as?`         | `ElementType`          | `'div'`     | Polymorphic element type              |
-| `forceMount?` | `boolean`                | `false`     | Always render for animation libraries |
-| `ref?`        | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to overlay element      |
+| Name        | Type                     | Default     | Description                      |
+| ----------- | ------------------------ | ----------- | -------------------------------- |
+| `children?` | `ReactNode`              | `undefined` | Overlay content (usually none)   |
+| `as?`       | `ElementType`            | `'div'`     | Polymorphic element type         |
+| `ref?`      | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to overlay element |
 
 **Events**
 
@@ -617,17 +615,16 @@ Main dialog container that handles focus management and keyboard interactions.
 
 **Props**
 
-| Name            | Type                                 | Default     | Description                           |
-| --------------- | ------------------------------------ | ----------- | ------------------------------------- |
-| `children`      | `ReactNode`                          | -           | Dialog content                        |
-| `as?`           | `ElementType`                      | `'div'`     | Polymorphic element type              |
-| `role?`         | `React.AriaRole`                     | `'dialog'`  | ARIA role for dialog type             |
-| `forceMount?`   | `boolean`                            | `false`     | Always render for animation libraries |
-| `trapFocus?`    | `boolean`                            | `true`      | Enable focus trapping                 |
-| `restoreFocus?` | `boolean`                            | `true`      | Restore focus on close                |
-| `initialFocus?` | `HTMLElement \| (() => HTMLElement)` | `undefined` | Element to focus on open              |
-| `finalFocus?`   | `HTMLElement \| (() => HTMLElement)` | `undefined` | Element to focus on close             |
-| `ref?`          | `React.Ref<HTMLElement>`             | `undefined` | Ref forwarded to content element      |
+| Name            | Type                                 | Default     | Description                      |
+| --------------- | ------------------------------------ | ----------- | -------------------------------- |
+| `children`      | `ReactNode`                          | -           | Dialog content                   |
+| `as?`           | `ElementType`                        | `'div'`     | Polymorphic element type         |
+| `role?`         | `React.AriaRole`                     | `'dialog'`  | ARIA role for dialog type        |
+| `trapFocus?`    | `boolean`                            | `true`      | Enable focus trapping            |
+| `restoreFocus?` | `boolean`                            | `true`      | Restore focus on close           |
+| `initialFocus?` | `HTMLElement \| (() => HTMLElement)` | `undefined` | Element to focus on open         |
+| `finalFocus?`   | `HTMLElement \| (() => HTMLElement)` | `undefined` | Element to focus on close        |
+| `ref?`          | `React.Ref<HTMLElement>`             | `undefined` | Ref forwarded to content element |
 
 **Events**
 
@@ -654,7 +651,7 @@ Dialog title that provides an accessible name for the dialog.
 | Name       | Type                     | Default     | Description                    |
 | ---------- | ------------------------ | ----------- | ------------------------------ |
 | `children` | `ReactNode`              | -           | Title content                  |
-| `as?`      | `ElementType`          | `'h2'`      | Polymorphic element type       |
+| `as?`      | `ElementType`            | `'h2'`      | Polymorphic element type       |
 | `level?`   | `number`                 | `2`         | Heading level (1-6)            |
 | `ref?`     | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to title element |
 
@@ -679,7 +676,7 @@ Dialog description that provides additional accessible information about the dia
 | Name       | Type                     | Default     | Description                          |
 | ---------- | ------------------------ | ----------- | ------------------------------------ |
 | `children` | `ReactNode`              | -           | Description content                  |
-| `as?`      | `ElementType`          | `'p'`       | Polymorphic element type             |
+| `as?`      | `ElementType`            | `'p'`       | Polymorphic element type             |
 | `ref?`     | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to description element |
 
 **Events**
@@ -702,10 +699,10 @@ Button that closes the dialog when activated. Extends all `Button` component pro
 
 | Name               | Type                                                          | Default     | Description                                         |
 | ------------------ | ------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `as?`      | `ElementType`            | `'button'`  | Polymorphic element type              |
+| `as?`              | `ElementType`                                                 | `'button'`  | Polymorphic element type                            |
 | `children`         | `ReactNode \| ((state: DialogCloseRenderProps) => ReactNode)` | -           | Close button content or render props function       |
 | `disabled?`        | `boolean`                                                     | `false`     | Whether close button is disabled                    |
-| `autoFocus?` | `boolean`                                                     | `false`     | Whether the button should receive focus on mount    |
+| `autoFocus?`       | `boolean`                                                     | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                     | `false`     | Loading state with screen reader support            |
 | `isPressed?`       | `boolean`                                                     | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange?` | `(pressed: boolean) => void`                                  | `undefined` | Callback fired when toggle state changes            |
