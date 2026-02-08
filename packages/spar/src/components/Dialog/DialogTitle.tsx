@@ -13,12 +13,12 @@ export const DialogTitle = <T extends ElementType = 'h2'>({
   children,
   ...props
 }: DialogTitleProps<T>) => {
-  const Component = as || 'h2';
+  const Component = as || (`h${level}` as ElementType);
   const context = useDialogContext();
   const { titleId } = context;
 
   return (
-    <Component ref={ref} id={titleId} data-level={level?.toString()} {...props}>
+    <Component ref={ref} id={titleId} data-level={level} {...props}>
       {children}
     </Component>
   );

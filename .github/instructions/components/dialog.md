@@ -46,6 +46,7 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 | `defaultOpen` | `boolean` | No | `false` | Initial open state (uncontrolled) |
 | `modal` | `boolean` | No | `true` | Whether dialog is modal (blocks interaction outside) |
 | `disabled` | `boolean` | No | `false` | Disables all dialog triggers (prevents opening) |
+| `forceMount` | `boolean` | No | `false` | Always render portal/overlay/content (for animation libraries) |
 | `children` | `ReactNode` | Yes | - | Dialog trigger and portal components |
 
 ### DialogTrigger Props
@@ -82,7 +83,6 @@ Extends all `ButtonProps` from the Button component.
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic element type |
-| `forceMount` | `boolean` | No | `false` | Always render (for animation libraries) |
 | `children` | `ReactNode` | No | - | Optional overlay content |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
 
@@ -91,7 +91,6 @@ Extends all `ButtonProps` from the Button component.
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic element type |
 | `role` | `'dialog' \| 'alertdialog'` | No | `'dialog'` | ARIA role for dialog type |
-| `forceMount` | `boolean` | No | `false` | Always render (for animation libraries) |
 | `trapFocus` | `boolean` | No | `true` | Enable focus trapping |
 | `restoreFocus` | `boolean` | No | `true` | Restore focus on close |
 | `initialFocus` | `HTMLElement \| (() => HTMLElement)` | No | - | Element to focus on open |
@@ -333,7 +332,7 @@ All components expose `data-*` attributes for styling without className coupling
 - No specific data attributes (standard button styling)
 
 ### Animation Support
-- `forceMount` prop on Overlay and Content for animation libraries
+- `forceMount` prop on DialogRoot for animation libraries (applies to Portal, Overlay, and Content via context)
 - Consistent `data-state` attributes for CSS transitions
 - Portal rendering prevents CSS containment issues
 
@@ -457,7 +456,7 @@ For teams migrating from other dialog libraries:
 - Similar compound component structure
 - Replace `Dialog.Panel` with `DialogContent`
 - Update focus management props if customized
-- Migrate `static` prop usage to `forceMount`
+- Migrate `static` prop usage to `forceMount` on DialogRoot
 
 **From Reach UI Dialog:**
 - Replace single component with compound structure
