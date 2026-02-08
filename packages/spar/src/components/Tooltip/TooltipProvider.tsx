@@ -1,6 +1,6 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from 'react';
 import type { TooltipProviderProps, TooltipProviderContextValue } from './types';
-import { TooltipProviderContext } from './TooltipProviderContext';
+import { TooltipProviderContext } from './hooks';
 
 /**
  * Provides shared configuration for multiple tooltip instances

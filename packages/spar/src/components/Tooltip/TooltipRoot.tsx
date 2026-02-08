@@ -1,8 +1,7 @@
 import { useId, useMemo, useRef, useState } from 'react';
 import type { TooltipRootProps, TooltipContextValue } from './types';
 import type { Side } from '../../types';
-import { TooltipContext } from './TooltipContext';
-import { useTooltipProvider } from './useTooltipProvider';
+import { useTooltipProviderContext, TooltipContext } from './hooks';
 
 /**
  * Root component that manages tooltip state and provides context to child components
@@ -16,7 +15,7 @@ export const TooltipRoot = ({
   hideDelay = 0,
   disabled = false,
 }: TooltipRootProps) => {
-  const provider = useTooltipProvider();
+  const provider = useTooltipProviderContext();
   const triggerId = useId();
   const contentId = useId();
 

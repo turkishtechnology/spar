@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, type ElementType, createElement } from 'react';
 import { useMergedRef } from '@/hooks';
 import type { TooltipArrowProps } from './types';
-import { useTooltip } from './useTooltip';
+import { useTooltipContext } from './hooks';
 
 /**
  * Optional arrow pointing to the trigger element
@@ -15,7 +15,7 @@ export const TooltipArrow = <T extends ElementType = 'svg'>({
   ...props
 }: TooltipArrowProps<T>) => {
   const Component = as || 'svg';
-  const context = useTooltip();
+  const context = useTooltipContext();
   const internalRef = useRef<HTMLElement | SVGSVGElement>(null);
   const mergedRef = useMergedRef(
     internalRef as React.RefObject<HTMLElement | null>,
