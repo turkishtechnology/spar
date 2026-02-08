@@ -1,5 +1,5 @@
 import React, { useCallback, type ElementType } from 'react';
-import { useTabsContext } from './Tabs';
+import { useTabsContext } from './hooks';
 import type { TabsListProps } from './types';
 
 /**

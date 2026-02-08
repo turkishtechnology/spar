@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMergedRef } from '@/hooks';
-import { useTabsContext } from './Tabs';
+import { useTabsContext } from './hooks';
 import type { TabsTriggerProps, TabsTriggerRenderProps } from './types';
 import { Button } from '../Button';
 

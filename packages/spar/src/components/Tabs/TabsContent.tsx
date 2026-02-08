@@ -1,5 +1,5 @@
 import { type ElementType } from 'react';
-import { useTabsContext } from './Tabs';
+import { useTabsContext } from './hooks';
 import type { TabsContentProps } from './types';
 
 /**
