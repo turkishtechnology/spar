@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, type ElementType } from 'react';
 import { createPortal } from 'react-dom';
 import { useInteractOutside, useMergedRef } from '@/hooks';
 import { PopoverContentProps } from './types';
@@ -8,7 +8,8 @@ import { getFocusableElements } from './utils/index';
 /**
  * Content container that holds the popover content
  */
-export const PopoverContent = ({
+export const PopoverContent = <T extends ElementType = 'div'>({
+  as,
   side = 'bottom',
   align = 'center',
   sideOffset = 8,
@@ -28,7 +29,9 @@ export const PopoverContent = ({
   onKeyDown,
   ref,
   ...props
-}: PopoverContentProps) => {
+}: PopoverContentProps<T>) => {
+  const Component = as || 'div';
+
   // Unused props for future implementation
   void side;
   void align;
@@ -163,7 +166,7 @@ export const PopoverContent = ({
   if (!state.isOpen || !isMounted) return null;
 
   const contentElement = (
-    <div
+    <Component
       ref={mergedRef}
       id={state.contentId}
       role={modal ? 'dialog' : undefined}
@@ -180,7 +183,7 @@ export const PopoverContent = ({
       {...props}
     >
       {children}
-    </div>
+    </Component>
   );
 
   return createPortal(contentElement, document.body);

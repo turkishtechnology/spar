@@ -1,3 +1,4 @@
+import { type ElementType } from 'react';
 import { useMergedRef } from '@/hooks';
 import { PopoverArrowProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
@@ -5,14 +6,16 @@ import { usePopoverContext } from './hooks/usePopoverContext';
 /**
  * Optional arrow element for popover visual enhancement
  */
-export const PopoverArrow = ({
+export const PopoverArrow = <T extends ElementType = 'div'>({
+  as,
   width = 10,
   height = 5,
   offset = 0,
   style,
   ref,
   ...props
-}: PopoverArrowProps) => {
+}: PopoverArrowProps<T>) => {
+  const Component = as || 'div';
   const { state, arrowRef } = usePopoverContext();
 
   const mergedRef = useMergedRef(arrowRef as React.RefObject<HTMLDivElement | null>, ref);
@@ -23,7 +26,7 @@ export const PopoverArrow = ({
   if (!state.isOpen) return null;
 
   return (
-    <div
+    <Component
       ref={mergedRef}
       role='presentation'
       data-side={state.actualSide}
