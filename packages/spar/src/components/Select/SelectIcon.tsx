@@ -1,6 +1,6 @@
 import { type ElementType } from 'react';
+import { useSelectContext } from './hooks';
 import type { SelectIconProps } from './types';
-import { useSelectContext } from './SelectRoot';
 
 /**
  * Optional visual indicator (chevron, arrow) that displays the select state.

@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useRef, type ElementType } from 'react';
+import React, { useEffect, useRef, useCallback, type ElementType } from 'react';
 import { useInteractOutside } from '@/hooks';
+import { useSelectContext } from './hooks';
 import {
   useFloating,
   offset as offsetMiddleware,
@@ -11,7 +12,6 @@ import {
   autoUpdate,
 } from '@floating-ui/react-dom';
 import type { SelectContentProps } from './types';
-import { useSelectContext } from './SelectRoot';
 
 /**
  * Dropdown container that appears when select is open. Handles keyboard navigation, focus management, and outside click detection. Positioned using Floating UI.

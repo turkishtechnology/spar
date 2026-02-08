@@ -1,25 +1,7 @@
-import {
-  createContext,
-  useContext,
-  useId,
-  useMemo,
-  useState,
-  useCallback,
-  useRef,
-  type ElementType,
-} from 'react';
+import { useId, useMemo, useState, useCallback, useRef, type ElementType } from 'react';
 import { useItemRegistry } from '@/hooks';
+import { SelectContext } from './hooks';
 import type { SelectRootProps, SelectContextValue, SelectItemData } from './types';
-
-const SelectContext = createContext<SelectContextValue | null>(null);
-
-export const useSelectContext = () => {
-  const context = useContext(SelectContext);
-  if (!context) {
-    throw new Error('Select components must be used within a SelectRoot');
-  }
-  return context;
-};
 
 /**
  * Select root component providing context and state management for all select components. Supports controlled and uncontrolled patterns with full keyboard navigation and accessibility.

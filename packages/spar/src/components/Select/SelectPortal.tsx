@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useSelectContext } from './hooks';
 import type { SelectPortalProps } from './types';
-import { useSelectContext } from './SelectRoot';
 
 /**
  * Portal container for rendering the select dropdown outside the DOM hierarchy. Ensures proper z-index stacking and accessibility.

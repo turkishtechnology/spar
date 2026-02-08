@@ -1,6 +1,6 @@
-import type { ElementType } from 'react';
+import { type ElementType } from 'react';
+import { useSelectContext } from './hooks';
 import type { SelectValueProps } from './types';
-import { useSelectContext } from './SelectRoot';
 
 /**
  * Displays the selected value or placeholder text. Automatically updates when selection changes.

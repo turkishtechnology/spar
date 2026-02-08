@@ -13,6 +13,7 @@ export { SelectItemText } from './SelectItemText';
 export { SelectItemIndicator } from './SelectItemIndicator';
 export { SelectSeparator } from './SelectSeparator';
 export { SelectArrow } from './SelectArrow';
+export { useSelectContext } from './hooks';
 
 export type {
   SelectRootProps,
