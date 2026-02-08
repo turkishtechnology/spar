@@ -12,9 +12,9 @@ import {
   type Middleware,
 } from '@floating-ui/react-dom';
 import { useMergedRef } from '@/hooks';
+import { useTooltipContext } from './hooks';
 import type { TooltipContentProps } from './types';
 import type { Side, Align } from '../../types';
-import { useTooltip } from './useTooltip';
 
 // Helper to convert Side + Align to Placement
 const toPlacement = (side: Side, align?: Align): Placement => {
@@ -46,7 +46,7 @@ export const TooltipContent = <T extends ElementType = 'div'>({
   ...props
 }: TooltipContentProps<T>) => {
   const Component = as || 'div';
-  const context = useTooltip();
+  const context = useTooltipContext();
   const internalRef = useRef<HTMLElement>(null);
   const mergedRef = useMergedRef(internalRef, ref);
 

@@ -1,8 +1,7 @@
 import React, { useRef, useEffect, useCallback, ElementType } from 'react';
 import { useMergedRef } from '@/hooks';
 import type { TooltipTriggerProps, TooltipTriggerRenderProps } from './types';
-import { useTooltip } from './useTooltip';
-import { useTooltipProvider } from './useTooltipProvider';
+import { useTooltipContext, useTooltipProviderContext } from './hooks';
 import { Button } from '../Button';
 import type { ButtonProps } from '../Button/types';
 
@@ -20,8 +19,8 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
   ref,
   ...props
 }: TooltipTriggerProps<T>) => {
-  const context = useTooltip();
-  const provider = useTooltipProvider();
+  const context = useTooltipContext();
+  const provider = useTooltipProviderContext();
   const showTimeoutRef = useRef<number | null>(null);
 
   const mergedRef = useMergedRef(context.triggerRef, ref);

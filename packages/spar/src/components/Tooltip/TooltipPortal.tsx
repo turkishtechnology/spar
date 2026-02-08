@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { TooltipPortalProps } from './types';
-import { useTooltip } from './useTooltip';
+import { useTooltipContext } from './hooks';
 
 /**
  * Portal component for rendering tooltip outside normal DOM tree
  */
 export const TooltipPortal = ({ children, container, forceMount = false }: TooltipPortalProps) => {
-  const context = useTooltip();
+  const context = useTooltipContext();
   const [mounted, setMounted] = useState(false);
 
   // Mount after hydration
