@@ -1,5 +1,5 @@
 import { createElement, type MouseEvent, type KeyboardEvent, ElementType } from 'react';
-import { useBreadcrumb } from './BreadcrumbContext';
+import { useBreadcrumbContext } from './hooks';
 import type { BreadcrumbLinkProps } from './types';
 
 /**
@@ -20,7 +20,7 @@ export const BreadcrumbLink = <T extends ElementType = 'a'>({
   ...props
 }: BreadcrumbLinkProps<T>) => {
   const Component = as || 'a';
-  const { disabled: rootDisabled, onNavigate } = useBreadcrumb();
+  const { disabled: rootDisabled, onNavigate } = useBreadcrumbContext();
   const linkIsDisabled = disabled || rootDisabled;
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {

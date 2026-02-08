@@ -1,5 +1,5 @@
 import { createElement, ElementType } from 'react';
-import { BreadcrumbContext } from './BreadcrumbContext';
+import { BreadcrumbContext } from './hooks';
 import type { BreadcrumbRootProps, BreadcrumbContextValue } from './types';
 
 /**
