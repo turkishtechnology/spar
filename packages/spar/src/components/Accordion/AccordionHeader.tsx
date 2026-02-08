@@ -1,6 +1,6 @@
 import { ElementType } from 'react';
 import type { AccordionHeaderProps } from './types';
-import { useAccordionItemContext } from './AccordionItem';
+import { useAccordionItemContext } from './hooks';
 
 /**
  * Accordion header providing semantic heading structure for triggers. Wraps the trigger in appropriate heading element for document hierarchy.

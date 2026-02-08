@@ -1,7 +1,6 @@
 import React, { useCallback, ElementType } from 'react';
 import type { AccordionTriggerProps, AccordionTriggerRenderProps } from './types';
-import { useAccordionContext } from './Accordion';
-import { useAccordionItemContext } from './AccordionItem';
+import { useAccordionContext, useAccordionItemContext } from './hooks';
 import { CollapsibleTrigger } from '../Collapsible';
 
 /**

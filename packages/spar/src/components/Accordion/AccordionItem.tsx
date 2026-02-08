@@ -1,25 +1,7 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useCallback,
-  useId,
-  ElementType,
-} from 'react';
+import { useEffect, useMemo, useCallback, useId, ElementType } from 'react';
 import type { AccordionItemProps, AccordionItemContextValue } from './types';
-import { useAccordionContext } from './Accordion';
+import { useAccordionContext, AccordionItemContext } from './hooks';
 import { CollapsibleRoot } from '../Collapsible';
-
-const AccordionItemContext = createContext<AccordionItemContextValue | null>(null);
-
-export const useAccordionItemContext = () => {
-  const context = useContext(AccordionItemContext);
-  if (!context) {
-    throw new Error('AccordionItem components must be used within an AccordionItem');
-  }
-  return context;
-};
 
 /**
  * Individual accordion item providing context for trigger and content components. Manages item registration and expansion state.
