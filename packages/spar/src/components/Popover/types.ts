@@ -1,4 +1,5 @@
-import type { ComponentProps, ReactNode, RefObject, CSSProperties } from 'react';
+import type { ElementType, ReactNode, RefObject, CSSProperties } from 'react';
+import type { PolymorphicProps } from '../../types';
 import type { ButtonProps } from '../Button/types';
 
 export type PopoverSide = 'top' | 'bottom' | 'left' | 'right';
@@ -123,10 +124,9 @@ export interface PopoverTriggerProps extends Omit<ButtonProps, 'children'> {
 }
 
 /**
- * Props for PopoverContent component
- * @remarks Fully accessible, headless popover content container
+ * Own props for PopoverContent component
  */
-export interface PopoverContentProps extends ComponentProps<'div'> {
+export interface PopoverContentOwnProps {
   /**
    * Side of trigger to position against
    * @defaultValue 'bottom'
@@ -206,10 +206,19 @@ export interface PopoverContentProps extends ComponentProps<'div'> {
 }
 
 /**
- * Props for PopoverArrow component
- * @remarks Purely decorative arrow element
+ * Props for PopoverContent component
+ * @remarks Fully accessible, headless popover content container
  */
-export interface PopoverArrowProps extends ComponentProps<'div'> {
+export type PopoverContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  PopoverContentOwnProps
+>;
+
+/**
+ * Own props for PopoverArrow component
+ */
+export interface PopoverArrowOwnProps {
   /**
    * Arrow width in pixels
    * @defaultValue 10
@@ -230,15 +239,34 @@ export interface PopoverArrowProps extends ComponentProps<'div'> {
 }
 
 /**
- * Props for PopoverAnchor component
- * @remarks Element used as positioning reference instead of trigger
+ * Props for PopoverArrow component
+ * @remarks Purely decorative arrow element
  */
-export interface PopoverAnchorProps extends Omit<ComponentProps<'div'>, 'children'> {
+export type PopoverArrowProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  PopoverArrowOwnProps
+>;
+
+/**
+ * Own props for PopoverAnchor component
+ */
+export interface PopoverAnchorOwnProps {
   /**
    * Children content or render function for render props pattern
    */
   children?: ReactNode | ((state: PopoverAnchorRenderProps) => ReactNode);
 }
+
+/**
+ * Props for PopoverAnchor component
+ * @remarks Element used as positioning reference instead of trigger
+ */
+export type PopoverAnchorProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  PopoverAnchorOwnProps
+>;
 
 /**
  * Props for PopoverPortal component
