@@ -189,10 +189,10 @@ const handleActivation = useCallback((event) => {
 
 // Memoize data attributes to prevent object recreation
 const dataAttributes = useMemo(() => ({
-  'data-disabled': disabled ? 'true' : undefined,
-  'data-loading': loading ? 'true' : undefined,
-  'data-pressed': isToggle ? String(isPressed) : undefined,
-  'data-autofocus': autoFocus ? 'true' : undefined,
+  'data-disabled': disabled ? '' : undefined,
+  'data-loading': loading ? '' : undefined,
+  'data-pressed': isToggle && isPressed ? '' : undefined,
+  'data-autofocus': autoFocus ? '' : undefined,
 }), [disabled, loading, isToggle, isPressed, autoFocus]);
 ```
 
@@ -206,10 +206,10 @@ const dataAttributes = useMemo(() => ({
 
 ### State Data Attributes
 ```typescript
-'data-disabled': disabled ? 'true' : undefined
-'data-loading': loading ? 'true' : undefined  
-'data-pressed': isToggle ? String(isPressed) : undefined
-'data-autofocus': autoFocus ? 'true' : undefined
+'data-disabled': disabled ? '' : undefined
+'data-loading': loading ? '' : undefined  
+'data-pressed': isToggle && isPressed ? '' : undefined
+'data-autofocus': autoFocus ? '' : undefined
 'data-focus-visible': // Handled by focus-visible polyfill
 ```
 
@@ -220,11 +220,10 @@ const dataAttributes = useMemo(() => ({
 ```
 
 ### Styling Hooks
-- **`[data-disabled="true"]`**: Disabled state styling
-- **`[data-loading="true"]`**: Loading state styling  
-- **`[data-pressed="true"]`**: Toggle button pressed state
-- **`[data-pressed="false"]`**: Toggle button unpressed state
-- **`[data-autofocus="true"]`**: Auto-focused button styling
+- **`[data-disabled]`**: Disabled state styling
+- **`[data-loading]`**: Loading state styling  
+- **`[data-pressed]`**: Toggle button pressed state
+- **`[data-autofocus]`**: Auto-focused button styling
 - **`:hover`**: Hover state styling
 - **`:focus-visible`**: Keyboard focus styling
 - **`:active`**: Active/pressed styling
