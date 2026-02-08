@@ -7,7 +7,7 @@ import {
   BreadcrumbLink,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '../Breadcrumb';
+} from '../index';
 
 describe('Breadcrumb Components', () => {
   afterEach(() => {
