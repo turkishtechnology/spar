@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import type { BreadcrumbContextValue } from './types';
+import type { BreadcrumbContextValue } from '../types';
 
 /**
  * Context for breadcrumb component communication
@@ -9,7 +9,7 @@ export const BreadcrumbContext = createContext<BreadcrumbContextValue | null>(nu
 /**
  * Hook to access breadcrumb context
  */
-export const useBreadcrumb = () => {
+export const useBreadcrumbContext = () => {
   const context = useContext(BreadcrumbContext);
   return context || {};
 };
