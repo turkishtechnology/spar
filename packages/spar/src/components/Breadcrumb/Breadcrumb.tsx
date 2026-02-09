@@ -1,4 +1,4 @@
-import { createElement, ElementType } from 'react';
+import type { ElementType } from 'react';
 import { BreadcrumbContext } from './hooks';
 import type { BreadcrumbProps, BreadcrumbContextValue } from './types';
 
@@ -22,17 +22,14 @@ export const Breadcrumb = <T extends ElementType = 'nav'>({
 
   return (
     <BreadcrumbContext.Provider value={contextValue}>
-      {createElement(
-        Component,
-        {
-          ...props,
-          'aria-label': ariaLabel,
-          'aria-disabled': disabled || undefined,
-          'data-spar-breadcrumb-root': '',
-          'data-disabled': disabled ? '' : undefined,
-        },
-        children,
-      )}
+      <Component
+        {...props}
+        aria-label={ariaLabel}
+        aria-disabled={disabled || undefined}
+        data-disabled={disabled ? '' : undefined}
+      >
+        {children}
+      </Component>
     </BreadcrumbContext.Provider>
   );
 };

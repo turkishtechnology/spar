@@ -1,4 +1,4 @@
-import { createElement, ElementType } from 'react';
+import type { ElementType } from 'react';
 import type { BreadcrumbItemProps } from './types';
 
 /**
@@ -14,15 +14,10 @@ export const BreadcrumbItem = <T extends ElementType = 'li'>({
 }: BreadcrumbItemProps<T>) => {
   const Component = as || 'li';
 
-  return createElement(
-    Component,
-    {
-      ...domProps,
-      'data-spar-breadcrumb-item': '',
-      'data-position': position,
-      'data-current': isCurrent ? '' : undefined,
-    },
-    children,
+  return (
+    <Component {...domProps} data-position={position} data-current={isCurrent ? '' : undefined}>
+      {children}
+    </Component>
   );
 };
 

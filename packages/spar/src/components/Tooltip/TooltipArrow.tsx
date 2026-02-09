@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, type ElementType, createElement } from 'react';
+import React, { useCallback, useRef, type ElementType } from 'react';
 import { useMergedRef } from '@/hooks';
 import type { TooltipArrowProps } from './types';
 import { useTooltipContext } from './hooks';
@@ -59,9 +59,9 @@ export const TooltipArrow = <T extends ElementType = 'svg'>({
     height,
     style: arrowStyle,
     'data-placement': context.placement,
-  };
+  } as React.ComponentProps<T>;
 
-  return createElement(Component, arrowProps);
+  return <Component {...arrowProps} />;
 };
 
 TooltipArrow.displayName = 'TooltipArrow';
