@@ -45,7 +45,6 @@ export const InputField = <T extends ElementType = 'input'>({
         }
         onFocus={handleFocus}
         onBlur={handleBlur}
-        data-spar-input
         data-autofocus={autoFocus ? '' : undefined}
         data-focused={focused ? '' : undefined}
         data-disabled={props.disabled ? '' : undefined}
@@ -73,7 +72,6 @@ export const InputField = <T extends ElementType = 'input'>({
       readOnly={context.readOnly}
       onFocus={handleFocus}
       onBlur={handleBlur}
-      data-spar-input-field
       data-autofocus={autoFocus ? '' : undefined}
       data-focused={focused ? '' : undefined}
       data-disabled={context.disabled ? '' : undefined}

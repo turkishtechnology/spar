@@ -16,7 +16,7 @@ export const InputDescription = <T extends ElementType = 'div'>({
   const context = useInputContext();
 
   return (
-    <Component {...props} ref={ref} id={context.descriptionId} data-spar-input-description>
+    <Component {...props} ref={ref} id={context.descriptionId}>
       {children}
     </Component>
   );

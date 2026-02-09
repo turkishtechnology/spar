@@ -33,7 +33,6 @@ export const Input = <T extends ElementType = 'div'>({
       <Component
         ref={ref}
         {...props}
-        data-spar-input
         data-invalid={isInvalid ? '' : undefined}
         data-disabled={disabled ? '' : undefined}
         data-required={required ? '' : undefined}

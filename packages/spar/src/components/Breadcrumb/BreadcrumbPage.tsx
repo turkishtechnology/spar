@@ -13,7 +13,7 @@ export const BreadcrumbPage = <T extends ElementType = 'span'>({
   const Component = as || 'span';
 
   return (
-    <Component {...props} aria-current='page' data-spar-breadcrumb-page={''} data-current={''}>
+    <Component {...props} aria-current='page' data-current={''}>
       {children}
     </Component>
   );

@@ -74,7 +74,6 @@ export const BreadcrumbLink = <T extends ElementType = 'a'>({
     tabIndex: linkIsDisabled ? -1 : undefined,
     onClick: handleClick,
     onKeyDown: handleKeyDown,
-    'data-spar-breadcrumb-link': '',
     'data-disabled': linkIsDisabled ? '' : undefined,
     'data-external': isExternal ? '' : undefined,
   };
