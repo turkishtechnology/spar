@@ -1,4 +1,4 @@
-import { createElement, ElementType } from 'react';
+import type { ElementType } from 'react';
 import type { BreadcrumbSeparatorProps } from './types';
 
 /**
@@ -13,14 +13,10 @@ export const BreadcrumbSeparator = <T extends ElementType = 'li'>({
 }: BreadcrumbSeparatorProps<T>) => {
   const Component = as || 'li';
 
-  return createElement(
-    Component,
-    {
-      ...props,
-      'aria-hidden': ariaHidden,
-      'data-spar-breadcrumb-separator': '',
-    },
-    children,
+  return (
+    <Component {...props} aria-hidden={ariaHidden}>
+      {children}
+    </Component>
   );
 };
 

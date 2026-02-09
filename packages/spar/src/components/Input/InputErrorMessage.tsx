@@ -20,14 +20,7 @@ export const InputErrorMessage = <T extends ElementType = 'div'>({
   }
 
   return (
-    <Component
-      {...props}
-      ref={ref}
-      id={context.errorId}
-      role='alert'
-      aria-live='assertive'
-      data-spar-input-error
-    >
+    <Component {...props} ref={ref} id={context.errorId} role='alert' aria-live='assertive'>
       {children}
     </Component>
   );

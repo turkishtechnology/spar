@@ -44,12 +44,8 @@ describe('Input', () => {
 
       const input = screen.getByTestId('simple-input');
 
-      // Should have spar data attribute directly on input (no wrapper)
-      expect(input).toHaveAttribute('data-spar-input');
-
-      // Should NOT have any wrapper with data-spar-input
-      const wrapperDiv = input.closest('[data-spar-input]');
-      expect(wrapperDiv).toBe(input); // The input itself should be the spar element
+      // Should render as standalone input (no wrapper)
+      expect(input.tagName).toBe('INPUT');
 
       // Should NOT have context-specific ID (standalone mode)
       expect(input).not.toHaveAttribute('id');
@@ -64,7 +60,7 @@ describe('Input', () => {
         </Input>,
       );
 
-      const root = screen.getByRole('textbox').closest('[data-spar-input]');
+      const root = screen.getByRole('textbox').parentElement;
       expect(root).toBeInTheDocument();
       expect(root).not.toHaveAttribute('data-invalid');
       expect(root).not.toHaveAttribute('data-disabled');
@@ -78,7 +74,7 @@ describe('Input', () => {
         </Input>,
       );
 
-      const root = screen.getByRole('textbox').closest('[data-spar-input]');
+      const root = screen.getByRole('textbox').parentElement;
       expect(root).toHaveAttribute('data-invalid', '');
     });
 
@@ -89,7 +85,7 @@ describe('Input', () => {
         </Input>,
       );
 
-      const root = screen.getByRole('textbox').closest('[data-spar-input]');
+      const root = screen.getByRole('textbox').parentElement;
       expect(root).toHaveAttribute('data-disabled', '');
     });
 
@@ -100,7 +96,7 @@ describe('Input', () => {
         </Input>,
       );
 
-      const root = screen.getByRole('textbox').closest('[data-spar-input]');
+      const root = screen.getByRole('textbox').parentElement;
       expect(root).toHaveAttribute('data-required', '');
     });
 
@@ -111,7 +107,7 @@ describe('Input', () => {
         </Input>,
       );
 
-      let root = screen.getByRole('textbox').closest('[data-spar-input]');
+      let root = screen.getByRole('textbox').parentElement;
       expect(root).not.toHaveAttribute('data-invalid');
 
       rerender(
@@ -120,7 +116,7 @@ describe('Input', () => {
         </Input>,
       );
 
-      root = screen.getByRole('textbox').closest('[data-spar-input]');
+      root = screen.getByRole('textbox').parentElement;
       expect(root).toHaveAttribute('data-invalid', '');
     });
 
@@ -133,7 +129,6 @@ describe('Input', () => {
 
       const root = screen.getByTestId('input-root');
       expect(root).toHaveClass('custom-class');
-      expect(root).toHaveAttribute('data-spar-input');
     });
 
     it('Input alias works the same as Input', () => {
@@ -143,7 +138,7 @@ describe('Input', () => {
         </Input>,
       );
 
-      const root = screen.getByRole('textbox').closest('[data-spar-input]');
+      const root = screen.getByRole('textbox').parentElement;
       expect(root).toBeInTheDocument();
     });
   });
@@ -266,7 +261,6 @@ describe('Input', () => {
       const field = screen.getByRole('textbox');
       expect(field).toHaveAttribute('placeholder', 'Enter text');
       expect(field).toHaveClass('custom-input');
-      expect(field).toHaveAttribute('data-spar-input-field');
     });
 
     it('renders as standalone input when used outside Input', () => {
@@ -276,7 +270,6 @@ describe('Input', () => {
 
       // Should render without errors (no context required)
       expect(field).toBeInTheDocument();
-      expect(field).toHaveAttribute('data-spar-input');
 
       // Should not have context-specific attributes
       expect(field).not.toHaveAttribute('aria-labelledby');
@@ -297,7 +290,6 @@ describe('Input', () => {
       const field = screen.getByRole('textbox');
 
       expect(label.tagName).toBe('LABEL');
-      expect(label).toHaveAttribute('data-spar-input-label');
       expect(label).toHaveAttribute('for', field.id);
       expect(field).toHaveAttribute('aria-labelledby', label.id);
     });
@@ -337,7 +329,6 @@ describe('Input', () => {
       const description = screen.getByText('Enter your username');
       const field = screen.getByRole('textbox');
 
-      expect(description).toHaveAttribute('data-spar-input-description');
       expect(field).toHaveAttribute('aria-describedby', description.id);
     });
 
@@ -378,7 +369,6 @@ describe('Input', () => {
 
       expect(error).toBeInTheDocument();
       expect(error).toHaveAttribute('role', 'alert');
-      expect(error).toHaveAttribute('data-spar-input-error');
       expect(field).toHaveAttribute('aria-describedby', error.id);
     });
 
