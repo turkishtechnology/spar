@@ -1,4 +1,4 @@
-import { createElement, ElementType } from 'react';
+import type { ElementType } from 'react';
 import type { BreadcrumbPageProps } from './types';
 
 /**
@@ -12,15 +12,10 @@ export const BreadcrumbPage = <T extends ElementType = 'span'>({
 }: BreadcrumbPageProps<T>) => {
   const Component = as || 'span';
 
-  return createElement(
-    Component,
-    {
-      ...props,
-      'aria-current': 'page',
-      'data-spar-breadcrumb-page': '',
-      'data-current': '',
-    },
-    children,
+  return (
+    <Component {...props} aria-current='page' data-spar-breadcrumb-page={''} data-current={''}>
+      {children}
+    </Component>
   );
 };
 

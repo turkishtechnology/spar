@@ -1,4 +1,4 @@
-import { createElement, type MouseEvent, type KeyboardEvent, ElementType } from 'react';
+import type { MouseEvent, KeyboardEvent, ElementType } from 'react';
 import { useBreadcrumbContext } from './hooks';
 import type { BreadcrumbLinkProps } from './types';
 
@@ -79,7 +79,7 @@ export const BreadcrumbLink = <T extends ElementType = 'a'>({
     'data-external': isExternal ? '' : undefined,
   };
 
-  return createElement(Component, linkProps, children);
+  return <Component {...linkProps}>{children}</Component>;
 };
 
 BreadcrumbLink.displayName = 'BreadcrumbLink';
