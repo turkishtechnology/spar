@@ -15,12 +15,7 @@ export const BreadcrumbItem = <T extends ElementType = 'li'>({
   const Component = as || 'li';
 
   return (
-    <Component
-      {...domProps}
-      data-spar-breadcrumb-item={''}
-      data-position={position}
-      data-current={isCurrent ? '' : undefined}
-    >
+    <Component {...domProps} data-position={position} data-current={isCurrent ? '' : undefined}>
       {children}
     </Component>
   );

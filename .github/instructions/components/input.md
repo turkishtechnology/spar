@@ -136,27 +136,13 @@ const useInputContext = () => {
 
 **InputRoot**:
 
-- `data-spar-input` - Base identifier
 - `data-invalid` - When validation fails
 - `data-disabled` - When input disabled
 - `data-required` - When input required
 
 **InputField**:
 
-- `data-spar-input-field` - Field identifier
 - `data-focused` - When input focused
-
-**InputLabel**:
-
-- `data-spar-input-label` - Label identifier
-
-**InputDescription**:
-
-- `data-spar-input-description` - Description identifier
-
-**InputErrorMessage**:
-
-- `data-spar-input-error` - Error identifier
 
 ## 7. Test Coverage Plan
 

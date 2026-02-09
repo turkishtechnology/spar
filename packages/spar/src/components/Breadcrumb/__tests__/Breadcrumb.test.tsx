@@ -75,20 +75,6 @@ describe('Breadcrumb Components', () => {
       expect(nav).toHaveAttribute('data-disabled', '');
     });
 
-    it('applies data attributes', () => {
-      render(
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>,
-      );
-
-      expect(screen.getByRole('navigation')).toHaveAttribute('data-spar-breadcrumb-root', '');
-    });
-
     it('calls onNavigate when link is clicked', async () => {
       const user = userEvent.setup();
       const handleNavigate = jest.fn();
@@ -155,20 +141,6 @@ describe('Breadcrumb Components', () => {
       expect(screen.getByTestId('custom-list')).toBeInTheDocument();
       expect(screen.getByTestId('custom-list').tagName).toBe('UL');
     });
-
-    it('applies data attributes', () => {
-      render(
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>,
-      );
-
-      expect(screen.getByRole('list')).toHaveAttribute('data-spar-breadcrumb-list', '');
-    });
   });
 
   describe('BreadcrumbItem', () => {
@@ -200,20 +172,6 @@ describe('Breadcrumb Components', () => {
 
       expect(screen.getByTestId('custom-item')).toBeInTheDocument();
       expect(screen.getByTestId('custom-item').tagName).toBe('DIV');
-    });
-
-    it('applies data attributes', () => {
-      render(
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>,
-      );
-
-      expect(screen.getByRole('listitem')).toHaveAttribute('data-spar-breadcrumb-item', '');
     });
 
     it('calculates position for multiple items', () => {
@@ -420,20 +378,6 @@ describe('Breadcrumb Components', () => {
       await user.click(screen.getByText('Home'));
       expect(handleClick).not.toHaveBeenCalled();
     });
-
-    it('applies data attributes', () => {
-      render(
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>,
-      );
-
-      expect(screen.getByRole('link')).toHaveAttribute('data-spar-breadcrumb-link', '');
-    });
   });
 
   describe('BreadcrumbPage', () => {
@@ -483,7 +427,6 @@ describe('Breadcrumb Components', () => {
       );
 
       const page = screen.getByText('Current Page');
-      expect(page).toHaveAttribute('data-spar-breadcrumb-page', '');
       expect(page).toHaveAttribute('data-current', '');
     });
   });
@@ -564,24 +507,6 @@ describe('Breadcrumb Components', () => {
       );
 
       expect(screen.getByText('/')).toHaveAttribute('aria-hidden', 'false');
-    });
-
-    it('applies data attributes', () => {
-      render(
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator>/</BreadcrumbSeparator>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Current</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>,
-      );
-
-      expect(screen.getByText('/')).toHaveAttribute('data-spar-breadcrumb-separator', '');
     });
 
     it('renders without children', () => {

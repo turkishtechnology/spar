@@ -16,13 +16,7 @@ export const InputLabel = <T extends ElementType = 'label'>({
   const context = useInputContext();
 
   return (
-    <Component
-      {...props}
-      ref={ref}
-      id={context.labelId}
-      htmlFor={context.fieldId}
-      data-spar-input-label
-    >
+    <Component {...props} ref={ref} id={context.labelId} htmlFor={context.fieldId}>
       {children}
     </Component>
   );

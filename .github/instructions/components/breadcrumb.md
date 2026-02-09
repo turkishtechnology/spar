@@ -272,28 +272,18 @@ const useId = () => {
 ### Required Data Attributes
 
 **BreadcrumbRoot**
-- `data-spar-breadcrumb-root`: Component identifier
 - `data-disabled="true"`: Applied when root is disabled
 
-**BreadcrumbList**
-- `data-spar-breadcrumb-list`: Component identifier
-
 **BreadcrumbItem**
-- `data-spar-breadcrumb-item`: Component identifier
 - `data-position="first|middle|last"`: Item position in breadcrumb trail
 
 **BreadcrumbLink**
-- `data-spar-breadcrumb-link`: Component identifier
 - `data-disabled="true"`: Applied when link is disabled
 - `data-external="true"`: Applied to external links
 - `data-focus-visible="true"`: Applied during keyboard focus
 
 **BreadcrumbPage**
-- `data-spar-breadcrumb-page`: Component identifier
 - `data-current="true"`: Indicates current page
-
-**BreadcrumbSeparator**
-- `data-spar-breadcrumb-separator`: Component identifier
 
 ### State-Based Data Attributes
 - `data-current="true"`: Applied to current page item/page component

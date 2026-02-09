@@ -22,7 +22,7 @@ export const BreadcrumbList = <T extends ElementType = 'ol'>({
   const childCount = Children.count(children);
 
   return (
-    <Component {...props} data-spar-breadcrumb-list={''}>
+    <Component {...props}>
       {Children.map(children, (child, index) => {
         if (isValidElement(child)) {
           // Skip Fragments and Separators (identified by displayName) - only pass position props to BreadcrumbItem

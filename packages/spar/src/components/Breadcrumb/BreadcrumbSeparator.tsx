@@ -14,7 +14,7 @@ export const BreadcrumbSeparator = <T extends ElementType = 'li'>({
   const Component = as || 'li';
 
   return (
-    <Component {...props} aria-hidden={ariaHidden} data-spar-breadcrumb-separator={''}>
+    <Component {...props} aria-hidden={ariaHidden}>
       {children}
     </Component>
   );
