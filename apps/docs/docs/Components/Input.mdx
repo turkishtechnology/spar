@@ -97,7 +97,13 @@ color: #f2f5f8;
 
 ```tsx
 // Compound component (named exports)
-import { InputRoot, InputField, InputLabel, InputDescription, InputErrorMessage } from '@turkish-technology/spar';
+import {
+  InputRoot,
+  InputField,
+  InputLabel,
+  InputDescription,
+  InputErrorMessage,
+} from '@turkish-technology/spar';
 
 // Simple input component
 import { Input } from '@turkish-technology/spar';
@@ -529,7 +535,7 @@ Direct input component function that returns an `InputField` without wrapper. De
 
 | Name           | Type                                              | Default     | Description                                 |
 | -------------- | ------------------------------------------------- | ----------- | ------------------------------------------- |
-| `as?`          | `ElementType`                                   | `'input'`   | Element type for polymorphic rendering      |
+| `as?`          | `ElementType`                                     | `'input'`   | Element type for polymorphic rendering      |
 | `ref?`         | `React.ComponentPropsWithRef<T>['ref']`           | `undefined` | Ref for the input element                   |
 | `type?`        | `string`                                          | `'text'`    | Input type attribute                        |
 | `placeholder?` | `string`                                          | `undefined` | Input placeholder text                      |
@@ -562,11 +568,11 @@ The root container that provides context and state management for all input comp
 
 **HTML Attributes**
 
-| Attribute       | Value               | Purpose                         |
-| --------------- | ------------------- | ------------------------------- |
-| `data-invalid`  | `""` \| `undefined` | Indicates validation state      |
-| `data-disabled` | `""` \| `undefined` | Indicates disabled state        |
-| `data-required` | `""` \| `undefined` | Indicates required state        |
+| Attribute       | Value               | Purpose                    |
+| --------------- | ------------------- | -------------------------- |
+| `data-invalid`  | `""` \| `undefined` | Indicates validation state |
+| `data-disabled` | `""` \| `undefined` | Indicates disabled state   |
+| `data-required` | `""` \| `undefined` | Indicates required state   |
 
 ### InputField
 
@@ -574,13 +580,13 @@ The core input element with polymorphic rendering support. Handles focus states,
 
 **Props**
 
-| Name               | Type                                             | Default     | Description                            |
-| ------------------ | ------------------------------------------------ | ----------- | -------------------------------------- |
-| `as?`              | `ElementType`                                  | `'input'`   | Element type for polymorphic rendering |
-| `ref?`             | `React.ComponentPropsWithRef<T>['ref']`          | `undefined` | Ref for the input element              |
+| Name         | Type                                             | Default     | Description                            |
+| ------------ | ------------------------------------------------ | ----------- | -------------------------------------- |
+| `as?`        | `ElementType`                                    | `'input'`   | Element type for polymorphic rendering |
+| `ref?`       | `React.ComponentPropsWithRef<T>['ref']`          | `undefined` | Ref for the input element              |
 | `autoFocus?` | `boolean`                                        | `false`     | Whether to focus the input on mount    |
-| `onFocus?`         | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Focus event handler                    |
-| `onBlur?`          | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Blur event handler                     |
+| `onFocus?`   | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Focus event handler                    |
+| `onBlur?`    | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Blur event handler                     |
 
 **Events**
 

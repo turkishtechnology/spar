@@ -200,9 +200,9 @@ function ComplexLabelExample() {
   return (
     <div>
       <Label htmlFor='username' required>
-        <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span>
           <span>Username</span>
-          <span style={{ fontSize: '12px', color: '#666' }}>(must be unique)</span>
+          <span>(must be unique)</span>
         </span>
       </Label>
       <input id='username' type='text' required />
@@ -243,11 +243,6 @@ function StyledLabelExample() {
         htmlFor='styled-input'
         required
         className='custom-label'
-        style={{
-          fontWeight: 'bold',
-          marginBottom: '4px',
-          display: 'block',
-        }}
       >
         Styled Label
       </Label>
@@ -306,7 +301,7 @@ function FormGroupExample() {
         aria-describedby={error ? 'error-message' : undefined}
       />
       {error && (
-        <span id='error-message' role='alert' style={{ color: 'red' }}>
+        <span id='error-message' role='alert'>
           {error}
         </span>
       )}
