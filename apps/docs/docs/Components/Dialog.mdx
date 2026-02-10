@@ -322,7 +322,7 @@ function ControlledDialog() {
           <DialogTitle>Edit Profile</DialogTitle>
           <DialogDescription>Make changes to your profile here.</DialogDescription>
 
-          <div style={{ marginTop: '16px' }}>
+          <div>
             <button onClick={handleSave}>Save Changes</button>
             <DialogClose>Cancel</DialogClose>
           </div>
@@ -412,7 +412,7 @@ function CustomFocusDialog() {
           <DialogTitle>Create New Account</DialogTitle>
           <DialogDescription>Enter your details to create an account.</DialogDescription>
 
-          <div style={{ margin: '16px 0' }}>
+          <div>
             <label>
               Username:
               <input ref={inputRef} type='text' />
@@ -581,10 +581,6 @@ Portal container that renders overlay and content outside the normal DOM tree.
 | ---- | ---------- | ----------- | -------------- |
 | -    | -          | No events   | -              |
 
-**HTML Attributes**
-
-_(No specific HTML attributes - portal container element)_
-
 ### DialogOverlay
 
 Background overlay that appears behind dialog content and handles click-outside behavior.
@@ -661,12 +657,6 @@ Dialog title that provides an accessible name for the dialog.
 | ---- | ---------- | ----------- | -------------- |
 | -    | -          | No events   | -              |
 
-**HTML Attributes**
-
-| Attribute | Value    | Purpose           |
-| --------- | -------- | ----------------- |
-| `id`      | `string` | Unique identifier |
-
 ### DialogDescription
 
 Dialog description that provides additional accessible information about the dialog.
@@ -684,12 +674,6 @@ Dialog description that provides additional accessible information about the dia
 | Name | Parameters | Description | When Triggered |
 | ---- | ---------- | ----------- | -------------- |
 | -    | -          | No events   | -              |
-
-**HTML Attributes**
-
-| Attribute | Value    | Purpose           |
-| --------- | -------- | ----------------- |
-| `id`      | `string` | Unique identifier |
 
 ### DialogClose
 

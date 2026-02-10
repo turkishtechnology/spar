@@ -722,11 +722,6 @@ The button that toggles the dropdown open and closed. Extends all `Button` compo
 | `onFocus`   | `(event: FocusEvent)`    | Trigger receives focus | Tab navigation or programmatic focus |
 | `onBlur`    | `(event: FocusEvent)`    | Trigger loses focus    | Focus moves away                     |
 
-**HTML Attributes**
-
-| Attribute | Value | Purpose |
-| --------- | ----- | ------- |
-
 **Data Attributes**
 
 - `data-state`: `"open" | "closed"` - Dropdown open state
@@ -749,12 +744,6 @@ Displays the currently selected value or placeholder text.
 
 No specific events.
 
-**HTML Attributes**
-
-| Attribute | Value    | Purpose                  |
-| --------- | -------- | ------------------------ |
-| `id`      | `string` | Identifies value element |
-
 ### SelectIcon
 
 Optional visual indicator element (typically a chevron or arrow).
@@ -769,10 +758,6 @@ Optional visual indicator element (typically a chevron or arrow).
 **Events**
 
 No specific events.
-
-**HTML Attributes**
-
-_(No specific HTML attributes - decorative icon element)_
 
 ### SelectPortal
 
@@ -789,10 +774,6 @@ Portal container for rendering dropdown outside DOM hierarchy.
 **Events**
 
 No specific events.
-
-**HTML Attributes**
-
-_(No specific HTML attributes - rendering mechanism only)_
 
 ### SelectContent
 
@@ -823,12 +804,6 @@ The dropdown container that appears when select is open. Uses Floating UI for in
 | `onEscapeKeyDown`      | `(event: KeyboardEvent)` | Escape key pressed     | User presses Escape while dropdown is open   |
 | `onPointerDownOutside` | `(event: PointerEvent)`  | Click outside content  | User clicks outside the dropdown             |
 | `onCloseAutoFocus`     | `(event: FocusEvent)`    | Focus returns on close | Dropdown closes and focus restoration occurs |
-
-**HTML Attributes**
-
-| Attribute | Value    | Purpose                   |
-| --------- | -------- | ------------------------- |
-| `id`      | `string` | Unique content identifier |
 
 **Data Attributes**
 
@@ -864,10 +839,6 @@ Scrollable container for select items within the content.
 
 No specific events.
 
-**HTML Attributes**
-
-_(No specific HTML attributes - scrollable container)_
-
 ### SelectItem
 
 Individual selectable option within the dropdown.
@@ -900,12 +871,6 @@ Individual selectable option within the dropdown.
 | `onPointerMove` | `(event: PointerEvent)` | Pointer moves over item | Mouse/pointer enters item        |
 | `onFocus`       | `(event: FocusEvent)`   | Item receives focus     | Keyboard navigation focuses item |
 
-**HTML Attributes**
-
-| Attribute | Value    | Purpose                |
-| --------- | -------- | ---------------------- |
-| `id`      | `string` | Unique item identifier |
-
 **Data Attributes**
 
 - `data-state`: `"checked" | "unchecked"` - Selection state
@@ -926,10 +891,6 @@ The text content of a select item.
 **Events**
 
 No specific events.
-
-**HTML Attributes**
-
-_(No specific HTML attributes - text container)_
 
 ### SelectItemIndicator
 
@@ -970,10 +931,6 @@ Groups related select items together.
 
 No specific events.
 
-**HTML Attributes**
-
-_(No specific HTML attributes - groups related elements)_
-
 ### SelectLabel
 
 Label for a group of select items.
@@ -988,12 +945,6 @@ Label for a group of select items.
 **Events**
 
 No specific events.
-
-**HTML Attributes**
-
-| Attribute | Value    | Purpose                 |
-| --------- | -------- | ----------------------- |
-| `id`      | `string` | Unique label identifier |
 
 ### SelectSeparator
 

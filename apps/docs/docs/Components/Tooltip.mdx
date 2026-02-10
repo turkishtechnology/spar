@@ -374,7 +374,7 @@ function CustomContainerTooltip() {
 
   return (
     <div>
-      <div ref={containerRef} style={{ position: 'relative' }} />
+      <div ref={containerRef} />
 
       <TooltipRoot>
         <TooltipTrigger>
@@ -467,10 +467,6 @@ Root component that manages tooltip state and provides context to child componen
 | -------------- | ----------------- | -------------------------- | --------------------------- |
 | `onOpenChange` | `(open: boolean)` | Tooltip visibility changes | User interaction or control |
 
-**HTML Attributes**
-
-_(No specific HTML attributes - Root manages context only)_
-
 ### TooltipTrigger
 
 The trigger element that shows/hides the tooltip on hover or focus. Extends all `Button` component props including polymorphic rendering via the `as` prop.
@@ -534,10 +530,6 @@ Portal component for rendering tooltip outside normal DOM tree.
 | Name | Parameters | Description                   | When Triggered |
 | ---- | ---------- | ----------------------------- | -------------- |
 | None | -          | Portal manages rendering only | -              |
-
-**HTML Attributes**
-
-_(No specific HTML attributes - Portal is transparent wrapper)_
 
 ### TooltipContent
 
