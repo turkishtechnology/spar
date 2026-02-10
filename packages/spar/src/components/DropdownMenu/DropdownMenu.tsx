@@ -6,6 +6,10 @@ import type {
 } from './types';
 import { DropdownMenuContext } from './hooks';
 
+/**
+ * Root component that manages dropdown menu state and provides context to child components.
+ * Supports controlled/uncontrolled open state, modal/non-modal modes, and full keyboard navigation.
+ */
 export const DropdownMenu = ({
   open,
   defaultOpen = false,

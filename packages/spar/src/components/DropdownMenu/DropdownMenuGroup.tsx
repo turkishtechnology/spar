@@ -1,6 +1,9 @@
 import type { ElementType } from 'react';
 import type { DropdownMenuGroupProps } from './types';
 
+/**
+ * Groups related menu items together with a `group` role for semantic structure.
+ */
 export const DropdownMenuGroup = <T extends ElementType = 'div'>({
   as,
   ...props
