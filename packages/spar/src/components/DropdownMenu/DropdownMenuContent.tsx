@@ -30,7 +30,7 @@ import { useMenuScope, DropdownMenuSubContext, DropdownMenuCollectionContext } f
 import { isCharacterKey, getCloseKey, TYPEAHEAD_TIMEOUT } from './utils/index';
 
 /**
- * Convert side and align to Floating UI placement
+ * Convert side and align to Floating UI placement.
  */
 const getPlacement = (side: Side, align: Align): Placement => {
   if (side === 'top' || side === 'bottom') {
@@ -46,6 +46,10 @@ const getPlacement = (side: Side, align: Align): Placement => {
   return 'bottom';
 };
 
+/**
+ * Floating content panel for the dropdown menu.
+ * Handles positioning, keyboard navigation, focus management, and outside interaction dismissal.
+ */
 export const DropdownMenuContent = <T extends ElementType = 'div'>({
   as,
   side: sideProp,

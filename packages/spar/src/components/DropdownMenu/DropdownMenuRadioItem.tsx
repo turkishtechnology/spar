@@ -7,6 +7,10 @@ import type { DropdownMenuRadioItemProps } from './types';
 import { useDropdownMenuRadioGroupContext } from './hooks';
 import { MenuItemPrimitive } from './MenuItemPrimitive';
 
+/**
+ * A radio-style menu item that participates in a DropdownMenuRadioGroup.
+ * Only one radio item can be selected at a time within the group.
+ */
 export const DropdownMenuRadioItem = ({ value, ...props }: DropdownMenuRadioItemProps) => {
   const radioGroup = useDropdownMenuRadioGroupContext();
   const checked = radioGroup?.value === value;

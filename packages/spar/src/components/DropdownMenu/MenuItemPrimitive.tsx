@@ -12,6 +12,7 @@ import type { DropdownMenuItemProps } from './types';
 import { useDropdownMenuCollectionContext } from './hooks';
 import { useMergedRef } from '@/hooks';
 
+/** @internal */
 type MenuItemType = 'item' | 'checkbox' | 'radio' | 'subtrigger';
 
 type MenuItemPrimitiveProps<T extends ElementType = 'div'> = DropdownMenuItemProps<T> & {
@@ -23,6 +24,10 @@ type MenuItemPrimitiveProps<T extends ElementType = 'div'> = DropdownMenuItemPro
   ) => void;
 };
 
+/**
+ * @internal Shared primitive that handles common menu item behavior including
+ * highlight tracking, keyboard/pointer interaction, typeahead registration, and selection.
+ */
 export const MenuItemPrimitive = <T extends ElementType = 'div'>({
   as,
   itemType,
@@ -154,3 +159,5 @@ export const MenuItemPrimitive = <T extends ElementType = 'div'>({
     />
   );
 };
+
+MenuItemPrimitive.displayName = 'MenuItemPrimitive';

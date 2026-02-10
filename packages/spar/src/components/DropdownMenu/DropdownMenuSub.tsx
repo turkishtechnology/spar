@@ -6,6 +6,10 @@ import type {
 } from './types';
 import { useDropdownMenuContext, DropdownMenuSubContext } from './hooks';
 
+/**
+ * Sub-menu root component that manages nested dropdown state.
+ * Automatically closes when the parent menu closes.
+ */
 export const DropdownMenuSub = ({
   open,
   defaultOpen = false,

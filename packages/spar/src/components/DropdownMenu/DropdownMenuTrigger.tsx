@@ -12,6 +12,10 @@ import { useDropdownMenuContext } from './hooks';
 import { useMergedRef } from '@/hooks';
 import { Button } from '../Button';
 
+/**
+ * Trigger button that toggles the dropdown menu open/closed state.
+ * Supports keyboard navigation with ArrowDown/ArrowUp to open and focus first/last item.
+ */
 export const DropdownMenuTrigger = ({
   as = 'button',
   disabled: disabledProp,

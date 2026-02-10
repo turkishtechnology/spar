@@ -7,6 +7,10 @@ import type { DropdownMenuCheckboxItemProps } from './types';
 import { MenuItemPrimitive } from './MenuItemPrimitive';
 import { mapCheckedStateToDataAttribute, mapCheckedStateToAria } from './utils/index';
 
+/**
+ * A menu item that can be toggled between checked and unchecked states.
+ * Renders with `menuitemcheckbox` role and supports indeterminate state.
+ */
 export const DropdownMenuCheckboxItem = ({
   checked = false,
   onCheckedChange,

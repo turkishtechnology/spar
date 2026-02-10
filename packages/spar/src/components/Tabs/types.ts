@@ -45,6 +45,7 @@ export interface TabsOwnProps {
 
 /**
  * Props for Tabs root component
+ * @remarks Fully accessible, headless tabbed interface
  */
 export type TabsProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T, TabsOwnProps>;
 
@@ -61,6 +62,7 @@ export interface TabsListOwnProps {
 
 /**
  * Props for TabsList component
+ * @remarks Container for tab trigger buttons with keyboard navigation
  */
 export type TabsListProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -96,6 +98,7 @@ export interface TabsTriggerRenderProps {
 
 /**
  * Props for TabsTrigger component
+ * @remarks Interactive tab button that selects a panel
  */
 export interface TabsTriggerProps extends Omit<ButtonProps, 'children'> {
   /**
@@ -133,6 +136,7 @@ export interface TabsContentOwnProps {
 
 /**
  * Props for TabsContent component
+ * @remarks Panel content displayed when its matching tab is selected
  */
 export type TabsContentProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',

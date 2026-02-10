@@ -11,6 +11,10 @@ import { useDropdownMenuSubContext, useDropdownMenuCollectionContext } from './h
 import { MenuItemPrimitive } from './MenuItemPrimitive';
 import { getOpenKey, getCloseKey } from './utils/index';
 
+/**
+ * Trigger item within a parent menu that opens a sub-menu on hover or keyboard interaction.
+ * Automatically closes the sub-menu when another item in the parent is highlighted.
+ */
 export const DropdownMenuSubTrigger = ({
   disabled = false,
   onPointerMove,

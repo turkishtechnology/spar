@@ -32,6 +32,7 @@ export interface DropdownMenuTriggerRenderProps {
 
 /**
  * Props for DropdownMenu component
+ * @remarks Root component managing menu state and context
  */
 export interface DropdownMenuProps {
   /**
@@ -82,6 +83,7 @@ export interface DropdownMenuProps {
 
 /**
  * Props for DropdownMenuTrigger component
+ * @remarks Button that toggles menu visibility
  */
 export interface DropdownMenuTriggerProps extends Omit<ButtonProps, 'children'> {
   /**
@@ -160,6 +162,7 @@ export interface DropdownMenuContentOwnProps {
 
 /**
  * Props for DropdownMenuContent component
+ * @remarks Floating content panel with positioning and keyboard navigation
  */
 export type DropdownMenuContentProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -190,6 +193,7 @@ export interface DropdownMenuItemOwnProps {
 
 /**
  * Props for DropdownMenuItem component
+ * @remarks Actionable item within the menu
  */
 export type DropdownMenuItemProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -215,6 +219,7 @@ export interface DropdownMenuCheckboxItemOwnProps extends DropdownMenuItemOwnPro
 
 /**
  * Props for DropdownMenuCheckboxItem component
+ * @remarks Toggleable checkbox item within the menu
  */
 export type DropdownMenuCheckboxItemProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -224,6 +229,7 @@ export type DropdownMenuCheckboxItemProps<T extends ElementType = 'div'> = Polym
 
 /**
  * Props for DropdownMenuRadioGroup component
+ * @remarks Groups radio items with mutual exclusion
  */
 export interface DropdownMenuRadioGroupProps extends ComponentProps<'div'> {
   /**
@@ -249,6 +255,7 @@ export interface DropdownMenuRadioItemOwnProps extends DropdownMenuItemOwnProps 
 
 /**
  * Props for DropdownMenuRadioItem component
+ * @remarks Radio-style item within a radio group
  */
 export type DropdownMenuRadioItemProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -263,6 +270,7 @@ export interface DropdownMenuSeparatorOwnProps {}
 
 /**
  * Props for DropdownMenuSeparator component
+ * @remarks Visual divider between menu item groups
  */
 export type DropdownMenuSeparatorProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -277,6 +285,7 @@ export interface DropdownMenuLabelOwnProps {}
 
 /**
  * Props for DropdownMenuLabel component
+ * @remarks Non-interactive label for a menu group
  */
 export type DropdownMenuLabelProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -291,6 +300,7 @@ export interface DropdownMenuGroupOwnProps {}
 
 /**
  * Props for DropdownMenuGroup component
+ * @remarks Semantic grouping container for related items
  */
 export type DropdownMenuGroupProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -300,6 +310,7 @@ export type DropdownMenuGroupProps<T extends ElementType = 'div'> = PolymorphicP
 
 /**
  * Props for DropdownMenuSub component
+ * @remarks Nested sub-menu root managing submenu state
  */
 export interface DropdownMenuSubProps {
   /**
@@ -331,6 +342,7 @@ export interface DropdownMenuSubTriggerOwnProps extends DropdownMenuItemOwnProps
 
 /**
  * Props for DropdownMenuSubTrigger component
+ * @remarks Item that opens a sub-menu on hover or keyboard
  */
 export type DropdownMenuSubTriggerProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
@@ -345,6 +357,7 @@ export interface DropdownMenuSubContentOwnProps extends DropdownMenuContentOwnPr
 
 /**
  * Props for DropdownMenuSubContent component
+ * @remarks Content panel for a nested sub-menu
  */
 export type DropdownMenuSubContentProps<T extends ElementType = 'div'> = PolymorphicProps<
   'div',
