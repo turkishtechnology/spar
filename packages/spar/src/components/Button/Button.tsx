@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useRef, ElementType } from 'react';
-import { useMergedRef, useAutoFocus } from '../../hooks';
+import { useMergedRef, useAutoFocus } from '@/hooks';
 import type { ButtonProps } from './types';
 
 /**

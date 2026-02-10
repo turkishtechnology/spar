@@ -1,5 +1,5 @@
 import { useId, useState, useRef, useEffect, ElementType } from 'react';
-import { useMergedRef, useAutoFocus } from '../../hooks';
+import { useMergedRef, useAutoFocus } from '@/hooks';
 import type { CheckboxProps, CheckboxRenderProps } from './types';
 import type { CheckedState } from '../../types';
 

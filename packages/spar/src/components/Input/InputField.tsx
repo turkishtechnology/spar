@@ -1,7 +1,7 @@
 import { useState, useContext, useRef, type ElementType } from 'react';
 import type { InputFieldProps } from './types';
 import { InputContext } from './hooks';
-import { useMergedRef, useAutoFocus } from '../../hooks';
+import { useMergedRef, useAutoFocus } from '@/hooks';
 
 /**
  * Input field component that renders the core input element with full accessibility support.

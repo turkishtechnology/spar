@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useSelectContext } from './hooks';
 import type { SelectTriggerProps, SelectTriggerRenderProps } from './types';
-import { useMergedRef } from '../../hooks';
+import { useMergedRef } from '@/hooks';
 import { Button } from '../Button';
 
 /**

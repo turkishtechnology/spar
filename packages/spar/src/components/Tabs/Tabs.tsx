@@ -1,5 +1,5 @@
 import { useMemo, useCallback, useRef, useId, type ElementType } from 'react';
-import { useControlledState } from '../../hooks/useControlledState';
+import { useControlledState } from '@/hooks';
 import { TabsContext } from './hooks';
 import type { TabsProps, TabsContextValue } from './types';
 
