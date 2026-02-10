@@ -3,7 +3,6 @@ import type { BreadcrumbPageProps } from './types';
 
 /**
  * Current page indicator (non-interactive). Marks the current location in the breadcrumb trail.
- * @remarks Fully accessible, headless component
  */
 export const BreadcrumbPage = <T extends ElementType = 'span'>({
   as,

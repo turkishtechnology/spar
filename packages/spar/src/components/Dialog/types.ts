@@ -14,6 +14,7 @@ export interface DialogProps {
 
   /**
    * Callback when open state changes
+   * @param open - The new open state
    */
   onOpenChange?: (open: boolean) => void;
 
@@ -173,26 +174,31 @@ export interface DialogContentOwnProps {
 
   /**
    * Callback before auto-focus
+   * @param event - The focus event (call preventDefault to prevent auto-focus)
    */
   onOpenAutoFocus?: (event: Event) => void;
 
   /**
    * Callback before focus restore
+   * @param event - The focus event (call preventDefault to prevent focus restore)
    */
   onCloseAutoFocus?: (event: Event) => void;
 
   /**
    * Escape key handler
+   * @param event - The keyboard event (call preventDefault to prevent close)
    */
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
 
   /**
    * Outside click handler
+   * @param event - The pointer event (call preventDefault to prevent close)
    */
   onPointerDownOutside?: (event: PointerEvent) => void;
 
   /**
    * Outside interaction handler with preventDefault capability
+   * @param event - The pointer event (call preventDefault to prevent close)
    */
   onInteractOutside?: (event: PointerEvent) => void;
 }
@@ -256,6 +262,7 @@ export type DialogCloseProps<T extends ElementType = 'button'> = PolymorphicProp
 
 /**
  * Context value for Dialog components
+ * @internal
  */
 export interface DialogContextValue {
   isOpen: boolean;

@@ -4,7 +4,6 @@ import type { BreadcrumbLinkProps } from './types';
 
 /**
  * Interactive link for breadcrumb navigation. Handles routing integration and accessibility states.
- * @remarks Fully accessible, headless component
  */
 export const BreadcrumbLink = <T extends ElementType = 'a'>({
   as,

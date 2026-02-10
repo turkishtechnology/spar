@@ -21,6 +21,7 @@ export interface TabsOwnProps {
 
   /**
    * Callback when tab selection changes
+   * @param value - The new selected tab value
    */
   onValueChange?: (value: string) => void;
 
@@ -146,6 +147,7 @@ export type TabsContentProps<T extends ElementType = 'div'> = PolymorphicProps<
 
 /**
  * Context value provided by Tabs root component
+ * @internal
  */
 export interface TabsContextValue {
   selectedValue: string | undefined;

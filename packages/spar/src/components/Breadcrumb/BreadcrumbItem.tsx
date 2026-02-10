@@ -3,7 +3,6 @@ import type { BreadcrumbItemProps } from './types';
 
 /**
  * List item wrapper for breadcrumb content. Receives position from parent BreadcrumbList.
- * @remarks Fully accessible, headless component
  */
 export const BreadcrumbItem = <T extends ElementType = 'li'>({
   as,
