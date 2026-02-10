@@ -1,5 +1,5 @@
 import { useId, useRef } from 'react';
-import { useMergedRef } from '../../hooks';
+import { useMergedRef } from '@/hooks';
 import { Button } from '../Button';
 import { useSwitch } from './hooks';
 import type { SwitchProps, SwitchRenderProps } from './types';
