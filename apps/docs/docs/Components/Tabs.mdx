@@ -317,7 +317,7 @@ function ForceMountTabs() {
 | `orientation`    | `'horizontal' \| 'vertical'`           | `'horizontal'` | Tabs orientation affecting keyboard navigation                |
 | `dir`            | `'ltr' \| 'rtl'`                       | `'ltr'`        | Text direction for arrow key navigation                       |
 | `activationMode` | `'automatic' \| 'manual'`              | `'automatic'`  | Whether tabs activate on focus or require explicit activation |
-| `as`             | `ElementType`                        | `'div'`        | Polymorphic component type                                    |
+| `as`             | `React.ElementType`                        | `'div'`        | Polymorphic component type                                    |
 
 #### Events
 
@@ -339,7 +339,7 @@ function ForceMountTabs() {
 | Name   | Type            | Default | Description                               |
 | ------ | --------------- | ------- | ----------------------------------------- |
 | `loop` | `boolean`       | `true`  | Whether arrow key navigation wraps around |
-| `as`   | `ElementType` | `'div'` | Polymorphic component type                |
+| `as`   | `React.ElementType` | `'div'` | Polymorphic component type                |
 
 #### ARIA
 
@@ -358,13 +358,13 @@ Extends all `Button` component props including polymorphic rendering via the `as
 | Name               | Type                                                          | Default     | Description                                         |
 | ------------------ | ------------------------------------------------------------- | ----------- | --------------------------------------------------- |
 | `value`            | `string`                                                      | —           | Unique identifier for the tab                       |
-| `as?`              | `ElementType`                                                 | `"button"`  | Element type to render as                           |
+| `as?`              | `React.ElementType`                                                 | `"button"`  | Element type to render as                           |
 | `disabled?`        | `boolean`                                                     | `false`     | Disables this specific tab                          |
 | `autoFocus?` | `boolean`                                                     | `false`     | Whether to focus this tab trigger on mount          |
 | `isLoading?`       | `boolean`                                                     | `false`     | Loading state with screen reader support            |
 | `isPressed?`       | `boolean`                                                     | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange?` | `(pressed: boolean) => void`                                  | `undefined` | Callback fired when toggle state changes            |
-| `children`         | `ReactNode \| ((state: TabsTriggerRenderProps) => ReactNode)` | —           | Children content or render function                 |
+| `children`         | `React.ReactNode \| ((state: TabsTriggerRenderProps) => React.ReactNode)` | —           | Children content or render function                 |
 | `...props`         | `ButtonProps`                                                 | -           | All standard Button component attributes            |
 
 #### TabsTriggerRenderProps
@@ -381,9 +381,9 @@ Extends all `Button` component props including polymorphic rendering via the `as
 
 | Name      | Parameters          | Description | When Triggered                           |
 | --------- | ------------------- | ----------- | ---------------------------------------- |
-| `onClick` | `event: MouseEvent` | Tab clicked | User clicks the tab trigger              |
-| `onFocus` | `event: FocusEvent` | Tab focused | Tab receives focus via keyboard or mouse |
-| `onBlur`  | `event: FocusEvent` | Tab blurred | Tab loses focus                          |
+| `onClick` | `event: React.MouseEvent` | Tab clicked | User clicks the tab trigger              |
+| `onFocus` | `event: React.FocusEvent` | Tab focused | Tab receives focus via keyboard or mouse |
+| `onBlur`  | `event: React.FocusEvent` | Tab blurred | Tab loses focus                          |
 
 #### ARIA
 
@@ -408,7 +408,7 @@ Extends all `Button` component props including polymorphic rendering via the `as
 | ------------ | --------------- | ------- | ----------------------------------------------- |
 | `value`      | `string`        | —       | Unique identifier matching a TabsTrigger value  |
 | `forceMount` | `boolean`       | `false` | Force content to remain mounted when not active |
-| `as`         | `ElementType` | `'div'` | Polymorphic component type                      |
+| `as`         | `React.ElementType` | `'div'` | Polymorphic component type                      |
 
 #### ARIA
 

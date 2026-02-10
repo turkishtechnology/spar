@@ -528,7 +528,7 @@ The root container that manages the dropdown menu state and provides context to 
 | `disabled?`      | `boolean`                 | `false`     | Disables all dropdown menu triggers (prevents opening)                                          |
 | `dir?`           | `'ltr' \| 'rtl'`          | `'ltr'`     | Reading direction for submenu positioning                                                       |
 | `closeOnSelect?` | `boolean \| 'auto'`       | `'auto'`    | Whether to close menu on item selection. 'auto' closes for items, stays open for checkbox/radio |
-| `children?`      | `ReactNode`               | `undefined` | Menu trigger and content                                                                        |
+| `children?`      | `React.ReactNode`               | `undefined` | Menu trigger and content                                                                        |
 
 **Events**
 
@@ -544,16 +544,16 @@ The button element that toggles the dropdown menu visibility. Extends all `Butto
 
 | Name               | Type                                                                  | Default     | Description                                         |
 | ------------------ | --------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `as?`              | `ElementType`                                                         | `"button"`  | Element type to render as                           |
-| `children`         | `ReactNode \| ((state: DropdownMenuTriggerRenderProps) => ReactNode)` | `undefined` | Trigger content or render props function            |
+| `as?`              | `React.ElementType`                                                         | `"button"`  | Element type to render as                           |
+| `children`         | `React.ReactNode \| ((state: DropdownMenuTriggerRenderProps) => React.ReactNode)` | `undefined` | Trigger content or render props function            |
 | `disabled?`        | `boolean`                                                             | `false`     | Whether the trigger is disabled                     |
 | `autoFocus?` | `boolean`                                                             | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                             | `false`     | Loading state with screen reader support            |
 | `isPressed?`       | `boolean`                                                             | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange?` | `(pressed: boolean) => void`                                          | `undefined` | Callback fired when toggle state changes            |
-| `ref?`             | `Ref<HTMLButtonElement \| null>`                                      | `undefined` | Forwarded ref to trigger element                    |
-| `onClick?`         | `(event: MouseEvent) => void`                                         | `undefined` | Click event handler                                 |
-| `onKeyDown?`       | `(event: KeyboardEvent) => void`                                      | `undefined` | Keyboard event handler                              |
+| `ref?`             | `React.Ref<HTMLButtonElement \| null>`                                      | `undefined` | Forwarded ref to trigger element                    |
+| `onClick?`         | `(event: React.MouseEvent) => void`                                         | `undefined` | Click event handler                                 |
+| `onKeyDown?`       | `(event: React.KeyboardEvent) => void`                                      | `undefined` | Keyboard event handler                              |
 | `...props`         | `ButtonProps`                                                         | -           | All standard Button component attributes            |
 
 **Render Props (DropdownMenuTriggerRenderProps)**
@@ -570,8 +570,8 @@ The button element that toggles the dropdown menu visibility. Extends all `Butto
 
 | Name        | Parameters               | Description            | When Triggered                 |
 | ----------- | ------------------------ | ---------------------- | ------------------------------ |
-| `onClick`   | `(event: MouseEvent)`    | Mouse click handler    | User clicks trigger            |
-| `onKeyDown` | `(event: KeyboardEvent)` | Keyboard event handler | User presses key while focused |
+| `onClick`   | `(event: React.MouseEvent)`    | Mouse click handler    | User clicks trigger            |
+| `onKeyDown` | `(event: React.KeyboardEvent)` | Keyboard event handler | User presses key while focused |
 
 **HTML Attributes**
 
@@ -588,7 +588,7 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 
 | Name                    | Type                                     | Default     | Description                                           |
 | ----------------------- | ---------------------------------------- | ----------- | ----------------------------------------------------- |
-| `as?`                   | `ElementType`                          | `'div'`     | Polymorphic element type to render                    |
+| `as?`                   | `React.ElementType`                          | `'div'`     | Polymorphic element type to render                    |
 | `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`  | Preferred side for positioning                        |
 | `align?`                | `'start' \| 'center' \| 'end'`           | `'start'`   | Alignment relative to trigger                         |
 | `sideOffset?`           | `number`                                 | `8`         | Distance in pixels from trigger                       |
@@ -597,21 +597,21 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 | `collisionBoundary?`    | `Element \| Element[] \| null`           | `null`      | Boundary element(s) for collision detection           |
 | `collisionPadding?`     | `number`                                 | `8`         | Padding from boundary edges in pixels                 |
 | `loop?`                 | `boolean`                                | `false`     | Whether keyboard navigation loops through items       |
-| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`         | `undefined` | Escape key handler                                    |
-| `onPointerDownOutside?` | `(event: PointerEvent) => void`          | `undefined` | Outside click handler                                 |
-| `onFocusOutside?`       | `(event: FocusEvent) => void`            | `undefined` | Outside focus handler                                 |
-| `onKeyDown?`            | `(event: KeyboardEvent) => void`         | `undefined` | Keyboard event handler                                |
-| `ref?`                  | `Ref<HTMLElement \| null>`               | `undefined` | Forwarded ref to content element                      |
-| `children?`             | `ReactNode`                              | `undefined` | Menu items and groups                                 |
+| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`         | `undefined` | Escape key handler                                    |
+| `onPointerDownOutside?` | `(event: React.PointerEvent) => void`          | `undefined` | Outside click handler                                 |
+| `onFocusOutside?`       | `(event: React.FocusEvent) => void`            | `undefined` | Outside focus handler                                 |
+| `onKeyDown?`            | `(event: React.KeyboardEvent) => void`         | `undefined` | Keyboard event handler                                |
+| `ref?`                  | `React.Ref<HTMLElement \| null>`               | `undefined` | Forwarded ref to content element                      |
+| `children?`             | `React.ReactNode`                              | `undefined` | Menu items and groups                                 |
 
 **Events**
 
 | Name                   | Parameters               | Description         | When Triggered                             |
 | ---------------------- | ------------------------ | ------------------- | ------------------------------------------ |
-| `onEscapeKeyDown`      | `(event: KeyboardEvent)` | Escape key pressed  | User presses Escape while menu is open     |
-| `onPointerDownOutside` | `(event: PointerEvent)`  | Click outside menu  | User clicks outside menu bounds            |
-| `onFocusOutside`       | `(event: FocusEvent)`    | Focus leaves menu   | Focus moves outside menu (non-modal mode)  |
-| `onKeyDown`            | `(event: KeyboardEvent)` | Key pressed in menu | User presses any key while menu is focused |
+| `onEscapeKeyDown`      | `(event: React.KeyboardEvent)` | Escape key pressed  | User presses Escape while menu is open     |
+| `onPointerDownOutside` | `(event: React.PointerEvent)`  | Click outside menu  | User clicks outside menu bounds            |
+| `onFocusOutside`       | `(event: React.FocusEvent)`    | Focus leaves menu   | Focus moves outside menu (non-modal mode)  |
+| `onKeyDown`            | `(event: React.KeyboardEvent)` | Key pressed in menu | User presses any key while menu is focused |
 
 **HTML Attributes**
 
@@ -630,22 +630,22 @@ A selectable menu item.
 
 | Name         | Type                              | Default     | Description                                                           |
 | ------------ | --------------------------------- | ----------- | --------------------------------------------------------------------- |
-| `as?`        | `ElementType`                   | `'div'`     | Polymorphic element type to render                                    |
+| `as?`        | `React.ElementType`                   | `'div'`     | Polymorphic element type to render                                    |
 | `disabled?`  | `boolean`                         | `false`     | Whether item is disabled                                              |
-| `onSelect?`  | `(event: SyntheticEvent) => void` | `undefined` | Selection handler                                                     |
+| `onSelect?`  | `(event: React.SyntheticEvent) => void` | `undefined` | Selection handler                                                     |
 | `textValue?` | `string`                          | `undefined` | Text value for typeahead (auto-detected from content if not provided) |
-| `ref?`       | `Ref<HTMLElement \| null>`        | `undefined` | Forwarded ref to item element                                         |
-| `children?`  | `ReactNode`                       | `undefined` | Item content                                                          |
+| `ref?`       | `React.Ref<HTMLElement \| null>`        | `undefined` | Forwarded ref to item element                                         |
+| `children?`  | `React.ReactNode`                       | `undefined` | Item content                                                          |
 
 **Events**
 
 | Name            | Parameters                | Description         | When Triggered                              |
 | --------------- | ------------------------- | ------------------- | ------------------------------------------- |
-| `onSelect`      | `(event: SyntheticEvent)` | Item selected       | User clicks or activates item with keyboard |
-| `onClick`       | `(event: MouseEvent)`     | Mouse click         | User clicks item                            |
-| `onKeyDown`     | `(event: KeyboardEvent)`  | Key pressed         | User presses key while item focused         |
-| `onPointerMove` | `(event: PointerEvent)`   | Pointer movement    | Pointer moves over item                     |
-| `onFocus`       | `(event: FocusEvent)`     | Item receives focus | Item gains focus                            |
+| `onSelect`      | `(event: React.SyntheticEvent)` | Item selected       | User clicks or activates item with keyboard |
+| `onClick`       | `(event: React.MouseEvent)`     | Mouse click         | User clicks item                            |
+| `onKeyDown`     | `(event: React.KeyboardEvent)`  | Key pressed         | User presses key while item focused         |
+| `onPointerMove` | `(event: React.PointerEvent)`   | Pointer movement    | Pointer moves over item                     |
+| `onFocus`       | `(event: React.FocusEvent)`     | Item receives focus | Item gains focus                            |
 
 **HTML Attributes**
 
@@ -663,21 +663,21 @@ A menu item with checkbox functionality for toggleable options.
 
 | Name               | Type                              | Default     | Description                        |
 | ------------------ | --------------------------------- | ----------- | ---------------------------------- |
-| `as?`              | `ElementType`                   | `'div'`     | Polymorphic element type to render |
+| `as?`              | `React.ElementType`                   | `'div'`     | Polymorphic element type to render |
 | `checked?`         | `boolean \| 'indeterminate'`      | `false`     | Checked state                      |
 | `onCheckedChange?` | `(checked: boolean) => void`      | `undefined` | Checked state change handler       |
 | `disabled?`        | `boolean`                         | `false`     | Whether item is disabled           |
-| `onSelect?`        | `(event: SyntheticEvent) => void` | `undefined` | Selection handler                  |
+| `onSelect?`        | `(event: React.SyntheticEvent) => void` | `undefined` | Selection handler                  |
 | `textValue?`       | `string`                          | `undefined` | Text value for typeahead           |
-| `ref?`             | `Ref<HTMLElement \| null>`        | `undefined` | Forwarded ref to item element      |
-| `children?`        | `ReactNode`                       | `undefined` | Item content                       |
+| `ref?`             | `React.Ref<HTMLElement \| null>`        | `undefined` | Forwarded ref to item element      |
+| `children?`        | `React.ReactNode`                       | `undefined` | Item content                       |
 
 **Events**
 
 | Name              | Parameters                | Description           | When Triggered        |
 | ----------------- | ------------------------- | --------------------- | --------------------- |
 | `onCheckedChange` | `(checked: boolean)`      | Checked state changes | User toggles checkbox |
-| `onSelect`        | `(event: SyntheticEvent)` | Item selected         | User activates item   |
+| `onSelect`        | `(event: React.SyntheticEvent)` | Item selected         | User activates item   |
 
 **HTML Attributes**
 
@@ -696,7 +696,7 @@ Container for radio menu items to manage mutually exclusive selection.
 | ---------------- | ------------------------- | ----------- | ------------------------ |
 | `value?`         | `string`                  | `undefined` | Currently selected value |
 | `onValueChange?` | `(value: string) => void` | `undefined` | Selection change handler |
-| `children?`      | `ReactNode`               | `undefined` | RadioItem components     |
+| `children?`      | `React.ReactNode`               | `undefined` | RadioItem components     |
 
 **Events**
 
@@ -713,18 +713,18 @@ A radio menu item for mutually exclusive selections within a RadioGroup.
 | Name         | Type                              | Default      | Description                        |
 | ------------ | --------------------------------- | ------------ | ---------------------------------- |
 | `value`      | `string`                          | **required** | Unique value for this radio item   |
-| `as?`        | `ElementType`                   | `'div'`      | Polymorphic element type to render |
+| `as?`        | `React.ElementType`                   | `'div'`      | Polymorphic element type to render |
 | `disabled?`  | `boolean`                         | `false`      | Whether item is disabled           |
-| `onSelect?`  | `(event: SyntheticEvent) => void` | `undefined`  | Selection handler                  |
+| `onSelect?`  | `(event: React.SyntheticEvent) => void` | `undefined`  | Selection handler                  |
 | `textValue?` | `string`                          | `undefined`  | Text value for typeahead           |
-| `ref?`       | `Ref<HTMLElement \| null>`        | `undefined`  | Forwarded ref to item element      |
-| `children?`  | `ReactNode`                       | `undefined`  | Item content                       |
+| `ref?`       | `React.Ref<HTMLElement \| null>`        | `undefined`  | Forwarded ref to item element      |
+| `children?`  | `React.ReactNode`                       | `undefined`  | Item content                       |
 
 **Events**
 
 | Name       | Parameters                | Description   | When Triggered      |
 | ---------- | ------------------------- | ------------- | ------------------- |
-| `onSelect` | `(event: SyntheticEvent)` | Item selected | User activates item |
+| `onSelect` | `(event: React.SyntheticEvent)` | Item selected | User activates item |
 
 **HTML Attributes**
 
@@ -741,8 +741,8 @@ A visual separator between menu sections.
 
 | Name   | Type                       | Default     | Description                        |
 | ------ | -------------------------- | ----------- | ---------------------------------- |
-| `as?`  | `ElementType`            | `'div'`     | Polymorphic element type to render |
-| `ref?` | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to separator element |
+| `as?`  | `React.ElementType`            | `'div'`     | Polymorphic element type to render |
+| `ref?` | `React.Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to separator element |
 
 **Events**
 
@@ -764,9 +764,9 @@ A non-interactive label for menu sections.
 
 | Name        | Type                       | Default     | Description                        |
 | ----------- | -------------------------- | ----------- | ---------------------------------- |
-| `as?`       | `ElementType`            | `'div'`     | Polymorphic element type to render |
-| `ref?`      | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to label element     |
-| `children?` | `ReactNode`                | `undefined` | Label content                      |
+| `as?`       | `React.ElementType`            | `'div'`     | Polymorphic element type to render |
+| `ref?`      | `React.Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to label element     |
+| `children?` | `React.ReactNode`                | `undefined` | Label content                      |
 
 **Events**
 
@@ -782,9 +782,9 @@ A logical grouping container for related menu items.
 
 | Name        | Type                       | Default     | Description                        |
 | ----------- | -------------------------- | ----------- | ---------------------------------- |
-| `as?`       | `ElementType`            | `'div'`     | Polymorphic element type to render |
-| `ref?`      | `Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to group element     |
-| `children?` | `ReactNode`                | `undefined` | Menu items or labels               |
+| `as?`       | `React.ElementType`            | `'div'`     | Polymorphic element type to render |
+| `ref?`      | `React.Ref<HTMLElement \| null>` | `undefined` | Forwarded ref to group element     |
+| `children?` | `React.ReactNode`                | `undefined` | Menu items or labels               |
 
 **Events**
 
@@ -803,7 +803,7 @@ Container for nested submenu functionality.
 | `open?`         | `boolean`                 | `undefined` | Controlled submenu open state             |
 | `defaultOpen?`  | `boolean`                 | `false`     | Initial submenu open state (uncontrolled) |
 | `onOpenChange?` | `(open: boolean) => void` | `undefined` | Callback when submenu open state changes  |
-| `children?`     | `ReactNode`               | `undefined` | SubTrigger and SubContent components      |
+| `children?`     | `React.ReactNode`               | `undefined` | SubTrigger and SubContent components      |
 
 **Events**
 
@@ -819,20 +819,20 @@ A menu item that triggers a nested submenu.
 
 | Name         | Type                              | Default     | Description                         |
 | ------------ | --------------------------------- | ----------- | ----------------------------------- |
-| `as?`        | `ElementType`                   | `'div'`     | Polymorphic element type to render  |
+| `as?`        | `React.ElementType`                   | `'div'`     | Polymorphic element type to render  |
 | `disabled?`  | `boolean`                         | `false`     | Whether subtrigger is disabled      |
-| `onSelect?`  | `(event: SyntheticEvent) => void` | `undefined` | Selection handler                   |
+| `onSelect?`  | `(event: React.SyntheticEvent) => void` | `undefined` | Selection handler                   |
 | `textValue?` | `string`                          | `undefined` | Text value for typeahead            |
-| `ref?`       | `Ref<HTMLElement \| null>`        | `undefined` | Forwarded ref to subtrigger element |
-| `children?`  | `ReactNode`                       | `undefined` | Subtrigger content                  |
+| `ref?`       | `React.Ref<HTMLElement \| null>`        | `undefined` | Forwarded ref to subtrigger element |
+| `children?`  | `React.ReactNode`                       | `undefined` | Subtrigger content                  |
 
 **Events**
 
 | Name            | Parameters               | Description                | When Triggered                            |
 | --------------- | ------------------------ | -------------------------- | ----------------------------------------- |
-| `onPointerMove` | `(event: PointerEvent)`  | Pointer moves over trigger | Opens submenu on hover                    |
-| `onKeyDown`     | `(event: KeyboardEvent)` | Key pressed                | Handles arrow keys for submenu navigation |
-| `onClick`       | `(event: MouseEvent)`    | Mouse click                | Opens submenu                             |
+| `onPointerMove` | `(event: React.PointerEvent)`  | Pointer moves over trigger | Opens submenu on hover                    |
+| `onKeyDown`     | `(event: React.KeyboardEvent)` | Key pressed                | Handles arrow keys for submenu navigation |
+| `onClick`       | `(event: React.MouseEvent)`    | Mouse click                | Opens submenu                             |
 
 **HTML Attributes**
 

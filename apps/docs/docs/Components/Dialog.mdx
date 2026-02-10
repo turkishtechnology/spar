@@ -503,7 +503,7 @@ The root container that manages dialog state and provides context to all child c
 
 | Name            | Type                      | Default     | Description                                                  |
 | --------------- | ------------------------- | ----------- | ------------------------------------------------------------ |
-| `children`      | `ReactNode`               | -           | Dialog trigger and portal components                         |
+| `children`      | `React.ReactNode`               | -           | Dialog trigger and portal components                         |
 | `open?`         | `boolean`                 | `undefined` | Controlled open state                                        |
 | `onOpenChange?` | `(open: boolean) => void` | `undefined` | Callback when open state changes                             |
 | `defaultOpen?`  | `boolean`                 | `false`     | Initial open state for uncontrolled usage                    |
@@ -531,7 +531,7 @@ Interactive element that opens the dialog when activated. Extends all `Button` c
 
 | Name               | Type                                                            | Default     | Description                                         |
 | ------------------ | --------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `children`         | `ReactNode \| ((state: DialogTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function            |
+| `children`         | `React.ReactNode \| ((state: DialogTriggerRenderProps) => React.ReactNode)` | -           | Trigger content or render props function            |
 | `disabled?`        | `boolean`                                                       | `false`     | Disables trigger interaction                        |
 | `autoFocus?`       | `boolean`                                                       | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                       | `false`     | Loading state with screen reader support            |
@@ -554,8 +554,8 @@ Interactive element that opens the dialog when activated. Extends all `Button` c
 
 | Name        | Parameters               | Description            | When Triggered       |
 | ----------- | ------------------------ | ---------------------- | -------------------- |
-| `onClick`   | `(event: MouseEvent)`    | Trigger clicked        | Mouse click          |
-| `onKeyDown` | `(event: KeyboardEvent)` | Key pressed on trigger | Keyboard interaction |
+| `onClick`   | `(event: React.MouseEvent)`    | Trigger clicked        | Mouse click          |
+| `onKeyDown` | `(event: React.KeyboardEvent)` | Key pressed on trigger | Keyboard interaction |
 
 **HTML Attributes**
 
@@ -572,7 +572,7 @@ Portal container that renders overlay and content outside the normal DOM tree.
 
 | Name         | Type                  | Default         | Description                |
 | ------------ | --------------------- | --------------- | -------------------------- |
-| `children`   | `ReactNode`           | -               | Dialog overlay and content |
+| `children`   | `React.ReactNode`           | -               | Dialog overlay and content |
 | `container?` | `HTMLElement \| null` | `document.body` | Portal container element   |
 
 **Events**
@@ -589,15 +589,15 @@ Background overlay that appears behind dialog content and handles click-outside 
 
 | Name        | Type                     | Default     | Description                      |
 | ----------- | ------------------------ | ----------- | -------------------------------- |
-| `children?` | `ReactNode`              | `undefined` | Overlay content (usually none)   |
-| `as?`       | `ElementType`            | `'div'`     | Polymorphic element type         |
+| `children?` | `React.ReactNode`              | `undefined` | Overlay content (usually none)   |
+| `as?`       | `React.ElementType`            | `'div'`     | Polymorphic element type         |
 | `ref?`      | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to overlay element |
 
 **Events**
 
 | Name      | Parameters            | Description     | When Triggered              |
 | --------- | --------------------- | --------------- | --------------------------- |
-| `onClick` | `(event: MouseEvent)` | Overlay clicked | Click on overlay background |
+| `onClick` | `(event: React.MouseEvent)` | Overlay clicked | Click on overlay background |
 
 **HTML Attributes**
 
@@ -613,8 +613,8 @@ Main dialog container that handles focus management and keyboard interactions.
 
 | Name            | Type                                 | Default     | Description                      |
 | --------------- | ------------------------------------ | ----------- | -------------------------------- |
-| `children`      | `ReactNode`                          | -           | Dialog content                   |
-| `as?`           | `ElementType`                        | `'div'`     | Polymorphic element type         |
+| `children`      | `React.ReactNode`                          | -           | Dialog content                   |
+| `as?`           | `React.ElementType`                        | `'div'`     | Polymorphic element type         |
 | `role?`         | `React.AriaRole`                     | `'dialog'`  | ARIA role for dialog type        |
 | `trapFocus?`    | `boolean`                            | `true`      | Enable focus trapping            |
 | `restoreFocus?` | `boolean`                            | `true`      | Restore focus on close           |
@@ -628,9 +628,9 @@ Main dialog container that handles focus management and keyboard interactions.
 | ---------------------- | ------------------------ | ----------------------------- | --------------------------------------- |
 | `onOpenAutoFocus`      | `(event: Event)`         | Before auto-focus on open     | Dialog opens                            |
 | `onCloseAutoFocus`     | `(event: Event)`         | Before focus restore on close | Dialog closes                           |
-| `onEscapeKeyDown`      | `(event: KeyboardEvent)` | Escape key pressed            | Escape key interaction                  |
-| `onPointerDownOutside` | `(event: PointerEvent)`  | Pointer down outside content  | Outside interaction                     |
-| `onInteractOutside`    | `(event: PointerEvent)`  | Interaction outside content   | Outside interaction with preventDefault |
+| `onEscapeKeyDown`      | `(event: React.KeyboardEvent)` | Escape key pressed            | Escape key interaction                  |
+| `onPointerDownOutside` | `(event: React.PointerEvent)`  | Pointer down outside content  | Outside interaction                     |
+| `onInteractOutside`    | `(event: React.PointerEvent)`  | Interaction outside content   | Outside interaction with preventDefault |
 
 **HTML Attributes**
 
@@ -646,8 +646,8 @@ Dialog title that provides an accessible name for the dialog.
 
 | Name       | Type                     | Default     | Description                    |
 | ---------- | ------------------------ | ----------- | ------------------------------ |
-| `children` | `ReactNode`              | -           | Title content                  |
-| `as?`      | `ElementType`            | `'h2'`      | Polymorphic element type       |
+| `children` | `React.ReactNode`              | -           | Title content                  |
+| `as?`      | `React.ElementType`            | `'h2'`      | Polymorphic element type       |
 | `level?`   | `number`                 | `2`         | Heading level (1-6)            |
 | `ref?`     | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to title element |
 
@@ -665,8 +665,8 @@ Dialog description that provides additional accessible information about the dia
 
 | Name       | Type                     | Default     | Description                          |
 | ---------- | ------------------------ | ----------- | ------------------------------------ |
-| `children` | `ReactNode`              | -           | Description content                  |
-| `as?`      | `ElementType`            | `'p'`       | Polymorphic element type             |
+| `children` | `React.ReactNode`              | -           | Description content                  |
+| `as?`      | `React.ElementType`            | `'p'`       | Polymorphic element type             |
 | `ref?`     | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to description element |
 
 **Events**
@@ -683,8 +683,8 @@ Button that closes the dialog when activated. Extends all `Button` component pro
 
 | Name               | Type                                                          | Default     | Description                                         |
 | ------------------ | ------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `as?`              | `ElementType`                                                 | `'button'`  | Polymorphic element type                            |
-| `children`         | `ReactNode \| ((state: DialogCloseRenderProps) => ReactNode)` | -           | Close button content or render props function       |
+| `as?`              | `React.ElementType`                                                 | `'button'`  | Polymorphic element type                            |
+| `children`         | `React.ReactNode \| ((state: DialogCloseRenderProps) => React.ReactNode)` | -           | Close button content or render props function       |
 | `disabled?`        | `boolean`                                                     | `false`     | Whether close button is disabled                    |
 | `autoFocus?`       | `boolean`                                                     | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                     | `false`     | Loading state with screen reader support            |
@@ -704,8 +704,8 @@ Button that closes the dialog when activated. Extends all `Button` component pro
 
 | Name        | Parameters               | Description                 | When Triggered       |
 | ----------- | ------------------------ | --------------------------- | -------------------- |
-| `onClick`   | `(event: MouseEvent)`    | Close button clicked        | Mouse click          |
-| `onKeyDown` | `(event: KeyboardEvent)` | Key pressed on close button | Keyboard interaction |
+| `onClick`   | `(event: React.MouseEvent)`    | Close button clicked        | Mouse click          |
+| `onKeyDown` | `(event: React.KeyboardEvent)` | Key pressed on close button | Keyboard interaction |
 
 **HTML Attributes**
 
