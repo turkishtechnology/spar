@@ -477,7 +477,7 @@ function IconBreadcrumb() {
     <BreadcrumbRoot>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href='/' style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <BreadcrumbLink href='/'>
             <HomeIcon />
             <span>Home</span>
           </BreadcrumbLink>
@@ -486,7 +486,6 @@ function IconBreadcrumb() {
         <BreadcrumbItem>
           <BreadcrumbLink
             href='/documents'
-            style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
           >
             <FolderIcon />
             <span>Documents</span>
@@ -494,7 +493,7 @@ function IconBreadcrumb() {
         </BreadcrumbItem>
         <BreadcrumbSeparator>/</BreadcrumbSeparator>
         <BreadcrumbItem>
-          <BreadcrumbPage style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <BreadcrumbPage>
             <FileIcon />
             <span>Report.pdf</span>
           </BreadcrumbPage>
@@ -601,10 +600,6 @@ Ordered list container that provides semantic structure and automatically calcul
 | ---------------------- | ---------- | ----------------------------- | ------------------------- |
 | _(No specific events)_ | -          | Inherits standard HTML events | Standard DOM interactions |
 
-**HTML Attributes**
-
-_(No specific HTML attributes - uses semantic `<ol>` element)_
-
 ### BreadcrumbItem
 
 List item wrapper that receives position and current state from parent BreadcrumbList for styling hooks and accessibility.
@@ -704,10 +699,6 @@ Visual separator between breadcrumb items, hidden from screen readers to prevent
 | Name                   | Parameters | Description                   | When Triggered            |
 | ---------------------- | ---------- | ----------------------------- | ------------------------- |
 | _(No specific events)_ | -          | Inherits standard HTML events | Standard DOM interactions |
-
-**HTML Attributes**
-
-_(No specific HTML attributes - decorative separator element)_
 
 ## Keyboard Interactions
 
