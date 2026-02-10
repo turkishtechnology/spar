@@ -47,7 +47,6 @@ import {
   PopoverPortal,
   PopoverAnchor,
   PopoverClose,
-  Radio,
   RadioGroup,
   RadioItem,
   Checkbox,
@@ -257,7 +256,6 @@ const LiveCode: React.FC<LiveCodeProps> = ({ code, cssCode }) => {
     CollapsibleTrigger,
     CollapsibleContent,
     // Radio components
-    Radio,
     RadioGroup,
     RadioItem,
     // Input components
