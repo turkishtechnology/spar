@@ -11,7 +11,6 @@ import type { BreadcrumbListProps, BreadcrumbItemProps, BreadcrumbPosition } fro
 /**
  * Ordered list container for breadcrumb items. Provides semantic structure for navigation trail.
  * Calculates and passes position data to child items.
- * @remarks Fully accessible, headless component
  */
 export const BreadcrumbList = <T extends ElementType = 'ol'>({
   as,

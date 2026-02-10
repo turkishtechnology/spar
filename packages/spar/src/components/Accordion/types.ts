@@ -31,6 +31,7 @@ export interface AccordionOwnProps {
 
   /**
    * Callback when state changes
+   * @param value - The new accordion value (string for single, string[] for multiple)
    */
   onValueChange?: (value: string | string[]) => void;
 
@@ -172,6 +173,10 @@ export type AccordionContentProps<T extends ElementType = 'div'> = PolymorphicPr
 >;
 
 // Internal context types
+
+/**
+ * @internal
+ */
 export interface AccordionContextValue {
   type: AccordionType;
   isCollapsible: boolean;
@@ -188,6 +193,9 @@ export interface AccordionContextValue {
   itemCount: number;
 }
 
+/**
+ * @internal
+ */
 export interface AccordionItemContextValue {
   value: string;
   isOpen: boolean;

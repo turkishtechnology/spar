@@ -57,6 +57,7 @@ export interface CollapsibleOwnProps {
 
   /**
    * Callback fired when open state changes
+   * @param open - The new open state
    */
   onOpenChange?: (open: boolean) => void;
 
@@ -109,6 +110,7 @@ export interface CollapsibleContentOwnProps {
 
   /**
    * Callback fired when content is found via browser search
+   * @param event - The beforematch event
    */
   onBeforeMatch?: (event: Event) => void;
 }

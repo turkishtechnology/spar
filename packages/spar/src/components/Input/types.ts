@@ -3,6 +3,7 @@ import type { PolymorphicProps } from '../../types';
 
 /**
  * Input context state
+ * @internal
  */
 export interface InputContextValue {
   fieldId: string;

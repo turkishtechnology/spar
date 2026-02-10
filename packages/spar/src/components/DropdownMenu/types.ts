@@ -48,6 +48,7 @@ export interface DropdownMenuProps {
 
   /**
    * Callback when open state changes
+   * @param open - The new open state
    */
   onOpenChange?: (open: boolean) => void;
 
@@ -146,16 +147,19 @@ export interface DropdownMenuContentOwnProps {
 
   /**
    * Escape key handler
+   * @param event - The keyboard event (call preventDefault to prevent close)
    */
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
 
   /**
    * Outside click handler
+   * @param event - The pointer event (call preventDefault to prevent close)
    */
   onPointerDownOutside?: (event: PointerEvent) => void;
 
   /**
    * Outside focus handler
+   * @param event - The focus event (call preventDefault to prevent close)
    */
   onFocusOutside?: (event: FocusEvent) => void;
 }
@@ -182,6 +186,7 @@ export interface DropdownMenuItemOwnProps {
 
   /**
    * Selection handler
+   * @param event - The selection event (call preventDefault to prevent menu close)
    */
   onSelect?: (event: SyntheticEvent<HTMLElement>) => void;
 
@@ -213,6 +218,7 @@ export interface DropdownMenuCheckboxItemOwnProps extends DropdownMenuItemOwnPro
 
   /**
    * Checked state change handler
+   * @param checked - The new checked state
    */
   onCheckedChange?: (checked: boolean) => void;
 }
@@ -239,6 +245,7 @@ export interface DropdownMenuRadioGroupProps extends ComponentProps<'div'> {
 
   /**
    * Value change handler
+   * @param value - The new selected value
    */
   onValueChange?: (value: string) => void;
 }
@@ -326,6 +333,7 @@ export interface DropdownMenuSubProps {
 
   /**
    * Submenu open change handler
+   * @param open - The new open state
    */
   onOpenChange?: (open: boolean) => void;
 
@@ -367,6 +375,7 @@ export type DropdownMenuSubContentProps<T extends ElementType = 'div'> = Polymor
 
 /**
  * Internal context value for DropdownMenu
+ * @internal
  */
 export interface DropdownMenuContextValue {
   open: boolean;
@@ -385,6 +394,7 @@ export interface DropdownMenuContextValue {
 
 /**
  * Context value for DropdownMenuRadioGroup
+ * @internal
  */
 export interface DropdownMenuRadioGroupContextValue {
   value: string | undefined;
@@ -393,6 +403,7 @@ export interface DropdownMenuRadioGroupContextValue {
 
 /**
  * Context value for DropdownMenuSub
+ * @internal
  */
 export interface DropdownMenuSubContextValue {
   open: boolean;
@@ -422,6 +433,7 @@ export interface MenuCollectionItem {
 
 /**
  * Context value for DropdownMenuCollection
+ * @internal
  */
 export interface DropdownMenuCollectionContextValue {
   registerItem: (item: MenuCollectionItem) => void;

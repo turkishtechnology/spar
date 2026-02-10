@@ -81,6 +81,7 @@ export interface TooltipProps {
 
   /**
    * Callback when tooltip open state changes
+   * @param open - The new open state
    */
   onOpenChange?: (open: boolean) => void;
 
@@ -187,21 +188,25 @@ export interface TooltipContentOwnProps {
 
   /**
    * Escape key handler
+   * @param event - The keyboard event (call preventDefault to prevent close)
    */
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
 
   /**
    * Outside pointer down handler
+   * @param event - The pointer event (call preventDefault to prevent close)
    */
   onPointerDownOutside?: (event: PointerEvent) => void;
 
   /**
    * Called when auto-focusing on open
+   * @param event - The focus event (call preventDefault to prevent auto-focus)
    */
   onOpenAutoFocus?: (event: Event) => void;
 
   /**
    * Called when auto-focusing on close
+   * @param event - The focus event (call preventDefault to prevent focus restore)
    */
   onCloseAutoFocus?: (event: Event) => void;
 }
@@ -267,6 +272,10 @@ export type TooltipArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<
 >;
 
 // Internal context types
+
+/**
+ * @internal
+ */
 export interface TooltipContextValue {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
@@ -289,6 +298,9 @@ export interface TooltipContextValue {
   clearHideTimeout: () => void;
 }
 
+/**
+ * @internal
+ */
 export interface TooltipProviderContextValue {
   delayDuration: number;
   skipDelayDuration: number;
@@ -297,6 +309,9 @@ export interface TooltipProviderContextValue {
   setIsOpenDelayed: (open: boolean) => void;
 }
 
+/**
+ * @internal
+ */
 export interface TooltipState {
   isOpen: boolean;
   hovering: boolean;

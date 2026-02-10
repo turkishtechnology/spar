@@ -29,6 +29,7 @@ export interface SelectOwnProps {
 
   /**
    * Callback when selection changes
+   * @param value - The new selected value
    */
   onValueChange?: (value: string) => void;
 
@@ -45,6 +46,7 @@ export interface SelectOwnProps {
 
   /**
    * Callback when open state changes
+   * @param open - The new open state
    */
   onOpenChange?: (open: boolean) => void;
 
@@ -247,16 +249,19 @@ export interface SelectContentOwnProps {
 
   /**
    * Escape key handler
+   * @param event - The keyboard event (call preventDefault to prevent close)
    */
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
 
   /**
    * Outside click handler
+   * @param event - The pointer event (call preventDefault to prevent close)
    */
   onPointerDownOutside?: (event: PointerEvent) => void;
 
   /**
    * Focus handler on close
+   * @param event - The focus event (call preventDefault to prevent focus restore)
    */
   onCloseAutoFocus?: (event: FocusEvent) => void;
 }
@@ -461,6 +466,9 @@ export interface SelectItemData {
   ref: RefObject<HTMLElement | null>;
 }
 
+/**
+ * @internal
+ */
 export interface SelectContextValue {
   // State
   open: boolean;
@@ -498,6 +506,9 @@ export interface SelectContextValue {
   setSearchString: (search: string) => void;
 }
 
+/**
+ * @internal
+ */
 export interface SelectItemContextValue {
   value: string;
   isSelected: boolean;
@@ -508,6 +519,9 @@ export interface SelectItemContextValue {
   registerItemText: (textValue: string) => void;
 }
 
+/**
+ * @internal
+ */
 export interface SelectGroupContextValue {
   labelId: string;
 }

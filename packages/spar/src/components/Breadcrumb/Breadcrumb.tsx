@@ -4,7 +4,6 @@ import type { BreadcrumbProps, BreadcrumbContextValue } from './types';
 
 /**
  * Root navigation container for breadcrumb trail. Provides navigation landmark and manages shared state.
- * @remarks Fully accessible, headless component
  */
 export const Breadcrumb = <T extends ElementType = 'nav'>({
   as,

@@ -3,7 +3,6 @@ import type { BreadcrumbSeparatorProps } from './types';
 
 /**
  * Visual separator between breadcrumb items. Hidden from screen readers to avoid verbose announcements.
- * @remarks Fully accessible, headless component
  */
 export const BreadcrumbSeparator = <T extends ElementType = 'li'>({
   as,

@@ -25,6 +25,7 @@ export interface ButtonOwnProps {
 
   /**
    * Callback fired when toggle state changes
+   * @param pressed - The new pressed state
    */
   onPressedChange?: (pressed: boolean) => void;
 }

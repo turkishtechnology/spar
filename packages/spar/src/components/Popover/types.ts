@@ -67,6 +67,7 @@ export interface PopoverProps {
 
   /**
    * Callback when popover open state changes
+   * @param open - The new open state
    */
   onOpenChange?: (open: boolean) => void;
 
@@ -170,31 +171,37 @@ export interface PopoverContentOwnProps {
 
   /**
    * Called when popover opens and focus moves inside
+   * @param event - The focus event (call preventDefault to prevent auto-focus)
    */
   onOpenAutoFocus?: (event: Event) => void;
 
   /**
    * Called when popover closes and focus returns to trigger
+   * @param event - The focus event (call preventDefault to prevent focus restore)
    */
   onCloseAutoFocus?: (event: Event) => void;
 
   /**
    * Called when escape is pressed
+   * @param event - The keyboard event (call preventDefault to prevent close)
    */
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
 
   /**
    * Called when pointer down occurs outside the content
+   * @param event - The pointer event (call preventDefault to prevent close)
    */
   onPointerDownOutside?: (event: PointerEvent) => void;
 
   /**
    * Called when focus moves outside the content
+   * @param event - The focus event (call preventDefault to prevent close)
    */
   onFocusOutside?: (event: FocusEvent) => void;
 
   /**
    * Called when interaction occurs outside the content
+   * @param event - The pointer or focus event (call preventDefault to prevent close)
    */
   onInteractOutside?: (event: PointerEvent | FocusEvent) => void;
 
@@ -316,6 +323,7 @@ export interface PopoverState {
 
 /**
  * Context value for sharing popover state between components
+ * @internal
  */
 export interface PopoverContextValue {
   state: PopoverState;

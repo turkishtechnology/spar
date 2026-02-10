@@ -14,6 +14,7 @@ export type BreadcrumbPosition = 'first' | 'middle' | 'last';
 
 /**
  * Context value for breadcrumb component communication
+ * @internal
  */
 export interface BreadcrumbContextValue {
   disabled?: boolean;
@@ -26,6 +27,8 @@ export interface BreadcrumbContextValue {
 export interface BreadcrumbOwnProps {
   /**
    * Navigation event handler for routing integration
+   * @param href - The link destination
+   * @param event - The triggering mouse or keyboard event
    */
   onNavigate?: NavigationHandler;
   /**
@@ -97,6 +100,7 @@ export interface BreadcrumbLinkOwnProps {
   isExternal?: boolean;
   /**
    * Press event handler (overrides default navigation)
+   * @param event - The triggering mouse or keyboard event
    */
   onPress?: (event: PressEvent) => void;
 }

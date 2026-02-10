@@ -17,6 +17,7 @@ export interface RadioGroupOwnProps {
 
   /**
    * Callback when selection changes
+   * @param value - The new selected value
    */
   onValueChange?: (value: string) => void;
 
@@ -124,6 +125,7 @@ export type RadioItemProps<T extends ElementType = 'label'> = PolymorphicProps<
 
 /**
  * Internal context interface for RadioGroup
+ * @internal
  */
 export interface RadioGroupContextValue {
   value: string | undefined;
