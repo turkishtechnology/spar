@@ -7,6 +7,7 @@ export { PopoverArrow } from './PopoverArrow';
 export { PopoverAnchor } from './PopoverAnchor';
 export { PopoverPortal } from './PopoverPortal';
 export { PopoverClose } from './PopoverClose';
+export { usePopoverContext } from './hooks';
 
 // Export types
 export type {
@@ -25,4 +26,5 @@ export type {
   PopoverCloseRenderProps,
   PopoverSide,
   PopoverAlign,
+  PopoverContextValue,
 } from './types';

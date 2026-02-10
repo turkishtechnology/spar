@@ -5,6 +5,7 @@ export { TooltipTrigger } from './TooltipTrigger';
 export { TooltipContent } from './TooltipContent';
 export { TooltipPortal } from './TooltipPortal';
 export { TooltipArrow } from './TooltipArrow';
+export { useTooltipContext } from './hooks';
 
 export type {
   TooltipProviderProps,
@@ -15,4 +16,5 @@ export type {
   TooltipPortalProps,
   TooltipArrowProps,
   Sticky,
+  TooltipContextValue,
 } from './types';
