@@ -3,10 +3,6 @@ import { useControlledState } from '@/hooks';
 import { TabsContext } from './hooks';
 import type { TabsProps, TabsContextValue } from './types';
 
-// ============================================================================
-// Component
-// ============================================================================
-
 /**
  * Tabs root component providing context and state management for tab navigation.
  * Supports controlled/uncontrolled patterns with full keyboard navigation.
@@ -24,9 +20,6 @@ export const Tabs = <T extends ElementType = 'div'>({
   ...props
 }: TabsProps<T>) => {
   const Component = as || 'div';
-  // ============================================================================
-  // State Management
-  // ============================================================================
 
   // Check if component is in controlled mode
   const isControlled = controlledValue !== undefined;
@@ -46,10 +39,6 @@ export const Tabs = <T extends ElementType = 'div'>({
     defaultValue,
     onValueChange,
   );
-
-  // ============================================================================
-  // Tab Registration Callbacks
-  // ============================================================================
 
   const registerTab = useCallback(
     (value: string, element: HTMLElement): void => {
@@ -71,10 +60,6 @@ export const Tabs = <T extends ElementType = 'div'>({
     tabRefs.current.delete(value);
   }, []);
 
-  // ============================================================================
-  // Focus Management Callbacks
-  // ============================================================================
-
   const getTabIndex = useCallback((value: string): number => {
     const registeredTabValues = Array.from(tabRefs.current.keys());
     return registeredTabValues.indexOf(value);
@@ -91,10 +76,6 @@ export const Tabs = <T extends ElementType = 'div'>({
     },
     [setSelectedValue],
   );
-
-  // ============================================================================
-  // Context Value
-  // ============================================================================
 
   // Memoize context value to prevent unnecessary re-renders
   const contextValue = useMemo<TabsContextValue>(
@@ -132,10 +113,6 @@ export const Tabs = <T extends ElementType = 'div'>({
       focusTab,
     ],
   );
-
-  // ============================================================================
-  // Render
-  // ============================================================================
 
   return (
     <TabsContext.Provider value={contextValue}>
