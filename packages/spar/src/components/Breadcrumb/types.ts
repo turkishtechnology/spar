@@ -1,11 +1,12 @@
 import type { ElementType, MouseEvent, KeyboardEvent } from 'react';
 import type { PolymorphicProps } from '../../types';
 
+export type PressEvent = MouseEvent | KeyboardEvent;
+
 /**
  * Event handler types for breadcrumb navigation
  */
-export type NavigationHandler = (href: string, event: MouseEvent | KeyboardEvent) => void;
-export type PressEvent = MouseEvent | KeyboardEvent;
+export type NavigationHandler = (href: string, event: PressEvent) => void;
 
 /**
  * Position of breadcrumb item in the trail

@@ -429,13 +429,13 @@ Popover with custom outside interaction logic:
 
 ```tsx
 export function PopoverWithOutsideHandlers() {
-  const handlePointerDownOutside = (event: PointerEvent) => {
+  const handlePointerDownOutside = (event: React.PointerEvent) => {
     console.log('Clicked outside popover');
     // Optionally prevent default close behavior
     // event.preventDefault();
   };
 
-  const handleEscapeKeyDown = (event: KeyboardEvent) => {
+  const handleEscapeKeyDown = (event: React.KeyboardEvent) => {
     console.log('Escape key pressed');
   };
 
@@ -498,7 +498,7 @@ The root container that provides context and manages state for all popover compo
 | `side?`         | `"top" \| "bottom" \| "left" \| "right"` | `"bottom"`  | Preferred side for popover positioning           |
 | `align?`        | `"start" \| "center" \| "end"`           | `"center"`  | Preferred alignment relative to trigger          |
 | `sideOffset?`   | `number`                                 | `8`         | Distance in pixels between trigger and popover   |
-| `children`      | `ReactNode`                              | -           | PopoverTrigger and PopoverContent components     |
+| `children`      | `React.ReactNode`                              | -           | PopoverTrigger and PopoverContent components     |
 
 **Events**
 
@@ -520,8 +520,8 @@ Button element that toggles the popover visibility. Extends all `Button` compone
 
 | Name               | Type                                                             | Default     | Description                                         |
 | ------------------ | ---------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `as?`              | `ElementType`                                                    | `"button"`  | Element type to render as                           |
-| `children`         | `ReactNode \| ((state: PopoverTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function            |
+| `as?`              | `React.ElementType`                                                    | `"button"`  | Element type to render as                           |
+| `children`         | `React.ReactNode \| ((state: PopoverTriggerRenderProps) => React.ReactNode)` | -           | Trigger content or render props function            |
 | `disabled?`        | `boolean`                                                        | `false`     | Whether trigger is disabled                         |
 | `autoFocus?` | `boolean`                                                        | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                        | `false`     | Loading state with screen reader support            |
@@ -574,15 +574,15 @@ Floating panel container that holds the popover content.
 | `hideWhenDetached?`     | `boolean`                                              | `false`     | Whether to hide when trigger is occluded                |
 | `onOpenAutoFocus?`      | `(event: Event) => void`                               | `undefined` | Called when popover opens and focus moves inside        |
 | `onCloseAutoFocus?`     | `(event: Event) => void`                               | `undefined` | Called when popover closes and focus returns to trigger |
-| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`                       | `undefined` | Called when escape is pressed                           |
-| `onPointerDownOutside?` | `(event: PointerEvent) => void`                        | `undefined` | Called when pointer down occurs outside content         |
-| `onFocusOutside?`       | `(event: FocusEvent) => void`                          | `undefined` | Called when focus moves outside content                 |
-| `onInteractOutside?`    | `(event: PointerEvent \| FocusEvent) => void`          | `undefined` | Called when interaction occurs outside content          |
+| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`                       | `undefined` | Called when escape is pressed                           |
+| `onPointerDownOutside?` | `(event: React.PointerEvent) => void`                        | `undefined` | Called when pointer down occurs outside content         |
+| `onFocusOutside?`       | `(event: React.FocusEvent) => void`                          | `undefined` | Called when focus moves outside content                 |
+| `onInteractOutside?`    | `(event: React.PointerEvent \| React.FocusEvent) => void`          | `undefined` | Called when interaction occurs outside content          |
 | `trapFocus?`            | `boolean`                                              | `false`     | Whether to trap focus within content                    |
 | `style?`                | `React.CSSProperties`                                  | `undefined` | Custom styles for content                               |
 | `onKeyDown?`            | `(event: React.KeyboardEvent<HTMLDivElement>) => void` | `undefined` | Custom keydown handler                                  |
 | `ref?`                  | `React.Ref<HTMLDivElement>`                            | `undefined` | Ref to the content element                              |
-| `children`              | `ReactNode`                                            | -           | Content to display in popover                           |
+| `children`              | `React.ReactNode`                                            | -           | Content to display in popover                           |
 
 **Events**
 
@@ -590,10 +590,10 @@ Floating panel container that holds the popover content.
 | ---------------------- | ---------------------------------------------- | --------------------------------- | ----------------------------------- |
 | `onOpenAutoFocus`      | `(event: Event)`                               | Focus moves inside on open        | Popover opens                       |
 | `onCloseAutoFocus`     | `(event: Event)`                               | Focus returns to trigger on close | Popover closes                      |
-| `onEscapeKeyDown`      | `(event: KeyboardEvent)`                       | Escape key pressed                | User presses Escape                 |
-| `onPointerDownOutside` | `(event: PointerEvent)`                        | Pointer down outside content      | Click/touch outside popover         |
-| `onFocusOutside`       | `(event: FocusEvent)`                          | Focus moves outside content       | Focus leaves popover                |
-| `onInteractOutside`    | `(event: PointerEvent \| FocusEvent)`          | Any interaction outside content   | Click, touch, or focus outside      |
+| `onEscapeKeyDown`      | `(event: React.KeyboardEvent)`                       | Escape key pressed                | User presses Escape                 |
+| `onPointerDownOutside` | `(event: React.PointerEvent)`                        | Pointer down outside content      | Click/touch outside popover         |
+| `onFocusOutside`       | `(event: React.FocusEvent)`                          | Focus moves outside content       | Focus leaves popover                |
+| `onInteractOutside`    | `(event: React.PointerEvent \| React.FocusEvent)`          | Any interaction outside content   | Click, touch, or focus outside      |
 | `onKeyDown`            | `(event: React.KeyboardEvent<HTMLDivElement>)` | Key pressed within content        | Keyboard interaction inside popover |
 
 **HTML Attributes**
@@ -640,7 +640,7 @@ Optional element used as positioning reference instead of the trigger. Always re
 
 | Name       | Type                                                            | Default     | Description                             |
 | ---------- | --------------------------------------------------------------- | ----------- | --------------------------------------- |
-| `children` | `ReactNode \| ((state: PopoverAnchorRenderProps) => ReactNode)` | -           | Anchor content or render props function |
+| `children` | `React.ReactNode \| ((state: PopoverAnchorRenderProps) => React.ReactNode)` | -           | Anchor content or render props function |
 | `ref?`     | `React.Ref<HTMLDivElement>`                                     | `undefined` | Ref to the anchor element               |
 | `...props` | `ComponentProps<'div'>`                                         | -           | All standard div attributes             |
 
@@ -671,7 +671,7 @@ Optional portal component for rendering content in a different DOM location.
 | Name         | Type              | Default         | Description                                       |
 | ------------ | ----------------- | --------------- | ------------------------------------------------- |
 | `container?` | `Element \| null` | `document.body` | Container element to portal into                  |
-| `children`   | `ReactNode`       | -               | Content to be portaled (typically PopoverContent) |
+| `children`   | `React.ReactNode`       | -               | Content to be portaled (typically PopoverContent) |
 
 **Events**
 
@@ -687,8 +687,8 @@ Close button component that automatically closes the popover when clicked. Exten
 
 | Name               | Type                                                           | Default     | Description                                         |
 | ------------------ | -------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `as?`              | `ElementType`                                                  | `"button"`  | Element type to render as                           |
-| `children`         | `ReactNode \| ((state: PopoverCloseRenderProps) => ReactNode)` | -           | Close button content or render props                |
+| `as?`              | `React.ElementType`                                                  | `"button"`  | Element type to render as                           |
+| `children`         | `React.ReactNode \| ((state: PopoverCloseRenderProps) => React.ReactNode)` | -           | Close button content or render props                |
 | `disabled?`        | `boolean`                                                      | `false`     | Whether close button is disabled                    |
 | `autoFocus?` | `boolean`                                                      | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                      | `false`     | Loading state with screen reader support            |
