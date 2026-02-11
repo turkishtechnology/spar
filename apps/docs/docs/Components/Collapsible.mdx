@@ -115,35 +115,23 @@ The Collapsible component consists of three main parts:
     { name: 'content', label: 'CollapsibleContent', description: 'Collapsible content container' },
   ]}
 >
-  <CollapsibleRoot data-spar-part='root' style={{ width: '100%' }}>
-    <CollapsibleTrigger
-      data-spar-part='trigger'
-      style={{
-        padding: '10px 16px',
-        background: '#f5f5f5',
-        border: '1px solid #ddd',
-        borderRadius: '6px',
-        cursor: 'pointer',
-        fontSize: '14px',
-        fontWeight: '500',
-        display: 'block',
-        width: '100%',
-        textAlign: 'left',
-      }}
-    >
-      {' Show Content '}
+  <CollapsibleRoot data-spar-part='root' className='collapsible-demo-container'>
+    <CollapsibleTrigger data-spar-part='trigger' className='collapsible-trigger'>
+      <svg
+        className='collapsible-trigger-icon'
+        xmlns='http://www.w3.org/2000/svg'
+        width='17'
+        height='17'
+        viewBox='0 0 17 17'
+        fill='none'
+      >
+        <path d='M8.33312 1.38867C4.49978 1.38867 1.38867 4.49978 1.38867 8.33312C1.38867 12.1665 4.49978 15.2776 8.33312 15.2776C12.1665 15.2776 15.2776 12.1665 15.2776 8.33312C15.2776 4.49978 12.1665 1.38867 8.33312 1.38867ZM11.1109 9.02756H9.02756V11.1109C9.02756 11.4928 8.71506 11.8053 8.33312 11.8053C7.95117 11.8053 7.63867 11.4928 7.63867 11.1109V9.02756H5.55534C5.17339 9.02756 4.86089 8.71506 4.86089 8.33312C4.86089 7.95117 5.17339 7.63867 5.55534 7.63867H7.63867V5.55534C7.63867 5.17339 7.95117 4.86089 8.33312 4.86089C8.71506 4.86089 9.02756 5.17339 9.02756 5.55534V7.63867H11.1109C11.4928 7.63867 11.8053 7.95117 11.8053 8.33312C11.8053 8.71506 11.4928 9.02756 11.1109 9.02756Z' />
+      </svg>
     </CollapsibleTrigger>
-    <CollapsibleContent
-      data-spar-part='content'
-      style={{
-        marginTop: '8px',
-        padding: '12px',
-        border: '1px solid #ddd',
-        borderRadius: '6px',
-        background: '#fafafa',
-      }}
-    >
-      {' This content can be collapsed and expanded. '}
+    <CollapsibleContent data-spar-part='content' className='collapsible-content'>
+      <div className='collapsible-item'></div>
+      <div className='collapsible-item'></div>
+      <div className='collapsible-item'></div>
     </CollapsibleContent>
   </CollapsibleRoot>
 </AnatomyViewer>
@@ -286,14 +274,14 @@ The root component that provides context and state management for the collapsibl
 
 | Name            | Type                      | Default | Description                               |
 | --------------- | ------------------------- | ------- | ----------------------------------------- |
-| `as?`           | `React.ElementType`           | `"div"` | Polymorphic component type                |
+| `as?`           | `React.ElementType`       | `"div"` | Polymorphic component type                |
 | `open?`         | `boolean`                 | -       | Controlled open state                     |
 | `defaultOpen?`  | `boolean`                 | `false` | Default open state for uncontrolled usage |
 | `onOpenChange?` | `(open: boolean) => void` | -       | Callback fired when open state changes    |
 | `disabled?`     | `boolean`                 | `false` | Whether the collapsible is disabled       |
 | `triggerId?`    | `string`                  | -       | Unique identifier for the trigger element |
 | `contentId?`    | `string`                  | -       | Unique identifier for the content element |
-| `children`      | `React.ReactNode`               | -       | Child components                          |
+| `children`      | `React.ReactNode`         | -       | Child components                          |
 
 **Events**
 
@@ -314,16 +302,16 @@ Interactive element that toggles the content visibility with full accessibility 
 
 **Props**
 
-| Name               | Type                                                                 | Default     | Description                                         |
-| ------------------ | -------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `as?`              | `React.ElementType`                                                      | `"button"`  | Element type for polymorphic rendering              |
+| Name               | Type                                                                             | Default     | Description                                         |
+| ------------------ | -------------------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
+| `as?`              | `React.ElementType`                                                              | `"button"`  | Element type for polymorphic rendering              |
 | `children?`        | `React.ReactNode \| ((state: CollapsibleTriggerRenderProps) => React.ReactNode)` | -           | Trigger content or render props function            |
-| `disabled?`        | `boolean`                                                            | `false`     | Whether trigger is disabled                         |
-| `autoFocus?` | `boolean`                                                            | `false`     | Whether the button should receive focus on mount    |
-| `isLoading?`       | `boolean`                                                            | `false`     | Loading state with screen reader support            |
-| `isPressed?`       | `boolean`                                                            | `undefined` | Toggle state - creates a toggle button when defined |
-| `onPressedChange?` | `(pressed: boolean) => void`                                         | `undefined` | Callback fired when toggle state changes            |
-| `...props`         | `ButtonProps`                                                        | -           | All standard Button component attributes            |
+| `disabled?`        | `boolean`                                                                        | `false`     | Whether trigger is disabled                         |
+| `autoFocus?`       | `boolean`                                                                        | `false`     | Whether the button should receive focus on mount    |
+| `isLoading?`       | `boolean`                                                                        | `false`     | Loading state with screen reader support            |
+| `isPressed?`       | `boolean`                                                                        | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange?` | `(pressed: boolean) => void`                                                     | `undefined` | Callback fired when toggle state changes            |
+| `...props`         | `ButtonProps`                                                                    | -           | All standard Button component attributes            |
 
 **Render Props (CollapsibleTriggerRenderProps)**
 
@@ -359,9 +347,9 @@ Container that shows/hides based on the collapsible state with advanced features
 
 | Name             | Type                     | Default | Description                                             |
 | ---------------- | ------------------------ | ------- | ------------------------------------------------------- |
-| `as?`            | `React.ElementType`          | `"div"` | Element type for polymorphic rendering                  |
+| `as?`            | `React.ElementType`      | `"div"` | Element type for polymorphic rendering                  |
 | `forceMount?`    | `boolean`                | `false` | Force content to remain mounted when closed             |
-| `children?`      | `React.ReactNode`              | -       | Content to be shown/hidden                              |
+| `children?`      | `React.ReactNode`        | -       | Content to be shown/hidden                              |
 | `onBeforeMatch?` | `(event: Event) => void` | -       | Callback fired when content is found via browser search |
 
 **Events**

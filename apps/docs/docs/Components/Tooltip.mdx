@@ -42,38 +42,38 @@ cssCode={`.tooltip-trigger {
   font-weight: 400;
   border: none;
 
-/* Light mode styles */
-  background-color: rgba(0, 0, 0, 0.08);
-  color: #222530;
-  font-size: 13px;
+/_ Light mode styles _/
+background-color: rgba(0, 0, 0, 0.08);
+color: #222530;
+font-size: 13px;
 }
 
 [data-theme='dark'] .tooltip-trigger {
-/* Dark mode styles */
-  background-color: rgba(255, 255, 255, 0.12);
-  color: #f2f5f8;
+/_ Dark mode styles _/
+background-color: rgba(255, 255, 255, 0.12);
+color: #f2f5f8;
 }
 
 .tooltip-content {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background-color: #ddd;
+padding: 8px 12px;
+border-radius: 8px;
+border: 1px solid rgba(0, 0, 0, 0.08);
+background-color: #ddd;
 
-  box-shadow:
-  0 2px 2px -1px rgba(82, 88, 102, 0.04),
-  0 6px 12px -2px rgba(82, 88, 102, 0.04),
-  0 8px 20px 0 rgba(82, 88, 102, 0.04);
+box-shadow:
+0 2px 2px -1px rgba(82, 88, 102, 0.04),
+0 6px 12px -2px rgba(82, 88, 102, 0.04),
+0 8px 20px 0 rgba(82, 88, 102, 0.04);
 }
 
 [data-theme='dark'] .tooltip-content {
-  border-color: rgba(0, 0, 0, 0.08);
-  background-color: #222;
+border-color: rgba(0, 0, 0, 0.08);
+background-color: #222;
 
-  box-shadow:
-  0 2px 2px -1px rgba(82, 88, 102, 0.04),
-  0 6px 12px -2px rgba(82, 88, 102, 0.04),
-  0 8px 20px 0 rgba(82, 88, 102, 0.04);
+box-shadow:
+0 2px 2px -1px rgba(82, 88, 102, 0.04),
+0 6px 12px -2px rgba(82, 88, 102, 0.04),
+0 8px 20px 0 rgba(82, 88, 102, 0.04);
 }`}
 />
 
@@ -130,33 +130,15 @@ The Tooltip component is built as a compound component with multiple parts:
     { name: 'arrow', label: 'TooltipArrow', description: 'Optional arrow element' },
   ]}
 >
-  <div data-spar-part='provider'>
+  <div className='tooltip-demo-container' data-spar-part='provider'>
     <TooltipProvider>
       <TooltipRoot data-spar-part='root'>
-        <TooltipTrigger
-          data-spar-part='trigger'
-          style={{
-            padding: '12px 24px',
-            border: '1px solid #ccc',
-            background: '#fff',
-            cursor: 'pointer',
-          }}
-        >
-          Hover or Focus Me
+        <TooltipTrigger data-spar-part='trigger' className='tooltip-trigger'>
+          {'Hover or Focus Me'}
         </TooltipTrigger>
         <TooltipPortal data-spar-part='portal'>
-          <TooltipContent
-            data-spar-part='content'
-            style={{
-              background: '#333',
-              color: '#fff',
-              padding: '8px 12px',
-              borderRadius: '4px',
-              fontSize: '14px',
-            }}
-          >
-            {' This is a helpful tooltip message! '}
-            <TooltipArrow data-spar-part='arrow' style={{ fill: '#333' }} />
+          <TooltipContent data-spar-part='content' className='tooltip-content'>
+            {'Explore'}
           </TooltipContent>
         </TooltipPortal>
       </TooltipRoot>
@@ -475,10 +457,10 @@ The trigger element that shows/hides the tooltip on hover or focus. Extends all 
 
 | Name               | Type                                                                         | Default     | Description                                         |
 | ------------------ | ---------------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `as?`              | `React.ElementType`                                                                | `"button"`  | Element type to render as                           |
+| `as?`              | `React.ElementType`                                                          | `"button"`  | Element type to render as                           |
 | `children`         | `React.ReactNode \| ((state: TooltipTriggerRenderProps) => React.ReactNode)` | -           | Trigger content or render props function            |
 | `disabled?`        | `boolean`                                                                    | `false`     | Disables the trigger                                |
-| `autoFocus?` | `boolean`                                                                    | `false`     | Whether the button should receive focus on mount    |
+| `autoFocus?`       | `boolean`                                                                    | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                                    | `false`     | Loading state with screen reader support            |
 | `isPressed?`       | `boolean`                                                                    | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange?` | `(pressed: boolean) => void`                                                 | `undefined` | Callback fired when toggle state changes            |
@@ -540,7 +522,7 @@ The content that displays in the tooltip popup with smart positioning.
 | Name                    | Type                                      | Default     | Description                                     |
 | ----------------------- | ----------------------------------------- | ----------- | ----------------------------------------------- |
 | `children`              | `React.ReactNode`                         | -           | Content to display in tooltip                   |
-| `as?`                   | `React.ElementType`                           | `"div"`     | Element type for tooltip content container      |
+| `as?`                   | `React.ElementType`                       | `"div"`     | Element type for tooltip content container      |
 | `asLabel?`              | `boolean`                                 | `false`     | Whether tooltip is primary label vs description |
 | `side?`                 | `"top" \| "bottom" \| "left" \| "right"`  | `"top"`     | Preferred placement relative to trigger         |
 | `sideOffset?`           | `number`                                  | `8`         | Distance in pixels from the trigger             |
@@ -551,8 +533,8 @@ The content that displays in the tooltip popup with smart positioning.
 | `collisionPadding?`     | `number \| Partial<Record<Side, number>>` | `8`         | Padding for collision detection                 |
 | `sticky?`               | `"partial" \| "always"`                   | `"partial"` | Sticky behavior during scroll                   |
 | `hideWhenDetached?`     | `boolean`                                 | `false`     | Hide when trigger becomes detached              |
-| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`          | -           | Escape key handler                              |
-| `onPointerDownOutside?` | `(event: React.PointerEvent) => void`           | -           | Outside pointer down handler                    |
+| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`    | -           | Escape key handler                              |
+| `onPointerDownOutside?` | `(event: React.PointerEvent) => void`     | -           | Outside pointer down handler                    |
 | `onOpenAutoFocus?`      | `(event: Event) => void`                  | -           | Called when auto-focusing on open               |
 | `onCloseAutoFocus?`     | `(event: Event) => void`                  | -           | Called when auto-focusing on close              |
 
@@ -560,8 +542,8 @@ The content that displays in the tooltip popup with smart positioning.
 
 | Name                   | Parameters                     | Description                  | When Triggered                  |
 | ---------------------- | ------------------------------ | ---------------------------- | ------------------------------- |
-| `onEscapeKeyDown`      | `(event: React.KeyboardEvent)`       | Escape key pressed           | User presses Escape             |
-| `onPointerDownOutside` | `(event: React.PointerEvent)`        | Pointer down outside tooltip | Click/touch outside content     |
+| `onEscapeKeyDown`      | `(event: React.KeyboardEvent)` | Escape key pressed           | User presses Escape             |
+| `onPointerDownOutside` | `(event: React.PointerEvent)`  | Pointer down outside tooltip | Click/touch outside content     |
 | `onPointerEnter`       | `(event: React.PointerEvent)`  | Pointer enters content       | Mouse hover or touch on tooltip |
 | `onPointerLeave`       | `(event: React.PointerEvent)`  | Pointer leaves content       | Mouse exit or touch end         |
 | `onKeyDown`            | `(event: React.KeyboardEvent)` | Key pressed in content       | Keyboard interaction            |
@@ -585,7 +567,7 @@ Optional arrow pointing to the trigger element.
 | ------------ | --------------------- | ------- | --------------------------- |
 | `width?`     | `number`              | `10`    | Arrow width in pixels       |
 | `height?`    | `number`              | `5`     | Arrow height in pixels      |
-| `as?`        | `React.ElementType`       | `"svg"` | Element type for arrow      |
+| `as?`        | `React.ElementType`   | `"svg"` | Element type for arrow      |
 | `className?` | `string`              | -       | CSS class names for styling |
 | `style?`     | `React.CSSProperties` | -       | Inline styles               |
 

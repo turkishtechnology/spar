@@ -135,47 +135,20 @@ The Tabs component consists of multiple compound parts that work together:
     },
   ]}
 >
-  <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
-    <TabsRoot defaultValue='overview' data-spar-part='root'>
-      <TabsList
-        data-spar-part='list'
-        style={{ display: 'flex', borderBottom: '1px solid #ddd', marginBottom: '16px' }}
-      >
-        <TabsTrigger
-          value='overview'
-          data-spar-part='trigger'
-          style={{
-            padding: '8px 16px',
-            border: 'none',
-            background: 'none',
-            cursor: 'pointer',
-            borderBottom: '2px solid transparent',
-          }}
-        >
-          {' Overview '}
+  <div className='tabs-demo-container'>
+    <TabsRoot defaultValue='trend' className='tabs' data-spar-part='root'>
+      <TabsList className='tabs-list' data-spar-part='list'>
+        <TabsTrigger value='recent' className='tab' data-spar-part='trigger'>
+          <span className='tab-label'>{'Recent'}</span>
         </TabsTrigger>
-        <TabsTrigger
-          value='details'
-          data-spar-part='trigger'
-          style={{
-            padding: '8px 16px',
-            border: 'none',
-            background: 'none',
-            cursor: 'pointer',
-            borderBottom: '2px solid transparent',
-          }}
-        >
-          {' Details '}
+        <TabsTrigger value='popular' className='tab' data-spar-part='trigger'>
+          <span className='tab-label'>{'Popular'}</span>
+        </TabsTrigger>
+        <TabsTrigger value='trend' className='tab' data-spar-part='trigger'>
+          <span className='tab-label'>{'Trend'}</span>
         </TabsTrigger>
       </TabsList>
-      <TabsContent value='overview' data-spar-part='content'>
-        <h4>{' Overview Panel '}</h4>
-        <p>{' This is the overview content panel. '}</p>
-      </TabsContent>
-      <TabsContent value='details' data-spar-part='content'>
-        <h4>{' Details Panel '}</h4>
-        <p>{' This is the details content panel. '}</p>
-      </TabsContent>
+      <TabsContent value='trend' data-spar-part='content'></TabsContent>
     </TabsRoot>
   </div>
 </AnatomyViewer>
@@ -317,7 +290,7 @@ function ForceMountTabs() {
 | `orientation`    | `'horizontal' \| 'vertical'`           | `'horizontal'` | Tabs orientation affecting keyboard navigation                |
 | `dir`            | `'ltr' \| 'rtl'`                       | `'ltr'`        | Text direction for arrow key navigation                       |
 | `activationMode` | `'automatic' \| 'manual'`              | `'automatic'`  | Whether tabs activate on focus or require explicit activation |
-| `as`             | `React.ElementType`                        | `'div'`        | Polymorphic component type                                    |
+| `as`             | `React.ElementType`                    | `'div'`        | Polymorphic component type                                    |
 
 #### Events
 
@@ -336,9 +309,9 @@ function ForceMountTabs() {
 
 #### Props
 
-| Name   | Type            | Default | Description                               |
-| ------ | --------------- | ------- | ----------------------------------------- |
-| `loop` | `boolean`       | `true`  | Whether arrow key navigation wraps around |
+| Name   | Type                | Default | Description                               |
+| ------ | ------------------- | ------- | ----------------------------------------- |
+| `loop` | `boolean`           | `true`  | Whether arrow key navigation wraps around |
 | `as`   | `React.ElementType` | `'div'` | Polymorphic component type                |
 
 #### ARIA
@@ -355,17 +328,17 @@ Extends all `Button` component props including polymorphic rendering via the `as
 
 #### Props
 
-| Name               | Type                                                          | Default     | Description                                         |
-| ------------------ | ------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `value`            | `string`                                                      | —           | Unique identifier for the tab                       |
-| `as?`              | `React.ElementType`                                                 | `"button"`  | Element type to render as                           |
-| `disabled?`        | `boolean`                                                     | `false`     | Disables this specific tab                          |
-| `autoFocus?` | `boolean`                                                     | `false`     | Whether to focus this tab trigger on mount          |
-| `isLoading?`       | `boolean`                                                     | `false`     | Loading state with screen reader support            |
-| `isPressed?`       | `boolean`                                                     | `undefined` | Toggle state - creates a toggle button when defined |
-| `onPressedChange?` | `(pressed: boolean) => void`                                  | `undefined` | Callback fired when toggle state changes            |
+| Name               | Type                                                                      | Default     | Description                                         |
+| ------------------ | ------------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
+| `value`            | `string`                                                                  | —           | Unique identifier for the tab                       |
+| `as?`              | `React.ElementType`                                                       | `"button"`  | Element type to render as                           |
+| `disabled?`        | `boolean`                                                                 | `false`     | Disables this specific tab                          |
+| `autoFocus?`       | `boolean`                                                                 | `false`     | Whether to focus this tab trigger on mount          |
+| `isLoading?`       | `boolean`                                                                 | `false`     | Loading state with screen reader support            |
+| `isPressed?`       | `boolean`                                                                 | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange?` | `(pressed: boolean) => void`                                              | `undefined` | Callback fired when toggle state changes            |
 | `children`         | `React.ReactNode \| ((state: TabsTriggerRenderProps) => React.ReactNode)` | —           | Children content or render function                 |
-| `...props`         | `ButtonProps`                                                 | -           | All standard Button component attributes            |
+| `...props`         | `ButtonProps`                                                             | -           | All standard Button component attributes            |
 
 #### TabsTriggerRenderProps
 
@@ -379,8 +352,8 @@ Extends all `Button` component props including polymorphic rendering via the `as
 
 #### Events
 
-| Name      | Parameters          | Description | When Triggered                           |
-| --------- | ------------------- | ----------- | ---------------------------------------- |
+| Name      | Parameters                | Description | When Triggered                           |
+| --------- | ------------------------- | ----------- | ---------------------------------------- |
 | `onClick` | `event: React.MouseEvent` | Tab clicked | User clicks the tab trigger              |
 | `onFocus` | `event: React.FocusEvent` | Tab focused | Tab receives focus via keyboard or mouse |
 | `onBlur`  | `event: React.FocusEvent` | Tab blurred | Tab loses focus                          |
@@ -404,10 +377,10 @@ Extends all `Button` component props including polymorphic rendering via the `as
 
 #### Props
 
-| Name         | Type            | Default | Description                                     |
-| ------------ | --------------- | ------- | ----------------------------------------------- |
-| `value`      | `string`        | —       | Unique identifier matching a TabsTrigger value  |
-| `forceMount` | `boolean`       | `false` | Force content to remain mounted when not active |
+| Name         | Type                | Default | Description                                     |
+| ------------ | ------------------- | ------- | ----------------------------------------------- |
+| `value`      | `string`            | —       | Unique identifier matching a TabsTrigger value  |
+| `forceMount` | `boolean`           | `false` | Force content to remain mounted when not active |
 | `as`         | `React.ElementType` | `'div'` | Polymorphic component type                      |
 
 #### ARIA

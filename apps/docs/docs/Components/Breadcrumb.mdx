@@ -245,65 +245,25 @@ The Breadcrumb component is built as a compound component with multiple parts:
     { name: 'separator', label: 'BreadcrumbSeparator', description: 'Visual separator element' },
   ]}
 >
-  <BreadcrumbRoot
-    data-spar-part='root'
-    style={{ padding: '16px', border: '1px solid #e0e0e0', borderRadius: '8px' }}
-  >
-    <BreadcrumbList
-      data-spar-part='list'
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        listStyle: 'none',
-        margin: 0,
-        padding: 0,
-      }}
-    >
-      <BreadcrumbItem data-spar-part='item' style={{ margin: 0, padding: 0 }}>
-        <BreadcrumbLink
-          data-spar-part='link'
-          href='/'
-          style={{
-            color: '#0066cc',
-            textDecoration: 'none',
-            cursor: 'pointer',
-          }}
-        >
-          {' Home '}
-        </BreadcrumbLink>
-      </BreadcrumbItem>
-      <BreadcrumbSeparator
-        data-spar-part='separator'
-        style={{ color: '#666', margin: '0 8px', display: 'flex', alignItems: 'center' }}
-      >
-        {' › '}
-      </BreadcrumbSeparator>
-      <BreadcrumbItem data-spar-part='item' style={{ margin: 0, padding: 0 }}>
-        <BreadcrumbLink
-          data-spar-part='link'
-          href='/products'
-          style={{
-            color: '#0066cc',
-            textDecoration: 'none',
-            cursor: 'pointer',
-          }}
-        >
-          {' Products '}
-        </BreadcrumbLink>
-      </BreadcrumbItem>
-      <BreadcrumbSeparator
-        data-spar-part='separator'
-        style={{ color: '#666', margin: '0 8px', display: 'flex', alignItems: 'center' }}
-      >
-        {' › '}
-      </BreadcrumbSeparator>
-      <BreadcrumbItem data-spar-part='item' style={{ margin: 0, padding: 0 }}>
-        <BreadcrumbPage data-spar-part='page' style={{ color: '#333', fontWeight: '500' }}>
-          {' Current Page '}
-        </BreadcrumbPage>
-      </BreadcrumbItem>
-    </BreadcrumbList>
-  </BreadcrumbRoot>
+  <div className='breadcrumb-demo-container'>
+    <BreadcrumbRoot data-spar-part='root'>
+      <BreadcrumbList className='breadcrumb-list' data-spar-part='list'>
+        <BreadcrumbItem className='breadcrumb-item' data-spar-part='item'>
+          <BreadcrumbLink className='breadcrumb-link' data-spar-part='link'>
+            {'step 0'}
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator className='breadcrumb-separator' data-spar-part='separator'>
+          {'/'}
+        </BreadcrumbSeparator>
+        <BreadcrumbItem className='breadcrumb-item' data-spar-part='item'>
+          <BreadcrumbPage className='breadcrumb-page' data-spar-part='page'>
+            {'step 1'}
+          </BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </BreadcrumbRoot>
+  </div>
 </AnatomyViewer>
 
 ### Structure
@@ -484,9 +444,7 @@ function IconBreadcrumb() {
         </BreadcrumbItem>
         <BreadcrumbSeparator>/</BreadcrumbSeparator>
         <BreadcrumbItem>
-          <BreadcrumbLink
-            href='/documents'
-          >
+          <BreadcrumbLink href='/documents'>
             <FolderIcon />
             <span>Documents</span>
           </BreadcrumbLink>
@@ -565,16 +523,16 @@ Navigation landmark container that provides context and manages shared state for
 
 | Name          | Type                | Default        | Description                                      |
 | ------------- | ------------------- | -------------- | ------------------------------------------------ |
-| `children`    | `React.ReactNode`         | -              | Breadcrumb content                               |
-| `as?`         | `React.ElementType`     | `'nav'`        | Polymorphic element type                         |
+| `children`    | `React.ReactNode`   | -              | Breadcrumb content                               |
+| `as?`         | `React.ElementType` | `'nav'`        | Polymorphic element type                         |
 | `aria-label?` | `string`            | `'Breadcrumb'` | Accessible name for navigation landmark          |
 | `onNavigate?` | `NavigationHandler` | `undefined`    | Navigation event handler for routing integration |
 | `disabled?`   | `boolean`           | `false`        | Disable all breadcrumb navigation                |
 
 **Events**
 
-| Name         | Parameters                                           | Description                                        | When Triggered                    |
-| ------------ | ---------------------------------------------------- | -------------------------------------------------- | --------------------------------- |
+| Name         | Parameters                          | Description                                        | When Triggered                    |
+| ------------ | ----------------------------------- | -------------------------------------------------- | --------------------------------- |
 | `onNavigate` | `(href: string, event: PressEvent)` | Navigation handler called when links are activated | Link click or keyboard activation |
 
 **HTML Attributes**
@@ -589,9 +547,9 @@ Ordered list container that provides semantic structure and automatically calcul
 
 **Props**
 
-| Name       | Type            | Default | Description              |
-| ---------- | --------------- | ------- | ------------------------ |
-| `children` | `React.ReactNode`     | -       | List items content       |
+| Name       | Type                | Default | Description              |
+| ---------- | ------------------- | ------- | ------------------------ |
+| `children` | `React.ReactNode`   | -       | List items content       |
 | `as?`      | `React.ElementType` | `'ol'`  | Polymorphic element type |
 
 **Events**
@@ -608,8 +566,8 @@ List item wrapper that receives position and current state from parent Breadcrum
 
 | Name         | Type                 | Default    | Description                                             |
 | ------------ | -------------------- | ---------- | ------------------------------------------------------- |
-| `children`   | `React.ReactNode`          | -          | Item content (Link or Page)                             |
-| `as?`        | `React.ElementType`      | `'li'`     | Polymorphic element type                                |
+| `children`   | `React.ReactNode`    | -          | Item content (Link or Page)                             |
+| `as?`        | `React.ElementType`  | `'li'`     | Polymorphic element type                                |
 | `position?`  | `BreadcrumbPosition` | `'middle'` | Position in trail (automatically calculated)            |
 | `isCurrent?` | `boolean`            | `false`    | Whether this is current page (automatically calculated) |
 
@@ -634,8 +592,8 @@ Interactive link component with accessibility features, routing integration, and
 
 | Name          | Type                          | Default     | Description                                                        |
 | ------------- | ----------------------------- | ----------- | ------------------------------------------------------------------ |
-| `children`    | `React.ReactNode`                   | -           | Link text content                                                  |
-| `as?`         | `React.ElementType`               | `'a'`       | Polymorphic element type                                           |
+| `children`    | `React.ReactNode`             | -           | Link text content                                                  |
+| `as?`         | `React.ElementType`           | `'a'`       | Polymorphic element type                                           |
 | `href?`       | `string`                      | `undefined` | Link destination                                                   |
 | `disabled?`   | `boolean`                     | `false`     | Disable this specific link                                         |
 | `isExternal?` | `boolean`                     | `false`     | Indicates external link (adds security attributes)                 |
@@ -645,11 +603,11 @@ Interactive link component with accessibility features, routing integration, and
 
 **Events**
 
-| Name        | Parameters                             | Description                                    | When Triggered                        |
-| ----------- | -------------------------------------- | ---------------------------------------------- | ------------------------------------- |
-| `onPress`   | `(event: PressEvent)` | Custom press handler that overrides navigation | Click, Enter, or Space key            |
-| `onClick`   | `(event: React.MouseEvent)`                  | Standard click handler                         | Mouse click (if onPress not provided) |
-| `onKeyDown` | `(event: React.KeyboardEvent)`               | Standard keyboard handler                      | Key press (if onPress not provided)   |
+| Name        | Parameters                     | Description                                    | When Triggered                        |
+| ----------- | ------------------------------ | ---------------------------------------------- | ------------------------------------- |
+| `onPress`   | `(event: PressEvent)`          | Custom press handler that overrides navigation | Click, Enter, or Space key            |
+| `onClick`   | `(event: React.MouseEvent)`    | Standard click handler                         | Mouse click (if onPress not provided) |
+| `onKeyDown` | `(event: React.KeyboardEvent)` | Standard keyboard handler                      | Key press (if onPress not provided)   |
 
 **HTML Attributes**
 
@@ -665,9 +623,9 @@ Non-interactive current page indicator with proper semantic marking for screen r
 
 **Props**
 
-| Name       | Type            | Default  | Description              |
-| ---------- | --------------- | -------- | ------------------------ |
-| `children` | `React.ReactNode`     | -        | Current page name        |
+| Name       | Type                | Default  | Description              |
+| ---------- | ------------------- | -------- | ------------------------ |
+| `children` | `React.ReactNode`   | -        | Current page name        |
 | `as?`      | `React.ElementType` | `'span'` | Polymorphic element type |
 
 **Events**
@@ -688,11 +646,11 @@ Visual separator between breadcrumb items, hidden from screen readers to prevent
 
 **Props**
 
-| Name           | Type            | Default     | Description              |
-| -------------- | --------------- | ----------- | ------------------------ |
-| `children?`    | `React.ReactNode`     | `undefined` | Custom separator content |
+| Name           | Type                | Default     | Description              |
+| -------------- | ------------------- | ----------- | ------------------------ |
+| `children?`    | `React.ReactNode`   | `undefined` | Custom separator content |
 | `as?`          | `React.ElementType` | `'li'`      | Polymorphic element type |
-| `aria-hidden?` | `boolean`       | `true`      | Hide from screen readers |
+| `aria-hidden?` | `boolean`           | `true`      | Hide from screen readers |
 
 **Events**
 

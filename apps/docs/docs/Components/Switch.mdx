@@ -30,24 +30,24 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
 }
 
 .switch::after {
-  content: '';
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.72);
-  transition: transform 0.2s ease;
+content: '';
+width: 24px;
+height: 24px;
+border-radius: 50%;
+background: rgba(0, 0, 0, 0.72);
+transition: transform 0.2s ease;
 }
 
 .switch[data-checked]::after {
-  transform: translateX(100%);
+transform: translateX(100%);
 }
 
 [data-theme='dark'] .switch {
-  background-color: rgba(255, 255, 255, 0.12);
+background-color: rgba(255, 255, 255, 0.12);
 }
 
 [data-theme='dark'] .switch::after {
-  background: rgba(255, 255, 255, 0.72);
+background: rgba(255, 255, 255, 0.72);
 }`}
 />
 
@@ -84,21 +84,8 @@ The Switch component is a single element that handles all switch functionality i
     },
   ]}
 >
-  <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
-    <Switch
-      data-spar-part='switch'
-      defaultChecked={true}
-      style={{
-        padding: '8px 16px',
-        border: '2px solid #007acc',
-        borderRadius: '4px',
-        backgroundColor: '#007acc',
-        color: 'white',
-        cursor: 'pointer',
-      }}
-    >
-      {' ON '}
-    </Switch>
+  <div className='switch-demo-container'>
+    <Switch data-spar-part='switch' className='switch' />
   </div>
 </AnatomyViewer>
 
@@ -273,25 +260,25 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
 
 **Props**
 
-| Name                | Type                                                     | Default     | Description                                                                       |
-| ------------------- | -------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------- |
-| `as?`               | `React.ElementType`                                            | `"button"`  | The element or component to render as                                             |
-| `checked?`          | `boolean`                                                | `undefined` | Controlled checked state. When provided, component operates in controlled mode    |
-| `defaultChecked?`   | `boolean`                                                | `false`     | Default checked state for uncontrolled usage                                      |
-| `onChange?`         | `(checked: boolean) => void`                             | `undefined` | Callback fired when the checked state changes                                     |
-| `disabled?`         | `boolean`                                                | `false`     | Disabled state - prevents interaction and is properly announced to screen readers |
-| `name?`             | `string`                                                 | `undefined` | Name attribute for form submission                                                |
-| `value?`            | `string`                                                 | `'on'`      | Value sent in form data when checked                                              |
-| `form?`             | `string`                                                 | `undefined` | ID of the form this switch belongs to                                             |
-| `required?`         | `boolean`                                                | `false`     | Required state for form validation                                                |
-| `readOnly?`         | `boolean`                                                | `false`     | Read-only state - prevents interaction                                            |
-| `autoFocus?`  | `boolean`                                                | `false`     | Auto-focus on mount                                                               |
-| `isLoading?`        | `boolean`                                                | `false`     | Loading state with screen reader support                                          |
-| `aria-label?`       | `string`                                                 | `undefined` | Accessible name for the switch. Required when switch has no visible label         |
-| `aria-labelledby?`  | `string`                                                 | `undefined` | ID of element that labels the switch                                              |
-| `aria-describedby?` | `string`                                                 | `undefined` | ID of element that describes the switch                                           |
+| Name                | Type                                                                 | Default     | Description                                                                       |
+| ------------------- | -------------------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------- |
+| `as?`               | `React.ElementType`                                                  | `"button"`  | The element or component to render as                                             |
+| `checked?`          | `boolean`                                                            | `undefined` | Controlled checked state. When provided, component operates in controlled mode    |
+| `defaultChecked?`   | `boolean`                                                            | `false`     | Default checked state for uncontrolled usage                                      |
+| `onChange?`         | `(checked: boolean) => void`                                         | `undefined` | Callback fired when the checked state changes                                     |
+| `disabled?`         | `boolean`                                                            | `false`     | Disabled state - prevents interaction and is properly announced to screen readers |
+| `name?`             | `string`                                                             | `undefined` | Name attribute for form submission                                                |
+| `value?`            | `string`                                                             | `'on'`      | Value sent in form data when checked                                              |
+| `form?`             | `string`                                                             | `undefined` | ID of the form this switch belongs to                                             |
+| `required?`         | `boolean`                                                            | `false`     | Required state for form validation                                                |
+| `readOnly?`         | `boolean`                                                            | `false`     | Read-only state - prevents interaction                                            |
+| `autoFocus?`        | `boolean`                                                            | `false`     | Auto-focus on mount                                                               |
+| `isLoading?`        | `boolean`                                                            | `false`     | Loading state with screen reader support                                          |
+| `aria-label?`       | `string`                                                             | `undefined` | Accessible name for the switch. Required when switch has no visible label         |
+| `aria-labelledby?`  | `string`                                                             | `undefined` | ID of element that labels the switch                                              |
+| `aria-describedby?` | `string`                                                             | `undefined` | ID of element that describes the switch                                           |
 | `children?`         | `React.ReactNode \| ((state: SwitchRenderProps) => React.ReactNode)` | `undefined` | Content to display inside the switch, or render props function                    |
-| `...props`          | `ButtonProps`                                            | -           | All standard Button component attributes                                          |
+| `...props`          | `ButtonProps`                                                        | -           | All standard Button component attributes                                          |
 
 **Render Props (SwitchRenderProps)**
 
@@ -307,9 +294,9 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
 
 **Events**
 
-| Name           | Parameters               | Description               | When Triggered                                                  |
-| -------------- | ------------------------ | ------------------------- | --------------------------------------------------------------- |
-| `onChange`     | `(checked: boolean)`     | Switch state changes      | User toggles switch via click, keyboard, or programmatic change |
+| Name           | Parameters                     | Description               | When Triggered                                                  |
+| -------------- | ------------------------------ | ------------------------- | --------------------------------------------------------------- |
+| `onChange`     | `(checked: boolean)`           | Switch state changes      | User toggles switch via click, keyboard, or programmatic change |
 | `onClick`      | `(event: React.MouseEvent)`    | Mouse click on switch     | User clicks the switch element                                  |
 | `onKeyDown`    | `(event: React.KeyboardEvent)` | Key pressed while focused | User presses Space or Enter keys                                |
 | `onFocus`      | `(event: React.FocusEvent)`    | Switch receives focus     | Focus moves to switch via Tab navigation or programmatically    |
