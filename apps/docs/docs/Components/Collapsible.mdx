@@ -286,14 +286,14 @@ The root component that provides context and state management for the collapsibl
 
 | Name            | Type                      | Default | Description                               |
 | --------------- | ------------------------- | ------- | ----------------------------------------- |
-| `as?`           | `ElementType`           | `"div"` | Polymorphic component type                |
+| `as?`           | `React.ElementType`           | `"div"` | Polymorphic component type                |
 | `open?`         | `boolean`                 | -       | Controlled open state                     |
 | `defaultOpen?`  | `boolean`                 | `false` | Default open state for uncontrolled usage |
 | `onOpenChange?` | `(open: boolean) => void` | -       | Callback fired when open state changes    |
 | `disabled?`     | `boolean`                 | `false` | Whether the collapsible is disabled       |
 | `triggerId?`    | `string`                  | -       | Unique identifier for the trigger element |
 | `contentId?`    | `string`                  | -       | Unique identifier for the content element |
-| `children`      | `ReactNode`               | -       | Child components                          |
+| `children`      | `React.ReactNode`               | -       | Child components                          |
 
 **Events**
 
@@ -316,8 +316,8 @@ Interactive element that toggles the content visibility with full accessibility 
 
 | Name               | Type                                                                 | Default     | Description                                         |
 | ------------------ | -------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `as?`              | `ElementType`                                                      | `"button"`  | Element type for polymorphic rendering              |
-| `children?`        | `ReactNode \| ((state: CollapsibleTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function            |
+| `as?`              | `React.ElementType`                                                      | `"button"`  | Element type for polymorphic rendering              |
+| `children?`        | `React.ReactNode \| ((state: CollapsibleTriggerRenderProps) => React.ReactNode)` | -           | Trigger content or render props function            |
 | `disabled?`        | `boolean`                                                            | `false`     | Whether trigger is disabled                         |
 | `autoFocus?` | `boolean`                                                            | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                            | `false`     | Loading state with screen reader support            |
@@ -359,9 +359,9 @@ Container that shows/hides based on the collapsible state with advanced features
 
 | Name             | Type                     | Default | Description                                             |
 | ---------------- | ------------------------ | ------- | ------------------------------------------------------- |
-| `as?`            | `ElementType`          | `"div"` | Element type for polymorphic rendering                  |
+| `as?`            | `React.ElementType`          | `"div"` | Element type for polymorphic rendering                  |
 | `forceMount?`    | `boolean`                | `false` | Force content to remain mounted when closed             |
-| `children?`      | `ReactNode`              | -       | Content to be shown/hidden                              |
+| `children?`      | `React.ReactNode`              | -       | Content to be shown/hidden                              |
 | `onBeforeMatch?` | `(event: Event) => void` | -       | Callback fired when content is found via browser search |
 
 **Events**

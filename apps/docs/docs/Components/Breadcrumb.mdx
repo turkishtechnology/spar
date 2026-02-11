@@ -365,7 +365,7 @@ import { useRouter } from 'next/router';
 function RouterBreadcrumb() {
   const router = useRouter();
 
-  const handleNavigate = (href: string, event: MouseEvent | KeyboardEvent) => {
+  const handleNavigate = (href: string, event: PressEvent) => {
     event.preventDefault();
     router.push(href);
   };
@@ -508,7 +508,7 @@ function IconBreadcrumb() {
 
 ```tsx
 function CustomEventBreadcrumb() {
-  const handleCustomPress = (event: MouseEvent | KeyboardEvent) => {
+  const handleCustomPress = (event: PressEvent) => {
     console.log('Custom action triggered:', event.type);
     // Custom logic here - overrides default navigation
   };
@@ -565,8 +565,8 @@ Navigation landmark container that provides context and manages shared state for
 
 | Name          | Type                | Default        | Description                                      |
 | ------------- | ------------------- | -------------- | ------------------------------------------------ |
-| `children`    | `ReactNode`         | -              | Breadcrumb content                               |
-| `as?`         | `ElementType`     | `'nav'`        | Polymorphic element type                         |
+| `children`    | `React.ReactNode`         | -              | Breadcrumb content                               |
+| `as?`         | `React.ElementType`     | `'nav'`        | Polymorphic element type                         |
 | `aria-label?` | `string`            | `'Breadcrumb'` | Accessible name for navigation landmark          |
 | `onNavigate?` | `NavigationHandler` | `undefined`    | Navigation event handler for routing integration |
 | `disabled?`   | `boolean`           | `false`        | Disable all breadcrumb navigation                |
@@ -575,7 +575,7 @@ Navigation landmark container that provides context and manages shared state for
 
 | Name         | Parameters                                           | Description                                        | When Triggered                    |
 | ------------ | ---------------------------------------------------- | -------------------------------------------------- | --------------------------------- |
-| `onNavigate` | `(href: string, event: MouseEvent \| KeyboardEvent)` | Navigation handler called when links are activated | Link click or keyboard activation |
+| `onNavigate` | `(href: string, event: PressEvent)` | Navigation handler called when links are activated | Link click or keyboard activation |
 
 **HTML Attributes**
 
@@ -591,8 +591,8 @@ Ordered list container that provides semantic structure and automatically calcul
 
 | Name       | Type            | Default | Description              |
 | ---------- | --------------- | ------- | ------------------------ |
-| `children` | `ReactNode`     | -       | List items content       |
-| `as?`      | `ElementType` | `'ol'`  | Polymorphic element type |
+| `children` | `React.ReactNode`     | -       | List items content       |
+| `as?`      | `React.ElementType` | `'ol'`  | Polymorphic element type |
 
 **Events**
 
@@ -608,8 +608,8 @@ List item wrapper that receives position and current state from parent Breadcrum
 
 | Name         | Type                 | Default    | Description                                             |
 | ------------ | -------------------- | ---------- | ------------------------------------------------------- |
-| `children`   | `ReactNode`          | -          | Item content (Link or Page)                             |
-| `as?`        | `ElementType`      | `'li'`     | Polymorphic element type                                |
+| `children`   | `React.ReactNode`          | -          | Item content (Link or Page)                             |
+| `as?`        | `React.ElementType`      | `'li'`     | Polymorphic element type                                |
 | `position?`  | `BreadcrumbPosition` | `'middle'` | Position in trail (automatically calculated)            |
 | `isCurrent?` | `boolean`            | `false`    | Whether this is current page (automatically calculated) |
 
@@ -634,8 +634,8 @@ Interactive link component with accessibility features, routing integration, and
 
 | Name          | Type                          | Default     | Description                                                        |
 | ------------- | ----------------------------- | ----------- | ------------------------------------------------------------------ |
-| `children`    | `ReactNode`                   | -           | Link text content                                                  |
-| `as?`         | `ElementType`               | `'a'`       | Polymorphic element type                                           |
+| `children`    | `React.ReactNode`                   | -           | Link text content                                                  |
+| `as?`         | `React.ElementType`               | `'a'`       | Polymorphic element type                                           |
 | `href?`       | `string`                      | `undefined` | Link destination                                                   |
 | `disabled?`   | `boolean`                     | `false`     | Disable this specific link                                         |
 | `isExternal?` | `boolean`                     | `false`     | Indicates external link (adds security attributes)                 |
@@ -647,9 +647,9 @@ Interactive link component with accessibility features, routing integration, and
 
 | Name        | Parameters                             | Description                                    | When Triggered                        |
 | ----------- | -------------------------------------- | ---------------------------------------------- | ------------------------------------- |
-| `onPress`   | `(event: MouseEvent \| KeyboardEvent)` | Custom press handler that overrides navigation | Click, Enter, or Space key            |
-| `onClick`   | `(event: MouseEvent)`                  | Standard click handler                         | Mouse click (if onPress not provided) |
-| `onKeyDown` | `(event: KeyboardEvent)`               | Standard keyboard handler                      | Key press (if onPress not provided)   |
+| `onPress`   | `(event: PressEvent)` | Custom press handler that overrides navigation | Click, Enter, or Space key            |
+| `onClick`   | `(event: React.MouseEvent)`                  | Standard click handler                         | Mouse click (if onPress not provided) |
+| `onKeyDown` | `(event: React.KeyboardEvent)`               | Standard keyboard handler                      | Key press (if onPress not provided)   |
 
 **HTML Attributes**
 
@@ -667,8 +667,8 @@ Non-interactive current page indicator with proper semantic marking for screen r
 
 | Name       | Type            | Default  | Description              |
 | ---------- | --------------- | -------- | ------------------------ |
-| `children` | `ReactNode`     | -        | Current page name        |
-| `as?`      | `ElementType` | `'span'` | Polymorphic element type |
+| `children` | `React.ReactNode`     | -        | Current page name        |
+| `as?`      | `React.ElementType` | `'span'` | Polymorphic element type |
 
 **Events**
 
@@ -690,8 +690,8 @@ Visual separator between breadcrumb items, hidden from screen readers to prevent
 
 | Name           | Type            | Default     | Description              |
 | -------------- | --------------- | ----------- | ------------------------ |
-| `children?`    | `ReactNode`     | `undefined` | Custom separator content |
-| `as?`          | `ElementType` | `'li'`      | Polymorphic element type |
+| `children?`    | `React.ReactNode`     | `undefined` | Custom separator content |
+| `as?`          | `React.ElementType` | `'li'`      | Polymorphic element type |
 | `aria-hidden?` | `boolean`       | `true`      | Hide from screen readers |
 
 **Events**

@@ -668,8 +668,8 @@ The main container that manages all select state and behavior.
 | `name?`            | `string`                  | `undefined` | Form field name                       |
 | `dir?`             | `'ltr' \| 'rtl'`          | `'ltr'`     | Reading direction                     |
 | `autoFocus?` | `boolean`                 | `false`     | Whether to focus the trigger on mount |
-| `as?`              | `ElementType`           | `undefined` | Polymorphic component type            |
-| `children`         | `ReactNode`               | -           | Select component children             |
+| `as?`              | `React.ElementType`           | `undefined` | Polymorphic component type            |
+| `children`         | `React.ReactNode`               | -           | Select component children             |
 
 **Events**
 
@@ -692,14 +692,14 @@ The button that toggles the dropdown open and closed. Extends all `Button` compo
 
 | Name               | Type                                                            | Default     | Description                                         |
 | ------------------ | --------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `as?`              | `ElementType`                                                   | `"button"`  | Element type to render as                           |
-| `children`         | `ReactNode \| ((state: SelectTriggerRenderProps) => ReactNode)` | -           | Trigger content or render props function            |
+| `as?`              | `React.ElementType`                                                   | `"button"`  | Element type to render as                           |
+| `children`         | `React.ReactNode \| ((state: SelectTriggerRenderProps) => React.ReactNode)` | -           | Trigger content or render props function            |
 | `disabled?`        | `boolean`                                                       | `false`     | Whether trigger is disabled                         |
 | `autoFocus?` | `boolean`                                                       | `false`     | Whether the button should receive focus on mount    |
 | `isLoading?`       | `boolean`                                                       | `false`     | Loading state with screen reader support            |
 | `isPressed?`       | `boolean`                                                       | `undefined` | Toggle state - creates a toggle button when defined |
 | `onPressedChange?` | `(pressed: boolean) => void`                                    | `undefined` | Callback fired when toggle state changes            |
-| `ref?`             | `RefObject`                                                     | `undefined` | Forward ref support                                 |
+| `ref?`             | `React.RefObject`                                                     | `undefined` | Forward ref support                                 |
 | `...props`         | `ButtonProps`                                                   | -           | All standard Button component attributes            |
 
 **Render Props (SelectTriggerRenderProps)**
@@ -717,10 +717,10 @@ The button that toggles the dropdown open and closed. Extends all `Button` compo
 
 | Name        | Parameters               | Description            | When Triggered                       |
 | ----------- | ------------------------ | ---------------------- | ------------------------------------ |
-| `onClick`   | `(event: MouseEvent)`    | Trigger clicked        | Mouse click on trigger               |
-| `onKeyDown` | `(event: KeyboardEvent)` | Key pressed on trigger | Space, Enter, or Arrow keys          |
-| `onFocus`   | `(event: FocusEvent)`    | Trigger receives focus | Tab navigation or programmatic focus |
-| `onBlur`    | `(event: FocusEvent)`    | Trigger loses focus    | Focus moves away                     |
+| `onClick`   | `(event: React.MouseEvent)`    | Trigger clicked        | Mouse click on trigger               |
+| `onKeyDown` | `(event: React.KeyboardEvent)` | Key pressed on trigger | Space, Enter, or Arrow keys          |
+| `onFocus`   | `(event: React.FocusEvent)`    | Trigger receives focus | Tab navigation or programmatic focus |
+| `onBlur`    | `(event: React.FocusEvent)`    | Trigger loses focus    | Focus moves away                     |
 
 **Data Attributes**
 
@@ -736,9 +736,9 @@ Displays the currently selected value or placeholder text.
 
 | Name           | Type            | Default     | Description                            |
 | -------------- | --------------- | ----------- | -------------------------------------- |
-| `placeholder?` | `ReactNode`     | `undefined` | Text shown when no value selected      |
-| `as?`          | `ElementType` | `'span'`    | Polymorphic component type             |
-| `children?`    | `ReactNode`     | `undefined` | Optional children (usually not needed) |
+| `placeholder?` | `React.ReactNode`     | `undefined` | Text shown when no value selected      |
+| `as?`          | `React.ElementType` | `'span'`    | Polymorphic component type             |
+| `children?`    | `React.ReactNode`     | `undefined` | Optional children (usually not needed) |
 
 **Events**
 
@@ -752,8 +752,8 @@ Optional visual indicator element (typically a chevron or arrow).
 
 | Name        | Type            | Default     | Description                |
 | ----------- | --------------- | ----------- | -------------------------- |
-| `as?`       | `ElementType` | `'span'`    | Polymorphic component type |
-| `children?` | `ReactNode`     | `undefined` | Icon content               |
+| `as?`       | `React.ElementType` | `'span'`    | Polymorphic component type |
+| `children?` | `React.ReactNode`     | `undefined` | Icon content               |
 
 **Events**
 
@@ -769,7 +769,7 @@ Portal container for rendering dropdown outside DOM hierarchy.
 | ------------- | --------------------- | --------------- | --------------------------------- |
 | `container?`  | `HTMLElement \| null` | `document.body` | Portal target element             |
 | `forceMount?` | `boolean`             | `false`         | Force mount for animation control |
-| `children`    | `ReactNode`           | -               | Portal content                    |
+| `children`    | `React.ReactNode`           | -               | Portal content                    |
 
 **Events**
 
@@ -792,18 +792,18 @@ The dropdown container that appears when select is open. Uses Floating UI for in
 | `flip?`             | `boolean`                                 | `true`           | Whether to flip to opposite side when no space                                                                                                                                                                             |
 | `hide?`             | `boolean`                                 | `false`          | Whether to hide when trigger is fully scrolled out of view                                                                                                                                                                 |
 | `size?`             | `boolean`                                 | `true`           | Whether to constrain size to available space                                                                                                                                                                               |
-| `arrowRef?`         | `RefObject<HTMLElement \| SVGSVGElement>` | `undefined`      | Arrow element ref for arrow positioning                                                                                                                                                                                    |
-| `as?`               | `ElementType`                           | `'div'`          | Polymorphic component type                                                                                                                                                                                                 |
-| `ref?`              | `RefObject`                               | `undefined`      | Forward ref support                                                                                                                                                                                                        |
-| `children`          | `ReactNode`                               | -                | Content children                                                                                                                                                                                                           |
+| `arrowRef?`         | `React.RefObject<HTMLElement \| SVGSVGElement>` | `undefined`      | Arrow element ref for arrow positioning                                                                                                                                                                                    |
+| `as?`               | `React.ElementType`                           | `'div'`          | Polymorphic component type                                                                                                                                                                                                 |
+| `ref?`              | `React.RefObject`                               | `undefined`      | Forward ref support                                                                                                                                                                                                        |
+| `children`          | `React.ReactNode`                               | -                | Content children                                                                                                                                                                                                           |
 
 **Events**
 
 | Name                   | Parameters               | Description            | When Triggered                               |
 | ---------------------- | ------------------------ | ---------------------- | -------------------------------------------- |
-| `onEscapeKeyDown`      | `(event: KeyboardEvent)` | Escape key pressed     | User presses Escape while dropdown is open   |
-| `onPointerDownOutside` | `(event: PointerEvent)`  | Click outside content  | User clicks outside the dropdown             |
-| `onCloseAutoFocus`     | `(event: FocusEvent)`    | Focus returns on close | Dropdown closes and focus restoration occurs |
+| `onEscapeKeyDown`      | `(event: React.KeyboardEvent)` | Escape key pressed     | User presses Escape while dropdown is open   |
+| `onPointerDownOutside` | `(event: React.PointerEvent)`  | Click outside content  | User clicks outside the dropdown             |
+| `onCloseAutoFocus`     | `(event: React.FocusEvent)`    | Focus returns on close | Dropdown closes and focus restoration occurs |
 
 **Data Attributes**
 
@@ -832,8 +832,8 @@ Scrollable container for select items within the content.
 
 | Name       | Type            | Default | Description                |
 | ---------- | --------------- | ------- | -------------------------- |
-| `as?`      | `ElementType` | `'div'` | Polymorphic component type |
-| `children` | `ReactNode`     | -       | Viewport children          |
+| `as?`      | `React.ElementType` | `'div'` | Polymorphic component type |
+| `children` | `React.ReactNode`     | -       | Viewport children          |
 
 **Events**
 
@@ -850,9 +850,9 @@ Individual selectable option within the dropdown.
 | `value`      | `string`                                                     | -           | Option value (required)                             |
 | `disabled?`  | `boolean`                                                    | `false`     | Disables the option                                 |
 | `textValue?` | `string`                                                     | `undefined` | Text for type-ahead (auto-detected if not provided) |
-| `as?`        | `ElementType`                                              | `'div'`     | Polymorphic component type                          |
-| `ref?`       | `RefObject`                                                  | `undefined` | Forward ref support                                 |
-| `children`   | `ReactNode \| ((state: SelectItemRenderProps) => ReactNode)` | -           | Item content or render props function               |
+| `as?`        | `React.ElementType`                                              | `'div'`     | Polymorphic component type                          |
+| `ref?`       | `React.RefObject`                                                  | `undefined` | Forward ref support                                 |
+| `children`   | `React.ReactNode \| ((state: SelectItemRenderProps) => React.ReactNode)` | -           | Item content or render props function               |
 
 **Render Props (SelectItemRenderProps)**
 
@@ -867,9 +867,9 @@ Individual selectable option within the dropdown.
 
 | Name            | Parameters              | Description             | When Triggered                   |
 | --------------- | ----------------------- | ----------------------- | -------------------------------- |
-| `onClick`       | `(event: MouseEvent)`   | Item clicked            | Mouse click on item              |
-| `onPointerMove` | `(event: PointerEvent)` | Pointer moves over item | Mouse/pointer enters item        |
-| `onFocus`       | `(event: FocusEvent)`   | Item receives focus     | Keyboard navigation focuses item |
+| `onClick`       | `(event: React.MouseEvent)`   | Item clicked            | Mouse click on item              |
+| `onPointerMove` | `(event: React.PointerEvent)` | Pointer moves over item | Mouse/pointer enters item        |
+| `onFocus`       | `(event: React.FocusEvent)`   | Item receives focus     | Keyboard navigation focuses item |
 
 **Data Attributes**
 
@@ -885,8 +885,8 @@ The text content of a select item.
 
 | Name       | Type            | Default  | Description                |
 | ---------- | --------------- | -------- | -------------------------- |
-| `as?`      | `ElementType` | `'span'` | Polymorphic component type |
-| `children` | `ReactNode`     | -        | Item text content          |
+| `as?`      | `React.ElementType` | `'span'` | Polymorphic component type |
+| `children` | `React.ReactNode`     | -        | Item text content          |
 
 **Events**
 
@@ -901,8 +901,8 @@ Visual indicator for selected state (checkmark, icon, etc).
 | Name          | Type            | Default     | Description                |
 | ------------- | --------------- | ----------- | -------------------------- |
 | `forceMount?` | `boolean`       | `false`     | Force mount for animation  |
-| `as?`         | `ElementType` | `'span'`    | Polymorphic component type |
-| `children?`   | `ReactNode`     | `undefined` | Indicator content          |
+| `as?`         | `React.ElementType` | `'span'`    | Polymorphic component type |
+| `children?`   | `React.ReactNode`     | `undefined` | Indicator content          |
 
 **Events**
 
@@ -924,8 +924,8 @@ Groups related select items together.
 
 | Name       | Type            | Default | Description                |
 | ---------- | --------------- | ------- | -------------------------- |
-| `as?`      | `ElementType` | `'div'` | Polymorphic component type |
-| `children` | `ReactNode`     | -       | Group children             |
+| `as?`      | `React.ElementType` | `'div'` | Polymorphic component type |
+| `children` | `React.ReactNode`     | -       | Group children             |
 
 **Events**
 
@@ -939,8 +939,8 @@ Label for a group of select items.
 
 | Name       | Type            | Default | Description                |
 | ---------- | --------------- | ------- | -------------------------- |
-| `as?`      | `ElementType` | `'div'` | Polymorphic component type |
-| `children` | `ReactNode`     | -       | Label content              |
+| `as?`      | `React.ElementType` | `'div'` | Polymorphic component type |
+| `children` | `React.ReactNode`     | -       | Label content              |
 
 **Events**
 
@@ -954,8 +954,8 @@ Visual separator between items or groups.
 
 | Name        | Type            | Default     | Description                |
 | ----------- | --------------- | ----------- | -------------------------- |
-| `as?`       | `ElementType` | `'div'`     | Polymorphic component type |
-| `children?` | `ReactNode`     | `undefined` | Optional children          |
+| `as?`       | `React.ElementType` | `'div'`     | Polymorphic component type |
+| `children?` | `React.ReactNode`     | `undefined` | Optional children          |
 
 **Events**
 
@@ -977,9 +977,9 @@ Optional arrow element pointing to the trigger. Automatically positioned by Floa
 | ----------- | -------------------------- | ----------- | ---------------------------------------------------- |
 | `width?`    | `number`                   | `10`        | Arrow width in pixels                                |
 | `height?`   | `number`                   | `5`         | Arrow height in pixels                               |
-| `ref?`      | `RefObject<SVGSVGElement>` | `undefined` | Forward ref support (required for arrow positioning) |
-| `as?`       | `ElementType`            | `'svg'`     | Polymorphic component type                           |
-| `children?` | `ReactNode`                | `undefined` | Optional children (custom arrow shape)               |
+| `ref?`      | `React.RefObject<SVGSVGElement>` | `undefined` | Forward ref support (required for arrow positioning) |
+| `as?`       | `React.ElementType`            | `'svg'`     | Polymorphic component type                           |
+| `children?` | `React.ReactNode`                | `undefined` | Optional children (custom arrow shape)               |
 
 **Events**
 

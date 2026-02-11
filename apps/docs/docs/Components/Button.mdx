@@ -208,16 +208,16 @@ A headless, accessible button component with complete keyboard support and toggl
 
 | Name               | Type                                      | Default     | Description                                                 |
 | ------------------ | ----------------------------------------- | ----------- | ----------------------------------------------------------- |
-| `as?`              | `ElementType`                             | `"button"`  | The element type to render as                               |
+| `as?`              | `React.ElementType`                             | `"button"`  | The element type to render as                               |
 | `type?`            | `"button" \| "submit" \| "reset"`         | `"button"`  | Button type (only applies when as="button")                 |
 | `disabled?`        | `boolean`                                 | `false`     | Disabled state - properly announced to screen readers       |
 | `autoFocus?` | `boolean`                                 | `false`     | Whether the button should receive focus when first rendered |
 | `isLoading?`       | `boolean`                                 | `false`     | Loading state with screen reader support                    |
 | `isPressed?`       | `boolean`                                 | `undefined` | Toggle state - when defined, creates a toggle button        |
 | `onPressedChange?` | `(pressed: boolean) => void`              | `undefined` | Callback fired when toggle state changes                    |
-| `children?`        | `ReactNode`                               | `undefined` | Component content                                           |
-| `onClick?`         | `MouseEventHandler<HTMLButtonElement>`    | `undefined` | Click event handler                                         |
-| `onKeyDown?`       | `KeyboardEventHandler<HTMLButtonElement>` | `undefined` | Keyboard event handler                                      |
+| `children?`        | `React.ReactNode`                               | `undefined` | Component content                                           |
+| `onClick?`         | `React.MouseEventHandler<HTMLButtonElement>`    | `undefined` | Click event handler                                         |
+| `onKeyDown?`       | `React.KeyboardEventHandler<HTMLButtonElement>` | `undefined` | Keyboard event handler                                      |
 | `className?`       | `string`                                  | `undefined` | CSS class names                                             |
 | `style?`           | `React.CSSProperties`                     | `undefined` | Inline styles                                               |
 | `ref?`             | `React.Ref<HTMLElement>`                  | `undefined` | Ref to the underlying element                               |
@@ -226,8 +226,8 @@ A headless, accessible button component with complete keyboard support and toggl
 
 | Name              | Parameters                                  | Description         | When Triggered                                           |
 | ----------------- | ------------------------------------------- | ------------------- | -------------------------------------------------------- |
-| `onClick`         | `(event: MouseEvent<HTMLButtonElement>)`    | Mouse click event   | User clicks the button                                   |
-| `onKeyDown`       | `(event: KeyboardEvent<HTMLButtonElement>)` | Keyboard event      | User presses a key while button is focused               |
+| `onClick`         | `(event: React.MouseEvent<HTMLButtonElement>)`    | Mouse click event   | User clicks the button                                   |
+| `onKeyDown`       | `(event: React.KeyboardEvent<HTMLButtonElement>)` | Keyboard event      | User presses a key while button is focused               |
 | `onPressedChange` | `(pressed: boolean)`                        | Toggle state change | Toggle button state changes (controlled or uncontrolled) |
 
 **HTML Attributes**

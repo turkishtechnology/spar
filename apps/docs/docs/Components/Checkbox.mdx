@@ -392,7 +392,7 @@ A headless checkbox component that provides complete accessibility and behavior 
 
 | Name               | Type                                                       | Default          | Description                                                           |
 | ------------------ | ---------------------------------------------------------- | ---------------- | --------------------------------------------------------------------- |
-| `as?`              | `ElementType`                                            | `'span'`         | The element or component to render as                                 |
+| `as?`              | `React.ElementType`                                            | `'span'`         | The element or component to render as                                 |
 | `ref?`             | `React.Ref<HTMLElement>`                                   | `undefined`      | Ref to the underlying DOM element                                     |
 | `checked?`         | `CheckedState`                                             | `undefined`      | Controlled checked state. When provided, component operates in controlled mode |
 | `defaultChecked?`  | `CheckedState`                                             | `false`          | Default checked state for uncontrolled usage                          |
@@ -407,7 +407,7 @@ A headless checkbox component that provides complete accessibility and behavior 
 | `aria-label?`      | `string`                                                   | `undefined`      | Accessible name for the checkbox. Required when checkbox has no visible label      |
 | `aria-labelledby?` | `string`                                                   | `undefined`      | ID of element that labels the checkbox                                           |
 | `aria-describedby?`| `string`                                                   | `undefined`      | ID of element that describes the checkbox                                        |
-| `children?`        | `ReactNode \| ((state: CheckboxRenderProps) => ReactNode)` | `undefined`      | Content to display inside the checkbox, or render props function                                   |
+| `children?`        | `React.ReactNode \| ((state: CheckboxRenderProps) => React.ReactNode)` | `undefined`      | Content to display inside the checkbox, or render props function                                   |
 | `id?`              | `string`                                                   | `auto-generated` | Unique identifier for the checkbox                                    |
 | `className?`       | `string`                                                   | `undefined`      | CSS class name                                                        |
 | `style?`           | `React.CSSProperties`                                      | `undefined`      | Inline styles                                                         |
@@ -432,10 +432,10 @@ When using the render props pattern, the following state properties are passed t
 | Name        | Parameters                | Description           | When Triggered                                     |
 | ----------- | ------------------------- | --------------------- | -------------------------------------------------- |
 | `onChange`  | `(checked: CheckedState)` | Checked state changes | User clicks, presses Space, or programmatic change |
-| `onClick`   | `(event: MouseEvent)`     | Element clicked       | Mouse click on checkbox                            |
-| `onKeyDown` | `(event: KeyboardEvent)`  | Key pressed           | Keyboard interaction (Space toggles)               |
-| `onFocus`   | `(event: FocusEvent)`     | Element gains focus   | Focus enters checkbox                              |
-| `onBlur`    | `(event: FocusEvent)`     | Element loses focus   | Focus leaves checkbox                              |
+| `onClick`   | `(event: React.MouseEvent)`     | Element clicked       | Mouse click on checkbox                            |
+| `onKeyDown` | `(event: React.KeyboardEvent)`  | Key pressed           | Keyboard interaction (Space toggles)               |
+| `onFocus`   | `(event: React.FocusEvent)`     | Element gains focus   | Focus enters checkbox                              |
+| `onBlur`    | `(event: React.FocusEvent)`     | Element loses focus   | Focus leaves checkbox                              |
 
 **HTML Attributes**
 
