@@ -1,21 +1,68 @@
-export { Select } from './Select';
-export { Select as SelectRoot } from './Select';
-export { SelectTrigger } from './SelectTrigger';
-export { SelectValue } from './SelectValue';
-export { SelectIcon } from './SelectIcon';
-export { SelectPortal } from './SelectPortal';
-export { SelectContent } from './SelectContent';
-export { SelectViewport } from './SelectViewport';
-export { SelectItem } from './SelectItem';
-export { SelectGroup } from './SelectGroup';
-export { SelectLabel } from './SelectLabel';
-export { SelectItemText } from './SelectItemText';
-export { SelectItemIndicator } from './SelectItemIndicator';
-export { SelectSeparator } from './SelectSeparator';
-export { SelectArrow } from './SelectArrow';
-export { useSelectContext } from './hooks';
-export { useSelectGroupContext } from './hooks';
-export { useSelectItemContext } from './hooks';
+import { Select as SelectRoot } from './Select';
+import { SelectTrigger } from './SelectTrigger';
+import { SelectValue } from './SelectValue';
+import { SelectIcon } from './SelectIcon';
+import { SelectPortal } from './SelectPortal';
+import { SelectContent } from './SelectContent';
+import { SelectViewport } from './SelectViewport';
+import { SelectItem } from './SelectItem';
+import { SelectGroup } from './SelectGroup';
+import { SelectLabel } from './SelectLabel';
+import { SelectItemText } from './SelectItemText';
+import { SelectItemIndicator } from './SelectItemIndicator';
+import { SelectSeparator } from './SelectSeparator';
+import { SelectArrow } from './SelectArrow';
+export { useSelectContext, useSelectGroupContext, useSelectItemContext } from './hooks';
+
+const Select = SelectRoot as typeof SelectRoot & {
+  Root: typeof SelectRoot;
+  Trigger: typeof SelectTrigger;
+  Value: typeof SelectValue;
+  Icon: typeof SelectIcon;
+  Portal: typeof SelectPortal;
+  Content: typeof SelectContent;
+  Viewport: typeof SelectViewport;
+  Item: typeof SelectItem;
+  Group: typeof SelectGroup;
+  Label: typeof SelectLabel;
+  ItemText: typeof SelectItemText;
+  ItemIndicator: typeof SelectItemIndicator;
+  Separator: typeof SelectSeparator;
+  Arrow: typeof SelectArrow;
+};
+
+Select.Root = SelectRoot;
+Select.Trigger = SelectTrigger;
+Select.Value = SelectValue;
+Select.Icon = SelectIcon;
+Select.Portal = SelectPortal;
+Select.Content = SelectContent;
+Select.Viewport = SelectViewport;
+Select.Item = SelectItem;
+Select.Group = SelectGroup;
+Select.Label = SelectLabel;
+Select.ItemText = SelectItemText;
+Select.ItemIndicator = SelectItemIndicator;
+Select.Separator = SelectSeparator;
+Select.Arrow = SelectArrow;
+
+export {
+  Select,
+  SelectRoot,
+  SelectTrigger,
+  SelectValue,
+  SelectIcon,
+  SelectPortal,
+  SelectContent,
+  SelectViewport,
+  SelectItem,
+  SelectGroup,
+  SelectLabel,
+  SelectItemText,
+  SelectItemIndicator,
+  SelectSeparator,
+  SelectArrow,
+};
 
 export type {
   SelectProps,
