@@ -1,21 +1,21 @@
 .anatomy-viewer-wrapper {
   display: flex;
   gap: 1rem;
-  border: 1px solid #E0E0E0;
-  border-radius: 8px;
+  border: 1px solid #e1e4ea;
+  border-radius: 12px;
   padding: 1rem;
   margin: 2rem 0;
-  background: #FAFAFA;
+  background: transparent;
 
   .anatomy-demo {
     flex: 1;
-    padding: 2rem;
-    min-height: 200px;
+    padding: 24px;
+    min-height: 140px;
     max-height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #FFFFFF;
+    background: transparent;
     border-radius: 4px;
     overflow: visible;
     position: relative;
@@ -23,7 +23,7 @@
 
   .anatomy-parts {
     width: 220px;
-    border-left: 1px solid #E0E0E0;
+    border-left: 1px solid #e1e4ea;
     padding-left: 1rem;
     max-height: 400px;
     overflow-y: auto;
@@ -32,7 +32,7 @@
     /* Hide scrollbar by default, show on hover */
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
-    
+
     &:hover {
       scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
     }
@@ -100,7 +100,7 @@
     .anatomy-parts {
       width: 100%;
       border-left: none;
-      border-top: 1px solid #E0E0E0;
+      border-top: 1px solid #e1e4ea;
       padding-left: 0;
       padding-top: 1rem;
       margin-top: 1rem;
@@ -119,15 +119,15 @@
 
 [data-theme='dark'] {
   .anatomy-viewer-wrapper {
-    border-color: #2A2D3A;
-    background: #1A1D28;
+    border-color: #2b303b;
+    background: #1a1d24;
 
     .anatomy-demo {
-      background: #212433;
+      background: transparent;
     }
 
     .anatomy-parts {
-      border-left-color: #2A2D3A;
+      border-left-color: #2b303b;
 
       &:hover {
         scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
@@ -138,7 +138,7 @@
       }
 
       .part-header {
-        color: #FFFFFF;
+        color: #ffffff;
       }
 
       .part-item {
@@ -148,23 +148,23 @@
         }
 
         .part-label {
-          color: #FFFFFF;
+          color: #ffffff;
         }
 
         .part-description {
-          color: #B0B0B0;
+          color: #b0b0b0;
         }
       }
     }
 
     @media (max-width: 768px) {
       .anatomy-parts {
-        border-top-color: #2A2D3A;
+        border-top-color: #2b303b;
       }
     }
   }
 
   .spar-anatomy-highlight {
-    outline-color: #FFFFFF !important;
+    outline-color: #ffffff !important;
   }
 }

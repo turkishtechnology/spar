@@ -24,13 +24,13 @@ A headless, accessible button component that provides complete keyboard support 
   padding: 12px 14px;
   font-weight: 400;
 
-/* Light mode styles */
+/_ Light mode styles _/
 background: rgba(0, 0, 0, 0.08);
 color: #222530;
 font-size: 13px;
 }
 
-/* Dark mode styles */
+/_ Dark mode styles _/
 [data-theme='dark'] .button {
 background: rgba(255, 255, 255, 0.12);
 color: #f2f5f8;
@@ -60,27 +60,12 @@ import { Button } from '@turkish-technology/spar';
 The Button is a single component that can be configured for different use cases:
 
 <AnatomyViewer
-  parts={[
-    { name: 'button', label: 'Button', description: 'Interactive button element' },
-  ]}
+  parts={[{ name: 'button', label: 'Button', description: 'Interactive button element' }]}
 >
-  <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
-    <Button
-      data-spar-part="button"
-      onClick={() => {}}
-      style={{ padding: '8px 16px', marginRight: '8px' }}
-    >
-      Click me
+  <div className='button-demo-container'>
+    <Button data-spar-part='button' className='button'>
+      {'button'}
     </Button>
-
-    <Button
-      data-spar-part="button"
-      disabled
-      style={{ padding: '8px 16px' }}
-    >
-      Disabled Button
-    </Button>
-
   </div>
 </AnatomyViewer>
 
@@ -206,38 +191,38 @@ A headless, accessible button component with complete keyboard support and toggl
 
 **Props**
 
-| Name               | Type                                      | Default     | Description                                                 |
-| ------------------ | ----------------------------------------- | ----------- | ----------------------------------------------------------- |
+| Name               | Type                                            | Default     | Description                                                 |
+| ------------------ | ----------------------------------------------- | ----------- | ----------------------------------------------------------- |
 | `as?`              | `React.ElementType`                             | `"button"`  | The element type to render as                               |
-| `type?`            | `"button" \| "submit" \| "reset"`         | `"button"`  | Button type (only applies when as="button")                 |
-| `disabled?`        | `boolean`                                 | `false`     | Disabled state - properly announced to screen readers       |
-| `autoFocus?` | `boolean`                                 | `false`     | Whether the button should receive focus when first rendered |
-| `isLoading?`       | `boolean`                                 | `false`     | Loading state with screen reader support                    |
-| `isPressed?`       | `boolean`                                 | `undefined` | Toggle state - when defined, creates a toggle button        |
-| `onPressedChange?` | `(pressed: boolean) => void`              | `undefined` | Callback fired when toggle state changes                    |
+| `type?`            | `"button" \| "submit" \| "reset"`               | `"button"`  | Button type (only applies when as="button")                 |
+| `disabled?`        | `boolean`                                       | `false`     | Disabled state - properly announced to screen readers       |
+| `autoFocus?`       | `boolean`                                       | `false`     | Whether the button should receive focus when first rendered |
+| `isLoading?`       | `boolean`                                       | `false`     | Loading state with screen reader support                    |
+| `isPressed?`       | `boolean`                                       | `undefined` | Toggle state - when defined, creates a toggle button        |
+| `onPressedChange?` | `(pressed: boolean) => void`                    | `undefined` | Callback fired when toggle state changes                    |
 | `children?`        | `React.ReactNode`                               | `undefined` | Component content                                           |
 | `onClick?`         | `React.MouseEventHandler<HTMLButtonElement>`    | `undefined` | Click event handler                                         |
 | `onKeyDown?`       | `React.KeyboardEventHandler<HTMLButtonElement>` | `undefined` | Keyboard event handler                                      |
-| `className?`       | `string`                                  | `undefined` | CSS class names                                             |
-| `style?`           | `React.CSSProperties`                     | `undefined` | Inline styles                                               |
-| `ref?`             | `React.Ref<HTMLElement>`                  | `undefined` | Ref to the underlying element                               |
+| `className?`       | `string`                                        | `undefined` | CSS class names                                             |
+| `style?`           | `React.CSSProperties`                           | `undefined` | Inline styles                                               |
+| `ref?`             | `React.Ref<HTMLElement>`                        | `undefined` | Ref to the underlying element                               |
 
 **Events**
 
-| Name              | Parameters                                  | Description         | When Triggered                                           |
-| ----------------- | ------------------------------------------- | ------------------- | -------------------------------------------------------- |
+| Name              | Parameters                                        | Description         | When Triggered                                           |
+| ----------------- | ------------------------------------------------- | ------------------- | -------------------------------------------------------- |
 | `onClick`         | `(event: React.MouseEvent<HTMLButtonElement>)`    | Mouse click event   | User clicks the button                                   |
 | `onKeyDown`       | `(event: React.KeyboardEvent<HTMLButtonElement>)` | Keyboard event      | User presses a key while button is focused               |
-| `onPressedChange` | `(pressed: boolean)`                        | Toggle state change | Toggle button state changes (controlled or uncontrolled) |
+| `onPressedChange` | `(pressed: boolean)`                              | Toggle state change | Toggle button state changes (controlled or uncontrolled) |
 
 **HTML Attributes**
 
-| Attribute        | Value               | Purpose                               |
-| ---------------- | ------------------- | ------------------------------------- |
-| `data-disabled`  | `""`                | Styling hook for disabled state       |
-| `data-loading`   | `""`                | Styling hook for loading state        |
-| `data-pressed`   | `""`                | Styling hook for toggle state (present when pressed) |
-| `data-autofocus` | `""`                | Styling hook for auto-focused buttons |
+| Attribute        | Value | Purpose                                              |
+| ---------------- | ----- | ---------------------------------------------------- |
+| `data-disabled`  | `""`  | Styling hook for disabled state                      |
+| `data-loading`   | `""`  | Styling hook for loading state                       |
+| `data-pressed`   | `""`  | Styling hook for toggle state (present when pressed) |
+| `data-autofocus` | `""`  | Styling hook for auto-focused buttons                |
 
 ## Keyboard Interactions
 
