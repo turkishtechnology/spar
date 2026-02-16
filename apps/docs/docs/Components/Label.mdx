@@ -23,7 +23,7 @@ A headless, accessible label component for form controls that establishes progra
   color: #222530;
 }
 
-/* Dark mode styles */
+/_ Dark mode styles _/
 [data-theme='dark'] .label {
 color: #f2f5f8;
 }`}
@@ -59,16 +59,10 @@ The Label component is a simple, single-element component that provides accessib
     },
   ]}
 >
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-    <Label htmlFor='username' required data-spar-part='label' style={{ fontWeight: 'bold' }}>
-      {' Username '}
+  <div className='label-demo-container'>
+    <Label data-spar-part='label' className='label'>
+      {'Label'}
     </Label>
-    <input
-      id='username'
-      type='text'
-      placeholder='Enter your username'
-      style={{ padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
-    />
   </div>
 </AnatomyViewer>
 
@@ -239,11 +233,7 @@ Use data attributes for custom styling:
 function StyledLabelExample() {
   return (
     <div>
-      <Label
-        htmlFor='styled-input'
-        required
-        className='custom-label'
-      >
+      <Label htmlFor='styled-input' required className='custom-label'>
         Styled Label
       </Label>
       <input id='styled-input' type='text' required />
@@ -358,11 +348,11 @@ The Label component creates accessible labels for form controls with support for
 
 **Props**
 
-| Name          | Type          | Default     | Description                                                                                                                                          |
-| ------------- | ------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `required?`   | `boolean`     | `false`     | Marks label for a required field (exposed via `data-required` attribute). Does NOT add required functionality - set `required` on the control itself |
-| `isOptional?` | `boolean`     | `false`     | Marks label for an optional field (exposed via `data-optional` attribute for styling)                                                                |
-| `disabled?`   | `boolean`     | `false`     | Marks label for a disabled field (exposed via `data-disabled` attribute). Does NOT disable the control - set `disabled` on the control itself        |
+| Name          | Type                | Default     | Description                                                                                                                                          |
+| ------------- | ------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `required?`   | `boolean`           | `false`     | Marks label for a required field (exposed via `data-required` attribute). Does NOT add required functionality - set `required` on the control itself |
+| `isOptional?` | `boolean`           | `false`     | Marks label for an optional field (exposed via `data-optional` attribute for styling)                                                                |
+| `disabled?`   | `boolean`           | `false`     | Marks label for a disabled field (exposed via `data-disabled` attribute). Does NOT disable the control - set `disabled` on the control itself        |
 | `as?`         | `React.ElementType` | `'label'`   | Polymorphic element type to render as. Using non-label elements breaks native association - use `aria-labelledby` on control                         |
 | `children?`   | `React.ReactNode`   | `undefined` | Label content (text, icons, or form controls for implicit association)                                                                               |
 
@@ -370,8 +360,8 @@ The Label component creates accessible labels for form controls with support for
 
 **Events**
 
-| Name            | Parameters                              | Description          | When Triggered                                           |
-| --------------- | --------------------------------------- | -------------------- | -------------------------------------------------------- |
+| Name            | Parameters                                    | Description          | When Triggered                                           |
+| --------------- | --------------------------------------------- | -------------------- | -------------------------------------------------------- |
 | `onClick?`      | `(event: React.MouseEvent<HTMLLabelElement>)` | Label clicked        | User clicks the label                                    |
 | `onMouseEnter?` | `(event: React.MouseEvent<HTMLLabelElement>)` | Mouse enters label   | Mouse pointer enters label area                          |
 | `onMouseLeave?` | `(event: React.MouseEvent<HTMLLabelElement>)` | Mouse leaves label   | Mouse pointer leaves label area                          |
@@ -382,11 +372,11 @@ The Label component creates accessible labels for form controls with support for
 
 **Data Attributes**
 
-| Attribute       | Value            | Purpose                                    |
-| --------------- | ---------------- | ------------------------------------------ |
-| `data-required` | `""`             | Indicates the associated field is required |
-| `data-optional` | `""`             | Indicates the associated field is optional |
-| `data-disabled` | `""`             | Indicates the associated field is disabled |
+| Attribute       | Value | Purpose                                    |
+| --------------- | ----- | ------------------------------------------ |
+| `data-required` | `""`  | Indicates the associated field is required |
+| `data-optional` | `""`  | Indicates the associated field is optional |
+| `data-disabled` | `""`  | Indicates the associated field is disabled |
 
 **Accessibility Attributes**
 

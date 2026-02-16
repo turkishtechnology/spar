@@ -213,59 +213,84 @@ The Accordion component is built as a compound component with multiple parts:
     { name: 'content', label: 'AccordionContent', description: 'Collapsible content panel' },
   ]}
 >
-  <div style={{ width: '500px' }} data-spar-part="root">
-    <AccordionRoot isCollapsible={true} defaultValue="item1" style={{ padding: '12px' }}>
-      <AccordionItem value="item1" data-spar-part="item">
-        <AccordionHeader data-spar-part="header">
-          <AccordionTrigger
-            data-spar-part="trigger"
-            style={{
-              width: '100%',
-              padding: '12px',
-              border: '1px solid #ccc',
-            }}
-          >
-            {' What is Spar Accordion? '}
+  <div className='accordion-demo-container'>
+    <AccordionRoot className='accordion' defaultValue='2' data-spar-part='root'>
+      <AccordionItem className='accordion-item' value='1' data-spar-part='item'>
+        <AccordionHeader className='accordion-header' data-spar-part='header'>
+          <AccordionTrigger className='accordion-trigger' data-spar-part='trigger'>
+            <span className='accordion-icon'></span>
+            <span className='accordion-title'>{'Accordion'}</span>
+            <div className='accordion-expand'>
+              <svg
+                className='accordion-expand-icon'
+                xmlns='http://www.w3.org/2000/svg'
+                width='20'
+                height='20'
+                viewBox='0 0 20 20'
+                fill='none'
+              >
+                <path d='M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z' />
+              </svg>
+            </div>
           </AccordionTrigger>
         </AccordionHeader>
-        <AccordionContent
-          data-spar-part="content"
-          style={{
-            padding: '12px',
-            margin: '12px 0',
-            border: '1px solid #ccc',
-          }}
-        >
-          {' Spar Accordion is a headless, accessible React component with no default styling. '}
+        <AccordionContent className='accordion-content' data-spar-part='content'>
+          {
+            'The accordion component is a customizable area. Users can add content as per their request.'
+          }
         </AccordionContent>
       </AccordionItem>
-
-      <AccordionItem value="item2" data-spar-part="item">
-        <AccordionHeader data-spar-part="header">
-          <AccordionTrigger
-            data-spar-part="trigger"
-            style={{
-              width: '100%',
-              padding: '12px',
-              border: '1px solid #ccc',
-            }}
-          >
-            {' How to use it? '}
+      <AccordionItem className='accordion-item' value='2' data-spar-part='item'>
+        <AccordionHeader className='accordion-header' data-spar-part='header'>
+          <AccordionTrigger className='accordion-trigger' data-spar-part='trigger'>
+            <span className='accordion-icon'></span>
+            <span className='accordion-title'>{'Accordion'}</span>
+            <div className='accordion-expand'>
+              <svg
+                className='accordion-expand-icon'
+                xmlns='http://www.w3.org/2000/svg'
+                width='20'
+                height='20'
+                viewBox='0 0 20 20'
+                fill='none'
+              >
+                <path d='M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z' />
+              </svg>
+            </div>
           </AccordionTrigger>
         </AccordionHeader>
-        <AccordionContent
-          data-spar-part="content"
-          style={{
-            padding: '12px',
-            margin: '12px 0',
-            border: '1px solid #ccc',
-          }}
-        >
-          {' Simply import the components and compose them together. Add your own CSS for styling. '}
+        <AccordionContent className='accordion-content' data-spar-part='content'>
+          {
+            'The accordion component is a customizable area. Users can add content as per their request.'
+          }
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem className='accordion-item' value='3' data-spar-part='item'>
+        <AccordionHeader className='accordion-header' data-spar-part='header'>
+          <AccordionTrigger className='accordion-trigger' data-spar-part='trigger'>
+            <span className='accordion-icon'></span>
+            <span className='accordion-title'>{'Accordion'}</span>
+            <div className='accordion-expand'>
+              <svg
+                className='accordion-expand-icon'
+                xmlns='http://www.w3.org/2000/svg'
+                width='20'
+                height='20'
+                viewBox='0 0 20 20'
+                fill='none'
+              >
+                <path d='M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z' />
+              </svg>
+            </div>
+          </AccordionTrigger>
+        </AccordionHeader>
+        <AccordionContent className='accordion-content' data-spar-part='content'>
+          {
+            'The accordion component is a customizable area. Users can add content as per their request.'
+          }
         </AccordionContent>
       </AccordionItem>
     </AccordionRoot>
-
   </div>
 </AnatomyViewer>
 
@@ -436,12 +461,12 @@ Button that toggles the visibility of the associated content panel.
 
 **Props**
 
-| Name         | Type                                                                         | Default     | Description                                   |
-| ------------ | ---------------------------------------------------------------------------- | ----------- | --------------------------------------------- |
-| `as?`        | `React.ElementType`                                                          | `"button"`  | Polymorphic component type                    |
-| `children`   | `React.ReactNode \| ((state: AccordionTriggerRenderProps) => React.ReactNode)` | -         | Trigger content or render props function      |
-| `onClick?`   | `(event: React.MouseEvent) => void`                                          | `undefined` | Custom click handler                          |
-| `onKeyDown?` | `(event: React.KeyboardEvent) => void`                                       | `undefined` | Custom keydown handler                        |
+| Name         | Type                                                                           | Default     | Description                              |
+| ------------ | ------------------------------------------------------------------------------ | ----------- | ---------------------------------------- |
+| `as?`        | `React.ElementType`                                                            | `"button"`  | Polymorphic component type               |
+| `children`   | `React.ReactNode \| ((state: AccordionTriggerRenderProps) => React.ReactNode)` | -           | Trigger content or render props function |
+| `onClick?`   | `(event: React.MouseEvent) => void`                                            | `undefined` | Custom click handler                     |
+| `onKeyDown?` | `(event: React.KeyboardEvent) => void`                                         | `undefined` | Custom keydown handler                   |
 
 **Render Props (AccordionTriggerRenderProps)**
 

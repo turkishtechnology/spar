@@ -83,40 +83,13 @@ The Radio component is built as a compound component with two main parts:
     { name: 'item', label: 'RadioItem', description: 'Individual radio option' },
   ]}
 >
-  <RadioGroup
-    data-spar-part='group'
-    defaultValue='option1'
-    aria-label='Basic radio group'
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '8px',
-      padding: '16px',
-      border: '1px solid #ccc',
-    }}
-  >
-    <RadioItem
-      data-spar-part='item'
-      value='option1'
-      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
-    >
-      {' Option 1 '}
-    </RadioItem>
-    <RadioItem
-      data-spar-part='item'
-      value='option2'
-      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
-    >
-      {' Option 2 '}
-    </RadioItem>
-    <RadioItem
-      data-spar-part='item'
-      value='option3'
-      style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px' }}
-    >
-      {' Option 3 '}
-    </RadioItem>
-  </RadioGroup>
+  <div className='radio-demo-container'>
+    <RadioGroup data-spar-part='group'>
+      <RadioItem data-spar-part='item' value='option1'></RadioItem>
+      <RadioItem data-spar-part='item' value='option2' className='radio-item'></RadioItem>
+      <RadioItem data-spar-part='item' value='option3' className='radio-item'></RadioItem>
+    </RadioGroup>
+  </div>
 </AnatomyViewer>
 
 ### Structure
@@ -326,18 +299,18 @@ The root container that manages the radio group state and provides keyboard navi
 | `required?`         | `boolean`                    | `false`      | Marks group as required for forms                  |
 | `orientation?`      | `'horizontal' \| 'vertical'` | `'vertical'` | Layout direction for keyboard navigation           |
 | `isInToolbar?`      | `boolean`                    | `false`      | Changes keyboard behavior per WAI-ARIA guidelines  |
-| `autoFocus?`  | `boolean`                    | `false`      | Whether to focus the first focusable item on mount |
+| `autoFocus?`        | `boolean`                    | `false`      | Whether to focus the first focusable item on mount |
 | `aria-label?`       | `string`                     | `undefined`  | Accessible name for the group                      |
 | `aria-labelledby?`  | `string`                     | `undefined`  | References element that labels the group           |
 | `aria-describedby?` | `string`                     | `undefined`  | References element that describes the group        |
-| `as?`               | `React.ElementType`              | `'div'`      | Polymorphic root element                           |
-| `children?`         | `React.ReactNode`            | `undefined`  | RadioItem components                              |
+| `as?`               | `React.ElementType`          | `'div'`      | Polymorphic root element                           |
+| `children?`         | `React.ReactNode`            | `undefined`  | RadioItem components                               |
 
 **Events**
 
-| Name            | Parameters               | Description             | When Triggered                    |
-| --------------- | ------------------------ | ----------------------- | --------------------------------- |
-| `onValueChange` | `(value: string)`        | Selection state changes | User selects different radio item |
+| Name            | Parameters                     | Description             | When Triggered                    |
+| --------------- | ------------------------------ | ----------------------- | --------------------------------- |
+| `onValueChange` | `(value: string)`              | Selection state changes | User selects different radio item |
 | `onKeyDown`     | `(event: React.KeyboardEvent)` | Key pressed on group    | Keyboard navigation occurs        |
 
 **HTML Attributes**
@@ -359,7 +332,7 @@ Individual radio option within a RadioGroup that handles selection and accessibi
 | `disabled?`         | `boolean`                                                               | `false`     | Disables this specific radio item           |
 | `aria-label?`       | `string`                                                                | `undefined` | Accessible name when children insufficient  |
 | `aria-describedby?` | `string`                                                                | `undefined` | References element that describes this item |
-| `as?`               | `React.ElementType`                                                         | `'label'`   | Polymorphic root element                    |
+| `as?`               | `React.ElementType`                                                     | `'label'`   | Polymorphic root element                    |
 | `children?`         | `React.ReactNode \| ((state: RadioItemRenderProps) => React.ReactNode)` | `undefined` | Label content or render props function      |
 
 **Render Props (RadioItemRenderProps)**
@@ -373,8 +346,8 @@ Individual radio option within a RadioGroup that handles selection and accessibi
 
 **Events**
 
-| Name        | Parameters               | Description         | When Triggered            |
-| ----------- | ------------------------ | ------------------- | ------------------------- |
+| Name        | Parameters                     | Description         | When Triggered            |
+| ----------- | ------------------------------ | ------------------- | ------------------------- |
 | `onClick`   | `(event: React.MouseEvent)`    | Item clicked        | Mouse click on radio item |
 | `onKeyDown` | `(event: React.KeyboardEvent)` | Key pressed on item | Keyboard interaction      |
 | `onFocus`   | `(event: React.FocusEvent)`    | Item receives focus | Focus management          |

@@ -13,6 +13,7 @@ import {
   InputLabel,
   InputDescription,
   InputErrorMessage,
+  Label,
 } from '@turkish-technology/spar';
 
 # Input
@@ -119,55 +120,19 @@ The Input component follows a compound component pattern with context-based stat
     { name: 'label', label: 'Label', description: 'Associated label with automatic ID linking' },
     { name: 'field', label: 'Field', description: 'Core input element (input/textarea)' },
     { name: 'description', label: 'Description', description: 'Helper text for guidance' },
-    { name: 'errorMessage', label: 'ErrorMessage', description: 'Error announcement with role="alert"' },
+    {
+      name: 'errorMessage',
+      label: 'ErrorMessage',
+      description: 'Error announcement with role="alert"',
+    },
   ]}
 >
-  {(() => {
-    const [email, setEmail] = React.useState('invalid-email');
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isInvalid = email.length > 0 && !emailRegex.test(email);
-
-    return (
-      <InputRoot
-        data-spar-part="root"
-        isInvalid={isInvalid}
-        required
-        style={{
-          padding: '12px',
-          border: `1px solid ${isInvalid ? '#ff6b6b' : '#e5e5e5'}`,
-          borderRadius: '6px'
-        }}
-      >
-        <InputLabel data-spar-part="label" style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
-          Email Address
-        </InputLabel>
-        <InputField
-          data-spar-part="field"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-          style={{
-            width: '100%',
-            padding: '8px 12px',
-            border: `1px solid ${isInvalid ? '#ff6b6b' : '#ccc'}`,
-            borderRadius: '4px',
-            fontSize: '14px'
-          }}
-        />
-        <InputDescription data-spar-part="description" style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
-          We'll use this to send you important updates
-        </InputDescription>
-        {isInvalid && (
-          <InputErrorMessage data-spar-part="errorMessage" style={{ marginTop: '4px', fontSize: '12px', color: '#ff6b6b' }}>
-            Please enter a valid email address
-          </InputErrorMessage>
-        )}
-      </InputRoot>
-    );
-
-})()}
-
+  <div className='input-demo-container' data-spar-part='root'>
+    <Label htmlFor='my-input' className='label' data-spar-part='label'>
+      {'Label'}
+    </Label>
+    <Input id='my-input' className='input' data-spar-part='field' />
+  </div>
 </AnatomyViewer>
 
 ### Structure
@@ -281,7 +246,7 @@ style={{
           border: 'none',
           borderRadius: '4px',
           cursor: 'pointer'
-        }} >
+        }}>
 Validate Email
 </button>
 </div>
@@ -535,7 +500,7 @@ Direct input component function that returns an `InputField` without wrapper. De
 
 | Name           | Type                                              | Default     | Description                                 |
 | -------------- | ------------------------------------------------- | ----------- | ------------------------------------------- |
-| `as?`          | `React.ElementType`                                     | `'input'`   | Element type for polymorphic rendering      |
+| `as?`          | `React.ElementType`                               | `'input'`   | Element type for polymorphic rendering      |
 | `ref?`         | `React.ComponentPropsWithRef<T>['ref']`           | `undefined` | Ref for the input element                   |
 | `type?`        | `string`                                          | `'text'`    | Input type attribute                        |
 | `placeholder?` | `string`                                          | `undefined` | Input placeholder text                      |
@@ -559,12 +524,12 @@ The root container that provides context and state management for all input comp
 
 **Props**
 
-| Name         | Type        | Default | Description             |
-| ------------ | ----------- | ------- | ----------------------- |
+| Name         | Type              | Default | Description             |
+| ------------ | ----------------- | ------- | ----------------------- |
 | `children`   | `React.ReactNode` | -       | Compound input elements |
-| `isInvalid?` | `boolean`   | `false` | Input validation state  |
-| `disabled?`  | `boolean`   | `false` | Input disabled state    |
-| `required?`  | `boolean`   | `false` | Input required state    |
+| `isInvalid?` | `boolean`         | `false` | Input validation state  |
+| `disabled?`  | `boolean`         | `false` | Input disabled state    |
+| `required?`  | `boolean`         | `false` | Input required state    |
 
 **HTML Attributes**
 
@@ -582,7 +547,7 @@ The core input element with polymorphic rendering support. Handles focus states,
 
 | Name         | Type                                             | Default     | Description                            |
 | ------------ | ------------------------------------------------ | ----------- | -------------------------------------- |
-| `as?`        | `React.ElementType`                                    | `'input'`   | Element type for polymorphic rendering |
+| `as?`        | `React.ElementType`                              | `'input'`   | Element type for polymorphic rendering |
 | `ref?`       | `React.ComponentPropsWithRef<T>['ref']`          | `undefined` | Ref for the input element              |
 | `autoFocus?` | `boolean`                                        | `false`     | Whether to focus the input on mount    |
 | `onFocus?`   | `(event: React.FocusEvent<HTMLElement>) => void` | `undefined` | Focus event handler                    |
@@ -612,7 +577,7 @@ The label element that provides accessible labeling for the input field. Automat
 
 | Name       | Type                          | Default     | Description               |
 | ---------- | ----------------------------- | ----------- | ------------------------- |
-| `children` | `React.ReactNode`                   | -           | Label content             |
+| `children` | `React.ReactNode`             | -           | Label content             |
 | `ref?`     | `React.Ref<HTMLLabelElement>` | `undefined` | Ref for the label element |
 
 ### InputDescription
@@ -623,7 +588,7 @@ The description element that provides helper text for the input field. Automatic
 
 | Name       | Type                        | Default     | Description                     |
 | ---------- | --------------------------- | ----------- | ------------------------------- |
-| `children` | `React.ReactNode`                 | -           | Description content             |
+| `children` | `React.ReactNode`           | -           | Description content             |
 | `ref?`     | `React.Ref<HTMLDivElement>` | `undefined` | Ref for the description element |
 
 ### InputErrorMessage
@@ -634,7 +599,7 @@ The error message element that announces validation errors to screen readers. Us
 
 | Name       | Type                        | Default     | Description               |
 | ---------- | --------------------------- | ----------- | ------------------------- |
-| `children` | `React.ReactNode`                 | -           | Error content             |
+| `children` | `React.ReactNode`           | -           | Error content             |
 | `ref?`     | `React.Ref<HTMLDivElement>` | `undefined` | Ref for the error element |
 
 ## Keyboard Interactions
