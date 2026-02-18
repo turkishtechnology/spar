@@ -289,14 +289,6 @@ All components automatically receive data attributes for styling:
 - `data-state`: `"open" | "closed"`
 - `data-disabled`: Present when disabled (inherited from root)
 
-### CSS Custom Properties
-The content component exposes CSS custom properties for smooth animations:
-
-- `--spar-collapsible-content-width`: Current content width in pixels
-- `--spar-collapsible-content-height`: Current content height in pixels
-
-These properties are automatically updated and can be used for height/width transitions.
-
 ### Usage Examples
 ```css
 /* Styling the trigger based on state */

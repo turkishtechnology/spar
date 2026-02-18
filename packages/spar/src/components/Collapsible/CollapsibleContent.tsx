@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, ElementType } from 'react';
+import { useEffect, useRef, ElementType } from 'react';
 import { useCollapsibleContext } from './hooks';
 import type { CollapsibleContentProps } from './types';
 
@@ -21,42 +21,12 @@ export const CollapsibleContent = <T extends ElementType = 'div'>({
   as,
   forceMount = false,
   children,
-  style,
   onBeforeMatch,
   ...props
 }: CollapsibleContentProps<T>) => {
   const Component = as || 'div';
   const { isOpen, disabled, contentId, toggle } = useCollapsibleContext();
   const contentRef = useRef<HTMLElement>(null);
-
-  // Update CSS custom properties for animations
-  useEffect(() => {
-    const element = contentRef.current;
-    if (!element) return undefined;
-
-    const updateCustomProperties = () => {
-      const { width, height } = element.getBoundingClientRect();
-      element.style.setProperty('--spar-collapsible-content-width', `${width}px`);
-      element.style.setProperty('--spar-collapsible-content-height', `${height}px`);
-    };
-
-    // Update properties when content becomes visible
-    if (isOpen) {
-      updateCustomProperties();
-    }
-
-    // Set up ResizeObserver to update properties when content size changes
-    if (typeof ResizeObserver !== 'undefined') {
-      const resizeObserver = new ResizeObserver(updateCustomProperties);
-      resizeObserver.observe(element);
-
-      return () => {
-        resizeObserver.disconnect();
-      };
-    }
-
-    return undefined;
-  }, [isOpen]);
 
   // Handle beforematch event for hidden="until-found" support
   // This must be attached via addEventListener since React doesn't support onBeforeMatch
@@ -86,11 +56,6 @@ export const CollapsibleContent = <T extends ElementType = 'div'>({
   const dataState = isOpen ? 'open' : 'closed';
   const hiddenAttribute = getHiddenAttribute(isOpen, forceMount);
 
-  // Combine styles with CSS custom properties
-  const combinedStyle: React.CSSProperties = {
-    ...style,
-  };
-
   return (
     <Component
       ref={contentRef}
@@ -98,7 +63,6 @@ export const CollapsibleContent = <T extends ElementType = 'div'>({
       hidden={hiddenAttribute}
       data-state={dataState}
       data-disabled={disabled ? '' : undefined}
-      style={combinedStyle}
       {...props}
     >
       {children}
