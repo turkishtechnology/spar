@@ -18,7 +18,7 @@ import { useCallback } from 'react';
  * };
  * ```
  */
-export const useMergedRef = <T extends HTMLElement>(
+export const useMergedRef = <T extends Element>(
   internalRef: React.RefObject<T | null>,
   externalRef?: React.Ref<T> | null,
 ) => {

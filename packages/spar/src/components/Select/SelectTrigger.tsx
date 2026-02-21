@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback } from 'react';
 import { useSelectContext } from './hooks';
 import type { SelectTriggerProps, SelectTriggerRenderProps } from './types';
 import { useMergedRef } from '@/hooks';
@@ -16,18 +16,7 @@ export const SelectTrigger = ({
   ...props
 }: SelectTriggerProps) => {
   const context = useSelectContext();
-  const internalRef = useRef<HTMLButtonElement>(null);
-  const mergedRef = useMergedRef(internalRef, ref);
-
-  // Merge external ref with internal ref
-  useEffect(() => {
-    if (context.triggerRef) {
-      if (typeof context.triggerRef === 'object' && context.triggerRef !== null) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (context.triggerRef as any).current = internalRef.current;
-      }
-    }
-  }, [context.triggerRef, internalRef]);
+  const mergedRef = useMergedRef(context.triggerRef, ref);
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {

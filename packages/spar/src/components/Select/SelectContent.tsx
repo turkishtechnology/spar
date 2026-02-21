@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback, type ElementType } from 'react';
-import { useInteractOutside } from '@/hooks';
+import { useInteractOutside, useMergedRef } from '@/hooks';
 import { useSelectContext } from './hooks';
 import {
   useFloating,
@@ -114,17 +114,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
     }
   }, [refs, context.contentRef]);
 
-  // Merge external ref with internal ref
-  useEffect(() => {
-    if (ref) {
-      if (typeof ref === 'function') {
-        ref(context.contentRef.current);
-      } else if (ref) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (ref as any).current = context.contentRef.current;
-      }
-    }
-  }, [ref, context.contentRef]);
+  const mergedRef = useMergedRef(context.contentRef, ref);
 
   // Focus management - focus content when opened
   useEffect(() => {
@@ -281,7 +271,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
 
   return (
     <Component
-      ref={context.contentRef}
+      ref={mergedRef}
       id={context.contentId}
       role='listbox'
       tabIndex={-1}
