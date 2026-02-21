@@ -1,4 +1,5 @@
 import { useEffect, useRef, ElementType } from 'react';
+import { useMergedRef } from '@/hooks';
 import { useCollapsibleContext } from './hooks';
 import type { CollapsibleContentProps } from './types';
 
@@ -19,6 +20,7 @@ const getHiddenAttribute = (isOpen: boolean, forceMount: boolean) => {
  */
 export const CollapsibleContent = <T extends ElementType = 'div'>({
   as,
+  ref,
   forceMount = false,
   children,
   onBeforeMatch,
@@ -27,6 +29,7 @@ export const CollapsibleContent = <T extends ElementType = 'div'>({
   const Component = as || 'div';
   const { isOpen, disabled, contentId, toggle } = useCollapsibleContext();
   const contentRef = useRef<HTMLElement>(null);
+  const mergedRef = useMergedRef(contentRef, ref);
 
   // Handle beforematch event for hidden="until-found" support
   // This must be attached via addEventListener since React doesn't support onBeforeMatch
@@ -58,7 +61,7 @@ export const CollapsibleContent = <T extends ElementType = 'div'>({
 
   return (
     <Component
-      ref={contentRef}
+      ref={mergedRef}
       id={contentId}
       hidden={hiddenAttribute}
       data-state={dataState}
