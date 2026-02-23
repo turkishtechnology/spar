@@ -846,6 +846,32 @@
   color: #f2f5f8;
 }
 
+.input-demo-container .description {
+  color: #666;
+  display: block;
+  font-size: 9px;
+  line-height: 13px;
+  padding-left: 5px;
+  margin-top: 2px;
+}
+
+[data-theme='dark'] .input-demo-container .description {
+  color: #aaa;
+}
+
+.input-demo-container .error {
+  color: #ff6b6b;
+  display: block;
+  font-size: 9px;
+  line-height: 13px;
+  padding-left: 5px;
+  margin-top: 2px;
+}
+
+[data-theme='dark'] .input-demo-container .error {
+  color: #ff6b6b;
+}
+
 // DropdownMenu styles
 .dropdown-demo-container .dropdown-trigger {
   margin-inline: auto;
