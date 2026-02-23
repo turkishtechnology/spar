@@ -25,12 +25,18 @@ A headless input component providing accessible form input primitives with compo
 ### Simple Usage (Most Common)
 
 <LiveCode
-  code={`<div className='input-demo-container'>
-  <Label htmlFor='my-input' className='label'>
+  code={`<Input className='input-demo-container' isInvalid>
+  <InputLabel htmlFor='my-input' className='label'>
     Label
-  </Label>
-  <Input id='my-input' className='input' />
-</div>`}
+  </InputLabel>
+  <InputField id='my-input' className='input' />
+  <InputDescription className='description'>
+    Helper text for guidance
+  </InputDescription>
+  <InputErrorMessage className='error'>
+    This field is required
+  </InputErrorMessage>
+</Input>`}
 cssCode={`.input {
   border-radius: 5px;
   border: 1px solid #e1e4ea;
@@ -56,6 +62,32 @@ margin-bottom: 2px;
 
 [data-theme='dark'] .label {
 color: #f2f5f8;
+}
+
+.description {
+color: #666;
+display: block;
+font-size: 9px;
+line-height: 13px;
+padding-left: 5px;
+margin-top: 2px;
+}
+
+[data-theme='dark'] .description {
+color: #aaa;
+}
+
+.error {
+color: #ff6b6b;
+display: block;
+font-size: 9px;
+line-height: 13px;
+padding-left: 5px;
+margin-top: 2px;
+}
+
+[data-theme='dark'] .error {
+color: #ff6b6b;
 }`}
 />
 
@@ -127,12 +159,18 @@ The Input component follows a compound component pattern with context-based stat
     },
   ]}
 >
-  <div className='input-demo-container' data-spar-part='root'>
-    <Label htmlFor='my-input' className='label' data-spar-part='label'>
+  <Input className='input-demo-container' isInvalid data-spar-part='root'>
+    <InputLabel htmlFor='my-input' className='label' data-spar-part='label'>
       {'Label'}
-    </Label>
-    <Input id='my-input' className='input' data-spar-part='field' />
-  </div>
+    </InputLabel>
+    <InputField id='my-input' className='input' data-spar-part='field' />
+    <InputDescription className='description' data-spar-part='description'>
+      {'Helper text for guidance'}
+    </InputDescription>
+    <InputErrorMessage className='error' data-spar-part='errorMessage'>
+      {'This field is required'}
+    </InputErrorMessage>
+  </Input>
 </AnatomyViewer>
 
 ### Structure

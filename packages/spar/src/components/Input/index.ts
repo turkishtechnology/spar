@@ -27,7 +27,6 @@ export type {
   InputProps,
   InputFieldOwnProps,
   InputFieldProps,
-  InputLabelOwnProps,
   InputLabelProps,
   InputDescriptionOwnProps,
   InputDescriptionProps,

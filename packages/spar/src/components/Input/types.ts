@@ -1,5 +1,6 @@
 import type { ElementType } from 'react';
 import type { PolymorphicProps } from '../../types';
+import type { LabelProps } from '../Label/types';
 
 /**
  * Input context state
@@ -68,19 +69,10 @@ export type InputFieldProps<T extends ElementType = 'input'> = PolymorphicProps<
 >;
 
 /**
- * Own props for InputLabel
- */
-export interface InputLabelOwnProps {}
-
-/**
  * Props for InputLabel
  * @remarks Associated label element with automatic ID linking
  */
-export type InputLabelProps<T extends ElementType = 'label'> = PolymorphicProps<
-  'label',
-  T,
-  InputLabelOwnProps
->;
+export type InputLabelProps<T extends ElementType = 'label'> = LabelProps<T>;
 
 /**
  * Own props for InputDescription

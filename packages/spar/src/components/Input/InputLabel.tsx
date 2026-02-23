@@ -1,6 +1,7 @@
 import { type ElementType } from 'react';
 import type { InputLabelProps } from './types';
 import { useInputContext } from './hooks';
+import { Label } from '../Label/Label';
 
 /**
  * Input label component that provides accessible labeling for the input field.
@@ -12,13 +13,12 @@ export const InputLabel = <T extends ElementType = 'label'>({
   ref,
   ...props
 }: InputLabelProps<T>) => {
-  const Component = as || 'label';
   const context = useInputContext();
 
   return (
-    <Component {...props} ref={ref} id={context.labelId} htmlFor={context.fieldId}>
+    <Label as={as || 'label'} {...props} ref={ref} id={context.labelId} htmlFor={context.fieldId}>
       {children}
-    </Component>
+    </Label>
   );
 };
 
