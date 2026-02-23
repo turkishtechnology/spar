@@ -1,6 +1,6 @@
 import type { ElementType, ReactNode, RefObject, CSSProperties } from 'react';
 import type { PolymorphicProps } from '../../types';
-import type { ButtonProps } from '../Button/types';
+import type { ButtonOwnProps } from '../Button/types';
 
 export type PopoverSide = 'top' | 'bottom' | 'left' | 'right';
 export type PopoverAlign = 'start' | 'center' | 'end';
@@ -114,15 +114,24 @@ export interface PopoverProps {
 }
 
 /**
- * Props for PopoverTrigger component
- * @remarks Fully accessible, headless popover trigger
+ * Own props for PopoverTrigger component
  */
-export interface PopoverTriggerProps extends Omit<ButtonProps, 'children'> {
+export interface PopoverTriggerOwnProps extends ButtonOwnProps {
   /**
    * Children content or render function for render props pattern
    */
   children?: ReactNode | ((state: PopoverTriggerRenderProps) => ReactNode);
 }
+
+/**
+ * Props for PopoverTrigger component
+ * @remarks Fully accessible, headless popover trigger
+ */
+export type PopoverTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  PopoverTriggerOwnProps
+>;
 
 /**
  * Own props for PopoverContent component
@@ -293,15 +302,24 @@ export interface PopoverPortalProps {
 }
 
 /**
- * Props for PopoverClose component
- * @remarks Close trigger that automatically closes the popover
+ * Own props for PopoverClose component
  */
-export interface PopoverCloseProps extends Omit<ButtonProps, 'children'> {
+export interface PopoverCloseOwnProps extends ButtonOwnProps {
   /**
    * Children content or render function for render props pattern
    */
   children?: ReactNode | ((state: PopoverCloseRenderProps) => ReactNode);
 }
+
+/**
+ * Props for PopoverClose component
+ * @remarks Close trigger that automatically closes the popover
+ */
+export type PopoverCloseProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  PopoverCloseOwnProps
+>;
 
 /**
  * Internal state for popover management

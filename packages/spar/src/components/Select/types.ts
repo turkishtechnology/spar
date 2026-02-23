@@ -1,8 +1,8 @@
 import type { ElementType, ReactNode, RefObject } from 'react';
 import type { Placement, Strategy, Middleware, VirtualElement } from '@floating-ui/react-dom';
 import type { Direction, PolymorphicProps } from '../../types';
-import type { ButtonProps } from '../Button/types';
 import type { LabelProps } from '../Label/types';
+import type { ButtonOwnProps } from '../Button/types';
 
 // Re-export Floating UI types for public API
 export type { Placement, Strategy, Middleware, VirtualElement };
@@ -118,15 +118,24 @@ export interface SelectTriggerRenderProps {
 }
 
 /**
- * Props for SelectTrigger component
- * @remarks Button that toggles the dropdown
+ * Own props for SelectTrigger component
  */
-export interface SelectTriggerProps extends Omit<ButtonProps, 'children'> {
+export interface SelectTriggerOwnProps extends ButtonOwnProps {
   /**
    * Children content or render function
    */
   children?: ReactNode | ((state: SelectTriggerRenderProps) => ReactNode);
 }
+
+/**
+ * Props for SelectTrigger component
+ * @remarks Button that toggles the dropdown
+ */
+export type SelectTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  SelectTriggerOwnProps
+>;
 
 /**
  * Own props for SelectValue component

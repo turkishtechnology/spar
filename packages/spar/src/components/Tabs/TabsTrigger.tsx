@@ -1,25 +1,26 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, ElementType } from 'react';
 import { useMergedRef } from '@/hooks';
 import { useTabsContext } from './hooks';
 import type { TabsTriggerProps, TabsTriggerRenderProps } from './types';
 import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * TabsTrigger component representing a clickable tab button with full accessibility support.
  * Supports render props pattern for complete rendering control.
  */
-export const TabsTrigger = ({
+export const TabsTrigger = <T extends ElementType = 'button'>({
   value,
   disabled = false,
   autoFocus = false,
-  as = 'button',
+  as,
   children,
   onClick,
   onFocus,
   onBlur,
   ref,
   ...props
-}: TabsTriggerProps) => {
+}: TabsTriggerProps<T>) => {
   const { selectedValue, onValueChange, orientation, registerTab, unregisterTab, tabsListId } =
     useTabsContext();
   const internalRef = useRef<HTMLButtonElement>(null);
@@ -81,25 +82,27 @@ export const TabsTrigger = ({
     orientation,
   };
 
+  const buttonProps = {
+    ...(as && { as }),
+    ref: mergedRef,
+    id: triggerId,
+    disabled,
+    autoFocus,
+    role: 'tab' as const,
+    'aria-selected': isSelected,
+    'aria-controls': panelId,
+    'data-state': isSelected ? 'active' : 'inactive',
+    'data-orientation': orientation,
+    'data-value': value,
+    tabIndex: isSelected ? 0 : -1,
+    onClick: handleClick,
+    onFocus: handleFocus,
+    onBlur: handleBlur,
+    ...props,
+  } as ButtonProps<T>;
+
   return (
-    <Button
-      as={as}
-      ref={mergedRef}
-      id={triggerId}
-      disabled={disabled}
-      autoFocus={autoFocus}
-      role='tab'
-      aria-selected={isSelected}
-      aria-controls={panelId}
-      data-state={isSelected ? 'active' : 'inactive'}
-      data-orientation={orientation}
-      data-value={value}
-      tabIndex={isSelected ? 0 : -1}
-      onClick={handleClick}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      {...props}
-    >
+    <Button {...buttonProps}>
       {typeof children === 'function' ? children(renderProps) : children}
     </Button>
   );
