@@ -6,22 +6,7 @@ description: Fully accessible, headless select component for single-value select
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import {
-  SelectRoot,
-  SelectTrigger,
-  SelectValue,
-  SelectIcon,
-  SelectPortal,
-  SelectContent,
-  SelectViewport,
-  SelectItem,
-  SelectItemText,
-  SelectItemIndicator,
-  SelectGroup,
-  SelectLabel,
-  SelectSeparator,
-  SelectArrow,
-} from '@turkish-technology/spar';
+import { Select } from '@turkish-technology/spar';
 
 # Select
 
@@ -31,10 +16,10 @@ A headless, fully accessible dropdown component that allows users to choose a si
 
 <div className='select-demo-container'>
 <LiveCode
-  code={`<SelectRoot>
-    <SelectTrigger className='select-trigger'>
-      <SelectValue className='select-value' placeholder='Options' />
-      <SelectIcon className='select-icon'>
+  code={`<Select.Root>
+    <Select.Trigger className='select-trigger'>
+      <Select.Value className='select-value' placeholder='Options' />
+      <Select.Icon className='select-icon'>
         <svg
           className='select-svg'
           xmlns='http://www.w3.org/2000/svg'
@@ -45,27 +30,27 @@ A headless, fully accessible dropdown component that allows users to choose a si
         >
           <path d='M13.2292 7.5001L9.99583 10.7334L6.7625 7.5001C6.4375 7.1751 5.9125 7.1751 5.5875 7.5001C5.2625 7.8251 5.2625 8.3501 5.5875 8.6751L9.4125 12.5001C9.7375 12.8251 10.2625 12.8251 10.5875 12.5001L14.4125 8.6751C14.7375 8.3501 14.7375 7.8251 14.4125 7.5001C14.0875 7.18343 13.5542 7.1751 13.2292 7.5001Z' />
         </svg>
-      </SelectIcon>
-    </SelectTrigger>
-    <SelectPortal>
-      <SelectContent className='select-content'>
-        <SelectViewport className='select-viewport'>
-          <SelectItem className='select-item' value='option1'>
-            <SelectItemText className='select-item-text'>Option 1</SelectItemText>
-            <SelectItemIndicator className='select-item-indicator'>✓</SelectItemIndicator>
-          </SelectItem>
-          <SelectItem className='select-item' value='option2'>
-            <SelectItemText className='select-item-text'>Option 2</SelectItemText>
-            <SelectItemIndicator className='select-item-indicator'>✓</SelectItemIndicator>
-          </SelectItem>
-          <SelectItem className='select-item' value='option3'>
-            <SelectItemText className='select-item-text'>Option 3</SelectItemText>
-            <SelectItemIndicator className='select-item-indicator'>✓</SelectItemIndicator>
-          </SelectItem>
-        </SelectViewport>
-      </SelectContent>
-    </SelectPortal>
-  </SelectRoot>`}
+      </Select.Icon>
+    </Select.Trigger>
+    <Select.Portal>
+      <Select.Content className='select-content'>
+        <Select.Viewport className='select-viewport'>
+          <Select.Item className='select-item' value='option1'>
+            <Select.ItemText className='select-item-text'>Option 1</Select.ItemText>
+            <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
+          </Select.Item>
+          <Select.Item className='select-item' value='option2'>
+            <Select.ItemText className='select-item-text'>Option 2</Select.ItemText>
+            <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
+          </Select.Item>
+          <Select.Item className='select-item' value='option3'>
+            <Select.ItemText className='select-item-text'>Option 3</Select.ItemText>
+            <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
+          </Select.Item>
+        </Select.Viewport>
+      </Select.Content>
+    </Select.Portal>
+  </Select.Root>`}
   cssCode={`.select-trigger {
   width: 100px;
   display: flex;
@@ -141,22 +126,7 @@ background: #222;
 
 ```tsx
 // Compound component (recommended)
-import {
-  SelectRoot,
-  SelectTrigger,
-  SelectValue,
-  SelectIcon,
-  SelectPortal,
-  SelectContent,
-  SelectViewport,
-  SelectItem,
-  SelectItemText,
-  SelectItemIndicator,
-  SelectGroup,
-  SelectLabel,
-  SelectSeparator,
-  SelectArrow,
-} from '@turkish-technology/spar';
+import { Select } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -190,10 +160,10 @@ The Select component is built as a compound component with multiple parts:
   ]}
 >
   <div className='select-demo-container'>
-    <SelectRoot data-spar-part='root'>
-      <SelectTrigger data-spar-part='trigger' className='select-trigger'>
-        <SelectValue data-spar-part='value' className='select-value' placeholder='Options' />
-        <SelectIcon data-spar-part='icon' className='select-icon'>
+    <Select.Root data-spar-part='root'>
+      <Select.Trigger data-spar-part='trigger' className='select-trigger'>
+        <Select.Value data-spar-part='value' className='select-value' placeholder='Options' />
+        <Select.Icon data-spar-part='icon' className='select-icon'>
           <svg
             className='select-svg'
             xmlns='http://www.w3.org/2000/svg'
@@ -204,86 +174,86 @@ The Select component is built as a compound component with multiple parts:
           >
             <path d='M13.2292 7.5001L9.99583 10.7334L6.7625 7.5001C6.4375 7.1751 5.9125 7.1751 5.5875 7.5001C5.2625 7.8251 5.2625 8.3501 5.5875 8.6751L9.4125 12.5001C9.7375 12.8251 10.2625 12.8251 10.5875 12.5001L14.4125 8.6751C14.7375 8.3501 14.7375 7.8251 14.4125 7.5001C14.0875 7.18343 13.5542 7.1751 13.2292 7.5001Z' />
           </svg>
-        </SelectIcon>
-      </SelectTrigger>
-      <SelectPortal data-spar-part='portal'>
-        <SelectContent data-spar-part='content' className='select-content'>
-          <SelectViewport data-spar-part='viewport' className='select-viewport'>
-            <SelectItem data-spar-part='item' className='select-item' value='option1'>
-              <SelectItemText data-spar-part='itemText' className='select-item-text'>
+        </Select.Icon>
+      </Select.Trigger>
+      <Select.Portal data-spar-part='portal'>
+        <Select.Content data-spar-part='content' className='select-content'>
+          <Select.Viewport data-spar-part='viewport' className='select-viewport'>
+            <Select.Item data-spar-part='item' className='select-item' value='option1'>
+              <Select.ItemText data-spar-part='itemText' className='select-item-text'>
                 {'Option 1'}
-              </SelectItemText>
-              <SelectItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
+              </Select.ItemText>
+              <Select.ItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
                 {'✓'}
-              </SelectItemIndicator>
-            </SelectItem>
-            <SelectItem data-spar-part='item' className='select-item' value='option2'>
-              <SelectItemText data-spar-part='itemText' className='select-item-text'>
+              </Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item data-spar-part='item' className='select-item' value='option2'>
+              <Select.ItemText data-spar-part='itemText' className='select-item-text'>
                 {'Option 2'}
-              </SelectItemText>
-              <SelectItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
+              </Select.ItemText>
+              <Select.ItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
                 {'✓'}
-              </SelectItemIndicator>
-            </SelectItem>
-            <SelectItem data-spar-part='item' className='select-item' value='option3'>
-              <SelectItemText data-spar-part='itemText' className='select-item-text'>
+              </Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item data-spar-part='item' className='select-item' value='option3'>
+              <Select.ItemText data-spar-part='itemText' className='select-item-text'>
                 {'Option 3'}
-              </SelectItemText>
-              <SelectItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
+              </Select.ItemText>
+              <Select.ItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
                 {'✓'}
-              </SelectItemIndicator>
-            </SelectItem>
-          </SelectViewport>
-        </SelectContent>
-      </SelectPortal>
-    </SelectRoot>
+              </Select.ItemIndicator>
+            </Select.Item>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
   </div>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<SelectRoot>
-  <SelectTrigger>
-    <SelectValue />
-    <SelectIcon />
-  </SelectTrigger>
+<Select.Root>
+  <Select.Trigger>
+    <Select.Value />
+    <Select.Icon />
+  </Select.Trigger>
 
-  <SelectPortal>
-    <SelectContent>
-      <SelectViewport>
-        <SelectGroup>
-          <SelectLabel />
-          <SelectItem>
-            <SelectItemText />
-            <SelectItemIndicator />
-          </SelectItem>
-        </SelectGroup>
+  <Select.Portal>
+    <Select.Content>
+      <Select.Viewport>
+        <Select.Group>
+          <Select.Label />
+          <Select.Item>
+            <Select.ItemText />
+            <Select.ItemIndicator />
+          </Select.Item>
+        </Select.Group>
 
-        <SelectSeparator />
-        <SelectArrow />
-      </SelectViewport>
-    </SelectContent>
-  </SelectPortal>
-</SelectRoot>
+        <Select.Separator />
+        <Select.Arrow />
+      </Select.Viewport>
+    </Select.Content>
+  </Select.Portal>
+</Select.Root>
 ```
 
 **Data Flow:**
 
-- `SelectRoot` manages state (open/value) and provides context to all child components
-- `SelectTrigger` toggles dropdown open/closed state and displays current selection
-- `SelectValue` displays the selected item's text or placeholder when nothing is selected
-- `SelectIcon` provides visual feedback for the dropdown state (optional)
-- `SelectPortal` renders content outside DOM hierarchy for proper z-index stacking
-- `SelectContent` uses Floating UI for intelligent positioning relative to trigger
-- `SelectViewport` provides scrollable container when items exceed available space
-- `SelectGroup` organizes related items and associates them with labels
-- `SelectLabel` provides semantic grouping labels for screen readers
-- `SelectItem` registers with root context and handles selection on click/keyboard
-- `SelectItemText` provides the text value for type-ahead search and display
-- `SelectItemIndicator` shows selected state visually (checkmark, icon, etc.)
-- `SelectSeparator` provides visual separation between groups or items
-- `SelectArrow` points to trigger when using Floating UI arrow middleware (optional)
+- `Select.Root` manages state (open/value) and provides context to all child components
+- `Select.Trigger` toggles dropdown open/closed state and displays current selection
+- `Select.Value` displays the selected item's text or placeholder when nothing is selected
+- `Select.Icon` provides visual feedback for the dropdown state (optional)
+- `Select.Portal` renders content outside DOM hierarchy for proper z-index stacking
+- `Select.Content` uses Floating UI for intelligent positioning relative to trigger
+- `Select.Viewport` provides scrollable container when items exceed available space
+- `Select.Group` organizes related items and associates them with labels
+- `Select.Label` provides semantic grouping labels for screen readers
+- `Select.Item` registers with root context and handles selection on click/keyboard
+- `Select.ItemText` provides the text value for type-ahead search and display
+- `Select.ItemIndicator` shows selected state visually (checkmark, icon, etc.)
+- `Select.Separator` provides visual separation between groups or items
+- `Select.Arrow` points to trigger when using Floating UI arrow middleware (optional)
 
 **Alternative: Tree-shakeable named imports**
 
@@ -309,31 +279,31 @@ function ControlledSelect() {
   const [selectedFruit, setSelectedFruit] = React.useState('');
 
   return (
-    <SelectRoot value={selectedFruit} onValueChange={setSelectedFruit}>
-      <SelectTrigger>
-        <SelectValue placeholder='Choose a fruit' />
-        <SelectIcon>▼</SelectIcon>
-      </SelectTrigger>
+    <Select.Root value={selectedFruit} onValueChange={setSelectedFruit}>
+      <Select.Trigger>
+        <Select.Value placeholder='Choose a fruit' />
+        <Select.Icon>▼</Select.Icon>
+      </Select.Trigger>
 
-      <SelectPortal>
-        <SelectContent>
-          <SelectViewport>
-            <SelectItem value='apple'>
-              <SelectItemText>Apple</SelectItemText>
-              <SelectItemIndicator>✓</SelectItemIndicator>
-            </SelectItem>
-            <SelectItem value='banana'>
-              <SelectItemText>Banana</SelectItemText>
-              <SelectItemIndicator>✓</SelectItemIndicator>
-            </SelectItem>
-            <SelectItem value='orange'>
-              <SelectItemText>Orange</SelectItemText>
-              <SelectItemIndicator>✓</SelectItemIndicator>
-            </SelectItem>
-          </SelectViewport>
-        </SelectContent>
-      </SelectPortal>
-    </SelectRoot>
+      <Select.Portal>
+        <Select.Content>
+          <Select.Viewport>
+            <Select.Item value='apple'>
+              <Select.ItemText>Apple</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value='banana'>
+              <Select.ItemText>Banana</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value='orange'>
+              <Select.ItemText>Orange</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
   );
 }
 ```
@@ -349,30 +319,30 @@ function UncontrolledSelect() {
   };
 
   return (
-    <SelectRoot defaultValue='medium' onValueChange={handleValueChange}>
-      <SelectTrigger>
-        <SelectValue placeholder='Select size' />
-      </SelectTrigger>
+    <Select.Root defaultValue='medium' onValueChange={handleValueChange}>
+      <Select.Trigger>
+        <Select.Value placeholder='Select size' />
+      </Select.Trigger>
 
-      <SelectPortal>
-        <SelectContent>
-          <SelectViewport>
-            <SelectItem value='small'>
-              <SelectItemText>Small</SelectItemText>
-              <SelectItemIndicator>✓</SelectItemIndicator>
-            </SelectItem>
-            <SelectItem value='medium'>
-              <SelectItemText>Medium</SelectItemText>
-              <SelectItemIndicator>✓</SelectItemIndicator>
-            </SelectItem>
-            <SelectItem value='large'>
-              <SelectItemText>Large</SelectItemText>
-              <SelectItemIndicator>✓</SelectItemIndicator>
-            </SelectItem>
-          </SelectViewport>
-        </SelectContent>
-      </SelectPortal>
-    </SelectRoot>
+      <Select.Portal>
+        <Select.Content>
+          <Select.Viewport>
+            <Select.Item value='small'>
+              <Select.ItemText>Small</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value='medium'>
+              <Select.ItemText>Medium</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value='large'>
+              <Select.ItemText>Large</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
   );
 }
 ```
@@ -386,52 +356,52 @@ function GroupedSelect() {
   const [value, setValue] = React.useState('');
 
   return (
-    <SelectRoot value={value} onValueChange={setValue}>
-      <SelectTrigger>
-        <SelectValue placeholder='Select a country' />
-        <SelectIcon>▼</SelectIcon>
-      </SelectTrigger>
+    <Select.Root value={value} onValueChange={setValue}>
+      <Select.Trigger>
+        <Select.Value placeholder='Select a country' />
+        <Select.Icon>▼</Select.Icon>
+      </Select.Trigger>
 
-      <SelectPortal>
-        <SelectContent>
-          <SelectViewport>
-            <SelectGroup>
-              <SelectLabel>North America</SelectLabel>
-              <SelectItem value='us'>
-                <SelectItemText>United States</SelectItemText>
-                <SelectItemIndicator>✓</SelectItemIndicator>
-              </SelectItem>
-              <SelectItem value='ca'>
-                <SelectItemText>Canada</SelectItemText>
-                <SelectItemIndicator>✓</SelectItemIndicator>
-              </SelectItem>
-              <SelectItem value='mx'>
-                <SelectItemText>Mexico</SelectItemText>
-                <SelectItemIndicator>✓</SelectItemIndicator>
-              </SelectItem>
-            </SelectGroup>
+      <Select.Portal>
+        <Select.Content>
+          <Select.Viewport>
+            <Select.Group>
+              <Select.Label>North America</Select.Label>
+              <Select.Item value='us'>
+                <Select.ItemText>United States</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+              <Select.Item value='ca'>
+                <Select.ItemText>Canada</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+              <Select.Item value='mx'>
+                <Select.ItemText>Mexico</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+            </Select.Group>
 
-            <SelectSeparator />
+            <Select.Separator />
 
-            <SelectGroup>
-              <SelectLabel>Europe</SelectLabel>
-              <SelectItem value='uk'>
-                <SelectItemText>United Kingdom</SelectItemText>
-                <SelectItemIndicator>✓</SelectItemIndicator>
-              </SelectItem>
-              <SelectItem value='de'>
-                <SelectItemText>Germany</SelectItemText>
-                <SelectItemIndicator>✓</SelectItemIndicator>
-              </SelectItem>
-              <SelectItem value='fr'>
-                <SelectItemText>France</SelectItemText>
-                <SelectItemIndicator>✓</SelectItemIndicator>
-              </SelectItem>
-            </SelectGroup>
-          </SelectViewport>
-        </SelectContent>
-      </SelectPortal>
-    </SelectRoot>
+            <Select.Group>
+              <Select.Label>Europe</Select.Label>
+              <Select.Item value='uk'>
+                <Select.ItemText>United Kingdom</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+              <Select.Item value='de'>
+                <Select.ItemText>Germany</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+              <Select.Item value='fr'>
+                <Select.ItemText>France</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+            </Select.Group>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
   );
 }
 ```
@@ -445,33 +415,33 @@ function SelectWithDisabledItems() {
   const [plan, setPlan] = React.useState('free');
 
   return (
-    <SelectRoot value={plan} onValueChange={setPlan}>
-      <SelectTrigger>
-        <SelectValue />
-        <SelectIcon>▼</SelectIcon>
-      </SelectTrigger>
+    <Select.Root value={plan} onValueChange={setPlan}>
+      <Select.Trigger>
+        <Select.Value />
+        <Select.Icon>▼</Select.Icon>
+      </Select.Trigger>
 
-      <SelectPortal>
-        <SelectContent>
-          <SelectViewport>
-            <SelectItem value='free'>
-              <SelectItemText>Free Plan</SelectItemText>
-              <SelectItemIndicator>✓</SelectItemIndicator>
-            </SelectItem>
-            <SelectItem value='basic'>
-              <SelectItemText>Basic Plan - $9/month</SelectItemText>
-              <SelectItemIndicator>✓</SelectItemIndicator>
-            </SelectItem>
-            <SelectItem value='premium' disabled>
-              <SelectItemText>Premium Plan - Coming Soon</SelectItemText>
-            </SelectItem>
-            <SelectItem value='enterprise' disabled>
-              <SelectItemText>Enterprise - Contact Sales</SelectItemText>
-            </SelectItem>
-          </SelectViewport>
-        </SelectContent>
-      </SelectPortal>
-    </SelectRoot>
+      <Select.Portal>
+        <Select.Content>
+          <Select.Viewport>
+            <Select.Item value='free'>
+              <Select.ItemText>Free Plan</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value='basic'>
+              <Select.ItemText>Basic Plan - $9/month</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value='premium' disabled>
+              <Select.ItemText>Premium Plan - Coming Soon</Select.ItemText>
+            </Select.Item>
+            <Select.Item value='enterprise' disabled>
+              <Select.ItemText>Enterprise - Contact Sales</Select.ItemText>
+            </Select.Item>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
   );
 }
 ```
@@ -493,30 +463,30 @@ function SelectInForm() {
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor='category-select'>Product Category</label>
-      <SelectRoot name='category' value={category} onValueChange={setCategory} required>
-        <SelectTrigger id='category-select'>
-          <SelectValue placeholder='Select category' />
-        </SelectTrigger>
+      <Select.Root name='category' value={category} onValueChange={setCategory} required>
+        <Select.Trigger id='category-select'>
+          <Select.Value placeholder='Select category' />
+        </Select.Trigger>
 
-        <SelectPortal>
-          <SelectContent>
-            <SelectViewport>
-              <SelectItem value='electronics'>
-                <SelectItemText>Electronics</SelectItemText>
-                <SelectItemIndicator>✓</SelectItemIndicator>
-              </SelectItem>
-              <SelectItem value='clothing'>
-                <SelectItemText>Clothing</SelectItemText>
-                <SelectItemIndicator>✓</SelectItemIndicator>
-              </SelectItem>
-              <SelectItem value='books'>
-                <SelectItemText>Books</SelectItemText>
-                <SelectItemIndicator>✓</SelectItemIndicator>
-              </SelectItem>
-            </SelectViewport>
-          </SelectContent>
-        </SelectPortal>
-      </SelectRoot>
+        <Select.Portal>
+          <Select.Content>
+            <Select.Viewport>
+              <Select.Item value='electronics'>
+                <Select.ItemText>Electronics</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+              <Select.Item value='clothing'>
+                <Select.ItemText>Clothing</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+              <Select.Item value='books'>
+                <Select.ItemText>Books</Select.ItemText>
+                <Select.ItemIndicator>✓</Select.ItemIndicator>
+              </Select.Item>
+            </Select.Viewport>
+          </Select.Content>
+        </Select.Portal>
+      </Select.Root>
       <button type='submit'>Submit</button>
     </form>
   );
@@ -533,14 +503,14 @@ function AdvancedPositioningSelect() {
   const arrowRef = React.useRef<SVGSVGElement>(null);
 
   return (
-    <SelectRoot value={value} onValueChange={setValue}>
-      <SelectTrigger>
-        <SelectValue placeholder='Choose option' />
-        <SelectIcon>▼</SelectIcon>
-      </SelectTrigger>
+    <Select.Root value={value} onValueChange={setValue}>
+      <Select.Trigger>
+        <Select.Value placeholder='Choose option' />
+        <Select.Icon>▼</Select.Icon>
+      </Select.Trigger>
 
-      <SelectPortal>
-        <SelectContent
+      <Select.Portal>
+        <Select.Content
           placement='bottom-start'
           sideOffset={10}
           shift={true}
@@ -549,24 +519,24 @@ function AdvancedPositioningSelect() {
           size={true}
           arrowRef={arrowRef}
         >
-          <SelectArrow ref={arrowRef} />
-          <SelectViewport>
-            <SelectItem value='option1'>
-              <SelectItemText>Option 1</SelectItemText>
-              <SelectItemIndicator>✓</SelectItemIndicator>
-            </SelectItem>
-            <SelectItem value='option2'>
-              <SelectItemText>Option 2</SelectItemText>
-              <SelectItemIndicator>✓</SelectItemIndicator>
-            </SelectItem>
-            <SelectItem value='option3'>
-              <SelectItemText>Option 3</SelectItemText>
-              <SelectItemIndicator>✓</SelectItemIndicator>
-            </SelectItem>
-          </SelectViewport>
-        </SelectContent>
-      </SelectPortal>
-    </SelectRoot>
+          <Select.Arrow ref={arrowRef} />
+          <Select.Viewport>
+            <Select.Item value='option1'>
+              <Select.ItemText>Option 1</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value='option2'>
+              <Select.ItemText>Option 2</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+            <Select.Item value='option3'>
+              <Select.ItemText>Option 3</Select.ItemText>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+            </Select.Item>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
   );
 }
 ```
@@ -580,34 +550,34 @@ function RTLSelect() {
   const [value, setValue] = React.useState('');
 
   return (
-    <SelectRoot value={value} onValueChange={setValue} dir='rtl'>
-      <SelectTrigger>
-        <SelectIcon>▼</SelectIcon>
-        <SelectValue placeholder='בחר אפשרות' />
-      </SelectTrigger>
+    <Select.Root value={value} onValueChange={setValue} dir='rtl'>
+      <Select.Trigger>
+        <Select.Icon>▼</Select.Icon>
+        <Select.Value placeholder='בחר אפשרות' />
+      </Select.Trigger>
 
-      <SelectPortal>
-        <SelectContent>
-          <SelectViewport>
-            <SelectItem value='option1'>
-              <SelectItemIndicator>✓</SelectItemIndicator>
-              <SelectItemText>אפשרות 1</SelectItemText>
-            </SelectItem>
-            <SelectItem value='option2'>
-              <SelectItemIndicator>✓</SelectItemIndicator>
-              <SelectItemText>אפשרות 2</SelectItemText>
-            </SelectItem>
-          </SelectViewport>
-        </SelectContent>
-      </SelectPortal>
-    </SelectRoot>
+      <Select.Portal>
+        <Select.Content>
+          <Select.Viewport>
+            <Select.Item value='option1'>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+              <Select.ItemText>אפשרות 1</Select.ItemText>
+            </Select.Item>
+            <Select.Item value='option2'>
+              <Select.ItemIndicator>✓</Select.ItemIndicator>
+              <Select.ItemText>אפשרות 2</Select.ItemText>
+            </Select.Item>
+          </Select.Viewport>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
   );
 }
 ```
 
 ## API Reference
 
-### SelectRoot
+### Select.Root
 
 The main container that manages all select state and behavior.
 
@@ -642,7 +612,7 @@ The main container that manages all select state and behavior.
 | ---------------- | --------- | ------------------------------ |
 | `data-autofocus` | `boolean` | Marks auto-focus configuration |
 
-### SelectTrigger
+### Select.Trigger
 
 The button that toggles the dropdown open and closed. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
@@ -686,7 +656,7 @@ The button that toggles the dropdown open and closed. Extends all `Button` compo
 - `data-disabled`: Present when `disabled={true}`
 - `data-placeholder`: Present when no value selected
 
-### SelectValue
+### Select.Value
 
 Displays the currently selected value or placeholder text.
 
@@ -702,7 +672,7 @@ Displays the currently selected value or placeholder text.
 
 No specific events.
 
-### SelectIcon
+### Select.Icon
 
 Optional visual indicator element (typically a chevron or arrow).
 
@@ -717,7 +687,7 @@ Optional visual indicator element (typically a chevron or arrow).
 
 No specific events.
 
-### SelectPortal
+### Select.Portal
 
 Portal container for rendering dropdown outside DOM hierarchy.
 
@@ -733,7 +703,7 @@ Portal container for rendering dropdown outside DOM hierarchy.
 
 No specific events.
 
-### SelectContent
+### Select.Content
 
 The dropdown container that appears when select is open. Uses Floating UI for intelligent positioning.
 
@@ -770,7 +740,7 @@ The dropdown container that appears when select is open. Uses Floating UI for in
 
 **Positioning**
 
-SelectContent uses Floating UI for advanced positioning. The component automatically:
+Select.Content uses Floating UI for advanced positioning. The component automatically:
 
 - Positions relative to the trigger using the specified `placement`
 - Applies `sideOffset` distance from the trigger
@@ -780,9 +750,9 @@ SelectContent uses Floating UI for advanced positioning. The component automatic
 - Updates position automatically on scroll, resize, and layout changes
 - Matches trigger width as minimum width
 
-For arrow positioning, pass an `arrowRef` to both `SelectContent` and `SelectArrow` components.
+For arrow positioning, pass an `arrowRef` to both `Select.Content` and `Select.Arrow` components.
 
-### SelectViewport
+### Select.Viewport
 
 Scrollable container for select items within the content.
 
@@ -797,7 +767,7 @@ Scrollable container for select items within the content.
 
 No specific events.
 
-### SelectItem
+### Select.Item
 
 Individual selectable option within the dropdown.
 
@@ -835,7 +805,7 @@ Individual selectable option within the dropdown.
 - `data-disabled`: Present when `disabled={true}`
 - `data-highlighted`: Present when focused via keyboard
 
-### SelectItemText
+### Select.ItemText
 
 The text content of a select item.
 
@@ -850,7 +820,7 @@ The text content of a select item.
 
 No specific events.
 
-### SelectItemIndicator
+### Select.ItemIndicator
 
 Visual indicator for selected state (checkmark, icon, etc).
 
@@ -874,7 +844,7 @@ No specific events.
 
 **Note**: Only renders when parent item is selected.
 
-### SelectGroup
+### Select.Group
 
 Groups related select items together.
 
@@ -889,7 +859,7 @@ Groups related select items together.
 
 No specific events.
 
-### SelectLabel
+### Select.Label
 
 Label for a group of select items.
 
@@ -904,7 +874,7 @@ Label for a group of select items.
 
 No specific events.
 
-### SelectSeparator
+### Select.Separator
 
 Visual separator between items or groups.
 
@@ -925,7 +895,7 @@ No specific events.
 | ------------------ | -------------- | --------------------- |
 | `data-orientation` | `"horizontal"` | Indicates orientation |
 
-### SelectArrow
+### Select.Arrow
 
 Optional arrow element pointing to the trigger. Automatically positioned by Floating UI when used with `arrowRef`.
 
@@ -954,8 +924,8 @@ No specific events.
 To enable automatic arrow positioning with Floating UI:
 
 1. Create a ref for the arrow: `const arrowRef = React.useRef<SVGSVGElement>(null)`
-2. Pass the ref to SelectArrow: `<SelectArrow ref={arrowRef} />`
-3. Pass the same ref to SelectContent: `<SelectContent arrowRef={arrowRef}>`
+2. Pass the ref to Select.Arrow: `<Select.Arrow ref={arrowRef} />`
+3. Pass the same ref to Select.Content: `<Select.Content arrowRef={arrowRef}>`
 
 The arrow will automatically position itself to point at the trigger, accounting for the content's placement.
 

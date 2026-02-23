@@ -6,15 +6,7 @@ description: A headless tooltip component that displays informative text when us
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Button } from '@turkish-technology/spar';
-import {
-  TooltipProvider,
-  TooltipRoot,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipPortal,
-  TooltipArrow,
-} from '@turkish-technology/spar';
+import { Button, Tooltip } from '@turkish-technology/spar';
 
 # Tooltip
 
@@ -24,18 +16,18 @@ A popup that displays information related to an element when the element receive
 
 <div className='tooltip-demo-container'>
 <LiveCode
-  code={`<TooltipProvider>
-        <TooltipRoot>
-          <TooltipTrigger className='tooltip-trigger'>
+  code={`<Tooltip.Provider>
+        <Tooltip.Root>
+          <Tooltip.Trigger className='tooltip-trigger'>
             Hover or Focus Me
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent className='tooltip-content'>
+          </Tooltip.Trigger>
+          <Tooltip.Portal>
+            <Tooltip.Content className='tooltip-content'>
               Explore
-            </TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
-</TooltipProvider>`}
+            </Tooltip.Content>
+          </Tooltip.Portal>
+        </Tooltip.Root>
+</Tooltip.Provider>`}
 cssCode={`.tooltip-trigger {
   border-radius: 8px;
   padding: 12px 14px;
@@ -100,14 +92,7 @@ pnpm install @turkish-technology/spar
 ```
 
 ```ts
-import {
-  TooltipProvider,
-  TooltipRoot,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipPortal,
-  TooltipArrow,
-} from '@turkish-technology/spar';
+import { Tooltip } from '@turkish-technology/spar';
 ```
 
 ---
@@ -120,56 +105,56 @@ The Tooltip component is built as a compound component with multiple parts:
   parts={[
     {
       name: 'provider',
-      label: 'TooltipProvider',
+      label: 'Provider',
       description: 'Optional shared configuration provider',
     },
-    { name: 'root', label: 'TooltipRoot', description: 'State management context' },
-    { name: 'trigger', label: 'TooltipTrigger', description: 'Element that triggers tooltip' },
-    { name: 'portal', label: 'TooltipPortal', description: 'Renders content in portal' },
-    { name: 'content', label: 'TooltipContent', description: 'Tooltip popup content' },
-    { name: 'arrow', label: 'TooltipArrow', description: 'Optional arrow element' },
+    { name: 'root', label: 'Root', description: 'State management context' },
+    { name: 'trigger', label: 'Trigger', description: 'Element that triggers tooltip' },
+    { name: 'portal', label: 'Portal', description: 'Renders content in portal' },
+    { name: 'content', label: 'Content', description: 'Tooltip popup content' },
+    { name: 'arrow', label: 'Arrow', description: 'Optional arrow element' },
   ]}
 >
   <div className='tooltip-demo-container' data-spar-part='provider'>
-    <TooltipProvider>
-      <TooltipRoot data-spar-part='root'>
-        <TooltipTrigger data-spar-part='trigger' className='tooltip-trigger'>
+    <Tooltip.Provider>
+      <Tooltip.Root data-spar-part='root'>
+        <Tooltip.Trigger data-spar-part='trigger' className='tooltip-trigger'>
           {'Hover or Focus Me'}
-        </TooltipTrigger>
-        <TooltipPortal data-spar-part='portal'>
-          <TooltipContent data-spar-part='content' className='tooltip-content'>
+        </Tooltip.Trigger>
+        <Tooltip.Portal data-spar-part='portal'>
+          <Tooltip.Content data-spar-part='content' className='tooltip-content'>
             {'Explore'}
-          </TooltipContent>
-        </TooltipPortal>
-      </TooltipRoot>
-    </TooltipProvider>
+          </Tooltip.Content>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+    </Tooltip.Provider>
   </div>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<TooltipProvider>
-  <TooltipRoot>
-    <TooltipTrigger>...</TooltipTrigger>
-    <TooltipPortal>
-      <TooltipContent>
+<Tooltip.Provider>
+  <Tooltip.Root>
+    <Tooltip.Trigger>...</Tooltip.Trigger>
+    <Tooltip.Portal>
+      <Tooltip.Content>
         ...
-        <TooltipArrow />
-      </TooltipContent>
-    </TooltipPortal>
-  </TooltipRoot>
-</TooltipProvider>
+        <Tooltip.Arrow />
+      </Tooltip.Content>
+    </Tooltip.Portal>
+  </Tooltip.Root>
+</Tooltip.Provider>
 ```
 
 **Data Flow:**
 
-- `TooltipProvider`: Optional provider for sharing configuration across multiple tooltips
-- `TooltipRoot`: Manages tooltip state and provides context to child components
-- `TooltipTrigger`: Element that shows/hides tooltip on hover or focus
-- `TooltipPortal`: Renders tooltip content outside normal DOM tree to avoid z-index issues
-- `TooltipContent`: The actual tooltip popup with smart positioning via Floating UI
-- `TooltipArrow`: Optional arrow element pointing to the trigger
+- `Tooltip.Provider`: Optional provider for sharing configuration across multiple tooltips
+- `Tooltip.Root`: Manages tooltip state and provides context to child components
+- `Tooltip.Trigger`: Element that shows/hides tooltip on hover or focus
+- `Tooltip.Portal`: Renders tooltip content outside normal DOM tree to avoid z-index issues
+- `Tooltip.Content`: The actual tooltip popup with smart positioning via Floating UI
+- `Tooltip.Arrow`: Optional arrow element pointing to the trigger
 
 ---
 
@@ -182,16 +167,16 @@ Simplest tooltip with default configuration:
 ```tsx {3-13}
 export function BasicTooltip() {
   return (
-    <TooltipProvider>
-      <TooltipRoot>
-        <TooltipTrigger>
+    <Tooltip.Provider>
+      <Tooltip.Root>
+        <Tooltip.Trigger>
           <button>Hover me</button>
-        </TooltipTrigger>
-        <TooltipPortal>
-          <TooltipContent>Helpful information</TooltipContent>
-        </TooltipPortal>
-      </TooltipRoot>
-    </TooltipProvider>
+        </Tooltip.Trigger>
+        <Tooltip.Portal>
+          <Tooltip.Content>Helpful information</Tooltip.Content>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+    </Tooltip.Provider>
   );
 }
 ```
@@ -201,16 +186,16 @@ export function BasicTooltip() {
 Control tooltip placement and alignment:
 
 ```tsx {6-9}
-<TooltipRoot>
-  <TooltipTrigger>
+<Tooltip.Root>
+  <Tooltip.Trigger>
     <button>Right aligned tooltip</button>
-  </TooltipTrigger>
-  <TooltipPortal>
-    <TooltipContent side='right' align='start' sideOffset={12} alignOffset={4}>
+  </Tooltip.Trigger>
+  <Tooltip.Portal>
+    <Tooltip.Content side='right' align='start' sideOffset={12} alignOffset={4}>
       Appears on the right side
-    </TooltipContent>
-  </TooltipPortal>
-</TooltipRoot>
+    </Tooltip.Content>
+  </Tooltip.Portal>
+</Tooltip.Root>
 ```
 
 ### Tooltip with Arrow
@@ -218,17 +203,17 @@ Control tooltip placement and alignment:
 Add an arrow pointing to the trigger element:
 
 ```tsx {8}
-<TooltipRoot>
-  <TooltipTrigger>
+<Tooltip.Root>
+  <Tooltip.Trigger>
     <button>Tooltip with arrow</button>
-  </TooltipTrigger>
-  <TooltipPortal>
-    <TooltipContent>
+  </Tooltip.Trigger>
+  <Tooltip.Portal>
+    <Tooltip.Content>
       Content with arrow
-      <TooltipArrow width={12} height={6} />
-    </TooltipContent>
-  </TooltipPortal>
-</TooltipRoot>
+      <Tooltip.Arrow width={12} height={6} />
+    </Tooltip.Content>
+  </Tooltip.Portal>
+</Tooltip.Root>
 ```
 
 ### Controlled Tooltip State
@@ -240,14 +225,14 @@ function ControlledTooltip() {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <TooltipRoot isOpen={open} onOpenChange={setOpen}>
-      <TooltipTrigger>
+    <Tooltip.Root isOpen={open} onOpenChange={setOpen}>
+      <Tooltip.Trigger>
         <button>Controlled tooltip</button>
-      </TooltipTrigger>
-      <TooltipPortal>
-        <TooltipContent>Controlled by external state</TooltipContent>
-      </TooltipPortal>
-    </TooltipRoot>
+      </Tooltip.Trigger>
+      <Tooltip.Portal>
+        <Tooltip.Content>Controlled by external state</Tooltip.Content>
+      </Tooltip.Portal>
+    </Tooltip.Root>
   );
 }
 ```
@@ -257,14 +242,14 @@ function ControlledTooltip() {
 Use tooltip to provide primary label instead of description:
 
 ```tsx {3,8}
-<TooltipRoot>
-  <TooltipTrigger>
+<Tooltip.Root>
+  <Tooltip.Trigger>
     <button aria-label='Close'>✕</button>
-  </TooltipTrigger>
-  <TooltipPortal>
-    <TooltipContent asLabel={true}>Close dialog</TooltipContent>
-  </TooltipPortal>
-</TooltipRoot>
+  </Tooltip.Trigger>
+  <Tooltip.Portal>
+    <Tooltip.Content asLabel={true}>Close dialog</Tooltip.Content>
+  </Tooltip.Portal>
+</Tooltip.Root>
 ```
 
 ### Multiple Tooltips with Shared Provider
@@ -272,25 +257,25 @@ Use tooltip to provide primary label instead of description:
 Share configuration across multiple tooltips:
 
 ```tsx {1}
-<TooltipProvider delayDuration={500} skipDelayDuration={200}>
-  <TooltipRoot>
-    <TooltipTrigger>
+<Tooltip.Provider delayDuration={500} skipDelayDuration={200}>
+  <Tooltip.Root>
+    <Tooltip.Trigger>
       <button>First tooltip</button>
-    </TooltipTrigger>
-    <TooltipPortal>
-      <TooltipContent>First tooltip content</TooltipContent>
-    </TooltipPortal>
-  </TooltipRoot>
+    </Tooltip.Trigger>
+    <Tooltip.Portal>
+      <Tooltip.Content>First tooltip content</Tooltip.Content>
+    </Tooltip.Portal>
+  </Tooltip.Root>
 
-  <TooltipRoot>
-    <TooltipTrigger>
+  <Tooltip.Root>
+    <Tooltip.Trigger>
       <button>Second tooltip</button>
-    </TooltipTrigger>
-    <TooltipPortal>
-      <TooltipContent>Second tooltip content</TooltipContent>
-    </TooltipPortal>
-  </TooltipRoot>
-</TooltipProvider>
+    </Tooltip.Trigger>
+    <Tooltip.Portal>
+      <Tooltip.Content>Second tooltip content</Tooltip.Content>
+    </Tooltip.Portal>
+  </Tooltip.Root>
+</Tooltip.Provider>
 ```
 
 ### Tooltip with Custom Delays
@@ -298,14 +283,14 @@ Share configuration across multiple tooltips:
 Override default delay timing for specific tooltip:
 
 ```tsx {1}
-<TooltipRoot delay={300} hideDelay={100}>
-  <TooltipTrigger>
+<Tooltip.Root delay={300} hideDelay={100}>
+  <Tooltip.Trigger>
     <button>Quick tooltip</button>
-  </TooltipTrigger>
-  <TooltipPortal>
-    <TooltipContent>Shows quickly with custom timing</TooltipContent>
-  </TooltipPortal>
-</TooltipRoot>
+  </Tooltip.Trigger>
+  <Tooltip.Portal>
+    <Tooltip.Content>Shows quickly with custom timing</Tooltip.Content>
+  </Tooltip.Portal>
+</Tooltip.Root>
 ```
 
 ### Disabled Tooltip
@@ -317,14 +302,14 @@ function DisabledExample() {
   const [disabled, setDisabled] = React.useState(false);
 
   return (
-    <TooltipRoot disabled={disabled}>
-      <TooltipTrigger>
+    <Tooltip.Root disabled={disabled}>
+      <Tooltip.Trigger>
         <button>Toggle disabled: {disabled ? 'Yes' : 'No'}</button>
-      </TooltipTrigger>
-      <TooltipPortal>
-        <TooltipContent>This tooltip can be disabled</TooltipContent>
-      </TooltipPortal>
-    </TooltipRoot>
+      </Tooltip.Trigger>
+      <Tooltip.Portal>
+        <Tooltip.Content>This tooltip can be disabled</Tooltip.Content>
+      </Tooltip.Portal>
+    </Tooltip.Root>
   );
 }
 ```
@@ -334,16 +319,16 @@ function DisabledExample() {
 Configure collision detection and boundaries:
 
 ```tsx {6-8}
-<TooltipRoot>
-  <TooltipTrigger>
+<Tooltip.Root>
+  <Tooltip.Trigger>
     <button>Smart positioning</button>
-  </TooltipTrigger>
-  <TooltipPortal>
-    <TooltipContent avoidCollisions={true} collisionPadding={20} hideWhenDetached={true}>
+  </Tooltip.Trigger>
+  <Tooltip.Portal>
+    <Tooltip.Content avoidCollisions={true} collisionPadding={20} hideWhenDetached={true}>
       Automatically avoids viewport edges
-    </TooltipContent>
-  </TooltipPortal>
-</TooltipRoot>
+    </Tooltip.Content>
+  </Tooltip.Portal>
+</Tooltip.Root>
 ```
 
 ### Tooltip with Custom Container
@@ -358,14 +343,14 @@ function CustomContainerTooltip() {
     <div>
       <div ref={containerRef} />
 
-      <TooltipRoot>
-        <TooltipTrigger>
+      <Tooltip.Root>
+        <Tooltip.Trigger>
           <button>Custom container</button>
-        </TooltipTrigger>
-        <TooltipPortal container={containerRef.current || undefined}>
-          <TooltipContent>Rendered in custom container</TooltipContent>
-        </TooltipPortal>
-      </TooltipRoot>
+        </Tooltip.Trigger>
+        <Tooltip.Portal container={containerRef.current || undefined}>
+          <Tooltip.Content>Rendered in custom container</Tooltip.Content>
+        </Tooltip.Portal>
+      </Tooltip.Root>
     </div>
   );
 }
@@ -378,21 +363,21 @@ Interactive tooltip that remains visible when hovering over the content (WCAG 1.
 ```tsx {3-4}
 function HoverableTooltip() {
   return (
-    <TooltipProvider disableHoverableContent={false}>
-      <TooltipRoot hideDelay={300}>
-        <TooltipTrigger>
+    <Tooltip.Provider disableHoverableContent={false}>
+      <Tooltip.Root hideDelay={300}>
+        <Tooltip.Trigger>
           <button>Hover to see interactive content</button>
-        </TooltipTrigger>
-        <TooltipPortal>
-          <TooltipContent>
+        </Tooltip.Trigger>
+        <Tooltip.Portal>
+          <Tooltip.Content>
             <div>
               <p>You can move your pointer to this content.</p>
               <p>It stays visible while hovering!</p>
             </div>
-          </TooltipContent>
-        </TooltipPortal>
-      </TooltipRoot>
-    </TooltipProvider>
+          </Tooltip.Content>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+    </Tooltip.Provider>
   );
 }
 ```
@@ -401,7 +386,7 @@ function HoverableTooltip() {
 
 ## API Reference
 
-### TooltipProvider
+### Tooltip.Provider
 
 Optional provider for sharing configuration across multiple tooltip instances.
 
@@ -427,7 +412,7 @@ Optional provider for sharing configuration across multiple tooltip instances.
 | `data-tooltip-provider` | `""`      | Identifies provider wrapper |
 | `data-skip-delay`       | `boolean` | Indicates skip delay mode   |
 
-### TooltipRoot
+### Tooltip.Root
 
 Root component that manages tooltip state and provides context to child components.
 
@@ -449,7 +434,7 @@ Root component that manages tooltip state and provides context to child componen
 | -------------- | ----------------- | -------------------------- | --------------------------- |
 | `onOpenChange` | `(open: boolean)` | Tooltip visibility changes | User interaction or control |
 
-### TooltipTrigger
+### Tooltip.Trigger
 
 The trigger element that shows/hides the tooltip on hover or focus. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
@@ -495,7 +480,7 @@ The trigger element that shows/hides the tooltip on hover or focus. Extends all 
 | `data-placement` | `Side`               | Indicates tooltip placement |
 | `data-disabled`  | `boolean`            | Indicates disabled state    |
 
-### TooltipPortal
+### Tooltip.Portal
 
 Portal component for rendering tooltip outside normal DOM tree.
 
@@ -513,7 +498,7 @@ Portal component for rendering tooltip outside normal DOM tree.
 | ---- | ---------- | ----------------------------- | -------------- |
 | None | -          | Portal manages rendering only | -              |
 
-### TooltipContent
+### Tooltip.Content
 
 The content that displays in the tooltip popup with smart positioning.
 
@@ -557,7 +542,7 @@ The content that displays in the tooltip popup with smart positioning.
 | `data-placement` | `Placement`          | Indicates actual placement     |
 | `data-as-label`  | `boolean`            | Indicates label vs description |
 
-### TooltipArrow
+### Tooltip.Arrow
 
 Optional arrow pointing to the trigger element.
 

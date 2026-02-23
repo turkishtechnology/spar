@@ -6,13 +6,7 @@ description: A headless accordion component that supports single and multiple pa
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import {
-  AccordionRoot,
-  AccordionItem,
-  AccordionHeader,
-  AccordionTrigger,
-  AccordionContent,
-} from '@turkish-technology/spar';
+import { Accordion } from '@turkish-technology/spar';
 
 # Accordion
 
@@ -22,10 +16,10 @@ A collapsible content component that supports single or multiple panel expansion
 
 <div className='accordion-demo-container'>
 <LiveCode
-  code={`<AccordionRoot className='accordion' defaultValue="2">
-        <AccordionItem className='accordion-item' value="1">
-          <AccordionHeader className='accordion-header'>
-            <AccordionTrigger className='accordion-trigger'>
+  code={`<Accordion.Root className='accordion' defaultValue="2">
+        <Accordion.Item className='accordion-item' value="1">
+          <Accordion.Header className='accordion-header'>
+            <Accordion.Trigger className='accordion-trigger'>
               <span className='accordion-icon'></span>
               <span className='accordion-title'>Accordion</span>
               <div className='accordion-expand'>
@@ -33,15 +27,15 @@ A collapsible content component that supports single or multiple panel expansion
                   <path d="M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z"/>
                 </svg> 
               </div>
-            </AccordionTrigger>
-          </AccordionHeader>
-          <AccordionContent className='accordion-content'>
+            </Accordion.Trigger>
+          </Accordion.Header>
+          <Accordion.Content className='accordion-content'>
             The accordion component is a customizable area. Users can add content as per their request.
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem className='accordion-item' value="2">
-          <AccordionHeader className='accordion-header'>
-            <AccordionTrigger className='accordion-trigger'>
+          </Accordion.Content>
+        </Accordion.Item>
+        <Accordion.Item className='accordion-item' value="2">
+          <Accordion.Header className='accordion-header'>
+            <Accordion.Trigger className='accordion-trigger'>
               <span className='accordion-icon'></span>
               <span className='accordion-title'>Accordion</span>
               <div className='accordion-expand'>
@@ -49,15 +43,15 @@ A collapsible content component that supports single or multiple panel expansion
                   <path d="M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z"/>
                 </svg> 
               </div>
-            </AccordionTrigger>
-          </AccordionHeader>
-          <AccordionContent className='accordion-content'>
+            </Accordion.Trigger>
+          </Accordion.Header>
+          <Accordion.Content className='accordion-content'>
             The accordion component is a customizable area. Users can add content as per their request.
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem className='accordion-item' value="3">
-          <AccordionHeader className='accordion-header'>
-            <AccordionTrigger className='accordion-trigger'>
+          </Accordion.Content>
+        </Accordion.Item>
+        <Accordion.Item className='accordion-item' value="3">
+          <Accordion.Header className='accordion-header'>
+            <Accordion.Trigger className='accordion-trigger'>
               <span className='accordion-icon'></span>
               <span className='accordion-title'>Accordion</span>
               <div className='accordion-expand'>
@@ -65,13 +59,13 @@ A collapsible content component that supports single or multiple panel expansion
                   <path d="M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z"/>
                 </svg> 
               </div>
-            </AccordionTrigger> 
-          </AccordionHeader>
-          <AccordionContent className='accordion-content'>
+            </Accordion.Trigger> 
+          </Accordion.Header>
+          <Accordion.Content className='accordion-content'>
             The accordion component is a customizable area. Users can add content as per their request.
-          </AccordionContent>
-        </AccordionItem>
-      </AccordionRoot>`}
+          </Accordion.Content>
+        </Accordion.Item>
+      </Accordion.Root>`}
 cssCode={`.accordion {
 width: 420px;
 display: flex;
@@ -189,13 +183,7 @@ pnpm install @turkish-technology/spar
 ```
 
 ```ts
-import {
-  Accordion,
-  AccordionItem,
-  AccordionHeader,
-  AccordionTrigger,
-  AccordionContent,
-} from '@turkish-technology/spar';
+import { Accordion } from '@turkish-technology/spar';
 ```
 
 ---
@@ -206,18 +194,18 @@ The Accordion component is built as a compound component with multiple parts:
 
 <AnatomyViewer
   parts={[
-    { name: 'root', label: 'Accordion', description: 'Root context provider' },
-    { name: 'item', label: 'AccordionItem', description: 'Single collapsible section' },
-    { name: 'header', label: 'AccordionHeader', description: 'Semantic heading wrapper' },
-    { name: 'trigger', label: 'AccordionTrigger', description: 'Toggle button' },
-    { name: 'content', label: 'AccordionContent', description: 'Collapsible content panel' },
+    { name: 'root', label: 'Root', description: 'Root context provider' },
+    { name: 'item', label: 'Item', description: 'Single collapsible section' },
+    { name: 'header', label: 'Header', description: 'Semantic heading wrapper' },
+    { name: 'trigger', label: 'Trigger', description: 'Toggle button' },
+    { name: 'content', label: 'Content', description: 'Collapsible content panel' },
   ]}
 >
   <div className='accordion-demo-container'>
-    <AccordionRoot className='accordion' defaultValue='2' data-spar-part='root'>
-      <AccordionItem className='accordion-item' value='1' data-spar-part='item'>
-        <AccordionHeader className='accordion-header' data-spar-part='header'>
-          <AccordionTrigger className='accordion-trigger' data-spar-part='trigger'>
+    <Accordion.Root className='accordion' defaultValue='2' data-spar-part='root'>
+      <Accordion.Item className='accordion-item' value='1' data-spar-part='item'>
+        <Accordion.Header className='accordion-header' data-spar-part='header'>
+          <Accordion.Trigger className='accordion-trigger' data-spar-part='trigger'>
             <span className='accordion-icon'></span>
             <span className='accordion-title'>{'Accordion'}</span>
             <div className='accordion-expand'>
@@ -232,17 +220,17 @@ The Accordion component is built as a compound component with multiple parts:
                 <path d='M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z' />
               </svg>
             </div>
-          </AccordionTrigger>
-        </AccordionHeader>
-        <AccordionContent className='accordion-content' data-spar-part='content'>
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className='accordion-content' data-spar-part='content'>
           {
             'The accordion component is a customizable area. Users can add content as per their request.'
           }
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem className='accordion-item' value='2' data-spar-part='item'>
-        <AccordionHeader className='accordion-header' data-spar-part='header'>
-          <AccordionTrigger className='accordion-trigger' data-spar-part='trigger'>
+        </Accordion.Content>
+      </Accordion.Item>
+      <Accordion.Item className='accordion-item' value='2' data-spar-part='item'>
+        <Accordion.Header className='accordion-header' data-spar-part='header'>
+          <Accordion.Trigger className='accordion-trigger' data-spar-part='trigger'>
             <span className='accordion-icon'></span>
             <span className='accordion-title'>{'Accordion'}</span>
             <div className='accordion-expand'>
@@ -257,17 +245,17 @@ The Accordion component is built as a compound component with multiple parts:
                 <path d='M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z' />
               </svg>
             </div>
-          </AccordionTrigger>
-        </AccordionHeader>
-        <AccordionContent className='accordion-content' data-spar-part='content'>
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className='accordion-content' data-spar-part='content'>
           {
             'The accordion component is a customizable area. Users can add content as per their request.'
           }
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem className='accordion-item' value='3' data-spar-part='item'>
-        <AccordionHeader className='accordion-header' data-spar-part='header'>
-          <AccordionTrigger className='accordion-trigger' data-spar-part='trigger'>
+        </Accordion.Content>
+      </Accordion.Item>
+      <Accordion.Item className='accordion-item' value='3' data-spar-part='item'>
+        <Accordion.Header className='accordion-header' data-spar-part='header'>
+          <Accordion.Trigger className='accordion-trigger' data-spar-part='trigger'>
             <span className='accordion-icon'></span>
             <span className='accordion-title'>{'Accordion'}</span>
             <div className='accordion-expand'>
@@ -282,38 +270,38 @@ The Accordion component is built as a compound component with multiple parts:
                 <path d='M13.2292 7.49998L9.99583 10.7333L6.7625 7.49998C6.4375 7.17498 5.9125 7.17498 5.5875 7.49998C5.2625 7.82498 5.2625 8.34998 5.5875 8.67498L9.4125 12.5C9.7375 12.825 10.2625 12.825 10.5875 12.5L14.4125 8.67498C14.7375 8.34998 14.7375 7.82498 14.4125 7.49998C14.0875 7.18331 13.5542 7.17498 13.2292 7.49998Z' />
               </svg>
             </div>
-          </AccordionTrigger>
-        </AccordionHeader>
-        <AccordionContent className='accordion-content' data-spar-part='content'>
+          </Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content className='accordion-content' data-spar-part='content'>
           {
             'The accordion component is a customizable area. Users can add content as per their request.'
           }
-        </AccordionContent>
-      </AccordionItem>
-    </AccordionRoot>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
   </div>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<AccordionRoot>
-  <AccordionItem value='item-1'>
-    <AccordionHeader>
-      <AccordionTrigger>...</AccordionTrigger>
-    </AccordionHeader>
-    <AccordionContent>...</AccordionContent>
-  </AccordionItem>
-</AccordionRoot>
+<Accordion.Root>
+  <Accordion.Item value='item-1'>
+    <Accordion.Header>
+      <Accordion.Trigger>...</Accordion.Trigger>
+    </Accordion.Header>
+    <Accordion.Content>...</Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>
 ```
 
 **Data Flow:**
 
 - `Accordion`: Root context provider that manages state
-- `AccordionItem`: Represents a single collapsible section
-- `AccordionHeader`: Semantic heading wrapper for proper document structure
-- `AccordionTrigger`: Button to toggle the item
-- `AccordionContent`: Panel revealed when open
+- `Accordion.Item`: Represents a single collapsible section
+- `Accordion.Header`: Semantic heading wrapper for proper document structure
+- `Accordion.Trigger`: Button to toggle the item
+- `Accordion.Content`: Panel revealed when open
 
 ---
 
@@ -326,20 +314,20 @@ Basic accordion that allows only one panel to be expanded at a time:
 ```tsx
 export function BasicAccordion() {
   return (
-    <AccordionRoot>
-      <AccordionItem value='a'>
-        <AccordionHeader>
-          <AccordionTrigger>Toggle A</AccordionTrigger>
-        </AccordionHeader>
-        <AccordionContent>Panel A</AccordionContent>
-      </AccordionItem>
-      <AccordionItem value='b'>
-        <AccordionHeader>
-          <AccordionTrigger>Toggle B</AccordionTrigger>
-        </AccordionHeader>
-        <AccordionContent>Panel B</AccordionContent>
-      </AccordionItem>
-    </AccordionRoot>
+    <Accordion.Root>
+      <Accordion.Item value='a'>
+        <Accordion.Header>
+          <Accordion.Trigger>Toggle A</Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content>Panel A</Accordion.Content>
+      </Accordion.Item>
+      <Accordion.Item value='b'>
+        <Accordion.Header>
+          <Accordion.Trigger>Toggle B</Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content>Panel B</Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
   );
 }
 ```
@@ -349,20 +337,20 @@ export function BasicAccordion() {
 Accordion that allows multiple panels to be expanded simultaneously:
 
 ```tsx
-<AccordionRoot type='multiple' defaultValue={['a']}>
-  <AccordionItem value='a'>
-    <AccordionHeader>
-      <AccordionTrigger>Section A</AccordionTrigger>
-    </AccordionHeader>
-    <AccordionContent>...</AccordionContent>
-  </AccordionItem>
-  <AccordionItem value='b'>
-    <AccordionHeader>
-      <AccordionTrigger>Section B</AccordionTrigger>
-    </AccordionHeader>
-    <AccordionContent>...</AccordionContent>
-  </AccordionItem>
-</AccordionRoot>
+<Accordion.Root type='multiple' defaultValue={['a']}>
+  <Accordion.Item value='a'>
+    <Accordion.Header>
+      <Accordion.Trigger>Section A</Accordion.Trigger>
+    </Accordion.Header>
+    <Accordion.Content>...</Accordion.Content>
+  </Accordion.Item>
+  <Accordion.Item value='b'>
+    <Accordion.Header>
+      <Accordion.Trigger>Section B</Accordion.Trigger>
+    </Accordion.Header>
+    <Accordion.Content>...</Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>
 ```
 
 ### Controlled State Management
@@ -372,9 +360,9 @@ Accordion with external state control and change handling:
 ```tsx
 const [openItems, setOpenItems] = React.useState<string[]>(['a']);
 
-<AccordionRoot type='multiple' value={openItems} onValueChange={setOpenItems}>
+<Accordion.Root type='multiple' value={openItems} onValueChange={setOpenItems}>
   {/* ...items */}
-</AccordionRoot>;
+</Accordion.Root>;
 ```
 
 ---
@@ -397,7 +385,7 @@ The root container that provides context and manages the state for all accordion
 | `disabled?`      | `boolean`                             | `false`      | Disables all accordion items                           |
 | `orientation?`   | `"vertical" \| "horizontal"`          | `"vertical"` | Orientation for keyboard navigation                    |
 | `as?`            | `React.ElementType`                   | `"div"`      | Polymorphic component type                             |
-| `children`       | `React.ReactNode`                     | -            | AccordionItem components                               |
+| `children`       | `React.ReactNode`                     | -            | Accordion.Item components                               |
 
 **Events**
 
@@ -411,7 +399,7 @@ The root container that provides context and manages the state for all accordion
 | ------------------ | ---------------------------- | -------------------------------- |
 | `data-orientation` | `"vertical" \| "horizontal"` | Indicates navigation orientation |
 
-### AccordionItem
+### Accordion.Item
 
 Individual accordion item that contains a header and content panel.
 
@@ -422,7 +410,7 @@ Individual accordion item that contains a header and content panel.
 | `value`     | `string`            | -       | Unique identifier for the item                  |
 | `disabled?` | `boolean`           | `false` | Disables this specific item                     |
 | `as?`       | `React.ElementType` | `"div"` | Polymorphic component type                      |
-| `children`  | `React.ReactNode`   | -       | AccordionHeader and AccordionContent components |
+| `children`  | `React.ReactNode`   | -       | Accordion.Header and Accordion.Content components |
 
 **Events**
 
@@ -437,7 +425,7 @@ Individual accordion item that contains a header and content panel.
 | `data-state`    | `"open" \| "closed"` | Indicates expansion state |
 | `data-disabled` | `boolean`            | Indicates disabled state  |
 
-### AccordionHeader
+### Accordion.Header
 
 Semantic heading wrapper for the accordion trigger button.
 
@@ -447,7 +435,7 @@ Semantic heading wrapper for the accordion trigger button.
 | ---------- | ------------------- | ------- | -------------------------------------------- |
 | `level?`   | `number`            | `3`     | Heading level (1-6) for document hierarchy   |
 | `as?`      | `React.ElementType` | `"h3"`  | Polymorphic component type (heading element) |
-| `children` | `React.ReactNode`   | -       | AccordionTrigger component                   |
+| `children` | `React.ReactNode`   | -       | Accordion.Trigger component                   |
 
 **Events**
 
@@ -455,7 +443,7 @@ Semantic heading wrapper for the accordion trigger button.
 | ---- | ---------- | ------------------------- | -------------- |
 | None | -          | Header is purely semantic | -              |
 
-### AccordionTrigger
+### Accordion.Trigger
 
 Button that toggles the visibility of the associated content panel.
 
@@ -493,7 +481,7 @@ Button that toggles the visibility of the associated content panel.
 | `data-state`    | `"open" \| "closed"` | Indicates expansion state |
 | `data-disabled` | `""`                 | Present when disabled     |
 
-### AccordionContent
+### Accordion.Content
 
 Collapsible panel containing the accordion item content.
 

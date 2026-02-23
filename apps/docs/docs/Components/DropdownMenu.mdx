@@ -6,21 +6,7 @@ description: Accessible dropdown menu component with keyboard navigation, typeah
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import {
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
-  DropdownMenuGroup,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-} from '@turkish-technology/spar';
+import { DropdownMenu } from '@turkish-technology/spar';
 
 # DropdownMenu
 
@@ -30,8 +16,8 @@ Accessible dropdown menu component for creating interactive command menus with k
 
 <div className='dropdown-demo-container'>
 <LiveCode
-  code={`<DropdownMenuRoot>
-        <DropdownMenuTrigger className='dropdown-trigger'>
+  code={`<DropdownMenu.Root>
+        <DropdownMenu.Trigger className='dropdown-trigger'>
           Options
           <svg
             className='dropdown-svg'
@@ -43,26 +29,26 @@ Accessible dropdown menu component for creating interactive command menus with k
           >
             <path d='M13.2292 7.5001L9.99583 10.7334L6.7625 7.5001C6.4375 7.1751 5.9125 7.1751 5.5875 7.5001C5.2625 7.8251 5.2625 8.3501 5.5875 8.6751L9.4125 12.5001C9.7375 12.8251 10.2625 12.8251 10.5875 12.5001L14.4125 8.6751C14.7375 8.3501 14.7375 7.8251 14.4125 7.5001C14.0875 7.18343 13.5542 7.1751 13.2292 7.5001Z' />
           </svg>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className='dropdown-content' align='end' sideOffset={4}>
-          <DropdownMenuItem className='dropdown-item'>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content className='dropdown-content' align='end' sideOffset={4}>
+          <DropdownMenu.Item className='dropdown-item'>
             <span className='dropdown-item-avatar'></span>
             Alice
-          </DropdownMenuItem>
-          <DropdownMenuItem className='dropdown-item'>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item className='dropdown-item'>
             <span className='dropdown-item-avatar'></span>
             Bob
-          </DropdownMenuItem>
-          <DropdownMenuItem className='dropdown-item'>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item className='dropdown-item'>
             <span className='dropdown-item-avatar'></span>
             Charlie
-          </DropdownMenuItem>
-          <DropdownMenuItem className='dropdown-item'>
+          </DropdownMenu.Item>
+          <DropdownMenu.Item className='dropdown-item'>
             <span className='dropdown-item-avatar'></span>
             Diana
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenuRoot>`}
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>`}
     cssCode={`.dropdown-trigger {
   margin-inline: auto;
   width: 100px;
@@ -155,21 +141,7 @@ background-color: #474747;
 
 ```tsx
 // Compound component (recommended)
-import {
-  DropdownMenuRoot,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
-  DropdownMenuGroup,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-} from '@turkish-technology/spar';
+import { DropdownMenu } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -185,8 +157,8 @@ The DropdownMenu component is built as a compound component with multiple parts:
   ]}
 >
   <div className='dropdown-demo-container'>
-    <DropdownMenuRoot data-spar-part='root'>
-      <DropdownMenuTrigger data-spar-part='trigger' className='dropdown-trigger'>
+    <DropdownMenu.Root data-spar-part='root'>
+      <DropdownMenu.Trigger data-spar-part='trigger' className='dropdown-trigger'>
         {'Options'}
         <svg
           className='dropdown-svg'
@@ -198,58 +170,58 @@ The DropdownMenu component is built as a compound component with multiple parts:
         >
           <path d='M13.2292 7.5001L9.99583 10.7334L6.7625 7.5001C6.4375 7.1751 5.9125 7.1751 5.5875 7.5001C5.2625 7.8251 5.2625 8.3501 5.5875 8.6751L9.4125 12.5001C9.7375 12.8251 10.2625 12.8251 10.5875 12.5001L14.4125 8.6751C14.7375 8.3501 14.7375 7.8251 14.4125 7.5001C14.0875 7.18343 13.5542 7.1751 13.2292 7.5001Z' />
         </svg>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content
         data-spar-part='content'
         className='dropdown-content'
         align='end'
         sideOffset={4}
       >
-        <DropdownMenuItem data-spar-part='item' className='dropdown-item'>
+        <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
           <span className='dropdown-item-avatar'></span>
           {'Alice'}
-        </DropdownMenuItem>
-        <DropdownMenuItem data-spar-part='item' className='dropdown-item'>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
           <span className='dropdown-item-avatar'></span>
           {'Bob'}
-        </DropdownMenuItem>
-        <DropdownMenuItem data-spar-part='item' className='dropdown-item'>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
           <span className='dropdown-item-avatar'></span>
           {'Charlie'}
-        </DropdownMenuItem>
-        <DropdownMenuItem data-spar-part='item' className='dropdown-item'>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
           <span className='dropdown-item-avatar'></span>
           {'Diana'}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenuRoot>
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   </div>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<DropdownMenuRoot>
-  <DropdownMenuTrigger />
-  <DropdownMenuContent>
-    <DropdownMenuLabel />
-    <DropdownMenuItem />
-    <DropdownMenuGroup>
-      <DropdownMenuItem />
-    </DropdownMenuGroup>
-    <DropdownMenuCheckboxItem />
-    <DropdownMenuRadioGroup>
-      <DropdownMenuRadioItem />
-    </DropdownMenuRadioGroup>
-    <DropdownMenuSub>
-      <DropdownMenuSubTrigger />
-      <DropdownMenuSubContent>
-        <DropdownMenuItem />
-      </DropdownMenuSubContent>
-    </DropdownMenuSub>
-    <DropdownMenuSeparator />
-  </DropdownMenuContent>
-</DropdownMenuRoot>
+<DropdownMenu.Root>
+  <DropdownMenu.Trigger />
+  <DropdownMenu.Content>
+    <DropdownMenu.Label />
+    <DropdownMenu.Item />
+    <DropdownMenu.Group>
+      <DropdownMenu.Item />
+    </DropdownMenu.Group>
+    <DropdownMenu.CheckboxItem />
+    <DropdownMenu.RadioGroup>
+      <DropdownMenu.RadioItem />
+    </DropdownMenu.RadioGroup>
+    <DropdownMenu.Sub>
+      <DropdownMenu.SubTrigger />
+      <DropdownMenu.SubContent>
+        <DropdownMenu.Item />
+      </DropdownMenu.SubContent>
+    </DropdownMenu.Sub>
+    <DropdownMenu.Separator />
+  </DropdownMenu.Content>
+</DropdownMenu.Root>
 ```
 
 **Alternative: Tree-shakeable named imports**
@@ -272,9 +244,9 @@ import {
 
 **Data Flow:**
 
-- `DropdownMenuRoot` manages open/close state and provides context
-- `DropdownMenuTrigger` controls menu visibility and manages focus
-- `DropdownMenuContent` handles positioning, keyboard navigation, and item collection
+- `DropdownMenu.Root` manages open/close state and provides context
+- `DropdownMenu.Trigger` controls menu visibility and manages focus
+- `DropdownMenu.Content` handles positioning, keyboard navigation, and item collection
 - Menu items register themselves for keyboard navigation and typeahead
 - Submenus inherit parent context and manage their own open state
 
@@ -287,15 +259,15 @@ A simple dropdown menu with standard items.
 ```tsx
 function BasicMenu() {
   return (
-    <DropdownMenuRoot>
-      <DropdownMenuTrigger>Actions</DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem onSelect={() => console.log('Edit')}>Edit</DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => console.log('Duplicate')}>Duplicate</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={() => console.log('Delete')}>Delete</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenuRoot>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>Actions</DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item onSelect={() => console.log('Edit')}>Edit</DropdownMenu.Item>
+        <DropdownMenu.Item onSelect={() => console.log('Duplicate')}>Duplicate</DropdownMenu.Item>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item onSelect={() => console.log('Delete')}>Delete</DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 }
 ```
@@ -311,13 +283,13 @@ function ControlledMenu() {
   return (
     <>
       <p>Menu is {isOpen ? 'open' : 'closed'}</p>
-      <DropdownMenuRoot open={isOpen} onOpenChange={setIsOpen}>
-        <DropdownMenuTrigger>Options</DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem>Option 1</DropdownMenuItem>
-          <DropdownMenuItem>Option 2</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenuRoot>
+      <DropdownMenu.Root open={isOpen} onOpenChange={setIsOpen}>
+        <DropdownMenu.Trigger>Options</DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Item>Option 1</DropdownMenu.Item>
+          <DropdownMenu.Item>Option 2</DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
     </>
   );
 }
@@ -333,18 +305,18 @@ function MenuWithCheckboxes() {
   const [showHistory, setShowHistory] = React.useState(false);
 
   return (
-    <DropdownMenuRoot>
-      <DropdownMenuTrigger>View</DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>Panels</DropdownMenuLabel>
-        <DropdownMenuCheckboxItem checked={showBookmarks} onCheckedChange={setShowBookmarks}>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>View</DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Label>Panels</DropdownMenu.Label>
+        <DropdownMenu.CheckboxItem checked={showBookmarks} onCheckedChange={setShowBookmarks}>
           Show Bookmarks
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem checked={showHistory} onCheckedChange={setShowHistory}>
+        </DropdownMenu.CheckboxItem>
+        <DropdownMenu.CheckboxItem checked={showHistory} onCheckedChange={setShowHistory}>
           Show History
-        </DropdownMenuCheckboxItem>
-      </DropdownMenuContent>
-    </DropdownMenuRoot>
+        </DropdownMenu.CheckboxItem>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 }
 ```
@@ -358,16 +330,16 @@ function MenuWithRadioGroup() {
   const [textAlign, setTextAlign] = React.useState('left');
 
   return (
-    <DropdownMenuRoot>
-      <DropdownMenuTrigger>Text Align</DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuRadioGroup value={textAlign} onValueChange={setTextAlign}>
-          <DropdownMenuRadioItem value='left'>Align Left</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value='center'>Align Center</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value='right'>Align Right</DropdownMenuRadioItem>
-        </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenuRoot>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>Text Align</DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.RadioGroup value={textAlign} onValueChange={setTextAlign}>
+          <DropdownMenu.RadioItem value='left'>Align Left</DropdownMenu.RadioItem>
+          <DropdownMenu.RadioItem value='center'>Align Center</DropdownMenu.RadioItem>
+          <DropdownMenu.RadioItem value='right'>Align Right</DropdownMenu.RadioItem>
+        </DropdownMenu.RadioGroup>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 }
 ```
@@ -379,22 +351,22 @@ Create nested menus with directional navigation.
 ```tsx
 function NestedMenu() {
   return (
-    <DropdownMenuRoot>
-      <DropdownMenuTrigger>File</DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem>New File</DropdownMenuItem>
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>Open Recent</DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <DropdownMenuItem>document.txt</DropdownMenuItem>
-            <DropdownMenuItem>project.json</DropdownMenuItem>
-            <DropdownMenuItem>notes.md</DropdownMenuItem>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>Save</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenuRoot>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>File</DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item>New File</DropdownMenu.Item>
+        <DropdownMenu.Sub>
+          <DropdownMenu.SubTrigger>Open Recent</DropdownMenu.SubTrigger>
+          <DropdownMenu.SubContent>
+            <DropdownMenu.Item>document.txt</DropdownMenu.Item>
+            <DropdownMenu.Item>project.json</DropdownMenu.Item>
+            <DropdownMenu.Item>notes.md</DropdownMenu.Item>
+          </DropdownMenu.SubContent>
+        </DropdownMenu.Sub>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item>Save</DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 }
 ```
@@ -406,20 +378,20 @@ Control menu positioning and collision behavior.
 ```tsx
 function CustomPositionMenu() {
   return (
-    <DropdownMenuRoot>
-      <DropdownMenuTrigger>Options</DropdownMenuTrigger>
-      <DropdownMenuContent
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>Options</DropdownMenu.Trigger>
+      <DropdownMenu.Content
         side='right'
         align='start'
         sideOffset={5}
         alignOffset={10}
         avoidCollisions={true}
       >
-        <DropdownMenuItem>Option 1</DropdownMenuItem>
-        <DropdownMenuItem>Option 2</DropdownMenuItem>
-        <DropdownMenuItem>Option 3</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenuRoot>
+        <DropdownMenu.Item>Option 1</DropdownMenu.Item>
+        <DropdownMenu.Item>Option 2</DropdownMenu.Item>
+        <DropdownMenu.Item>Option 3</DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 }
 ```
@@ -431,23 +403,23 @@ Group related items together.
 ```tsx
 function GroupedMenu() {
   return (
-    <DropdownMenuRoot>
-      <DropdownMenuTrigger>Edit</DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>Clipboard</DropdownMenuLabel>
-          <DropdownMenuItem>Cut</DropdownMenuItem>
-          <DropdownMenuItem>Copy</DropdownMenuItem>
-          <DropdownMenuItem>Paste</DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>Transform</DropdownMenuLabel>
-          <DropdownMenuItem>Uppercase</DropdownMenuItem>
-          <DropdownMenuItem>Lowercase</DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenuRoot>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>Edit</DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Group>
+          <DropdownMenu.Label>Clipboard</DropdownMenu.Label>
+          <DropdownMenu.Item>Cut</DropdownMenu.Item>
+          <DropdownMenu.Item>Copy</DropdownMenu.Item>
+          <DropdownMenu.Item>Paste</DropdownMenu.Item>
+        </DropdownMenu.Group>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Group>
+          <DropdownMenu.Label>Transform</DropdownMenu.Label>
+          <DropdownMenu.Item>Uppercase</DropdownMenu.Item>
+          <DropdownMenu.Item>Lowercase</DropdownMenu.Item>
+        </DropdownMenu.Group>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 }
 ```
@@ -461,14 +433,14 @@ function MenuWithDisabledItems() {
   const hasSelection = false;
 
   return (
-    <DropdownMenuRoot>
-      <DropdownMenuTrigger>Edit</DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem disabled={!hasSelection}>Cut</DropdownMenuItem>
-        <DropdownMenuItem disabled={!hasSelection}>Copy</DropdownMenuItem>
-        <DropdownMenuItem>Paste</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenuRoot>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>Edit</DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item disabled={!hasSelection}>Cut</DropdownMenu.Item>
+        <DropdownMenu.Item disabled={!hasSelection}>Copy</DropdownMenu.Item>
+        <DropdownMenu.Item>Paste</DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 }
 ```
@@ -480,14 +452,14 @@ Allow focus to leave the menu without closing.
 ```tsx
 function NonModalMenu() {
   return (
-    <DropdownMenuRoot modal={false}>
-      <DropdownMenuTrigger>Settings</DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem>Preferences</DropdownMenuItem>
-        <DropdownMenuItem>Extensions</DropdownMenuItem>
-        <DropdownMenuItem>Keyboard Shortcuts</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenuRoot>
+    <DropdownMenu.Root modal={false}>
+      <DropdownMenu.Trigger>Settings</DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item>Preferences</DropdownMenu.Item>
+        <DropdownMenu.Item>Extensions</DropdownMenu.Item>
+        <DropdownMenu.Item>Keyboard Shortcuts</DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 }
 ```
@@ -499,22 +471,22 @@ Control when the menu closes on selection.
 ```tsx
 function CustomCloseBehavior() {
   return (
-    <DropdownMenuRoot closeOnSelect={false}>
-      <DropdownMenuTrigger>Multi-Select</DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuCheckboxItem checked={false}>Option 1</DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem checked={false}>Option 2</DropdownMenuCheckboxItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>Keep Open</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenuRoot>
+    <DropdownMenu.Root closeOnSelect={false}>
+      <DropdownMenu.Trigger>Multi-Select</DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.CheckboxItem checked={false}>Option 1</DropdownMenu.CheckboxItem>
+        <DropdownMenu.CheckboxItem checked={false}>Option 2</DropdownMenu.CheckboxItem>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item onSelect={(e) => e.preventDefault()}>Keep Open</DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 }
 ```
 
 ## API Reference
 
-### DropdownMenuRoot
+### DropdownMenu.Root
 
 The root container that manages the dropdown menu state and provides context to all child components.
 
@@ -537,7 +509,7 @@ The root container that manages the dropdown menu state and provides context to 
 | -------------- | ----------------- | ------------------------- | --------------------------------------------- |
 | `onOpenChange` | `(open: boolean)` | Open state change handler | User interaction or programmatic state change |
 
-### DropdownMenuTrigger
+### DropdownMenu.Trigger
 
 The button element that toggles the dropdown menu visibility. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
@@ -581,7 +553,7 @@ The button element that toggles the dropdown menu visibility. Extends all `Butto
 | `data-state`    | `'open' \| 'closed'` | Current state for styling |
 | `data-disabled` | `''`                 | Present when disabled     |
 
-### DropdownMenuContent
+### DropdownMenu.Content
 
 The container for menu items with positioning, keyboard navigation, and typeahead support.
 
@@ -623,7 +595,7 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 | `data-align` | Align    | Current alignment              |
 | `tabIndex`   | `-1`     | Manages focus programmatically |
 
-### DropdownMenuItem
+### DropdownMenu.Item
 
 A selectable menu item.
 
@@ -656,7 +628,7 @@ A selectable menu item.
 | `data-disabled`    | `''`      | Present when disabled                                      |
 | `data-highlighted` | `''`      | Present when highlighted                                   |
 
-### DropdownMenuCheckboxItem
+### DropdownMenu.CheckboxItem
 
 A menu item with checkbox functionality for toggleable options.
 
@@ -687,7 +659,7 @@ A menu item with checkbox functionality for toggleable options.
 | `data-checked` | `'true' \| 'false' \| 'indeterminate'` | Current checked state for styling |
 | `tabIndex`     | `0 \| -1`                              | Controls keyboard focus           |
 
-### DropdownMenuRadioGroup
+### DropdownMenu.RadioGroup
 
 Container for radio menu items to manage mutually exclusive selection.
 
@@ -705,7 +677,7 @@ Container for radio menu items to manage mutually exclusive selection.
 | --------------- | ----------------- | ---------------------- | ------------------------- |
 | `onValueChange` | `(value: string)` | Selected value changes | User selects a radio item |
 
-### DropdownMenuRadioItem
+### DropdownMenu.RadioItem
 
 A radio menu item for mutually exclusive selections within a RadioGroup.
 
@@ -734,7 +706,7 @@ A radio menu item for mutually exclusive selections within a RadioGroup.
 | `data-checked` | `'true' \| 'false'` | Current checked state for styling |
 | `tabIndex`     | `0 \| -1`           | Controls keyboard focus           |
 
-### DropdownMenuSeparator
+### DropdownMenu.Separator
 
 A visual separator between menu sections.
 
@@ -757,7 +729,7 @@ A visual separator between menu sections.
 | ------------------ | -------------- | --------------------- |
 | `data-orientation` | `'horizontal'` | Indicates orientation |
 
-### DropdownMenuLabel
+### DropdownMenu.Label
 
 A non-interactive label for menu sections.
 
@@ -775,7 +747,7 @@ A non-interactive label for menu sections.
 | ---- | ---------- | --------------------- | ------------------------ |
 | N/A  | N/A        | No interactive events | Label is non-interactive |
 
-### DropdownMenuGroup
+### DropdownMenu.Group
 
 A logical grouping container for related menu items.
 
@@ -793,7 +765,7 @@ A logical grouping container for related menu items.
 | ---- | ---------- | --------------------- | ---------------------------------- |
 | N/A  | N/A        | No interactive events | Group is non-interactive container |
 
-### DropdownMenuSub
+### DropdownMenu.Sub
 
 Container for nested submenu functionality.
 
@@ -812,7 +784,7 @@ Container for nested submenu functionality.
 | -------------- | ----------------- | -------------------------- | ------------------------- |
 | `onOpenChange` | `(open: boolean)` | Submenu open state changes | User opens/closes submenu |
 
-### DropdownMenuSubTrigger
+### DropdownMenu.SubTrigger
 
 A menu item that triggers a nested submenu.
 
@@ -842,26 +814,26 @@ A menu item that triggers a nested submenu.
 | `data-state` | `'open' \| 'closed'` | Current state for styling |
 | `tabIndex`   | `0 \| -1`            | Controls keyboard focus   |
 
-### DropdownMenuSubContent
+### DropdownMenu.SubContent
 
-The content container for a nested submenu, inheriting most behavior from DropdownMenuContent.
+The content container for a nested submenu, inheriting most behavior from DropdownMenu.Content.
 
 **Props**
 
-Inherits all props from `DropdownMenuContent`. Default `side` is `'right'` instead of `'bottom'`.
+Inherits all props from `DropdownMenu.Content`. Default `side` is `'right'` instead of `'bottom'`.
 
 | Name                | Type                                     | Default   | Description                                                      |
 | ------------------- | ---------------------------------------- | --------- | ---------------------------------------------------------------- |
-| (All Content props) | -                                        | -         | Same as DropdownMenuContent                                      |
+| (All Content props) | -                                        | -         | Same as DropdownMenu.Content                                      |
 | `side?`             | `'top' \| 'right' \| 'bottom' \| 'left'` | `'right'` | Preferred side for positioning (auto-determined based on parent) |
 
 **Events**
 
-Same as `DropdownMenuContent`.
+Same as `DropdownMenu.Content`.
 
 **HTML Attributes**
 
-Same as `DropdownMenuContent`.
+Same as `DropdownMenu.Content`.
 
 ## Keyboard Interactions
 
