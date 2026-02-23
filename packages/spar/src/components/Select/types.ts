@@ -2,6 +2,7 @@ import type { ElementType, ReactNode, RefObject } from 'react';
 import type { Placement, Strategy, Middleware, VirtualElement } from '@floating-ui/react-dom';
 import type { Direction, PolymorphicProps } from '../../types';
 import type { ButtonProps } from '../Button/types';
+import type { LabelProps } from '../Label/types';
 
 // Re-export Floating UI types for public API
 export type { Placement, Strategy, Middleware, VirtualElement };
@@ -401,19 +402,10 @@ export type SelectGroupProps<T extends ElementType = 'div'> = PolymorphicProps<
 >;
 
 /**
- * Own props for SelectLabel component
- */
-export interface SelectLabelOwnProps {}
-
-/**
  * Props for SelectLabel component
  * @remarks Label for a group of items
  */
-export type SelectLabelProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  SelectLabelOwnProps
->;
+export type SelectLabelProps<T extends ElementType = 'label'> = LabelProps<T>;
 
 /**
  * Own props for SelectSeparator component
