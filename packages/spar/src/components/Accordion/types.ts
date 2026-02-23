@@ -1,6 +1,13 @@
-import type { ElementType, ReactNode } from 'react';
+import type { ElementType } from 'react';
 import type { Orientation, PolymorphicProps } from '../../types';
-import type { ButtonOwnProps } from '../Button/types';
+import type {
+  CollapsibleOwnProps,
+  CollapsibleTriggerRenderProps,
+  CollapsibleTriggerOwnProps,
+  CollapsibleTriggerProps,
+  CollapsibleContentOwnProps,
+  CollapsibleContentProps,
+} from '../Collapsible/types';
 
 export type AccordionType = 'single' | 'multiple';
 
@@ -62,17 +69,11 @@ export type AccordionProps<T extends ElementType = 'div'> = PolymorphicProps<
 /**
  * Own props for AccordionItem component
  */
-export interface AccordionItemOwnProps {
+export interface AccordionItemOwnProps extends CollapsibleOwnProps {
   /**
    * Unique identifier for the item
    */
   value: string;
-
-  /**
-   * Disables this specific item
-   * @defaultValue false
-   */
-  disabled?: boolean;
 }
 
 /**
@@ -108,70 +109,33 @@ export type AccordionHeaderProps<T extends ElementType = 'h3'> = PolymorphicProp
 
 /**
  * Render props provided to children function for AccordionTrigger
+ * @remarks Identical to CollapsibleTriggerRenderProps
  */
-export interface AccordionTriggerRenderProps {
-  /**
-   * Whether the accordion item is currently open/expanded
-   */
-  isOpen: boolean;
-  /**
-   * Whether the accordion item is disabled
-   */
-  disabled: boolean;
-  /**
-   * Function to open the accordion item
-   */
-  open: () => void;
-  /**
-   * Function to close the accordion item
-   */
-  close: () => void;
-  /**
-   * Function to toggle the open state
-   */
-  toggle: () => void;
-}
+export type AccordionTriggerRenderProps = CollapsibleTriggerRenderProps;
 
 /**
  * Own props for AccordionTrigger component
+ * @remarks Identical to CollapsibleTriggerOwnProps
  */
-export interface AccordionTriggerOwnProps extends ButtonOwnProps {
-  /**
-   * Children content or render function
-   */
-  children?: ReactNode | ((state: AccordionTriggerRenderProps) => ReactNode);
-}
+export type AccordionTriggerOwnProps = CollapsibleTriggerOwnProps;
 
 /**
  * Props for AccordionTrigger component
  * @remarks Button that toggles panel visibility
  */
-export type AccordionTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
-  'button',
-  T,
-  AccordionTriggerOwnProps
->;
+export type AccordionTriggerProps<T extends ElementType = 'button'> = CollapsibleTriggerProps<T>;
 
 /**
  * Own props for AccordionContent component
+ * @remarks Identical to CollapsibleContentOwnProps
  */
-export interface AccordionContentOwnProps {
-  /**
-   * Force content to remain mounted when collapsed
-   * @defaultValue false
-   */
-  forceMount?: boolean;
-}
+export type AccordionContentOwnProps = CollapsibleContentOwnProps;
 
 /**
  * Props for AccordionContent component
  * @remarks Collapsible panel content
  */
-export type AccordionContentProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  AccordionContentOwnProps
->;
+export type AccordionContentProps<T extends ElementType = 'div'> = CollapsibleContentProps<T>;
 
 // Internal context types
 
