@@ -1,18 +1,19 @@
-import { useCallback } from 'react';
+import { useCallback, ElementType } from 'react';
 import { PopoverCloseProps, PopoverCloseRenderProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * Close button component that automatically closes the popover
  */
-export const PopoverClose = ({
-  as = 'button',
+export const PopoverClose = <T extends ElementType = 'button'>({
+  as,
   children,
   onClick,
   ref,
   ...props
-}: PopoverCloseProps) => {
+}: PopoverCloseProps<T>) => {
   const { closePopover, state } = usePopoverContext();
 
   const handleClick = useCallback(
@@ -29,8 +30,16 @@ export const PopoverClose = ({
     close: closePopover,
   };
 
+  const buttonProps = {
+    ...(as && { as }),
+    ...(ref && { ref }),
+    onClick: handleClick,
+    'data-popover-close': '',
+    ...props,
+  } as ButtonProps<T>;
+
   return (
-    <Button as={as} ref={ref} onClick={handleClick} data-popover-close='' {...props}>
+    <Button {...buttonProps}>
       {typeof children === 'function' ? children(renderProps) : children}
     </Button>
   );

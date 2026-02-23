@@ -1,5 +1,6 @@
 import type { ElementType, ReactNode } from 'react';
 import type { Orientation, PolymorphicProps } from '../../types';
+import type { ButtonOwnProps } from '../Button/types';
 
 export type AccordionType = 'single' | 'multiple';
 
@@ -134,7 +135,7 @@ export interface AccordionTriggerRenderProps {
 /**
  * Own props for AccordionTrigger component
  */
-export interface AccordionTriggerOwnProps {
+export interface AccordionTriggerOwnProps extends ButtonOwnProps {
   /**
    * Children content or render function
    */

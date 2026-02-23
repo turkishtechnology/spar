@@ -1,20 +1,21 @@
-import { useCallback } from 'react';
+import { useCallback, ElementType } from 'react';
 import { useSelectContext } from './hooks';
 import type { SelectTriggerProps, SelectTriggerRenderProps } from './types';
 import { useMergedRef } from '@/hooks';
 import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * Trigger button that toggles the select dropdown. Handles keyboard navigation and accessibility attributes.
  */
-export const SelectTrigger = ({
+export const SelectTrigger = <T extends ElementType = 'button'>({
   ref,
-  as = 'button',
+  as,
   onClick,
   onKeyDown,
   children,
   ...props
-}: SelectTriggerProps) => {
+}: SelectTriggerProps<T>) => {
   const context = useSelectContext();
   const mergedRef = useMergedRef(context.triggerRef, ref);
 
@@ -63,25 +64,27 @@ export const SelectTrigger = ({
     toggle: () => context.onOpenChange(!context.open),
   };
 
+  const buttonProps = {
+    ...(as && { as }),
+    ref: mergedRef,
+    disabled: context.disabled,
+    autoFocus: context.autoFocus,
+    role: 'combobox' as const,
+    'aria-haspopup': 'listbox' as const,
+    'aria-expanded': context.open,
+    'aria-controls': context.open ? context.contentId : undefined,
+    'aria-labelledby': context.valueId,
+    'aria-required': context.required || undefined,
+    'data-state': context.open ? 'open' : 'closed',
+    'data-required': context.required ? '' : undefined,
+    'data-placeholder': !context.value ? '' : undefined,
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    ...props,
+  } as ButtonProps<T>;
+
   return (
-    <Button
-      as={as}
-      ref={mergedRef}
-      disabled={context.disabled}
-      autoFocus={context.autoFocus}
-      role='combobox'
-      aria-haspopup='listbox'
-      aria-expanded={context.open}
-      aria-controls={context.open ? context.contentId : undefined}
-      aria-labelledby={context.valueId}
-      aria-required={context.required || undefined}
-      data-state={context.open ? 'open' : 'closed'}
-      data-required={context.required ? '' : undefined}
-      data-placeholder={!context.value ? '' : undefined}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      {...props}
-    >
+    <Button {...buttonProps}>
       {typeof children === 'function' ? children(renderProps) : children}
     </Button>
   );
