@@ -1,4 +1,5 @@
 import React, { type ElementType } from 'react';
+import { useMergedRef } from '@/hooks';
 import type { SelectArrowProps } from './types';
 
 /**
@@ -14,18 +15,7 @@ export const SelectArrow = <T extends ElementType = 'svg'>({
 }: SelectArrowProps<T>) => {
   const Component = as || 'svg';
   const arrowRef = React.useRef<SVGSVGElement>(null);
-
-  // Merge external ref with internal ref
-  React.useEffect(() => {
-    if (ref) {
-      if (typeof ref === 'function') {
-        ref(arrowRef.current);
-      } else if (ref) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (ref as any).current = arrowRef.current;
-      }
-    }
-  }, [ref]);
+  const mergedRef = useMergedRef(arrowRef, ref);
 
   // Note: Arrow positioning is handled by Floating UI's arrow middleware
   // Users must pass this component's ref to SelectContent's arrowRef prop for proper positioning
@@ -37,7 +27,7 @@ export const SelectArrow = <T extends ElementType = 'svg'>({
 
   return (
     <Component
-      ref={arrowRef}
+      ref={mergedRef}
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
