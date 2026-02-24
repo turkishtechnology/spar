@@ -1,6 +1,6 @@
 import type { ComponentProps, ElementType, ReactNode, SyntheticEvent, RefObject } from 'react';
 import type { CheckedState, Side, Align, Direction, PolymorphicProps } from '../../types';
-import type { ButtonProps } from '../Button/types';
+import type { ButtonOwnProps } from '../Button/types';
 
 export type DropdownMenuFocusStrategy = 'first' | 'last' | 'none';
 
@@ -83,15 +83,24 @@ export interface DropdownMenuProps {
 }
 
 /**
- * Props for DropdownMenuTrigger component
- * @remarks Button that toggles menu visibility
+ * Own props for DropdownMenuTrigger component
  */
-export interface DropdownMenuTriggerProps extends Omit<ButtonProps, 'children'> {
+export interface DropdownMenuTriggerOwnProps extends ButtonOwnProps {
   /**
    * Children content or render function for render props pattern
    */
   children?: ReactNode | ((state: DropdownMenuTriggerRenderProps) => ReactNode);
 }
+
+/**
+ * Props for DropdownMenuTrigger component
+ * @remarks Button that toggles menu visibility
+ */
+export type DropdownMenuTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  DropdownMenuTriggerOwnProps
+>;
 
 /**
  * Own props for DropdownMenuContent component

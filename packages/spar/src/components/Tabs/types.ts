@@ -1,6 +1,6 @@
 import type { ElementType, RefObject } from 'react';
 import type { Direction, Orientation, PolymorphicProps } from '../../types';
-import type { ButtonProps } from '../Button/types';
+import type { ButtonOwnProps } from '../Button/types';
 
 export type TabsActivationMode = 'automatic' | 'manual';
 
@@ -98,26 +98,29 @@ export interface TabsTriggerRenderProps {
 }
 
 /**
- * Props for TabsTrigger component
- * @remarks Interactive tab button that selects a panel
+ * Own props for TabsTrigger component
  */
-export interface TabsTriggerProps extends Omit<ButtonProps, 'children'> {
+export interface TabsTriggerOwnProps extends ButtonOwnProps {
   /**
    * Unique identifier for the tab
    */
   value: string;
 
   /**
-   * Disables this specific tab
-   * @defaultValue false
-   */
-  disabled?: boolean;
-
-  /**
    * Children content or render function
    */
   children?: React.ReactNode | ((state: TabsTriggerRenderProps) => React.ReactNode);
 }
+
+/**
+ * Props for TabsTrigger component
+ * @remarks Interactive tab button that selects a panel
+ */
+export type TabsTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  TabsTriggerOwnProps
+>;
 
 /**
  * Own props for TabsContent component

@@ -1,5 +1,6 @@
 import type { ElementType, ReactNode, RefObject } from 'react';
-import { Side, Align, PolymorphicProps } from '../../types';
+import type { Side, Align, PolymorphicProps } from '../../types';
+import type { ButtonOwnProps } from '../Button/types';
 
 export type Sticky = 'partial' | 'always';
 
@@ -106,7 +107,7 @@ export interface TooltipProps {
 /**
  * Own props for TooltipTrigger
  */
-export interface TooltipTriggerOwnProps {
+export interface TooltipTriggerOwnProps extends ButtonOwnProps {
   /**
    * Children content or render function for render props pattern
    */

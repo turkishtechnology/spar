@@ -1,13 +1,14 @@
 import type {
-  AriaAttributes,
   CSSProperties,
+  ElementType,
   KeyboardEvent,
   MouseEvent,
   FocusEvent,
   PointerEvent,
   ReactNode,
 } from 'react';
-import type { ButtonProps } from '../Button/types';
+import type { PolymorphicProps } from '../../types';
+import type { ButtonOwnProps } from '../Button/types';
 
 /**
  * Render props provided to children function for Switch
@@ -44,11 +45,10 @@ export interface SwitchRenderProps {
 }
 
 /**
- * Props for Switch component
- * @remarks Fully accessible, headless switch component providing binary toggle functionality
+ * Own props for Switch component
+ * @remarks Extends ButtonOwnProps for shared button behavior
  */
-export interface SwitchProps
-  extends Omit<ButtonProps, 'onChange' | 'checked' | 'defaultChecked' | 'children'> {
+export interface SwitchOwnProps extends ButtonOwnProps {
   /**
    * Controlled checked state
    * @remarks When provided, component operates in controlled mode
@@ -68,28 +68,6 @@ export interface SwitchProps
   onChange?: (checked: boolean) => void;
 
   /**
-   * Disabled state - prevents interaction and is properly announced to screen readers
-   * @defaultValue false
-   */
-  disabled?: boolean;
-
-  /**
-   * Name attribute for form submission
-   */
-  name?: string;
-
-  /**
-   * Value sent in form data when checked
-   * @defaultValue 'on'
-   */
-  value?: string;
-
-  /**
-   * ID of the form this switch belongs to
-   */
-  form?: string;
-
-  /**
    * Required state for form validation
    * @defaultValue false
    */
@@ -102,32 +80,20 @@ export interface SwitchProps
   readOnly?: boolean;
 
   /**
-   * Auto-focus on mount
-   * @defaultValue false
-   */
-  autoFocus?: boolean;
-
-  /**
-   * Accessible name for the switch
-   * @remarks Required when switch has no visible label
-   */
-  'aria-label'?: AriaAttributes['aria-label'];
-
-  /**
-   * ID of element that labels the switch
-   */
-  'aria-labelledby'?: AriaAttributes['aria-labelledby'];
-
-  /**
-   * ID of element that describes the switch
-   */
-  'aria-describedby'?: AriaAttributes['aria-describedby'];
-
-  /**
    * Children content or render function
    */
   children?: ReactNode | ((state: SwitchRenderProps) => ReactNode);
 }
+
+/**
+ * Props for Switch component
+ * @remarks Fully accessible, headless switch component providing binary toggle functionality
+ */
+export type SwitchProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  SwitchOwnProps
+>;
 
 /**
  * Props for useSwitch hook

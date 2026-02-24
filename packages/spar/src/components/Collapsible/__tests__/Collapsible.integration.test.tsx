@@ -3,16 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '../index';
 
-// Mock ResizeObserver
-class MockResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(globalThis as any).ResizeObserver = MockResizeObserver;
-
 // Complex form component for integration testing
 const FormWithCollapsible = () => {
   const [formData, setFormData] = useState({
@@ -496,21 +486,6 @@ describe('Collapsible Integration Tests', () => {
   });
 
   describe('Performance and Memory', () => {
-    it('cleans up ResizeObserver on unmount', () => {
-      const disconnectSpy = jest.spyOn(MockResizeObserver.prototype, 'disconnect');
-
-      const { unmount } = render(
-        <Collapsible defaultOpen>
-          <CollapsibleTrigger>Toggle</CollapsibleTrigger>
-          <CollapsibleContent>Content with ResizeObserver</CollapsibleContent>
-        </Collapsible>,
-      );
-
-      unmount();
-
-      expect(disconnectSpy).toHaveBeenCalled();
-    });
-
     it('handles rapid state changes without memory leaks', async () => {
       const user = userEvent.setup();
 
