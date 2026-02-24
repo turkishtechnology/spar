@@ -6,17 +6,7 @@ description: Accessible modal and non-modal dialog component with focus manageme
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import {
-  Button,
-  DialogRoot,
-  DialogTrigger,
-  DialogPortal,
-  DialogOverlay,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@turkish-technology/spar';
+import { Button, Dialog } from '@turkish-technology/spar';
 
 # Dialog
 
@@ -29,31 +19,31 @@ A headless modal and non-modal dialog component that provides accessibility feat
     code={`function DialogDemo() {
   const [open, setOpen] = React.useState(false);
   return (
-    <DialogRoot className='dialog' open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='dialog-trigger'>
+    <Dialog.Root className='dialog' open={open} onOpenChange={setOpen}>
+      <Dialog.Trigger className='dialog-trigger'>
         Open Dialog
-      </DialogTrigger>
-      <DialogPortal className='dialog-portal'>
-        <DialogOverlay className='dialog-overlay'/>
-        <DialogContent className='dialog-content'>
-          <DialogTitle className='dialog-title'>
+      </Dialog.Trigger>
+      <Dialog.Portal className='dialog-portal'>
+        <Dialog.Overlay className='dialog-overlay'/>
+        <Dialog.Content className='dialog-content'>
+          <Dialog.Title className='dialog-title'>
             Dialog Title
-          </DialogTitle>
-          <DialogDescription className='dialog-description'>
+          </Dialog.Title>
+          <Dialog.Description className='dialog-description'>
             If you delete this item, it will be permanently removed. Are you sure you want to delete
             it?
-          </DialogDescription>
+          </Dialog.Description>
           <div className='dialog-actions'>
-            <DialogClose className='dialog-close'>
+            <Dialog.Close className='dialog-close'>
               Close
-            </DialogClose>
+            </Dialog.Close>
             <Button className='dialog-continue'>
               Continue
             </Button>
           </div>
-        </DialogContent>
-      </DialogPortal>
-    </DialogRoot>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }`}
 cssCode={`.dialog-overlay {
@@ -170,16 +160,7 @@ color: #f2f5f8;
 ## Installation
 
 ```tsx
-import {
-  DialogRoot,
-  DialogTrigger,
-  DialogPortal,
-  DialogOverlay,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@turkish-technology/spar';
+import { Dialog } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -207,58 +188,58 @@ The Dialog component is built as a compound component with multiple parts:
   ]}
 >
   <div className='dialog-demo-container'>
-    <DialogRoot data-spar-part='root' className='dialog'>
-      <DialogTrigger data-spar-part='trigger' className='dialog-trigger'>
+    <Dialog.Root data-spar-part='root' className='dialog'>
+      <Dialog.Trigger data-spar-part='trigger' className='dialog-trigger'>
         {'Open Dialog'}
-      </DialogTrigger>
-      <DialogPortal data-spar-part='portal' className='dialog-portal'>
-        <DialogOverlay data-spar-part='overlay' className='dialog-overlay' />
-        <DialogContent data-spar-part='content' className='dialog-content'>
-          <DialogTitle data-spar-part='title' className='dialog-title'>
+      </Dialog.Trigger>
+      <Dialog.Portal data-spar-part='portal' className='dialog-portal'>
+        <Dialog.Overlay data-spar-part='overlay' className='dialog-overlay' />
+        <Dialog.Content data-spar-part='content' className='dialog-content'>
+          <Dialog.Title data-spar-part='title' className='dialog-title'>
             {'Dialog Title'}
-          </DialogTitle>
-          <DialogDescription data-spar-part='description' className='dialog-description'>
+          </Dialog.Title>
+          <Dialog.Description data-spar-part='description' className='dialog-description'>
             {
               'If you delete this item, it will be permanently removed. Are you sure you want to delete it?'
             }
-          </DialogDescription>
+          </Dialog.Description>
           <div className='dialog-actions'>
-            <DialogClose data-spar-part='close' className='dialog-close'>
+            <Dialog.Close data-spar-part='close' className='dialog-close'>
               {'Close'}
-            </DialogClose>
+            </Dialog.Close>
             <Button className='dialog-continue'>{'Continue'}</Button>
           </div>
-        </DialogContent>
-      </DialogPortal>
-    </DialogRoot>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   </div>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<DialogRoot>
-  <DialogTrigger />
-  <DialogPortal>
-    <DialogOverlay />
-    <DialogContent>
-      <DialogTitle />
-      <DialogDescription />
-      <DialogClose />
-    </DialogContent>
-  </DialogPortal>
-</DialogRoot>
+<Dialog.Root>
+  <Dialog.Trigger />
+  <Dialog.Portal>
+    <Dialog.Overlay />
+    <Dialog.Content>
+      <Dialog.Title />
+      <Dialog.Description />
+      <Dialog.Close />
+    </Dialog.Content>
+  </Dialog.Portal>
+</Dialog.Root>
 ```
 
 **Data Flow:**
 
-- `DialogRoot` manages open/close state and provides context to all child components
-- `DialogTrigger` toggles the dialog state and maintains focus reference
-- `DialogPortal` renders overlay and content outside the normal DOM tree
-- `DialogOverlay` provides background overlay with click-outside-to-close behavior
-- `DialogContent` handles focus management and keyboard interactions
-- `DialogTitle` and `DialogDescription` provide accessible labeling
-- `DialogClose` provides a way to close the dialog from within the content
+- `Dialog.Root` manages open/close state and provides context to all child components
+- `Dialog.Trigger` toggles the dialog state and maintains focus reference
+- `Dialog.Portal` renders overlay and content outside the normal DOM tree
+- `Dialog.Overlay` provides background overlay with click-outside-to-close behavior
+- `Dialog.Content` handles focus management and keyboard interactions
+- `Dialog.Title` and `Dialog.Description` provide accessible labeling
+- `Dialog.Close` provides a way to close the dialog from within the content
 
 ## Code Examples
 
@@ -277,21 +258,21 @@ function ControlledDialog() {
   };
 
   return (
-    <DialogRoot open={open} onOpenChange={setOpen}>
-      <DialogTrigger>Edit Profile</DialogTrigger>
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <DialogTitle>Edit Profile</DialogTitle>
-          <DialogDescription>Make changes to your profile here.</DialogDescription>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Trigger>Edit Profile</Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay />
+        <Dialog.Content>
+          <Dialog.Title>Edit Profile</Dialog.Title>
+          <Dialog.Description>Make changes to your profile here.</Dialog.Description>
 
           <div>
             <button onClick={handleSave}>Save Changes</button>
-            <DialogClose>Cancel</DialogClose>
+            <Dialog.Close>Cancel</Dialog.Close>
           </div>
-        </DialogContent>
-      </DialogPortal>
-    </DialogRoot>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
 ```
@@ -303,17 +284,17 @@ Use uncontrolled mode when you don't need to manage the dialog state externally.
 ```tsx {3}
 function UncontrolledDialog() {
   return (
-    <DialogRoot defaultOpen={false}>
-      <DialogTrigger>Open Settings</DialogTrigger>
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <DialogTitle>Settings</DialogTitle>
-          <DialogDescription>Configure your application settings.</DialogDescription>
-          <DialogClose>Done</DialogClose>
-        </DialogContent>
-      </DialogPortal>
-    </DialogRoot>
+    <Dialog.Root defaultOpen={false}>
+      <Dialog.Trigger>Open Settings</Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay />
+        <Dialog.Content>
+          <Dialog.Title>Settings</Dialog.Title>
+          <Dialog.Description>Configure your application settings.</Dialog.Description>
+          <Dialog.Close>Done</Dialog.Close>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
 ```
@@ -325,24 +306,24 @@ Create non-modal dialogs that don't block interaction with the underlying page.
 ```tsx {3}
 function NonModalDialog() {
   return (
-    <DialogRoot modal={false}>
-      <DialogTrigger>Open Info Panel</DialogTrigger>
-      <DialogPortal>
-        <DialogContent
+    <Dialog.Root modal={false}>
+      <Dialog.Trigger>Open Info Panel</Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Content
           role='dialog'
           onEscapeKeyDown={(e) => {
             // Custom escape handling for non-modal
             console.log('Escape pressed in non-modal dialog');
           }}
         >
-          <DialogTitle>Information Panel</DialogTitle>
-          <DialogDescription>
+          <Dialog.Title>Information Panel</Dialog.Title>
+          <Dialog.Description>
             This is a non-modal dialog. You can still interact with the page behind it.
-          </DialogDescription>
-          <DialogClose>Close Panel</DialogClose>
-        </DialogContent>
-      </DialogPortal>
-    </DialogRoot>
+          </Dialog.Description>
+          <Dialog.Close>Close Panel</Dialog.Close>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
 ```
@@ -357,11 +338,11 @@ function CustomFocusDialog() {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   return (
-    <DialogRoot open={open} onOpenChange={setOpen}>
-      <DialogTrigger>Create Account</DialogTrigger>
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Trigger>Create Account</Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay />
+        <Dialog.Content
           initialFocus={() => inputRef.current!}
           onOpenAutoFocus={(event) => {
             // Custom logic before auto-focus
@@ -372,8 +353,8 @@ function CustomFocusDialog() {
             console.log('Dialog is about to restore focus');
           }}
         >
-          <DialogTitle>Create New Account</DialogTitle>
-          <DialogDescription>Enter your details to create an account.</DialogDescription>
+          <Dialog.Title>Create New Account</Dialog.Title>
+          <Dialog.Description>Enter your details to create an account.</Dialog.Description>
 
           <div>
             <label>
@@ -384,11 +365,11 @@ function CustomFocusDialog() {
 
           <div>
             <button type='submit'>Create</button>
-            <DialogClose>Cancel</DialogClose>
+            <Dialog.Close>Cancel</Dialog.Close>
           </div>
-        </DialogContent>
-      </DialogPortal>
-    </DialogRoot>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
 ```
@@ -400,23 +381,23 @@ Use the `as` prop to render dialog parts as different HTML elements or custom co
 ```tsx {4,8,10,13,14}
 function PolymorphicDialog() {
   return (
-    <DialogRoot>
-      <DialogTrigger as='div' role='button' tabIndex={0}>
+    <Dialog.Root>
+      <Dialog.Trigger as='div' role='button' tabIndex={0}>
         Custom Trigger Element
-      </DialogTrigger>
-      <DialogPortal>
-        <DialogOverlay as='section' />
-        <DialogContent>
-          <DialogTitle as='h1' level={1}>
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay as='section' />
+        <Dialog.Content>
+          <Dialog.Title as='h1' level={1}>
             Main Dialog Title
-          </DialogTitle>
-          <DialogDescription as='div'>Custom description container</DialogDescription>
-          <DialogClose as='span' role='button' tabIndex={0}>
+          </Dialog.Title>
+          <Dialog.Description as='div'>Custom description container</Dialog.Description>
+          <Dialog.Close as='span' role='button' tabIndex={0}>
             Custom Close Element
-          </DialogClose>
-        </DialogContent>
-      </DialogPortal>
-    </DialogRoot>
+          </Dialog.Close>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
 ```
@@ -430,35 +411,35 @@ function AnimatedDialog() {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <DialogRoot open={open} onOpenChange={setOpen} forceMount>
-      <DialogTrigger>Open Animated Dialog</DialogTrigger>
-      <DialogPortal>
-        <DialogOverlay
+    <Dialog.Root open={open} onOpenChange={setOpen} forceMount>
+      <Dialog.Trigger>Open Animated Dialog</Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay
           style={{
             opacity: open ? 1 : 0,
             transition: 'opacity 0.2s ease',
           }}
         />
-        <DialogContent
+        <Dialog.Content
           style={{
             transform: open ? 'scale(1)' : 'scale(0.95)',
             opacity: open ? 1 : 0,
             transition: 'all 0.2s ease',
           }}
         >
-          <DialogTitle>Animated Dialog</DialogTitle>
-          <DialogDescription>This dialog has custom animations.</DialogDescription>
-          <DialogClose>Close</DialogClose>
-        </DialogContent>
-      </DialogPortal>
-    </DialogRoot>
+          <Dialog.Title>Animated Dialog</Dialog.Title>
+          <Dialog.Description>This dialog has custom animations.</Dialog.Description>
+          <Dialog.Close>Close</Dialog.Close>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
 ```
 
 ## API Reference
 
-### DialogRoot
+### Dialog.Root
 
 The root container that manages dialog state and provides context to all child components.
 
@@ -486,7 +467,7 @@ The root container that manages dialog state and provides context to all child c
 | ------------ | -------------------- | -------------------- |
 | `data-state` | `"open" \| "closed"` | Current dialog state |
 
-### DialogTrigger
+### Dialog.Trigger
 
 Interactive element that opens the dialog when activated. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
@@ -527,7 +508,7 @@ Interactive element that opens the dialog when activated. Extends all `Button` c
 | `data-state`    | `"open" \| "closed"`  | Current dialog state     |
 | `data-disabled` | `string \| undefined` | Disabled state indicator |
 
-### DialogPortal
+### Dialog.Portal
 
 Portal container that renders overlay and content outside the normal DOM tree.
 
@@ -544,7 +525,7 @@ Portal container that renders overlay and content outside the normal DOM tree.
 | ---- | ---------- | ----------- | -------------- |
 | -    | -          | No events   | -              |
 
-### DialogOverlay
+### Dialog.Overlay
 
 Background overlay that appears behind dialog content and handles click-outside behavior.
 
@@ -568,7 +549,7 @@ Background overlay that appears behind dialog content and handles click-outside 
 | ------------ | -------------------- | -------------------- |
 | `data-state` | `"open" \| "closed"` | Current dialog state |
 
-### DialogContent
+### Dialog.Content
 
 Main dialog container that handles focus management and keyboard interactions.
 
@@ -601,7 +582,7 @@ Main dialog container that handles focus management and keyboard interactions.
 | ------------ | -------------------- | -------------------- |
 | `data-state` | `"open" \| "closed"` | Current dialog state |
 
-### DialogTitle
+### Dialog.Title
 
 Dialog title that provides an accessible name for the dialog.
 
@@ -620,7 +601,7 @@ Dialog title that provides an accessible name for the dialog.
 | ---- | ---------- | ----------- | -------------- |
 | -    | -          | No events   | -              |
 
-### DialogDescription
+### Dialog.Description
 
 Dialog description that provides additional accessible information about the dialog.
 
@@ -638,7 +619,7 @@ Dialog description that provides additional accessible information about the dia
 | ---- | ---------- | ----------- | -------------- |
 | -    | -          | No events   | -              |
 
-### DialogClose
+### Dialog.Close
 
 Button that closes the dialog when activated. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 

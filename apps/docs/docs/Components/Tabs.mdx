@@ -6,7 +6,7 @@ description: A headless, accessible tabs component with full keyboard navigation
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { TabsRoot, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/spar';
+import { Tabs } from '@turkish-technology/spar';
 
 # Tabs
 
@@ -16,21 +16,21 @@ A headless, accessible tabs component that provides complete keyboard navigation
 
 <LiveCode
   code={`<div className='tabs-demo-container'>
-<TabsRoot defaultValue='trend' className='tabs'>
-        <TabsList className='tabs-list'>
-          <TabsTrigger value='recent' className='tab'>
+<Tabs.Root defaultValue='trend' className='tabs'>
+        <Tabs.List className='tabs-list'>
+          <Tabs.Trigger value='recent' className='tab'>
             <span className='tab-label'>Recent</span>
-          </TabsTrigger>
-          <TabsTrigger value='popular' className='tab'>
+          </Tabs.Trigger>
+          <Tabs.Trigger value='popular' className='tab'>
             <span className='tab-label'>Popular</span>
-          </TabsTrigger>
-          <TabsTrigger value='trend' className='tab'>
+          </Tabs.Trigger>
+          <Tabs.Trigger value='trend' className='tab'>
             <span className='tab-label'>Trend</span>
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value='trend'>
-        </TabsContent>
-</TabsRoot>
+          </Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value='trend'>
+        </Tabs.Content>
+</Tabs.Root>
 </div>`}
 cssCode={`.tabs {
   height: 29.288px;
@@ -97,14 +97,14 @@ border-color: rgba(255, 255, 255, 0.72);
 - ✅ Lazy content rendering for performance
 - ✅ Force mount option for always-rendered content
 - ✅ Polymorphic rendering with `as` prop
-- ✅ Render props pattern for TabsTrigger customization
+- ✅ Render props pattern for Tabs.Trigger customization
 - ✅ Disabled tab support
 - ✅ RTL (right-to-left) text direction support
 
 ## Installation
 
 ```tsx
-import { TabsRoot, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/spar';
+import { Tabs } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -115,61 +115,61 @@ The Tabs component consists of multiple compound parts that work together:
   parts={[
     {
       name: 'root',
-      label: 'Tabs (Root)',
+      label: 'Root',
       description: 'Root container that manages state and provides context',
     },
     {
       name: 'list',
-      label: 'TabsList',
+      label: 'List',
       description: 'Container for tab triggers with keyboard navigation',
     },
     {
       name: 'trigger',
-      label: 'TabsTrigger',
+      label: 'Trigger',
       description: 'Clickable tab button that activates content',
     },
     {
       name: 'content',
-      label: 'TabsContent',
+      label: 'Content',
       description: 'Content panel associated with each tab',
     },
   ]}
 >
   <div className='tabs-demo-container'>
-    <TabsRoot defaultValue='trend' className='tabs' data-spar-part='root'>
-      <TabsList className='tabs-list' data-spar-part='list'>
-        <TabsTrigger value='recent' className='tab' data-spar-part='trigger'>
+    <Tabs.Root defaultValue='trend' className='tabs' data-spar-part='root'>
+      <Tabs.List className='tabs-list' data-spar-part='list'>
+        <Tabs.Trigger value='recent' className='tab' data-spar-part='trigger'>
           <span className='tab-label'>{'Recent'}</span>
-        </TabsTrigger>
-        <TabsTrigger value='popular' className='tab' data-spar-part='trigger'>
+        </Tabs.Trigger>
+        <Tabs.Trigger value='popular' className='tab' data-spar-part='trigger'>
           <span className='tab-label'>{'Popular'}</span>
-        </TabsTrigger>
-        <TabsTrigger value='trend' className='tab' data-spar-part='trigger'>
+        </Tabs.Trigger>
+        <Tabs.Trigger value='trend' className='tab' data-spar-part='trigger'>
           <span className='tab-label'>{'Trend'}</span>
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value='trend' data-spar-part='content'></TabsContent>
-    </TabsRoot>
+        </Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value='trend' data-spar-part='content'></Tabs.Content>
+    </Tabs.Root>
   </div>
 </AnatomyViewer>
 
 ```tsx
-<TabsRoot>
-  <TabsList>
-    <TabsTrigger />
-    <TabsTrigger />
-  </TabsList>
-  <TabsContent />
-  <TabsContent />
-</TabsRoot>
+<Tabs.Root>
+  <Tabs.List>
+    <Tabs.Trigger />
+    <Tabs.Trigger />
+  </Tabs.List>
+  <Tabs.Content />
+  <Tabs.Content />
+</Tabs.Root>
 ```
 
 ### Data Flow
 
 1. **Tabs (Root)** manages the selected value state and provides context to all child components
-2. **TabsList** handles keyboard navigation between triggers and focus management
-3. **TabsTrigger** components register themselves with the root and handle activation
-4. **TabsContent** components automatically show/hide based on the selected value
+2. **Tabs.List** handles keyboard navigation between triggers and focus management
+3. **Tabs.Trigger** components register themselves with the root and handle activation
+4. **Tabs.Content** components automatically show/hide based on the selected value
 
 ## Code Examples
 
@@ -180,14 +180,14 @@ function ControlledTabs() {
   const [activeTab, setActiveTab] = useState('profile');
 
   return (
-    <TabsRoot value={activeTab} onValueChange={setActiveTab}>
-      <TabsList>
-        <TabsTrigger value='profile'>Profile</TabsTrigger>
-        <TabsTrigger value='settings'>Settings</TabsTrigger>
-      </TabsList>
-      <TabsContent value='profile'>Profile content here</TabsContent>
-      <TabsContent value='settings'>Settings content here</TabsContent>
-    </TabsRoot>
+    <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
+      <Tabs.List>
+        <Tabs.Trigger value='profile'>Profile</Tabs.Trigger>
+        <Tabs.Trigger value='settings'>Settings</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value='profile'>Profile content here</Tabs.Content>
+      <Tabs.Content value='settings'>Settings content here</Tabs.Content>
+    </Tabs.Root>
   );
 }
 ```
@@ -197,16 +197,16 @@ function ControlledTabs() {
 ```tsx
 function VerticalTabs() {
   return (
-    <TabsRoot orientation='vertical' defaultValue='tab1'>
-      <TabsList>
-        <TabsTrigger value='tab1'>First Tab</TabsTrigger>
-        <TabsTrigger value='tab2'>Second Tab</TabsTrigger>
-        <TabsTrigger value='tab3'>Third Tab</TabsTrigger>
-      </TabsList>
-      <TabsContent value='tab1'>First content</TabsContent>
-      <TabsContent value='tab2'>Second content</TabsContent>
-      <TabsContent value='tab3'>Third content</TabsContent>
-    </TabsRoot>
+    <Tabs.Root orientation='vertical' defaultValue='tab1'>
+      <Tabs.List>
+        <Tabs.Trigger value='tab1'>First Tab</Tabs.Trigger>
+        <Tabs.Trigger value='tab2'>Second Tab</Tabs.Trigger>
+        <Tabs.Trigger value='tab3'>Third Tab</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value='tab1'>First content</Tabs.Content>
+      <Tabs.Content value='tab2'>Second content</Tabs.Content>
+      <Tabs.Content value='tab3'>Third content</Tabs.Content>
+    </Tabs.Root>
   );
 }
 ```
@@ -216,16 +216,16 @@ function VerticalTabs() {
 ```tsx
 function ManualActivationTabs() {
   return (
-    <TabsRoot activationMode='manual' defaultValue='home'>
-      <TabsList>
-        <TabsTrigger value='home'>Home</TabsTrigger>
-        <TabsTrigger value='about'>About</TabsTrigger>
-        <TabsTrigger value='contact'>Contact</TabsTrigger>
-      </TabsList>
-      <TabsContent value='home'>Home page content</TabsContent>
-      <TabsContent value='about'>About page content</TabsContent>
-      <TabsContent value='contact'>Contact page content</TabsContent>
-    </TabsRoot>
+    <Tabs.Root activationMode='manual' defaultValue='home'>
+      <Tabs.List>
+        <Tabs.Trigger value='home'>Home</Tabs.Trigger>
+        <Tabs.Trigger value='about'>About</Tabs.Trigger>
+        <Tabs.Trigger value='contact'>Contact</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value='home'>Home page content</Tabs.Content>
+      <Tabs.Content value='about'>About page content</Tabs.Content>
+      <Tabs.Content value='contact'>Contact page content</Tabs.Content>
+    </Tabs.Root>
   );
 }
 ```
@@ -235,9 +235,9 @@ function ManualActivationTabs() {
 ```tsx
 function RenderPropsTabs() {
   return (
-    <TabsRoot defaultValue='dashboard'>
-      <TabsList>
-        <TabsTrigger value='dashboard'>
+    <Tabs.Root defaultValue='dashboard'>
+      <Tabs.List>
+        <Tabs.Trigger value='dashboard'>
           {({ isSelected, isFocused }) => (
             <span className={isSelected ? 'selected' : ''}>
               <DashboardIcon />
@@ -245,14 +245,14 @@ function RenderPropsTabs() {
               {isFocused && <span className='focus-indicator' />}
             </span>
           )}
-        </TabsTrigger>
-        <TabsTrigger value='analytics'>
+        </Tabs.Trigger>
+        <Tabs.Trigger value='analytics'>
           {({ isSelected }) => <span className={isSelected ? 'selected' : ''}>Analytics</span>}
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value='dashboard'>Dashboard content</TabsContent>
-      <TabsContent value='analytics'>Analytics content</TabsContent>
-    </TabsRoot>
+        </Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value='dashboard'>Dashboard content</Tabs.Content>
+      <Tabs.Content value='analytics'>Analytics content</Tabs.Content>
+    </Tabs.Root>
   );
 }
 ```
@@ -262,16 +262,16 @@ function RenderPropsTabs() {
 ```tsx
 function ForceMountTabs() {
   return (
-    <TabsRoot defaultValue='lazy'>
-      <TabsList>
-        <TabsTrigger value='lazy'>Lazy Content</TabsTrigger>
-        <TabsTrigger value='eager'>Always Mounted</TabsTrigger>
-      </TabsList>
-      <TabsContent value='lazy'>This content is only rendered when active</TabsContent>
-      <TabsContent value='eager' forceMount>
+    <Tabs.Root defaultValue='lazy'>
+      <Tabs.List>
+        <Tabs.Trigger value='lazy'>Lazy Content</Tabs.Trigger>
+        <Tabs.Trigger value='eager'>Always Mounted</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value='lazy'>This content is only rendered when active</Tabs.Content>
+      <Tabs.Content value='eager' forceMount>
         This content is always in the DOM (useful for forms, videos, etc.)
-      </TabsContent>
-    </TabsRoot>
+      </Tabs.Content>
+    </Tabs.Root>
   );
 }
 ```
@@ -305,7 +305,7 @@ function ForceMountTabs() {
 | `data-orientation` | `horizontal \| vertical` | Indicates tab orientation |
 | `data-dir`         | `ltr \| rtl`             | Indicates text direction  |
 
-### TabsList
+### Tabs.List
 
 #### Props
 
@@ -322,7 +322,7 @@ function ForceMountTabs() {
 | `aria-orientation` | `horizontal \| vertical` | Indicates tab list orientation       |
 | `data-orientation` | `horizontal \| vertical` | Indicates tab list orientation       |
 
-### TabsTrigger
+### Tabs.Trigger
 
 Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
@@ -373,13 +373,13 @@ Extends all `Button` component props including polymorphic rendering via the `as
 | `data-value`       | `string`                 | Tab's unique value              |
 | `data-autofocus`   | `'' \| undefined`        | Indicates auto-focus state      |
 
-### TabsContent
+### Tabs.Content
 
 #### Props
 
 | Name         | Type                | Default | Description                                     |
 | ------------ | ------------------- | ------- | ----------------------------------------------- |
-| `value`      | `string`            | —       | Unique identifier matching a TabsTrigger value  |
+| `value`      | `string`            | —       | Unique identifier matching a Tabs.Trigger value  |
 | `forceMount` | `boolean`           | `false` | Force content to remain mounted when not active |
 | `as`         | `React.ElementType` | `'div'` | Polymorphic component type                      |
 

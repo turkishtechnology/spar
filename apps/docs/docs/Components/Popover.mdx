@@ -6,12 +6,7 @@ description: A headless popover component with intelligent positioning, focus ma
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import {
-  PopoverRoot,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverClose,
-} from '@turkish-technology/spar';
+import { Popover } from '@turkish-technology/spar';
 
 # Popover
 
@@ -21,23 +16,23 @@ A floating panel component anchored to a trigger element with smart positioning,
 
 <div className='popover-demo-container'>
 <LiveCode
-  code={`<PopoverRoot>
-        <PopoverTrigger className='popover-trigger'>
+  code={`<Popover.Root>
+        <Popover.Trigger className='popover-trigger'>
           Open Popover
-        </PopoverTrigger>
-        <PopoverContent className='popover-content'>
+        </Popover.Trigger>
+        <Popover.Content className='popover-content'>
           <div className='popover-header'>
             <span className='popover-icon'></span>
             <span className='popover-title'>Information</span>
-            <PopoverClose className='popover-close'>
+            <Popover.Close className='popover-close'>
               <svg xmlns="http://www.w3.org/2000/svg" width="7" height="7" viewBox="0 0 7 7" fill="none">
                 <path d="M6.72003 0.157674C6.51675 -0.045608 6.18837 -0.045608 5.98509 0.157674L3.43625 2.7013L0.887404 0.152461C0.684122 -0.0508205 0.355743 -0.0508205 0.152461 0.152461C-0.0508205 0.355743 -0.0508205 0.684122 0.152461 0.887404L2.7013 3.43625L0.152461 5.98509C-0.0508205 6.18837 -0.0508205 6.51675 0.152461 6.72003C0.355743 6.92331 0.684122 6.92331 0.887404 6.72003L3.43625 4.17119L5.98509 6.72003C6.18837 6.92331 6.51675 6.92331 6.72003 6.72003C6.92331 6.51675 6.92331 6.18837 6.72003 5.98509L4.17119 3.43625L6.72003 0.887404C6.9181 0.689334 6.9181 0.355743 6.72003 0.157674Z"/>
               </svg>
-            </PopoverClose>
+            </Popover.Close>
           </div>
           <p className='popover-paragraph'>Lorem ipsum dolor sit amet consectetur. Duis cras laeet ultrices tellus. Vitae id interdum sagittis </p>
-        </PopoverContent>
-      </PopoverRoot>`}
+        </Popover.Content>
+      </Popover.Root>`}
   cssCode={`.popover-trigger {
   border-radius: 8px;
   padding: 12px 14px;
@@ -148,15 +143,7 @@ pnpm install @turkish-technology/spar
 ```
 
 ```ts
-import {
-  PopoverRoot,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverAnchor,
-  PopoverPortal,
-  PopoverClose,
-} from '@turkish-technology/spar';
+import { Popover } from '@turkish-technology/spar';
 ```
 
 ---
@@ -186,15 +173,15 @@ The Popover component is built as a compound component with multiple parts:
   ]}
 >
   <div className='popover-demo-container'>
-    <PopoverRoot data-spar-part='root'>
-      <PopoverTrigger data-spar-part='trigger' className='popover-trigger'>
+    <Popover.Root data-spar-part='root'>
+      <Popover.Trigger data-spar-part='trigger' className='popover-trigger'>
         {'Open Popover'}
-      </PopoverTrigger>
-      <PopoverContent data-spar-part='content' className='popover-content'>
+      </Popover.Trigger>
+      <Popover.Content data-spar-part='content' className='popover-content'>
         <div className='popover-header'>
           <span className='popover-icon'></span>
           <span className='popover-title'>{'Information'}</span>
-          <PopoverClose data-spar-part='close' className='popover-close'>
+          <Popover.Close data-spar-part='close' className='popover-close'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               width='7'
@@ -204,60 +191,60 @@ The Popover component is built as a compound component with multiple parts:
             >
               <path d='M6.72003 0.157674C6.51675 -0.045608 6.18837 -0.045608 5.98509 0.157674L3.43625 2.7013L0.887404 0.152461C0.684122 -0.0508205 0.355743 -0.0508205 0.152461 0.152461C-0.0508205 0.355743 -0.0508205 0.684122 0.152461 0.887404L2.7013 3.43625L0.152461 5.98509C-0.0508205 6.18837 -0.0508205 6.51675 0.152461 6.72003C0.355743 6.92331 0.684122 6.92331 0.887404 6.72003L3.43625 4.17119L5.98509 6.72003C6.18837 6.92331 6.51675 6.92331 6.72003 6.72003C6.92331 6.51675 6.92331 6.18837 6.72003 5.98509L4.17119 3.43625L6.72003 0.887404C6.9181 0.689334 6.9181 0.355743 6.72003 0.157674Z' />
             </svg>
-          </PopoverClose>
+          </Popover.Close>
         </div>
         <p className='popover-paragraph'>
           {
             'Lorem ipsum dolor sit amet consectetur. Duis cras laeet ultrices tellus. Vitae id interdum sagittis '
           }
         </p>
-      </PopoverContent>
-    </PopoverRoot>
+      </Popover.Content>
+    </Popover.Root>
   </div>
 </AnatomyViewer>
 
 ### Structure
 
 ```jsx
-<PopoverRoot>
-  <PopoverTrigger>...</PopoverTrigger>
-  <PopoverContent>
-    <PopoverClose>...</PopoverClose>
-  </PopoverContent>
-</PopoverRoot>;
+<Popover.Root>
+  <Popover.Trigger>...</Popover.Trigger>
+  <Popover.Content>
+    <Popover.Close>...</Popover.Close>
+  </Popover.Content>
+</Popover.Root>;
 
 {
   /* With optional parts */
 }
-<PopoverRoot>
-  <PopoverAnchor>...</PopoverAnchor>
-  <PopoverTrigger>...</PopoverTrigger>
-  <PopoverPortal>
-    <PopoverContent>
-      <PopoverArrow />
+<Popover.Root>
+  <Popover.Anchor>...</Popover.Anchor>
+  <Popover.Trigger>...</Popover.Trigger>
+  <Popover.Portal>
+    <Popover.Content>
+      <Popover.Arrow />
       ...
-    </PopoverContent>
-  </PopoverPortal>
-</PopoverRoot>;
+    </Popover.Content>
+  </Popover.Portal>
+</Popover.Root>;
 ```
 
 **Data Flow:**
 
-- `PopoverRoot` manages the open/closed state and provides context to all child components
-- `PopoverTrigger` toggles the popover visibility and maintains ARIA relationship with content
-- `PopoverContent` positions itself intelligently relative to the trigger with collision detection
-- `PopoverClose` provides a way to programmatically close the popover from within the content
-- Optional `PopoverAnchor` allows positioning relative to a different element than the trigger
-- Optional `PopoverPortal` controls where the content is rendered in the DOM
-- Optional `PopoverArrow` adds a decorative visual pointer to the trigger element
+- `Popover.Root` manages the open/closed state and provides context to all child components
+- `Popover.Trigger` toggles the popover visibility and maintains ARIA relationship with content
+- `Popover.Content` positions itself intelligently relative to the trigger with collision detection
+- `Popover.Close` provides a way to programmatically close the popover from within the content
+- Optional `Popover.Anchor` allows positioning relative to a different element than the trigger
+- Optional `Popover.Portal` controls where the content is rendered in the DOM
+- Optional `Popover.Arrow` adds a decorative visual pointer to the trigger element
 
-- `PopoverRoot`: Root context provider managing popover state
-- `PopoverTrigger`: Button that toggles popover visibility
-- `PopoverContent`: Floating panel with content
-- `PopoverClose`: Optional button to close the popover
-- `PopoverArrow`: Optional decorative arrow element
-- `PopoverAnchor`: Optional custom positioning reference
-- `PopoverPortal`: Optional portal container for custom rendering
+- `Popover.Root`: Root context provider managing popover state
+- `Popover.Trigger`: Button that toggles popover visibility
+- `Popover.Content`: Floating panel with content
+- `Popover.Close`: Optional button to close the popover
+- `Popover.Arrow`: Optional decorative arrow element
+- `Popover.Anchor`: Optional custom positioning reference
+- `Popover.Portal`: Optional portal container for custom rendering
 
 ---
 
@@ -270,12 +257,12 @@ Simple popover with trigger and content:
 ```tsx
 export function BasicPopover() {
   return (
-    <PopoverRoot>
-      <PopoverTrigger>Show Info</PopoverTrigger>
-      <PopoverContent>
+    <Popover.Root>
+      <Popover.Trigger>Show Info</Popover.Trigger>
+      <Popover.Content>
         <p>This is popover content</p>
-      </PopoverContent>
-    </PopoverRoot>
+      </Popover.Content>
+    </Popover.Root>
   );
 }
 ```
@@ -292,12 +279,12 @@ export function ControlledPopover() {
     <div>
       <button onClick={() => setIsOpen(!isOpen)}>External Toggle</button>
 
-      <PopoverRoot open={open} onOpenChange={setOpen}>
-        <PopoverTrigger>Open Popover</PopoverTrigger>
-        <PopoverContent>
+      <Popover.Root open={open} onOpenChange={setOpen}>
+        <Popover.Trigger>Open Popover</Popover.Trigger>
+        <Popover.Content>
           <p>Controlled content</p>
-        </PopoverContent>
-      </PopoverRoot>
+        </Popover.Content>
+      </Popover.Root>
     </div>
   );
 }
@@ -310,16 +297,16 @@ Modal popover that traps focus within the content:
 ```tsx
 export function ModalPopover() {
   return (
-    <PopoverRoot modal={true}>
-      <PopoverTrigger>Open Modal Popover</PopoverTrigger>
-      <PopoverContent trapFocus={true}>
+    <Popover.Root modal={true}>
+      <Popover.Trigger>Open Modal Popover</Popover.Trigger>
+      <Popover.Content trapFocus={true}>
         <h2>Modal Popover</h2>
         <p>Focus is trapped within this popover</p>
         <button>First Focusable</button>
         <button>Second Focusable</button>
-        <PopoverClose>Close</PopoverClose>
-      </PopoverContent>
-    </PopoverRoot>
+        <Popover.Close>Close</Popover.Close>
+      </Popover.Content>
+    </Popover.Root>
   );
 }
 ```
@@ -331,12 +318,12 @@ Popover with specific side and alignment preferences:
 ```tsx
 export function PositionedPopover() {
   return (
-    <PopoverRoot side='top' align='start' sideOffset={16}>
-      <PopoverTrigger>Top-Start Popover</PopoverTrigger>
-      <PopoverContent>
+    <Popover.Root side='top' align='start' sideOffset={16}>
+      <Popover.Trigger>Top-Start Popover</Popover.Trigger>
+      <Popover.Content>
         <p>Positioned at top-start with 16px offset</p>
-      </PopoverContent>
-    </PopoverRoot>
+      </Popover.Content>
+    </Popover.Root>
   );
 }
 ```
@@ -348,13 +335,13 @@ Popover with a decorative arrow pointing to the trigger:
 ```tsx
 export function PopoverWithArrow() {
   return (
-    <PopoverRoot>
-      <PopoverTrigger>Show Popover</PopoverTrigger>
-      <PopoverContent>
-        <PopoverArrow width={12} height={6} />
+    <Popover.Root>
+      <Popover.Trigger>Show Popover</Popover.Trigger>
+      <Popover.Content>
+        <Popover.Arrow width={12} height={6} />
         <p>Content with arrow</p>
-      </PopoverContent>
-    </PopoverRoot>
+      </Popover.Content>
+    </Popover.Root>
   );
 }
 ```
@@ -366,19 +353,19 @@ Popover positioned relative to a different element:
 ```tsx
 export function AnchoredPopover() {
   return (
-    <PopoverRoot>
+    <Popover.Root>
       <div>
-        <PopoverAnchor>
+        <Popover.Anchor>
           <div>Anchor Element</div>
-        </PopoverAnchor>
+        </Popover.Anchor>
 
-        <PopoverTrigger>Open (separate from anchor)</PopoverTrigger>
+        <Popover.Trigger>Open (separate from anchor)</Popover.Trigger>
 
-        <PopoverContent>
+        <Popover.Content>
           <p>Positioned relative to anchor, not trigger</p>
-        </PopoverContent>
+        </Popover.Content>
       </div>
-    </PopoverRoot>
+    </Popover.Root>
   );
 }
 ```
@@ -400,13 +387,13 @@ export function PopoverWithFocusCallbacks() {
   };
 
   return (
-    <PopoverRoot>
-      <PopoverTrigger>Open Popover</PopoverTrigger>
-      <PopoverContent onOpenAutoFocus={handleOpenAutoFocus} onCloseAutoFocus={handleCloseAutoFocus}>
+    <Popover.Root>
+      <Popover.Trigger>Open Popover</Popover.Trigger>
+      <Popover.Content onOpenAutoFocus={handleOpenAutoFocus} onCloseAutoFocus={handleCloseAutoFocus}>
         <input placeholder='Auto-focused input' />
-        <PopoverClose>Close</PopoverClose>
-      </PopoverContent>
-    </PopoverRoot>
+        <Popover.Close>Close</Popover.Close>
+      </Popover.Content>
+    </Popover.Root>
   );
 }
 ```
@@ -428,15 +415,15 @@ export function PopoverWithOutsideHandlers() {
   };
 
   return (
-    <PopoverRoot>
-      <PopoverTrigger>Open Popover</PopoverTrigger>
-      <PopoverContent
+    <Popover.Root>
+      <Popover.Trigger>Open Popover</Popover.Trigger>
+      <Popover.Content
         onPointerDownOutside={handlePointerDownOutside}
         onEscapeKeyDown={handleEscapeKeyDown}
       >
         <p>Try clicking outside or pressing Escape</p>
-      </PopoverContent>
-    </PopoverRoot>
+      </Popover.Content>
+    </Popover.Root>
   );
 }
 ```
@@ -453,14 +440,14 @@ export function PopoverWithCustomPortal() {
     <div>
       <div ref={setContainer} id='custom-portal' />
 
-      <PopoverRoot>
-        <PopoverTrigger>Open Popover</PopoverTrigger>
-        <PopoverPortal container={container}>
-          <PopoverContent>
+      <Popover.Root>
+        <Popover.Trigger>Open Popover</Popover.Trigger>
+        <Popover.Portal container={container}>
+          <Popover.Content>
             <p>Rendered in custom container</p>
-          </PopoverContent>
-        </PopoverPortal>
-      </PopoverRoot>
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
     </div>
   );
 }
@@ -470,7 +457,7 @@ export function PopoverWithCustomPortal() {
 
 ## API Reference
 
-### PopoverRoot
+### Popover.Root
 
 The root container that provides context and manages state for all popover components within it.
 
@@ -486,7 +473,7 @@ The root container that provides context and manages state for all popover compo
 | `side?`         | `"top" \| "bottom" \| "left" \| "right"` | `"bottom"`  | Preferred side for popover positioning           |
 | `align?`        | `"start" \| "center" \| "end"`           | `"center"`  | Preferred alignment relative to trigger          |
 | `sideOffset?`   | `number`                                 | `8`         | Distance in pixels between trigger and popover   |
-| `children`      | `React.ReactNode`                        | -           | PopoverTrigger and PopoverContent components     |
+| `children`      | `React.ReactNode`                        | -           | Popover.Trigger and Popover.Content components     |
 
 **Events**
 
@@ -500,7 +487,7 @@ The root container that provides context and manages state for all popover compo
 | ------------ | -------------------- | ----------------------- |
 | `data-state` | `"open" \| "closed"` | Indicates popover state |
 
-### PopoverTrigger
+### Popover.Trigger
 
 Button element that toggles the popover visibility. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
@@ -545,7 +532,7 @@ Button element that toggles the popover visibility. Extends all `Button` compone
 | `data-disabled` | `string`             | Indicates disabled state  |
 | `disabled`      | `boolean`            | Native disabled attribute |
 
-### PopoverContent
+### Popover.Content
 
 Floating panel container that holds the popover content.
 
@@ -594,7 +581,7 @@ Floating panel container that holds the popover content.
 | `data-side`  | `"top" \| "bottom" \| "left" \| "right"` | Actual positioned side    |
 | `data-align` | `"start" \| "center" \| "end"`           | Actual alignment          |
 
-### PopoverArrow
+### Popover.Arrow
 
 Optional decorative arrow element that points to the trigger.
 
@@ -620,7 +607,7 @@ Optional decorative arrow element that points to the trigger.
 | ----------- | ---------------------------------------- | ------------------------- |
 | `data-side` | `"top" \| "bottom" \| "left" \| "right"` | Indicates positioned side |
 
-### PopoverAnchor
+### Popover.Anchor
 
 Optional element used as positioning reference instead of the trigger. Always renders as a `div` element.
 
@@ -650,7 +637,7 @@ Optional element used as positioning reference instead of the trigger. Always re
 | --------------------- | -------- | ---------------------------- |
 | `data-popover-anchor` | `string` | Identifies as anchor element |
 
-### PopoverPortal
+### Popover.Portal
 
 Optional portal component for rendering content in a different DOM location.
 
@@ -659,7 +646,7 @@ Optional portal component for rendering content in a different DOM location.
 | Name         | Type              | Default         | Description                                       |
 | ------------ | ----------------- | --------------- | ------------------------------------------------- |
 | `container?` | `Element \| null` | `document.body` | Container element to portal into                  |
-| `children`   | `React.ReactNode` | -               | Content to be portaled (typically PopoverContent) |
+| `children`   | `React.ReactNode` | -               | Content to be portaled (typically Popover.Content) |
 
 **Events**
 
@@ -667,7 +654,7 @@ Optional portal component for rendering content in a different DOM location.
 | ---- | ---------- | ------------------------ | -------------- |
 | None | -          | Portal manages rendering | -              |
 
-### PopoverClose
+### Popover.Close
 
 Close button component that automatically closes the popover when clicked. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
