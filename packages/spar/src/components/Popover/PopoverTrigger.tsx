@@ -44,6 +44,9 @@ export const PopoverTrigger = <T extends ElementType = 'button'>({
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
       if (disabled) return;
 
+      onKeyDown?.(event);
+      if (event.defaultPrevented) return;
+
       switch (event.key) {
         case 'ArrowDown':
           event.preventDefault();
@@ -52,9 +55,8 @@ export const PopoverTrigger = <T extends ElementType = 'button'>({
           }
           break;
       }
-      onKeyDown?.(event);
     },
-    [disabled, state.isOpen, openPopover, onKeyDown],
+    [onKeyDown, disabled, state.isOpen, openPopover],
   );
 
   const mergedRef = useMergedRef(triggerRef as React.RefObject<HTMLElement | null>, ref);
