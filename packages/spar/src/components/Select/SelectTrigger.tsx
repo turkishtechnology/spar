@@ -11,6 +11,7 @@ import type { ButtonProps } from '../Button/types';
 export const SelectTrigger = <T extends ElementType = 'button'>({
   ref,
   as,
+  disabled: disabledProp,
   onClick,
   onKeyDown,
   children,
@@ -19,19 +20,25 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
   const context = useSelectContext();
   const mergedRef = useMergedRef(context.triggerRef, ref);
 
+  // Use prop if explicitly provided, otherwise use context
+  const disabled = disabledProp ?? context.disabled;
+
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
-      if (context.disabled) return;
+      if (disabled) return;
 
       context.onOpenChange(!context.open);
       onClick?.(event);
     },
-    [context, onClick],
+    [disabled, context, onClick],
   );
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
-      if (context.disabled) return;
+      if (disabled) return;
+
+      onKeyDown?.(event);
+      if (event.defaultPrevented) return;
 
       const { key } = event;
 
@@ -48,17 +55,15 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
           context.setHighlightedIndex(selectedIndex !== -1 ? selectedIndex : 0);
         }
       }
-
-      onKeyDown?.(event);
     },
-    [context, onKeyDown],
+    [onKeyDown, disabled, context],
   );
 
   // Render props for children function
   const renderProps: SelectTriggerRenderProps = {
     isOpen: context.open,
     value: context.value,
-    disabled: context.disabled,
+    disabled,
     open: () => context.onOpenChange(true),
     close: () => context.onOpenChange(false),
     toggle: () => context.onOpenChange(!context.open),
@@ -67,7 +72,7 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
   const buttonProps = {
     ...(as && { as }),
     ref: mergedRef,
-    disabled: context.disabled,
+    disabled,
     autoFocus: context.autoFocus,
     role: 'combobox' as const,
     'aria-haspopup': 'listbox' as const,

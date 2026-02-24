@@ -102,6 +102,9 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
+      onKeyDown?.(event as React.KeyboardEvent<HTMLButtonElement>);
+      if (event.defaultPrevented) return;
+
       if (event.key === 'Escape' && context.isOpen) {
         event.preventDefault();
         event.stopPropagation();
@@ -109,9 +112,8 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
         // Keep focus on trigger
         context.triggerRef.current?.focus();
       }
-      onKeyDown?.(event as React.KeyboardEvent<HTMLButtonElement>);
     },
-    [context.isOpen, context.triggerRef, hideTooltip, onKeyDown],
+    [onKeyDown, context.isOpen, context.triggerRef, hideTooltip],
   );
 
   // Global escape key handler for better accessibility
