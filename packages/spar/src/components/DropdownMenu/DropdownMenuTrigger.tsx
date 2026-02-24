@@ -46,7 +46,6 @@ export const DropdownMenuTrigger = <T extends ElementType = 'button'>({
   const handleClick = useCallback(
     (event: ReactMouseEvent<HTMLButtonElement>) => {
       if (disabled) {
-        onClick?.(event);
         return;
       }
 
@@ -62,10 +61,10 @@ export const DropdownMenuTrigger = <T extends ElementType = 'button'>({
 
   const handleKeyDown = useCallback(
     (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+      if (disabled) return;
+
       onKeyDown?.(event);
-      if (event.defaultPrevented || disabled) {
-        return;
-      }
+      if (event.defaultPrevented) return;
 
       if (event.key === 'ArrowDown') {
         event.preventDefault();
