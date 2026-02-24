@@ -1,21 +1,22 @@
-import { useCallback } from 'react';
+import { useCallback, ElementType } from 'react';
 import { useMergedRef } from '@/hooks';
 import { PopoverTriggerProps, PopoverTriggerRenderProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * Trigger element that opens/closes the popover
  */
-export const PopoverTrigger = ({
-  as = 'button',
+export const PopoverTrigger = <T extends ElementType = 'button'>({
+  as,
   children,
   disabled: disabledProp,
   onClick,
   onKeyDown,
   ref,
   ...props
-}: PopoverTriggerProps) => {
+}: PopoverTriggerProps<T>) => {
   const {
     state,
     triggerRef,
@@ -67,19 +68,21 @@ export const PopoverTrigger = ({
     toggle: togglePopover,
   };
 
+  const buttonProps = {
+    ...(as && { as }),
+    disabled,
+    ref: mergedRef,
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    'aria-expanded': state.isOpen,
+    'aria-controls': state.isOpen ? state.contentId : undefined,
+    'aria-haspopup': 'dialog' as const,
+    'data-state': state.isOpen ? 'open' : 'closed',
+    ...props,
+  } as ButtonProps<T>;
+
   return (
-    <Button
-      as={as}
-      disabled={disabled}
-      ref={mergedRef}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      aria-expanded={state.isOpen}
-      aria-controls={state.isOpen ? state.contentId : undefined}
-      aria-haspopup='dialog'
-      data-state={state.isOpen ? 'open' : 'closed'}
-      {...props}
-    >
+    <Button {...buttonProps}>
       {typeof children === 'function' ? children(renderProps) : children}
     </Button>
   );

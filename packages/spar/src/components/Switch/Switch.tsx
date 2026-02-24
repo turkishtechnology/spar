@@ -1,14 +1,15 @@
-import { useId, useRef } from 'react';
+import { type ElementType, useId, useRef } from 'react';
 import { useMergedRef } from '@/hooks';
 import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 import { useSwitch } from './hooks';
 import type { SwitchProps, SwitchRenderProps } from './types';
 
 /**
  * Headless switch component for boolean toggle controls. Provides accessible switch semantics with form integration.
  */
-export const Switch = ({
-  as = 'button',
+export const Switch = <T extends ElementType = 'button'>({
+  as,
   checked,
   defaultChecked,
   onChange,
@@ -23,7 +24,7 @@ export const Switch = ({
   children,
   ref,
   ...restProps
-}: SwitchProps) => {
+}: SwitchProps<T>) => {
   const internalId = useId();
   const id = providedId || internalId;
 
@@ -83,41 +84,43 @@ export const Switch = ({
     onPointerCancel,
   } = switchProps;
 
+  const buttonProps = {
+    ...(as && { as }),
+    ref: mergedRef,
+    id,
+    disabled,
+    autoFocus,
+    role: 'switch' as const,
+    'aria-checked': checkedState,
+    'aria-label': ariaLabel,
+    'aria-labelledby': ariaLabelledBy,
+    'aria-describedby': ariaDescribedBy,
+    'aria-required': required || undefined,
+    'aria-readonly': readOnly || undefined,
+    'data-switch': '',
+    'data-state': checkedState ? 'checked' : 'unchecked',
+    'data-checked': checkedState ? '' : undefined,
+    'data-readonly': readOnly ? '' : undefined,
+    'data-required': required ? '' : undefined,
+    'data-focus': isFocused ? '' : undefined,
+    'data-hover': isHovered ? '' : undefined,
+    'data-active': isActive ? '' : undefined,
+    className,
+    style,
+    onClick,
+    onFocus,
+    onBlur,
+    onPointerEnter,
+    onPointerLeave,
+    onPointerDown,
+    onPointerUp,
+    onPointerCancel,
+    ...safeProps,
+  } as ButtonProps<T>;
+
   return (
     <>
-      <Button
-        as={as}
-        ref={mergedRef}
-        id={id}
-        disabled={disabled}
-        autoFocus={autoFocus}
-        role='switch'
-        aria-checked={checkedState}
-        aria-label={ariaLabel}
-        aria-labelledby={ariaLabelledBy}
-        aria-describedby={ariaDescribedBy}
-        aria-required={required || undefined}
-        aria-readonly={readOnly || undefined}
-        data-switch=''
-        data-state={checkedState ? 'checked' : 'unchecked'}
-        data-checked={checkedState ? '' : undefined}
-        data-readonly={readOnly ? '' : undefined}
-        data-required={required ? '' : undefined}
-        data-focus={isFocused ? '' : undefined}
-        data-hover={isHovered ? '' : undefined}
-        data-active={isActive ? '' : undefined}
-        className={className}
-        style={style}
-        onClick={onClick}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        onPointerEnter={onPointerEnter}
-        onPointerLeave={onPointerLeave}
-        onPointerDown={onPointerDown}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerCancel}
-        {...safeProps}
-      >
+      <Button {...buttonProps}>
         {typeof children === 'function' ? children(renderProps) : children}
       </Button>
       {name && (

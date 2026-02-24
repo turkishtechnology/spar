@@ -1,5 +1,6 @@
 import {
   useCallback,
+  type ElementType,
   type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent,
 } from 'react';
@@ -11,20 +12,21 @@ import type {
 import { useDropdownMenuContext } from './hooks';
 import { useMergedRef } from '@/hooks';
 import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * Trigger button that toggles the dropdown menu open/closed state.
  * Supports keyboard navigation with ArrowDown/ArrowUp to open and focus first/last item.
  */
-export const DropdownMenuTrigger = ({
-  as = 'button',
+export const DropdownMenuTrigger = <T extends ElementType = 'button'>({
+  as,
   disabled: disabledProp,
   onClick,
   onKeyDown,
   ref,
   children,
   ...props
-}: DropdownMenuTriggerProps) => {
+}: DropdownMenuTriggerProps<T>) => {
   const menu = useDropdownMenuContext();
 
   // Use prop if explicitly provided, otherwise use context
@@ -95,20 +97,22 @@ export const DropdownMenuTrigger = ({
     }, [menu, handleOpen]),
   };
 
+  const buttonProps = {
+    ...(as && { as }),
+    ref: mergedRef,
+    id: menu.triggerId,
+    disabled,
+    'aria-haspopup': 'menu' as const,
+    'aria-expanded': menu.open,
+    'aria-controls': menu.open ? menu.contentId : undefined,
+    'data-state': menu.open ? 'open' : 'closed',
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    ...props,
+  } as ButtonProps<T>;
+
   return (
-    <Button
-      as={as}
-      ref={mergedRef}
-      id={menu.triggerId}
-      disabled={disabled}
-      aria-haspopup='menu'
-      aria-expanded={menu.open}
-      aria-controls={menu.open ? menu.contentId : undefined}
-      data-state={menu.open ? 'open' : 'closed'}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      {...props}
-    >
+    <Button {...buttonProps}>
       {typeof children === 'function' ? children(renderProps) : children}
     </Button>
   );
