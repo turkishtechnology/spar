@@ -6,7 +6,7 @@ description: A headless collapsible component that manages the visibility of con
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
+import { Collapsible } from '@turkish-technology/spar';
 
 # Collapsible
 
@@ -15,8 +15,8 @@ A headless collapsible component that manages the visibility of content sections
 ## Live Demo
 
 <LiveCode
-  code={`<CollapsibleRoot className="collapsible-demo-container">
-        <CollapsibleTrigger className="collapsible-trigger">
+  code={`<Collapsible.Root className="collapsible-demo-container">
+        <Collapsible.Trigger className="collapsible-trigger">
           <svg
             className="collapsible-trigger-icon"
             xmlns="http://www.w3.org/2000/svg"
@@ -27,13 +27,13 @@ A headless collapsible component that manages the visibility of content sections
           >
             <path d="M8.33312 1.38867C4.49978 1.38867 1.38867 4.49978 1.38867 8.33312C1.38867 12.1665 4.49978 15.2776 8.33312 15.2776C12.1665 15.2776 15.2776 12.1665 15.2776 8.33312C15.2776 4.49978 12.1665 1.38867 8.33312 1.38867ZM11.1109 9.02756H9.02756V11.1109C9.02756 11.4928 8.71506 11.8053 8.33312 11.8053C7.95117 11.8053 7.63867 11.4928 7.63867 11.1109V9.02756H5.55534C5.17339 9.02756 4.86089 8.71506 4.86089 8.33312C4.86089 7.95117 5.17339 7.63867 5.55534 7.63867H7.63867V5.55534C7.63867 5.17339 7.95117 4.86089 8.33312 4.86089C8.71506 4.86089 9.02756 5.17339 9.02756 5.55534V7.63867H11.1109C11.4928 7.63867 11.8053 7.95117 11.8053 8.33312C11.8053 8.71506 11.4928 9.02756 11.1109 9.02756Z" />
           </svg>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="collapsible-content">
+        </Collapsible.Trigger>
+        <Collapsible.Content className="collapsible-content">
           <div className="collapsible-item"></div>
           <div className="collapsible-item"></div>
           <div className="collapsible-item"></div>
-        </CollapsibleContent>
-      </CollapsibleRoot>
+        </Collapsible.Content>
+      </Collapsible.Root>
   `}
   cssCode={`.collapsible-trigger {
   display: flex;
@@ -101,7 +101,7 @@ pnpm install @turkish-technology/spar
 ```
 
 ```tsx
-import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
+import { Collapsible } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -110,13 +110,13 @@ The Collapsible component consists of three main parts:
 
 <AnatomyViewer
   parts={[
-    { name: 'root', label: 'Collapsible', description: 'Context and state provider' },
-    { name: 'trigger', label: 'CollapsibleTrigger', description: 'Toggle button' },
-    { name: 'content', label: 'CollapsibleContent', description: 'Collapsible content container' },
+    { name: 'root', label: 'Root', description: 'Context and state provider' },
+    { name: 'trigger', label: 'Trigger', description: 'Toggle button' },
+    { name: 'content', label: 'Content', description: 'Collapsible content container' },
   ]}
 >
-  <CollapsibleRoot data-spar-part='root' className='collapsible-demo-container'>
-    <CollapsibleTrigger data-spar-part='trigger' className='collapsible-trigger'>
+  <Collapsible.Root data-spar-part='root' className='collapsible-demo-container'>
+    <Collapsible.Trigger data-spar-part='trigger' className='collapsible-trigger'>
       <svg
         className='collapsible-trigger-icon'
         xmlns='http://www.w3.org/2000/svg'
@@ -127,45 +127,45 @@ The Collapsible component consists of three main parts:
       >
         <path d='M8.33312 1.38867C4.49978 1.38867 1.38867 4.49978 1.38867 8.33312C1.38867 12.1665 4.49978 15.2776 8.33312 15.2776C12.1665 15.2776 15.2776 12.1665 15.2776 8.33312C15.2776 4.49978 12.1665 1.38867 8.33312 1.38867ZM11.1109 9.02756H9.02756V11.1109C9.02756 11.4928 8.71506 11.8053 8.33312 11.8053C7.95117 11.8053 7.63867 11.4928 7.63867 11.1109V9.02756H5.55534C5.17339 9.02756 4.86089 8.71506 4.86089 8.33312C4.86089 7.95117 5.17339 7.63867 5.55534 7.63867H7.63867V5.55534C7.63867 5.17339 7.95117 4.86089 8.33312 4.86089C8.71506 4.86089 9.02756 5.17339 9.02756 5.55534V7.63867H11.1109C11.4928 7.63867 11.8053 7.95117 11.8053 8.33312C11.8053 8.71506 11.4928 9.02756 11.1109 9.02756Z' />
       </svg>
-    </CollapsibleTrigger>
-    <CollapsibleContent data-spar-part='content' className='collapsible-content'>
+    </Collapsible.Trigger>
+    <Collapsible.Content data-spar-part='content' className='collapsible-content'>
       <div className='collapsible-item'></div>
       <div className='collapsible-item'></div>
       <div className='collapsible-item'></div>
-    </CollapsibleContent>
-  </CollapsibleRoot>
+    </Collapsible.Content>
+  </Collapsible.Root>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<CollapsibleRoot>
-  <CollapsibleTrigger />
-  <CollapsibleContent />
-</CollapsibleRoot>
+<Collapsible.Root>
+  <Collapsible.Trigger />
+  <Collapsible.Content />
+</Collapsible.Root>
 ```
 
 **Data Flow:**
 
 - `Collapsible`: Provides context and state management for the collapsible
-- `CollapsibleTrigger`: Interactive element that toggles the content visibility
-- `CollapsibleContent`: Container that shows/hides based on the collapsible state
+- `Collapsible.Trigger`: Interactive element that toggles the content visibility
+- `Collapsible.Content`: Container that shows/hides based on the collapsible state
 
 ## Code Examples
 
 ### Basic Usage
 
 ```tsx
-import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
+import { Collapsible } from '@turkish-technology/spar';
 
 function BasicCollapsible() {
   return (
-    <CollapsibleRoot>
-      <CollapsibleTrigger>Toggle Content</CollapsibleTrigger>
-      <CollapsibleContent>
+    <Collapsible.Root>
+      <Collapsible.Trigger>Toggle Content</Collapsible.Trigger>
+      <Collapsible.Content>
         <p>This content can be toggled.</p>
-      </CollapsibleContent>
-    </CollapsibleRoot>
+      </Collapsible.Content>
+    </Collapsible.Root>
   );
 }
 ```
@@ -173,22 +173,22 @@ function BasicCollapsible() {
 ### Controlled State
 
 ```tsx
-import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
+import { Collapsible } from '@turkish-technology/spar';
 import { useState } from 'react';
 
 function ControlledCollapsible() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <CollapsibleRoot open={isOpen} onOpenChange={setIsOpen}>
-      <CollapsibleTrigger>{isOpen ? 'Collapse' : 'Expand'}</CollapsibleTrigger>
-      <CollapsibleContent>
+    <Collapsible.Root open={isOpen} onOpenChange={setIsOpen}>
+      <Collapsible.Trigger>{isOpen ? 'Collapse' : 'Expand'}</Collapsible.Trigger>
+      <Collapsible.Content>
         <div>
           <h3>Controlled Content</h3>
           <p>The parent component controls this state</p>
         </div>
-      </CollapsibleContent>
-    </CollapsibleRoot>
+      </Collapsible.Content>
+    </Collapsible.Root>
   );
 }
 ```
@@ -196,16 +196,16 @@ function ControlledCollapsible() {
 ### Default Open State
 
 ```tsx
-import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
+import { Collapsible } from '@turkish-technology/spar';
 
 function DefaultOpenCollapsible() {
   return (
-    <CollapsibleRoot defaultOpen={true}>
-      <CollapsibleTrigger>Toggle Content</CollapsibleTrigger>
-      <CollapsibleContent>
+    <Collapsible.Root defaultOpen={true}>
+      <Collapsible.Trigger>Toggle Content</Collapsible.Trigger>
+      <Collapsible.Content>
         <p>This content starts expanded</p>
-      </CollapsibleContent>
-    </CollapsibleRoot>
+      </Collapsible.Content>
+    </Collapsible.Root>
   );
 }
 ```
@@ -213,18 +213,18 @@ function DefaultOpenCollapsible() {
 ### Custom Trigger Element
 
 ```tsx
-import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
+import { Collapsible } from '@turkish-technology/spar';
 
 function CustomTriggerCollapsible() {
   return (
-    <CollapsibleRoot>
-      <CollapsibleTrigger as='div'>
+    <Collapsible.Root>
+      <Collapsible.Trigger as='div'>
         <h3>Click this heading to expand</h3>
-      </CollapsibleTrigger>
-      <CollapsibleContent>
+      </Collapsible.Trigger>
+      <Collapsible.Content>
         <p>Content revealed by custom trigger.</p>
-      </CollapsibleContent>
-    </CollapsibleRoot>
+      </Collapsible.Content>
+    </Collapsible.Root>
   );
 }
 ```
@@ -232,17 +232,17 @@ function CustomTriggerCollapsible() {
 ### Force Mount Content
 
 ```tsx
-import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
+import { Collapsible } from '@turkish-technology/spar';
 
 function ForceMountCollapsible() {
   return (
-    <CollapsibleRoot>
-      <CollapsibleTrigger>Toggle (Content Always Mounted)</CollapsibleTrigger>
-      <CollapsibleContent forceMount={true}>
+    <Collapsible.Root>
+      <Collapsible.Trigger>Toggle (Content Always Mounted)</Collapsible.Trigger>
+      <Collapsible.Content forceMount={true}>
         <p>This content stays in the DOM even when collapsed.</p>
         <p>Useful for maintaining component state or enabling browser search.</p>
-      </CollapsibleContent>
-    </CollapsibleRoot>
+      </Collapsible.Content>
+    </Collapsible.Root>
   );
 }
 ```
@@ -250,23 +250,23 @@ function ForceMountCollapsible() {
 ### Disabled State
 
 ```tsx
-import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from '@turkish-technology/spar';
+import { Collapsible } from '@turkish-technology/spar';
 
 function DisabledCollapsible() {
   return (
-    <CollapsibleRoot disabled={true}>
-      <CollapsibleTrigger>Disabled Trigger</CollapsibleTrigger>
-      <CollapsibleContent>
+    <Collapsible.Root disabled={true}>
+      <Collapsible.Trigger>Disabled Trigger</Collapsible.Trigger>
+      <Collapsible.Content>
         <p>This content cannot be toggled</p>
-      </CollapsibleContent>
-    </CollapsibleRoot>
+      </Collapsible.Content>
+    </Collapsible.Root>
   );
 }
 ```
 
 ## API Reference
 
-### CollapsibleRoot
+### Collapsible.Root
 
 The root component that provides context and state management for the collapsible.
 
@@ -296,7 +296,7 @@ The root component that provides context and state management for the collapsibl
 | `data-state`    | `"open" \| "closed"` | Indicates current state  |
 | `data-disabled` | `""` (when disabled) | Indicates disabled state |
 
-### CollapsibleTrigger
+### Collapsible.Trigger
 
 Interactive element that toggles the content visibility with full accessibility support. Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
@@ -339,7 +339,7 @@ Interactive element that toggles the content visibility with full accessibility 
 | `data-state`    | `"open" \| "closed"` | Indicates current state                     |
 | `data-disabled` | `""` (when disabled) | Indicates disabled state                    |
 
-### CollapsibleContent
+### Collapsible.Content
 
 Container that shows/hides based on the collapsible state with advanced features.
 

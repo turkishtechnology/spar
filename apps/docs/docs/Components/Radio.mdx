@@ -6,7 +6,7 @@ description: Accessible radio group component for mutually exclusive selections 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { RadioGroup, RadioItem } from '@turkish-technology/spar';
+import { Radio } from '@turkish-technology/spar';
 
 # Radio
 
@@ -16,11 +16,11 @@ Accessible radio group component for creating mutually exclusive selections with
 
 <div className="radio-demo-container">
 <LiveCode
-  code={`<RadioGroup>
-        <RadioItem value="option1"></RadioItem>
-        <RadioItem value='option2' className='radio-item'></RadioItem>
-        <RadioItem value='option3' className='radio-item'></RadioItem>
-</RadioGroup>`}
+  code={`<Radio.Group>
+        <Radio.Item value="option1"></Radio.Item>
+        <Radio.Item value='option2' className='radio-item'></Radio.Item>
+        <Radio.Item value='option3' className='radio-item'></Radio.Item>
+</Radio.Group>`}
 cssCode={`input[type='radio'] {
   position: relative;
   appearance: none;
@@ -70,7 +70,7 @@ background-color: rgba(255, 255, 255, 0.72);
 
 ```tsx
 // Compound component (recommended)
-import { RadioGroup, RadioItem } from '@turkish-technology/spar';
+import { Radio } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -79,45 +79,45 @@ The Radio component is built as a compound component with two main parts:
 
 <AnatomyViewer
   parts={[
-    { name: 'group', label: 'RadioGroup', description: 'Context and state provider' },
-    { name: 'item', label: 'RadioItem', description: 'Individual radio option' },
+    { name: 'group', label: 'Group', description: 'Context and state provider' },
+    { name: 'item', label: 'Item', description: 'Individual radio option' },
   ]}
 >
   <div className='radio-demo-container'>
-    <RadioGroup data-spar-part='group'>
-      <RadioItem data-spar-part='item' value='option1'></RadioItem>
-      <RadioItem data-spar-part='item' value='option2' className='radio-item'></RadioItem>
-      <RadioItem data-spar-part='item' value='option3' className='radio-item'></RadioItem>
-    </RadioGroup>
+    <Radio.Group data-spar-part='group'>
+      <Radio.Item data-spar-part='item' value='option1'></Radio.Item>
+      <Radio.Item data-spar-part='item' value='option2' className='radio-item'></Radio.Item>
+      <Radio.Item data-spar-part='item' value='option3' className='radio-item'></Radio.Item>
+    </Radio.Group>
   </div>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<RadioGroup>
-  <RadioItem />
-  <RadioItem />
-  <RadioItem />
-</RadioGroup>
+<Radio.Group>
+  <Radio.Item />
+  <Radio.Item />
+  <Radio.Item />
+</Radio.Group>
 ```
 
 **Alternative: Tree-shakeable named imports**
 
 ```tsx
-import { RadioGroup, RadioItem } from '@turkish-technology/spar';
+import { Radio } from '@turkish-technology/spar';
 
-<RadioGroup>
-  <RadioItem />
-  <RadioItem />
-  <RadioItem />
-</RadioGroup>;
+<Radio.Group>
+  <Radio.Item />
+  <Radio.Item />
+  <Radio.Item />
+</Radio.Group>;
 ```
 
 **Data Flow:**
 
-- `RadioGroup` manages selection state and provides context
-- `RadioItem` components register with the group and handle individual interactions
+- `Radio.Group` manages selection state and provides context
+- `Radio.Item` components register with the group and handle individual interactions
 - Focus management ensures only one radio is tabbable at a time
 - Hidden inputs provide form integration and accessibility
 
@@ -130,11 +130,11 @@ function ControlledRadio() {
   const [selectedValue, setSelectedValue] = React.useState('medium');
 
   return (
-    <RadioGroup value={selectedValue} onValueChange={setSelectedValue} aria-label='Size selection'>
-      <RadioItem value='small'>Small</RadioItem>
-      <RadioItem value='medium'>Medium</RadioItem>
-      <RadioItem value='large'>Large</RadioItem>
-    </RadioGroup>
+    <Radio.Group value={selectedValue} onValueChange={setSelectedValue} aria-label='Size selection'>
+      <Radio.Item value='small'>Small</Radio.Item>
+      <Radio.Item value='medium'>Medium</Radio.Item>
+      <Radio.Item value='large'>Large</Radio.Item>
+    </Radio.Group>
   );
 }
 ```
@@ -148,15 +148,15 @@ function UncontrolledRadio() {
   };
 
   return (
-    <RadioGroup
+    <Radio.Group
       defaultValue='silver'
       onValueChange={handleValueChange}
       aria-label='Membership tier'
     >
-      <RadioItem value='bronze'>Bronze Membership</RadioItem>
-      <RadioItem value='silver'>Silver Membership</RadioItem>
-      <RadioItem value='gold'>Gold Membership</RadioItem>
-    </RadioGroup>
+      <Radio.Item value='bronze'>Bronze Membership</Radio.Item>
+      <Radio.Item value='silver'>Silver Membership</Radio.Item>
+      <Radio.Item value='gold'>Gold Membership</Radio.Item>
+    </Radio.Group>
   );
 }
 ```
@@ -168,16 +168,16 @@ function HorizontalRadio() {
   const [alignment, setAlignment] = React.useState('left');
 
   return (
-    <RadioGroup
+    <Radio.Group
       value={alignment}
       onValueChange={setAlignment}
       orientation='horizontal'
       aria-label='Text alignment'
     >
-      <RadioItem value='left'>Left</RadioItem>
-      <RadioItem value='center'>Center</RadioItem>
-      <RadioItem value='right'>Right</RadioItem>
-    </RadioGroup>
+      <Radio.Item value='left'>Left</Radio.Item>
+      <Radio.Item value='center'>Center</Radio.Item>
+      <Radio.Item value='right'>Right</Radio.Item>
+    </Radio.Group>
   );
 }
 ```
@@ -189,13 +189,13 @@ function DisabledRadio() {
   const [plan, setPlan] = React.useState('basic');
 
   return (
-    <RadioGroup value={plan} onValueChange={setPlan} aria-label='Subscription plan'>
-      <RadioItem value='free'>Free Plan</RadioItem>
-      <RadioItem value='basic'>Basic Plan</RadioItem>
-      <RadioItem value='premium' disabled>
+    <Radio.Group value={plan} onValueChange={setPlan} aria-label='Subscription plan'>
+      <Radio.Item value='free'>Free Plan</Radio.Item>
+      <Radio.Item value='basic'>Basic Plan</Radio.Item>
+      <Radio.Item value='premium' disabled>
         Premium Plan (Coming Soon)
-      </RadioItem>
-    </RadioGroup>
+      </Radio.Item>
+    </Radio.Group>
   );
 }
 ```
@@ -208,18 +208,18 @@ function ToolbarRadio() {
 
   return (
     <div role='toolbar' aria-label='Text formatting'>
-      <RadioGroup
+      <Radio.Group
         value={alignment}
         onValueChange={setAlignment}
         isInToolbar={true}
         orientation='horizontal'
         aria-label='Text alignment'
       >
-        <RadioItem value='left'>Align Left</RadioItem>
-        <RadioItem value='center'>Align Center</RadioItem>
-        <RadioItem value='right'>Align Right</RadioItem>
-        <RadioItem value='justify'>Justify</RadioItem>
-      </RadioGroup>
+        <Radio.Item value='left'>Align Left</Radio.Item>
+        <Radio.Item value='center'>Align Center</Radio.Item>
+        <Radio.Item value='right'>Align Right</Radio.Item>
+        <Radio.Item value='justify'>Justify</Radio.Item>
+      </Radio.Group>
       {/* Other toolbar controls */}
     </div>
   );
@@ -240,18 +240,18 @@ function FormRadio() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <RadioGroup
+      <Radio.Group
         value={paymentMethod}
         onValueChange={setPaymentMethod}
         name='payment'
         required
         aria-label='Payment method'
       >
-        <RadioItem value='credit'>Credit Card</RadioItem>
-        <RadioItem value='debit'>Debit Card</RadioItem>
-        <RadioItem value='paypal'>PayPal</RadioItem>
-        <RadioItem value='bank'>Bank Transfer</RadioItem>
-      </RadioGroup>
+        <Radio.Item value='credit'>Credit Card</Radio.Item>
+        <Radio.Item value='debit'>Debit Card</Radio.Item>
+        <Radio.Item value='paypal'>PayPal</Radio.Item>
+        <Radio.Item value='bank'>Bank Transfer</Radio.Item>
+      </Radio.Group>
       <button type='submit'>Continue</button>
     </form>
   );
@@ -265,25 +265,25 @@ function CustomRadio() {
   const [theme, setTheme] = React.useState('light');
 
   return (
-    <RadioGroup value={theme} onValueChange={setTheme} as='fieldset' aria-label='Theme selection'>
+    <Radio.Group value={theme} onValueChange={setTheme} as='fieldset' aria-label='Theme selection'>
       <legend>Choose Theme</legend>
-      <RadioItem value='light' as='div'>
+      <Radio.Item value='light' as='div'>
         Light Theme
-      </RadioItem>
-      <RadioItem value='dark' as='div'>
+      </Radio.Item>
+      <Radio.Item value='dark' as='div'>
         Dark Theme
-      </RadioItem>
-      <RadioItem value='auto' as='div'>
+      </Radio.Item>
+      <Radio.Item value='auto' as='div'>
         Auto Theme
-      </RadioItem>
-    </RadioGroup>
+      </Radio.Item>
+    </Radio.Group>
   );
 }
 ```
 
 ## API Reference
 
-### RadioGroup
+### Radio.Group
 
 The root container that manages the radio group state and provides keyboard navigation.
 
@@ -304,7 +304,7 @@ The root container that manages the radio group state and provides keyboard navi
 | `aria-labelledby?`  | `string`                     | `undefined`  | References element that labels the group           |
 | `aria-describedby?` | `string`                     | `undefined`  | References element that describes the group        |
 | `as?`               | `React.ElementType`          | `'div'`      | Polymorphic root element                           |
-| `children?`         | `React.ReactNode`            | `undefined`  | RadioItem components                               |
+| `children?`         | `React.ReactNode`            | `undefined`  | Radio.Item components                               |
 
 **Events**
 
@@ -320,9 +320,9 @@ The root container that manages the radio group state and provides keyboard navi
 | `data-orientation` | `"horizontal" \| "vertical"` | Indicates layout direction  |
 | `data-disabled`    | `""`                         | Present when group disabled |
 
-### RadioItem
+### Radio.Item
 
-Individual radio option within a RadioGroup that handles selection and accessibility.
+Individual radio option within a Radio.Group that handles selection and accessibility.
 
 **Props**
 

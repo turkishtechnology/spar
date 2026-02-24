@@ -6,14 +6,7 @@ description: Accessible headless breadcrumb navigation component for hierarchica
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import {
-  BreadcrumbRoot,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@turkish-technology/spar';
+import { Breadcrumb } from '@turkish-technology/spar';
 
 # Breadcrumb
 
@@ -23,17 +16,17 @@ A fully accessible headless breadcrumb component for displaying hierarchical nav
 
 <div className='breadcrumb-demo-container'>
   <LiveCode
-    code={`<BreadcrumbRoot>
-    <BreadcrumbList className='breadcrumb-list'>
-      <BreadcrumbItem className='breadcrumb-item'>
-        <BreadcrumbLink className='breadcrumb-link'>step 0</BreadcrumbLink>
-      </BreadcrumbItem>
-      <BreadcrumbSeparator className='breadcrumb-separator'>/</BreadcrumbSeparator>
-      <BreadcrumbItem className='breadcrumb-item'>
-        <BreadcrumbPage className='breadcrumb-page'>step 1</BreadcrumbPage>
-      </BreadcrumbItem>
-    </BreadcrumbList>
-  </BreadcrumbRoot>`}
+    code={`<Breadcrumb.Root>
+    <Breadcrumb.List className='breadcrumb-list'>
+      <Breadcrumb.Item className='breadcrumb-item'>
+        <Breadcrumb.Link className='breadcrumb-link'>step 0</Breadcrumb.Link>
+      </Breadcrumb.Item>
+      <Breadcrumb.Separator className='breadcrumb-separator'>/</Breadcrumb.Separator>
+      <Breadcrumb.Item className='breadcrumb-item'>
+        <Breadcrumb.Page className='breadcrumb-page'>step 1</Breadcrumb.Page>
+      </Breadcrumb.Item>
+    </Breadcrumb.List>
+  </Breadcrumb.Root>`}
     cssCode={`.breadcrumb-list {
   padding: 0;
   margin: 0;
@@ -135,10 +128,10 @@ const breadcrumbs = [
 
 return (
 
-<BreadcrumbRoot
+<Breadcrumb.Root
 onNavigate={handleNavigate}
 style={{ padding: '16px', border: '1px solid #e0e0e0', borderRadius: '8px' }} >
-<BreadcrumbList
+<Breadcrumb.List
 style={{
           display: 'flex',
           alignItems: 'center',
@@ -153,9 +146,9 @@ const Icon = item.Icon;
 
           return (
             <React.Fragment key={item.href}>
-              <BreadcrumbItem style={{ margin: 0, padding: 0 }}>
+              <Breadcrumb.Item style={{ margin: 0, padding: 0 }}>
                 {isCurrent ? (
-                  <BreadcrumbPage
+                  <Breadcrumb.Page
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -166,9 +159,9 @@ const Icon = item.Icon;
                   >
                     <Icon />
                     <span>{item.label}</span>
-                  </BreadcrumbPage>
+                  </Breadcrumb.Page>
                 ) : (
-                  <BreadcrumbLink
+                  <Breadcrumb.Link
                     href={item.href}
                     style={{
                       display: 'flex',
@@ -181,17 +174,17 @@ const Icon = item.Icon;
                   >
                     <Icon />
                     <span>{item.label}</span>
-                  </BreadcrumbLink>
+                  </Breadcrumb.Link>
                 )}
-              </BreadcrumbItem>
+              </Breadcrumb.Item>
               {!isLast && (
-                <BreadcrumbSeparator style={{ color: '#666', margin: '0 8px' }}>›</BreadcrumbSeparator>
+                <Breadcrumb.Separator style={{ color: '#666', margin: '0 8px' }}>›</Breadcrumb.Separator>
               )}
             </React.Fragment>
           );
         })}
-      </BreadcrumbList>
-    </BreadcrumbRoot>
+      </Breadcrumb.List>
+    </Breadcrumb.Root>
 
 );
 }`}
@@ -217,14 +210,7 @@ pnpm add @turkish-technology/spar
 ```
 
 ```tsx
-import {
-  BreadcrumbRoot,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@turkish-technology/spar';
+import { Breadcrumb } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
@@ -233,63 +219,63 @@ The Breadcrumb component is built as a compound component with multiple parts:
 
 <AnatomyViewer
   parts={[
-    { name: 'root', label: 'BreadcrumbRoot', description: 'Navigation landmark container' },
+    { name: 'root', label: 'Root', description: 'Navigation landmark container' },
     {
       name: 'list',
-      label: 'BreadcrumbList',
+      label: 'List',
       description: 'Ordered list with position calculation',
     },
-    { name: 'item', label: 'BreadcrumbItem', description: 'Individual list item wrapper' },
-    { name: 'link', label: 'BreadcrumbLink', description: 'Navigational link element' },
-    { name: 'page', label: 'BreadcrumbPage', description: 'Current page indicator' },
-    { name: 'separator', label: 'BreadcrumbSeparator', description: 'Visual separator element' },
+    { name: 'item', label: 'Item', description: 'Individual list item wrapper' },
+    { name: 'link', label: 'Link', description: 'Navigational link element' },
+    { name: 'page', label: 'Page', description: 'Current page indicator' },
+    { name: 'separator', label: 'Separator', description: 'Visual separator element' },
   ]}
 >
   <div className='breadcrumb-demo-container'>
-    <BreadcrumbRoot data-spar-part='root'>
-      <BreadcrumbList className='breadcrumb-list' data-spar-part='list'>
-        <BreadcrumbItem className='breadcrumb-item' data-spar-part='item'>
-          <BreadcrumbLink className='breadcrumb-link' data-spar-part='link'>
+    <Breadcrumb.Root data-spar-part='root'>
+      <Breadcrumb.List className='breadcrumb-list' data-spar-part='list'>
+        <Breadcrumb.Item className='breadcrumb-item' data-spar-part='item'>
+          <Breadcrumb.Link className='breadcrumb-link' data-spar-part='link'>
             {'step 0'}
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator className='breadcrumb-separator' data-spar-part='separator'>
+          </Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator className='breadcrumb-separator' data-spar-part='separator'>
           {'/'}
-        </BreadcrumbSeparator>
-        <BreadcrumbItem className='breadcrumb-item' data-spar-part='item'>
-          <BreadcrumbPage className='breadcrumb-page' data-spar-part='page'>
+        </Breadcrumb.Separator>
+        <Breadcrumb.Item className='breadcrumb-item' data-spar-part='item'>
+          <Breadcrumb.Page className='breadcrumb-page' data-spar-part='page'>
             {'step 1'}
-          </BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </BreadcrumbRoot>
+          </Breadcrumb.Page>
+        </Breadcrumb.Item>
+      </Breadcrumb.List>
+    </Breadcrumb.Root>
   </div>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<BreadcrumbRoot>
-  <BreadcrumbList>
-    <BreadcrumbItem>
-      <BreadcrumbLink />
-    </BreadcrumbItem>
-    <BreadcrumbSeparator />
-    <BreadcrumbItem>
-      <BreadcrumbPage />
-    </BreadcrumbItem>
-  </BreadcrumbList>
-</BreadcrumbRoot>
+<Breadcrumb.Root>
+  <Breadcrumb.List>
+    <Breadcrumb.Item>
+      <Breadcrumb.Link />
+    </Breadcrumb.Item>
+    <Breadcrumb.Separator />
+    <Breadcrumb.Item>
+      <Breadcrumb.Page />
+    </Breadcrumb.Item>
+  </Breadcrumb.List>
+</Breadcrumb.Root>
 ```
 
 **Data Flow:**
 
-- `BreadcrumbRoot` provides navigation context and manages shared state
-- `BreadcrumbList` calculates position data (first, middle, last) for items
-- `BreadcrumbItem` receives position information for styling hooks
-- `BreadcrumbLink` handles navigation and routing integration
-- `BreadcrumbPage` marks the current page with proper ARIA attributes
-- `BreadcrumbSeparator` provides visual separation (hidden from screen readers)
+- `Breadcrumb.Root` provides navigation context and manages shared state
+- `Breadcrumb.List` calculates position data (first, middle, last) for items
+- `Breadcrumb.Item` receives position information for styling hooks
+- `Breadcrumb.Link` handles navigation and routing integration
+- `Breadcrumb.Page` marks the current page with proper ARIA attributes
+- `Breadcrumb.Separator` provides visual separation (hidden from screen readers)
 
 ## Code Examples
 
@@ -298,21 +284,21 @@ The Breadcrumb component is built as a compound component with multiple parts:
 ```tsx
 function SimpleBreadcrumb() {
   return (
-    <BreadcrumbRoot>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href='/'>Home</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator>/</BreadcrumbSeparator>
-        <BreadcrumbItem>
-          <BreadcrumbLink href='/docs'>Documentation</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator>/</BreadcrumbSeparator>
-        <BreadcrumbItem>
-          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </BreadcrumbRoot>
+    <Breadcrumb.Root>
+      <Breadcrumb.List>
+        <Breadcrumb.Item>
+          <Breadcrumb.Link href='/'>Home</Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator>/</Breadcrumb.Separator>
+        <Breadcrumb.Item>
+          <Breadcrumb.Link href='/docs'>Documentation</Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator>/</Breadcrumb.Separator>
+        <Breadcrumb.Item>
+          <Breadcrumb.Page>Breadcrumb</Breadcrumb.Page>
+        </Breadcrumb.Item>
+      </Breadcrumb.List>
+    </Breadcrumb.Root>
   );
 }
 ```
@@ -331,21 +317,21 @@ function RouterBreadcrumb() {
   };
 
   return (
-    <BreadcrumbRoot onNavigate={handleNavigate} aria-label='Site navigation'>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href='/'>Dashboard</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator>→</BreadcrumbSeparator>
-        <BreadcrumbItem>
-          <BreadcrumbLink href='/users'>Users</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator>→</BreadcrumbSeparator>
-        <BreadcrumbItem>
-          <BreadcrumbPage>Profile Settings</BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </BreadcrumbRoot>
+    <Breadcrumb.Root onNavigate={handleNavigate} aria-label='Site navigation'>
+      <Breadcrumb.List>
+        <Breadcrumb.Item>
+          <Breadcrumb.Link href='/'>Dashboard</Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator>→</Breadcrumb.Separator>
+        <Breadcrumb.Item>
+          <Breadcrumb.Link href='/users'>Users</Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator>→</Breadcrumb.Separator>
+        <Breadcrumb.Item>
+          <Breadcrumb.Page>Profile Settings</Breadcrumb.Page>
+        </Breadcrumb.Item>
+      </Breadcrumb.List>
+    </Breadcrumb.Root>
   );
 }
 ```
@@ -355,23 +341,23 @@ function RouterBreadcrumb() {
 ```tsx
 function ExternalLinksBreadcrumb() {
   return (
-    <BreadcrumbRoot>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href='/'>Internal</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator>|</BreadcrumbSeparator>
-        <BreadcrumbItem>
-          <BreadcrumbLink href='https://external-docs.example.com' isExternal={true}>
+    <Breadcrumb.Root>
+      <Breadcrumb.List>
+        <Breadcrumb.Item>
+          <Breadcrumb.Link href='/'>Internal</Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator>|</Breadcrumb.Separator>
+        <Breadcrumb.Item>
+          <Breadcrumb.Link href='https://external-docs.example.com' isExternal={true}>
             External Docs
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator>|</BreadcrumbSeparator>
-        <BreadcrumbItem>
-          <BreadcrumbPage>Current Page</BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </BreadcrumbRoot>
+          </Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator>|</Breadcrumb.Separator>
+        <Breadcrumb.Item>
+          <Breadcrumb.Page>Current Page</Breadcrumb.Page>
+        </Breadcrumb.Item>
+      </Breadcrumb.List>
+    </Breadcrumb.Root>
   );
 }
 ```
@@ -388,23 +374,23 @@ function DisabledBreadcrumb() {
         Toggle Navigation: {isNavigationDisabled ? 'Disabled' : 'Enabled'}
       </button>
 
-      <BreadcrumbRoot disabled={isNavigationDisabled}>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href='/'>Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator>›</BreadcrumbSeparator>
-          <BreadcrumbItem>
-            <BreadcrumbLink href='/products' disabled={true}>
+      <Breadcrumb.Root disabled={isNavigationDisabled}>
+        <Breadcrumb.List>
+          <Breadcrumb.Item>
+            <Breadcrumb.Link href='/'>Home</Breadcrumb.Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Separator>›</Breadcrumb.Separator>
+          <Breadcrumb.Item>
+            <Breadcrumb.Link href='/products' disabled={true}>
               Products (Individual Disabled)
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator>›</BreadcrumbSeparator>
-          <BreadcrumbItem>
-            <BreadcrumbPage>Current</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </BreadcrumbRoot>
+            </Breadcrumb.Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Separator>›</Breadcrumb.Separator>
+          <Breadcrumb.Item>
+            <Breadcrumb.Page>Current</Breadcrumb.Page>
+          </Breadcrumb.Item>
+        </Breadcrumb.List>
+      </Breadcrumb.Root>
     </div>
   );
 }
@@ -434,30 +420,30 @@ function IconBreadcrumb() {
   );
 
   return (
-    <BreadcrumbRoot>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href='/'>
+    <Breadcrumb.Root>
+      <Breadcrumb.List>
+        <Breadcrumb.Item>
+          <Breadcrumb.Link href='/'>
             <HomeIcon />
             <span>Home</span>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator>/</BreadcrumbSeparator>
-        <BreadcrumbItem>
-          <BreadcrumbLink href='/documents'>
+          </Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator>/</Breadcrumb.Separator>
+        <Breadcrumb.Item>
+          <Breadcrumb.Link href='/documents'>
             <FolderIcon />
             <span>Documents</span>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator>/</BreadcrumbSeparator>
-        <BreadcrumbItem>
-          <BreadcrumbPage>
+          </Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator>/</Breadcrumb.Separator>
+        <Breadcrumb.Item>
+          <Breadcrumb.Page>
             <FileIcon />
             <span>Report.pdf</span>
-          </BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </BreadcrumbRoot>
+          </Breadcrumb.Page>
+        </Breadcrumb.Item>
+      </Breadcrumb.List>
+    </Breadcrumb.Root>
   );
 }
 ```
@@ -472,19 +458,19 @@ function CustomEventBreadcrumb() {
   };
 
   return (
-    <BreadcrumbRoot>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href='/' onPress={handleCustomPress}>
+    <Breadcrumb.Root>
+      <Breadcrumb.List>
+        <Breadcrumb.Item>
+          <Breadcrumb.Link href='/' onPress={handleCustomPress}>
             Custom Action Link
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator>•</BreadcrumbSeparator>
-        <BreadcrumbItem>
-          <BreadcrumbPage>Current</BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </BreadcrumbRoot>
+          </Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator>•</Breadcrumb.Separator>
+        <Breadcrumb.Item>
+          <Breadcrumb.Page>Current</Breadcrumb.Page>
+        </Breadcrumb.Item>
+      </Breadcrumb.List>
+    </Breadcrumb.Root>
   );
 }
 ```
@@ -496,26 +482,26 @@ import { Link } from 'react-router-dom';
 
 function PolymorphicBreadcrumb() {
   return (
-    <BreadcrumbRoot as='section'>
-      <BreadcrumbList as='ul'>
-        <BreadcrumbItem as='div'>
-          <BreadcrumbLink as={Link} to='/home'>
+    <Breadcrumb.Root as='section'>
+      <Breadcrumb.List as='ul'>
+        <Breadcrumb.Item as='div'>
+          <Breadcrumb.Link as={Link} to='/home'>
             React Router Link
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator as='span'>–</BreadcrumbSeparator>
-        <BreadcrumbItem>
-          <BreadcrumbPage as='h1'>Page Title</BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </BreadcrumbRoot>
+          </Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator as='span'>–</Breadcrumb.Separator>
+        <Breadcrumb.Item>
+          <Breadcrumb.Page as='h1'>Page Title</Breadcrumb.Page>
+        </Breadcrumb.Item>
+      </Breadcrumb.List>
+    </Breadcrumb.Root>
   );
 }
 ```
 
 ## API Reference
 
-### BreadcrumbRoot
+### Breadcrumb.Root
 
 Navigation landmark container that provides context and manages shared state for all breadcrumb components.
 
@@ -541,7 +527,7 @@ Navigation landmark container that provides context and manages shared state for
 | --------------- | ----- | --------------------- |
 | `data-disabled` | `""`  | Present when disabled |
 
-### BreadcrumbList
+### Breadcrumb.List
 
 Ordered list container that provides semantic structure and automatically calculates position data for child items.
 
@@ -558,9 +544,9 @@ Ordered list container that provides semantic structure and automatically calcul
 | ---------------------- | ---------- | ----------------------------- | ------------------------- |
 | _(No specific events)_ | -          | Inherits standard HTML events | Standard DOM interactions |
 
-### BreadcrumbItem
+### Breadcrumb.Item
 
-List item wrapper that receives position and current state from parent BreadcrumbList for styling hooks and accessibility.
+List item wrapper that receives position and current state from parent Breadcrumb.List for styling hooks and accessibility.
 
 **Props**
 
@@ -584,7 +570,7 @@ List item wrapper that receives position and current state from parent Breadcrum
 | `data-position` | `"first" \| "middle" \| "last"` | Indicates position in breadcrumb      |
 | `data-current`  | `""`                            | Present when this is the current page |
 
-### BreadcrumbLink
+### Breadcrumb.Link
 
 Interactive link component with accessibility features, routing integration, and security for external links.
 
@@ -617,7 +603,7 @@ Interactive link component with accessibility features, routing integration, and
 | `data-external` | `""`     | Present when link is external            |
 | `tabIndex`      | `number` | Controls focusability (-1 when disabled) |
 
-### BreadcrumbPage
+### Breadcrumb.Page
 
 Non-interactive current page indicator with proper semantic marking for screen readers.
 
@@ -640,7 +626,7 @@ Non-interactive current page indicator with proper semantic marking for screen r
 | -------------- | ----- | ----------------------- |
 | `data-current` | `""`  | Present on current page |
 
-### BreadcrumbSeparator
+### Breadcrumb.Separator
 
 Visual separator between breadcrumb items, hidden from screen readers to prevent verbose announcements.
 
@@ -673,4 +659,4 @@ Complete keyboard behavior for the entire breadcrumb component:
 | `Home`        | No action         | Breadcrumb   | Not applicable - use Tab to navigate to first link       |
 | `End`         | No action         | Breadcrumb   | Not applicable - use Tab to navigate to last link        |
 
-**Note**: Disabled links are automatically skipped in the tab order and do not respond to keyboard activation. The current page element (BreadcrumbPage) is not focusable as it represents static content.
+**Note**: Disabled links are automatically skipped in the tab order and do not respond to keyboard activation. The current page element (Breadcrumb.Page) is not focusable as it represents static content.
