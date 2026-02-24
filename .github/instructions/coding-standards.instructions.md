@@ -388,6 +388,45 @@ const click = () => {}; // Unclear
 
 ## Performance Guidelines
 
+### Context Value Memoization
+
+**ALWAYS**: Wrap context provider values with `useMemo` to prevent unnecessary re-renders of all consumers on every parent render.
+
+```typescript
+// ALWAYS: Memoize context value objects
+const contextValue = useMemo<MyContextValue>(
+  () => ({
+    value,
+    onChange: handleChange,
+    disabled,
+  }),
+  [value, handleChange, disabled],
+);
+
+return (
+  <MyContext.Provider value={contextValue}>
+    {children}
+  </MyContext.Provider>
+);
+
+// NEVER: Inline object literals as context value
+// This creates a new object reference on every render,
+// causing ALL consumers to re-render unnecessarily
+const contextValue: MyContextValue = {
+  value,
+  onChange: handleChange,
+  disabled,
+};
+
+return (
+  <MyContext.Provider value={contextValue}>
+    {children}
+  </MyContext.Provider>
+);
+```
+
+**Rule:** Every `Context.Provider` value must be wrapped in `useMemo` with appropriate dependencies. Without memoization, a new object reference is created on every render, triggering re-renders in all consuming components even when the actual values haven't changed.
+
 ### Conditional Rendering
 
 ```typescript
