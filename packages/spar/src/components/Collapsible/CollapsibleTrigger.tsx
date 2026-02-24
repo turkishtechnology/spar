@@ -1,4 +1,4 @@
-import React, { ElementType } from 'react';
+import React, { useCallback, ElementType } from 'react';
 import { useCollapsibleContext } from './hooks';
 import type { CollapsibleTriggerProps, CollapsibleTriggerRenderProps } from './types';
 import { Button } from '../Button';
@@ -9,17 +9,32 @@ import type { ButtonProps } from '../Button/types';
  */
 export const CollapsibleTrigger = <T extends ElementType = 'button'>({
   as,
+  disabled: disabledProp,
   children,
   onClick,
   ...props
 }: CollapsibleTriggerProps<T>) => {
-  const { isOpen, open, close, toggle, disabled, triggerId, contentId } = useCollapsibleContext();
+  const {
+    isOpen,
+    open,
+    close,
+    toggle,
+    disabled: contextDisabled,
+    triggerId,
+    contentId,
+  } = useCollapsibleContext();
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (disabled) return;
-    toggle();
-    onClick?.(event);
-  };
+  // Use prop if explicitly provided, otherwise use context
+  const disabled = disabledProp ?? contextDisabled;
+
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (disabled) return;
+      toggle();
+      onClick?.(event);
+    },
+    [disabled, toggle, onClick],
+  );
 
   // Render props for children function
   const renderProps: CollapsibleTriggerRenderProps = {
