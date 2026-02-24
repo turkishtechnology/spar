@@ -1,4 +1,12 @@
-import React, { useState, useCallback, useId, useRef, useEffect, ElementType } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useId,
+  useRef,
+  useEffect,
+  useMemo,
+  ElementType,
+} from 'react';
 import { useControlledState, useItemRegistry } from '@/hooks';
 import { RadioGroupContext } from './hooks';
 import type { RadioGroupProps, RadioGroupContextValue } from './types';
@@ -136,18 +144,32 @@ export const RadioGroup = <T extends ElementType = 'div'>({
     [focusedValue, items, value],
   );
 
-  const contextValue: RadioGroupContextValue = {
-    value,
-    onValueChange: handleValueChange,
-    disabled,
-    name,
-    focusedValue,
-    setFocusedValue,
-    orientation,
-    isInToolbar,
-    registerItem,
-    unregisterItem,
-  };
+  const contextValue = useMemo<RadioGroupContextValue>(
+    () => ({
+      value,
+      onValueChange: handleValueChange,
+      disabled,
+      name,
+      focusedValue,
+      setFocusedValue,
+      orientation,
+      isInToolbar,
+      registerItem,
+      unregisterItem,
+    }),
+    [
+      value,
+      handleValueChange,
+      disabled,
+      name,
+      focusedValue,
+      setFocusedValue,
+      orientation,
+      isInToolbar,
+      registerItem,
+      unregisterItem,
+    ],
+  );
 
   // Data attributes for styling
   const dataAttributes = {

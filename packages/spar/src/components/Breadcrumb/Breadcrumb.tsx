@@ -1,4 +1,4 @@
-import type { ElementType } from 'react';
+import { useMemo, type ElementType } from 'react';
 import { BreadcrumbContext } from './hooks';
 import type { BreadcrumbProps, BreadcrumbContextValue } from './types';
 
@@ -14,10 +14,13 @@ export const Breadcrumb = <T extends ElementType = 'nav'>({
   ...props
 }: BreadcrumbProps<T>) => {
   const Component = as || 'nav';
-  const contextValue: BreadcrumbContextValue = {
-    ...(disabled !== undefined && { disabled }),
-    ...(onNavigate && { onNavigate }),
-  };
+  const contextValue = useMemo<BreadcrumbContextValue>(
+    () => ({
+      ...(disabled !== undefined && { disabled }),
+      ...(onNavigate && { onNavigate }),
+    }),
+    [disabled, onNavigate],
+  );
 
   return (
     <BreadcrumbContext.Provider value={contextValue}>

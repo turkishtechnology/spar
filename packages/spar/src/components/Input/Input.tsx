@@ -1,4 +1,4 @@
-import { useId, type ElementType } from 'react';
+import { useId, useMemo, type ElementType } from 'react';
 import { InputContext } from './hooks';
 import type { InputContextValue, InputProps } from './types';
 
@@ -18,15 +18,18 @@ export const Input = <T extends ElementType = 'div'>({
   const Component = as || 'div';
   const id = useId();
 
-  const contextValue: InputContextValue = {
-    fieldId: `${id}-field`,
-    labelId: `${id}-label`,
-    descriptionId: `${id}-description`,
-    errorId: `${id}-error`,
-    isInvalid,
-    disabled,
-    required,
-  };
+  const contextValue = useMemo<InputContextValue>(
+    () => ({
+      fieldId: `${id}-field`,
+      labelId: `${id}-label`,
+      descriptionId: `${id}-description`,
+      errorId: `${id}-error`,
+      isInvalid,
+      disabled,
+      required,
+    }),
+    [id, isInvalid, disabled, required],
+  );
 
   return (
     <InputContext.Provider value={contextValue}>
