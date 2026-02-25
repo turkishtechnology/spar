@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import {
   Dialog,
   DialogTrigger,
-  DialogPortal,
   DialogOverlay,
   DialogContent,
   DialogTitle,
@@ -41,15 +40,13 @@ const DialogTestComponent = ({
     modal={modal}
   >
     <DialogTrigger>Open Dialog</DialogTrigger>
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogContent trapFocus={trapFocus} restoreFocus={restoreFocus}>
-        <DialogTitle>Dialog Title</DialogTitle>
-        <DialogDescription>Dialog description content</DialogDescription>
-        <p>Main dialog content</p>
-        <DialogClose>Close</DialogClose>
-      </DialogContent>
-    </DialogPortal>
+    <DialogOverlay />
+    <DialogContent trapFocus={trapFocus} restoreFocus={restoreFocus}>
+      <DialogTitle>Dialog Title</DialogTitle>
+      <DialogDescription>Dialog description content</DialogDescription>
+      <p>Main dialog content</p>
+      <DialogClose>Close</DialogClose>
+    </DialogContent>
   </Dialog>
 );
 
@@ -57,16 +54,14 @@ const DialogTestComponent = ({
 const AlertDialogTestComponent = () => (
   <Dialog>
     <DialogTrigger>Open Alert</DialogTrigger>
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogContent role='alertdialog'>
-        <DialogTitle>Delete Confirmation</DialogTitle>
-        <DialogDescription>This action cannot be undone.</DialogDescription>
-        <button type='button'>Cancel</button>
-        <button type='button'>Delete</button>
-        <DialogClose>Close</DialogClose>
-      </DialogContent>
-    </DialogPortal>
+    <DialogOverlay />
+    <DialogContent role='alertdialog'>
+      <DialogTitle>Delete Confirmation</DialogTitle>
+      <DialogDescription>This action cannot be undone.</DialogDescription>
+      <button type='button'>Cancel</button>
+      <button type='button'>Delete</button>
+      <DialogClose>Close</DialogClose>
+    </DialogContent>
   </Dialog>
 );
 
@@ -207,13 +202,11 @@ describe('Dialog Accessibility', () => {
       render(
         <Dialog>
           <DialogTrigger disabled>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogOverlay />
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+          <DialogOverlay />
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -339,21 +332,19 @@ describe('Dialog Accessibility', () => {
       const CustomFocusDialog = () => (
         <Dialog open={true}>
           <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogOverlay />
-            <DialogContent initialFocus={() => customFocusElement!}>
-              <DialogTitle>Title</DialogTitle>
-              <button
-                type='button'
-                ref={(el) => {
-                  customFocusElement = el;
-                }}
-              >
-                Custom Focus
-              </button>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+          <DialogOverlay />
+          <DialogContent initialFocus={() => customFocusElement!}>
+            <DialogTitle>Title</DialogTitle>
+            <button
+              type='button'
+              ref={(el) => {
+                customFocusElement = el;
+              }}
+            >
+              Custom Focus
+            </button>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
         </Dialog>
       );
 
@@ -465,13 +456,11 @@ describe('Dialog Accessibility', () => {
       render(
         <Dialog>
           <DialogTrigger disabled>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogOverlay />
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+          <DialogOverlay />
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -506,14 +495,12 @@ describe('Dialog Accessibility', () => {
       const { container } = render(
         <Dialog open={true}>
           <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogOverlay />
-            <DialogContent>
-              {/* No DialogTitle component */}
-              <p>Content without title</p>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+          <DialogOverlay />
+          <DialogContent>
+            {/* No DialogTitle component */}
+            <p>Content without title</p>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -539,15 +526,13 @@ describe('Dialog Accessibility', () => {
       rerender(
         <Dialog open={true}>
           <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogOverlay />
-            <DialogContent>
-              <DialogTitle>Updated Title</DialogTitle>
-              <DialogDescription>Updated description</DialogDescription>
-              <input type='text' placeholder='New input' />
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+          <DialogOverlay />
+          <DialogContent>
+            <DialogTitle>Updated Title</DialogTitle>
+            <DialogDescription>Updated description</DialogDescription>
+            <input type='text' placeholder='New input' />
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 

@@ -15,15 +15,13 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 ```tsx
 <DialogRoot>
   <DialogTrigger />
-  <DialogPortal>
-    <DialogOverlay />
-    <DialogContent>
-      <DialogTitle />
-      <DialogDescription />
-      <DialogClose />
-      {/* Custom content */}
-    </DialogContent>
-  </DialogPortal>
+  <DialogOverlay />
+  <DialogContent>
+    <DialogTitle />
+    <DialogDescription />
+    <DialogClose />
+    {/* Custom content */}
+  </DialogContent>
 </DialogRoot>
 ```
 
@@ -32,7 +30,7 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 - **Accessibility-first**: WCAG 2.2 AA compliant with full screen reader support
 - **Focus management**: Automatic focus trapping and restoration
 - **Flexible composition**: Granular parts for maximum customization
-- **Portal support**: Render outside DOM hierarchy to avoid z-index issues
+- **Portal support**: Content and Overlay automatically portal to `document.body` (configurable via `container` prop)
 - **Nested dialogs**: Multiple dialog layers with proper stacking
 - **Alert dialog variant**: Special handling for urgent/critical messages
 
@@ -73,16 +71,11 @@ Extends all `ButtonProps` from the Button component.
 | `close` | `() => void` | Function to programmatically close the dialog |
 | `toggle` | `() => void` | Function to programmatically toggle the dialog |
 
-### DialogPortal Props
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `container` | `HTMLElement` | No | `document.body` | Portal container element |
-| `children` | `ReactNode` | Yes | - | Dialog overlay and content |
-
 ### DialogOverlay Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic element type |
+| `container` | `HTMLElement` | No | `document.body` | Portal container element for overlay |
 | `children` | `ReactNode` | No | - | Optional overlay content |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
 
@@ -95,6 +88,7 @@ Extends all `ButtonProps` from the Button component.
 | `restoreFocus` | `boolean` | No | `true` | Restore focus on close |
 | `initialFocus` | `HTMLElement \| (() => HTMLElement)` | No | - | Element to focus on open |
 | `finalFocus` | `HTMLElement \| (() => HTMLElement)` | No | - | Element to focus on close |
+| `container` | `HTMLElement` | No | `document.body` | Portal container element for content |
 | `onOpenAutoFocus` | `(event: Event) => void` | No | - | Callback before auto-focus |
 | `onCloseAutoFocus` | `(event: Event) => void` | No | - | Callback before focus restore |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Escape key handler |
@@ -301,7 +295,7 @@ const useDialogEvents = () => {
 
 ### SSR/CSR Safety and Deterministic IDs
 - Use `useId()` for generating accessible IDs
-- Portal rendering handled safely across environments
+- Portal rendering handled safely across environments via built-in `createPortal` in Content and Overlay
 - No hydration mismatches
 - Deterministic ID generation for title/description relationships
 
@@ -332,9 +326,9 @@ All components expose `data-*` attributes for styling without className coupling
 - No specific data attributes (standard button styling)
 
 ### Animation Support
-- `forceMount` prop on DialogRoot for animation libraries (applies to Portal, Overlay, and Content via context)
+- `forceMount` prop on DialogRoot for animation libraries (applies to Overlay and Content via context)
 - Consistent `data-state` attributes for CSS transitions
-- Portal rendering prevents CSS containment issues
+- Built-in portal rendering prevents CSS containment issues
 
 ## 7. Test Coverage Plan
 
@@ -449,7 +443,7 @@ For teams migrating from other dialog libraries:
 - Keep `open` prop pattern (consistent with Spar standards)
 - Update focus management to use built-in trapping
 - Migrate overlay click handling to `onPointerDownOutside` or `onInteractOutside`
-- Replace custom portal logic with `DialogPortal`
+- Use the `container` prop on DialogContent/DialogOverlay for custom portal targets
 - Add `modal` prop to specify modal vs non-modal behavior
 
 **From Headless UI Dialog:**
@@ -469,9 +463,8 @@ For teams migrating from other dialog libraries:
 #### Core Functionality
 - [ ] DialogRoot with controlled/uncontrolled state (`open` prop)
 - [ ] DialogTrigger with proper event handling
-- [ ] DialogPortal with configurable container
-- [ ] DialogOverlay with modal/non-modal background behavior
-- [ ] DialogContent with modal/non-modal focus management
+- [ ] DialogOverlay with modal/non-modal background behavior and built-in portal (`container` prop)
+- [ ] DialogContent with modal/non-modal focus management and built-in portal (`container` prop)
 - [ ] DialogTitle with heading semantics
 - [ ] DialogDescription with proper association (conditional based on content complexity)
 - [ ] DialogClose with close functionality
@@ -488,7 +481,7 @@ For teams migrating from other dialog libraries:
 - [ ] Nested dialog focus management
 
 #### Advanced Features
-- [ ] Portal rendering with SSR safety
+- [ ] Built-in portal rendering with SSR safety (Content and Overlay portal to `document.body` by default)
 - [ ] Nested dialog support and stacking
 - [ ] Custom focus management options
 - [ ] Outside click and escape handling

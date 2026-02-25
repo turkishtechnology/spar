@@ -173,29 +173,6 @@ export type SelectIconProps<T extends ElementType = 'span'> = PolymorphicProps<
 >;
 
 /**
- * Props for SelectPortal component
- * @remarks Portal container for dropdown rendering
- */
-export interface SelectPortalProps {
-  /**
-   * Portal target element
-   * @defaultValue document.body
-   */
-  container?: HTMLElement | null;
-
-  /**
-   * Force mount for animation control
-   * @defaultValue false
-   */
-  forceMount?: boolean;
-
-  /**
-   * Portal content
-   */
-  children: ReactNode;
-}
-
-/**
  * Own props for SelectContent component
  */
 export interface SelectContentOwnProps {
@@ -256,6 +233,12 @@ export interface SelectContentOwnProps {
    * Arrow element ref for arrow positioning
    */
   arrowRef?: RefObject<HTMLElement | SVGSVGElement>;
+
+  /**
+   * Portal container element. Content is portaled to document.body by default.
+   * @defaultValue document.body
+   */
+  container?: HTMLElement | null;
 
   /**
    * Escape key handler

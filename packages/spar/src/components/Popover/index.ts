@@ -3,7 +3,6 @@ import { PopoverTrigger } from './PopoverTrigger';
 import { PopoverContent } from './PopoverContent';
 import { PopoverArrow } from './PopoverArrow';
 import { PopoverAnchor } from './PopoverAnchor';
-import { PopoverPortal } from './PopoverPortal';
 import { PopoverClose } from './PopoverClose';
 export { usePopoverContext } from './hooks';
 
@@ -13,7 +12,6 @@ const Popover = PopoverRoot as typeof PopoverRoot & {
   Content: typeof PopoverContent;
   Arrow: typeof PopoverArrow;
   Anchor: typeof PopoverAnchor;
-  Portal: typeof PopoverPortal;
   Close: typeof PopoverClose;
 };
 
@@ -22,7 +20,6 @@ Popover.Trigger = PopoverTrigger;
 Popover.Content = PopoverContent;
 Popover.Arrow = PopoverArrow;
 Popover.Anchor = PopoverAnchor;
-Popover.Portal = PopoverPortal;
 Popover.Close = PopoverClose;
 
 export {
@@ -32,7 +29,6 @@ export {
   PopoverContent,
   PopoverArrow,
   PopoverAnchor,
-  PopoverPortal,
   PopoverClose,
 };
 
@@ -47,7 +43,6 @@ export type {
   PopoverAnchorOwnProps,
   PopoverAnchorProps,
   PopoverAnchorRenderProps,
-  PopoverPortalProps,
   PopoverCloseProps,
   PopoverCloseRenderProps,
   PopoverSide,

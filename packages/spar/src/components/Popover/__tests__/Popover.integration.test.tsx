@@ -6,7 +6,6 @@ import { PopoverTrigger } from '../PopoverTrigger';
 import { PopoverContent } from '../PopoverContent';
 import { PopoverArrow } from '../PopoverArrow';
 import { PopoverAnchor } from '../PopoverAnchor';
-import { PopoverPortal } from '../PopoverPortal';
 import { PopoverClose } from '../PopoverClose';
 
 describe('Popover Integration Tests', () => {
@@ -249,22 +248,23 @@ describe('Popover Integration Tests', () => {
       document.body.appendChild(customContainer);
 
       const PortalPopover = () => (
-        <Popover>
+        <Popover defaultOpen>
           <PopoverTrigger>Open in portal</PopoverTrigger>
-          <PopoverPortal container={customContainer}>
+          <PopoverContent container={customContainer}>
             <div data-testid='portal-content'>
               This content is rendered in a custom portal container.
             </div>
-          </PopoverPortal>
+          </PopoverContent>
         </Popover>
       );
 
       render(<PortalPopover />);
 
-      // PopoverPortal renders immediately, doesn't depend on popover state
-      expect(
-        screen.getByText('This content is rendered in a custom portal container.'),
-      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          screen.getByText('This content is rendered in a custom portal container.'),
+        ).toBeInTheDocument();
+      });
 
       // Verify content is in custom container
       expect(customContainer).toContainElement(screen.getByTestId('portal-content'));

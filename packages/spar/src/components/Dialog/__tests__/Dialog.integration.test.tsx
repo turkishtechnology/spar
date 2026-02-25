@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import {
   Dialog,
   DialogTrigger,
-  DialogPortal,
   DialogOverlay,
   DialogContent,
   DialogTitle,
@@ -28,29 +27,28 @@ describe('Dialog Integration Tests', () => {
       render(
         <Dialog onOpenChange={onOpenChange}>
           <DialogTrigger>Open Settings</DialogTrigger>
-          <DialogPortal>
-            <DialogOverlay>
-              <DialogContent>
-                <DialogTitle>Settings</DialogTitle>
-                <DialogDescription>Configure your preferences</DialogDescription>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    onSubmit();
-                  }}
-                >
-                  <label htmlFor='username'>Username:</label>
-                  <input id='username' name='username' defaultValue='john' />
-                  <label htmlFor='email'>Email:</label>
-                  <input id='email' name='email' type='email' defaultValue='john@example.com' />
-                  <div>
-                    <button type='submit'>Save</button>
-                    <DialogClose type='button'>Cancel</DialogClose>
-                  </div>
-                </form>
-              </DialogContent>
-            </DialogOverlay>
-          </DialogPortal>
+
+          <DialogOverlay>
+            <DialogContent>
+              <DialogTitle>Settings</DialogTitle>
+              <DialogDescription>Configure your preferences</DialogDescription>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  onSubmit();
+                }}
+              >
+                <label htmlFor='username'>Username:</label>
+                <input id='username' name='username' defaultValue='john' />
+                <label htmlFor='email'>Email:</label>
+                <input id='email' name='email' type='email' defaultValue='john@example.com' />
+                <div>
+                  <button type='submit'>Save</button>
+                  <DialogClose type='button'>Cancel</DialogClose>
+                </div>
+              </form>
+            </DialogContent>
+          </DialogOverlay>
         </Dialog>,
       );
 
@@ -99,32 +97,31 @@ describe('Dialog Integration Tests', () => {
       render(
         <Dialog>
           <DialogTrigger>Delete Item</DialogTrigger>
-          <DialogPortal>
-            <DialogOverlay>
-              <DialogContent role='alertdialog'>
-                <DialogTitle>Confirm Deletion</DialogTitle>
-                <DialogDescription>
-                  Are you sure you want to delete this item? This action cannot be undone.
-                </DialogDescription>
-                <div>
-                  <button
-                    onClick={() => {
-                      onConfirm();
-                    }}
-                  >
-                    Delete
-                  </button>
-                  <DialogClose
-                    onClick={() => {
-                      onCancel();
-                    }}
-                  >
-                    Cancel
-                  </DialogClose>
-                </div>
-              </DialogContent>
-            </DialogOverlay>
-          </DialogPortal>
+
+          <DialogOverlay>
+            <DialogContent role='alertdialog'>
+              <DialogTitle>Confirm Deletion</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to delete this item? This action cannot be undone.
+              </DialogDescription>
+              <div>
+                <button
+                  onClick={() => {
+                    onConfirm();
+                  }}
+                >
+                  Delete
+                </button>
+                <DialogClose
+                  onClick={() => {
+                    onCancel();
+                  }}
+                >
+                  Cancel
+                </DialogClose>
+              </div>
+            </DialogContent>
+          </DialogOverlay>
         </Dialog>,
       );
 
@@ -152,35 +149,33 @@ describe('Dialog Integration Tests', () => {
 
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Advanced Settings</DialogTitle>
-              <div role='tablist'>
-                <button role='tab' aria-selected={true} onClick={() => onTabSelect('general')}>
-                  General
-                </button>
-                <button role='tab' aria-selected={false} onClick={() => onTabSelect('security')}>
-                  Security
-                </button>
-              </div>
-              <div role='tabpanel'>
-                <h3>General Settings</h3>
-                <label>
-                  <input type='checkbox' defaultChecked />
-                  Enable notifications
-                </label>
-                <label>
-                  <input type='radio' name='theme' value='light' defaultChecked />
-                  Light theme
-                </label>
-                <label>
-                  <input type='radio' name='theme' value='dark' />
-                  Dark theme
-                </label>
-              </div>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Advanced Settings</DialogTitle>
+            <div role='tablist'>
+              <button role='tab' aria-selected={true} onClick={() => onTabSelect('general')}>
+                General
+              </button>
+              <button role='tab' aria-selected={false} onClick={() => onTabSelect('security')}>
+                Security
+              </button>
+            </div>
+            <div role='tabpanel'>
+              <h3>General Settings</h3>
+              <label>
+                <input type='checkbox' defaultChecked />
+                Enable notifications
+              </label>
+              <label>
+                <input type='radio' name='theme' value='light' defaultChecked />
+                Light theme
+              </label>
+              <label>
+                <input type='radio' name='theme' value='dark' />
+                Dark theme
+              </label>
+            </div>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -208,22 +203,20 @@ describe('Dialog Integration Tests', () => {
         <div>
           <Dialog>
             <DialogTrigger>Open Dialog 1</DialogTrigger>
-            <DialogPortal>
-              <DialogContent onInteractOutside={(e) => e.preventDefault()}>
-                <DialogTitle>Dialog 1</DialogTitle>
-                <DialogClose>Close</DialogClose>
-              </DialogContent>
-            </DialogPortal>
+
+            <DialogContent onInteractOutside={(e) => e.preventDefault()}>
+              <DialogTitle>Dialog 1</DialogTitle>
+              <DialogClose>Close</DialogClose>
+            </DialogContent>
           </Dialog>
 
           <Dialog>
             <DialogTrigger>Open Dialog 2</DialogTrigger>
-            <DialogPortal>
-              <DialogContent onInteractOutside={(e) => e.preventDefault()}>
-                <DialogTitle>Dialog 2</DialogTitle>
-                <DialogClose>Close</DialogClose>
-              </DialogContent>
-            </DialogPortal>
+
+            <DialogContent onInteractOutside={(e) => e.preventDefault()}>
+              <DialogTitle>Dialog 2</DialogTitle>
+              <DialogClose>Close</DialogClose>
+            </DialogContent>
           </Dialog>
         </div>,
       );
@@ -258,12 +251,11 @@ describe('Dialog Integration Tests', () => {
       render(
         <Dialog onOpenChange={onOpenChange}>
           <DialogTrigger>Toggle Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Rapid Toggle Dialog</DialogTitle>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+
+          <DialogContent>
+            <DialogTitle>Rapid Toggle Dialog</DialogTitle>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -287,13 +279,12 @@ describe('Dialog Integration Tests', () => {
       render(
         <Dialog>
           <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Dialog Title</DialogTitle>
-              <button>First Button</button>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+            <button>First Button</button>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -321,12 +312,11 @@ describe('Dialog Integration Tests', () => {
             <button onClick={() => setOpen(false)}>External Close</button>
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger>Internal Toggle</DialogTrigger>
-              <DialogPortal>
-                <DialogContent>
-                  <DialogTitle>Controlled Dialog</DialogTitle>
-                  <DialogClose>Internal Close</DialogClose>
-                </DialogContent>
-              </DialogPortal>
+
+              <DialogContent>
+                <DialogTitle>Controlled Dialog</DialogTitle>
+                <DialogClose>Internal Close</DialogClose>
+              </DialogContent>
             </Dialog>
           </div>
         );
@@ -359,19 +349,17 @@ describe('Dialog Integration Tests', () => {
 
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogOverlay data-testid='overlay'>
-              <DialogContent data-testid='content'>
-                <DialogTitle>Dialog with Nested Content</DialogTitle>
-                <div data-testid='nested-div'>
-                  <button data-testid='nested-button'>Nested Button</button>
-                  <div data-testid='deeply-nested'>
-                    <span data-testid='deep-span'>Deep content</span>
-                  </div>
+          <DialogOverlay data-testid='overlay'>
+            <DialogContent data-testid='content'>
+              <DialogTitle>Dialog with Nested Content</DialogTitle>
+              <div data-testid='nested-div'>
+                <button data-testid='nested-button'>Nested Button</button>
+                <div data-testid='deeply-nested'>
+                  <span data-testid='deep-span'>Deep content</span>
                 </div>
-              </DialogContent>
-            </DialogOverlay>
-          </DialogPortal>
+              </div>
+            </DialogContent>
+          </DialogOverlay>
         </Dialog>,
       );
 
@@ -402,49 +390,48 @@ describe('Dialog Integration Tests', () => {
       render(
         <Dialog>
           <DialogTrigger>Sign In</DialogTrigger>
-          <DialogPortal>
-            <DialogOverlay>
-              <DialogContent>
-                <DialogTitle>Sign In to Your Account</DialogTitle>
-                <DialogDescription>Enter your credentials to access your account</DialogDescription>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.currentTarget);
-                    onLogin({
-                      email: formData.get('email'),
-                      password: formData.get('password'),
-                    });
-                  }}
-                >
-                  <div>
-                    <label htmlFor='email'>Email:</label>
-                    <input id='email' name='email' type='email' required autoComplete='email' />
-                  </div>
-                  <div>
-                    <label htmlFor='password'>Password:</label>
-                    <input
-                      id='password'
-                      name='password'
-                      type='password'
-                      required
-                      autoComplete='current-password'
-                    />
-                  </div>
-                  <div>
-                    <label>
-                      <input type='checkbox' name='remember' />
-                      Remember me
-                    </label>
-                  </div>
-                  <div>
-                    <button type='submit'>Sign In</button>
-                    <DialogClose type='button'>Cancel</DialogClose>
-                  </div>
-                </form>
-              </DialogContent>
-            </DialogOverlay>
-          </DialogPortal>
+
+          <DialogOverlay>
+            <DialogContent>
+              <DialogTitle>Sign In to Your Account</DialogTitle>
+              <DialogDescription>Enter your credentials to access your account</DialogDescription>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  onLogin({
+                    email: formData.get('email'),
+                    password: formData.get('password'),
+                  });
+                }}
+              >
+                <div>
+                  <label htmlFor='email'>Email:</label>
+                  <input id='email' name='email' type='email' required autoComplete='email' />
+                </div>
+                <div>
+                  <label htmlFor='password'>Password:</label>
+                  <input
+                    id='password'
+                    name='password'
+                    type='password'
+                    required
+                    autoComplete='current-password'
+                  />
+                </div>
+                <div>
+                  <label>
+                    <input type='checkbox' name='remember' />
+                    Remember me
+                  </label>
+                </div>
+                <div>
+                  <button type='submit'>Sign In</button>
+                  <DialogClose type='button'>Cancel</DialogClose>
+                </div>
+              </form>
+            </DialogContent>
+          </DialogOverlay>
         </Dialog>,
       );
 
@@ -491,48 +478,46 @@ describe('Dialog Integration Tests', () => {
               open={selectedImage !== null}
               onOpenChange={(open) => !open && setSelectedImage(null)}
             >
-              <DialogPortal>
-                <DialogOverlay>
-                  <DialogContent role='dialog'>
-                    <DialogTitle>Image Viewer</DialogTitle>
-                    {selectedImage && (
+              <DialogOverlay>
+                <DialogContent role='dialog'>
+                  <DialogTitle>Image Viewer</DialogTitle>
+                  {selectedImage && (
+                    <div>
+                      <img
+                        src={images.find((img) => img.id === selectedImage)?.src}
+                        alt={images.find((img) => img.id === selectedImage)?.alt}
+                      />
                       <div>
-                        <img
-                          src={images.find((img) => img.id === selectedImage)?.src}
-                          alt={images.find((img) => img.id === selectedImage)?.alt}
-                        />
-                        <div>
-                          <button
-                            onClick={() => {
-                              const currentIndex = images.findIndex(
-                                (img) => img.id === selectedImage,
-                              );
-                              const prevIndex = (currentIndex - 1 + images.length) % images.length;
-                              setSelectedImage(images[prevIndex]!.id);
-                            }}
-                            disabled={images.length <= 1}
-                          >
-                            Previous
-                          </button>
-                          <button
-                            onClick={() => {
-                              const currentIndex = images.findIndex(
-                                (img) => img.id === selectedImage,
-                              );
-                              const nextIndex = (currentIndex + 1) % images.length;
-                              setSelectedImage(images[nextIndex]!.id);
-                            }}
-                            disabled={images.length <= 1}
-                          >
-                            Next
-                          </button>
-                        </div>
+                        <button
+                          onClick={() => {
+                            const currentIndex = images.findIndex(
+                              (img) => img.id === selectedImage,
+                            );
+                            const prevIndex = (currentIndex - 1 + images.length) % images.length;
+                            setSelectedImage(images[prevIndex]!.id);
+                          }}
+                          disabled={images.length <= 1}
+                        >
+                          Previous
+                        </button>
+                        <button
+                          onClick={() => {
+                            const currentIndex = images.findIndex(
+                              (img) => img.id === selectedImage,
+                            );
+                            const nextIndex = (currentIndex + 1) % images.length;
+                            setSelectedImage(images[nextIndex]!.id);
+                          }}
+                          disabled={images.length <= 1}
+                        >
+                          Next
+                        </button>
                       </div>
-                    )}
-                    <DialogClose>Close</DialogClose>
-                  </DialogContent>
-                </DialogOverlay>
-              </DialogPortal>
+                    </div>
+                  )}
+                  <DialogClose>Close</DialogClose>
+                </DialogContent>
+              </DialogOverlay>
             </Dialog>
           </div>
         );

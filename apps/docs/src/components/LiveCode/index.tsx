@@ -32,7 +32,6 @@ import {
   TooltipRoot,
   TooltipTrigger,
   TooltipContent,
-  TooltipPortal,
 } from '@turkish-technology/spar';
 
 import { SnapshotPreview } from './SnapshotPreview';
@@ -333,40 +332,38 @@ export const LiveCode = ({ code, cssCode }: LiveCodeProps) => {
                           />
                         </svg>
                       </TooltipTrigger>
-                      <TooltipPortal>
-                        <TooltipContent
-                          className='live-code-copy-tooltip'
-                          side='bottom'
-                          sideOffset={5}
-                          style={{
-                            borderColor: isCopied
-                              ? 'var(--states-success-sub-base, #A0E6BA)'
-                              : 'var(--border-dark, #525866)',
-                            background: isCopied
-                              ? 'var(--states-success-light, #CAF1D8)'
-                              : 'var(--background-darkest, #222530)',
-                            color: isCopied ? 'var(--text-darkest, #222530)' : '#fff',
-                          }}
-                        >
-                          {isCopied && (
-                            <div className='live-code-copy-tooltip-icon'>
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='14'
-                                height='14'
-                                viewBox='0 0 14 14'
-                                fill='none'
-                              >
-                                <path
-                                  d='M6.66667 0C2.98667 0 0 2.98667 0 6.66667C0 10.3467 2.98667 13.3333 6.66667 13.3333C10.3467 13.3333 13.3333 10.3467 13.3333 6.66667C13.3333 2.98667 10.3467 0 6.66667 0ZM4.86 9.52667L2.46667 7.13333C2.20667 6.87333 2.20667 6.45333 2.46667 6.19333C2.72667 5.93333 3.14667 5.93333 3.40667 6.19333L5.33333 8.11333L9.92 3.52667C10.18 3.26667 10.6 3.26667 10.86 3.52667C11.12 3.78667 11.12 4.20667 10.86 4.46667L5.8 9.52667C5.54667 9.78667 5.12 9.78667 4.86 9.52667Z'
-                                  fill='#188A42'
-                                />
-                              </svg>
-                            </div>
-                          )}
-                          {isCopied ? 'Copied successfully' : 'Copy'}
-                        </TooltipContent>
-                      </TooltipPortal>
+                      <TooltipContent
+                        className='live-code-copy-tooltip'
+                        side='bottom'
+                        sideOffset={5}
+                        style={{
+                          borderColor: isCopied
+                            ? 'var(--states-success-sub-base, #A0E6BA)'
+                            : 'var(--border-dark, #525866)',
+                          background: isCopied
+                            ? 'var(--states-success-light, #CAF1D8)'
+                            : 'var(--background-darkest, #222530)',
+                          color: isCopied ? 'var(--text-darkest, #222530)' : '#fff',
+                        }}
+                      >
+                        {isCopied && (
+                          <div className='live-code-copy-tooltip-icon'>
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              width='14'
+                              height='14'
+                              viewBox='0 0 14 14'
+                              fill='none'
+                            >
+                              <path
+                                d='M6.66667 0C2.98667 0 0 2.98667 0 6.66667C0 10.3467 2.98667 13.3333 6.66667 13.3333C10.3467 13.3333 13.3333 10.3467 13.3333 6.66667C13.3333 2.98667 10.3467 0 6.66667 0ZM4.86 9.52667L2.46667 7.13333C2.20667 6.87333 2.20667 6.45333 2.46667 6.19333C2.72667 5.93333 3.14667 5.93333 3.40667 6.19333L5.33333 8.11333L9.92 3.52667C10.18 3.26667 10.6 3.26667 10.86 3.52667C11.12 3.78667 11.12 4.20667 10.86 4.46667L5.8 9.52667C5.54667 9.78667 5.12 9.78667 4.86 9.52667Z'
+                                fill='#188A42'
+                              />
+                            </svg>
+                          </div>
+                        )}
+                        {isCopied ? 'Copied successfully' : 'Copy'}
+                      </TooltipContent>
                     </TooltipRoot>
                   </TooltipProvider>
                 </div>

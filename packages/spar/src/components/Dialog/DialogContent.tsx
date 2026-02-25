@@ -1,4 +1,5 @@
-import { useEffect, useCallback, useRef, ElementType } from 'react';
+import { useEffect, useCallback, useRef, useState, ElementType } from 'react';
+import { createPortal } from 'react-dom';
 import { useMergedRef, useInteractOutside } from '@/hooks';
 import { useDialogContext } from './hooks';
 import type { DialogContentProps } from './types';
@@ -14,6 +15,7 @@ export const DialogContent = <T extends ElementType = 'div'>({
   restoreFocus = true,
   initialFocus,
   finalFocus,
+  container,
   onOpenAutoFocus,
   onCloseAutoFocus,
   onEscapeKeyDown,
@@ -48,6 +50,12 @@ export const DialogContent = <T extends ElementType = 'div'>({
   // Track whether open focus has already been handled to prevent StrictMode double-fire
   const hasOpenFocusedRef = useRef(false);
 
+  // SSR safety - only render portal after mount
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Keep refs updated with latest values
   onOpenAutoFocusRef.current = onOpenAutoFocus;
   initialFocusRef.current = initialFocus;
@@ -73,17 +81,18 @@ export const DialogContent = <T extends ElementType = 'div'>({
 
   // Handle open auto-focus
   useEffect(() => {
-    if (!isOpen) {
+    if (!isOpen || !mounted) {
       hasOpenFocusedRef.current = false;
       return;
     }
 
     // Prevent StrictMode double-fire
     if (hasOpenFocusedRef.current) return;
-    hasOpenFocusedRef.current = true;
 
     const contentElement = contentRef.current;
     if (!contentElement) return;
+
+    hasOpenFocusedRef.current = true;
 
     // Focus initial element
     const focusElement = (() => {
@@ -118,11 +127,11 @@ export const DialogContent = <T extends ElementType = 'div'>({
         focusElement.focus();
       }
     }
-  }, [isOpen, role, contentRef]);
+  }, [isOpen, mounted, role, contentRef]);
 
   // Focus trap for modal dialogs
   useEffect(() => {
-    if (!isOpen || !modal || !trapFocus) return;
+    if (!isOpen || !mounted || !modal || !trapFocus) return;
 
     const contentElement = contentRef.current;
     if (!contentElement) return;
@@ -157,7 +166,7 @@ export const DialogContent = <T extends ElementType = 'div'>({
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, modal, trapFocus]);
+  }, [isOpen, mounted, modal, trapFocus]);
 
   // Escape key handler
   const handleKeyDown = useCallback(
@@ -190,9 +199,16 @@ export const DialogContent = <T extends ElementType = 'div'>({
     return null;
   }
 
+  // Don't render on server
+  if (!mounted) {
+    return null;
+  }
+
   const dataState = isOpen ? 'open' : 'closed';
 
-  return (
+  const portalContainer = container || document.body;
+
+  const contentElement = (
     <Component
       ref={mergedRef}
       role={role}
@@ -208,6 +224,8 @@ export const DialogContent = <T extends ElementType = 'div'>({
       {children}
     </Component>
   );
+
+  return createPortal(contentElement, portalContainer);
 };
 
 DialogContent.displayName = 'DialogContent';

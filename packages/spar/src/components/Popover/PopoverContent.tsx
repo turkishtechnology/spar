@@ -17,6 +17,7 @@ export const PopoverContent = <T extends ElementType = 'div'>({
   avoidCollisions = true,
   collisionBoundary,
   hideWhenDetached = false,
+  container,
   onOpenAutoFocus,
   onCloseAutoFocus,
   onEscapeKeyDown,
@@ -186,7 +187,7 @@ export const PopoverContent = <T extends ElementType = 'div'>({
     </Component>
   );
 
-  return createPortal(contentElement, document.body);
+  return createPortal(contentElement, container || document.body);
 };
 
 PopoverContent.displayName = 'PopoverContent';
