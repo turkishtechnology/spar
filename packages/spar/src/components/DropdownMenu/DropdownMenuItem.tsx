@@ -9,7 +9,7 @@ export const DropdownMenuItem = ({
   role: roleProp = 'menuitem',
   ...props
 }: DropdownMenuItemProps) => {
-  return <MenuItemPrimitive {...props} role={roleProp} itemType='item' closeBehavior='close' />;
+  return <MenuItemPrimitive {...props} role={roleProp} />;
 };
 
 DropdownMenuItem.displayName = 'DropdownMenuItem';
