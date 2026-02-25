@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import {
   Dialog,
   DialogTrigger,
-  DialogPortal,
   DialogOverlay,
   DialogContent,
   DialogTitle,
@@ -60,11 +59,9 @@ describe('Dialog', () => {
       render(
         <Dialog defaultOpen={true}>
           <DialogTrigger>Open</DialogTrigger>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -74,9 +71,7 @@ describe('Dialog', () => {
     it('should set modal to true by default', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogOverlay data-testid='overlay' />
-          </DialogPortal>
+          <DialogOverlay data-testid='overlay' />
         </Dialog>,
       );
 
@@ -86,9 +81,7 @@ describe('Dialog', () => {
     it('should handle non-modal dialogs', () => {
       render(
         <Dialog modal={false} defaultOpen={true}>
-          <DialogPortal>
-            <DialogOverlay data-testid='overlay' />
-          </DialogPortal>
+          <DialogOverlay data-testid='overlay' />
         </Dialog>,
       );
 
@@ -102,11 +95,10 @@ describe('Dialog', () => {
       render(
         <Dialog disabled onOpenChange={onOpenChange}>
           <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Dialog Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -126,11 +118,10 @@ describe('Dialog', () => {
       render(
         <Dialog disabled={false} onOpenChange={onOpenChange}>
           <DialogTrigger disabled>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Dialog Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -148,11 +139,10 @@ describe('Dialog', () => {
       render(
         <Dialog disabled onOpenChange={onOpenChange}>
           <DialogTrigger disabled={false}>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Dialog Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -195,11 +185,10 @@ describe('Dialog', () => {
       render(
         <Dialog>
           <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -216,11 +205,10 @@ describe('Dialog', () => {
       render(
         <Dialog>
           <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Dialog Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -233,11 +221,10 @@ describe('Dialog', () => {
       render(
         <Dialog>
           <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Dialog Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -253,11 +240,10 @@ describe('Dialog', () => {
       render(
         <Dialog>
           <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Dialog Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -276,11 +262,10 @@ describe('Dialog', () => {
           <DialogTrigger disabled onClick={onClick}>
             Open Dialog
           </DialogTrigger>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Dialog Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -339,9 +324,7 @@ describe('Dialog', () => {
     it('should not render when dialog is closed', () => {
       render(
         <Dialog>
-          <DialogPortal>
-            <DialogOverlay data-testid='overlay' />
-          </DialogPortal>
+          <DialogOverlay data-testid='overlay' />
         </Dialog>,
       );
 
@@ -351,9 +334,7 @@ describe('Dialog', () => {
     it('should render when dialog is open', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogOverlay data-testid='overlay' />
-          </DialogPortal>
+          <DialogOverlay data-testid='overlay' />
         </Dialog>,
       );
 
@@ -376,13 +357,11 @@ describe('Dialog', () => {
       const user = userEvent.setup();
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogOverlay data-testid='overlay'>
-              <DialogContent>
-                <DialogTitle>Title</DialogTitle>
-              </DialogContent>
-            </DialogOverlay>
-          </DialogPortal>
+          <DialogOverlay data-testid='overlay'>
+            <DialogContent>
+              <DialogTitle>Title</DialogTitle>
+            </DialogContent>
+          </DialogOverlay>
         </Dialog>,
       );
 
@@ -399,14 +378,12 @@ describe('Dialog', () => {
       const user = userEvent.setup();
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogOverlay data-testid='overlay'>
-              <DialogContent data-testid='content'>
-                <DialogTitle>Title</DialogTitle>
-                <button>Inside button</button>
-              </DialogContent>
-            </DialogOverlay>
-          </DialogPortal>
+          <DialogOverlay data-testid='overlay'>
+            <DialogContent data-testid='content'>
+              <DialogTitle>Title</DialogTitle>
+              <button>Inside button</button>
+            </DialogContent>
+          </DialogOverlay>
         </Dialog>,
       );
 
@@ -420,9 +397,7 @@ describe('Dialog', () => {
     it('should support polymorphic as prop', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogOverlay as='section' data-testid='overlay' />
-          </DialogPortal>
+          <DialogOverlay as='section' data-testid='overlay' />
         </Dialog>,
       );
 
@@ -435,9 +410,7 @@ describe('Dialog', () => {
       const onClick = jest.fn();
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogOverlay onClick={onClick} data-testid='overlay' />
-          </DialogPortal>
+          <DialogOverlay onClick={onClick} data-testid='overlay' />
         </Dialog>,
       );
 
@@ -450,12 +423,10 @@ describe('Dialog', () => {
     it('should render with proper role', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-              <p>Content</p>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+            <p>Content</p>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -465,12 +436,10 @@ describe('Dialog', () => {
     it('should have proper ARIA attributes', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Dialog Title</DialogTitle>
-              <DialogDescription>Dialog description</DialogDescription>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+            <DialogDescription>Dialog description</DialogDescription>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -482,11 +451,9 @@ describe('Dialog', () => {
     it('should support alertdialog role', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent role='alertdialog'>
-              <DialogTitle>Alert Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent role='alertdialog'>
+            <DialogTitle>Alert Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -496,11 +463,9 @@ describe('Dialog', () => {
     it('should not render when dialog is closed', () => {
       render(
         <Dialog>
-          <DialogPortal>
-            <DialogContent data-testid='content'>
-              <DialogTitle>Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent data-testid='content'>
+            <DialogTitle>Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -523,11 +488,9 @@ describe('Dialog', () => {
     it('should support polymorphic as prop', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent as='section' data-testid='content'>
-              <DialogTitle>Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent as='section' data-testid='content'>
+            <DialogTitle>Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -541,11 +504,9 @@ describe('Dialog', () => {
     it('should render as h2 by default', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Dialog Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -557,11 +518,9 @@ describe('Dialog', () => {
     it('should support custom heading level via data attribute', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle level={1}>Dialog Title</DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle level={1}>Dialog Title</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -572,13 +531,11 @@ describe('Dialog', () => {
     it('should support polymorphic as prop', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle as='div' data-testid='title'>
-                Dialog Title
-              </DialogTitle>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle as='div' data-testid='title'>
+              Dialog Title
+            </DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -592,12 +549,10 @@ describe('Dialog', () => {
     it('should render as paragraph by default', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-              <DialogDescription>This is a description</DialogDescription>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+            <DialogDescription>This is a description</DialogDescription>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -609,14 +564,12 @@ describe('Dialog', () => {
     it('should support polymorphic as prop', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-              <DialogDescription as='div' data-testid='description'>
-                This is a description
-              </DialogDescription>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+            <DialogDescription as='div' data-testid='description'>
+              This is a description
+            </DialogDescription>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -630,12 +583,10 @@ describe('Dialog', () => {
     it('should render as button by default', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -648,12 +599,10 @@ describe('Dialog', () => {
       const user = userEvent.setup();
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -669,12 +618,10 @@ describe('Dialog', () => {
       const user = userEvent.setup();
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -691,12 +638,10 @@ describe('Dialog', () => {
       const user = userEvent.setup();
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -712,14 +657,12 @@ describe('Dialog', () => {
     it('should support polymorphic as prop', () => {
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-              <DialogClose as='div' data-testid='close'>
-                Close
-              </DialogClose>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+            <DialogClose as='div' data-testid='close'>
+              Close
+            </DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -732,12 +675,10 @@ describe('Dialog', () => {
       const onClick = jest.fn();
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-              <DialogClose onClick={onClick}>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+            <DialogClose onClick={onClick}>Close</DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -750,12 +691,10 @@ describe('Dialog', () => {
       const onKeyDown = jest.fn();
       render(
         <Dialog defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Title</DialogTitle>
-              <DialogClose onKeyDown={onKeyDown}>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
+          <DialogContent>
+            <DialogTitle>Title</DialogTitle>
+            <DialogClose onKeyDown={onKeyDown}>Close</DialogClose>
+          </DialogContent>
         </Dialog>,
       );
 
@@ -772,15 +711,14 @@ describe('Dialog', () => {
       render(
         <Dialog defaultOpen={true}>
           <DialogTrigger>Open</DialogTrigger>
-          <DialogPortal>
-            <DialogOverlay>
-              <DialogContent>
-                <DialogTitle>Title</DialogTitle>
-                <DialogDescription>Description</DialogDescription>
-                <DialogClose>Close</DialogClose>
-              </DialogContent>
-            </DialogOverlay>
-          </DialogPortal>
+
+          <DialogOverlay>
+            <DialogContent>
+              <DialogTitle>Title</DialogTitle>
+              <DialogDescription>Description</DialogDescription>
+              <DialogClose>Close</DialogClose>
+            </DialogContent>
+          </DialogOverlay>
         </Dialog>,
       );
 

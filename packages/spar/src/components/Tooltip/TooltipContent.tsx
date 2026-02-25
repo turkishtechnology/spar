@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useRef, type ElementType } from 'react';
+import React, { useEffect, useCallback, useRef, useState, type ElementType } from 'react';
 import {
   useFloating,
   autoUpdate,
@@ -11,6 +11,7 @@ import {
   type Placement,
   type Middleware,
 } from '@floating-ui/react-dom';
+import { createPortal } from 'react-dom';
 import { useMergedRef } from '@/hooks';
 import { useTooltipContext } from './hooks';
 import type { TooltipContentProps } from './types';
@@ -41,6 +42,7 @@ export const TooltipContent = <T extends ElementType = 'div'>({
   collisionBoundary,
   collisionPadding = 8,
   hideWhenDetached = false,
+  container,
   onEscapeKeyDown,
   ref,
   ...props
@@ -49,6 +51,12 @@ export const TooltipContent = <T extends ElementType = 'div'>({
   const context = useTooltipContext();
   const internalRef = useRef<HTMLElement>(null);
   const mergedRef = useMergedRef(internalRef, ref);
+
+  // SSR safety - only render portal after mount
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Update placement
   useEffect(() => {
@@ -187,18 +195,8 @@ export const TooltipContent = <T extends ElementType = 'div'>({
     }
   }, [context]);
 
-  // Don't render if not open or disabled
-  if (!context.isOpen || context.disabled) {
-    return null;
-  }
-
-  // Check if hidden by middleware
-  const isHidden = hideWhenDetached && middlewareData.hide?.referenceHidden;
-  if (isHidden) {
-    return null;
-  }
-
   // Ref callback that combines mergedRef with context and floating refs
+  // Must be before early returns to satisfy Rules of Hooks
   const refCallback = useCallback(
     (node: HTMLElement | null) => {
       mergedRef(node);
@@ -207,6 +205,22 @@ export const TooltipContent = <T extends ElementType = 'div'>({
     },
     [mergedRef, context.contentRef, refs],
   );
+
+  // Don't render if not open or disabled
+  if (!context.isOpen || context.disabled) {
+    return null;
+  }
+
+  // Don't render on server
+  if (!mounted) {
+    return null;
+  }
+
+  // Check if hidden by middleware
+  const isHidden = hideWhenDetached && middlewareData.hide?.referenceHidden;
+  if (isHidden) {
+    return null;
+  }
 
   // Get arrow data
   const arrowX = middlewareData.arrow?.x;
@@ -234,7 +248,9 @@ export const TooltipContent = <T extends ElementType = 'div'>({
     ...props,
   };
 
-  return <Component {...contentProps}>{children}</Component>;
+  const portalContainer = container || document.body;
+
+  return createPortal(<Component {...contentProps}>{children}</Component>, portalContainer);
 };
 
 TooltipContent.displayName = 'TooltipContent';

@@ -9,7 +9,7 @@
   - User profile cards and action menus  
   - Content previews and detailed information displays
   - Custom dropdowns with complex interactions
-- **Compound Component Structure**: Root container, Trigger, Content, Anchor, Portal, Close, and optional Arrow components
+- **Compound Component Structure**: Root container, Trigger, Content, Anchor, Close, and optional Arrow components
 - **Key Differentiators**: 
   - Modal-like behavior without blocking the entire page
   - Rich content support (forms, buttons, links)
@@ -68,6 +68,7 @@
 | `onFocusOutside` | `(event: FocusEvent) => void` | No | - | Called when focus moves outside the content. Call `event.preventDefault()` to prevent closing |
 | `onInteractOutside` | `(event: PointerEvent \| FocusEvent) => void` | No | - | Called when interaction occurs outside the content. Call `event.preventDefault()` to prevent closing |
 | `trapFocus` | `boolean` | No | `false` | Whether to trap focus within content |
+| `container` | `HTMLElement` | No | `document.body` | Portal target container for the popover content |
 | `children` | `React.ReactNode` | Yes | - | Popover content |
 
 ### PopoverArrow Props
@@ -89,13 +90,6 @@
 | Name | Type | Description |
 |------|------|-------------|
 | `isOpen` | `boolean` | Whether the popover is currently open |
-
-### PopoverPortal Props
-
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `container` | `Element \| null` | No | `document.body` | Container element to portal content into |
-| `children` | `React.ReactNode` | Yes | - | Content to be portaled (typically PopoverContent) |
 
 ### PopoverClose Props
 
@@ -140,7 +134,7 @@
 | Open | PopoverAnchor element moves/removed | Reposition or close popover | Update position data attributes |
 | Open | Viewport resize | Reposition popover with collision detection | Update `data-side`, `data-align` |
 | Open | Scroll container | Update popover position | Update position CSS variables |
-| Open | Click PopoverPortal container | No action (event isolated) | No change |
+| Open | Click portal container | No action (event isolated) | No change |
 | Open | PopoverArrow positioning | Arrow follows content placement | Update `data-side` on arrow |
 | Modal | Focus outside attempt | Block focus change, return to content | No change |
 | Disabled | Any trigger interaction | No action | No attributes applied |
@@ -155,7 +149,6 @@
 - **Content element**: `dialog` role for modal popover, no specific role for non-modal
 - **Arrow element**: `presentation` role (purely decorative)
 - **Anchor element**: No specific role (inherits from child or defaults to generic)
-- **Portal element**: No role (transparent rendering container)
 - **Close element**: `button` role (default) or maintains semantic role with render props
 
 ### Keyboard
@@ -293,7 +286,8 @@ const usePopover = (props: PopoverRootProps) => {
   // Focus management utilities
   // Event coordination between trigger and content
   // Viewport resize and scroll listeners
-  // Portal management
+   // Built-in portal rendering (via createPortal in PopoverContent)
+
 }
 
 const usePopoverContext = () => {
@@ -347,7 +341,7 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 - **Type safety**: Strict TypeScript definitions for all ref element types with generic inference
 - **Generic support**: Full TypeScript generic support for custom element types (e.g., `<PopoverTrigger<'a'>`)
 - **Performance optimization**: Memoized ref callbacks and efficient cleanup
-- **Portal compatibility**: Ref accessibility across portal rendering boundaries
+- **Built-in portal**: Ref accessibility across portal rendering boundaries
 - **Error handling**: Graceful fallback when ref targets become unavailable
 
 ### Event System
@@ -358,21 +352,21 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 - **Escape handling**: Global escape key listener with proper event prevention
 - **Event coordination**: Centralized event management with proper cleanup
 - **Event bubbling**: Controlled propagation to prevent interference
-- **Portal isolation**: Event boundaries for portal-rendered content
+- **Built-in portal isolation**: Event boundaries for portal-rendered content
 - **Performance optimization**: Debounced scroll/resize with passive listeners
 - **Global listeners**: Window blur/focus for state management
 - **Memory management**: Comprehensive cleanup of all event listeners
 
 ### SSR/CSR Safety and Deterministic IDs
 - **Stable ID generation**: Generate stable IDs using `useId()` hook for ARIA relationships
-- **Portal hydration safety**: Portal creation only after hydration with `useEffect`
+- **Built-in portal hydration safety**: Portal creation only after hydration with `useEffect` (inside PopoverContent)
 - **Graceful degradation**: Basic functionality when JavaScript disabled
 - **Layout shift prevention**: No visual jumps during popover mounting
 - **Hydration mismatch guards**: Prevent server/client rendering inconsistencies
 - **Progressive enhancement**: Layer interactive features over accessible baseline
 - **ID collision prevention**: Unique identifiers across multiple component instances
 - **Content streaming support**: Compatible with React 18 streaming SSR
-- **Portal error recovery**: Fallback behavior when portal containers unavailable
+- **Portal error recovery**: Fallback behavior when portal container unavailable
 - **Client-only isolation**: Wrap CSR-specific features in hydration checks
 - **State consistency**: Ensure server and client state synchronization
 - **Performance optimization**: Lazy initialization of expensive operations
@@ -412,9 +406,6 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 #### PopoverClose
 - `data-state`: `"open" | "closed"`
 
-#### PopoverPortal
-- `data-portal`: Identifies portal-rendered content
-
 #### Animation States (All Components)
 - `data-entering`: Present during enter animation
 - `data-exiting`: Present during exit animation
@@ -449,7 +440,7 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 - **Controlled/uncontrolled modes**: External state control vs internal state management
 - **Element references**: Trigger, content, and anchor element tracking
 - **Position calculations**: Placement updates and collision detection triggers
-- **Portal behavior**: Content rendering in portal containers
+- **Portal behavior**: Content rendering via built-in `createPortal` in PopoverContent
 
 ### Accessibility Tests
 - **jest-axe integration**: Zero accessibility violations across all component combinations
@@ -525,7 +516,7 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 ### Implementation Checklist
 
 #### Core Architecture
-- [ ] **Compound component architecture**: Root, Trigger, Content, Arrow, Anchor, Portal, Close components
+- [ ] **Compound component architecture**: Root, Trigger, Content, Arrow, Anchor, Close components (portal is built into Content)
 - [ ] **Context-based state sharing**: Unified state across all components with TypeScript safety
 - [ ] **Ref forwarding strategy**: Proper ref composition with render props pattern support
 - [ ] **Event system**: Comprehensive event handling with cleanup and prevention patterns
@@ -535,7 +526,7 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 - [ ] **Comprehensive positioning system**: 12 placement options with collision detection
 - [ ] **Collision boundary support**: Custom boundary elements and viewport edge detection
 - [ ] **Dynamic repositioning**: Scroll and resize listeners with debounced updates
-- [ ] **Portal rendering**: Proper z-index and positioning isolation
+- [ ] **Built-in portal rendering**: Proper z-index and positioning isolation (via `createPortal` in PopoverContent)
 - [ ] **CSS custom properties**: Transform origin, positioning variables, sizing references
 
 #### Accessibility & UX
@@ -579,7 +570,7 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 
 #### Production Readiness
 - [ ] **Error handling**: Graceful degradation and fallback behaviors
-- [ ] **Edge case coverage**: Portal container removal, dynamic content changes, nested scenarios
+- [ ] **Edge case coverage**: Portal container unavailable, dynamic content changes, nested scenarios
 - [ ] **Documentation**: Complete API documentation with usage examples
 - [ ] **Migration guides**: Clear upgrade paths from existing solutions
 - [ ] **Performance benchmarks**: Baseline metrics for positioning calculations and re-renders

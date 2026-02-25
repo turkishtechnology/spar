@@ -5,7 +5,6 @@ import {
   Select,
   SelectTrigger,
   SelectValue,
-  SelectPortal,
   SelectContent,
   SelectItem,
   SelectGroup,
@@ -979,7 +978,7 @@ describe('Select Integration Tests', () => {
       expect(trigger).toHaveTextContent('Apple');
     });
 
-    it('should work with portal rendering', async () => {
+    it('should work with custom container rendering', async () => {
       const user = userEvent.setup();
       const { container } = render(
         <div>
@@ -988,12 +987,10 @@ describe('Select Integration Tests', () => {
             <SelectTrigger aria-label='Choose option'>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
-            <SelectPortal container={document.getElementById('portal-target')}>
-              <SelectContent>
-                <SelectItem value='option1'>Option 1</SelectItem>
-                <SelectItem value='option2'>Option 2</SelectItem>
-              </SelectContent>
-            </SelectPortal>
+            <SelectContent container={document.getElementById('portal-target')}>
+              <SelectItem value='option1'>Option 1</SelectItem>
+              <SelectItem value='option2'>Option 2</SelectItem>
+            </SelectContent>
           </Select>
         </div>,
       );

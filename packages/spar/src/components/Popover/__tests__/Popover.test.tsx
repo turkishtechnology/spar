@@ -6,7 +6,6 @@ import { PopoverTrigger } from '../PopoverTrigger';
 import { PopoverContent } from '../PopoverContent';
 import { PopoverArrow } from '../PopoverArrow';
 import { PopoverAnchor } from '../PopoverAnchor';
-import { PopoverPortal } from '../PopoverPortal';
 import { PopoverClose } from '../PopoverClose';
 
 describe('Popover', () => {
@@ -664,43 +663,6 @@ describe('PopoverAnchor', () => {
     const anchor = screen.getByTestId('anchor');
     expect(anchor).toHaveTextContent('Open');
     expect(anchor).toHaveAttribute('data-popover-anchor', '');
-  });
-});
-
-describe('PopoverPortal', () => {
-  it('renders children in document.body by default', () => {
-    render(
-      <Popover>
-        <PopoverTrigger>Open</PopoverTrigger>
-        <PopoverPortal>
-          <div data-testid='portal-content'>Portal content</div>
-        </PopoverPortal>
-      </Popover>,
-    );
-
-    const portalContent = screen.getByTestId('portal-content');
-    expect(portalContent).toBeInTheDocument();
-    expect(document.body).toContainElement(portalContent);
-  });
-
-  it('renders children in custom container', () => {
-    const customContainer = document.createElement('div');
-    document.body.appendChild(customContainer);
-
-    render(
-      <Popover>
-        <PopoverTrigger>Open</PopoverTrigger>
-        <PopoverPortal container={customContainer}>
-          <div data-testid='portal-content'>Portal content</div>
-        </PopoverPortal>
-      </Popover>,
-    );
-
-    const portalContent = screen.getByTestId('portal-content');
-    expect(portalContent).toBeInTheDocument();
-    expect(customContainer).toContainElement(portalContent);
-
-    document.body.removeChild(customContainer);
   });
 });
 

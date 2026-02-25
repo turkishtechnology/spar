@@ -1,6 +1,5 @@
 import { Dialog as DialogRoot } from './Dialog';
 import { DialogTrigger } from './DialogTrigger';
-import { DialogPortal } from './DialogPortal';
 import { DialogOverlay } from './DialogOverlay';
 import { DialogContent } from './DialogContent';
 import { DialogTitle } from './DialogTitle';
@@ -11,7 +10,6 @@ export { useDialogContext } from './hooks';
 const Dialog = DialogRoot as typeof DialogRoot & {
   Root: typeof DialogRoot;
   Trigger: typeof DialogTrigger;
-  Portal: typeof DialogPortal;
   Overlay: typeof DialogOverlay;
   Content: typeof DialogContent;
   Title: typeof DialogTitle;
@@ -21,7 +19,6 @@ const Dialog = DialogRoot as typeof DialogRoot & {
 
 Dialog.Root = DialogRoot;
 Dialog.Trigger = DialogTrigger;
-Dialog.Portal = DialogPortal;
 Dialog.Overlay = DialogOverlay;
 Dialog.Content = DialogContent;
 Dialog.Title = DialogTitle;
@@ -32,7 +29,6 @@ export {
   Dialog,
   DialogRoot,
   DialogTrigger,
-  DialogPortal,
   DialogOverlay,
   DialogContent,
   DialogTitle,
@@ -44,7 +40,6 @@ export type {
   DialogProps,
   DialogTriggerProps,
   DialogTriggerRenderProps,
-  DialogPortalProps,
   DialogOverlayProps,
   DialogContentProps,
   DialogTitleProps,
