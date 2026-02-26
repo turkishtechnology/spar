@@ -201,6 +201,7 @@ const Icon = item.Icon;
 - ✅ Individual and global disabled states
 - ✅ Current page identification with aria-current
 - ✅ Separator elements hidden from assistive technology
+- ✅ Render props support for conditional rendering based on item state
 - ✅ Full support for icons and custom content in links
 
 ## Installation
@@ -475,6 +476,52 @@ function CustomEventBreadcrumb() {
 }
 ```
 
+### Render Props
+
+`Breadcrumb.Item` accepts a render function as children, providing access to `position`, `isCurrent`, and `isDisabled` state. This is useful for conditionally rendering custom components like Next.js `Link` or React Router `Link` based on item state.
+
+```tsx {8-18}
+import NextLink from 'next/link';
+
+function RenderPropsBreadcrumb() {
+  return (
+    <Breadcrumb.Root>
+      <Breadcrumb.List>
+        <Breadcrumb.Item>
+          {({ isCurrent, position, isDisabled }) =>
+            isCurrent ? (
+              <Breadcrumb.Page>{`Current (${position})`}</Breadcrumb.Page>
+            ) : (
+              <Breadcrumb.Link as={NextLink} href='/home' isDisabled={isDisabled}>
+                Home
+              </Breadcrumb.Link>
+            )
+          }
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator>/</Breadcrumb.Separator>
+        <Breadcrumb.Item>
+          {({ isCurrent }) =>
+            isCurrent ? (
+              <Breadcrumb.Page>Settings</Breadcrumb.Page>
+            ) : (
+              <Breadcrumb.Link href='/settings'>Settings</Breadcrumb.Link>
+            )
+          }
+        </Breadcrumb.Item>
+      </Breadcrumb.List>
+    </Breadcrumb.Root>
+  );
+}
+```
+
+The render function receives the following properties:
+
+| Property     | Type                            | Description                                           |
+| ------------ | ------------------------------- | ----------------------------------------------------- |
+| `position`   | `'first' \| 'middle' \| 'last'` | Position of the item in the breadcrumb trail          |
+| `isCurrent`  | `boolean`                       | Whether this item is the current (last) page          |
+| `isDisabled` | `boolean`                       | Whether breadcrumb navigation is disabled from root   |
+
 ### Polymorphic Usage
 
 ```tsx
@@ -552,7 +599,7 @@ List item wrapper that receives position and current state from parent Breadcrum
 
 | Name         | Type                 | Default    | Description                                             |
 | ------------ | -------------------- | ---------- | ------------------------------------------------------- |
-| `children`   | `React.ReactNode`    | -          | Item content (Link or Page)                             |
+| `children`   | `React.ReactNode \| ((props: BreadcrumbItemRenderProps) => React.ReactNode)` | -          | Item content or render function receiving item state |
 | `as?`        | `React.ElementType`  | `'li'`     | Polymorphic element type                                |
 | `position?`  | `BreadcrumbPosition` | `'middle'` | Position in trail (automatically calculated)            |
 | `isCurrent?` | `boolean`            | `false`    | Whether this is current page (automatically calculated) |
