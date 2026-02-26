@@ -28,8 +28,6 @@ export type {
   InputFieldOwnProps,
   InputFieldProps,
   InputLabelProps,
-  InputDescriptionOwnProps,
   InputDescriptionProps,
-  InputErrorMessageOwnProps,
   InputErrorMessageProps,
 } from './types';

@@ -3,6 +3,7 @@ import React, {
   useLayoutEffect,
   useRef,
   useCallback,
+  useMemo,
   useState,
   type ElementType,
 } from 'react';
@@ -18,23 +19,36 @@ import {
   hide as hideMiddleware,
   arrow as arrowMiddleware,
   autoUpdate,
+  type Placement,
 } from '@floating-ui/react-dom';
 import type { SelectContentProps } from './types';
+import type { Side, Align } from '../../types';
+
+/**
+ * Convert side and align to Floating UI placement.
+ */
+const getPlacement = (side: Side, align: Align): Placement => {
+  if (align === 'center') {
+    return side as Placement;
+  }
+  return `${side}-${align}` as Placement;
+};
 
 /**
  * Dropdown container that appears when select is open. Handles keyboard navigation, focus management, and outside click detection. Positioned using Floating UI.
  */
 export const SelectContent = <T extends ElementType = 'div'>({
   ref,
-  placement = 'bottom-start',
-  strategy = 'absolute',
-  middleware: customMiddleware,
+  side = 'bottom',
+  align = 'start',
   sideOffset = 8,
-  shift = true,
+  alignOffset: _alignOffset = 0,
+  avoidCollisions = true,
   collisionPadding = 8,
   flip = true,
-  hide = false,
+  shift = true,
   size = true,
+  hide = false,
   arrowRef,
   container,
   onEscapeKeyDown,
@@ -57,23 +71,19 @@ export const SelectContent = <T extends ElementType = 'div'>({
   }, []);
 
   // Build middleware array
-  const middleware = React.useMemo(() => {
-    if (customMiddleware) {
-      return customMiddleware;
-    }
-
+  const middleware = useMemo(() => {
     const middlewares = [];
 
     // Offset from trigger
     middlewares.push(offsetMiddleware(sideOffset));
 
     // Flip to opposite side when no space
-    if (flip) {
+    if (avoidCollisions && flip) {
       middlewares.push(flipMiddleware());
     }
 
     // Shift to stay in view
-    if (shift) {
+    if (avoidCollisions && shift) {
       middlewares.push(shiftMiddleware({ padding: collisionPadding }));
     }
 
@@ -102,7 +112,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
     }
 
     return middlewares;
-  }, [customMiddleware, sideOffset, flip, shift, collisionPadding, size, hide, arrowRef]);
+  }, [sideOffset, avoidCollisions, flip, shift, collisionPadding, size, hide, arrowRef]);
 
   // Use Floating UI hook for positioning
   const {
@@ -112,8 +122,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
     refs,
     placement: finalPlacement,
   } = useFloating({
-    placement,
-    strategy,
+    placement: getPlacement(side, align),
     middleware,
     whileElementsMounted: autoUpdate,
   });
@@ -278,6 +287,14 @@ export const SelectContent = <T extends ElementType = 'div'>({
     };
   }, []);
 
+  // Extract placement information for data attributes
+  const [currentSide, currentAlign] = useMemo(() => {
+    const parts = finalPlacement.split('-');
+    const placementSide = parts[0] as Side;
+    const placementAlign = parts[1] ? (parts[1] as Align) : 'center';
+    return [placementSide, placementAlign];
+  }, [finalPlacement]);
+
   if (!context.open || !mounted) {
     return null;
   }
@@ -300,7 +317,8 @@ export const SelectContent = <T extends ElementType = 'div'>({
       role='listbox'
       tabIndex={-1}
       data-state={context.open ? 'open' : 'closed'}
-      data-placement={finalPlacement}
+      data-side={currentSide}
+      data-align={currentAlign}
       onKeyDown={handleKeyDown}
       style={floatingStyles}
       {...props}

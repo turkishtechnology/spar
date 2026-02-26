@@ -34,7 +34,7 @@ export interface CollapsibleTriggerRenderProps {
 export interface CollapsibleOwnProps {
   /**
    * Unique identifier for the trigger element.
-   * IF not provided, one will be generated automatically.
+   * If not provided, one will be generated automatically.
    */
   triggerId?: string;
 
@@ -130,38 +130,11 @@ export type CollapsibleContentProps<T extends ElementType = 'div'> = Polymorphic
  * @internal
  */
 export interface CollapsibleContextValue {
-  /**
-   * Current open state
-   */
   isOpen: boolean;
-
-  /**
-   * Function to open the collapsible
-   */
   open: () => void;
-
-  /**
-   * Function to close the collapsible
-   */
   close: () => void;
-
-  /**
-   * Toggle function to change open state
-   */
   toggle: () => void;
-
-  /**
-   * Whether the collapsible is disabled
-   */
   disabled: boolean;
-
-  /**
-   * ID of the trigger element
-   */
   triggerId: string;
-
-  /**
-   * ID of the content element
-   */
   contentId: string;
 }

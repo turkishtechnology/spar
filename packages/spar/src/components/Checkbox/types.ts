@@ -1,4 +1,4 @@
-import type { ElementType, AriaAttributes, ReactNode } from 'react';
+import type { ElementType, ReactNode } from 'react';
 import type { CheckedState, PolymorphicProps } from '../../types';
 
 /**
@@ -96,22 +96,6 @@ export interface CheckboxOwnProps {
    * @defaultValue false
    */
   autoFocus?: boolean;
-
-  /**
-   * Accessible name for the checkbox
-   * @remarks Required when checkbox has no visible label
-   */
-  'aria-label'?: AriaAttributes['aria-label'];
-
-  /**
-   * ID of element that labels the checkbox
-   */
-  'aria-labelledby'?: AriaAttributes['aria-labelledby'];
-
-  /**
-   * ID of element that describes the checkbox
-   */
-  'aria-describedby'?: AriaAttributes['aria-describedby'];
 
   /**
    * Children content or render function

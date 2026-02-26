@@ -2,6 +2,6 @@ export { DropdownMenuContext, useDropdownMenuContext } from './useDropdownMenuCo
 export {
   DropdownMenuCollectionContext,
   useDropdownMenuCollectionContext,
-  type MenuCollectionItem,
+  type DropdownMenuCollectionItem,
   type DropdownMenuCollectionContextValue,
 } from './useDropdownMenuCollectionContext';

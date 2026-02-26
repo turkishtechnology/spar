@@ -1,4 +1,4 @@
-import type { ElementType, RefObject } from 'react';
+import type { ElementType, ReactNode, RefObject } from 'react';
 import type { Direction, Orientation, PolymorphicProps } from '../../types';
 import type { ButtonOwnProps } from '../Button/types';
 
@@ -109,7 +109,7 @@ export interface TabsTriggerOwnProps extends ButtonOwnProps {
   /**
    * Children content or render function
    */
-  children?: React.ReactNode | ((state: TabsTriggerRenderProps) => React.ReactNode);
+  children?: ReactNode | ((state: TabsTriggerRenderProps) => ReactNode);
 }
 
 /**

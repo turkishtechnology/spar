@@ -75,31 +75,13 @@ export type InputFieldProps<T extends ElementType = 'input'> = PolymorphicProps<
 export type InputLabelProps<T extends ElementType = 'label'> = LabelProps<T>;
 
 /**
- * Own props for InputDescription
- */
-export interface InputDescriptionOwnProps {}
-
-/**
  * Props for InputDescription
  * @remarks Helper text element for additional input guidance
  */
-export type InputDescriptionProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  InputDescriptionOwnProps
->;
-
-/**
- * Own props for InputErrorMessage
- */
-export interface InputErrorMessageOwnProps {}
+export type InputDescriptionProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * Props for InputErrorMessage
  * @remarks Error announcement element with automatic ARIA handling
  */
-export type InputErrorMessageProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  InputErrorMessageOwnProps
->;
+export type InputErrorMessageProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;

@@ -117,7 +117,7 @@ The dropdown container that appears when open.
 | `alignOffset` | `number` | No | `0` | Alignment offset in pixels |
 | `avoidCollisions` | `boolean` | No | `true` | Adjust position to avoid viewport edges |
 | `collisionBoundary` | `Element \| Element[]` | No | `[]` | Boundaries for collision detection |
-| `collisionPadding` | `number \| Padding` | No | `8` | Padding from boundary edges (in pixels) |
+| `collisionPadding` | `number` | No | `8` | Padding from boundary edges (in pixels) |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Escape key handler |
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | - | Outside click handler |
 | `onCloseAutoFocus` | `(event: FocusEvent) => void` | No | - | Focus handler on close |
