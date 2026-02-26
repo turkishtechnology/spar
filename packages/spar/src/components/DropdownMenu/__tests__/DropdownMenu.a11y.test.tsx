@@ -6,15 +6,9 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuLabel,
   DropdownMenuGroup,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
 } from '../';
 
 expect.extend(toHaveNoViolations);
@@ -59,67 +53,6 @@ describe('DropdownMenu Accessibility', () => {
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
-
-    it('should have no accessibility violations with checkbox items', async () => {
-      const { container } = render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>View Options</DropdownMenuLabel>
-              <DropdownMenuCheckboxItem checked={true}>Show Toolbar</DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem checked={false}>Show Sidebar</DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem checked='indeterminate'>
-                Show Status Bar
-              </DropdownMenuCheckboxItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
-
-    it('should have no accessibility violations with radio items', async () => {
-      const { container } = render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup value='light'>
-              <DropdownMenuLabel>Theme</DropdownMenuLabel>
-              <DropdownMenuRadioItem value='light'>Light</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='dark'>Dark</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='system'>System</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
-
-    it('should have no accessibility violations with submenus', async () => {
-      const { container } = render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>New File</DropdownMenuItem>
-            <DropdownMenuSub defaultOpen={true}>
-              <DropdownMenuSubTrigger>Open Recent</DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Document 1</DropdownMenuItem>
-                <DropdownMenuItem>Document 2</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
   });
 
   describe('ARIA Attributes', () => {
@@ -152,44 +85,6 @@ describe('DropdownMenu Accessibility', () => {
       // Separator should have separator role
       const separator = screen.getByRole('separator');
       expect(separator).toBeInTheDocument();
-    });
-
-    it('should have proper ARIA attributes for checkbox items', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem checked={true}>Checked Item</DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem checked={false}>Unchecked Item</DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem checked='indeterminate'>Mixed Item</DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const checkboxItems = screen.getAllByRole('menuitemcheckbox');
-
-      expect(checkboxItems[0]).toHaveAttribute('aria-checked', 'true');
-      expect(checkboxItems[1]).toHaveAttribute('aria-checked', 'false');
-      expect(checkboxItems[2]).toHaveAttribute('aria-checked', 'mixed');
-    });
-
-    it('should have proper ARIA attributes for radio items', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup value='option1'>
-              <DropdownMenuRadioItem value='option1'>Option 1</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const radioItems = screen.getAllByRole('menuitemradio');
-
-      expect(radioItems[0]).toHaveAttribute('aria-checked', 'true');
-      expect(radioItems[1]).toHaveAttribute('aria-checked', 'false');
     });
 
     it('should have proper disabled state attributes', () => {
@@ -379,50 +274,6 @@ describe('DropdownMenu Accessibility', () => {
       expect(onSelect).toHaveBeenCalled();
     });
 
-    it('should toggle checkbox items with keyboard activation', async () => {
-      const onCheckedChange = jest.fn();
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem checked={false} onCheckedChange={onCheckedChange}>
-              Checkbox Item
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const item = screen.getByRole('menuitemcheckbox');
-      await user.click(item);
-
-      expect(onCheckedChange).toHaveBeenCalledWith(true);
-    });
-
-    it('should select radio items with keyboard activation', async () => {
-      const onValueChange = jest.fn();
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup value='option1' onValueChange={onValueChange}>
-              <DropdownMenuRadioItem value='option1'>Option 1</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const radioItems = screen.getAllByRole('menuitemradio');
-
-      await user.click(radioItems[1]!);
-
-      expect(onValueChange).toHaveBeenCalledWith('option2');
-    });
-
     it('should not respond to keyboard when disabled', async () => {
       const onOpenChange = jest.fn();
       const user = userEvent.setup();
@@ -477,90 +328,6 @@ describe('DropdownMenu Accessibility', () => {
   });
 
   describe('Focus Management', () => {
-    it('should have proper tabIndex values', async () => {
-      const user = userEvent.setup();
-      render(
-        <DropdownMenu>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Enabled Item</DropdownMenuItem>
-            <DropdownMenuItem disabled>Disabled Item</DropdownMenuItem>
-            <DropdownMenuCheckboxItem>Checkbox Item</DropdownMenuCheckboxItem>
-            <DropdownMenuRadioGroup value='option1'>
-              <DropdownMenuRadioItem value='option1'>Option 1</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      // Open the menu with multiple approaches to ensure focus strategy is set
-      const trigger = screen.getByRole('button');
-
-      // Try multiple ways to trigger focus strategy
-      await user.click(trigger); // First open
-      await user.keyboard('[Escape]'); // Close
-
-      act(() => {
-        trigger.focus();
-      });
-      await user.keyboard('[ArrowDown]'); // Open with arrow down
-
-      // Wait for menu to be fully rendered and items registered
-      await waitFor(() => {
-        expect(screen.getByRole('menu')).toBeInTheDocument();
-        expect(screen.getAllByRole('menuitem')).toHaveLength(2);
-        expect(screen.getByRole('menuitemcheckbox')).toBeInTheDocument();
-        expect(screen.getByRole('menuitemradio')).toBeInTheDocument();
-      });
-
-      // Force additional rendering cycles to ensure highlight logic runs
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 200));
-      });
-
-      // Check if highlighting happened - try multiple times with increasing delays
-      let highlightedItems: Element[] = [];
-      let attempts = 0;
-      const maxAttempts = 10;
-
-      while (highlightedItems.length === 0 && attempts < maxAttempts) {
-        await act(async () => {
-          await new Promise((resolve) => setTimeout(resolve, 50 * (attempts + 1)));
-        });
-
-        const menuItems = screen.getAllByRole('menuitem');
-        highlightedItems = menuItems.filter((item) => item.getAttribute('tabIndex') === '0');
-        attempts++;
-      }
-
-      // At this point, check the results
-      const menuItems = screen.getAllByRole('menuitem');
-      const checkboxItem = screen.getByRole('menuitemcheckbox');
-      const radioItem = screen.getByRole('menuitemradio');
-
-      if (highlightedItems.length === 1) {
-        // If highlighting worked, verify it's correct
-        expect(highlightedItems[0]).toBe(menuItems[0]);
-        expect(menuItems[0]).toHaveAttribute('tabIndex', '0');
-        expect(checkboxItem).toHaveAttribute('tabIndex', '-1');
-        expect(radioItem).toHaveAttribute('tabIndex', '-1');
-        expect(menuItems[1]).toHaveAttribute('tabIndex', '-1');
-      } else {
-        // If highlighting didn't work in test environment, just verify basic structure
-        expect(menuItems[0]).toHaveAttribute('role', 'menuitem');
-        expect(menuItems[1]).toHaveAttribute('role', 'menuitem');
-        expect(menuItems[1]).toHaveAttribute('aria-disabled', 'true');
-        expect(checkboxItem).toHaveAttribute('role', 'menuitemcheckbox');
-        expect(radioItem).toHaveAttribute('role', 'menuitemradio');
-
-        // At minimum, all items should have tabIndex -1
-        expect(menuItems[0]).toHaveAttribute('tabIndex', '-1');
-        expect(menuItems[1]).toHaveAttribute('tabIndex', '-1');
-        expect(checkboxItem).toHaveAttribute('tabIndex', '-1');
-        expect(radioItem).toHaveAttribute('tabIndex', '-1');
-      }
-    }, 10000);
-
     it('should maintain focus within menu when open', async () => {
       render(
         <div>
@@ -639,54 +406,6 @@ describe('DropdownMenu Accessibility', () => {
       expect(menu).toHaveAttribute('aria-labelledby', trigger.id);
       expect(group).toBeInTheDocument();
       expect(label).toBeInTheDocument();
-    });
-
-    it('should announce checkbox item states', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Options Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem checked={true}>Checked Option</DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem checked={false}>Unchecked Option</DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem checked='indeterminate'>
-              Mixed Option
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const checkboxItems = screen.getAllByRole('menuitemcheckbox');
-
-      expect(checkboxItems[0]).toHaveAccessibleName('Checked Option');
-      expect(checkboxItems[1]).toHaveAccessibleName('Unchecked Option');
-      expect(checkboxItems[2]).toHaveAccessibleName('Mixed Option');
-    });
-
-    it('should announce radio item states and group', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Theme Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup value='dark'>
-              <DropdownMenuRadioItem value='light'>Light Theme</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='dark'>Dark Theme</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='auto'>Auto Theme</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const radioGroup = screen.getByRole('group');
-      const radioItems = screen.getAllByRole('menuitemradio');
-
-      expect(radioGroup).toBeInTheDocument();
-      expect(radioItems[0]).toHaveAccessibleName('Light Theme');
-      expect(radioItems[1]).toHaveAccessibleName('Dark Theme');
-      expect(radioItems[2]).toHaveAccessibleName('Auto Theme');
-
-      expect(radioItems[0]).toHaveAttribute('aria-checked', 'false');
-      expect(radioItems[1]).toHaveAttribute('aria-checked', 'true');
-      expect(radioItems[2]).toHaveAttribute('aria-checked', 'false');
     });
   });
 

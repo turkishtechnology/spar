@@ -12,12 +12,7 @@ import type { DropdownMenuItemProps } from './types';
 import { useDropdownMenuCollectionContext } from './hooks';
 import { useMergedRef } from '@/hooks';
 
-/** @internal */
-type MenuItemType = 'item' | 'checkbox' | 'radio' | 'subtrigger';
-
 type MenuItemPrimitiveProps<T extends ElementType = 'div'> = DropdownMenuItemProps<T> & {
-  itemType: MenuItemType;
-  closeBehavior: 'close' | 'persist';
   role: string;
   onSelectImpl?: (
     event: React.MouseEvent<HTMLDivElement> | ReactKeyboardEvent<HTMLDivElement>,
@@ -30,8 +25,6 @@ type MenuItemPrimitiveProps<T extends ElementType = 'div'> = DropdownMenuItemPro
  */
 export const MenuItemPrimitive = <T extends ElementType = 'div'>({
   as,
-  itemType,
-  closeBehavior,
   role,
   onSelect,
   onSelectImpl,
@@ -61,24 +54,17 @@ export const MenuItemPrimitive = <T extends ElementType = 'div'>({
       ref: itemRef,
       disabled,
       textValue: text,
-      type: itemType,
     });
 
     return () => {
       collection.unregisterItem(itemId);
     };
-  }, [itemId, disabled, textValue, itemType, collection.registerItem, collection.unregisterItem]);
+  }, [itemId, disabled, textValue, collection.registerItem, collection.unregisterItem]);
 
   const isHighlighted = collection.isItemHighlighted(itemId);
 
   const shouldCloseMenu = () => {
-    if (collection.closeOnSelect === false) {
-      return false;
-    }
-    if (collection.closeOnSelect === true) {
-      return true;
-    }
-    return closeBehavior === 'close';
+    return collection.closeOnSelect;
   };
 
   const runSelection = (

@@ -1,6 +1,5 @@
 import {
   useCallback,
-  useContext,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -9,6 +8,7 @@ import {
   type ElementType,
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
+import { createPortal } from 'react-dom';
 import { useInteractOutside, useMergedRef } from '@/hooks';
 import {
   useFloating,
@@ -26,8 +26,8 @@ import type {
   MenuCollectionItem,
 } from './types';
 import type { Side, Align } from '../../types';
-import { useMenuScope, DropdownMenuSubContext, DropdownMenuCollectionContext } from './hooks';
-import { isCharacterKey, getCloseKey, TYPEAHEAD_TIMEOUT } from './utils/index';
+import { useDropdownMenuContext, DropdownMenuCollectionContext } from './hooks';
+import { isCharacterKey, TYPEAHEAD_TIMEOUT } from './utils/index';
 
 /**
  * Convert side and align to Floating UI placement.
@@ -52,7 +52,7 @@ const getPlacement = (side: Side, align: Align): Placement => {
  */
 export const DropdownMenuContent = <T extends ElementType = 'div'>({
   as,
-  side: sideProp,
+  side = 'bottom',
   align = 'start',
   sideOffset = 8,
   alignOffset = 0,
@@ -60,6 +60,7 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
   collisionBoundary = null,
   collisionPadding = 8,
   loop = false,
+  container,
   onEscapeKeyDown,
   onPointerDownOutside,
   onFocusOutside,
@@ -68,15 +69,14 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
   ...props
 }: DropdownMenuContentProps<T>) => {
   const Component = as || 'div';
-  const menu = useMenuScope();
-  const parentSubContext = useContext(DropdownMenuSubContext);
-  const isSubmenu = parentSubContext === menu;
-  // Get closeRootMenu for submenus - this closes the entire menu hierarchy
-  const closeRootMenu =
-    isSubmenu && parentSubContext ? parentSubContext.closeRootMenu : menu.closeMenu;
-  // Auto-determine side based on menu type
-  const side = sideProp ?? (isSubmenu ? 'right' : 'bottom');
+  const menu = useDropdownMenuContext();
   const contentRef = useRef<HTMLElement | null>(null);
+
+  // SSR safety - only render portal after mount
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Configure Floating UI middleware
   const middleware: Middleware[] = useMemo(() => {
@@ -389,8 +389,7 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
         case 'Escape':
           event.preventDefault();
           onEscapeKeyDown?.(event.nativeEvent);
-          // Escape closes the entire menu hierarchy, not just the current level
-          closeRootMenu();
+          menu.closeMenu();
           return;
         case 'Tab':
           if (menu.modal) {
@@ -407,11 +406,6 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
         default:
           break;
       }
-
-      if (isSubmenu && event.key === getCloseKey(menu.dir)) {
-        event.preventDefault();
-        menu.closeMenu();
-      }
     },
     [
       onKeyDown,
@@ -421,11 +415,8 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
       highlightFirst,
       highlightLast,
       onEscapeKeyDown,
-      closeRootMenu,
-      menu.dir,
       menu.closeMenu,
       menu.modal,
-      isSubmenu,
     ],
   );
 
@@ -475,11 +466,13 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     return [placementSide, placementAlign];
   }, [placement]);
 
-  if (!menu.open) {
+  if (!menu.open || !mounted) {
     return null;
   }
 
-  return (
+  const portalContainer = container || document.body;
+
+  const contentElement = (
     <DropdownMenuCollectionContext.Provider value={collectionValue}>
       <Component
         {...props}
@@ -501,6 +494,8 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
       />
     </DropdownMenuCollectionContext.Provider>
   );
+
+  return createPortal(contentElement, portalContainer);
 };
 
 DropdownMenuContent.displayName = 'DropdownMenuContent';

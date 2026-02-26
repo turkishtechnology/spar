@@ -1,4 +1,12 @@
-import React, { useEffect, useRef, useCallback, type ElementType } from 'react';
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useCallback,
+  useState,
+  type ElementType,
+} from 'react';
+import { createPortal } from 'react-dom';
 import { useInteractOutside, useMergedRef } from '@/hooks';
 import { useSelectContext } from './hooks';
 import {
@@ -28,6 +36,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
   hide = false,
   size = true,
   arrowRef,
+  container,
   onEscapeKeyDown,
   onPointerDownOutside,
   onCloseAutoFocus: _onCloseAutoFocus,
@@ -40,6 +49,12 @@ export const SelectContent = <T extends ElementType = 'div'>({
   const Component = as || 'div';
   const context = useSelectContext();
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // SSR safety - only render portal after mount
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Build middleware array
   const middleware = React.useMemo(() => {
@@ -103,18 +118,25 @@ export const SelectContent = <T extends ElementType = 'div'>({
     whileElementsMounted: autoUpdate,
   });
 
-  // Merge internal refs with Floating UI refs
-  useEffect(() => {
-    refs.setReference(context.triggerRef.current);
+  // Connect trigger ref to Floating UI reference
+  useLayoutEffect(() => {
+    if (context.triggerRef.current) {
+      refs.setReference(context.triggerRef.current);
+    }
   }, [refs, context.triggerRef]);
 
-  useEffect(() => {
-    if (context.contentRef.current) {
-      refs.setFloating(context.contentRef.current);
-    }
-  }, [refs, context.contentRef]);
-
+  // Merge internal refs with external ref, and sync with Floating UI
   const mergedRef = useMergedRef(context.contentRef, ref);
+
+  const floatingRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      mergedRef(node);
+      if (node) {
+        refs.setFloating(node);
+      }
+    },
+    [mergedRef, refs],
+  );
 
   // Focus management - focus content when opened
   useEffect(() => {
@@ -256,7 +278,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
     };
   }, []);
 
-  if (!context.open) {
+  if (!context.open || !mounted) {
     return null;
   }
 
@@ -269,9 +291,11 @@ export const SelectContent = <T extends ElementType = 'div'>({
     ...style,
   };
 
-  return (
+  const portalContainer = container || document.body;
+
+  const contentElement = (
     <Component
-      ref={mergedRef}
+      ref={floatingRef}
       id={context.contentId}
       role='listbox'
       tabIndex={-1}
@@ -284,6 +308,8 @@ export const SelectContent = <T extends ElementType = 'div'>({
       {children}
     </Component>
   );
+
+  return createPortal(contentElement, portalContainer);
 };
 
 SelectContent.displayName = 'SelectContent';

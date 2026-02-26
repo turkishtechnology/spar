@@ -1,14 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipPortal,
-  TooltipArrow,
-} from '../index';
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent, TooltipArrow } from '../index';
 
 // Mock timer functions
 jest.useFakeTimers();
@@ -51,9 +44,7 @@ const BasicTooltip = ({
   <TooltipProvider>
     <Tooltip defaultOpen={defaultOpen} {...props}>
       <TooltipTrigger>Trigger</TooltipTrigger>
-      <TooltipPortal>
-        <TooltipContent asLabel={asLabel}>{children}</TooltipContent>
-      </TooltipPortal>
+      <TooltipContent asLabel={asLabel}>{children}</TooltipContent>
     </Tooltip>
   </TooltipProvider>
 );
@@ -172,9 +163,7 @@ describe('TooltipTrigger', () => {
           <TooltipTrigger>
             {({ isOpen }) => <span>{isOpen ? 'Open' : 'Closed'}</span>}
           </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent>Content</TooltipContent>
-          </TooltipPortal>
+          <TooltipContent>Content</TooltipContent>
         </Tooltip>
       </TooltipProvider>,
     );
@@ -305,9 +294,7 @@ describe('TooltipContent', () => {
       <TooltipProvider>
         <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent as='section'>Section content</TooltipContent>
-          </TooltipPortal>
+          <TooltipContent as='section'>Section content</TooltipContent>
         </Tooltip>
       </TooltipProvider>,
     );
@@ -351,11 +338,9 @@ describe('TooltipContent', () => {
       <TooltipProvider>
         <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent side='bottom' sideOffset={16} align='start'>
-              Positioned content
-            </TooltipContent>
-          </TooltipPortal>
+          <TooltipContent side='bottom' sideOffset={16} align='start'>
+            Positioned content
+          </TooltipContent>
         </Tooltip>
       </TooltipProvider>,
     );
@@ -371,11 +356,9 @@ describe('TooltipContent', () => {
       <TooltipProvider>
         <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent className='custom-class' style={customStyle}>
-              Styled content
-            </TooltipContent>
-          </TooltipPortal>
+          <TooltipContent className='custom-class' style={customStyle}>
+            Styled content
+          </TooltipContent>
         </Tooltip>
       </TooltipProvider>,
     );
@@ -392,9 +375,7 @@ describe('TooltipContent', () => {
       <TooltipProvider>
         <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent onEscapeKeyDown={handleEscape}>Content</TooltipContent>
-          </TooltipPortal>
+          <TooltipContent onEscapeKeyDown={handleEscape}>Content</TooltipContent>
         </Tooltip>
       </TooltipProvider>,
     );
@@ -420,68 +401,16 @@ describe('TooltipContent', () => {
   });
 });
 
-describe('TooltipPortal', () => {
-  it('renders content in portal when open', () => {
-    render(<BasicTooltip defaultOpen />);
-    expect(screen.getByRole('tooltip')).toBeInTheDocument();
-  });
-
-  it('does not render when closed', () => {
-    render(<BasicTooltip />);
-    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-  });
-
-  it('supports forceMount prop', () => {
-    render(
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>Trigger</TooltipTrigger>
-          <TooltipPortal forceMount>
-            <TooltipContent>Always mounted</TooltipContent>
-          </TooltipPortal>
-        </Tooltip>
-      </TooltipProvider>,
-    );
-
-    // NOTE: Currently forceMount doesn't work correctly because TooltipContent
-    // has its own check for context.isOpen and returns null when closed
-    // This test is currently expected to fail until the component is fixed
-    expect(screen.queryByText('Always mounted')).not.toBeInTheDocument();
-  });
-
-  it('renders in custom container when provided', () => {
-    const customContainer = document.createElement('div');
-    customContainer.id = 'custom-portal';
-    document.body.appendChild(customContainer);
-
-    render(
-      <TooltipProvider>
-        <Tooltip defaultOpen>
-          <TooltipTrigger>Trigger</TooltipTrigger>
-          <TooltipPortal container={customContainer}>
-            <TooltipContent>Portal content</TooltipContent>
-          </TooltipPortal>
-        </Tooltip>
-      </TooltipProvider>,
-    );
-
-    expect(customContainer).toContainElement(screen.getByRole('tooltip'));
-    document.body.removeChild(customContainer);
-  });
-});
-
 describe('TooltipArrow', () => {
   it('renders svg arrow by default', () => {
     render(
       <TooltipProvider>
         <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent>
-              Content
-              <TooltipArrow />
-            </TooltipContent>
-          </TooltipPortal>
+          <TooltipContent>
+            Content
+            <TooltipArrow />
+          </TooltipContent>
         </Tooltip>
       </TooltipProvider>,
     );
@@ -496,12 +425,10 @@ describe('TooltipArrow', () => {
       <TooltipProvider>
         <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent>
-              Content
-              <TooltipArrow width={20} height={10} />
-            </TooltipContent>
-          </TooltipPortal>
+          <TooltipContent>
+            Content
+            <TooltipArrow width={20} height={10} />
+          </TooltipContent>
         </Tooltip>
       </TooltipProvider>,
     );
@@ -516,12 +443,10 @@ describe('TooltipArrow', () => {
       <TooltipProvider>
         <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent>
-              Content
-              <TooltipArrow as='div' />
-            </TooltipContent>
-          </TooltipPortal>
+          <TooltipContent>
+            Content
+            <TooltipArrow as='div' />
+          </TooltipContent>
         </Tooltip>
       </TooltipProvider>,
     );
@@ -535,12 +460,10 @@ describe('TooltipArrow', () => {
       <TooltipProvider>
         <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent>
-              Content
-              <TooltipArrow className='custom-arrow' style={{ color: 'blue' }} />
-            </TooltipContent>
-          </TooltipPortal>
+          <TooltipContent>
+            Content
+            <TooltipArrow className='custom-arrow' style={{ color: 'blue' }} />
+          </TooltipContent>
         </Tooltip>
       </TooltipProvider>,
     );

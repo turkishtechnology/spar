@@ -6,7 +6,6 @@ import {
   Select,
   SelectTrigger,
   SelectValue,
-  SelectPortal,
   SelectContent,
   SelectItem,
   SelectItemText,
@@ -38,8 +37,6 @@ describe('Select Accessibility', () => {
 
     it('should pass accessibility checks when open', async () => {
       const user = userEvent.setup();
-      const portalContainer = document.createElement('div');
-      document.body.appendChild(portalContainer);
 
       const { container } = render(
         <div>
@@ -47,12 +44,10 @@ describe('Select Accessibility', () => {
             <SelectTrigger aria-label='Choose option'>
               <SelectValue placeholder='Select...' />
             </SelectTrigger>
-            <SelectPortal container={portalContainer}>
-              <SelectContent>
-                <SelectItem value='option1'>Option 1</SelectItem>
-                <SelectItem value='option2'>Option 2</SelectItem>
-              </SelectContent>
-            </SelectPortal>
+            <SelectContent>
+              <SelectItem value='option1'>Option 1</SelectItem>
+              <SelectItem value='option2'>Option 2</SelectItem>
+            </SelectContent>
           </Select>
         </div>,
       );
@@ -66,8 +61,6 @@ describe('Select Accessibility', () => {
         },
       });
       expect(results).toHaveNoViolations();
-
-      document.body.removeChild(portalContainer);
     });
 
     it('should pass accessibility checks with selected value', async () => {

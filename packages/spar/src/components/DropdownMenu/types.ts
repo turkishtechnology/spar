@@ -1,5 +1,5 @@
-import type { ComponentProps, ElementType, ReactNode, SyntheticEvent, RefObject } from 'react';
-import type { CheckedState, Side, Align, Direction, PolymorphicProps } from '../../types';
+import type { ElementType, ReactNode, SyntheticEvent, RefObject } from 'react';
+import type { Side, Align, Direction, PolymorphicProps } from '../../types';
 import type { ButtonOwnProps } from '../Button/types';
 
 export type DropdownMenuFocusStrategy = 'first' | 'last' | 'none';
@@ -71,10 +71,10 @@ export interface DropdownMenuProps {
   dir?: Direction;
 
   /**
-   * Selection close policy
-   * @defaultValue 'auto'
+   * Whether to close the menu after an item is selected
+   * @defaultValue true
    */
-  closeOnSelect?: boolean | 'auto';
+  closeOnSelect?: boolean;
 
   /**
    * Component content
@@ -155,6 +155,12 @@ export interface DropdownMenuContentOwnProps {
   loop?: boolean;
 
   /**
+   * Portal container element. Content is portaled to document.body by default.
+   * @defaultValue document.body
+   */
+  container?: HTMLElement | null;
+
+  /**
    * Escape key handler
    * @param event - The keyboard event (call preventDefault to prevent close)
    */
@@ -216,70 +222,6 @@ export type DropdownMenuItemProps<T extends ElementType = 'div'> = PolymorphicPr
 >;
 
 /**
- * Own props for DropdownMenuCheckboxItem component
- */
-export interface DropdownMenuCheckboxItemOwnProps extends DropdownMenuItemOwnProps {
-  /**
-   * Controlled checked state
-   * @defaultValue false
-   */
-  checked?: CheckedState;
-
-  /**
-   * Checked state change handler
-   * @param checked - The new checked state
-   */
-  onCheckedChange?: (checked: boolean) => void;
-}
-
-/**
- * Props for DropdownMenuCheckboxItem component
- * @remarks Toggleable checkbox item within the menu
- */
-export type DropdownMenuCheckboxItemProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  DropdownMenuCheckboxItemOwnProps
->;
-
-/**
- * Props for DropdownMenuRadioGroup component
- * @remarks Groups radio items with mutual exclusion
- */
-export interface DropdownMenuRadioGroupProps extends ComponentProps<'div'> {
-  /**
-   * Controlled selected value
-   */
-  value?: string;
-
-  /**
-   * Value change handler
-   * @param value - The new selected value
-   */
-  onValueChange?: (value: string) => void;
-}
-
-/**
- * Own props for DropdownMenuRadioItem component
- */
-export interface DropdownMenuRadioItemOwnProps extends DropdownMenuItemOwnProps {
-  /**
-   * Unique value for this radio item
-   */
-  value: string;
-}
-
-/**
- * Props for DropdownMenuRadioItem component
- * @remarks Radio-style item within a radio group
- */
-export type DropdownMenuRadioItemProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  DropdownMenuRadioItemOwnProps
->;
-
-/**
  * Own props for DropdownMenuSeparator component
  */
 export interface DropdownMenuSeparatorOwnProps {}
@@ -325,64 +267,6 @@ export type DropdownMenuGroupProps<T extends ElementType = 'div'> = PolymorphicP
 >;
 
 /**
- * Props for DropdownMenuSub component
- * @remarks Nested sub-menu root managing submenu state
- */
-export interface DropdownMenuSubProps {
-  /**
-   * Controlled submenu open state
-   */
-  open?: boolean;
-
-  /**
-   * Default submenu open state
-   * @defaultValue false
-   */
-  defaultOpen?: boolean;
-
-  /**
-   * Submenu open change handler
-   * @param open - The new open state
-   */
-  onOpenChange?: (open: boolean) => void;
-
-  /**
-   * Component content
-   */
-  children?: ReactNode;
-}
-
-/**
- * Own props for DropdownMenuSubTrigger component
- */
-export interface DropdownMenuSubTriggerOwnProps extends DropdownMenuItemOwnProps {}
-
-/**
- * Props for DropdownMenuSubTrigger component
- * @remarks Item that opens a sub-menu on hover or keyboard
- */
-export type DropdownMenuSubTriggerProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  DropdownMenuSubTriggerOwnProps
->;
-
-/**
- * Own props for DropdownMenuSubContent component
- */
-export interface DropdownMenuSubContentOwnProps extends DropdownMenuContentOwnProps {}
-
-/**
- * Props for DropdownMenuSubContent component
- * @remarks Content panel for a nested sub-menu
- */
-export type DropdownMenuSubContentProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  DropdownMenuSubContentOwnProps
->;
-
-/**
  * Internal context value for DropdownMenu
  * @internal
  */
@@ -394,39 +278,11 @@ export interface DropdownMenuContextValue {
   modal: boolean;
   disabled: boolean;
   dir: Direction;
-  closeOnSelect: boolean | 'auto';
+  closeOnSelect: boolean;
   focusStrategy: DropdownMenuFocusStrategy;
   setFocusStrategy: (strategy: DropdownMenuFocusStrategy) => void;
   triggerRef: RefObject<HTMLElement | null>;
   closeMenu: (options?: { focusTrigger?: boolean }) => void;
-}
-
-/**
- * Context value for DropdownMenuRadioGroup
- * @internal
- */
-export interface DropdownMenuRadioGroupContextValue {
-  value: string | undefined;
-  onValueChange: ((value: string) => void) | undefined;
-}
-
-/**
- * Context value for DropdownMenuSub
- * @internal
- */
-export interface DropdownMenuSubContextValue {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  triggerId: string;
-  contentId: string;
-  modal: boolean;
-  dir: Direction;
-  closeOnSelect: boolean | 'auto';
-  focusStrategy: DropdownMenuFocusStrategy;
-  setFocusStrategy: (strategy: DropdownMenuFocusStrategy) => void;
-  triggerRef: RefObject<HTMLElement | null>;
-  closeMenu: (options?: { focusTrigger?: boolean }) => void;
-  closeRootMenu: (options?: { focusTrigger?: boolean }) => void;
 }
 
 /**
@@ -437,7 +293,6 @@ export interface MenuCollectionItem {
   ref: RefObject<HTMLElement | null>;
   disabled: boolean;
   textValue: string;
-  type: 'item' | 'checkbox' | 'radio' | 'subtrigger';
 }
 
 /**
@@ -454,7 +309,7 @@ export interface DropdownMenuCollectionContextValue {
   highlightPrevious: () => void;
   isItemHighlighted: (id: string) => boolean;
   highlightedId: string | null;
-  closeOnSelect: boolean | 'auto';
+  closeOnSelect: boolean;
   closeMenu: (options?: { focusTrigger?: boolean }) => void;
   loop: boolean;
   dir: Direction;

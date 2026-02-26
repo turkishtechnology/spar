@@ -2,14 +2,7 @@ import React from 'react';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipPortal,
-  TooltipArrow,
-} from '../index';
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent, TooltipArrow } from '../index';
 
 expect.extend(toHaveNoViolations);
 
@@ -58,12 +51,10 @@ const AccessibleTooltip = ({
   <TooltipProvider>
     <Tooltip defaultOpen={defaultOpen} disabled={disabled} {...props}>
       <TooltipTrigger>{triggerContent}</TooltipTrigger>
-      <TooltipPortal>
-        <TooltipContent asLabel={asLabel}>
-          {tooltipContent}
-          <TooltipArrow />
-        </TooltipContent>
-      </TooltipPortal>
+      <TooltipContent asLabel={asLabel}>
+        {tooltipContent}
+        <TooltipArrow />
+      </TooltipContent>
     </Tooltip>
   </TooltipProvider>
 );
@@ -319,9 +310,7 @@ describe('Tooltip Accessibility', () => {
         <TooltipProvider>
           <Tooltip defaultOpen>
             <TooltipTrigger aria-label='Settings'>⚙️</TooltipTrigger>
-            <TooltipPortal>
-              <TooltipContent asLabel>Settings menu</TooltipContent>
-            </TooltipPortal>
+            <TooltipContent asLabel>Settings menu</TooltipContent>
           </Tooltip>
         </TooltipProvider>,
       );
@@ -354,13 +343,11 @@ describe('Tooltip Accessibility', () => {
         <TooltipProvider>
           <Tooltip defaultOpen>
             <TooltipTrigger>Complex action</TooltipTrigger>
-            <TooltipPortal>
-              <TooltipContent>
-                <div>
-                  <strong>Pro tip:</strong> Use Ctrl+S to save quickly
-                </div>
-              </TooltipContent>
-            </TooltipPortal>
+            <TooltipContent>
+              <div>
+                <strong>Pro tip:</strong> Use Ctrl+S to save quickly
+              </div>
+            </TooltipContent>
           </Tooltip>
         </TooltipProvider>,
       );
@@ -576,9 +563,7 @@ describe('Tooltip Accessibility', () => {
         <TooltipProvider>
           <Tooltip defaultOpen>
             <TooltipTrigger>Empty tooltip</TooltipTrigger>
-            <TooltipPortal>
-              <TooltipContent>Empty tooltip content</TooltipContent>
-            </TooltipPortal>
+            <TooltipContent>Empty tooltip content</TooltipContent>
           </Tooltip>
         </TooltipProvider>,
       );
@@ -596,15 +581,11 @@ describe('Tooltip Accessibility', () => {
           <div>
             <Tooltip>
               <TooltipTrigger>First trigger</TooltipTrigger>
-              <TooltipPortal>
-                <TooltipContent>First tooltip</TooltipContent>
-              </TooltipPortal>
+              <TooltipContent>First tooltip</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger>Second trigger</TooltipTrigger>
-              <TooltipPortal>
-                <TooltipContent>Second tooltip</TooltipContent>
-              </TooltipPortal>
+              <TooltipContent>Second tooltip</TooltipContent>
             </Tooltip>
           </div>
         </TooltipProvider>,
@@ -624,9 +605,7 @@ describe('Tooltip Accessibility', () => {
             <TooltipTrigger aria-label='Search'>
               {({ isOpen }) => <span>Search: {isOpen ? 'showing help' : 'hover for help'}</span>}
             </TooltipTrigger>
-            <TooltipPortal>
-              <TooltipContent>Search help text</TooltipContent>
-            </TooltipPortal>
+            <TooltipContent>Search help text</TooltipContent>
           </Tooltip>
         </TooltipProvider>,
       );

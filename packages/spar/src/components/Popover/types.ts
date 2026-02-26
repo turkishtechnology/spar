@@ -179,6 +179,12 @@ export interface PopoverContentOwnProps {
   hideWhenDetached?: boolean;
 
   /**
+   * Portal container element. Content is portaled to document.body by default.
+   * @defaultValue document.body
+   */
+  container?: HTMLElement | null;
+
+  /**
    * Called when popover opens and focus moves inside
    * @param event - The focus event (call preventDefault to prevent auto-focus)
    */
@@ -283,23 +289,6 @@ export type PopoverAnchorProps<T extends ElementType = 'div'> = PolymorphicProps
   T,
   PopoverAnchorOwnProps
 >;
-
-/**
- * Props for PopoverPortal component
- * @remarks Portal container for popover content
- */
-export interface PopoverPortalProps {
-  /**
-   * Container element to portal content into
-   * @defaultValue document.body
-   */
-  container?: Element | null;
-
-  /**
-   * Content to be portaled (typically PopoverContent)
-   */
-  children: ReactNode;
-}
 
 /**
  * Own props for PopoverClose component
