@@ -10,7 +10,8 @@ import {
   hide,
   type Strategy,
 } from '@floating-ui/react-dom';
-import type { PopoverProps, PopoverState, PopoverSide, PopoverAlign } from '../types';
+import type { PopoverProps, PopoverState } from '../types';
+import type { Side, Align } from '../../../types';
 import { getPlacement } from '../utils';
 
 /**
@@ -112,10 +113,7 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   // Update actual placement in state
   useEffect(() => {
     if (actualPlacement) {
-      const [actualSide, actualAlign] = actualPlacement.split('-') as [
-        PopoverSide,
-        PopoverAlign | undefined,
-      ];
+      const [actualSide, actualAlign] = actualPlacement.split('-') as [Side, Align | undefined];
       setState((prev) => ({
         ...prev,
         actualSide,
