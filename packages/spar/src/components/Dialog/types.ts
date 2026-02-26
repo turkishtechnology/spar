@@ -109,26 +109,15 @@ export interface DialogCloseRenderProps {
 }
 
 /**
- * Props for DialogPortal
- * @remarks Fully accessible, headless component
+ * Own props for DialogOverlay
  */
-export interface DialogPortalProps {
+export interface DialogOverlayOwnProps {
   /**
-   * Portal container element
+   * Portal container element. Content is portaled to document.body by default.
    * @defaultValue document.body
    */
   container?: HTMLElement | null;
-
-  /**
-   * Dialog overlay and content
-   */
-  children: ReactNode;
 }
-
-/**
- * Own props for DialogOverlay
- */
-export interface DialogOverlayOwnProps {}
 
 /**
  * Props for DialogOverlay
@@ -149,6 +138,12 @@ export interface DialogContentOwnProps {
    * @defaultValue 'dialog'
    */
   role?: AriaRole;
+
+  /**
+   * Portal container element. Content is portaled to document.body by default.
+   * @defaultValue document.body
+   */
+  container?: HTMLElement | null;
 
   /**
    * Enable focus trapping

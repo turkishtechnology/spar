@@ -188,6 +188,12 @@ export interface TooltipContentOwnProps {
   hideWhenDetached?: boolean;
 
   /**
+   * Portal container element. Content is portaled to document.body by default.
+   * @defaultValue document.body
+   */
+  container?: HTMLElement | null;
+
+  /**
    * Escape key handler
    * @param event - The keyboard event (call preventDefault to prevent close)
    */
@@ -221,29 +227,6 @@ export type TooltipContentProps<T extends ElementType = 'div'> = PolymorphicProp
   T,
   TooltipContentOwnProps
 >;
-
-/**
- * Props for TooltipPortal
- * @remarks Portal component for rendering tooltip outside normal DOM tree
- */
-export interface TooltipPortalProps {
-  /**
-   * Content to render in portal
-   */
-  children?: ReactNode;
-
-  /**
-   * Portal container element
-   * @defaultValue document.body
-   */
-  container?: HTMLElement;
-
-  /**
-   * Force mount regardless of open state
-   * @defaultValue false
-   */
-  forceMount?: boolean;
-}
 
 /**
  * Own props for TooltipArrow

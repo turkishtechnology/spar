@@ -23,26 +23,24 @@ A headless modal and non-modal dialog component that provides accessibility feat
       <Dialog.Trigger className='dialog-trigger'>
         Open Dialog
       </Dialog.Trigger>
-      <Dialog.Portal className='dialog-portal'>
-        <Dialog.Overlay className='dialog-overlay'/>
-        <Dialog.Content className='dialog-content'>
-          <Dialog.Title className='dialog-title'>
-            Dialog Title
-          </Dialog.Title>
-          <Dialog.Description className='dialog-description'>
-            If you delete this item, it will be permanently removed. Are you sure you want to delete
-            it?
-          </Dialog.Description>
-          <div className='dialog-actions'>
-            <Dialog.Close className='dialog-close'>
-              Close
-            </Dialog.Close>
-            <Button className='dialog-continue'>
-              Continue
-            </Button>
-          </div>
-        </Dialog.Content>
-      </Dialog.Portal>
+      <Dialog.Overlay className='dialog-overlay'/>
+      <Dialog.Content className='dialog-content'>
+        <Dialog.Title className='dialog-title'>
+          Dialog Title
+        </Dialog.Title>
+        <Dialog.Description className='dialog-description'>
+          If you delete this item, it will be permanently removed. Are you sure you want to delete
+          it?
+        </Dialog.Description>
+        <div className='dialog-actions'>
+          <Dialog.Close className='dialog-close'>
+            Close
+          </Dialog.Close>
+          <Button className='dialog-continue'>
+            Continue
+          </Button>
+        </div>
+      </Dialog.Content>
     </Dialog.Root>
   );
 }`}
@@ -151,7 +149,7 @@ color: #f2f5f8;
 - ✅ Focus trapping and restoration
 - ✅ Escape key handling
 - ✅ Click outside to close
-- ✅ Portal rendering for overlays
+- ✅ Automatic portal rendering to document.body
 - ✅ Polymorphic components with `as` prop
 - ✅ Custom focus management with initial and final focus
 - ✅ Force mount for animation libraries
@@ -171,7 +169,6 @@ The Dialog component is built as a compound component with multiple parts:
   parts={[
     { name: 'root', label: 'Root', description: 'Container managing dialog state and context' },
     { name: 'trigger', label: 'Trigger', description: 'Button that opens the dialog' },
-    { name: 'portal', label: 'Portal', description: 'Portal container for overlay and content' },
     { name: 'overlay', label: 'Overlay', description: 'Background overlay behind dialog content' },
     {
       name: 'content',
@@ -192,25 +189,23 @@ The Dialog component is built as a compound component with multiple parts:
       <Dialog.Trigger data-spar-part='trigger' className='dialog-trigger'>
         {'Open Dialog'}
       </Dialog.Trigger>
-      <Dialog.Portal data-spar-part='portal' className='dialog-portal'>
-        <Dialog.Overlay data-spar-part='overlay' className='dialog-overlay' />
-        <Dialog.Content data-spar-part='content' className='dialog-content'>
-          <Dialog.Title data-spar-part='title' className='dialog-title'>
-            {'Dialog Title'}
-          </Dialog.Title>
-          <Dialog.Description data-spar-part='description' className='dialog-description'>
-            {
-              'If you delete this item, it will be permanently removed. Are you sure you want to delete it?'
-            }
-          </Dialog.Description>
-          <div className='dialog-actions'>
-            <Dialog.Close data-spar-part='close' className='dialog-close'>
-              {'Close'}
-            </Dialog.Close>
-            <Button className='dialog-continue'>{'Continue'}</Button>
-          </div>
-        </Dialog.Content>
-      </Dialog.Portal>
+      <Dialog.Overlay data-spar-part='overlay' className='dialog-overlay' />
+      <Dialog.Content data-spar-part='content' className='dialog-content'>
+        <Dialog.Title data-spar-part='title' className='dialog-title'>
+          {'Dialog Title'}
+        </Dialog.Title>
+        <Dialog.Description data-spar-part='description' className='dialog-description'>
+          {
+            'If you delete this item, it will be permanently removed. Are you sure you want to delete it?'
+          }
+        </Dialog.Description>
+        <div className='dialog-actions'>
+          <Dialog.Close data-spar-part='close' className='dialog-close'>
+            {'Close'}
+          </Dialog.Close>
+          <Button className='dialog-continue'>{'Continue'}</Button>
+        </div>
+      </Dialog.Content>
     </Dialog.Root>
   </div>
 </AnatomyViewer>
@@ -220,14 +215,12 @@ The Dialog component is built as a compound component with multiple parts:
 ```tsx
 <Dialog.Root>
   <Dialog.Trigger />
-  <Dialog.Portal>
-    <Dialog.Overlay />
-    <Dialog.Content>
-      <Dialog.Title />
-      <Dialog.Description />
-      <Dialog.Close />
-    </Dialog.Content>
-  </Dialog.Portal>
+  <Dialog.Overlay />
+  <Dialog.Content>
+    <Dialog.Title />
+    <Dialog.Description />
+    <Dialog.Close />
+  </Dialog.Content>
 </Dialog.Root>
 ```
 
@@ -235,9 +228,8 @@ The Dialog component is built as a compound component with multiple parts:
 
 - `Dialog.Root` manages open/close state and provides context to all child components
 - `Dialog.Trigger` toggles the dialog state and maintains focus reference
-- `Dialog.Portal` renders overlay and content outside the normal DOM tree
-- `Dialog.Overlay` provides background overlay with click-outside-to-close behavior
-- `Dialog.Content` handles focus management and keyboard interactions
+- `Dialog.Overlay` provides background overlay with click-outside-to-close behavior (portals to `document.body` by default)
+- `Dialog.Content` handles focus management and keyboard interactions (portals to `document.body` by default)
 - `Dialog.Title` and `Dialog.Description` provide accessible labeling
 - `Dialog.Close` provides a way to close the dialog from within the content
 
@@ -260,18 +252,16 @@ function ControlledDialog() {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>Edit Profile</Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay />
-        <Dialog.Content>
-          <Dialog.Title>Edit Profile</Dialog.Title>
-          <Dialog.Description>Make changes to your profile here.</Dialog.Description>
+      <Dialog.Overlay />
+      <Dialog.Content>
+        <Dialog.Title>Edit Profile</Dialog.Title>
+        <Dialog.Description>Make changes to your profile here.</Dialog.Description>
 
-          <div>
-            <button onClick={handleSave}>Save Changes</button>
-            <Dialog.Close>Cancel</Dialog.Close>
-          </div>
-        </Dialog.Content>
-      </Dialog.Portal>
+        <div>
+          <button onClick={handleSave}>Save Changes</button>
+          <Dialog.Close>Cancel</Dialog.Close>
+        </div>
+      </Dialog.Content>
     </Dialog.Root>
   );
 }
@@ -286,14 +276,12 @@ function UncontrolledDialog() {
   return (
     <Dialog.Root defaultOpen={false}>
       <Dialog.Trigger>Open Settings</Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay />
-        <Dialog.Content>
-          <Dialog.Title>Settings</Dialog.Title>
-          <Dialog.Description>Configure your application settings.</Dialog.Description>
-          <Dialog.Close>Done</Dialog.Close>
-        </Dialog.Content>
-      </Dialog.Portal>
+      <Dialog.Overlay />
+      <Dialog.Content>
+        <Dialog.Title>Settings</Dialog.Title>
+        <Dialog.Description>Configure your application settings.</Dialog.Description>
+        <Dialog.Close>Done</Dialog.Close>
+      </Dialog.Content>
     </Dialog.Root>
   );
 }
@@ -308,21 +296,19 @@ function NonModalDialog() {
   return (
     <Dialog.Root modal={false}>
       <Dialog.Trigger>Open Info Panel</Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Content
-          role='dialog'
-          onEscapeKeyDown={(e) => {
-            // Custom escape handling for non-modal
-            console.log('Escape pressed in non-modal dialog');
-          }}
-        >
-          <Dialog.Title>Information Panel</Dialog.Title>
-          <Dialog.Description>
-            This is a non-modal dialog. You can still interact with the page behind it.
-          </Dialog.Description>
-          <Dialog.Close>Close Panel</Dialog.Close>
-        </Dialog.Content>
-      </Dialog.Portal>
+      <Dialog.Content
+        role='dialog'
+        onEscapeKeyDown={(e) => {
+          // Custom escape handling for non-modal
+          console.log('Escape pressed in non-modal dialog');
+        }}
+      >
+        <Dialog.Title>Information Panel</Dialog.Title>
+        <Dialog.Description>
+          This is a non-modal dialog. You can still interact with the page behind it.
+        </Dialog.Description>
+        <Dialog.Close>Close Panel</Dialog.Close>
+      </Dialog.Content>
     </Dialog.Root>
   );
 }
@@ -340,35 +326,33 @@ function CustomFocusDialog() {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>Create Account</Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay />
-        <Dialog.Content
-          initialFocus={() => inputRef.current!}
-          onOpenAutoFocus={(event) => {
-            // Custom logic before auto-focus
-            console.log('Dialog is about to focus');
-          }}
-          onCloseAutoFocus={(event) => {
-            // Custom logic before focus restoration
-            console.log('Dialog is about to restore focus');
-          }}
-        >
-          <Dialog.Title>Create New Account</Dialog.Title>
-          <Dialog.Description>Enter your details to create an account.</Dialog.Description>
+      <Dialog.Overlay />
+      <Dialog.Content
+        initialFocus={() => inputRef.current!}
+        onOpenAutoFocus={(event) => {
+          // Custom logic before auto-focus
+          console.log('Dialog is about to focus');
+        }}
+        onCloseAutoFocus={(event) => {
+          // Custom logic before focus restoration
+          console.log('Dialog is about to restore focus');
+        }}
+      >
+        <Dialog.Title>Create New Account</Dialog.Title>
+        <Dialog.Description>Enter your details to create an account.</Dialog.Description>
 
-          <div>
-            <label>
-              Username:
-              <input ref={inputRef} type='text' />
-            </label>
-          </div>
+        <div>
+          <label>
+            Username:
+            <input ref={inputRef} type='text' />
+          </label>
+        </div>
 
-          <div>
-            <button type='submit'>Create</button>
-            <Dialog.Close>Cancel</Dialog.Close>
-          </div>
-        </Dialog.Content>
-      </Dialog.Portal>
+        <div>
+          <button type='submit'>Create</button>
+          <Dialog.Close>Cancel</Dialog.Close>
+        </div>
+      </Dialog.Content>
     </Dialog.Root>
   );
 }
@@ -385,18 +369,16 @@ function PolymorphicDialog() {
       <Dialog.Trigger as='div' role='button' tabIndex={0}>
         Custom Trigger Element
       </Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay as='section' />
-        <Dialog.Content>
-          <Dialog.Title as='h1' level={1}>
-            Main Dialog Title
-          </Dialog.Title>
-          <Dialog.Description as='div'>Custom description container</Dialog.Description>
-          <Dialog.Close as='span' role='button' tabIndex={0}>
-            Custom Close Element
-          </Dialog.Close>
-        </Dialog.Content>
-      </Dialog.Portal>
+      <Dialog.Overlay as='section' />
+      <Dialog.Content>
+        <Dialog.Title as='h1' level={1}>
+          Main Dialog Title
+        </Dialog.Title>
+        <Dialog.Description as='div'>Custom description container</Dialog.Description>
+        <Dialog.Close as='span' role='button' tabIndex={0}>
+          Custom Close Element
+        </Dialog.Close>
+      </Dialog.Content>
     </Dialog.Root>
   );
 }
@@ -413,25 +395,23 @@ function AnimatedDialog() {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen} forceMount>
       <Dialog.Trigger>Open Animated Dialog</Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay
-          style={{
-            opacity: open ? 1 : 0,
-            transition: 'opacity 0.2s ease',
-          }}
-        />
-        <Dialog.Content
-          style={{
-            transform: open ? 'scale(1)' : 'scale(0.95)',
-            opacity: open ? 1 : 0,
-            transition: 'all 0.2s ease',
-          }}
-        >
-          <Dialog.Title>Animated Dialog</Dialog.Title>
-          <Dialog.Description>This dialog has custom animations.</Dialog.Description>
-          <Dialog.Close>Close</Dialog.Close>
-        </Dialog.Content>
-      </Dialog.Portal>
+      <Dialog.Overlay
+        style={{
+          opacity: open ? 1 : 0,
+          transition: 'opacity 0.2s ease',
+        }}
+      />
+      <Dialog.Content
+        style={{
+          transform: open ? 'scale(1)' : 'scale(0.95)',
+          opacity: open ? 1 : 0,
+          transition: 'all 0.2s ease',
+        }}
+      >
+        <Dialog.Title>Animated Dialog</Dialog.Title>
+        <Dialog.Description>This dialog has custom animations.</Dialog.Description>
+        <Dialog.Close>Close</Dialog.Close>
+      </Dialog.Content>
     </Dialog.Root>
   );
 }
@@ -447,7 +427,7 @@ The root container that manages dialog state and provides context to all child c
 
 | Name            | Type                      | Default     | Description                                                  |
 | --------------- | ------------------------- | ----------- | ------------------------------------------------------------ |
-| `children`      | `React.ReactNode`         | -           | Dialog trigger and portal components                         |
+| `children`      | `React.ReactNode`         | -           | Dialog trigger, overlay, and content components              |
 | `open?`         | `boolean`                 | `undefined` | Controlled open state                                        |
 | `onOpenChange?` | `(open: boolean) => void` | `undefined` | Callback when open state changes                             |
 | `defaultOpen?`  | `boolean`                 | `false`     | Initial open state for uncontrolled usage                    |
@@ -508,34 +488,18 @@ Interactive element that opens the dialog when activated. Extends all `Button` c
 | `data-state`    | `"open" \| "closed"`  | Current dialog state     |
 | `data-disabled` | `string \| undefined` | Disabled state indicator |
 
-### Dialog.Portal
-
-Portal container that renders overlay and content outside the normal DOM tree.
-
-**Props**
-
-| Name         | Type                  | Default         | Description                |
-| ------------ | --------------------- | --------------- | -------------------------- |
-| `children`   | `React.ReactNode`     | -               | Dialog overlay and content |
-| `container?` | `HTMLElement \| null` | `document.body` | Portal container element   |
-
-**Events**
-
-| Name | Parameters | Description | When Triggered |
-| ---- | ---------- | ----------- | -------------- |
-| -    | -          | No events   | -              |
-
 ### Dialog.Overlay
 
 Background overlay that appears behind dialog content and handles click-outside behavior.
 
 **Props**
 
-| Name        | Type                     | Default     | Description                      |
-| ----------- | ------------------------ | ----------- | -------------------------------- |
-| `children?` | `React.ReactNode`        | `undefined` | Overlay content (usually none)   |
-| `as?`       | `React.ElementType`      | `'div'`     | Polymorphic element type         |
-| `ref?`      | `React.Ref<HTMLElement>` | `undefined` | Ref forwarded to overlay element |
+| Name         | Type                     | Default         | Description                      |
+| ------------ | ------------------------ | --------------- | -------------------------------- |
+| `children?`  | `React.ReactNode`        | `undefined`     | Overlay content (usually none)   |
+| `as?`        | `React.ElementType`      | `'div'`         | Polymorphic element type         |
+| `container?` | `HTMLElement \| null`    | `document.body` | Custom portal container element  |
+| `ref?`       | `React.Ref<HTMLElement>` | `undefined`     | Ref forwarded to overlay element |
 
 **Events**
 
@@ -555,16 +519,17 @@ Main dialog container that handles focus management and keyboard interactions.
 
 **Props**
 
-| Name            | Type                                 | Default     | Description                      |
-| --------------- | ------------------------------------ | ----------- | -------------------------------- |
-| `children`      | `React.ReactNode`                    | -           | Dialog content                   |
-| `as?`           | `React.ElementType`                  | `'div'`     | Polymorphic element type         |
-| `role?`         | `React.AriaRole`                     | `'dialog'`  | ARIA role for dialog type        |
-| `trapFocus?`    | `boolean`                            | `true`      | Enable focus trapping            |
-| `restoreFocus?` | `boolean`                            | `true`      | Restore focus on close           |
-| `initialFocus?` | `HTMLElement \| (() => HTMLElement)` | `undefined` | Element to focus on open         |
-| `finalFocus?`   | `HTMLElement \| (() => HTMLElement)` | `undefined` | Element to focus on close        |
-| `ref?`          | `React.Ref<HTMLElement>`             | `undefined` | Ref forwarded to content element |
+| Name            | Type                                 | Default         | Description                      |
+| --------------- | ------------------------------------ | --------------- | -------------------------------- |
+| `children`      | `React.ReactNode`                    | -               | Dialog content                   |
+| `as?`           | `React.ElementType`                  | `'div'`         | Polymorphic element type         |
+| `role?`         | `React.AriaRole`                     | `'dialog'`      | ARIA role for dialog type        |
+| `trapFocus?`    | `boolean`                            | `true`          | Enable focus trapping            |
+| `restoreFocus?` | `boolean`                            | `true`          | Restore focus on close           |
+| `initialFocus?` | `HTMLElement \| (() => HTMLElement)` | `undefined`     | Element to focus on open         |
+| `finalFocus?`   | `HTMLElement \| (() => HTMLElement)` | `undefined`     | Element to focus on close        |
+| `container?`    | `HTMLElement \| null`                | `document.body` | Custom portal container element  |
+| `ref?`          | `React.Ref<HTMLElement>`             | `undefined`     | Ref forwarded to content element |
 
 **Events**
 

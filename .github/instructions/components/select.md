@@ -20,22 +20,20 @@ The Select component is a headless, fully accessible dropdown UI pattern that al
     <SelectIcon />
   </SelectTrigger>
 
-  <SelectPortal>
-    <SelectContent>
-      <SelectViewport>
-        <SelectGroup>
-          <SelectLabel />
-          <SelectItem>
-            <SelectItemText />
-            <SelectItemIndicator />
-          </SelectItem>
-        </SelectGroup>
+  <SelectContent>
+    <SelectViewport>
+      <SelectGroup>
+        <SelectLabel />
+        <SelectItem>
+          <SelectItemText />
+          <SelectItemIndicator />
+        </SelectItem>
+      </SelectGroup>
 
-        <SelectSeparator />
-        <SelectArrow />
-      </SelectViewport>
-    </SelectContent>
-  </SelectPortal>
+      <SelectSeparator />
+      <SelectArrow />
+    </SelectViewport>
+  </SelectContent>
 </SelectRoot>
 ```
 
@@ -107,14 +105,6 @@ Optional visual indicator (chevron, arrow).
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `span` | Polymorphic component type |
 
-### SelectPortal
-Portal container for dropdown rendering.
-
-| Prop | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `container` | `HTMLElement` | No | `document.body` | Portal target element |
-| `forceMount` | `boolean` | No | `false` | Force mount for animation control |
-
 ### SelectContent
 The dropdown container that appears when open.
 
@@ -131,6 +121,7 @@ The dropdown container that appears when open.
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Escape key handler |
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | - | Outside click handler |
 | `onCloseAutoFocus` | `(event: FocusEvent) => void` | No | - | Focus handler on close |
+| `container` | `HTMLElement` | No | `document.body` | Portal target container for the dropdown content |
 | `as` | `ElementType` | No | `div` | Polymorphic component type |
 | `ref` | `RefObject` | No | - | Forward ref support |
 
@@ -537,7 +528,7 @@ Consumers define styling:
 - ✅ Default value initialization
 - ✅ Value change callback fires
 - ✅ Open change callback fires
-- ✅ Portal rendering
+- ✅ Built-in portal rendering (via `container` prop on SelectContent)
 - ✅ Type-ahead search
 - ✅ RTL support
 
@@ -574,7 +565,7 @@ Using `jest-axe`:
 - ✅ Async loading states
 - ✅ Collision detection (viewport boundaries)
 - ✅ Popper vs item-aligned positioning
-- ✅ Portal container customization
+- ✅ Portal container customization (via `container` prop on SelectContent)
 - ✅ SSR/CSR hydration
 
 ## 8. Constraints
@@ -663,8 +654,7 @@ export * as Select from './index';
 - [ ] Unit tests for core components
 
 **Phase 2: Dropdown & Items** (Week 2)
-- [ ] Implement `SelectPortal` with container support
-- [ ] Implement `SelectContent` with positioning
+- [ ] Implement `SelectContent` with built-in portal (via `createPortal`) and positioning
 - [ ] Implement `SelectViewport` (scrollable container)
 - [ ] Implement `SelectItem` with selection logic
 - [ ] Implement `SelectItemText` and `SelectItemIndicator`
@@ -709,6 +699,6 @@ export * as Select from './index';
 2. **Focus Management**: Use `aria-activedescendant` for virtual focus (better screen reader support)
 3. **Type-Ahead**: 1000ms timeout, matches ARIA APG recommendations
 4. **Form Integration**: Hidden input approach for native form submission
-5. **Portal**: Optional, defaults to `document.body` for z-index control
+5. **Portal**: Built into `SelectContent` via `createPortal`, defaults to `document.body`, customizable via `container` prop
 6. **Item Registration**: Use collection pattern (context-based) for dynamic items
 7. **SSR**: Deterministic IDs with fallback generation, hydration-safe portals

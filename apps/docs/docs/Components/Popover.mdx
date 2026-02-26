@@ -131,7 +131,7 @@ color: #99a0ae;
 - ✅ Outside click and focus detection
 - ✅ Escape key to close
 - ✅ Auto-focus management on open/close
-- ✅ Portal rendering for proper stacking context
+- ✅ Automatic portal rendering to document.body
 - ✅ Optional decorative arrow element
 - ✅ Custom anchor positioning support
 - ✅ SSR-safe implementation
@@ -219,12 +219,10 @@ The Popover component is built as a compound component with multiple parts:
 <Popover.Root>
   <Popover.Anchor>...</Popover.Anchor>
   <Popover.Trigger>...</Popover.Trigger>
-  <Popover.Portal>
-    <Popover.Content>
-      <Popover.Arrow />
-      ...
-    </Popover.Content>
-  </Popover.Portal>
+  <Popover.Content>
+    <Popover.Arrow />
+    ...
+  </Popover.Content>
 </Popover.Root>;
 ```
 
@@ -235,7 +233,6 @@ The Popover component is built as a compound component with multiple parts:
 - `Popover.Content` positions itself intelligently relative to the trigger with collision detection
 - `Popover.Close` provides a way to programmatically close the popover from within the content
 - Optional `Popover.Anchor` allows positioning relative to a different element than the trigger
-- Optional `Popover.Portal` controls where the content is rendered in the DOM
 - Optional `Popover.Arrow` adds a decorative visual pointer to the trigger element
 
 - `Popover.Root`: Root context provider managing popover state
@@ -244,7 +241,6 @@ The Popover component is built as a compound component with multiple parts:
 - `Popover.Close`: Optional button to close the popover
 - `Popover.Arrow`: Optional decorative arrow element
 - `Popover.Anchor`: Optional custom positioning reference
-- `Popover.Portal`: Optional portal container for custom rendering
 
 ---
 
@@ -389,7 +385,10 @@ export function PopoverWithFocusCallbacks() {
   return (
     <Popover.Root>
       <Popover.Trigger>Open Popover</Popover.Trigger>
-      <Popover.Content onOpenAutoFocus={handleOpenAutoFocus} onCloseAutoFocus={handleCloseAutoFocus}>
+      <Popover.Content
+        onOpenAutoFocus={handleOpenAutoFocus}
+        onCloseAutoFocus={handleCloseAutoFocus}
+      >
         <input placeholder='Auto-focused input' />
         <Popover.Close>Close</Popover.Close>
       </Popover.Content>
@@ -442,11 +441,9 @@ export function PopoverWithCustomPortal() {
 
       <Popover.Root>
         <Popover.Trigger>Open Popover</Popover.Trigger>
-        <Popover.Portal container={container}>
-          <Popover.Content>
-            <p>Rendered in custom container</p>
-          </Popover.Content>
-        </Popover.Portal>
+        <Popover.Content container={container}>
+          <p>Rendered in custom container</p>
+        </Popover.Content>
       </Popover.Root>
     </div>
   );
@@ -473,7 +470,7 @@ The root container that provides context and manages state for all popover compo
 | `side?`         | `"top" \| "bottom" \| "left" \| "right"` | `"bottom"`  | Preferred side for popover positioning           |
 | `align?`        | `"start" \| "center" \| "end"`           | `"center"`  | Preferred alignment relative to trigger          |
 | `sideOffset?`   | `number`                                 | `8`         | Distance in pixels between trigger and popover   |
-| `children`      | `React.ReactNode`                        | -           | Popover.Trigger and Popover.Content components     |
+| `children`      | `React.ReactNode`                        | -           | Popover.Trigger and Popover.Content components   |
 
 **Events**
 
@@ -538,26 +535,27 @@ Floating panel container that holds the popover content.
 
 **Props**
 
-| Name                    | Type                                                      | Default     | Description                                             |
-| ----------------------- | --------------------------------------------------------- | ----------- | ------------------------------------------------------- |
-| `side?`                 | `"top" \| "bottom" \| "left" \| "right"`                  | `"bottom"`  | Side of trigger to position against                     |
-| `align?`                | `"start" \| "center" \| "end"`                            | `"center"`  | Alignment relative to trigger                           |
-| `sideOffset?`           | `number`                                                  | `8`         | Distance from trigger in pixels                         |
-| `alignOffset?`          | `number`                                                  | `0`         | Offset along alignment axis                             |
-| `avoidCollisions?`      | `boolean`                                                 | `true`      | Whether to adjust position to avoid viewport collisions |
-| `collisionBoundary?`    | `Element \| Element[]`                                    | `undefined` | Boundary elements for collision detection               |
-| `hideWhenDetached?`     | `boolean`                                                 | `false`     | Whether to hide when trigger is occluded                |
-| `onOpenAutoFocus?`      | `(event: Event) => void`                                  | `undefined` | Called when popover opens and focus moves inside        |
-| `onCloseAutoFocus?`     | `(event: Event) => void`                                  | `undefined` | Called when popover closes and focus returns to trigger |
-| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`                    | `undefined` | Called when escape is pressed                           |
-| `onPointerDownOutside?` | `(event: React.PointerEvent) => void`                     | `undefined` | Called when pointer down occurs outside content         |
-| `onFocusOutside?`       | `(event: React.FocusEvent) => void`                       | `undefined` | Called when focus moves outside content                 |
-| `onInteractOutside?`    | `(event: React.PointerEvent \| React.FocusEvent) => void` | `undefined` | Called when interaction occurs outside content          |
-| `trapFocus?`            | `boolean`                                                 | `false`     | Whether to trap focus within content                    |
-| `style?`                | `React.CSSProperties`                                     | `undefined` | Custom styles for content                               |
-| `onKeyDown?`            | `(event: React.KeyboardEvent<HTMLDivElement>) => void`    | `undefined` | Custom keydown handler                                  |
-| `ref?`                  | `React.Ref<HTMLDivElement>`                               | `undefined` | Ref to the content element                              |
-| `children`              | `React.ReactNode`                                         | -           | Content to display in popover                           |
+| Name                    | Type                                                      | Default         | Description                                             |
+| ----------------------- | --------------------------------------------------------- | --------------- | ------------------------------------------------------- |
+| `side?`                 | `"top" \| "bottom" \| "left" \| "right"`                  | `"bottom"`      | Side of trigger to position against                     |
+| `align?`                | `"start" \| "center" \| "end"`                            | `"center"`      | Alignment relative to trigger                           |
+| `sideOffset?`           | `number`                                                  | `8`             | Distance from trigger in pixels                         |
+| `alignOffset?`          | `number`                                                  | `0`             | Offset along alignment axis                             |
+| `avoidCollisions?`      | `boolean`                                                 | `true`          | Whether to adjust position to avoid viewport collisions |
+| `collisionBoundary?`    | `Element \| Element[]`                                    | `undefined`     | Boundary elements for collision detection               |
+| `hideWhenDetached?`     | `boolean`                                                 | `false`         | Whether to hide when trigger is occluded                |
+| `onOpenAutoFocus?`      | `(event: Event) => void`                                  | `undefined`     | Called when popover opens and focus moves inside        |
+| `onCloseAutoFocus?`     | `(event: Event) => void`                                  | `undefined`     | Called when popover closes and focus returns to trigger |
+| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`                    | `undefined`     | Called when escape is pressed                           |
+| `onPointerDownOutside?` | `(event: React.PointerEvent) => void`                     | `undefined`     | Called when pointer down occurs outside content         |
+| `onFocusOutside?`       | `(event: React.FocusEvent) => void`                       | `undefined`     | Called when focus moves outside content                 |
+| `onInteractOutside?`    | `(event: React.PointerEvent \| React.FocusEvent) => void` | `undefined`     | Called when interaction occurs outside content          |
+| `trapFocus?`            | `boolean`                                                 | `false`         | Whether to trap focus within content                    |
+| `style?`                | `React.CSSProperties`                                     | `undefined`     | Custom styles for content                               |
+| `onKeyDown?`            | `(event: React.KeyboardEvent<HTMLDivElement>) => void`    | `undefined`     | Custom keydown handler                                  |
+| `ref?`                  | `React.Ref<HTMLDivElement>`                               | `undefined`     | Ref to the content element                              |
+| `children`              | `React.ReactNode`                                         | -               | Content to display in popover                           |
+| `container?`            | `HTMLElement \| null`                                     | `document.body` | Custom portal container element                         |
 
 **Events**
 
@@ -636,23 +634,6 @@ Optional element used as positioning reference instead of the trigger. Always re
 | Attribute             | Value    | Purpose                      |
 | --------------------- | -------- | ---------------------------- |
 | `data-popover-anchor` | `string` | Identifies as anchor element |
-
-### Popover.Portal
-
-Optional portal component for rendering content in a different DOM location.
-
-**Props**
-
-| Name         | Type              | Default         | Description                                       |
-| ------------ | ----------------- | --------------- | ------------------------------------------------- |
-| `container?` | `Element \| null` | `document.body` | Container element to portal into                  |
-| `children`   | `React.ReactNode` | -               | Content to be portaled (typically Popover.Content) |
-
-**Events**
-
-| Name | Parameters | Description              | When Triggered |
-| ---- | ---------- | ------------------------ | -------------- |
-| None | -          | Portal manages rendering | -              |
 
 ### Popover.Close
 

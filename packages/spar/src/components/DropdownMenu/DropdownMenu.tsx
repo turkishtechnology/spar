@@ -17,7 +17,7 @@ export const DropdownMenu = ({
   modal = true,
   disabled = false,
   dir = 'ltr',
-  closeOnSelect = 'auto',
+  closeOnSelect = true,
   children,
 }: DropdownMenuProps) => {
   const isControlled = open !== undefined;

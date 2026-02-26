@@ -8,7 +8,7 @@
   - Supplementary descriptions for form inputs  
   - Additional context for complex UI controls
   - Clarifying abbreviations or technical terms
-- **Compound Component Structure**: Flexible composition with Provider, Root, Trigger, Content, Portal, and Arrow parts
+- **Compound Component Structure**: Flexible composition with Provider, Root, Trigger, Content, and Arrow parts
 - **Key Differentiators**: 
   - Non-modal, lightweight information display
   - Dismissible with Escape or focus/hover loss
@@ -79,14 +79,7 @@
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | - | Outside pointer down handler |
 | `onOpenAutoFocus` | `(event: Event) => void` | No | - | Called when auto-focusing on open |
 | `onCloseAutoFocus` | `(event: Event) => void` | No | - | Called when auto-focusing on close |
-
-#### TooltipPortal Props
-
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `children` | `React.ReactNode` | No | - | Content to render in portal |
-| `container` | `HTMLElement` | No | `document.body` | Portal container element |
-| `forceMount` | `boolean` | No | `false` | Force mount regardless of open state |
+| `container` | `HTMLElement` | No | `document.body` | Portal target container for the tooltip content |
 
 #### TooltipArrow Props
 
@@ -221,7 +214,7 @@ interface TooltipProviderContextValue {
 
 ### SSR/CSR Safety and Deterministic IDs
 - Generate stable IDs using `useId()` hook
-- Portal creation only after hydration
+- Built-in portal (via `createPortal` in TooltipContent) renders only after hydration
 - No layout shift during tooltip appearance
 - Graceful degradation when JS disabled
 - **Hydration safety**: Prevent hydration mismatches with proper SSR handling
@@ -279,7 +272,7 @@ interface TooltipProviderContextValue {
 ### Integration Tests
 - Multiple tooltips on same page (tooltip groups and isolation)
 - Tooltip within forms and complex components
-- Portal rendering and positioning
+- Built-in portal rendering and positioning (via `container` prop on TooltipContent)
 - Performance with many tooltips (virtual scrolling scenarios)
 - Edge cases (rapidly hovering, nested focusable elements)
 - **Provider behavior**: Test skip delay and inter-tooltip coordination
@@ -319,14 +312,14 @@ interface TooltipProviderContextValue {
 - [ ] **Hide delay implementation**: Prevents accidental dismissal during pointer movement
 - [ ] Escape key dismissal
 - [ ] Click outside dismissal
-- [ ] Portal creation for z-index independence
+- [ ] Built-in portal via `createPortal` in TooltipContent for z-index independence
 - [ ] Collision detection and placement adjustment
 - [ ] **Touch device accessibility**: Alternative content access patterns
 - [ ] **Media query detection**: Proper hover capability detection
 - [ ] SSR compatibility and hydration safety
 - [ ] Performance optimization for multiple tooltips
 - [ ] TypeScript strict mode compliance
-- [ ] **Compound API implementation**: Provider, Root, Trigger, Content, Portal, Arrow components
+- [ ] **Compound API implementation**: Provider, Root, Trigger, Content, Arrow components (portal is built into Content)
 - [ ] **Context state management**: Provider shares configuration across tooltip instances
 - [ ] **Composition flexibility**: Support for custom layouts and advanced positioning
 - [ ] **Arrow component**: Optional arrow with customizable size and styling hooks

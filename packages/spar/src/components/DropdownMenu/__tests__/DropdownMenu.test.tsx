@@ -5,15 +5,9 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuLabel,
   DropdownMenuGroup,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
 } from '../';
 
 describe('DropdownMenu', () => {
@@ -685,28 +679,6 @@ describe('DropdownMenu', () => {
       });
     });
 
-    it('should close menu after selection with closeOnSelect=auto', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu closeOnSelect='auto' defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Item 1</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      expect(screen.getByRole('menu')).toBeInTheDocument();
-
-      const item = screen.getByRole('menuitem');
-      await user.click(item);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('menu')).not.toBeInTheDocument();
-      });
-    });
-
     it('should not close menu after selection with closeOnSelect=false', async () => {
       const user = userEvent.setup();
 
@@ -723,186 +695,6 @@ describe('DropdownMenu', () => {
 
       const item = screen.getByRole('menuitem');
       await user.click(item);
-
-      expect(screen.getByRole('menu')).toBeInTheDocument();
-    });
-  });
-
-  describe('DropdownMenuCheckboxItem', () => {
-    it('should render with proper role and attributes', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem checked={true}>Checkbox Item</DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const item = screen.getByRole('menuitemcheckbox');
-      expect(item).toHaveAttribute('aria-checked', 'true');
-      expect(item).toHaveAttribute('data-checked', '');
-    });
-
-    it('should handle indeterminate state', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem checked='indeterminate'>
-              Checkbox Item
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const item = screen.getByRole('menuitemcheckbox');
-      expect(item).toHaveAttribute('aria-checked', 'mixed');
-      expect(item).toHaveAttribute('data-indeterminate', '');
-    });
-
-    it('should toggle checked state on selection', async () => {
-      const onCheckedChange = jest.fn();
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem checked={false} onCheckedChange={onCheckedChange}>
-              Checkbox Item
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const item = screen.getByRole('menuitemcheckbox');
-      await user.click(item);
-
-      expect(onCheckedChange).toHaveBeenCalledWith(true);
-    });
-
-    it('should handle indeterminate to checked transition', async () => {
-      const onCheckedChange = jest.fn();
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem checked='indeterminate' onCheckedChange={onCheckedChange}>
-              Checkbox Item
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const item = screen.getByRole('menuitemcheckbox');
-      await user.click(item);
-
-      expect(onCheckedChange).toHaveBeenCalledWith(true);
-    });
-
-    it('should not close menu with closeOnSelect=auto', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu closeOnSelect='auto' defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem>Checkbox Item</DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      expect(screen.getByRole('menu')).toBeInTheDocument();
-
-      const item = screen.getByRole('menuitemcheckbox');
-      await user.click(item);
-
-      expect(screen.getByRole('menu')).toBeInTheDocument();
-    });
-  });
-
-  describe('DropdownMenuRadioGroup & RadioItem', () => {
-    it('should render radio group with proper role', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup value='option1'>
-              <DropdownMenuRadioItem value='option1'>Option 1</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      expect(screen.getByRole('group')).toBeInTheDocument();
-      const radioItems = screen.getAllByRole('menuitemradio');
-      expect(radioItems).toHaveLength(2);
-    });
-
-    it('should reflect selected value in radio items', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup value='option2'>
-              <DropdownMenuRadioItem value='option1'>Option 1</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const radioItems = screen.getAllByRole('menuitemradio');
-      expect(radioItems[0]).toHaveAttribute('aria-checked', 'false');
-      expect(radioItems[1]).toHaveAttribute('aria-checked', 'true');
-      expect(radioItems[1]).toHaveAttribute('data-checked', '');
-    });
-
-    it('should change value on radio item selection', async () => {
-      const onValueChange = jest.fn();
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup value='option1' onValueChange={onValueChange}>
-              <DropdownMenuRadioItem value='option1'>Option 1</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const radioItems = screen.getAllByRole('menuitemradio');
-      await user.click(radioItems[1]!);
-
-      expect(onValueChange).toHaveBeenCalledWith('option2');
-    });
-
-    it('should not close menu with closeOnSelect=auto for radio items', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu closeOnSelect='auto' defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup value='option1'>
-              <DropdownMenuRadioItem value='option1'>Option 1</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      expect(screen.getByRole('menu')).toBeInTheDocument();
-
-      const radioItems = screen.getAllByRole('menuitemradio');
-      await user.click(radioItems[1]!);
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
     });
@@ -961,69 +753,6 @@ describe('DropdownMenu', () => {
 
       const groups = screen.getAllByRole('group');
       expect(groups).toHaveLength(1);
-    });
-  });
-
-  describe('DropdownMenuSub', () => {
-    it('should manage submenu open state', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuSub defaultOpen={true}>
-              <DropdownMenuSubTrigger>Submenu Trigger</DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Sub Item 1</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      expect(screen.getByText('Sub Item 1')).toBeInTheDocument();
-    });
-
-    it('should call onOpenChange for submenu', async () => {
-      const onOpenChange = jest.fn();
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuSub onOpenChange={onOpenChange}>
-              <DropdownMenuSubTrigger>Submenu Trigger</DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Sub Item 1</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const subTrigger = screen.getByText('Submenu Trigger');
-      await user.click(subTrigger);
-
-      expect(onOpenChange).toHaveBeenCalledWith(true);
-    });
-
-    it('should show submenu state in trigger', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuSub defaultOpen={true}>
-              <DropdownMenuSubTrigger>Submenu Trigger</DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Sub Item 1</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const subTrigger = screen.getByText('Submenu Trigger');
-      expect(subTrigger).toHaveAttribute('data-state', 'open');
     });
   });
 

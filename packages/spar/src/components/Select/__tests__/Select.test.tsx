@@ -896,7 +896,7 @@ describe('Select', () => {
 
     it('renders as custom element when as prop is provided', async () => {
       const user = userEvent.setup();
-      const { container } = render(
+      render(
         <Select>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
@@ -915,7 +915,7 @@ describe('Select', () => {
       await waitFor(() => {
         expect(screen.queryByRole('listbox')).toBeInTheDocument();
       });
-      const option = container.querySelector('[role="option"]');
+      const option = document.querySelector('[role="option"]');
       expect(option?.tagName).toBe('LI');
     });
   });
