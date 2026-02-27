@@ -45,7 +45,5 @@ export type {
   PopoverAnchorRenderProps,
   PopoverCloseProps,
   PopoverCloseRenderProps,
-  PopoverSide,
-  PopoverAlign,
   PopoverContextValue,
 } from './types';

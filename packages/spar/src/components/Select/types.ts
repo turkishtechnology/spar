@@ -1,18 +1,7 @@
 import type { ElementType, ReactNode, RefObject } from 'react';
-import type { Placement, Strategy, Middleware, VirtualElement } from '@floating-ui/react-dom';
-import type { Direction, PolymorphicProps } from '../../types';
+import type { Side, Align, Direction, PolymorphicProps } from '../../types';
 import type { LabelProps } from '../Label/types';
 import type { ButtonOwnProps } from '../Button/types';
-
-// Re-export Floating UI types for public API
-export type { Placement, Strategy, Middleware, VirtualElement };
-
-export interface Padding {
-  top?: number;
-  right?: number;
-  bottom?: number;
-  left?: number;
-}
 
 /**
  * Own props for Select root component
@@ -158,40 +147,26 @@ export type SelectValueProps<T extends ElementType = 'span'> = PolymorphicProps<
 >;
 
 /**
- * Own props for SelectIcon component
- */
-export interface SelectIconOwnProps {}
-
-/**
  * Props for SelectIcon component
  * @remarks Optional visual indicator (chevron, arrow)
  */
-export type SelectIconProps<T extends ElementType = 'span'> = PolymorphicProps<
-  'span',
-  T,
-  SelectIconOwnProps
->;
+export type SelectIconProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
 
 /**
  * Own props for SelectContent component
  */
 export interface SelectContentOwnProps {
   /**
-   * Placement of the floating content relative to the trigger
-   * @defaultValue 'bottom-start'
+   * Preferred side for positioning relative to trigger
+   * @defaultValue 'bottom'
    */
-  placement?: Placement;
+  side?: Side;
 
   /**
-   * Positioning strategy (absolute or fixed)
-   * @defaultValue 'absolute'
+   * Alignment relative to trigger
+   * @defaultValue 'start'
    */
-  strategy?: Strategy;
-
-  /**
-   * Custom middleware array for advanced positioning control
-   */
-  middleware?: Middleware[];
+  align?: Align;
 
   /**
    * Distance from trigger in pixels
@@ -200,10 +175,16 @@ export interface SelectContentOwnProps {
   sideOffset?: number;
 
   /**
-   * Whether to shift the content to stay in view
+   * Offset along alignment axis in pixels
+   * @defaultValue 0
+   */
+  alignOffset?: number;
+
+  /**
+   * Whether to adjust position to avoid viewport collisions
    * @defaultValue true
    */
-  shift?: boolean;
+  avoidCollisions?: boolean;
 
   /**
    * Padding from boundary edges (in pixels)
@@ -218,16 +199,22 @@ export interface SelectContentOwnProps {
   flip?: boolean;
 
   /**
-   * Whether to hide when trigger is fully scrolled out of view
-   * @defaultValue false
+   * Whether to shift the content to stay in view
+   * @defaultValue true
    */
-  hide?: boolean;
+  shift?: boolean;
 
   /**
    * Whether to constrain size to available space
    * @defaultValue true
    */
   size?: boolean;
+
+  /**
+   * Whether to hide when trigger is fully scrolled out of view
+   * @defaultValue false
+   */
+  hide?: boolean;
 
   /**
    * Arrow element ref for arrow positioning
@@ -270,19 +257,10 @@ export type SelectContentProps<T extends ElementType = 'div'> = PolymorphicProps
 >;
 
 /**
- * Own props for SelectViewport component
- */
-export interface SelectViewportOwnProps {}
-
-/**
  * Props for SelectViewport component
  * @remarks Scrollable container for select items
  */
-export type SelectViewportProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  SelectViewportOwnProps
->;
+export type SelectViewportProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * Render props provided to children function for SelectItem
@@ -343,19 +321,10 @@ export type SelectItemProps<T extends ElementType = 'div'> = PolymorphicProps<
 >;
 
 /**
- * Own props for SelectItemText component
- */
-export interface SelectItemTextOwnProps {}
-
-/**
  * Props for SelectItemText component
  * @remarks The text content of an item
  */
-export type SelectItemTextProps<T extends ElementType = 'span'> = PolymorphicProps<
-  'span',
-  T,
-  SelectItemTextOwnProps
->;
+export type SelectItemTextProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
 
 /**
  * Own props for SelectItemIndicator component
@@ -379,19 +348,10 @@ export type SelectItemIndicatorProps<T extends ElementType = 'span'> = Polymorph
 >;
 
 /**
- * Own props for SelectGroup component
- */
-export interface SelectGroupOwnProps {}
-
-/**
  * Props for SelectGroup component
  * @remarks Groups related items together
  */
-export type SelectGroupProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  SelectGroupOwnProps
->;
+export type SelectGroupProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * Props for SelectLabel component
@@ -400,19 +360,10 @@ export type SelectGroupProps<T extends ElementType = 'div'> = PolymorphicProps<
 export type SelectLabelProps<T extends ElementType = 'label'> = LabelProps<T>;
 
 /**
- * Own props for SelectSeparator component
- */
-export interface SelectSeparatorOwnProps {}
-
-/**
  * Props for SelectSeparator component
  * @remarks Visual separator between items or groups
  */
-export type SelectSeparatorProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  SelectSeparatorOwnProps
->;
+export type SelectSeparatorProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * Own props for SelectArrow component
@@ -441,8 +392,9 @@ export type SelectArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<
   SelectArrowOwnProps
 >;
 
-// Internal context types
-
+/**
+ * @internal
+ */
 export interface SelectItemData {
   value: string;
   textValue: string;

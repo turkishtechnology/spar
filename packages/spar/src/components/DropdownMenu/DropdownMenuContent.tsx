@@ -23,7 +23,7 @@ import {
 import type {
   DropdownMenuContentProps,
   DropdownMenuCollectionContextValue,
-  MenuCollectionItem,
+  DropdownMenuCollectionItem,
 } from './types';
 import type { Side, Align } from '../../types';
 import { useDropdownMenuContext, DropdownMenuCollectionContext } from './hooks';
@@ -135,12 +135,12 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     [mergedRef, refs],
   );
 
-  const [items, setItems] = useState<MenuCollectionItem[]>([]);
+  const [items, setItems] = useState<DropdownMenuCollectionItem[]>([]);
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
   const typeaheadRef = useRef('');
   const typeaheadTimeoutId = useRef<number | null>(null);
 
-  const registerItem = useCallback((item: MenuCollectionItem) => {
+  const registerItem = useCallback((item: DropdownMenuCollectionItem) => {
     setItems((previous) => {
       const next = [...previous.filter((entry) => entry.id !== item.id), item];
       next.sort((a, b) => {

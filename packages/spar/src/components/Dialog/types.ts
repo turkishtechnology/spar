@@ -45,7 +45,7 @@ export interface DialogProps {
   /**
    * Dialog trigger and portal components
    */
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 /**
@@ -270,12 +270,8 @@ export interface DialogContextValue {
   contentRef: RefObject<HTMLElement | null>;
   titleId: string;
   descriptionId: string;
-  /** @internal Ref for storing the element to restore focus to on close */
   restoreFocusRef: RefObject<HTMLElement | null>;
-  /** @internal Ref for close auto-focus callback set by DialogContent */
   onCloseAutoFocusRef: RefObject<((event: Event) => void) | undefined>;
-  /** @internal Ref for restoreFocus prop value set by DialogContent */
   restoreFocusPropRef: RefObject<boolean>;
-  /** @internal Ref for finalFocus prop set by DialogContent */
   finalFocusPropRef: RefObject<HTMLElement | (() => HTMLElement) | undefined>;
 }

@@ -255,8 +255,6 @@ export type TooltipArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<
   TooltipArrowOwnProps
 >;
 
-// Internal context types
-
 /**
  * @internal
  */
