@@ -137,8 +137,6 @@ export type AccordionContentOwnProps = CollapsibleContentOwnProps;
  */
 export type AccordionContentProps<T extends ElementType = 'div'> = CollapsibleContentProps<T>;
 
-// Internal context types
-
 /**
  * @internal
  */

@@ -222,49 +222,22 @@ export type DropdownMenuItemProps<T extends ElementType = 'div'> = PolymorphicPr
 >;
 
 /**
- * Own props for DropdownMenuSeparator component
- */
-export interface DropdownMenuSeparatorOwnProps {}
-
-/**
  * Props for DropdownMenuSeparator component
  * @remarks Visual divider between menu item groups
  */
-export type DropdownMenuSeparatorProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  DropdownMenuSeparatorOwnProps
->;
-
-/**
- * Own props for DropdownMenuLabel component
- */
-export interface DropdownMenuLabelOwnProps {}
+export type DropdownMenuSeparatorProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * Props for DropdownMenuLabel component
  * @remarks Non-interactive label for a menu group
  */
-export type DropdownMenuLabelProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  DropdownMenuLabelOwnProps
->;
-
-/**
- * Own props for DropdownMenuGroup component
- */
-export interface DropdownMenuGroupOwnProps {}
+export type DropdownMenuLabelProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * Props for DropdownMenuGroup component
  * @remarks Semantic grouping container for related items
  */
-export type DropdownMenuGroupProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  DropdownMenuGroupOwnProps
->;
+export type DropdownMenuGroupProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * Internal context value for DropdownMenu
@@ -286,9 +259,9 @@ export interface DropdownMenuContextValue {
 }
 
 /**
- * Collection item registered in menu content
+ * @internal
  */
-export interface MenuCollectionItem {
+export interface DropdownMenuCollectionItem {
   id: string;
   ref: RefObject<HTMLElement | null>;
   disabled: boolean;
@@ -300,7 +273,7 @@ export interface MenuCollectionItem {
  * @internal
  */
 export interface DropdownMenuCollectionContextValue {
-  registerItem: (item: MenuCollectionItem) => void;
+  registerItem: (item: DropdownMenuCollectionItem) => void;
   unregisterItem: (id: string) => void;
   highlightItem: (id: string | null) => void;
   highlightFirst: () => void;

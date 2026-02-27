@@ -1,9 +1,6 @@
 import type { ElementType, ReactNode, RefObject, CSSProperties } from 'react';
-import type { PolymorphicProps } from '../../types';
+import type { Side, Align, PolymorphicProps } from '../../types';
 import type { ButtonOwnProps } from '../Button/types';
-
-export type PopoverSide = 'top' | 'bottom' | 'left' | 'right';
-export type PopoverAlign = 'start' | 'center' | 'end';
 
 /**
  * Render props provided to PopoverTrigger children function
@@ -93,13 +90,13 @@ export interface PopoverProps {
    * Preferred side for popover positioning
    * @defaultValue 'bottom'
    */
-  side?: PopoverSide;
+  side?: Side;
 
   /**
    * Preferred alignment relative to trigger
    * @defaultValue 'center'
    */
-  align?: PopoverAlign;
+  align?: Align;
 
   /**
    * Distance in pixels between trigger and popover
@@ -110,7 +107,7 @@ export interface PopoverProps {
   /**
    * PopoverTrigger and PopoverContent components
    */
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 /**
@@ -141,13 +138,13 @@ export interface PopoverContentOwnProps {
    * Side of trigger to position against
    * @defaultValue 'bottom'
    */
-  side?: PopoverSide;
+  side?: Side;
 
   /**
    * Alignment relative to trigger
    * @defaultValue 'center'
    */
-  align?: PopoverAlign;
+  align?: Align;
 
   /**
    * Distance from trigger
@@ -311,16 +308,16 @@ export type PopoverCloseProps<T extends ElementType = 'button'> = PolymorphicPro
 >;
 
 /**
- * Internal state for popover management
+ * @internal
  */
 export interface PopoverState {
   isOpen: boolean;
   triggerRect: DOMRect | null;
   contentRect: DOMRect | null;
-  side: PopoverSide;
-  align: PopoverAlign;
-  actualSide: PopoverSide;
-  actualAlign: PopoverAlign;
+  side: Side;
+  align: Align;
+  actualSide: Side;
+  actualAlign: Align;
   isPositioned: boolean;
   triggerElement: HTMLElement | null;
   contentElement: HTMLElement | null;
@@ -341,8 +338,8 @@ export interface PopoverContextValue {
   floatingStyles: CSSProperties;
   modal: boolean;
   disabled: boolean;
-  side: PopoverSide;
-  align: PopoverAlign;
+  side: Side;
+  align: Align;
   sideOffset: number;
   openPopover: () => void;
   closePopover: () => void;

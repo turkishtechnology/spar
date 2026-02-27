@@ -205,18 +205,19 @@ interface PopoverState {
   isOpen: boolean;
   triggerRect: DOMRect | null;
   contentRect: DOMRect | null;
-  side: PopoverSide;
-  align: PopoverAlign;
-  actualSide: PopoverSide;
-  actualAlign: PopoverAlign;
+  side: Side;
+  align: Align;
+  actualSide: Side;
+  actualAlign: Align;
   isPositioned: boolean;
   triggerElement: HTMLElement | null;
   contentElement: HTMLElement | null;
   anchorElement: HTMLElement | null;
 }
 
-type PopoverSide = 'top' | 'bottom' | 'left' | 'right';
-type PopoverAlign = 'start' | 'center' | 'end';
+// Side and Align are shared types from src/types/index.ts
+type Side = 'top' | 'right' | 'bottom' | 'left';
+type Align = 'start' | 'center' | 'end';
 
 // Enhanced TypeScript Generics for Render Props Pattern
 type RenderPropsChildren<T> = ReactNode | ((state: T) => ReactNode);
@@ -250,8 +251,8 @@ interface PopoverTriggerRenderProps {
 
 interface PopoverContentProps<T extends React.ElementType = 'div'> 
   extends PolymorphicComponentProps<T> {
-  side?: PopoverSide;
-  align?: PopoverAlign;
+  side?: Side;
+  align?: Align;
   sideOffset?: number;
   alignOffset?: number;
   avoidCollisions?: boolean;

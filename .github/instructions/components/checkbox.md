@@ -39,9 +39,6 @@ The Checkbox component provides a headless, accessible checkbox implementation t
 | `value` | `string` | No | `"on"` | Value sent in form data when checked |
 | `form` | `string` | No | `undefined` | ID of the form this checkbox belongs to |
 | `autoFocus` | `boolean` | No | `false` | Auto-focus on mount |
-| `aria-label` | `string` | No | `undefined` | Accessible name for the checkbox. Required when checkbox has no visible label |
-| `aria-labelledby` | `string` | No | `undefined` | ID of element that labels the checkbox |
-| `aria-describedby` | `string` | No | `undefined` | ID of element that describes the checkbox |
 | `tabIndex` | `number` | No | `0` | Tab index for keyboard navigation |
 | `id` | `string` | No | Auto-generated | Unique identifier |
 | `className` | `string` | No | `undefined` | CSS class names |
