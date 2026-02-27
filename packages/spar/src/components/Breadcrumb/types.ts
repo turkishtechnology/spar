@@ -14,6 +14,24 @@ export type NavigationHandler = (href: string, event: PressEvent) => void;
 export type BreadcrumbPosition = 'first' | 'middle' | 'last';
 
 /**
+ * Render props provided to BreadcrumbItem children function
+ */
+export interface BreadcrumbItemRenderProps {
+  /**
+   * Position of this item in the breadcrumb trail
+   */
+  position: BreadcrumbPosition;
+  /**
+   * Whether this item represents the current page
+   */
+  isCurrent: boolean;
+  /**
+   * Whether breadcrumb navigation is disabled (from root context)
+   */
+  isDisabled: boolean;
+}
+
+/**
  * Context value for breadcrumb component communication
  * @internal
  */
@@ -69,6 +87,10 @@ export interface BreadcrumbItemOwnProps {
    * @internal Automatically calculated by BreadcrumbList
    */
   isCurrent?: boolean;
+  /**
+   * Item content (Link or Page), or a render function receiving item state
+   */
+  children?: React.ReactNode | ((props: BreadcrumbItemRenderProps) => React.ReactNode);
 }
 
 /**

@@ -36,6 +36,7 @@ export type {
   BreadcrumbProps,
   BreadcrumbListProps,
   BreadcrumbItemProps,
+  BreadcrumbItemRenderProps,
   BreadcrumbLinkProps,
   BreadcrumbPageProps,
   BreadcrumbSeparatorProps,
