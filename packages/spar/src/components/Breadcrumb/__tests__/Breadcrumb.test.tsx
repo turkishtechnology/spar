@@ -195,6 +195,76 @@ describe('Breadcrumb Components', () => {
       const items = screen.getAllByRole('listitem');
       expect(items).toHaveLength(3);
     });
+
+    it('calculates correct position when separator is placed before first item', () => {
+      render(
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbSeparator data-testid='leading-sep'>/</BreadcrumbSeparator>
+            <BreadcrumbItem data-testid='first-item'>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbItem data-testid='middle-item'>
+              <BreadcrumbLink href='/products'>Products</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbItem data-testid='last-item'>
+              <BreadcrumbPage>Current</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>,
+      );
+
+      expect(screen.getByTestId('first-item')).toHaveAttribute('data-position', 'first');
+      expect(screen.getByTestId('middle-item')).toHaveAttribute('data-position', 'middle');
+      expect(screen.getByTestId('last-item')).toHaveAttribute('data-position', 'last');
+      expect(screen.getByTestId('last-item')).toHaveAttribute('data-current', '');
+    });
+
+    it('calculates correct position when separator is placed after last item', () => {
+      render(
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem data-testid='first-item'>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbItem data-testid='last-item'>
+              <BreadcrumbPage>Current</BreadcrumbPage>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator data-testid='trailing-sep'>/</BreadcrumbSeparator>
+          </BreadcrumbList>
+        </Breadcrumb>,
+      );
+
+      expect(screen.getByTestId('first-item')).toHaveAttribute('data-position', 'first');
+      expect(screen.getByTestId('last-item')).toHaveAttribute('data-position', 'last');
+      expect(screen.getByTestId('last-item')).toHaveAttribute('data-current', '');
+    });
+
+    it('calculates correct position with consecutive separators', () => {
+      render(
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbItem data-testid='first-item'>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbItem data-testid='last-item'>
+              <BreadcrumbPage>Current</BreadcrumbPage>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+          </BreadcrumbList>
+        </Breadcrumb>,
+      );
+
+      expect(screen.getByTestId('first-item')).toHaveAttribute('data-position', 'first');
+      expect(screen.getByTestId('last-item')).toHaveAttribute('data-position', 'last');
+      expect(screen.getByTestId('last-item')).toHaveAttribute('data-current', '');
+    });
   });
 
   describe('BreadcrumbLink', () => {
