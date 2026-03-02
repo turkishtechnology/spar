@@ -6,7 +6,7 @@ description: A headless input component with compound pattern support, full acce
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Input, Label } from '@turkish-technology/spar';
+import { Input } from '@turkish-technology/spar';
 
 # Input
 
@@ -153,16 +153,16 @@ The Input component follows a compound component pattern with context-based stat
   ]}
 >
   <Input className='input-demo-container' isInvalid data-spar-part='root'>
-    <InputLabel htmlFor='my-input' className='label' data-spar-part='label'>
+    <Input.Label htmlFor='my-input' className='label' data-spar-part='label'>
       {'Label'}
-    </InputLabel>
-    <InputField id='my-input' className='input' data-spar-part='field' />
-    <InputDescription className='description' data-spar-part='description'>
+    </Input.Label>
+    <Input.Field id='my-input' className='input' data-spar-part='field' />
+    <Input.Description className='description' data-spar-part='description'>
       {'Helper text for guidance'}
-    </InputDescription>
-    <InputErrorMessage className='error' data-spar-part='errorMessage'>
+    </Input.Description>
+    <Input.ErrorMessage className='error' data-spar-part='errorMessage'>
       {'This field is required'}
-    </InputErrorMessage>
+    </Input.ErrorMessage>
   </Input>
 </AnatomyViewer>
 
