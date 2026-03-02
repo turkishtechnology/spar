@@ -15,7 +15,8 @@
     "prepare": "husky",
     "version:spar": "pnpm --filter @turkish-technology/spar version",
     "publish:spar": "pnpm publish --filter @turkish-technology/spar --no-git-checks --provenance",
-    "publish:spar:dry": "pnpm --filter @turkish-technology/spar publish --dry-run --no-git-checks"
+    "publish:spar:dry": "pnpm --filter @turkish-technology/spar publish --dry-run --no-git-checks",
+    "test": "pnpm --filter @turkish-technology/spar test"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
