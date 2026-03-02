@@ -265,6 +265,38 @@ describe('Breadcrumb Components', () => {
       expect(screen.getByTestId('last-item')).toHaveAttribute('data-position', 'last');
       expect(screen.getByTestId('last-item')).toHaveAttribute('data-current', '');
     });
+
+    it('calculates correct position with non-separator elements among items', () => {
+      render(
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem data-testid='first-item'>
+              <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <span data-testid='non-separator'>custom element</span>
+            <BreadcrumbItem data-testid='middle-item'>
+              <BreadcrumbLink href='/products'>Products</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <BreadcrumbItem data-testid='last-item'>
+              <BreadcrumbPage>Current</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>,
+      );
+
+      const nonSeparator = screen.getByTestId('non-separator');
+      expect(nonSeparator).toBeInTheDocument();
+      expect(nonSeparator.tagName).toBe('SPAN');
+
+      // first-item = index 0 → 'first'
+      // middle-item = index 2 → 'middle'
+      // last-item = index 3 → 'last'
+      expect(screen.getByTestId('first-item')).toHaveAttribute('data-position', 'first');
+      expect(screen.getByTestId('middle-item')).toHaveAttribute('data-position', 'middle');
+      expect(screen.getByTestId('last-item')).toHaveAttribute('data-position', 'last');
+      expect(screen.getByTestId('last-item')).toHaveAttribute('data-current', '');
+    });
   });
 
   describe('BreadcrumbLink', () => {
