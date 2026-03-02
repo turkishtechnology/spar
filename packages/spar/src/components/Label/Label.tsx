@@ -9,6 +9,8 @@ export const Label = <T extends ElementType = 'label'>({
   required = false,
   isOptional = false,
   disabled = false,
+  readOnly = false,
+  isInvalid = false,
   children,
   ref,
   ...htmlProps
@@ -20,8 +22,10 @@ export const Label = <T extends ElementType = 'label'>({
       'data-required': required ? '' : undefined,
       'data-optional': isOptional ? '' : undefined,
       'data-disabled': disabled ? '' : undefined,
+      'data-readonly': readOnly ? '' : undefined,
+      'data-invalid': isInvalid ? '' : undefined,
     }),
-    [required, isOptional, disabled],
+    [required, isOptional, disabled, readOnly, isInvalid],
   );
 
   return (
