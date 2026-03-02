@@ -266,36 +266,41 @@ describe('Breadcrumb Components', () => {
       expect(screen.getByTestId('last-item')).toHaveAttribute('data-current', '');
     });
 
-    it('calculates correct position with non-separator elements among items', () => {
+    it('calculates correct position while excluding non-breadcrumb elements for first/middle/last', () => {
       render(
         <Breadcrumb>
           <BreadcrumbList>
+            <span data-testid='non-breadcrumb-before-first'>before first</span>
             <BreadcrumbItem data-testid='first-item'>
               <BreadcrumbLink href='/home'>Home</BreadcrumbLink>
             </BreadcrumbItem>
-            <span data-testid='non-separator'>custom element</span>
+            <span data-testid='non-breadcrumb-between-first-middle'>between first and middle</span>
             <BreadcrumbItem data-testid='middle-item'>
               <BreadcrumbLink href='/products'>Products</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator>/</BreadcrumbSeparator>
+            <div data-testid='non-breadcrumb-between-middle-last'>between middle and last</div>
             <BreadcrumbItem data-testid='last-item'>
               <BreadcrumbPage>Current</BreadcrumbPage>
             </BreadcrumbItem>
+            <span data-testid='non-breadcrumb-after-last'>after last</span>
           </BreadcrumbList>
         </Breadcrumb>,
       );
 
-      const nonSeparator = screen.getByTestId('non-separator');
-      expect(nonSeparator).toBeInTheDocument();
-      expect(nonSeparator.tagName).toBe('SPAN');
+      expect(screen.getByTestId('non-breadcrumb-before-first').tagName).toBe('SPAN');
+      expect(screen.getByTestId('non-breadcrumb-between-first-middle').tagName).toBe('SPAN');
+      expect(screen.getByTestId('non-breadcrumb-between-middle-last').tagName).toBe('DIV');
+      expect(screen.getByTestId('non-breadcrumb-after-last').tagName).toBe('SPAN');
 
+      // Only BreadcrumbItem elements are indexed.
       // first-item = index 0 → 'first'
-      // middle-item = index 2 → 'middle'
-      // last-item = index 3 → 'last'
+      // middle-item = index 1 → 'middle'
+      // last-item = index 2 → 'last'
       expect(screen.getByTestId('first-item')).toHaveAttribute('data-position', 'first');
       expect(screen.getByTestId('middle-item')).toHaveAttribute('data-position', 'middle');
       expect(screen.getByTestId('last-item')).toHaveAttribute('data-position', 'last');
       expect(screen.getByTestId('last-item')).toHaveAttribute('data-current', '');
+      expect(screen.getAllByRole('listitem')).toHaveLength(3);
     });
   });
 

@@ -2,13 +2,12 @@ import {
   Children,
   cloneElement,
   isValidElement,
-  Fragment,
   type ReactElement,
   type ReactNode,
   type ElementType,
 } from 'react';
 import type { BreadcrumbListProps, BreadcrumbItemProps, BreadcrumbPosition } from './types';
-import { BreadcrumbSeparator } from './BreadcrumbSeparator';
+import { BreadcrumbItem } from './BreadcrumbItem';
 
 /**
  * Ordered list container for breadcrumb items. Provides semantic structure for navigation trail.
@@ -21,19 +20,19 @@ export const BreadcrumbList = <T extends ElementType = 'ol'>({
 }: BreadcrumbListProps<T>) => {
   const Component = as || 'ol';
 
-  const isSeparatorOrFragment = (child: ReactNode): boolean => {
+  const isBreadcrumbItem = (child: ReactNode): child is ReactElement<BreadcrumbItemProps> => {
     if (!isValidElement(child)) return false;
-    return child.type === Fragment || child.type === BreadcrumbSeparator;
+    return child.type === BreadcrumbItem;
   };
 
-  const items = Children.toArray(children).filter((child) => !isSeparatorOrFragment(child));
+  const items = Children.toArray(children).filter(isBreadcrumbItem);
   const itemCount = items.length;
   let itemIndex = 0;
 
   return (
     <Component {...props}>
       {Children.map(children, (child) => {
-        if (isValidElement(child) && !isSeparatorOrFragment(child)) {
+        if (isBreadcrumbItem(child)) {
           const currentItemIndex = itemIndex++;
 
           const position: BreadcrumbPosition =
@@ -43,7 +42,7 @@ export const BreadcrumbList = <T extends ElementType = 'ol'>({
                 ? 'last'
                 : 'middle';
 
-          return cloneElement(child as ReactElement<BreadcrumbItemProps>, {
+          return cloneElement(child, {
             position,
             isCurrent: currentItemIndex === itemCount - 1,
           });
