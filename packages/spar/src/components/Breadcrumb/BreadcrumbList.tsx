@@ -8,6 +8,7 @@ import {
   type ElementType,
 } from 'react';
 import type { BreadcrumbListProps, BreadcrumbItemProps, BreadcrumbPosition } from './types';
+import { BreadcrumbSeparator } from './BreadcrumbSeparator';
 
 /**
  * Ordered list container for breadcrumb items. Provides semantic structure for navigation trail.
@@ -22,8 +23,7 @@ export const BreadcrumbList = <T extends ElementType = 'ol'>({
 
   const isSeparatorOrFragment = (child: ReactNode): boolean => {
     if (!isValidElement(child)) return false;
-    const childType = child.type as { displayName?: string };
-    return child.type === Fragment || childType.displayName === 'BreadcrumbSeparator';
+    return child.type === Fragment || child.type === BreadcrumbSeparator;
   };
 
   const items = Children.toArray(children).filter((child) => !isSeparatorOrFragment(child));
