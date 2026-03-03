@@ -124,7 +124,7 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
       if (event.key === 'Escape') {
         // Check if the event originated from tooltip content
         const target = event.target as HTMLElement;
-        const tooltipContent = document.getElementById(context.contentId);
+        const tooltipContent = context.contentRef.current;
 
         // If the event came from tooltip content, let the content handle it
         if (tooltipContent && (target === tooltipContent || tooltipContent.contains(target))) {

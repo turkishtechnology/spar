@@ -638,7 +638,7 @@ describe('Select', () => {
         </Select>,
       );
 
-      const valueElement = container.querySelector('[id]');
+      const valueElement = container.querySelector('[id$="-value"]');
       expect(valueElement?.tagName).toBe('DIV');
     });
   });

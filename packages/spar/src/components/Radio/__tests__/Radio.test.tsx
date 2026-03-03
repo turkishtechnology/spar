@@ -261,7 +261,7 @@ describe('Radio', () => {
 
         const hiddenInput = container.querySelector('input[type="hidden"]');
         expect(hiddenInput).toHaveAttribute('name');
-        expect(hiddenInput!.getAttribute('name')).toMatch(/^radio-group-/);
+        expect(hiddenInput!.getAttribute('name')).toMatch(/-radio-group$/);
       });
     });
   });

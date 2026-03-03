@@ -9,6 +9,13 @@ export type TabsActivationMode = 'automatic' | 'manual';
  */
 export interface TabsOwnProps {
   /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-trigger-${value}` and `${id}-panel-${value}`.
+   */
+  id?: string;
+
+  /**
    * Controlled selected tab value
    */
   value?: string;
@@ -159,7 +166,7 @@ export interface TabsContextValue {
   dir: Direction;
   activationMode: TabsActivationMode;
   loop: boolean;
-  tabsListId: string;
+  baseId: string;
   tabRefs: RefObject<Map<string, HTMLElement>>;
   registerTab: (value: string, element: HTMLElement) => void;
   unregisterTab: (value: string) => void;

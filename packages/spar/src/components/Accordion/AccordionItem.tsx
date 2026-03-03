@@ -9,14 +9,17 @@ import { Collapsible } from '../Collapsible';
 export const AccordionItem = <T extends ElementType = 'div'>({
   value,
   disabled: itemDisabled = false,
+  id: providedId,
   as,
   children,
   ...props
 }: AccordionItemProps<T>) => {
   const Component = as || 'div';
   const accordionContext = useAccordionContext();
-  const triggerId = useId();
-  const contentId = useId();
+  const generatedId = useId();
+  const baseId = providedId ?? generatedId;
+  const triggerId = `${baseId}-trigger`;
+  const contentId = `${baseId}-content`;
 
   // Register/unregister item with accordion
   useEffect(() => {

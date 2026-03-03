@@ -188,9 +188,6 @@ describe('Popover Accessibility', () => {
 
       const trigger = screen.getByRole('button');
 
-      // No aria-controls when closed
-      expect(trigger).not.toHaveAttribute('aria-controls');
-
       await user.click(trigger);
 
       await waitFor(() => {

@@ -21,12 +21,12 @@ export const TabsTrigger = <T extends ElementType = 'button'>({
   ref,
   ...props
 }: TabsTriggerProps<T>) => {
-  const { selectedValue, onValueChange, orientation, registerTab, unregisterTab, tabsListId } =
+  const { selectedValue, onValueChange, orientation, registerTab, unregisterTab, baseId } =
     useTabsContext();
   const internalRef = useRef<HTMLButtonElement>(null);
   const mergedRef = useMergedRef(internalRef, ref);
-  const triggerId = `${tabsListId}-trigger-${value}`;
-  const panelId = `${tabsListId}-panel-${value}`;
+  const triggerId = `${baseId}-trigger-${value}`;
+  const panelId = `${baseId}-panel-${value}`;
   const [isFocused, setIsFocused] = useState(false);
 
   const isSelected = selectedValue === value;

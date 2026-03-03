@@ -19,6 +19,7 @@ import { getPlacement } from '../utils';
  */
 export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   const {
+    id: providedId,
     open: controlledOpen,
     onOpenChange,
     defaultOpen = false,
@@ -30,7 +31,9 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   } = props;
 
   const generatedId = useId();
-  const contentId = `popover-content-${generatedId}`;
+  const baseId = providedId ?? generatedId;
+  const triggerId = `${baseId}-trigger`;
+  const contentId = `${baseId}-content`;
 
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isControlled = controlledOpen !== undefined;
@@ -102,6 +105,7 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
     triggerElement: null,
     contentElement: null,
     anchorElement: null,
+    triggerId,
     contentId,
   });
 

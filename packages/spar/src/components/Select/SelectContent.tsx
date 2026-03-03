@@ -315,6 +315,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
       ref={floatingRef}
       id={context.contentId}
       role='listbox'
+      aria-labelledby={context.triggerId}
       tabIndex={-1}
       data-state={context.open ? 'open' : 'closed'}
       data-side={currentSide}

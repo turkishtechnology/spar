@@ -179,7 +179,7 @@ describe('DropdownMenu', () => {
       expect(trigger).toHaveAttribute('aria-expanded', 'false');
       expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
       expect(trigger).toHaveAttribute('data-state', 'closed');
-      expect(trigger).not.toHaveAttribute('aria-controls');
+      expect(trigger).toHaveAttribute('aria-controls');
     });
 
     it('should have proper ARIA attributes when open', () => {

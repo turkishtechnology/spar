@@ -7,6 +7,7 @@ import { useTooltipProviderContext, TooltipContext } from './hooks';
  * Root component that manages tooltip state and provides context to child components
  */
 export const Tooltip = ({
+  id: providedId,
   children,
   open: controlledOpen,
   defaultOpen = false,
@@ -16,8 +17,10 @@ export const Tooltip = ({
   disabled = false,
 }: TooltipProps) => {
   const provider = useTooltipProviderContext();
-  const triggerId = useId();
-  const contentId = useId();
+  const generatedId = useId();
+  const baseId = providedId ?? generatedId;
+  const triggerId = `${baseId}-trigger`;
+  const contentId = `${baseId}-content`;
 
   // Controlled vs uncontrolled state
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
