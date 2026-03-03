@@ -26,7 +26,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
     name,
     focusedValue,
     setFocusedValue,
-    isInToolbar,
+    selectOnFocus,
     registerItem,
     unregisterItem,
   } = context;
@@ -37,11 +37,10 @@ export const RadioItem = <T extends ElementType = 'label'>({
   const isFocused = focusedValue === itemValue;
 
   // Determine if this item should be focusable (tabIndex={0})
+  // Uses roving tabindex: exactly one item in the group should have tabIndex={0}
+  const isFirstItemFallback = groupValue === undefined;
   const isFocusable =
-    !isDisabled &&
-    (focusedValue === itemValue || // Currently focused
-      (focusedValue === null && (isChecked || groupValue === itemValue)) || // No focus, but this is selected
-      (focusedValue === null && !groupValue && itemValue)); // No focus, no selection, accept any item (first will win)
+    !isDisabled && focusedValue === null && (isFocused || isChecked || isFirstItemFallback);
 
   // Register/unregister with group
   useEffect(() => {
@@ -50,7 +49,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
   }, [itemValue, registerItem, unregisterItem]);
 
   // Focus management - direct implementation to avoid SSR issues
-  useFocusItem(focusedValue === itemValue, itemRef);
+  useFocusItem(isFocused, itemRef);
 
   // Handle selection
   const handleClick = useCallback(() => {
@@ -61,14 +60,14 @@ export const RadioItem = <T extends ElementType = 'label'>({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
-      // Only handle Space/Enter in toolbar mode
-      // In normal mode, arrow keys already handle focus + selection
-      if (isInToolbar && (event.key === ' ' || event.key === 'Enter')) {
+      // When selectOnFocus is false, Space/Enter is required to select
+      // When true, arrow keys already handle focus + selection
+      if (!selectOnFocus && (event.key === ' ' || event.key === 'Enter')) {
         event.preventDefault();
         handleClick();
       }
     },
-    [handleClick, isInToolbar],
+    [handleClick, selectOnFocus],
   );
 
   const handleFocus = useCallback(() => {
@@ -120,7 +119,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
         tabIndex={-1}
         data-hidden
         data-disabled={isDisabled ? '' : undefined}
-        onChange={() => {}} // Controlled by parent
+        readOnly
       />
     </Component>
   );
