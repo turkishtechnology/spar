@@ -11,7 +11,7 @@ export const TooltipProvider = ({
   skipDelayDuration = 300,
   disableHoverableContent = false,
 }: TooltipProviderProps) => {
-  const [isOpenDelayed, setIsOpenDelayed] = useState(false);
+  const [skipDelay, setSkipDelay] = useState(false);
   const skipDelayTimerRef = useRef<number | null>(null);
 
   const clearSkipDelayTimer = useCallback(() => {
@@ -21,16 +21,16 @@ export const TooltipProvider = ({
     }
   }, []);
 
-  const handleSetIsOpenDelayed = useCallback(
+  const handleSetSkipDelay = useCallback(
     (value: boolean) => {
       if (value) {
         clearSkipDelayTimer();
-        setIsOpenDelayed(true);
+        setSkipDelay(true);
       } else {
         clearSkipDelayTimer();
 
         skipDelayTimerRef.current = window.setTimeout(() => {
-          setIsOpenDelayed(false);
+          setSkipDelay(false);
           skipDelayTimerRef.current = null;
         }, skipDelayDuration);
       }
@@ -43,16 +43,10 @@ export const TooltipProvider = ({
       delayDuration,
       skipDelayDuration,
       disableHoverableContent,
-      isOpenDelayed,
-      setIsOpenDelayed: handleSetIsOpenDelayed,
+      skipDelay,
+      setSkipDelay: handleSetSkipDelay,
     }),
-    [
-      delayDuration,
-      skipDelayDuration,
-      disableHoverableContent,
-      isOpenDelayed,
-      handleSetIsOpenDelayed,
-    ],
+    [delayDuration, skipDelayDuration, disableHoverableContent, skipDelay, handleSetSkipDelay],
   );
 
   // Cleanup timer on unmount
