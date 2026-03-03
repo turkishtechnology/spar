@@ -37,11 +37,10 @@ export const RadioItem = <T extends ElementType = 'label'>({
   const isFocused = focusedValue === itemValue;
 
   // Determine if this item should be focusable (tabIndex={0})
+  // Uses roving tabindex: exactly one item in the group should have tabIndex={0}
+  const isFirstItemFallback = groupValue === undefined;
   const isFocusable =
-    !isDisabled &&
-    (focusedValue === itemValue || // Currently focused
-      (focusedValue === null && (isChecked || groupValue === itemValue)) || // No focus, but this is selected
-      (focusedValue === null && !groupValue && itemValue)); // No focus, no selection, accept any item (first will win)
+    !isDisabled && focusedValue === null && (isFocused || isChecked || isFirstItemFallback);
 
   // Register/unregister with group
   useEffect(() => {
