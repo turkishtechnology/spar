@@ -49,7 +49,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
   }, [itemValue, registerItem, unregisterItem]);
 
   // Focus management - direct implementation to avoid SSR issues
-  useFocusItem(focusedValue === itemValue, itemRef);
+  useFocusItem(isFocused, itemRef);
 
   // Handle selection
   const handleClick = useCallback(() => {
