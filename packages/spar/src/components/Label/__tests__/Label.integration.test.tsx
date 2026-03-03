@@ -199,6 +199,28 @@ describe('Label Integration', () => {
       await user.click(option2Label);
       expect(option2Radio).not.toBeChecked();
     });
+
+    it('handles readOnly input fields', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <div>
+          <Label htmlFor='readonly-input' readOnly>
+            Read-Only Input
+          </Label>
+          <input id='readonly-input' type='text' readOnly value='Cannot edit this' />
+        </div>,
+      );
+
+      const label = screen.getByText('Read-Only Input');
+      const input = screen.getByLabelText('Read-Only Input');
+
+      expect(label).toHaveAttribute('data-readonly');
+      expect(input).toHaveAttribute('readOnly');
+
+      await user.click(label);
+      expect(input).toHaveFocus();
+    });
   });
 
   describe('Checkbox Group Integration', () => {
@@ -451,6 +473,74 @@ describe('Label Integration', () => {
       label = screen.getByText('Field');
       expect(label).toHaveAttribute('data-required');
       expect(label).not.toHaveAttribute('data-optional');
+    });
+
+    it('updates readOnly state indicator dynamically', () => {
+      const { rerender } = render(
+        <div>
+          <Label htmlFor='readonly-state-input'>Field</Label>
+          <input id='readonly-state-input' type='text' />
+        </div>,
+      );
+
+      let label = screen.getByText('Field');
+      expect(label).not.toHaveAttribute('data-readonly');
+
+      rerender(
+        <div>
+          <Label htmlFor='readonly-state-input' readOnly>
+            Field
+          </Label>
+          <input id='readonly-state-input' type='text' readOnly />
+        </div>,
+      );
+
+      label = screen.getByText('Field');
+      expect(label).toHaveAttribute('data-readonly');
+
+      rerender(
+        <div>
+          <Label htmlFor='readonly-state-input'>Field</Label>
+          <input id='readonly-state-input' type='text' />
+        </div>,
+      );
+
+      label = screen.getByText('Field');
+      expect(label).not.toHaveAttribute('data-readonly');
+    });
+
+    it('updates invalid state indicator dynamically', () => {
+      const { rerender } = render(
+        <div>
+          <Label htmlFor='invalid-state-input'>Field</Label>
+          <input id='invalid-state-input' type='text' />
+        </div>,
+      );
+
+      let label = screen.getByText('Field');
+      expect(label).not.toHaveAttribute('data-invalid');
+
+      rerender(
+        <div>
+          <Label htmlFor='invalid-state-input' isInvalid>
+            Field
+          </Label>
+          <input id='invalid-state-input' type='text' aria-invalid='true' />
+        </div>,
+      );
+
+      label = screen.getByText('Field');
+      expect(label).toHaveAttribute('data-invalid');
+
+      rerender(
+        <div>
+          <Label htmlFor='invalid-state-input'>Field</Label>
+          <input id='invalid-state-input' type='text' />
+        </div>,
+      );
+
+      label = screen.getByText('Field');
+      expect(label).not.toHaveAttribute('data-invalid');
     });
   });
 

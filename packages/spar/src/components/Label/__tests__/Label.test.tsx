@@ -185,6 +185,46 @@ describe('Label', () => {
     });
   });
 
+  describe('ReadOnly State', () => {
+    it('sets data-readonly attribute when readOnly is true', () => {
+      render(<Label readOnly>Read-Only Field</Label>);
+      const label = screen.getByText('Read-Only Field');
+      expect(label).toHaveAttribute('data-readonly');
+    });
+
+    it('does not set data-readonly attribute when readOnly is false', () => {
+      render(<Label readOnly={false}>Editable Field</Label>);
+      const label = screen.getByText('Editable Field');
+      expect(label).not.toHaveAttribute('data-readonly');
+    });
+
+    it('does not set data-readonly attribute by default', () => {
+      render(<Label>Default Field</Label>);
+      const label = screen.getByText('Default Field');
+      expect(label).not.toHaveAttribute('data-readonly');
+    });
+  });
+
+  describe('Invalid State', () => {
+    it('sets data-invalid attribute when isInvalid is true', () => {
+      render(<Label isInvalid>Invalid Field</Label>);
+      const label = screen.getByText('Invalid Field');
+      expect(label).toHaveAttribute('data-invalid');
+    });
+
+    it('does not set data-invalid attribute when isInvalid is false', () => {
+      render(<Label isInvalid={false}>Valid Field</Label>);
+      const label = screen.getByText('Valid Field');
+      expect(label).not.toHaveAttribute('data-invalid');
+    });
+
+    it('does not set data-invalid attribute by default', () => {
+      render(<Label>Default Field</Label>);
+      const label = screen.getByText('Default Field');
+      expect(label).not.toHaveAttribute('data-invalid');
+    });
+  });
+
   describe('Combined States', () => {
     it('handles multiple state flags together', () => {
       render(
@@ -196,6 +236,8 @@ describe('Label', () => {
       expect(label).toHaveAttribute('data-required');
       expect(label).toHaveAttribute('data-disabled');
       expect(label).not.toHaveAttribute('data-optional');
+      expect(label).not.toHaveAttribute('data-readonly');
+      expect(label).not.toHaveAttribute('data-invalid');
     });
 
     it('handles required and isOptional together', () => {
@@ -211,7 +253,7 @@ describe('Label', () => {
 
     it('handles all state flags together', () => {
       render(
-        <Label required isOptional disabled>
+        <Label required isOptional disabled readOnly isInvalid>
           All States
         </Label>,
       );
@@ -219,6 +261,35 @@ describe('Label', () => {
       expect(label).toHaveAttribute('data-required');
       expect(label).toHaveAttribute('data-optional');
       expect(label).toHaveAttribute('data-disabled');
+      expect(label).toHaveAttribute('data-readonly');
+      expect(label).toHaveAttribute('data-invalid');
+    });
+
+    it('handles readOnly with disabled together', () => {
+      render(
+        <Label readOnly disabled>
+          ReadOnly and Disabled
+        </Label>,
+      );
+      const label = screen.getByText('ReadOnly and Disabled');
+      expect(label).toHaveAttribute('data-readonly');
+      expect(label).toHaveAttribute('data-disabled');
+      expect(label).not.toHaveAttribute('data-required');
+      expect(label).not.toHaveAttribute('data-optional');
+      expect(label).not.toHaveAttribute('data-invalid');
+    });
+
+    it('handles isInvalid with required together', () => {
+      render(
+        <Label isInvalid required>
+          Invalid Required
+        </Label>,
+      );
+      const label = screen.getByText('Invalid Required');
+      expect(label).toHaveAttribute('data-invalid');
+      expect(label).toHaveAttribute('data-required');
+      expect(label).not.toHaveAttribute('data-disabled');
+      expect(label).not.toHaveAttribute('data-readonly');
     });
   });
 
@@ -260,9 +331,11 @@ describe('Label', () => {
       expect(label).not.toHaveAttribute('data-required');
       expect(label).not.toHaveAttribute('data-optional');
       expect(label).not.toHaveAttribute('data-disabled');
+      expect(label).not.toHaveAttribute('data-readonly');
+      expect(label).not.toHaveAttribute('data-invalid');
 
       rerender(
-        <Label required isOptional disabled>
+        <Label required isOptional disabled readOnly isInvalid>
           All States
         </Label>,
       );
@@ -270,6 +343,8 @@ describe('Label', () => {
       expect(label).toHaveAttribute('data-required');
       expect(label).toHaveAttribute('data-optional');
       expect(label).toHaveAttribute('data-disabled');
+      expect(label).toHaveAttribute('data-readonly');
+      expect(label).toHaveAttribute('data-invalid');
     });
 
     it('memoizes data attributes correctly', () => {
@@ -332,12 +407,26 @@ describe('Label', () => {
       const { rerender } = render(<Label>Dynamic</Label>);
       const label = screen.getByText('Dynamic');
       expect(label).not.toHaveAttribute('data-disabled');
+      expect(label).not.toHaveAttribute('data-readonly');
+      expect(label).not.toHaveAttribute('data-invalid');
 
       rerender(<Label disabled>Dynamic</Label>);
       expect(label).toHaveAttribute('data-disabled');
 
       rerender(<Label disabled={false}>Dynamic</Label>);
       expect(label).not.toHaveAttribute('data-disabled');
+
+      rerender(<Label readOnly>Dynamic</Label>);
+      expect(label).toHaveAttribute('data-readonly');
+
+      rerender(<Label readOnly={false}>Dynamic</Label>);
+      expect(label).not.toHaveAttribute('data-readonly');
+
+      rerender(<Label isInvalid>Dynamic</Label>);
+      expect(label).toHaveAttribute('data-invalid');
+
+      rerender(<Label isInvalid={false}>Dynamic</Label>);
+      expect(label).not.toHaveAttribute('data-invalid');
     });
 
     it('handles rapid prop changes', () => {
@@ -352,6 +441,16 @@ describe('Label', () => {
       expect(label).not.toHaveAttribute('data-required');
       expect(label).not.toHaveAttribute('data-optional');
       expect(label).toHaveAttribute('data-disabled');
+
+      rerender(<Label readOnly>Field</Label>);
+      expect(label).not.toHaveAttribute('data-required');
+      expect(label).not.toHaveAttribute('data-optional');
+      expect(label).not.toHaveAttribute('data-disabled');
+      expect(label).toHaveAttribute('data-readonly');
+
+      rerender(<Label isInvalid>Field</Label>);
+      expect(label).not.toHaveAttribute('data-readonly');
+      expect(label).toHaveAttribute('data-invalid');
     });
 
     it('works with special characters in content', () => {

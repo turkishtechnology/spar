@@ -16,7 +16,17 @@ export const InputLabel = <T extends ElementType = 'label'>({
   const context = useInputContext();
 
   return (
-    <Label as={as || 'label'} {...props} ref={ref} id={context.labelId} htmlFor={context.fieldId}>
+    <Label
+      as={as || 'label'}
+      {...props}
+      ref={ref}
+      id={context.labelId}
+      htmlFor={context.fieldId}
+      disabled={context.disabled}
+      required={context.required}
+      readOnly={context.readOnly}
+      isInvalid={context.isInvalid}
+    >
       {children}
     </Label>
   );
