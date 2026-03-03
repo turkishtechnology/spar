@@ -185,7 +185,7 @@ export const TooltipContent = <T extends ElementType = 'div'>({
     // Cancel any pending hide timeout when hovering over content (WCAG 1.4.13)
     // Only if hoverable content is not disabled
     if (!context.disableHoverableContent) {
-      context.clearHideTimeout();
+      context.cancelHideTimer();
     }
   }, [context]);
 

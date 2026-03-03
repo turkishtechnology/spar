@@ -1,4 +1,4 @@
-import { useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useId, useMemo, useRef, useState } from 'react';
 import type { TooltipProps, TooltipContextValue } from './types';
 import type { Side } from '../../types';
 import { useTooltipProviderContext, TooltipContext } from './hooks';
@@ -35,7 +35,7 @@ export const Tooltip = ({
   const contentRef = useRef<HTMLElement | null>(null);
   const arrowRef = useRef<HTMLElement | SVGSVGElement | null>(null);
 
-  // Timeout refs for external access
+  // Private hide timer — not exposed via context
   const hideTimeoutRef = useRef<number | null>(null);
 
   // Get delay values from provider or props
@@ -53,13 +53,23 @@ export const Tooltip = ({
     }
   };
 
-  // Clear hide timeout function
-  const clearHideTimeout = () => {
+  const cancelHideTimer = useCallback(() => {
     if (hideTimeoutRef.current) {
       clearTimeout(hideTimeoutRef.current);
       hideTimeoutRef.current = null;
     }
-  };
+  }, []);
+
+  const startHideTimer = useCallback(
+    (delayMs: number, callback: () => void) => {
+      cancelHideTimer();
+      hideTimeoutRef.current = window.setTimeout(() => {
+        hideTimeoutRef.current = null;
+        callback();
+      }, delayMs);
+    },
+    [cancelHideTimer],
+  );
 
   // Context value
   const contextValue: TooltipContextValue = useMemo(
@@ -78,8 +88,8 @@ export const Tooltip = ({
       triggerRef,
       contentRef,
       arrowRef,
-      hideTimeoutRef,
-      clearHideTimeout,
+      startHideTimer,
+      cancelHideTimer,
     }),
     [
       isOpen,
@@ -96,6 +106,8 @@ export const Tooltip = ({
       triggerRef,
       contentRef,
       arrowRef,
+      startHideTimer,
+      cancelHideTimer,
     ],
   );
 
