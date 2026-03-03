@@ -47,11 +47,11 @@ export const PopoverContent = <T extends ElementType = 'div'>({
 
   const mergedRef = useMergedRef(contentRef as React.RefObject<HTMLDivElement | null>, ref);
 
-  const [isMounted, setIsMounted] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // SSR safety
   useEffect(() => {
-    setIsMounted(true);
+    setMounted(true);
   }, []);
 
   // Focus management
@@ -164,7 +164,7 @@ export const PopoverContent = <T extends ElementType = 'div'>({
     [onKeyDown],
   );
 
-  if (!state.isOpen || !isMounted) return null;
+  if (!state.isOpen || !mounted) return null;
 
   const contentElement = (
     <Component
