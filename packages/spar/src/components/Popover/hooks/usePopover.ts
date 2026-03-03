@@ -37,7 +37,6 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   const isOpen = isControlled ? controlledOpen : internalOpen;
 
   const arrowRef = useRef<HTMLDivElement | null>(null);
-  const anchorRef = useRef<HTMLElement | null>(null);
 
   // Floating UI setup
   const placement = getPlacement(side, align);
@@ -101,7 +100,6 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
     isPositioned: false,
     triggerElement: null,
     contentElement: null,
-    anchorElement: null,
     contentId,
   });
 
@@ -162,7 +160,6 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
     setState,
     triggerRef: refs.reference,
     contentRef: refs.floating,
-    anchorRef,
     arrowRef,
     floatingStyles,
     modal,

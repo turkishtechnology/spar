@@ -5,7 +5,7 @@ import { Popover } from '../Popover';
 import { PopoverTrigger } from '../PopoverTrigger';
 import { PopoverContent } from '../PopoverContent';
 import { PopoverArrow } from '../PopoverArrow';
-import { PopoverAnchor } from '../PopoverAnchor';
+
 import { PopoverClose } from '../PopoverClose';
 
 expect.extend(toHaveNoViolations);
@@ -112,27 +112,6 @@ describe('Popover Accessibility', () => {
 
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-    });
-
-    it('should pass axe accessibility tests - with custom anchor', async () => {
-      const user = userEvent.setup();
-
-      const { container } = render(
-        <Popover>
-          <PopoverAnchor>
-            <div>Anchor Element</div>
-          </PopoverAnchor>
-          <PopoverTrigger>Open</PopoverTrigger>
-          <PopoverContent>Content positioned relative to anchor</PopoverContent>
-        </Popover>,
-      );
-
-      await user.click(screen.getByRole('button'));
-
-      await waitFor(async () => {
-        const results = await axe(container);
-        expect(results).toHaveNoViolations();
-      });
     });
   });
 

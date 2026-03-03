@@ -133,7 +133,6 @@ color: #99a0ae;
 - ✅ Auto-focus management on open/close
 - ✅ Automatic portal rendering to document.body
 - ✅ Optional decorative arrow element
-- ✅ Custom anchor positioning support
 - ✅ SSR-safe implementation
 
 ## Installation
@@ -217,7 +216,6 @@ The Popover component is built as a compound component with multiple parts:
   /* With optional parts */
 }
 <Popover.Root>
-  <Popover.Anchor>...</Popover.Anchor>
   <Popover.Trigger>...</Popover.Trigger>
   <Popover.Content>
     <Popover.Arrow />
@@ -232,7 +230,6 @@ The Popover component is built as a compound component with multiple parts:
 - `Popover.Trigger` toggles the popover visibility and maintains ARIA relationship with content
 - `Popover.Content` positions itself intelligently relative to the trigger with collision detection
 - `Popover.Close` provides a way to programmatically close the popover from within the content
-- Optional `Popover.Anchor` allows positioning relative to a different element than the trigger
 - Optional `Popover.Arrow` adds a decorative visual pointer to the trigger element
 
 - `Popover.Root`: Root context provider managing popover state
@@ -240,7 +237,6 @@ The Popover component is built as a compound component with multiple parts:
 - `Popover.Content`: Floating panel with content
 - `Popover.Close`: Optional button to close the popover
 - `Popover.Arrow`: Optional decorative arrow element
-- `Popover.Anchor`: Optional custom positioning reference
 
 ---
 
@@ -337,30 +333,6 @@ export function PopoverWithArrow() {
         <Popover.Arrow width={12} height={6} />
         <p>Content with arrow</p>
       </Popover.Content>
-    </Popover.Root>
-  );
-}
-```
-
-### Custom Anchor Positioning
-
-Popover positioned relative to a different element:
-
-```tsx
-export function AnchoredPopover() {
-  return (
-    <Popover.Root>
-      <div>
-        <Popover.Anchor>
-          <div>Anchor Element</div>
-        </Popover.Anchor>
-
-        <Popover.Trigger>Open (separate from anchor)</Popover.Trigger>
-
-        <Popover.Content>
-          <p>Positioned relative to anchor, not trigger</p>
-        </Popover.Content>
-      </div>
     </Popover.Root>
   );
 }
@@ -604,36 +576,6 @@ Optional decorative arrow element that points to the trigger.
 | Attribute   | Value                                    | Purpose                   |
 | ----------- | ---------------------------------------- | ------------------------- |
 | `data-side` | `"top" \| "bottom" \| "left" \| "right"` | Indicates positioned side |
-
-### Popover.Anchor
-
-Optional element used as positioning reference instead of the trigger. Always renders as a `div` element.
-
-**Props**
-
-| Name       | Type                                                                        | Default     | Description                             |
-| ---------- | --------------------------------------------------------------------------- | ----------- | --------------------------------------- |
-| `children` | `React.ReactNode \| ((state: PopoverAnchorRenderProps) => React.ReactNode)` | -           | Anchor content or render props function |
-| `ref?`     | `React.Ref<HTMLDivElement>`                                                 | `undefined` | Ref to the anchor element               |
-| `...props` | `ComponentProps<'div'>`                                                     | -           | All standard div attributes             |
-
-**Render Props (PopoverAnchorRenderProps)**
-
-| Property | Type      | Description                              |
-| -------- | --------- | ---------------------------------------- |
-| `isOpen` | `boolean` | Whether the popover is currently visible |
-
-**Events**
-
-| Name | Parameters | Description               | When Triggered |
-| ---- | ---------- | ------------------------- | -------------- |
-| None | -          | Anchor is for positioning | -              |
-
-**HTML Attributes**
-
-| Attribute             | Value    | Purpose                      |
-| --------------------- | -------- | ---------------------------- |
-| `data-popover-anchor` | `string` | Identifies as anchor element |
 
 ### Popover.Close
 
