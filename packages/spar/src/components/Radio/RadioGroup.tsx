@@ -25,7 +25,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
   disabled = false,
   required = false,
   orientation = 'vertical',
-  isInToolbar = false,
+  selectOnFocus = true,
   autoFocus = false,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
@@ -121,15 +121,15 @@ export const RadioGroup = <T extends ElementType = 'div'>({
         if (nextValue) {
           handleFocusMove(nextValue);
 
-          // In normal mode (not toolbar), arrow keys also change selection
-          // In toolbar mode, only Space/Enter changes selection
-          if (!isInToolbar) {
+          // When selectOnFocus is true, arrow keys also change selection
+          // When false, only Space/Enter changes selection
+          if (selectOnFocus) {
             handleValueChange(nextValue);
           }
         }
       }
     },
-    [items, focusedValue, orientation, handleFocusMove, isInToolbar, handleValueChange],
+    [items, focusedValue, orientation, handleFocusMove, selectOnFocus, handleValueChange],
   );
 
   // Focus management: Only set focus on user interaction (Tab into group)
@@ -155,7 +155,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
       focusedValue,
       setFocusedValue,
       orientation,
-      isInToolbar,
+      selectOnFocus,
       registerItem,
       unregisterItem,
     }),
@@ -167,7 +167,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
       focusedValue,
       setFocusedValue,
       orientation,
-      isInToolbar,
+      selectOnFocus,
       registerItem,
       unregisterItem,
     ],
@@ -178,7 +178,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
     'data-orientation': orientation,
     'data-disabled': disabled ? '' : undefined,
     'data-required': required ? '' : undefined,
-    'data-toolbar': isInToolbar ? '' : undefined,
+    'data-select-on-focus': selectOnFocus ? '' : undefined,
     'data-autofocus': autoFocus ? '' : undefined,
   };
 
