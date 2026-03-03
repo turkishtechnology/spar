@@ -38,7 +38,7 @@
 | `disabled` | `boolean` | No | `false` | Disables entire radio group |
 | `required` | `boolean` | No | `false` | Marks group as required for form validation |
 | `orientation` | `'horizontal' \| 'vertical'` | No | `'vertical'` | Layout direction affecting keyboard navigation |
-| `isInToolbar` | `boolean` | No | `false` | Changes keyboard behavior per WAI-ARIA guidelines |
+| `selectOnFocus` | `boolean` | No | `true` | Whether arrow keys automatically select the focused item |
 | `children` | `React.ReactNode` | Yes | — | RadioItem components |
 | `aria-label` | `string` | No | `undefined` | Accessible name for the group |
 | `aria-labelledby` | `string` | No | `undefined` | References element that labels the group |
@@ -101,7 +101,7 @@
 
 ### Keyboard Navigation
 
-#### Standard Radio Group (isInToolbar={false})
+#### Standard Radio Group (selectOnFocus={true})
 - **Tab/Shift+Tab**: Move focus into/out of radio group (single tab stop)
 - **Arrow Keys**: Navigate between items and change selection
   - **Down Arrow/Right Arrow**: Next item (wraps to first)
@@ -110,7 +110,7 @@
 - **Home**: Move focus to and select first item
 - **End**: Move focus to and select last item
 
-#### Toolbar Radio Group (isInToolbar={true})
+#### Toolbar Radio Group (selectOnFocus={false})
 - **Tab/Shift+Tab**: Move focus into/out of radio group (single tab stop)
 - **Arrow Keys**: Navigate between items (focus only, no selection change)
   - **Down Arrow/Right Arrow**: Next item (wraps to first)
@@ -202,7 +202,7 @@ const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
 data-orientation="horizontal" | "vertical"
 data-disabled="true" | undefined
 data-required="true" | undefined
-data-toolbar="true" | undefined
+data-select-on-focus="true" | undefined
 ```
 
 #### RadioItem
@@ -216,7 +216,7 @@ data-focused="true" | undefined
 - **data-state**: `"checked"` when selected, `"unchecked"` when not selected
 - **data-disabled**: `"true"` when disabled, undefined when enabled
 - **data-focused**: `"true"` when focused, undefined when not focused
-- **data-toolbar**: `"true"` when in toolbar mode, undefined when in standard mode
+- **data-select-on-focus**: `"true"` when selectOnFocus is enabled, undefined when disabled
 - **data-orientation**: `"horizontal"` or `"vertical"` for layout styling
 - **data-required**: `"true"` when required, undefined when optional
 
