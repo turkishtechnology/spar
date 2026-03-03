@@ -281,9 +281,9 @@ export interface TooltipContextValue {
   triggerRef: RefObject<HTMLElement | null>;
   contentRef: RefObject<HTMLElement | null>;
   arrowRef: RefObject<HTMLElement | SVGSVGElement | null>;
-  // Timeout control for hoverable content
-  hideTimeoutRef: RefObject<number | null>;
-  clearHideTimeout: () => void;
+  // Hide timer control for hoverable content (WCAG 1.4.13)
+  startHideTimer: (delayMs: number, callback: () => void) => void;
+  cancelHideTimer: () => void;
 }
 
 /**

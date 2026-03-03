@@ -31,7 +31,7 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
       clearTimeout(showTimeoutRef.current);
       showTimeoutRef.current = null;
     }
-    context.clearHideTimeout();
+    context.cancelHideTimer();
   }, [context]);
 
   // Show tooltip with delay
@@ -56,13 +56,10 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
 
       const delay = immediate ? 0 : context.hideDelay;
 
-      const hideTimeoutId = window.setTimeout(() => {
+      context.startHideTimer(delay, () => {
         context.onOpenChange(false);
         provider?.setSkipDelay?.(false);
-      }, delay);
-
-      // Store timeout ID in context ref so it can be cleared from content
-      context.hideTimeoutRef.current = hideTimeoutId;
+      });
     },
     [clearTimeouts, context, provider],
   );

@@ -177,6 +177,9 @@ interface TooltipContextValue {
   triggerId: string;
   contentId: string;
   asLabel: boolean;
+  // Hide timer control for hoverable content (WCAG 1.4.13)
+  startHideTimer: (delayMs: number, callback: () => void) => void;
+  cancelHideTimer: () => void;
 }
 
 interface TooltipProviderContextValue {
