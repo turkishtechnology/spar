@@ -22,6 +22,13 @@ export interface InputContextValue {
  */
 export interface InputOwnProps {
   /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-field`, `${id}-label`, etc.
+   */
+  id?: string;
+
+  /**
    * Input validation state
    * @defaultValue false
    */

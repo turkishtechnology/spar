@@ -6,6 +6,12 @@ import type { Orientation, PolymorphicProps } from '../../types';
  */
 export interface RadioGroupOwnProps {
   /**
+   * Custom base ID used for generating the form `name` attribute.
+   * If not provided, one will be generated automatically.
+   */
+  id?: string;
+
+  /**
    * Controlled value of selected radio item
    */
   value?: string;

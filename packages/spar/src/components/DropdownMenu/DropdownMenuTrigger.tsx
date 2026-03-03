@@ -103,7 +103,7 @@ export const DropdownMenuTrigger = <T extends ElementType = 'button'>({
     disabled,
     'aria-haspopup': 'menu' as const,
     'aria-expanded': menu.open,
-    'aria-controls': menu.open ? menu.contentId : undefined,
+    'aria-controls': menu.contentId,
     'data-state': menu.open ? 'open' : 'closed',
     onClick: handleClick,
     onKeyDown: handleKeyDown,

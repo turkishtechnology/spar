@@ -17,6 +17,7 @@ import type { RadioGroupProps, RadioGroupContextValue } from './types';
  */
 export const RadioGroup = <T extends ElementType = 'div'>({
   ref,
+  id: providedId,
   value: controlledValue,
   defaultValue,
   onValueChange,
@@ -39,7 +40,8 @@ export const RadioGroup = <T extends ElementType = 'div'>({
   const { registerItem, unregisterItem, getItemIds } = useItemRegistry<void>();
   const items = getItemIds(); // Get items as array for navigation
   const generatedId = useId();
-  const name = nameProp || `radio-group-${generatedId}`;
+  const baseId = providedId ?? generatedId;
+  const name = nameProp ?? `${baseId}-radio-group`;
   const hasAutoFocused = useRef(false);
 
   // Auto focus first item on mount

@@ -58,6 +58,13 @@ export interface PopoverCloseRenderProps {
  */
 export interface PopoverProps {
   /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-trigger` and `${id}-content`.
+   */
+  id?: string;
+
+  /**
    * Controlled state for popover visibility
    */
   open?: boolean;
@@ -322,6 +329,7 @@ export interface PopoverState {
   triggerElement: HTMLElement | null;
   contentElement: HTMLElement | null;
   anchorElement: HTMLElement | null;
+  triggerId: string;
   contentId: string;
 }
 

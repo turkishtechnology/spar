@@ -11,6 +11,7 @@ import { DropdownMenuContext } from './hooks';
  * Supports controlled/uncontrolled open state, modal/non-modal modes, and full keyboard navigation.
  */
 export const DropdownMenu = ({
+  id: providedId,
   open,
   defaultOpen = false,
   onOpenChange,
@@ -24,8 +25,10 @@ export const DropdownMenu = ({
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isOpen = isControlled ? Boolean(open) : internalOpen;
   const triggerRef = useRef<HTMLElement | null>(null);
-  const triggerId = useId();
-  const contentId = useId();
+  const generatedId = useId();
+  const baseId = providedId ?? generatedId;
+  const triggerId = `${baseId}-trigger`;
+  const contentId = `${baseId}-content`;
   const [focusStrategy, setFocusStrategy] = useState<DropdownMenuFocusStrategy>('none');
   const restoreFocusRef = useRef(true);
   const previousOpenRef = useRef(isOpen);
