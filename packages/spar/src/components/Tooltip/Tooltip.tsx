@@ -40,8 +40,6 @@ export const Tooltip = ({
 
   // Get delay values from provider or props
   const effectiveDelay = delay ?? provider?.delayDuration ?? 700;
-  const effectiveHideDelay = hideDelay;
-  const effectiveSkipDelay = provider?.skipDelayDuration ?? 300;
   const effectiveDisableHover = provider?.disableHoverableContent ?? false;
 
   // Handle open change
@@ -69,8 +67,7 @@ export const Tooltip = ({
       isOpen,
       onOpenChange: handleOpenChange,
       delay: effectiveDelay,
-      hideDelay: effectiveHideDelay,
-      skipDelayDuration: effectiveSkipDelay,
+      hideDelay,
       disableHoverableContent: effectiveDisableHover,
       triggerId,
       contentId,
@@ -88,8 +85,7 @@ export const Tooltip = ({
       isOpen,
       handleOpenChange,
       effectiveDelay,
-      effectiveHideDelay,
-      effectiveSkipDelay,
+      hideDelay,
       effectiveDisableHover,
       triggerId,
       contentId,
