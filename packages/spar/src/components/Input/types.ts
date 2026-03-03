@@ -14,7 +14,7 @@ export interface InputContextValue {
   isInvalid: boolean;
   disabled: boolean;
   required: boolean;
-  readOnly?: boolean;
+  readOnly: boolean;
 }
 
 /**
@@ -38,6 +38,12 @@ export interface InputOwnProps {
    * @defaultValue false
    */
   required?: boolean;
+
+  /**
+   * Input read-only state
+   * @defaultValue false
+   */
+  readOnly?: boolean;
 }
 
 /**

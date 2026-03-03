@@ -24,6 +24,20 @@ export interface LabelOwnProps {
    * @defaultValue false
    */
   disabled?: boolean;
+
+  /**
+   * Marks label for a read-only field (exposed via data attribute for styling)
+   * @remarks Does NOT make the control read-only - set `readOnly` on the control itself
+   * @defaultValue false
+   */
+  readOnly?: boolean;
+
+  /**
+   * Marks label for an invalid field (exposed via data attribute for styling)
+   * @remarks Does NOT invalidate the control - set `aria-invalid` on the control itself
+   * @defaultValue false
+   */
+  isInvalid?: boolean;
 }
 
 /**

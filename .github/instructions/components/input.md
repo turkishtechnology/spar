@@ -33,6 +33,7 @@ The Input component provides accessible form input primitives with zero styling 
 | `invalid`  | `boolean`   | No       | `false` | Input validation state  |
 | `disabled` | `boolean`   | No       | `false` | Input disabled state    |
 | `required` | `boolean`   | No       | `false` | Input required state    |
+| `readOnly` | `boolean`   | No       | `false` | Input read-only state   |
 | `children` | `ReactNode` | Yes      | -       | Compound input elements |
 
 ### InputField Props
@@ -47,6 +48,15 @@ The Input component provides accessible form input primitives with zero styling 
 | Name       | Type        | Required | Default | Description   |
 | ---------- | ----------- | -------- | ------- | ------------- |
 | `children` | `ReactNode` | Yes      | -       | Label content |
+
+**Auto-forwarded from context**: When used inside `InputRoot`, the following props are automatically forwarded from the Input context to the underlying `Label` component — no manual prop passing needed:
+
+- `disabled` — mirrors `InputRoot`'s `disabled` prop
+- `required` — mirrors `InputRoot`'s `required` prop
+- `readOnly` — mirrors `InputRoot`'s `readOnly` prop
+- `isInvalid` — mirrors `InputRoot`'s `invalid` prop
+
+These produce corresponding `data-disabled`, `data-required`, `data-readonly`, and `data-invalid` attributes on the rendered label element for styling hooks.
 
 ### InputDescription Props
 
@@ -69,6 +79,7 @@ The Input component provides accessible form input primitives with zero styling 
 | **Invalid**  | `aria-invalid="true"`, `aria-describedby` includes error ID |
 | **Disabled** | `disabled` attribute, non-interactive                       |
 | **Required** | `aria-required="true"` and `required` attribute             |
+| **ReadOnly** | `readOnly` attribute, non-editable but focusable            |
 
 ## 4. Accessibility
 
@@ -139,10 +150,18 @@ const useInputContext = () => {
 - `data-invalid` - When validation fails
 - `data-disabled` - When input disabled
 - `data-required` - When input required
+- `data-readonly` - When input read-only
 
 **InputField**:
 
 - `data-focused` - When input focused
+
+**InputLabel** (auto-forwarded from context):
+
+- `data-disabled` - When input disabled
+- `data-required` - When input required
+- `data-readonly` - When input read-only
+- `data-invalid` - When validation fails
 
 ## 7. Test Coverage Plan
 

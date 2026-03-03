@@ -89,29 +89,28 @@ color: #ff6b6b;
   code={`function CompoundInputExample() {
   const [value, setValue] = React.useState('');
 
-  return (
-    <Input.Root style={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px' }}>
-      <Input.Label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
-        Username
-      </Input.Label>
-      <Input.Field
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
-      />
-      <Input.Description style={{ marginTop: '4px', fontSize: '14px', color: '#666' }}>
-        Enter your username to continue
-      </Input.Description>
-    </Input.Root>
-  );
-}`}
-/>
+return (
+
+<Input.Root style={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px' }}>
+  <Input.Label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+    Username
+  </Input.Label>
+  <Input.Field
+    value={value}
+    onChange={(e) => setValue(e.target.value)}
+    style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
+  />
+  <Input.Description style={{ marginTop: '4px', fontSize: '14px', color: '#666' }}>
+    Enter your username to continue
+  </Input.Description>
+</Input.Root>
+); }`} />
 
 ## Features
 
 - ✅ Text input and textarea support with polymorphic rendering
 - ✅ Validation states (invalid, valid) with automatic ARIA handling
-- ✅ Interactive states (disabled, required, focused) with proper attributes
+- ✅ Interactive states (disabled, required, read-only, focused) with proper attributes
 - ✅ Error message display with role="alert" for screen reader announcements
 - ✅ Helper text support with automatic ARIA associations
 - ✅ Form integration with proper name and validation attribute support
@@ -179,7 +178,7 @@ The Input component follows a compound component pattern with context-based stat
 
 **Data Flow:**
 
-- **Input.Root**: Context provider that manages validation, disabled, and required states
+- **Input.Root**: Context provider that manages validation, disabled, required, and read-only states
 - **Input.Field**: Core input element with polymorphic support (input/textarea)
 - **Input.Label**: Associated label element with automatic ID linking
 - **Input.Description**: Helper text element for additional guidance
@@ -293,34 +292,35 @@ Shows polymorphic rendering capability for multi-line text input with proper acc
   code={`function TextareaInput() {
   const [message, setMessage] = React.useState('');
 
-  return (
-    <Input.Root style={{ padding: '12px', border: '1px solid #e5e5e5', borderRadius: '6px' }}>
-      <Input.Label style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}>
-        Message
-      </Input.Label>
-      <Input.Field
-        as="textarea"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        rows={4}
-        placeholder="Enter your message here..."
-        style={{
-          width: '100%',
-          padding: '8px 12px',
-          border: '1px solid #ccc',
-          borderRadius: '4px',
-          fontSize: '14px',
-          resize: 'vertical',
-          fontFamily: 'inherit'
-        }}
-      />
-      <Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
-        Maximum 500 characters ({message.length}/500)
-      </Input.Description>
-    </Input.Root>
-  );
-}`}
-/>
+return (
+
+<Input.Root style={{ padding: '12px', border: '1px solid #e5e5e5', borderRadius: '6px' }}>
+  <Input.Label
+    style={{ display: 'block', marginBottom: '6px', fontSize: '14px', fontWeight: '500' }}
+  >
+    Message
+  </Input.Label>
+  <Input.Field
+    as='textarea'
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+    rows={4}
+    placeholder='Enter your message here...'
+    style={{
+      width: '100%',
+      padding: '8px 12px',
+      border: '1px solid #ccc',
+      borderRadius: '4px',
+      fontSize: '14px',
+      resize: 'vertical',
+      fontFamily: 'inherit',
+    }}
+  />
+  <Input.Description style={{ marginTop: '4px', fontSize: '12px', color: '#666' }}>
+    Maximum 500 characters ({message.length}/500)
+  </Input.Description>
+</Input.Root>
+); }`} />
 
 ### Disabled Input
 
@@ -545,7 +545,7 @@ Direct input component function that returns an `Input.Field` without wrapper. D
 
 ### Input.Root
 
-The root container that provides context and state management for all input compound components. Manages validation, disabled, and required states with proper ARIA coordination.
+The root container that provides context and state management for all input compound components. Manages validation, disabled, required, and read-only states with proper ARIA coordination.
 
 **Props**
 
@@ -555,6 +555,7 @@ The root container that provides context and state management for all input comp
 | `isInvalid?` | `boolean`         | `false` | Input validation state  |
 | `disabled?`  | `boolean`         | `false` | Input disabled state    |
 | `required?`  | `boolean`         | `false` | Input required state    |
+| `readOnly?`  | `boolean`         | `false` | Input read-only state   |
 
 **HTML Attributes**
 
@@ -563,6 +564,7 @@ The root container that provides context and state management for all input comp
 | `data-invalid`  | `""` \| `undefined` | Indicates validation state |
 | `data-disabled` | `""` \| `undefined` | Indicates disabled state   |
 | `data-required` | `""` \| `undefined` | Indicates required state   |
+| `data-readonly` | `""` \| `undefined` | Indicates read-only state  |
 
 ### Input.Field
 
@@ -604,6 +606,15 @@ The label element that provides accessible labeling for the input field. Automat
 | ---------- | ----------------------------- | ----------- | ------------------------- |
 | `children` | `React.ReactNode`             | -           | Label content             |
 | `ref?`     | `React.Ref<HTMLLabelElement>` | `undefined` | Ref for the label element |
+
+**Auto-forwarded from context**: When used inside `Input.Root`, the following state props are automatically forwarded from context to the underlying `Label` component:
+
+- `disabled` — mirrors `Input.Root`'s `disabled` prop → `data-disabled`
+- `required` — mirrors `Input.Root`'s `required` prop → `data-required`
+- `readOnly` — mirrors `Input.Root`'s `readOnly` prop → `data-readonly`
+- `isInvalid` — mirrors `Input.Root`'s `isInvalid` prop → `data-invalid`
+
+These data attributes can be used as styling hooks without manually passing props.
 
 ### Input.Description
 
