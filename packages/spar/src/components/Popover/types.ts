@@ -29,16 +29,6 @@ export interface PopoverTriggerRenderProps {
 }
 
 /**
- * Render props provided to PopoverAnchor children function
- */
-export interface PopoverAnchorRenderProps {
-  /**
-   * Whether the popover is currently open
-   */
-  isOpen: boolean;
-}
-
-/**
  * Render props provided to PopoverClose children function
  */
 export interface PopoverCloseRenderProps {
@@ -268,26 +258,6 @@ export type PopoverArrowProps<T extends ElementType = 'div'> = PolymorphicProps<
 >;
 
 /**
- * Own props for PopoverAnchor component
- */
-export interface PopoverAnchorOwnProps {
-  /**
-   * Children content or render function for render props pattern
-   */
-  children?: ReactNode | ((state: PopoverAnchorRenderProps) => ReactNode);
-}
-
-/**
- * Props for PopoverAnchor component
- * @remarks Element used as positioning reference instead of trigger
- */
-export type PopoverAnchorProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  PopoverAnchorOwnProps
->;
-
-/**
  * Own props for PopoverClose component
  */
 export interface PopoverCloseOwnProps extends ButtonOwnProps {
@@ -321,7 +291,6 @@ export interface PopoverState {
   isPositioned: boolean;
   triggerElement: HTMLElement | null;
   contentElement: HTMLElement | null;
-  anchorElement: HTMLElement | null;
   contentId: string;
 }
 
@@ -333,7 +302,6 @@ export interface PopoverContextValue {
   state: PopoverState;
   triggerRef: RefObject<HTMLElement | null>;
   contentRef: RefObject<HTMLDivElement | null>;
-  anchorRef: RefObject<HTMLElement | null>;
   arrowRef: RefObject<HTMLDivElement | null>;
   floatingStyles: CSSProperties;
   modal: boolean;
