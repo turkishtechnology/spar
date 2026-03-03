@@ -172,7 +172,6 @@ interface TooltipContextValue {
   onOpenChange: (open: boolean) => void;
   delay: number;
   hideDelay: number;
-  skipDelayDuration: number;
   disableHoverableContent: boolean;
   // Internal state for compound components
   triggerId: string;
@@ -185,7 +184,7 @@ interface TooltipProviderContextValue {
   skipDelayDuration: number;
   disableHoverableContent: boolean;
   skipDelay: boolean;
-  setSkipDelay: (open: boolean) => void;
+  setSkipDelay: (value: boolean) => void;
 }
 ```
 

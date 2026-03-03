@@ -270,7 +270,6 @@ export interface TooltipContextValue {
   onOpenChange: (open: boolean) => void;
   delay: number;
   hideDelay: number;
-  skipDelayDuration: number;
   disableHoverableContent: boolean;
   triggerId: string;
   contentId: string;
