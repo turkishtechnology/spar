@@ -236,10 +236,6 @@ interface TooltipProviderContextValue {
 - `data-placement`: `"top" | "bottom" | "left" | "right"`
 - `data-as-label`: `"true" | "false"` (matches asLabel prop)
 
-#### Provider Element
-- `data-tooltip-provider`: `""` (marks provider container)
-- `data-skip-delay`: `"true" | "false"` (skip delay optimization active)
-
 ### Positioning Data
 - CSS custom properties for dynamic positioning:
   - `--tooltip-x`: Horizontal position
