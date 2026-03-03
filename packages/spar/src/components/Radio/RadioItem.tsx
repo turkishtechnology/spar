@@ -119,7 +119,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
         tabIndex={-1}
         data-hidden
         data-disabled={isDisabled ? '' : undefined}
-        onChange={() => {}} // Controlled by parent
+        readOnly
       />
     </Component>
   );
