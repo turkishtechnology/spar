@@ -26,7 +26,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
     name,
     focusedValue,
     setFocusedValue,
-    isInToolbar,
+    selectOnFocus,
     registerItem,
     unregisterItem,
   } = context;
@@ -61,14 +61,14 @@ export const RadioItem = <T extends ElementType = 'label'>({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
-      // Only handle Space/Enter in toolbar mode
-      // In normal mode, arrow keys already handle focus + selection
-      if (isInToolbar && (event.key === ' ' || event.key === 'Enter')) {
+      // When selectOnFocus is false, Space/Enter is required to select
+      // When true, arrow keys already handle focus + selection
+      if (!selectOnFocus && (event.key === ' ' || event.key === 'Enter')) {
         event.preventDefault();
         handleClick();
       }
     },
-    [handleClick, isInToolbar],
+    [handleClick, selectOnFocus],
   );
 
   const handleFocus = useCallback(() => {

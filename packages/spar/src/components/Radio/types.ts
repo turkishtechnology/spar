@@ -45,13 +45,13 @@ export interface RadioGroupOwnProps {
   orientation?: Orientation;
 
   /**
-   * Whether radio group is contained within a toolbar
+   * Whether arrow key navigation automatically selects the focused radio item
    * Changes keyboard behavior per WAI-ARIA guidelines:
-   * - false: Arrow keys move focus and select (standard behavior)
-   * - true: Arrow keys only move focus, Space/Enter selects (toolbar behavior)
-   * @defaultValue false
+   * - true: Arrow keys move focus and select (standard radio group behavior)
+   * - false: Arrow keys only move focus, Space/Enter selects (toolbar behavior)
+   * @defaultValue true
    */
-  isInToolbar?: boolean;
+  selectOnFocus?: boolean;
 
   /**
    * Whether to focus the first focusable radio item on mount
@@ -135,7 +135,7 @@ export interface RadioGroupContextValue {
   focusedValue: string | null;
   setFocusedValue: (value: string | null) => void;
   orientation: Orientation;
-  isInToolbar: boolean;
+  selectOnFocus: boolean;
   registerItem: (value: string) => void;
   unregisterItem: (value: string) => void;
 }
