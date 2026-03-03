@@ -61,15 +61,13 @@ describe('TooltipProvider', () => {
   });
 
   it('sets default props correctly', () => {
-    const { container } = render(
+    render(
       <TooltipProvider>
         <div>Content</div>
       </TooltipProvider>,
     );
 
-    const provider = container.querySelector('[data-tooltip-provider]');
-    expect(provider).toBeInTheDocument();
-    expect(provider).toHaveAttribute('data-skip-delay', 'false');
+    expect(screen.getByText('Content')).toBeInTheDocument();
   });
 
   it('accepts custom delay duration props', () => {

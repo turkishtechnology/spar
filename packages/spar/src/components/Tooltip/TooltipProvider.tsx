@@ -64,9 +64,7 @@ export const TooltipProvider = ({
 
   return (
     <TooltipProviderContext.Provider value={contextValue}>
-      <div data-tooltip-provider='' data-skip-delay={isOpenDelayed ? 'true' : 'false'}>
-        {children}
-      </div>
+      {children}
     </TooltipProviderContext.Provider>
   );
 };
