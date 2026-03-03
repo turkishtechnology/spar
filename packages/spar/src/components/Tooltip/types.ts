@@ -294,8 +294,8 @@ export interface TooltipProviderContextValue {
   delayDuration: number;
   skipDelayDuration: number;
   disableHoverableContent: boolean;
-  isOpenDelayed: boolean;
-  setIsOpenDelayed: (open: boolean) => void;
+  skipDelay: boolean;
+  setSkipDelay: (value: boolean) => void;
 }
 
 /**

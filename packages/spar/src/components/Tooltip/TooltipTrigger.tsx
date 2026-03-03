@@ -39,11 +39,11 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
     (immediate = false) => {
       clearTimeouts();
 
-      const delay = immediate || provider?.isOpenDelayed ? 0 : context.delay;
+      const delay = immediate || provider?.skipDelay ? 0 : context.delay;
 
       showTimeoutRef.current = window.setTimeout(() => {
         context.onOpenChange(true);
-        provider?.setIsOpenDelayed?.(true);
+        provider?.setSkipDelay?.(true);
       }, delay);
     },
     [clearTimeouts, provider, context],
@@ -58,7 +58,7 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
 
       const hideTimeoutId = window.setTimeout(() => {
         context.onOpenChange(false);
-        provider?.setIsOpenDelayed?.(false);
+        provider?.setSkipDelay?.(false);
       }, delay);
 
       // Store timeout ID in context ref so it can be cleared from content
