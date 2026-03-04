@@ -126,36 +126,6 @@ export interface DropdownMenuContentOwnProps {
   align?: Align;
 
   /**
-   * Offset from trigger (in pixels)
-   * @defaultValue 8
-   */
-  sideOffset?: number;
-
-  /**
-   * Alignment offset (in pixels)
-   * @defaultValue 0
-   */
-  alignOffset?: number;
-
-  /**
-   * Automatically adjust position to avoid collisions
-   * @defaultValue true
-   */
-  avoidCollisions?: boolean;
-
-  /**
-   * Boundary element for collision detection
-   * @defaultValue clippingAncestors
-   */
-  collisionBoundary?: Element | Element[] | null;
-
-  /**
-   * Padding from boundary edges (in pixels)
-   * @defaultValue 8
-   */
-  collisionPadding?: number;
-
-  /**
    * Allow focus to loop through items
    * @defaultValue false
    */

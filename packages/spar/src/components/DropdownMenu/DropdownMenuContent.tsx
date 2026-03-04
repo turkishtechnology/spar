@@ -9,42 +9,22 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { useInteractOutside, useMergedRef } from '@/hooks';
 import {
+  useInteractOutside,
+  useMergedRef,
   useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  limitShift,
-  type Placement,
-  type Middleware,
-} from '@floating-ui/react-dom';
+  type UseFloatingOptions,
+  type UseFloatingReturn,
+} from '@/hooks';
+
 import type {
   DropdownMenuContentProps,
   DropdownMenuCollectionContextValue,
   DropdownMenuCollectionItem,
 } from './types';
-import type { Side, Align } from '../../types';
 import { useDropdownMenuContext, DropdownMenuCollectionContext } from './hooks';
 import { isCharacterKey, TYPEAHEAD_TIMEOUT } from './utils/index';
-
-/**
- * Convert side and align to Floating UI placement.
- */
-const getPlacement = (side: Side, align: Align): Placement => {
-  if (side === 'top' || side === 'bottom') {
-    if (align === 'start') return `${side}-start`;
-    if (align === 'end') return `${side}-end`;
-    return side;
-  }
-  if (side === 'left' || side === 'right') {
-    if (align === 'start') return `${side}-start`;
-    if (align === 'end') return `${side}-end`;
-    return side;
-  }
-  return 'bottom';
-};
+import { Align, Side } from '@/types';
 
 const normalizeTypeaheadValue = (value: string) => value.trim().toLocaleLowerCase();
 
@@ -56,11 +36,6 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
   as,
   side = 'bottom',
   align = 'start',
-  sideOffset = 8,
-  alignOffset = 0,
-  avoidCollisions = true,
-  collisionBoundary = null,
-  collisionPadding = 8,
   loop = false,
   container,
   onEscapeKeyDown,
@@ -79,45 +54,20 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     setMounted(true);
   }, []);
 
-  const middleware: Middleware[] = useMemo(() => {
-    const result: Middleware[] = [offset({ mainAxis: sideOffset, alignmentAxis: alignOffset })];
+  // Use custom Floating UI hook for positioning
+  const floatingOptions: UseFloatingOptions = {
+    side,
+    align,
+    arrowRef: menu.arrowRef?.current,
+  };
 
-    if (avoidCollisions) {
-      const boundaryValue = collisionBoundary
-        ? Array.isArray(collisionBoundary)
-          ? collisionBoundary
-          : [collisionBoundary]
-        : undefined;
+  const { x, y, strategy, placement, refs, middlewareData }: UseFloatingReturn =
+    useFloating(floatingOptions);
 
-      result.push(
-        flip({
-          ...(boundaryValue && { boundary: boundaryValue }),
-          padding: collisionPadding,
-        }),
-      );
-      result.push(
-        shift({
-          ...(boundaryValue && { boundary: boundaryValue }),
-          padding: collisionPadding,
-          limiter: limitShift(),
-        }),
-      );
-    }
-
-    return result;
-  }, [sideOffset, alignOffset, avoidCollisions, collisionBoundary, collisionPadding]);
-
-  const { x, y, strategy, refs, placement } = useFloating({
-    placement: getPlacement(side, align),
-    middleware,
-    whileElementsMounted: autoUpdate,
-  });
-
-  useLayoutEffect(() => {
-    if (menu.triggerRef.current) {
-      refs.setReference(menu.triggerRef.current);
-    }
-  }, [menu.triggerRef, refs]);
+  // Set reference element
+  useEffect(() => {
+    refs.setReference(menu.triggerRef.current);
+  }, [refs, menu.triggerRef]);
 
   const mergedRef = useMergedRef(contentRef, ref);
 
@@ -480,11 +430,24 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     return [placementSide, placementAlign];
   }, [placement]);
 
+  // Calculate arrow position for CSS custom properties
+  const arrowX = middlewareData.arrow?.x;
+  const arrowY = middlewareData.arrow?.y;
+
   if (!menu.open || !mounted) {
     return null;
   }
 
   const portalContainer = container || document.body;
+
+  const floatingStyles: React.CSSProperties = {
+    position: strategy,
+    top: y ?? 0,
+    left: x ?? 0,
+    // Arrow positioning via CSS custom properties
+    '--dropdown-arrow-x': arrowX === undefined ? undefined : `${arrowX}px`,
+    '--dropdown-arrow-y': arrowY === undefined ? undefined : `${arrowY}px`,
+  } as React.CSSProperties;
 
   const contentElement = (
     <DropdownMenuCollectionContext.Provider value={collectionValue}>
@@ -500,9 +463,7 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
         tabIndex={-1}
         onKeyDown={handleKeyDown}
         style={{
-          position: strategy,
-          top: y ?? 0,
-          left: x ?? 0,
+          ...floatingStyles,
           ...props.style,
         }}
       />
