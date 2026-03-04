@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { visuallyHidden } from '@/utils';
 import type { UseSwitchProps, UseSwitchReturn } from '../types';
 
 /**
@@ -139,14 +140,7 @@ export const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
     onChange: () => {}, // Handled by the switch element
     tabIndex: -1 as const,
     'aria-hidden': true as const,
-    style: {
-      position: 'absolute' as const,
-      opacity: 0,
-      pointerEvents: 'none' as const,
-      margin: 0,
-      width: 0,
-      height: 0,
-    },
+    style: visuallyHidden,
   };
 
   return {

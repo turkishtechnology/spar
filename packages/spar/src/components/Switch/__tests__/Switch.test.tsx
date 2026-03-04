@@ -300,7 +300,17 @@ describe('Switch', () => {
       expect(hiddenInput).toHaveAttribute('value', 'on');
       expect(hiddenInput).toHaveAttribute('tabindex', '-1');
       expect(hiddenInput).toHaveAttribute('aria-hidden', 'true');
-      expect(hiddenInput).toHaveStyle({ position: 'absolute', opacity: '0' });
+
+      // Verify visually hidden styles are applied (clip pattern)
+      expect(hiddenInput).toHaveStyle({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: '1px',
+        width: '1px',
+        overflow: 'hidden',
+        position: 'absolute',
+        whiteSpace: 'nowrap',
+      });
     });
 
     it('should not render hidden input when name is not provided', () => {
