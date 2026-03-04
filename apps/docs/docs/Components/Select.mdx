@@ -107,11 +107,8 @@ background: #222;
 - ✅ Single value selection from dropdown list
 - ✅ Controlled and uncontrolled state management
 - ✅ Type-ahead search with character navigation
-- ✅ Advanced positioning with Floating UI integration
-- ✅ Automatic collision detection and viewport boundary awareness
-- ✅ Flexible placement options (12 standard placements)
-- ✅ Smart flipping and shifting to stay in view
-- ✅ Automatic size constraints based on available space
+- ✅ Smart positioning with custom useFloating hook
+- ✅ Automatic collision detection and flipping
 - ✅ Form integration with native HTML support
 - ✅ Automatic portal rendering to document.body
 - ✅ Grouped items with labels and separators
@@ -140,7 +137,7 @@ The Select component is built as a compound component with multiple parts:
     {
       name: 'content',
       label: 'Content',
-      description: 'Dropdown container with Floating UI positioning',
+      description: 'Dropdown container with smart positioning',
     },
     { name: 'viewport', label: 'Viewport', description: 'Scrollable container for items' },
     { name: 'group', label: 'Group', description: 'Groups related items together' },
@@ -237,7 +234,7 @@ The Select component is built as a compound component with multiple parts:
 - `Select.Trigger` toggles dropdown open/closed state and displays current selection
 - `Select.Value` displays the selected item's text or placeholder when nothing is selected
 - `Select.Icon` provides visual feedback for the dropdown state (optional)
-- `Select.Content` portals to `document.body` by default and uses Floating UI for intelligent positioning relative to trigger
+- `Select.Content` portals to `document.body` by default and uses custom `useFloating` hook for intelligent positioning relative to trigger
 - `Select.Viewport` provides scrollable container when items exceed available space
 - `Select.Group` organizes related items and associates them with labels
 - `Select.Label` provides semantic grouping labels for screen readers
@@ -245,7 +242,7 @@ The Select component is built as a compound component with multiple parts:
 - `Select.ItemText` provides the text value for type-ahead search and display
 - `Select.ItemIndicator` shows selected state visually (checkmark, icon, etc.)
 - `Select.Separator` provides visual separation between groups or items
-- `Select.Arrow` points to trigger when using Floating UI arrow middleware (optional)
+- `Select.Arrow` points to trigger with automatic positioning (optional)
 
 **Alternative: Tree-shakeable named imports**
 
@@ -475,50 +472,6 @@ function SelectInForm() {
 }
 ```
 
-### Advanced Positioning with Floating UI
-
-Use Floating UI's powerful positioning features for advanced placement control.
-
-```tsx
-function AdvancedPositioningSelect() {
-  const [value, setValue] = React.useState('');
-
-  return (
-    <Select.Root value={value} onValueChange={setValue}>
-      <Select.Trigger>
-        <Select.Value placeholder='Choose option' />
-        <Select.Icon>▼</Select.Icon>
-      </Select.Trigger>
-
-      <Select.Content
-        placement='bottom-start'
-        sideOffset={10}
-        shift={true}
-        collisionPadding={8}
-        flip={true}
-        size={true}
-      >
-        <Select.Arrow />
-        <Select.Viewport>
-          <Select.Item value='option1'>
-            <Select.ItemText>Option 1</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-          <Select.Item value='option2'>
-            <Select.ItemText>Option 2</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-          <Select.Item value='option3'>
-            <Select.ItemText>Option 3</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-        </Select.Viewport>
-      </Select.Content>
-    </Select.Root>
-  );
-}
-```
-
 ### RTL Support
 
 Select component with right-to-left text direction.
@@ -669,21 +622,17 @@ The dropdown container that appears when select is open. Uses Floating UI for in
 
 **Props**
 
-| Name                | Type                                            | Default          | Description                                                                                                                                                                                                                |
-| ------------------- | ----------------------------------------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `placement?`        | `Placement`                                     | `'bottom-start'` | Placement relative to trigger. Supports 12 positions: `'top'`, `'top-start'`, `'top-end'`, `'right'`, `'right-start'`, `'right-end'`, `'bottom'`, `'bottom-start'`, `'bottom-end'`, `'left'`, `'left-start'`, `'left-end'` |
-| `strategy?`         | `'absolute' \| 'fixed'`                         | `'absolute'`     | CSS positioning strategy                                                                                                                                                                                                   |
-| `middleware?`       | `Middleware[]`                                  | `undefined`      | Custom Floating UI middleware array for advanced positioning control                                                                                                                                                       |
-| `sideOffset?`       | `number`                                        | `8`              | Distance from trigger in pixels                                                                                                                                                                                            |
-| `shift?`            | `boolean`                                       | `true`           | Whether to shift the content to stay in viewport                                                                                                                                                                           |
-| `collisionPadding?` | `number`                                        | `8`              | Padding from boundary edges (in pixels)                                                                                                                                                                                    |
-| `flip?`             | `boolean`                                       | `true`           | Whether to flip to opposite side when no space                                                                                                                                                                             |
-| `hide?`             | `boolean`                                       | `false`          | Whether to hide when trigger is fully scrolled out of view                                                                                                                                                                 |
-| `size?`             | `boolean`                                       | `true`           | Whether to constrain size to available space                                                                                                                                                                               |
-| `as?`               | `React.ElementType`                             | `'div'`          | Polymorphic component type                                                                                                                                                                                                 |
-| `ref?`              | `React.RefObject`                               | `undefined`      | Forward ref support                                                                                                                                                                                                        |
-| `children`          | `React.ReactNode`                               | -                | Content children                                                                                                                                                                                                           |
-| `container?`        | `HTMLElement \| null`                           | `document.body`  | Custom portal container element                                                                                                                                                                                            |
+| Name                   | Type                            | Default         | Description                                              |
+| ---------------------- | ------------------------------- | --------------- | -------------------------------------------------------- |
+| `side?`                | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`      | Preferred placement side                                 |
+| `align?`               | `'start' \| 'center' \| 'end'`  | `'start'`       | Alignment relative to trigger                            |
+| `as?`                  | `React.ElementType`             | `'div'`         | Polymorphic component type                               |
+| `ref?`                 | `React.RefObject`               | `undefined`     | Forward ref support                                      |
+| `children`             | `React.ReactNode`               | -               | Content children                                         |
+| `container?`           | `HTMLElement \| null`           | `document.body` | Custom portal container element                          |
+| `onEscapeKeyDown?`     | `(event: React.KeyboardEvent)`  | `undefined`     | Escape key handler                                       |
+| `onPointerDownOutside?`| `(event: React.PointerEvent)`   | `undefined`     | Outside click handler                                    |
+| `onCloseAutoFocus?`    | `(event: React.FocusEvent)`     | `undefined`     | Focus handler on close                                   |
 
 **Events**
 
@@ -696,17 +645,17 @@ The dropdown container that appears when select is open. Uses Floating UI for in
 **Data Attributes**
 
 - `data-state`: `"open" | "closed"` - Dropdown open state
-- `data-placement`: Floating UI computed placement (e.g., `"bottom-start"`, `"top-end"`)
+- `data-side`: `"top" | "right" | "bottom" | "left"` - Actual placement side
+- `data-align`: `"start" | "center" | "end"` - Actual alignment
 
 **Positioning**
 
-Select.Content uses Floating UI for advanced positioning. The component automatically:
+Select.Content uses custom `useFloating` hook for positioning. The component automatically:
 
-- Positions relative to the trigger using the specified `placement`
-- Applies `sideOffset` distance from the trigger
-- Shifts content to stay within the viewport when `shift={true}`
-- Flips to the opposite side when there's no space and `flip={true}`
-- Constrains content height to available space when `size={true}`
+- Positions relative to the trigger using `side` and `align`
+- Applies internal 8px offset from trigger
+- Shifts content to stay within the viewport (always enabled)
+- Flips to the opposite side when there's no space (always enabled)
 - Updates position automatically on scroll, resize, and layout changes
 - Matches trigger width as minimum width
 
