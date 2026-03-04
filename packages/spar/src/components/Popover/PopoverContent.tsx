@@ -9,6 +9,7 @@ import {
 } from '@/hooks';
 import { PopoverContentProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
+import { PopoverContentContext } from './hooks/usePopoverContentContext';
 import { getFocusableElements } from './utils/index';
 
 /**
@@ -43,7 +44,7 @@ export const PopoverContent = <T extends ElementType = 'div'>({
     arrowRef: arrowRef?.current ?? null,
   };
 
-  const { x, y, strategy, placement, refs, middlewareData }: UseFloatingReturn =
+  const { floatingStyles, arrowStyles, placement, refs }: UseFloatingReturn =
     useFloating(floatingOptions);
 
   // Set reference element
@@ -186,41 +187,31 @@ export const PopoverContent = <T extends ElementType = 'div'>({
     return [placementSide, placementAlign];
   }, [placement]);
 
-  // Calculate arrow position for CSS custom properties
-  const arrowX = middlewareData.arrow?.x;
-  const arrowY = middlewareData.arrow?.y;
+  const contentContextValue = useMemo(() => ({ arrowStyles }), [arrowStyles]);
 
   if (!state.isOpen || !mounted) return null;
 
-  // Combine Floating UI styles with user styles
-  const floatingStyles: React.CSSProperties = {
-    position: strategy,
-    top: y ?? 0,
-    left: x ?? 0,
-    // Arrow positioning via CSS custom properties
-    '--popover-arrow-x': arrowX === undefined ? undefined : `${arrowX}px`,
-    '--popover-arrow-y': arrowY === undefined ? undefined : `${arrowY}px`,
-  } as React.CSSProperties;
-
   const contentElement = (
-    <Component
-      ref={floatingRef}
-      id={state.contentId}
-      role={modal ? 'dialog' : undefined}
-      aria-modal={modal ? 'true' : undefined}
-      tabIndex={-1}
-      data-state='open'
-      data-side={currentSide}
-      data-align={currentAlign}
-      style={{
-        ...floatingStyles,
-        ...style,
-      }}
-      onKeyDown={handleKeyDown}
-      {...props}
-    >
-      {children}
-    </Component>
+    <PopoverContentContext.Provider value={contentContextValue}>
+      <Component
+        ref={floatingRef}
+        id={state.contentId}
+        role={modal ? 'dialog' : undefined}
+        aria-modal={modal ? 'true' : undefined}
+        tabIndex={-1}
+        data-state='open'
+        data-side={currentSide}
+        data-align={currentAlign}
+        style={{
+          ...floatingStyles,
+          ...style,
+        }}
+        onKeyDown={handleKeyDown}
+        {...props}
+      >
+        {children}
+      </Component>
+    </PopoverContentContext.Provider>
   );
 
   return createPortal(contentElement, container || document.body);
