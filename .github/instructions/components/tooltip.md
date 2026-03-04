@@ -4,7 +4,6 @@
 
 - **Purpose**: A popup that displays supplementary information when an element receives focus or hover, providing clarification without cluttering the interface
 - **Use Cases**: 
-  - Icon-only buttons that need accessible labels
   - Supplementary descriptions for form inputs  
   - Additional context for complex UI controls
   - Clarifying abbreviations or technical terms
@@ -13,7 +12,6 @@
   - Non-modal, lightweight information display
   - Dismissible with Escape or focus/hover loss
   - Never receives focus itself
-  - Supports both primary labeling and auxiliary description patterns
 
 ## 2. API
 
@@ -65,7 +63,6 @@
 | `className` | `string` | No | - | CSS class names for styling |
 | `style` | `React.CSSProperties` | No | - | Inline styles |
 | `as` | `ElementType` | No | `'div'` | Element type for tooltip content container |
-| `asLabel` | `boolean` | No | `false` | Whether tooltip provides primary label or auxiliary description |
 | `side` | `'top' \| 'bottom' \| 'left' \| 'right'` | No | `'top'` | Preferred placement relative to trigger |
 | `sideOffset` | `number` | No | `8` | Distance in pixels from the trigger |
 | `align` | `'start' \| 'center' \| 'end'` | No | `'center'` | Alignment relative to trigger |
@@ -102,15 +99,15 @@
 
 | State | Trigger | Result | ARIA/DOM Update |
 |-------|---------|--------|-----------------|
-| Closed | Mouse hover on trigger | Show tooltip after delay | `aria-describedby` or `aria-labelledby` points to tooltip |
-| Closed | Focus trigger | Show tooltip immediately | `aria-describedby` or `aria-labelledby` points to tooltip |
+| Closed | Mouse hover on trigger | Show tooltip after delay | `aria-describedby` points to tooltip |
+| Closed | Focus trigger | Show tooltip immediately | `aria-describedby` points to tooltip |
 | Closed | Touch trigger | No tooltip shown | No change |
 | Open | Mouse enter tooltip | Tooltip stays open | No change (WCAG 1.4.13 hoverable requirement) |
-| Open | Mouse leave trigger | Hide tooltip after hideDelay | Remove `aria-describedby`/`aria-labelledby` |
-| Open | Blur trigger | Hide tooltip | Remove `aria-describedby`/`aria-labelledby` |
-| Open | Press Escape | Hide tooltip | Remove `aria-describedby`/`aria-labelledby`, focus remains on trigger |
-| Open | Click outside | Hide tooltip | Remove `aria-describedby`/`aria-labelledby` |
-| Open | Trigger click (when closeOnClick=true) | Hide tooltip | Remove `aria-describedby`/`aria-labelledby` |
+| Open | Mouse leave trigger | Hide tooltip after hideDelay | Remove `aria-describedby` |
+| Open | Blur trigger | Hide tooltip | Remove `aria-describedby` |
+| Open | Press Escape | Hide tooltip | Remove `aria-describedby`, focus remains on trigger |
+| Open | Click outside | Hide tooltip | Remove `aria-describedby` |
+| Open | Trigger click (when closeOnClick=true) | Hide tooltip | Remove `aria-describedby` |
 | Disabled | Any interaction | No tooltip | No ARIA attributes applied |
 | **Controlled** | `isOpen=true` prop | Show tooltip immediately | ARIA attributes applied |
 | **Controlled** | `isOpen=false` prop | Hide tooltip immediately | ARIA attributes removed |
@@ -140,18 +137,15 @@
 - Clear focus indicators on trigger element
 
 ### Announcements (Screen Reader)
-- **Primary Label Mode** (`asLabel={true}`): 
-  - Use `aria-labelledby` to associate tooltip as primary label
-  - Content announced when trigger receives focus
-- **Auxiliary Description Mode** (`asLabel={false}` - default):
+- **Auxiliary Description Mode** (default):
   - Use `aria-describedby` to associate tooltip as supplementary info
   - Content announced after label and role information
 - **No live regions**: Tooltip content is not dynamically announced
 
 ### Name/Role/Value Exposure
 - Trigger element must have accessible name (via `aria-label`, `aria-labelledby`, or text content)
-- Tooltip content provides either primary label or supplementary description
-- Proper association via `aria-labelledby` or `aria-describedby`
+- Tooltip content provides supplementary description
+- Proper association via `aria-describedby`
 
 ## 5. Implementation Architecture
 
@@ -177,7 +171,6 @@ interface TooltipContextValue {
   // Internal state for compound components
   triggerId: string;
   contentId: string;
-  asLabel: boolean;
 }
 
 interface TooltipProviderContextValue {
@@ -234,7 +227,6 @@ interface TooltipProviderContextValue {
 #### Tooltip Element  
 - `data-state`: `"open" | "closed"`
 - `data-placement`: `"top" | "bottom" | "left" | "right"`
-- `data-as-label`: `"true" | "false"` (matches asLabel prop)
 
 #### Provider Element
 - `data-tooltip-provider`: `""` (marks provider container)
@@ -258,7 +250,7 @@ interface TooltipProviderContextValue {
 - Ref forwarding to trigger element
 
 ### Accessibility Tests
-- Proper ARIA attributes in both modes (`aria-labelledby` vs `aria-describedby`)
+- Proper ARIA attributes (`aria-describedby`)
 - Keyboard navigation (focus/escape)
 - Screen reader announcements
 - Focus management and indicators
@@ -304,7 +296,7 @@ interface TooltipProviderContextValue {
 
 ### Implementation Checklist
 - [ ] Single trigger element validation (children must be one focusable element)
-- [ ] Proper ARIA association (`aria-describedby` vs `aria-labelledby`)
+- [ ] Proper ARIA association (`aria-describedby`)
 - [ ] Hover delay implementation with cleanup
 - [ ] Focus-based immediate showing
 - [ ] **WCAG 1.4.13 compliance**: Dismissible, hoverable, persistent behavior

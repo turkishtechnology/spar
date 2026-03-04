@@ -166,10 +166,7 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
     ref: mergedRef,
     id: context.triggerId,
     disabled: context.disabled,
-    'aria-describedby':
-      context.isOpen && !context.disabled && !context.asLabel ? context.contentId : undefined,
-    'aria-labelledby':
-      context.isOpen && !context.disabled && context.asLabel ? context.contentId : undefined,
+    'aria-describedby': context.isOpen && !context.disabled ? context.contentId : undefined,
     'data-state': context.isOpen ? 'open' : 'closed',
     'data-placement': context.placement,
     onPointerEnter: context.disabled ? undefined : handlePointerEnter,

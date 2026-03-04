@@ -502,12 +502,12 @@ describe('Tooltip Integration Tests', () => {
           <nav>
             <Tooltip>
               <TooltipTrigger aria-label='Home'>🏠</TooltipTrigger>
-              <TooltipContent asLabel>Home</TooltipContent>
+              <TooltipContent>Home</TooltipContent>
             </Tooltip>
 
             <Tooltip>
               <TooltipTrigger aria-label='Settings'>⚙️</TooltipTrigger>
-              <TooltipContent asLabel>Settings</TooltipContent>
+              <TooltipContent>Settings</TooltipContent>
             </Tooltip>
           </nav>
 

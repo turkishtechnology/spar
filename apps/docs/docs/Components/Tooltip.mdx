@@ -81,7 +81,6 @@ box-shadow:
 - ✅ Native touch and mobile device support via Pointer Events API
 - ✅ Escape key support to dismiss tooltip
 - ✅ Skip delay for quick navigation between tooltips
-- ✅ Can act as label or description for accessibility
 
 ## Installation
 
@@ -219,19 +218,6 @@ function ControlledTooltip() {
     </Tooltip.Root>
   );
 }
-```
-
-### Tooltip as Label
-
-Use tooltip to provide primary label instead of description:
-
-```tsx {3,8}
-<Tooltip.Root>
-  <Tooltip.Trigger>
-    <button aria-label='Close'>✕</button>
-  </Tooltip.Trigger>
-  <Tooltip.Content asLabel={true}>Close dialog</Tooltip.Content>
-</Tooltip.Root>
 ```
 
 ### Multiple Tooltips with Shared Provider
@@ -456,25 +442,24 @@ The content that displays in the tooltip popup with smart positioning.
 
 **Props**
 
-| Name                    | Type                                      | Default         | Description                                     |
-| ----------------------- | ----------------------------------------- | --------------- | ----------------------------------------------- |
-| `children`              | `React.ReactNode`                         | -               | Content to display in tooltip                   |
-| `as?`                   | `React.ElementType`                       | `"div"`         | Element type for tooltip content container      |
-| `asLabel?`              | `boolean`                                 | `false`         | Whether tooltip is primary label vs description |
-| `side?`                 | `"top" \| "bottom" \| "left" \| "right"`  | `"top"`         | Preferred placement relative to trigger         |
-| `sideOffset?`           | `number`                                  | `8`             | Distance in pixels from the trigger             |
-| `align?`                | `"start" \| "center" \| "end"`            | `"center"`      | Alignment relative to trigger                   |
-| `alignOffset?`          | `number`                                  | `0`             | Offset for alignment                            |
-| `avoidCollisions?`      | `boolean`                                 | `true`          | Whether to avoid viewport collisions            |
-| `collisionBoundary?`    | `Element \| Element[]`                    | -               | Collision boundary elements                     |
-| `collisionPadding?`     | `number \| Partial<Record<Side, number>>` | `8`             | Padding for collision detection                 |
-| `sticky?`               | `"partial" \| "always"`                   | `"partial"`     | Sticky behavior during scroll                   |
-| `hideWhenDetached?`     | `boolean`                                 | `false`         | Hide when trigger becomes detached              |
-| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`    | -               | Escape key handler                              |
-| `onPointerDownOutside?` | `(event: React.PointerEvent) => void`     | -               | Outside pointer down handler                    |
-| `onOpenAutoFocus?`      | `(event: Event) => void`                  | -               | Called when auto-focusing on open               |
-| `onCloseAutoFocus?`     | `(event: Event) => void`                  | -               | Called when auto-focusing on close              |
-| `container?`            | `HTMLElement \| null`                     | `document.body` | Custom portal container element                 |
+| Name                    | Type                                      | Default         | Description                                |
+| ----------------------- | ----------------------------------------- | --------------- | ------------------------------------------ |
+| `children`              | `React.ReactNode`                         | -               | Content to display in tooltip              |
+| `as?`                   | `React.ElementType`                       | `"div"`         | Element type for tooltip content container |
+| `side?`                 | `"top" \| "bottom" \| "left" \| "right"`  | `"top"`         | Preferred placement relative to trigger    |
+| `sideOffset?`           | `number`                                  | `8`             | Distance in pixels from the trigger        |
+| `align?`                | `"start" \| "center" \| "end"`            | `"center"`      | Alignment relative to trigger              |
+| `alignOffset?`          | `number`                                  | `0`             | Offset for alignment                       |
+| `avoidCollisions?`      | `boolean`                                 | `true`          | Whether to avoid viewport collisions       |
+| `collisionBoundary?`    | `Element \| Element[]`                    | -               | Collision boundary elements                |
+| `collisionPadding?`     | `number \| Partial<Record<Side, number>>` | `8`             | Padding for collision detection            |
+| `sticky?`               | `"partial" \| "always"`                   | `"partial"`     | Sticky behavior during scroll              |
+| `hideWhenDetached?`     | `boolean`                                 | `false`         | Hide when trigger becomes detached         |
+| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`    | -               | Escape key handler                         |
+| `onPointerDownOutside?` | `(event: React.PointerEvent) => void`     | -               | Outside pointer down handler               |
+| `onOpenAutoFocus?`      | `(event: Event) => void`                  | -               | Called when auto-focusing on open          |
+| `onCloseAutoFocus?`     | `(event: Event) => void`                  | -               | Called when auto-focusing on close         |
+| `container?`            | `HTMLElement \| null`                     | `document.body` | Custom portal container element            |
 
 **Events**
 
@@ -488,12 +473,11 @@ The content that displays in the tooltip popup with smart positioning.
 
 **HTML Attributes**
 
-| Attribute        | Value                | Purpose                        |
-| ---------------- | -------------------- | ------------------------------ |
-| `id`             | `string`             | Unique identifier for content  |
-| `data-state`     | `"open" \| "closed"` | Indicates visibility state     |
-| `data-placement` | `Placement`          | Indicates actual placement     |
-| `data-as-label`  | `boolean`            | Indicates label vs description |
+| Attribute        | Value                | Purpose                       |
+| ---------------- | -------------------- | ----------------------------- |
+| `id`             | `string`             | Unique identifier for content |
+| `data-state`     | `"open" \| "closed"` | Indicates visibility state    |
+| `data-placement` | `Placement`          | Indicates actual placement    |
 
 ### Tooltip.Arrow
 
@@ -555,7 +539,6 @@ The Tooltip component is designed with accessibility as a priority:
 1. **Keep Content Brief**: Tooltips should provide concise, helpful information
 2. **Use for Supplementary Info**: Don't hide critical information in tooltips
 3. **Avoid Interactive Content**: Tooltips are not for complex interactions
-4. **Label vs Description**: Use `asLabel={true}` only when tooltip provides the primary label
-5. **Cross-Device Compatibility**: Pointer Events API ensures consistent behavior on desktop, mobile, and tablet devices
-6. **Timing**: Default delays work well; adjust only if needed for specific UX
-7. **Positioning**: Use `side` and `align` props to ensure tooltip doesn't cover important content
+4. **Cross-Device Compatibility**: Pointer Events API ensures consistent behavior on desktop, mobile, and tablet devices
+5. **Timing**: Default delays work well; adjust only if needed for specific UX
+6. **Positioning**: Use `side` and `align` props to ensure tooltip doesn't cover important content
