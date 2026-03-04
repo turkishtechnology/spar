@@ -228,10 +228,6 @@ interface TooltipProviderContextValue {
 - `data-state`: `"open" | "closed"`
 - `data-placement`: `"top" | "bottom" | "left" | "right"`
 
-#### Provider Element
-- `data-tooltip-provider`: `""` (marks provider container)
-- `data-skip-delay`: `"true" | "false"` (skip delay optimization active)
-
 ### Positioning Data
 - CSS custom properties for dynamic positioning:
   - `--tooltip-x`: Horizontal position
