@@ -230,31 +230,10 @@ export type TooltipContentProps<T extends ElementType = 'div'> = PolymorphicProp
 >;
 
 /**
- * Own props for TooltipArrow
- */
-export interface TooltipArrowOwnProps {
-  /**
-   * Arrow width in pixels
-   * @defaultValue 10
-   */
-  width?: number;
-
-  /**
-   * Arrow height in pixels
-   * @defaultValue 5
-   */
-  height?: number;
-}
-
-/**
  * Props for TooltipArrow
- * @remarks Optional arrow pointing to the trigger element
+ * @remarks Optional arrow pointing to the trigger element. Headless: user provides all visuals.
  */
-export type TooltipArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<
-  'svg',
-  T,
-  TooltipArrowOwnProps
->;
+export type TooltipArrowProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * @internal
@@ -273,7 +252,7 @@ export interface TooltipContextValue {
   // Floating UI refs
   triggerRef: RefObject<HTMLElement | null>;
   contentRef: RefObject<HTMLElement | null>;
-  arrowRef: RefObject<HTMLElement | SVGSVGElement | null>;
+  arrowRef: RefObject<Element | null>;
   // Hide timer control for hoverable content (WCAG 1.4.13)
   startHideTimer: (delayMs: number, callback: () => void) => void;
   cancelHideTimer: () => void;

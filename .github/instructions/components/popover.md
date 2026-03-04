@@ -75,9 +75,7 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `width` | `number` | No | `10` | Arrow width in pixels |
-| `height` | `number` | No | `5` | Arrow height in pixels |
-| `offset` | `number` | No | `0` | Offset along the edge |
+| `as` | `ElementType` | No | `'div'` | Polymorphic element type to render |
 
 ### PopoverClose Props
 
@@ -313,7 +311,8 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 ### Ref Forwarding Strategy
 - **PopoverTrigger**: forwards ref to trigger element with render props support and generic type safety
 - **PopoverContent**: forwards ref to content container element with polymorphic element support
-- **PopoverArrow**: forwards ref to arrow SVG element for positioning
+
+- **PopoverArrow**: forwards ref to arrow element for positioning
 - **PopoverClose**: forwards ref to close button element with polymorphic element support
 - **Internal ref system**: Separate refs for positioning calculations and focus management
 - **Ref composition**: Safe merging of internal, forwarded, and child refs with type preservation

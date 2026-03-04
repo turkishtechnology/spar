@@ -38,6 +38,7 @@ export const Select = <T extends ElementType = 'div'>({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const valueNodeRef = useRef<HTMLElement>(null);
+  const arrowRef = useRef<Element | null>(null);
 
   // IDs
   const generatedId = useId();
@@ -104,6 +105,7 @@ export const Select = <T extends ElementType = 'div'>({
       triggerRef,
       contentRef,
       valueNodeRef,
+      arrowRef,
 
       // IDs
       triggerId,

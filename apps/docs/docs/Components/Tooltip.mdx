@@ -196,7 +196,7 @@ Add an arrow pointing to the trigger element:
   </Tooltip.Trigger>
   <Tooltip.Content>
     Content with arrow
-    <Tooltip.Arrow width={12} height={6} />
+    <Tooltip.Arrow />
   </Tooltip.Content>
 </Tooltip.Root>
 ```
@@ -474,17 +474,16 @@ The content that displays in the tooltip popup with smart positioning.
 
 ### Tooltip.Arrow
 
-Optional arrow pointing to the trigger element.
+Optional decorative arrow pointing to the trigger element. Headless: renders a plain element with no visual opinions — user provides all styling.
 
 **Props**
 
-| Name         | Type                  | Default | Description                 |
-| ------------ | --------------------- | ------- | --------------------------- |
-| `width?`     | `number`              | `10`    | Arrow width in pixels       |
-| `height?`    | `number`              | `5`     | Arrow height in pixels      |
-| `as?`        | `React.ElementType`   | `"svg"` | Element type for arrow      |
-| `className?` | `string`              | -       | CSS class names for styling |
-| `style?`     | `React.CSSProperties` | -       | Inline styles               |
+| Name         | Type                  | Default | Description                       |
+| ------------ | --------------------- | ------- | --------------------------------- |
+| `as?`        | `React.ElementType`   | `"div"` | Polymorphic element type to render |
+| `ref?`       | `React.Ref<Element>`  | -       | Forward ref support               |
+| `className?` | `string`              | -       | CSS class names for styling       |
+| `style?`     | `React.CSSProperties` | -       | Inline styles                     |
 
 **Events**
 

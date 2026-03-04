@@ -32,7 +32,7 @@ export const Tooltip = ({
   // Floating UI refs
   const triggerRef = useRef<HTMLElement | null>(null);
   const contentRef = useRef<HTMLElement | null>(null);
-  const arrowRef = useRef<HTMLElement | SVGSVGElement | null>(null);
+  const arrowRef = useRef<Element | null>(null);
 
   // Private hide timer — not exposed via context
   const hideTimeoutRef = useRef<number | null>(null);

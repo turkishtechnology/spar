@@ -38,7 +38,7 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   const isControlled = controlledOpen !== undefined;
   const isOpen = isControlled ? controlledOpen : internalOpen;
 
-  const arrowRef = useRef<HTMLDivElement | null>(null);
+  const arrowRef = useRef<Element | null>(null);
 
   // Floating UI setup
   const placement = getPlacement(side, align);
