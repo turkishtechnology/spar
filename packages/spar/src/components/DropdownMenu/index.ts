@@ -5,6 +5,7 @@ import { DropdownMenuItem } from './DropdownMenuItem';
 import { DropdownMenuSeparator } from './DropdownMenuSeparator';
 import { DropdownMenuLabel } from './DropdownMenuLabel';
 import { DropdownMenuGroup } from './DropdownMenuGroup';
+import { DropdownMenuArrow } from './DropdownMenuArrow';
 export { useDropdownMenuContext, useDropdownMenuCollectionContext } from './hooks';
 
 const DropdownMenu = DropdownMenuRoot as typeof DropdownMenuRoot & {
@@ -15,6 +16,7 @@ const DropdownMenu = DropdownMenuRoot as typeof DropdownMenuRoot & {
   Separator: typeof DropdownMenuSeparator;
   Label: typeof DropdownMenuLabel;
   Group: typeof DropdownMenuGroup;
+  Arrow: typeof DropdownMenuArrow;
 };
 
 DropdownMenu.Root = DropdownMenuRoot;
@@ -24,6 +26,7 @@ DropdownMenu.Item = DropdownMenuItem;
 DropdownMenu.Separator = DropdownMenuSeparator;
 DropdownMenu.Label = DropdownMenuLabel;
 DropdownMenu.Group = DropdownMenuGroup;
+DropdownMenu.Arrow = DropdownMenuArrow;
 
 export {
   DropdownMenu,
@@ -34,6 +37,7 @@ export {
   DropdownMenuSeparator,
   DropdownMenuLabel,
   DropdownMenuGroup,
+  DropdownMenuArrow,
 };
 
 export type {
@@ -45,4 +49,5 @@ export type {
   DropdownMenuSeparatorProps,
   DropdownMenuLabelProps,
   DropdownMenuGroupProps,
+  DropdownMenuArrowProps,
 } from './types';

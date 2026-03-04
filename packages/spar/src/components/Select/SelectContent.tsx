@@ -49,7 +49,6 @@ export const SelectContent = <T extends ElementType = 'div'>({
   shift = true,
   size = true,
   hide = false,
-  arrowRef,
   container,
   onEscapeKeyDown,
   onPointerDownOutside,
@@ -107,12 +106,12 @@ export const SelectContent = <T extends ElementType = 'div'>({
     }
 
     // Arrow positioning
-    if (arrowRef?.current) {
-      middlewares.push(arrowMiddleware({ element: arrowRef.current }));
+    if (context.arrowRef?.current) {
+      middlewares.push(arrowMiddleware({ element: context.arrowRef.current }));
     }
 
     return middlewares;
-  }, [sideOffset, avoidCollisions, flip, shift, collisionPadding, size, hide, arrowRef]);
+  }, [sideOffset, avoidCollisions, flip, shift, collisionPadding, size, hide, context.arrowRef]);
 
   // Use Floating UI hook for positioning
   const {

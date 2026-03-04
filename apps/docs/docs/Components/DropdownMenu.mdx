@@ -153,6 +153,7 @@ The DropdownMenu component is built as a compound component with multiple parts:
     { name: 'trigger', label: 'Trigger', description: 'Button that toggles menu visibility' },
     { name: 'content', label: 'Content', description: 'Menu container with positioning' },
     { name: 'item', label: 'Item', description: 'Individual selectable menu option' },
+    { name: 'arrow', label: 'Arrow', description: 'Optional decorative arrow element' },
   ]}
 >
   <div className='dropdown-demo-container'>
@@ -599,6 +600,31 @@ A logical grouping container for related menu items.
 | Name | Parameters | Description           | When Triggered                     |
 | ---- | ---------- | --------------------- | ---------------------------------- |
 | N/A  | N/A        | No interactive events | Group is non-interactive container |
+
+### DropdownMenu.Arrow
+
+Optional decorative arrow element that points to the trigger. Headless: renders a plain element with no visual opinions — user provides all styling. Arrow ref is automatically managed via context.
+
+**Props**
+
+| Name         | Type                  | Default     | Description                        |
+| ------------ | --------------------- | ----------- | ---------------------------------- |
+| `as?`        | `React.ElementType`   | `'div'`     | Polymorphic element type to render |
+| `ref?`       | `React.Ref<Element>`  | `undefined` | Forward ref support                |
+| `className?` | `string`              | `undefined` | CSS class names for styling        |
+| `style?`     | `React.CSSProperties` | `undefined` | Custom styles for arrow            |
+
+**Events**
+
+| Name | Parameters | Description                | When Triggered |
+| ---- | ---------- | -------------------------- | -------------- |
+| None | -          | Arrow is purely decorative | -              |
+
+**HTML Attributes**
+
+| Attribute     | Value    | Purpose                     |
+| ------------- | -------- | --------------------------- |
+| `aria-hidden` | `"true"` | Hidden from assistive tech  |
 
 ## Keyboard Interactions
 

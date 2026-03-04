@@ -38,7 +38,6 @@ export type {
   PopoverTriggerRenderProps,
   PopoverContentOwnProps,
   PopoverContentProps,
-  PopoverArrowOwnProps,
   PopoverArrowProps,
   PopoverAnchorOwnProps,
   PopoverAnchorProps,

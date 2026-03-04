@@ -224,11 +224,6 @@ export interface SelectContentOwnProps {
   hide?: boolean;
 
   /**
-   * Arrow element ref for arrow positioning
-   */
-  arrowRef?: RefObject<HTMLElement | SVGSVGElement>;
-
-  /**
    * Portal container element. Content is portaled to document.body by default.
    * @defaultValue document.body
    */
@@ -373,31 +368,10 @@ export type SelectLabelProps<T extends ElementType = 'label'> = LabelProps<T>;
 export type SelectSeparatorProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
- * Own props for SelectArrow component
- */
-export interface SelectArrowOwnProps {
-  /**
-   * Arrow width
-   * @defaultValue 10
-   */
-  width?: number;
-
-  /**
-   * Arrow height
-   * @defaultValue 5
-   */
-  height?: number;
-}
-
-/**
  * Props for SelectArrow component
- * @remarks Optional arrow pointing to trigger
+ * @remarks Optional arrow pointing to trigger. Headless: user provides all visuals.
  */
-export type SelectArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<
-  'svg',
-  T,
-  SelectArrowOwnProps
->;
+export type SelectArrowProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * @internal
@@ -429,6 +403,7 @@ export interface SelectContextValue {
   triggerRef: RefObject<HTMLButtonElement | null>;
   contentRef: RefObject<HTMLDivElement | null>;
   valueNodeRef: RefObject<HTMLElement | null>;
+  arrowRef: RefObject<Element | null>;
 
   // IDs
   triggerId: string;
