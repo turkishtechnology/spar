@@ -30,21 +30,19 @@ Object.defineProperty(window, 'matchMedia', {
 
 interface BasicTooltipProps {
   children?: React.ReactNode;
-  asLabel?: boolean;
   defaultOpen?: boolean;
   [key: string]: unknown;
 }
 
 const BasicTooltip = ({
   children = 'Tooltip content',
-  asLabel = false,
   defaultOpen = false,
   ...props
 }: BasicTooltipProps) => (
   <TooltipProvider>
     <Tooltip defaultOpen={defaultOpen} {...props}>
       <TooltipTrigger>Trigger</TooltipTrigger>
-      <TooltipContent asLabel={asLabel}>{children}</TooltipContent>
+      <TooltipContent>{children}</TooltipContent>
     </Tooltip>
   </TooltipProvider>
 );
@@ -310,19 +308,6 @@ describe('TooltipContent', () => {
     const tooltip = screen.getByRole('tooltip');
 
     expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
-    expect(tooltip).toHaveAttribute('data-as-label', 'false');
-  });
-
-  it('sets aria-labelledby when asLabel is true', async () => {
-    render(<BasicTooltip defaultOpen asLabel />);
-
-    const trigger = screen.getByRole('button', { name: 'Trigger' });
-    const tooltip = screen.getByRole('tooltip');
-
-    // The component currently uses aria-describedby even when asLabel is true
-    // This is because the asLabel update happens in useEffect and may not be synchronous
-    expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
-    expect(tooltip).toHaveAttribute('data-as-label', 'true');
   });
 
   it('sets correct data attributes', () => {
