@@ -242,37 +242,10 @@ export type PopoverContentProps<T extends ElementType = 'div'> = PolymorphicProp
 >;
 
 /**
- * Own props for PopoverArrow component
- */
-export interface PopoverArrowOwnProps {
-  /**
-   * Arrow width in pixels
-   * @defaultValue 10
-   */
-  width?: number;
-
-  /**
-   * Arrow height in pixels
-   * @defaultValue 5
-   */
-  height?: number;
-
-  /**
-   * Offset along the edge
-   * @defaultValue 0
-   */
-  offset?: number;
-}
-
-/**
  * Props for PopoverArrow component
- * @remarks Purely decorative arrow element
+ * @remarks Purely decorative arrow element. Headless: user provides all visuals.
  */
-export type PopoverArrowProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  PopoverArrowOwnProps
->;
+export type PopoverArrowProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * Own props for PopoverAnchor component
@@ -342,7 +315,7 @@ export interface PopoverContextValue {
   triggerRef: RefObject<HTMLElement | null>;
   contentRef: RefObject<HTMLDivElement | null>;
   anchorRef: RefObject<HTMLElement | null>;
-  arrowRef: RefObject<HTMLDivElement | null>;
+  arrowRef: RefObject<Element | null>;
   floatingStyles: CSSProperties;
   modal: boolean;
   disabled: boolean;

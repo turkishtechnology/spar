@@ -13,6 +13,7 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 <DropdownMenuRoot>
   <DropdownMenuTrigger />
   <DropdownMenuContent>
+    <DropdownMenuArrow />
     <DropdownMenuItem />
     <DropdownMenuSeparator />
     <DropdownMenuGroup>

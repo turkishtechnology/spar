@@ -207,13 +207,11 @@ Visual separator between items or groups.
 | `as` | `ElementType` | No | `div` | Polymorphic component type |
 
 ### SelectArrow
-Optional arrow pointing to trigger.
+Optional decorative arrow element pointing to trigger. Headless: user provides all visuals.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `width` | `number` | No | `10` | Arrow width |
-| `height` | `number` | No | `5` | Arrow height |
-| `as` | `ElementType` | No | `svg` | Polymorphic component type |
+| `as` | `ElementType` | No | `div` | Polymorphic element type to render |
 
 ## 3. Behavior Matrix
 

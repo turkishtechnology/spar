@@ -247,6 +247,12 @@ export type DropdownMenuLabelProps<T extends ElementType = 'div'> = PolymorphicP
 export type DropdownMenuGroupProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
+ * Props for DropdownMenuArrow component
+ * @remarks Purely decorative arrow element. Headless: user provides all visuals.
+ */
+export type DropdownMenuArrowProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
+
+/**
  * Internal context value for DropdownMenu
  * @internal
  */
@@ -262,6 +268,7 @@ export interface DropdownMenuContextValue {
   focusStrategy: DropdownMenuFocusStrategy;
   setFocusStrategy: (strategy: DropdownMenuFocusStrategy) => void;
   triggerRef: RefObject<HTMLElement | null>;
+  arrowRef: RefObject<Element | null>;
   closeMenu: (options?: { focusTrigger?: boolean }) => void;
 }
 
