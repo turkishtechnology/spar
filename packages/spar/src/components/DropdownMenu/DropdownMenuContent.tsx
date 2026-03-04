@@ -74,9 +74,7 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
   const floatingRef = useCallback(
     (node: HTMLElement | null) => {
       mergedRef(node);
-      if (node) {
-        refs.setFloating(node);
-      }
+      refs.setFloating(node);
     },
     [mergedRef, refs],
   );
