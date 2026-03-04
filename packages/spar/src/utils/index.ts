@@ -1,1 +1,1 @@
-export {};
+export { visuallyHidden, getVisuallyHiddenStyles } from './visuallyHidden';
