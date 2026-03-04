@@ -1,6 +1,5 @@
 import { useCallback, useId, useMemo, useRef, useState } from 'react';
 import type { TooltipProps, TooltipContextValue } from './types';
-import type { Side } from '../../types';
 import { useTooltipProviderContext, TooltipContext } from './hooks';
 
 /**
@@ -26,8 +25,6 @@ export const Tooltip = ({
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const isControlled = controlledOpen !== undefined;
   const isOpen = isControlled ? controlledOpen : uncontrolledOpen;
-
-  const [placement, setPlacement] = useState<Side>('top');
 
   // Floating UI refs
   const triggerRef = useRef<HTMLElement | null>(null);
@@ -80,8 +77,6 @@ export const Tooltip = ({
       disableHoverableContent: effectiveDisableHover,
       triggerId,
       contentId,
-      placement,
-      setPlacement,
       disabled,
       triggerRef,
       contentRef,
@@ -97,8 +92,6 @@ export const Tooltip = ({
       effectiveDisableHover,
       triggerId,
       contentId,
-      placement,
-      setPlacement,
       disabled,
       triggerRef,
       contentRef,
