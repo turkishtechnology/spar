@@ -388,9 +388,27 @@ describe('Checkbox - Unit Tests', () => {
 
       const hiddenInput = document.querySelector('input[type="checkbox"][name="subscribe"]');
       expect(hiddenInput).toBeInTheDocument();
-      expect(hiddenInput).toHaveStyle({ position: 'absolute' });
       expect(hiddenInput).toHaveAttribute('aria-hidden', 'true');
       expect(hiddenInput).toHaveAttribute('tabIndex', '-1');
+    });
+
+    it('applies visually hidden styles to hidden input', () => {
+      render(<Checkbox name='subscribe' />);
+
+      const hiddenInput = document.querySelector(
+        'input[type="checkbox"][name="subscribe"]',
+      ) as HTMLInputElement;
+
+      // Verify visually hidden styles are applied (clip pattern)
+      expect(hiddenInput).toHaveStyle({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: '1px',
+        width: '1px',
+        overflow: 'hidden',
+        position: 'absolute',
+        whiteSpace: 'nowrap',
+      });
     });
 
     it('syncs hidden input with checkbox state', async () => {
