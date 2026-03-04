@@ -335,7 +335,6 @@ export const LiveCode = ({ code, cssCode }: LiveCodeProps) => {
                       <TooltipContent
                         className='live-code-copy-tooltip'
                         side='bottom'
-                        sideOffset={5}
                         style={{
                           borderColor: isCopied
                             ? 'var(--states-success-sub-base, #A0E6BA)'

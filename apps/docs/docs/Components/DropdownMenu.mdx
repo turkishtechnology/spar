@@ -30,7 +30,7 @@ Accessible dropdown menu component for creating interactive command menus with k
             <path d='M13.2292 7.5001L9.99583 10.7334L6.7625 7.5001C6.4375 7.1751 5.9125 7.1751 5.5875 7.5001C5.2625 7.8251 5.2625 8.3501 5.5875 8.6751L9.4125 12.5001C9.7375 12.8251 10.2625 12.8251 10.5875 12.5001L14.4125 8.6751C14.7375 8.3501 14.7375 7.8251 14.4125 7.5001C14.0875 7.18343 13.5542 7.1751 13.2292 7.5001Z' />
           </svg>
         </DropdownMenu.Trigger>
-        <DropdownMenu.Content className='dropdown-content' align='end' sideOffset={4}>
+        <DropdownMenu.Content className='dropdown-content' align='end'>
           <DropdownMenu.Item className='dropdown-item'>
             <span className='dropdown-item-avatar'></span>
             Alice
@@ -175,7 +175,6 @@ The DropdownMenu component is built as a compound component with multiple parts:
         data-spar-part='content'
         className='dropdown-content'
         align='end'
-        sideOffset={4}
       >
         <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
           <span className='dropdown-item-avatar'></span>
