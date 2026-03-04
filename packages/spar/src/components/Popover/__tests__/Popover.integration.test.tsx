@@ -5,7 +5,7 @@ import { Popover } from '../Popover';
 import { PopoverTrigger } from '../PopoverTrigger';
 import { PopoverContent } from '../PopoverContent';
 import { PopoverArrow } from '../PopoverArrow';
-import { PopoverAnchor } from '../PopoverAnchor';
+
 import { PopoverClose } from '../PopoverClose';
 
 describe('Popover Integration Tests', () => {
@@ -204,42 +204,6 @@ describe('Popover Integration Tests', () => {
       await waitFor(() => {
         expect(screen.queryByRole('heading', { name: 'Feature Help' })).not.toBeInTheDocument();
       });
-    });
-
-    it('works with custom positioning anchor', async () => {
-      const user = userEvent.setup();
-
-      const AnchoredPopover = () => (
-        <div style={{ padding: '100px' }}>
-          <Popover>
-            <PopoverAnchor>
-              <div
-                data-testid='anchor'
-                style={{ width: '100px', height: '50px', background: 'gray' }}
-              >
-                Anchor Element
-              </div>
-            </PopoverAnchor>
-            <PopoverTrigger>Open near anchor</PopoverTrigger>
-            <PopoverContent>
-              <p>This content is positioned relative to the anchor, not the trigger.</p>
-            </PopoverContent>
-          </Popover>
-        </div>
-      );
-
-      render(<AnchoredPopover />);
-
-      await user.click(screen.getByRole('button', { name: 'Open near anchor' }));
-
-      await waitFor(() => {
-        expect(
-          screen.getByText('This content is positioned relative to the anchor, not the trigger.'),
-        ).toBeInTheDocument();
-      });
-
-      // Verify anchor element exists
-      expect(screen.getByTestId('anchor')).toBeInTheDocument();
     });
 
     it('works with portal rendering in custom container', async () => {
@@ -837,33 +801,12 @@ describe('Edge Cases and Uncovered Code Paths', () => {
       expect(contentRefCallback).toHaveBeenCalledWith(expect.any(HTMLDivElement));
     });
 
-    it('handles function refs for PopoverAnchor', () => {
-      const anchorRefCallback = jest.fn();
-
-      render(
-        <Popover>
-          <PopoverAnchor ref={anchorRefCallback}>
-            <div>Anchor with function ref</div>
-          </PopoverAnchor>
-          <PopoverTrigger>Trigger</PopoverTrigger>
-          <PopoverContent>Content</PopoverContent>
-        </Popover>,
-      );
-
-      // Function ref should be called with the element (covers lines 622, 624)
-      expect(anchorRefCallback).toHaveBeenCalledWith(expect.any(HTMLDivElement));
-    });
-
     it('handles function refs with render props pattern', async () => {
       const triggerRefCallback = jest.fn();
       const contentRefCallback = jest.fn();
-      const anchorRefCallback = jest.fn();
 
       render(
         <Popover defaultOpen>
-          <PopoverAnchor ref={anchorRefCallback}>
-            {({ isOpen }) => <span>Custom anchor: {isOpen ? 'open' : 'closed'}</span>}
-          </PopoverAnchor>
           <PopoverTrigger ref={triggerRefCallback}>
             {({ isOpen }) => <span>Custom trigger: {isOpen ? 'open' : 'closed'}</span>}
           </PopoverTrigger>
@@ -876,7 +819,6 @@ describe('Edge Cases and Uncovered Code Paths', () => {
       });
 
       // All function refs should be called correctly
-      expect(anchorRefCallback).toHaveBeenCalledWith(expect.any(HTMLDivElement));
       expect(triggerRefCallback).toHaveBeenCalledWith(expect.any(HTMLButtonElement));
       expect(contentRefCallback).toHaveBeenCalledWith(expect.any(HTMLDivElement));
     });
@@ -938,13 +880,9 @@ describe('Ref Object Handling Edge Cases', () => {
   it('handles ref objects (not functions) for all components', async () => {
     const triggerRef = React.createRef<HTMLButtonElement>();
     const contentRef = React.createRef<HTMLDivElement>();
-    const anchorRef = React.createRef<HTMLDivElement>();
 
     render(
       <Popover defaultOpen>
-        <PopoverAnchor ref={anchorRef}>
-          <div>Anchor with ref object</div>
-        </PopoverAnchor>
         <PopoverTrigger ref={triggerRef}>Trigger with ref object</PopoverTrigger>
         <PopoverContent ref={contentRef}>Content with ref object</PopoverContent>
       </Popover>,
@@ -954,10 +892,9 @@ describe('Ref Object Handling Edge Cases', () => {
       expect(screen.getByText('Content with ref object')).toBeInTheDocument();
     });
 
-    // Ref objects should be populated (covers lines 307, 563, 624)
+    // Ref objects should be populated (covers lines 307, 563)
     expect(triggerRef.current).toBeInstanceOf(HTMLButtonElement);
     expect(contentRef.current).toBeInstanceOf(HTMLDivElement);
-    expect(anchorRef.current).toBeInstanceOf(HTMLDivElement);
   });
 });
 

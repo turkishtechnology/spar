@@ -32,7 +32,6 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 interface AccessibleTooltipProps {
-  asLabel?: boolean;
   defaultOpen?: boolean;
   triggerContent?: string;
   tooltipContent?: string;
@@ -41,7 +40,6 @@ interface AccessibleTooltipProps {
 }
 
 const AccessibleTooltip = ({
-  asLabel = false,
   defaultOpen = false,
   triggerContent = 'Trigger button',
   tooltipContent = 'Helpful tooltip content',
@@ -51,7 +49,7 @@ const AccessibleTooltip = ({
   <TooltipProvider>
     <Tooltip defaultOpen={defaultOpen} disabled={disabled} {...props}>
       <TooltipTrigger>{triggerContent}</TooltipTrigger>
-      <TooltipContent asLabel={asLabel}>
+      <TooltipContent>
         {tooltipContent}
         <TooltipArrow />
       </TooltipContent>
@@ -118,16 +116,6 @@ describe('Tooltip Accessibility', () => {
 
       expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
       expect(trigger).not.toHaveAttribute('aria-labelledby');
-    });
-
-    it('uses aria-labelledby for primary label when asLabel=true', () => {
-      render(<AccessibleTooltip defaultOpen asLabel />);
-
-      const trigger = screen.getByRole('button');
-      const tooltip = screen.getByRole('tooltip');
-
-      // Note: This might need to be aria-describedby based on actual implementation
-      expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
     });
 
     it('generates stable IDs for ARIA relationships', () => {
@@ -310,7 +298,7 @@ describe('Tooltip Accessibility', () => {
         <TooltipProvider>
           <Tooltip defaultOpen>
             <TooltipTrigger aria-label='Settings'>⚙️</TooltipTrigger>
-            <TooltipContent asLabel>Settings menu</TooltipContent>
+            <TooltipContent>Settings menu</TooltipContent>
           </Tooltip>
         </TooltipProvider>,
       );

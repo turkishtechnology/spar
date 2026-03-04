@@ -74,7 +74,6 @@ export const PopoverTrigger = <T extends ElementType = 'button'>({
     ...(as && { as }),
     disabled,
     ref: mergedRef,
-    id: state.triggerId,
     onClick: handleClick,
     onKeyDown: handleKeyDown,
     'aria-expanded': state.isOpen,

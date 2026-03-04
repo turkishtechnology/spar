@@ -136,12 +136,6 @@ export type TooltipTriggerProps<T extends ElementType = 'button'> = PolymorphicP
  */
 export interface TooltipContentOwnProps {
   /**
-   * Whether tooltip provides primary label or auxiliary description
-   * @defaultValue false
-   */
-  asLabel?: boolean;
-
-  /**
    * Preferred placement relative to trigger
    * @defaultValue 'top'
    */
@@ -252,7 +246,6 @@ export interface TooltipContextValue {
   disableHoverableContent: boolean;
   triggerId: string;
   contentId: string;
-  asLabel: boolean;
   placement: Side;
   setPlacement: (placement: Side) => void;
   disabled: boolean;

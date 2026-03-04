@@ -28,7 +28,6 @@ export const Tooltip = ({
   const isOpen = isControlled ? controlledOpen : uncontrolledOpen;
 
   const [placement, setPlacement] = useState<Side>('top');
-  const [asLabel] = useState(false);
 
   // Floating UI refs
   const triggerRef = useRef<HTMLElement | null>(null);
@@ -81,7 +80,6 @@ export const Tooltip = ({
       disableHoverableContent: effectiveDisableHover,
       triggerId,
       contentId,
-      asLabel,
       placement,
       setPlacement,
       disabled,
@@ -99,7 +97,6 @@ export const Tooltip = ({
       effectiveDisableHover,
       triggerId,
       contentId,
-      asLabel,
       placement,
       setPlacement,
       disabled,

@@ -9,7 +9,7 @@
   - User profile cards and action menus  
   - Content previews and detailed information displays
   - Custom dropdowns with complex interactions
-- **Compound Component Structure**: Root container, Trigger, Content, Anchor, Close, and optional Arrow components
+- **Compound Component Structure**: Root container, Trigger, Content, Close, and optional Arrow components
 - **Key Differentiators**: 
   - Modal-like behavior without blocking the entire page
   - Rich content support (forms, buttons, links)
@@ -77,18 +77,6 @@
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic element type to render |
 
-### PopoverAnchor Props
-
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `children` | `ReactNode \| ((state: PopoverAnchorRenderProps) => ReactNode)` | Yes | - | Anchor element content or render function for render props pattern |
-
-### PopoverAnchorRenderProps
-
-| Name | Type | Description |
-|------|------|-------------|
-| `isOpen` | `boolean` | Whether the popover is currently open |
-
 ### PopoverClose Props
 
 | Name | Type | Required | Default | Description |
@@ -106,7 +94,6 @@
 ### Ref Support
 - PopoverTrigger forwards ref to trigger element
 - PopoverContent forwards ref to content container
-- PopoverAnchor forwards ref to anchor element
 - Render props pattern for PopoverTrigger composition
 
 ### Controlled/Uncontrolled
@@ -129,7 +116,6 @@
 | Open | Shift+Tab from first element (when trapped) | Focus last element | No change |
 | Open | Tab from last element (when trapped) | Focus first element | No change |:
 | Open | Click PopoverClose | Close popover, return focus to trigger | aria-expanded="false" |
-| Open | PopoverAnchor element moves/removed | Reposition or close popover | Update position data attributes |
 | Open | Viewport resize | Reposition popover with collision detection | Update `data-side`, `data-align` |
 | Open | Scroll container | Update popover position | Update position CSS variables |
 | Open | Click portal container | No action (event isolated) | No change |
@@ -146,7 +132,6 @@
 - **Trigger element**: `button` role (default) or maintains semantic role with render props
 - **Content element**: `dialog` role for modal popover, no specific role for non-modal
 - **Arrow element**: `presentation` role (purely decorative)
-- **Anchor element**: No specific role (inherits from child or defaults to generic)
 - **Close element**: `button` role (default) or maintains semantic role with render props
 
 ### Keyboard
@@ -210,7 +195,6 @@ interface PopoverState {
   isPositioned: boolean;
   triggerElement: HTMLElement | null;
   contentElement: HTMLElement | null;
-  anchorElement: HTMLElement | null;
 }
 
 // Side and Align are shared types from src/types/index.ts
@@ -265,9 +249,6 @@ interface PopoverContentProps<T extends React.ElementType = 'div'>
   trapFocus?: boolean;
 }
 
-interface PopoverAnchorProps<T extends React.ElementType = 'div'> 
-  extends PolymorphicComponentProps<T> {}
-
 interface PopoverCloseProps<T extends React.ElementType = 'button'> 
   extends PolymorphicComponentProps<T> {
   onClick?: (event: MouseEvent) => void;
@@ -276,7 +257,6 @@ interface PopoverCloseProps<T extends React.ElementType = 'button'>
 // Generic component declarations
 declare const PopoverTrigger: PolymorphicComponent<'button', PopoverTriggerProps>;
 declare const PopoverContent: PolymorphicComponent<'div', PopoverContentProps>;
-declare const PopoverAnchor: PolymorphicComponent<'div', PopoverAnchorProps>;
 declare const PopoverClose: PolymorphicComponent<'button', PopoverCloseProps>;
 
 const usePopover = (props: PopoverRootProps) => {
@@ -331,7 +311,7 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 ### Ref Forwarding Strategy
 - **PopoverTrigger**: forwards ref to trigger element with render props support and generic type safety
 - **PopoverContent**: forwards ref to content container element with polymorphic element support
-- **PopoverAnchor**: forwards ref to anchor element for positioning reference with type inference
+
 - **PopoverArrow**: forwards ref to arrow element for positioning
 - **PopoverClose**: forwards ref to close button element with polymorphic element support
 - **Internal ref system**: Separate refs for positioning calculations and focus management
@@ -399,9 +379,6 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 #### PopoverArrow
 - `data-side`: Matches content side for styling
 
-#### PopoverAnchor
-- `data-state`: `"open" | "closed"`
-
 #### PopoverClose
 - `data-state`: `"open" | "closed"`
 
@@ -417,8 +394,6 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
   - `--popover-content-available-height`: Available space for content
   - `--popover-trigger-width`: Trigger element width for sizing reference
   - `--popover-trigger-height`: Trigger element height for sizing reference
-  - `--popover-anchor-width`: Anchor element width (when using separate anchor)
-  - `--popover-anchor-height`: Anchor element height (when using separate anchor)
 
 ### Animation Hooks
 - `data-state` changes provide CSS transition hooks
@@ -437,7 +412,7 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 - **ARIA attributes**: Correct application of `aria-expanded`, `aria-controls`, `aria-disabled`
 - **Context sharing**: Proper state synchronization between Root, Trigger, and Content
 - **Controlled/uncontrolled modes**: External state control vs internal state management
-- **Element references**: Trigger, content, and anchor element tracking
+- **Element references**: Trigger and content element tracking
 - **Position calculations**: Placement updates and collision detection triggers
 - **Portal behavior**: Content rendering via built-in `createPortal` in PopoverContent
 
@@ -515,7 +490,7 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 ### Implementation Checklist
 
 #### Core Architecture
-- [ ] **Compound component architecture**: Root, Trigger, Content, Arrow, Anchor, Close components (portal is built into Content)
+- [ ] **Compound component architecture**: Root, Trigger, Content, Arrow, Close components (portal is built into Content)
 - [ ] **Context-based state sharing**: Unified state across all components with TypeScript safety
 - [ ] **Ref forwarding strategy**: Proper ref composition with render props pattern support
 - [ ] **Event system**: Comprehensive event handling with cleanup and prevention patterns

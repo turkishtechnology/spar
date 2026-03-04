@@ -32,7 +32,6 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
 
   const generatedId = useId();
   const baseId = providedId ?? generatedId;
-  const triggerId = `${baseId}-trigger`;
   const contentId = `${baseId}-content`;
 
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
@@ -40,7 +39,6 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   const isOpen = isControlled ? controlledOpen : internalOpen;
 
   const arrowRef = useRef<Element | null>(null);
-  const anchorRef = useRef<HTMLElement | null>(null);
 
   // Floating UI setup
   const placement = getPlacement(side, align);
@@ -104,8 +102,6 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
     isPositioned: false,
     triggerElement: null,
     contentElement: null,
-    anchorElement: null,
-    triggerId,
     contentId,
   });
 
@@ -166,7 +162,6 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
     setState,
     triggerRef: refs.reference,
     contentRef: refs.floating,
-    anchorRef,
     arrowRef,
     floatingStyles,
     modal,
