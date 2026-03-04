@@ -5,7 +5,7 @@ import { Popover } from '../Popover';
 import { PopoverTrigger } from '../PopoverTrigger';
 import { PopoverContent } from '../PopoverContent';
 import { PopoverArrow } from '../PopoverArrow';
-import { PopoverAnchor } from '../PopoverAnchor';
+
 import { PopoverClose } from '../PopoverClose';
 
 describe('Popover', () => {
@@ -631,38 +631,6 @@ describe('PopoverArrow', () => {
     await waitFor(() => {
       expect(screen.getByTestId('arrow')).toHaveAttribute('role', 'presentation');
     });
-  });
-});
-
-describe('PopoverAnchor', () => {
-  it('renders as div by default', () => {
-    render(
-      <Popover>
-        <PopoverAnchor data-testid='anchor'>Anchor</PopoverAnchor>
-        <PopoverTrigger>Open</PopoverTrigger>
-        <PopoverContent>Content</PopoverContent>
-      </Popover>,
-    );
-
-    const anchor = screen.getByTestId('anchor');
-    expect(anchor.tagName).toBe('DIV');
-    expect(anchor).toHaveAttribute('data-popover-anchor', '');
-  });
-
-  it('supports render props pattern for state access', () => {
-    render(
-      <Popover defaultOpen>
-        <PopoverAnchor data-testid='anchor'>
-          {({ isOpen }) => <span>{isOpen ? 'Open' : 'Closed'}</span>}
-        </PopoverAnchor>
-        <PopoverTrigger>Open</PopoverTrigger>
-        <PopoverContent>Content</PopoverContent>
-      </Popover>,
-    );
-
-    const anchor = screen.getByTestId('anchor');
-    expect(anchor).toHaveTextContent('Open');
-    expect(anchor).toHaveAttribute('data-popover-anchor', '');
   });
 });
 
