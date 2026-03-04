@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode, RefObject, CSSProperties } from 'react';
+import type { ElementType, ReactNode, RefObject } from 'react';
 import type { Side, Align, PolymorphicProps } from '../../types';
 import type { ButtonOwnProps } from '../Button/types';
 
@@ -84,24 +84,6 @@ export interface PopoverProps {
   disabled?: boolean;
 
   /**
-   * Preferred side for popover positioning
-   * @defaultValue 'bottom'
-   */
-  side?: Side;
-
-  /**
-   * Preferred alignment relative to trigger
-   * @defaultValue 'center'
-   */
-  align?: Align;
-
-  /**
-   * Distance in pixels between trigger and popover
-   * @defaultValue 8
-   */
-  sideOffset?: number;
-
-  /**
    * PopoverTrigger and PopoverContent components
    */
   children?: ReactNode;
@@ -142,35 +124,6 @@ export interface PopoverContentOwnProps {
    * @defaultValue 'center'
    */
   align?: Align;
-
-  /**
-   * Distance from trigger
-   * @defaultValue 8
-   */
-  sideOffset?: number;
-
-  /**
-   * Offset along alignment axis
-   * @defaultValue 0
-   */
-  alignOffset?: number;
-
-  /**
-   * Whether to adjust position to avoid viewport collisions
-   * @defaultValue true
-   */
-  avoidCollisions?: boolean;
-
-  /**
-   * Boundary elements for collision detection
-   */
-  collisionBoundary?: Element | Element[];
-
-  /**
-   * Whether to hide when trigger is occluded
-   * @defaultValue false
-   */
-  hideWhenDetached?: boolean;
 
   /**
    * Portal container element. Content is portaled to document.body by default.
@@ -264,8 +217,6 @@ export interface PopoverState {
   isOpen: boolean;
   triggerRect: DOMRect | null;
   contentRect: DOMRect | null;
-  side: Side;
-  align: Align;
   actualSide: Side;
   actualAlign: Align;
   isPositioned: boolean;
@@ -283,12 +234,8 @@ export interface PopoverContextValue {
   triggerRef: RefObject<HTMLElement | null>;
   contentRef: RefObject<HTMLDivElement | null>;
   arrowRef: RefObject<Element | null>;
-  floatingStyles: CSSProperties;
   modal: boolean;
   disabled: boolean;
-  side: Side;
-  align: Align;
-  sideOffset: number;
   openPopover: () => void;
   closePopover: () => void;
   togglePopover: () => void;

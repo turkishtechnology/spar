@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import type { PopoverProps, PopoverContextValue } from './types';
 import { PopoverContext } from './hooks/usePopoverContext';
 import { usePopover } from './hooks/usePopover';
@@ -15,12 +15,8 @@ export const Popover = ({ children, ...props }: PopoverProps) => {
       triggerRef: popoverState.triggerRef as React.RefObject<HTMLElement | null>,
       contentRef: popoverState.contentRef as React.RefObject<HTMLDivElement | null>,
       arrowRef: popoverState.arrowRef,
-      floatingStyles: popoverState.floatingStyles,
       modal: popoverState.modal,
       disabled: popoverState.disabled,
-      side: popoverState.side,
-      align: popoverState.align,
-      sideOffset: popoverState.sideOffset,
       openPopover: popoverState.openPopover,
       closePopover: popoverState.closePopover,
       togglePopover: popoverState.togglePopover,
@@ -31,12 +27,8 @@ export const Popover = ({ children, ...props }: PopoverProps) => {
       popoverState.triggerRef,
       popoverState.contentRef,
       popoverState.arrowRef,
-      popoverState.floatingStyles,
       popoverState.modal,
       popoverState.disabled,
-      popoverState.side,
-      popoverState.align,
-      popoverState.sideOffset,
       popoverState.openPopover,
       popoverState.closePopover,
       popoverState.togglePopover,
