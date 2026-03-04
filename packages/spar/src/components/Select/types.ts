@@ -176,54 +176,6 @@ export interface SelectContentOwnProps {
   align?: Align;
 
   /**
-   * Distance from trigger in pixels
-   * @defaultValue 8
-   */
-  sideOffset?: number;
-
-  /**
-   * Offset along alignment axis in pixels
-   * @defaultValue 0
-   */
-  alignOffset?: number;
-
-  /**
-   * Whether to adjust position to avoid viewport collisions
-   * @defaultValue true
-   */
-  avoidCollisions?: boolean;
-
-  /**
-   * Padding from boundary edges (in pixels)
-   * @defaultValue 8
-   */
-  collisionPadding?: number;
-
-  /**
-   * Whether to flip to opposite side when no space
-   * @defaultValue true
-   */
-  flip?: boolean;
-
-  /**
-   * Whether to shift the content to stay in view
-   * @defaultValue true
-   */
-  shift?: boolean;
-
-  /**
-   * Whether to constrain size to available space
-   * @defaultValue true
-   */
-  size?: boolean;
-
-  /**
-   * Whether to hide when trigger is fully scrolled out of view
-   * @defaultValue false
-   */
-  hide?: boolean;
-
-  /**
    * Portal container element. Content is portaled to document.body by default.
    * @defaultValue document.body
    */
