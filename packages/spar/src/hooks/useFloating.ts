@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import {
   useFloating as useFloatingUI,
+  autoUpdate,
   arrow,
   offset,
   flip,
@@ -111,6 +112,7 @@ export const useFloating = (options: UseFloatingOptions = {}): UseFloatingReturn
   const floating = useFloatingUI({
     placement,
     middleware,
+    whileElementsMounted: autoUpdate,
   });
 
   return {
