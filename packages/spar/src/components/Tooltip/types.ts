@@ -199,8 +199,6 @@ export interface TooltipContextValue {
   disableHoverableContent: boolean;
   triggerId: string;
   contentId: string;
-  placement: Side;
-  setPlacement: (placement: Side) => void;
   disabled: boolean;
   // Floating UI refs
   triggerRef: RefObject<HTMLElement | null>;
