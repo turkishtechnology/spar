@@ -1,4 +1,4 @@
-import { useId, useState, useRef, useEffect, ElementType } from 'react';
+import { useId, useState, useRef, useEffect, useMemo, ElementType } from 'react';
 import { useMergedRef, useAutoFocus } from '@/hooks';
 import { visuallyHidden } from '@/utils';
 import type { CheckboxProps, CheckboxRenderProps } from './types';
@@ -168,6 +168,35 @@ export const Checkbox = <T extends ElementType = 'span'>({
     isPressed,
   };
 
+  // ARIA attributes - consistent with Button component pattern
+  const ariaAttributes = useMemo(() => {
+    const attrs: Record<string, boolean | string> = {
+      role: 'checkbox',
+      'aria-checked': checked === 'indeterminate' ? 'mixed' : checked,
+    };
+
+    // Disabled state - only add aria-disabled for non-native button elements
+    // Native buttons already communicate disabled state via the disabled attribute
+    if (disabled && Component !== 'button') {
+      attrs['aria-disabled'] = true;
+    }
+
+    // Read-only state
+    if (readOnly) {
+      attrs['aria-readonly'] = true;
+    }
+
+    // Required state
+    if (required) {
+      attrs['aria-required'] = true;
+    }
+
+    // Invalid state - placeholder for validation logic
+    // attrs['aria-invalid'] = false; // Uncomment when validation is implemented
+
+    return attrs;
+  }, [checked, disabled, readOnly, required, Component]);
+
   // Build props for the element
   const isNativeButton = Component === 'button';
   const elementProps: Record<string, unknown> = {
@@ -184,29 +213,21 @@ export const Checkbox = <T extends ElementType = 'span'>({
     onMouseDown: handleMouseDown,
     onMouseUp: handleMouseUp,
     ...dataAttributes,
+    ...ariaAttributes,
     ...restProps,
     tabIndex: disabled ? -1 : tabIndex,
   };
+
+  // Add button-specific props when rendering as button
   if (isNativeButton) {
-    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = disabled;
     (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).type = 'button';
-    elementProps['role'] = 'checkbox';
-    elementProps['aria-checked'] = checked === 'indeterminate' ? 'mixed' : checked;
-    elementProps['aria-readonly'] = readOnly || undefined;
-    elementProps['aria-invalid'] = undefined;
-    elementProps['aria-required'] = required || undefined;
-    // Remove aria-disabled for native button
+    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = disabled;
+    // Remove aria-disabled if present in restProps (native button uses disabled attribute)
     if ('aria-disabled' in elementProps) {
       delete elementProps['aria-disabled'];
     }
   } else {
-    elementProps['role'] = 'checkbox';
-    elementProps['aria-checked'] = checked === 'indeterminate' ? 'mixed' : checked;
-    elementProps['aria-disabled'] = disabled || undefined;
-    elementProps['aria-readonly'] = readOnly || undefined;
-    elementProps['aria-invalid'] = undefined;
-    elementProps['aria-required'] = required || undefined;
-    // Remove native disabled/type if present
+    // Remove native disabled and type attributes if present in restProps
     if ('disabled' in elementProps) {
       delete elementProps['disabled'];
     }
