@@ -153,7 +153,6 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
   const renderProps: TooltipTriggerRenderProps = {
     isOpen: context.isOpen,
     disabled: context.disabled,
-    placement: context.placement,
     show: () => showTooltip(true),
     hide: () => hideTooltip(true),
   };
@@ -165,7 +164,6 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
     disabled: context.disabled,
     'aria-describedby': context.isOpen && !context.disabled ? context.contentId : undefined,
     'data-state': context.isOpen ? 'open' : 'closed',
-    'data-placement': context.placement,
     onPointerEnter: context.disabled ? undefined : handlePointerEnter,
     onPointerLeave: context.disabled ? undefined : handlePointerLeave,
     onFocus: context.disabled ? undefined : handleFocus,
