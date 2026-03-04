@@ -1,21 +1,8 @@
-import { useState, useRef, useCallback, useEffect, useId, useMemo } from 'react';
-import {
-  useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  arrow,
-  size,
-  hide,
-  type Strategy,
-} from '@floating-ui/react-dom';
+import { useState, useRef, useCallback, useEffect, useId } from 'react';
 import type { PopoverProps, PopoverState } from '../types';
-import type { Side, Align } from '../../../types';
-import { getPlacement } from '../utils';
 
 /**
- * Custom hook for popover state management with Floating UI
+ * Custom hook for popover state management
  */
 export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   const {
@@ -25,9 +12,6 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
     defaultOpen = false,
     modal = false,
     disabled = false,
-    side = 'bottom',
-    align = 'center',
-    sideOffset = 8,
   } = props;
 
   const generatedId = useId();
@@ -39,42 +23,8 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   const isOpen = isControlled ? controlledOpen : internalOpen;
 
   const arrowRef = useRef<Element | null>(null);
-
-  // Floating UI setup
-  const placement = getPlacement(side, align);
-  const {
-    x,
-    y,
-    strategy,
-    refs,
-    update,
-    placement: actualPlacement,
-  } = useFloating({
-    placement,
-    open: isOpen,
-    middleware: [
-      offset(sideOffset),
-      flip({
-        fallbackAxisSideDirection: 'start',
-      }),
-      shift({
-        padding: 8,
-      }),
-      arrow({
-        element: arrowRef,
-      }),
-      size({
-        apply({ availableWidth, availableHeight, elements }) {
-          Object.assign(elements.floating.style, {
-            maxWidth: `${availableWidth}px`,
-            maxHeight: `${availableHeight}px`,
-          });
-        },
-      }),
-      hide(),
-    ],
-    strategy: 'absolute' as Strategy,
-  });
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   const [mounted, setMounted] = useState(false);
 
@@ -83,22 +33,12 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
     setMounted(true);
   }, []);
 
-  // Auto-update position
-  useEffect(() => {
-    if (!isOpen || !refs.reference.current || !refs.floating.current) return;
-
-    const cleanup = autoUpdate(refs.reference.current, refs.floating.current, update);
-    return cleanup;
-  }, [isOpen, refs.reference, refs.floating, update]);
-
   const [state, setState] = useState<PopoverState>({
     isOpen,
     triggerRect: null,
     contentRect: null,
-    side,
-    align,
-    actualSide: side,
-    actualAlign: align,
+    actualSide: 'bottom',
+    actualAlign: 'center',
     isPositioned: false,
     triggerElement: null,
     contentElement: null,
@@ -109,18 +49,6 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   useEffect(() => {
     setState((prev) => ({ ...prev, isOpen }));
   }, [isOpen]);
-
-  // Update actual placement in state
-  useEffect(() => {
-    if (actualPlacement) {
-      const [actualSide, actualAlign] = actualPlacement.split('-') as [Side, Align | undefined];
-      setState((prev) => ({
-        ...prev,
-        actualSide,
-        actualAlign: actualAlign || 'center',
-      }));
-    }
-  }, [actualPlacement]);
 
   const openPopover = useCallback(() => {
     const newOpen = true;
@@ -148,27 +76,14 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
     }
   }, [isOpen, openPopover, closePopover]);
 
-  const floatingStyles = useMemo(
-    () => ({
-      position: strategy,
-      top: y ?? 0,
-      left: x ?? 0,
-    }),
-    [strategy, y, x],
-  );
-
   return {
     state,
     setState,
-    triggerRef: refs.reference,
-    contentRef: refs.floating,
+    triggerRef,
+    contentRef,
     arrowRef,
-    floatingStyles,
     modal,
     disabled,
-    side,
-    align,
-    sideOffset,
     openPopover,
     closePopover,
     togglePopover,

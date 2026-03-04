@@ -28,9 +28,6 @@
 | `defaultOpen` | `boolean` | No | `false` | Initial open state for uncontrolled mode |
 | `modal` | `boolean` | No | `false` | Whether popover should behave modally (focus trap + backdrop) |
 | `disabled` | `boolean` | No | `false` | Disables all popover triggers (prevents opening) |
-| `side` | `'top' \| 'bottom' \| 'left' \| 'right'` | No | `'bottom'` | Preferred side for popover positioning |
-| `align` | `'start' \| 'center' \| 'end'` | No | `'center'` | Preferred alignment relative to trigger |
-| `sideOffset` | `number` | No | `8` | Distance in pixels between trigger and popover |
 | `children` | `React.ReactNode` | Yes | - | PopoverTrigger and PopoverContent components |
 
 ### PopoverTrigger Props
@@ -56,11 +53,6 @@
 |------|------|----------|---------|-------------|
 | `side` | `'top' \| 'bottom' \| 'left' \| 'right'` | No | `'bottom'` | Side of trigger to position against |
 | `align` | `'start' \| 'center' \| 'end'` | No | `'center'` | Alignment relative to trigger |
-| `sideOffset` | `number` | No | `8` | Distance from trigger |
-| `alignOffset` | `number` | No | `0` | Offset along alignment axis |
-| `avoidCollisions` | `boolean` | No | `true` | Whether to adjust position to avoid viewport collisions |
-| `collisionBoundary` | `Element \| Element[]` | No | - | Boundary elements for collision detection |
-| `hideWhenDetached` | `boolean` | No | `false` | Whether to hide when trigger is occluded |
 | `onOpenAutoFocus` | `(event: Event) => void` | No | - | Called when popover opens and focus moves inside. Call `event.preventDefault()` to prevent default focus behavior |
 | `onCloseAutoFocus` | `(event: Event) => void` | No | - | Called when popover closes and focus returns to trigger. Call `event.preventDefault()` to prevent default focus behavior |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Called when escape is pressed. Call `event.preventDefault()` to prevent closing |
@@ -116,14 +108,8 @@
 | Open | Shift+Tab from first element (when trapped) | Focus last element | No change |
 | Open | Tab from last element (when trapped) | Focus first element | No change |:
 | Open | Click PopoverClose | Close popover, return focus to trigger | aria-expanded="false" |
-| Open | Viewport resize | Reposition popover with collision detection | Update `data-side`, `data-align` |
-| Open | Scroll container | Update popover position | Update position CSS variables |
-| Open | Click portal container | No action (event isolated) | No change |
-| Open | PopoverArrow positioning | Arrow follows content placement | Update `data-side` on arrow |
 | Modal | Focus outside attempt | Block focus change, return to content | No change |
 | Disabled | Any trigger interaction | No action | No attributes applied |
-| Error | Invalid configuration | Log error, graceful degradation | Add `data-error` attribute |
-| Loading | Async content loading | Show loading state | Add `data-loading` attribute |
 
 
 ## 4. Accessibility
@@ -235,11 +221,6 @@ interface PopoverContentProps<T extends React.ElementType = 'div'>
   extends PolymorphicComponentProps<T> {
   side?: Side;
   align?: Align;
-  sideOffset?: number;
-  alignOffset?: number;
-  avoidCollisions?: boolean;
-  collisionBoundary?: Element | Element[];
-  hideWhenDetached?: boolean;
   onOpenAutoFocus?: (event: Event) => void;
   onCloseAutoFocus?: (event: Event) => void;
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
@@ -261,11 +242,9 @@ declare const PopoverClose: PolymorphicComponent<'button', PopoverCloseProps>;
 
 const usePopover = (props: PopoverRootProps) => {
   // Controlled/uncontrolled state management
-  // Position calculation and collision detection
   // Focus management utilities
   // Event coordination between trigger and content
-  // Viewport resize and scroll listeners
-   // Built-in portal rendering (via createPortal in PopoverContent)
+  // Built-in portal rendering (via createPortal in PopoverContent)
 
 }
 
@@ -372,9 +351,6 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 - `data-align`: `"start" | "center" | "end"` (actual alignment)
 - `data-modal`: Present when popover behaves modally
 - `data-focus-trapped`: Present when focus is trapped within content
-- `data-hidden`: Present when hideWhenDetached=true and trigger is occluded
-- `data-error`: Present when configuration error occurs
-- `data-loading`: Present during async content loading
 
 #### PopoverArrow
 - `data-side`: Matches content side for styling
@@ -388,12 +364,8 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 
 ### Positioning Data
 - CSS custom properties for dynamic positioning:
-  - `--popover-content-transform-origin`: Transform origin based on placement
-  - `--popover-arrow-offset`: Arrow position offset
-  - `--popover-content-available-width`: Available space for content
-  - `--popover-content-available-height`: Available space for content
-  - `--popover-trigger-width`: Trigger element width for sizing reference
-  - `--popover-trigger-height`: Trigger element height for sizing reference
+  - `--popover-arrow-x`: Arrow x-axis position
+  - `--popover-arrow-y`: Arrow y-axis position
 
 ### Animation Hooks
 - `data-state` changes provide CSS transition hooks
@@ -497,11 +469,8 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 - [ ] **Hook architecture**: usePopover, usePopoverContext, usePopoverTrigger, usePopoverContent
 
 #### Positioning & Layout
-- [ ] **Comprehensive positioning system**: 12 placement options with collision detection
-- [ ] **Collision boundary support**: Custom boundary elements and viewport edge detection
-- [ ] **Dynamic repositioning**: Scroll and resize listeners with debounced updates
 - [ ] **Built-in portal rendering**: Proper z-index and positioning isolation (via `createPortal` in PopoverContent)
-- [ ] **CSS custom properties**: Transform origin, positioning variables, sizing references
+- [ ] **CSS custom properties**: Arrow positioning variables
 
 #### Accessibility & UX
 - [ ] **Advanced focus management**: Optional focus trapping and restoration with escape routes
@@ -536,19 +505,13 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 #### Testing & Quality
 - [ ] **jest-axe compliance**: Zero accessibility violations across all component combinations
 - [ ] **Unit test coverage**: State management, event handling, ARIA attributes, context sharing
-- [ ] **Integration testing**: Complex content scenarios, positioning edge cases, multi-popover interactions
+- [ ] **Integration testing**: Complex content scenarios, multi-popover interactions
 - [ ] **Accessibility testing**: Focus management, keyboard navigation, screen reader announcements
 - [ ] **Cross-browser testing**: Focus behavior, portal rendering, event handling across browsers
 - [ ] **Real device testing**: Touch interactions, virtual keyboards, screen reader validation
-- [ ] **Performance testing**: Large content rendering, rapid open/close cycles, memory leak detection
 
 #### Production Readiness
 - [ ] **Error handling**: Graceful degradation and fallback behaviors
 - [ ] **Edge case coverage**: Portal container unavailable, dynamic content changes, nested scenarios
 - [ ] **Documentation**: Complete API documentation with usage examples
 - [ ] **Migration guides**: Clear upgrade paths from existing solutions
-- [ ] **Performance benchmarks**: Baseline metrics for positioning calculations and re-renders
-- [ ] Positioning calculation: <16ms for complex layouts
-- [ ] Re-render optimization: <100 unnecessary renders per 1000 operations
-- [ ] Bundle size: Core functionality <5KB gzipped
-- [ ] Memory usage: <1MB for 100 concurrent popovers

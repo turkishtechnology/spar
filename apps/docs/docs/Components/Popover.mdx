@@ -310,7 +310,7 @@ Popover with specific side and alignment preferences:
 ```tsx
 export function PositionedPopover() {
   return (
-    <Popover.Root side='top' align='start' sideOffset={16}>
+    <Popover.Root side='top' align='start'>
       <Popover.Trigger>Top-Start Popover</Popover.Trigger>
       <Popover.Content>
         <p>Positioned at top-start with 16px offset</p>
@@ -511,11 +511,6 @@ Floating panel container that holds the popover content.
 | ----------------------- | --------------------------------------------------------- | --------------- | ------------------------------------------------------- |
 | `side?`                 | `"top" \| "bottom" \| "left" \| "right"`                  | `"bottom"`      | Side of trigger to position against                     |
 | `align?`                | `"start" \| "center" \| "end"`                            | `"center"`      | Alignment relative to trigger                           |
-| `sideOffset?`           | `number`                                                  | `8`             | Distance from trigger in pixels                         |
-| `alignOffset?`          | `number`                                                  | `0`             | Offset along alignment axis                             |
-| `avoidCollisions?`      | `boolean`                                                 | `true`          | Whether to adjust position to avoid viewport collisions |
-| `collisionBoundary?`    | `Element \| Element[]`                                    | `undefined`     | Boundary elements for collision detection               |
-| `hideWhenDetached?`     | `boolean`                                                 | `false`         | Whether to hide when trigger is occluded                |
 | `onOpenAutoFocus?`      | `(event: Event) => void`                                  | `undefined`     | Called when popover opens and focus moves inside        |
 | `onCloseAutoFocus?`     | `(event: Event) => void`                                  | `undefined`     | Called when popover closes and focus returns to trigger |
 | `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`                    | `undefined`     | Called when escape is pressed                           |
