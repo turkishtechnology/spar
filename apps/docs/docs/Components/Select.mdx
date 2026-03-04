@@ -482,7 +482,6 @@ Use Floating UI's powerful positioning features for advanced placement control.
 ```tsx
 function AdvancedPositioningSelect() {
   const [value, setValue] = React.useState('');
-  const arrowRef = React.useRef<SVGSVGElement>(null);
 
   return (
     <Select.Root value={value} onValueChange={setValue}>
@@ -498,9 +497,8 @@ function AdvancedPositioningSelect() {
         collisionPadding={8}
         flip={true}
         size={true}
-        arrowRef={arrowRef}
       >
-        <Select.Arrow ref={arrowRef} />
+        <Select.Arrow />
         <Select.Viewport>
           <Select.Item value='option1'>
             <Select.ItemText>Option 1</Select.ItemText>
@@ -682,7 +680,6 @@ The dropdown container that appears when select is open. Uses Floating UI for in
 | `flip?`             | `boolean`                                       | `true`           | Whether to flip to opposite side when no space                                                                                                                                                                             |
 | `hide?`             | `boolean`                                       | `false`          | Whether to hide when trigger is fully scrolled out of view                                                                                                                                                                 |
 | `size?`             | `boolean`                                       | `true`           | Whether to constrain size to available space                                                                                                                                                                               |
-| `arrowRef?`         | `React.RefObject<HTMLElement \| SVGSVGElement>` | `undefined`      | Arrow element ref for arrow positioning                                                                                                                                                                                    |
 | `as?`               | `React.ElementType`                             | `'div'`          | Polymorphic component type                                                                                                                                                                                                 |
 | `ref?`              | `React.RefObject`                               | `undefined`      | Forward ref support                                                                                                                                                                                                        |
 | `children`          | `React.ReactNode`                               | -                | Content children                                                                                                                                                                                                           |
@@ -713,7 +710,7 @@ Select.Content uses Floating UI for advanced positioning. The component automati
 - Updates position automatically on scroll, resize, and layout changes
 - Matches trigger width as minimum width
 
-For arrow positioning, pass an `arrowRef` to both `Select.Content` and `Select.Arrow` components.
+For arrow positioning, render `<Select.Arrow />` inside `<Select.Content>`. The arrow ref is automatically managed through context.
 
 ### Select.Viewport
 
@@ -860,17 +857,16 @@ No specific events.
 
 ### Select.Arrow
 
-Optional arrow element pointing to the trigger. Automatically positioned by Floating UI when used with `arrowRef`.
+Optional decorative arrow element pointing to the trigger. Headless: renders a plain element with no visual opinions — user provides all styling. Arrow ref is automatically managed via context.
 
 **Props**
 
-| Name        | Type                             | Default     | Description                                          |
-| ----------- | -------------------------------- | ----------- | ---------------------------------------------------- |
-| `width?`    | `number`                         | `10`        | Arrow width in pixels                                |
-| `height?`   | `number`                         | `5`         | Arrow height in pixels                               |
-| `ref?`      | `React.RefObject<SVGSVGElement>` | `undefined` | Forward ref support (required for arrow positioning) |
-| `as?`       | `React.ElementType`              | `'svg'`     | Polymorphic component type                           |
-| `children?` | `React.ReactNode`                | `undefined` | Optional children (custom arrow shape)               |
+| Name         | Type                  | Default     | Description                        |
+| ------------ | --------------------- | ----------- | ---------------------------------------------------- |
+| `as?`        | `React.ElementType`   | `'div'`     | Polymorphic element type to render                   |
+| `ref?`       | `React.Ref<Element>`  | `undefined` | Forward ref support                                  |
+| `className?` | `string`              | `undefined` | CSS class names for styling                          |
+| `style?`     | `React.CSSProperties` | `undefined` | Custom styles for arrow                              |
 
 **Events**
 
@@ -884,13 +880,7 @@ No specific events.
 
 **Arrow Positioning**
 
-To enable automatic arrow positioning with Floating UI:
-
-1. Create a ref for the arrow: `const arrowRef = React.useRef<SVGSVGElement>(null)`
-2. Pass the ref to Select.Arrow: `<Select.Arrow ref={arrowRef} />`
-3. Pass the same ref to Select.Content: `<Select.Content arrowRef={arrowRef}>`
-
-The arrow will automatically position itself to point at the trigger, accounting for the content's placement.
+The arrow ref is automatically managed through context. Simply render `<Select.Arrow />` inside `<Select.Content>` and the arrow middleware will handle positioning.
 
 ## Keyboard Interactions
 

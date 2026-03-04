@@ -330,7 +330,7 @@ export function PopoverWithArrow() {
     <Popover.Root>
       <Popover.Trigger>Show Popover</Popover.Trigger>
       <Popover.Content>
-        <Popover.Arrow width={12} height={6} />
+        <Popover.Arrow />
         <p>Content with arrow</p>
       </Popover.Content>
     </Popover.Root>
@@ -553,17 +553,16 @@ Floating panel container that holds the popover content.
 
 ### Popover.Arrow
 
-Optional decorative arrow element that points to the trigger.
+Optional decorative arrow element that points to the trigger. Headless: renders a plain element with no visual opinions — user provides all styling.
 
 **Props**
 
-| Name      | Type                        | Default     | Description              |
-| --------- | --------------------------- | ----------- | ------------------------ |
-| `width?`  | `number`                    | `10`        | Arrow width in pixels    |
-| `height?` | `number`                    | `5`         | Arrow height in pixels   |
-| `offset?` | `number`                    | `0`         | Offset along the edge    |
-| `style?`  | `React.CSSProperties`       | `undefined` | Custom styles for arrow  |
-| `ref?`    | `React.Ref<HTMLDivElement>` | `undefined` | Ref to the arrow element |
+| Name         | Type                  | Default     | Description                        |
+| ------------ | --------------------- | ----------- | ---------------------------------- |
+| `as?`        | `React.ElementType`   | `'div'`     | Polymorphic element type to render |
+| `ref?`       | `React.Ref<Element>`  | `undefined` | Forward ref support                |
+| `className?` | `string`              | `undefined` | CSS class names for styling        |
+| `style?`     | `React.CSSProperties` | `undefined` | Custom styles for arrow            |
 
 **Events**
 

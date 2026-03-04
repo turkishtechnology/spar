@@ -25,6 +25,7 @@ export const DropdownMenu = ({
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isOpen = isControlled ? Boolean(open) : internalOpen;
   const triggerRef = useRef<HTMLElement | null>(null);
+  const arrowRef = useRef<Element | null>(null);
   const generatedId = useId();
   const baseId = providedId ?? generatedId;
   const triggerId = `${baseId}-trigger`;
@@ -76,6 +77,7 @@ export const DropdownMenu = ({
       focusStrategy,
       setFocusStrategy,
       triggerRef,
+      arrowRef,
       closeMenu,
     }),
     [
@@ -90,6 +92,7 @@ export const DropdownMenu = ({
       focusStrategy,
       setFocusStrategy,
       triggerRef,
+      arrowRef,
       closeMenu,
     ],
   );

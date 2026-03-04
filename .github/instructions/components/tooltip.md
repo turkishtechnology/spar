@@ -82,15 +82,13 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `width` | `number` | No | `10` | Arrow width in pixels |
-| `height` | `number` | No | `5` | Arrow height in pixels |
-| `as` | `ElementType` | No | `'svg'` | Element type for arrow |
+| `as` | `ElementType` | No | `'div'` | Polymorphic element type to render |
 
 ### Ref Support
 
 - Forwards ref to trigger element
 - Content component supports polymorphic `as` prop for semantic flexibility
-- Arrow component supports polymorphic `as` prop (defaults to `'svg'`)
+- Arrow component supports polymorphic `as` prop (defaults to `'div'`)
 
 ### Controlled/Uncontrolled
 
