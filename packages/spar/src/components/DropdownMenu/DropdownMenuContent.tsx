@@ -46,6 +46,8 @@ const getPlacement = (side: Side, align: Align): Placement => {
   return 'bottom';
 };
 
+const normalizeTypeaheadValue = (value: string) => value.trim().toLocaleLowerCase();
+
 /**
  * Floating content panel for the dropdown menu.
  * Handles positioning, keyboard navigation, focus management, and outside interaction dismissal.
@@ -72,13 +74,11 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
   const menu = useDropdownMenuContext();
   const contentRef = useRef<HTMLElement | null>(null);
 
-  // SSR safety - only render portal after mount
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Configure Floating UI middleware
   const middleware: Middleware[] = useMemo(() => {
     const result: Middleware[] = [offset({ mainAxis: sideOffset, alignmentAxis: alignOffset })];
 
@@ -107,24 +107,20 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     return result;
   }, [sideOffset, alignOffset, avoidCollisions, collisionBoundary, collisionPadding]);
 
-  // Floating UI setup
   const { x, y, strategy, refs, placement } = useFloating({
     placement: getPlacement(side, align),
     middleware,
     whileElementsMounted: autoUpdate,
   });
 
-  // Set trigger ref from context
   useLayoutEffect(() => {
     if (menu.triggerRef.current) {
       refs.setReference(menu.triggerRef.current);
     }
   }, [menu.triggerRef, refs]);
 
-  // Merge internal contentRef with external ref
   const mergedRef = useMergedRef(contentRef, ref);
 
-  // Wrap mergedRef to also update floating ref
   const floatingRef = useCallback(
     (node: HTMLElement | null) => {
       mergedRef(node);
@@ -135,10 +131,12 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     [mergedRef, refs],
   );
 
+  // --- Item collection ---
   const [items, setItems] = useState<DropdownMenuCollectionItem[]>([]);
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
   const typeaheadRef = useRef('');
   const typeaheadTimeoutId = useRef<number | null>(null);
+  const hadHighlightRef = useRef(false);
 
   const registerItem = useCallback((item: DropdownMenuCollectionItem) => {
     setItems((previous) => {
@@ -148,12 +146,8 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
         const bNode = b.ref.current;
         if (aNode && bNode) {
           const position = aNode.compareDocumentPosition(bNode);
-          if (position & Node.DOCUMENT_POSITION_FOLLOWING) {
-            return -1;
-          }
-          if (position & Node.DOCUMENT_POSITION_PRECEDING) {
-            return 1;
-          }
+          if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
+          if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1;
         }
         return 0;
       });
@@ -165,12 +159,9 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     setItems((previous) => previous.filter((item) => item.id !== id));
   }, []);
 
-  const isItemHighlighted = useCallback(
-    (id: string) => {
-      return highlightedId === id;
-    },
-    [highlightedId],
-  );
+  // --- Highlight ---
+
+  const isItemHighlighted = useCallback((id: string) => highlightedId === id, [highlightedId]);
 
   const highlightItem = useCallback((id: string | null) => {
     setHighlightedId(id);
@@ -208,9 +199,7 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
         setHighlightedId(candidate.id);
         return;
       }
-      if (!loop && index === items.length - 1) {
-        return;
-      }
+      if (!loop && index === items.length - 1) return;
     }
   }, [items, highlightedId, loop]);
 
@@ -232,11 +221,11 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
         setHighlightedId(candidate.id);
         return;
       }
-      if (!loop && index === 0) {
-        return;
-      }
+      if (!loop && index === 0) return;
     }
   }, [items, highlightedId, loop]);
+
+  // --- Typeahead ---
 
   const resetTypeahead = useCallback(() => {
     typeaheadRef.current = '';
@@ -248,48 +237,41 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
 
   const performTypeahead = useCallback(
     (event: ReactKeyboardEvent<HTMLElement>) => {
-      if (!isCharacterKey(event)) {
-        return false;
-      }
+      if (!isCharacterKey(event)) return false;
 
-      const search = (typeaheadRef.current + event.key.toLowerCase()).trim();
-      if (!search) {
-        return false;
-      }
+      const key = normalizeTypeaheadValue(event.key);
+      if (!key) return false;
 
-      const enabledItems = items.filter((item) => !item.disabled);
-      if (!enabledItems.length) {
-        return false;
-      }
+      const nextSearch = `${typeaheadRef.current}${key}`;
+      const isRepeatedKey =
+        nextSearch.length > 1 && nextSearch.split('').every((char) => char === nextSearch[0]);
+      const search = isRepeatedKey ? key : nextSearch;
+      if (!search) return false;
+
+      const enabledItems = items
+        .filter((item) => !item.disabled)
+        .map((item) => ({ item, value: normalizeTypeaheadValue(item.textValue) }))
+        .filter((entry) => entry.value.length > 0);
+      if (!enabledItems.length) return false;
 
       const currentIndex = highlightedId
-        ? enabledItems.findIndex((item) => item.id === highlightedId)
+        ? enabledItems.findIndex((entry) => entry.item.id === highlightedId)
         : -1;
 
       const findMatch = (startIndex: number) => {
-        for (let offset = 1; offset <= enabledItems.length; offset += 1) {
-          const index = (startIndex + offset) % enabledItems.length;
+        for (let step = 1; step <= enabledItems.length; step += 1) {
+          const index = (startIndex + step) % enabledItems.length;
           const candidate = enabledItems[index];
-          if (!candidate) {
-            continue;
-          }
-          const value = candidate.textValue.toLowerCase();
-          if (value.startsWith(search)) {
-            return candidate;
-          }
+          if (candidate?.value.startsWith(search)) return candidate.item;
         }
         return null;
       };
 
       const match = findMatch(currentIndex);
-      if (match) {
-        setHighlightedId(match.id);
-      }
+      if (match) setHighlightedId(match.id);
 
       typeaheadRef.current = search;
-      if (typeaheadTimeoutId.current !== null) {
-        window.clearTimeout(typeaheadTimeoutId.current);
-      }
+      if (typeaheadTimeoutId.current !== null) window.clearTimeout(typeaheadTimeoutId.current);
       typeaheadTimeoutId.current = window.setTimeout(resetTypeahead, TYPEAHEAD_TIMEOUT);
 
       return true;
@@ -297,6 +279,22 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     [items, highlightedId, resetTypeahead],
   );
 
+  // --- Activation ---
+
+  const handleItemActivation = useCallback(() => {
+    if (!highlightedId) return false;
+
+    const currentItem = items.find((item) => item.id === highlightedId);
+    const element = currentItem?.ref.current;
+    if (!currentItem || currentItem.disabled || !element) return false;
+
+    element.click();
+    return true;
+  }, [highlightedId, items]);
+
+  // --- Focus strategy ---
+  // highlightFirst/Last and setFocusStrategy('none') must stay in the same synchronous
+  // layout effect — splitting them causes re-trigger loops during item registration.
   useLayoutEffect(() => {
     if (!menu.open) {
       setHighlightedId(null);
@@ -310,22 +308,31 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
       highlightLast();
       menu.setFocusStrategy('none');
     }
-    // If already 'none' do nothing (prevents redundant state updates each render)
   }, [menu.open, menu.focusStrategy, highlightFirst, highlightLast, resetTypeahead]);
 
   useEffect(() => {
     setItems((previous) => previous.filter((item) => item.ref.current));
   }, [menu.open]);
 
+  // --- Focus sync ---
   useEffect(() => {
-    if (!menu.open || !highlightedId) {
+    if (!menu.open) {
+      hadHighlightRef.current = false;
       return;
     }
 
-    const currentItem = items.find((item) => item.id === highlightedId);
-    const element = currentItem?.ref.current;
-    if (element && element !== element.ownerDocument.activeElement) {
-      element.focus({ preventScroll: true });
+    if (highlightedId) {
+      hadHighlightRef.current = true;
+      const currentItem = items.find((item) => item.id === highlightedId);
+      const element = currentItem?.ref.current;
+      if (element && element !== element.ownerDocument.activeElement) {
+        element.focus({ preventScroll: true });
+      }
+    } else if (hadHighlightRef.current) {
+      const contentNode = contentRef.current;
+      if (contentNode && !contentNode.contains(contentNode.ownerDocument.activeElement)) {
+        contentNode.focus({ preventScroll: true });
+      }
     }
   }, [menu.open, highlightedId, items]);
 
@@ -338,7 +345,7 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     [],
   );
 
-  // Handle outside interactions
+  // --- Outside interaction ---
   useInteractOutside([contentRef, menu.triggerRef], {
     enabled: menu.open,
     includeFocus: true,
@@ -357,12 +364,12 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     },
   });
 
-  const handleKeyDownInternal = useCallback(
+  // --- Keyboard ---
+
+  const handleKeyDown = useCallback(
     (event: ReactKeyboardEvent<HTMLDivElement>) => {
       onKeyDown?.(event);
-      if (event.defaultPrevented) {
-        return;
-      }
+      if (event.defaultPrevented) return;
 
       if (performTypeahead(event)) {
         event.preventDefault();
@@ -370,6 +377,13 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
       }
 
       switch (event.key) {
+        case 'Enter':
+        case ' ':
+          if (handleItemActivation()) {
+            event.preventDefault();
+            return;
+          }
+          break;
         case 'ArrowDown':
           event.preventDefault();
           highlightNext();
@@ -410,6 +424,7 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     [
       onKeyDown,
       performTypeahead,
+      handleItemActivation,
       highlightNext,
       highlightPrevious,
       highlightFirst,
@@ -458,7 +473,6 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     ],
   );
 
-  // Extract placement information for data attributes
   const [currentSide, currentAlign] = useMemo(() => {
     const parts = placement.split('-');
     const placementSide = parts[0] as Side;
@@ -484,7 +498,7 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
         data-side={currentSide}
         data-align={currentAlign}
         tabIndex={-1}
-        onKeyDown={handleKeyDownInternal}
+        onKeyDown={handleKeyDown}
         style={{
           position: strategy,
           top: y ?? 0,
