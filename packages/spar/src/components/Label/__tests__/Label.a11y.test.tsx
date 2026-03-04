@@ -59,6 +59,32 @@ describe('Label Accessibility', () => {
       expect(results).toHaveNoViolations();
     });
 
+    it('should not have violations with readOnly state', async () => {
+      const { container } = render(
+        <div>
+          <Label htmlFor='readonly-input' readOnly>
+            Read-Only Field
+          </Label>
+          <input id='readonly-input' type='text' readOnly />
+        </div>,
+      );
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+    });
+
+    it('should not have violations with invalid state', async () => {
+      const { container } = render(
+        <div>
+          <Label htmlFor='invalid-input' isInvalid>
+            Invalid Field
+          </Label>
+          <input id='invalid-input' type='text' aria-invalid='true' />
+        </div>,
+      );
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+    });
+
     it('should not have violations with custom element', async () => {
       const { container } = render(
         <div>
@@ -267,6 +293,72 @@ describe('Label Accessibility', () => {
 
       expect(label).toHaveAttribute('data-disabled');
       expect(input).toHaveAttribute('aria-disabled', 'true');
+    });
+  });
+
+  describe('ReadOnly State Communication', () => {
+    it('provides data-readonly for styling read-only fields', () => {
+      render(
+        <div>
+          <Label htmlFor='readonly-field' readOnly>
+            Read-Only Field
+          </Label>
+          <input id='readonly-field' type='text' readOnly />
+        </div>,
+      );
+
+      const label = screen.getByText('Read-Only Field');
+      expect(label).toHaveAttribute('data-readonly');
+    });
+
+    it('works with aria-readonly on controls', () => {
+      render(
+        <div>
+          <Label htmlFor='aria-readonly-field' readOnly>
+            Read-Only Field
+          </Label>
+          <input id='aria-readonly-field' type='text' readOnly aria-readonly='true' />
+        </div>,
+      );
+
+      const label = screen.getByText('Read-Only Field');
+      const input = screen.getByLabelText('Read-Only Field');
+
+      expect(label).toHaveAttribute('data-readonly');
+      expect(input).toHaveAttribute('aria-readonly', 'true');
+    });
+  });
+
+  describe('Invalid State Communication', () => {
+    it('provides data-invalid for styling invalid fields', () => {
+      render(
+        <div>
+          <Label htmlFor='invalid-field' isInvalid>
+            Invalid Field
+          </Label>
+          <input id='invalid-field' type='text' aria-invalid='true' />
+        </div>,
+      );
+
+      const label = screen.getByText('Invalid Field');
+      expect(label).toHaveAttribute('data-invalid');
+    });
+
+    it('works with aria-invalid on controls', () => {
+      render(
+        <div>
+          <Label htmlFor='aria-invalid-field' isInvalid>
+            Invalid Field
+          </Label>
+          <input id='aria-invalid-field' type='text' aria-invalid='true' />
+        </div>,
+      );
+
+      const label = screen.getByText('Invalid Field');
+      const input = screen.getByLabelText('Invalid Field');
+
+      expect(label).toHaveAttribute('data-invalid');
+      expect(input).toHaveAttribute('aria-invalid', 'true');
     });
   });
 
@@ -535,7 +627,7 @@ describe('Label Accessibility', () => {
     it('provides semantic attributes for visual styling', () => {
       render(
         <div>
-          <Label htmlFor='styled-input' required disabled>
+          <Label htmlFor='styled-input' required disabled readOnly isInvalid>
             Styled Label
           </Label>
           <input id='styled-input' type='text' />
@@ -545,6 +637,8 @@ describe('Label Accessibility', () => {
       const label = screen.getByText('Styled Label');
       expect(label).toHaveAttribute('data-required');
       expect(label).toHaveAttribute('data-disabled');
+      expect(label).toHaveAttribute('data-readonly');
+      expect(label).toHaveAttribute('data-invalid');
     });
 
     it('supports custom styling through className', () => {

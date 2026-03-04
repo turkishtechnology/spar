@@ -1,7 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "types": ["jest", "@testing-library/jest-dom", "jest-axe"]
+    "types": ["jest", "@testing-library/jest-dom", "jest-axe"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "composite": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   },
-  "include": ["./src/**/__tests__/**/*"]
+  "include": ["./src/**/*"],
+  "exclude": [".turbo", "dist", "node_modules", "build", "coverage"]
 }

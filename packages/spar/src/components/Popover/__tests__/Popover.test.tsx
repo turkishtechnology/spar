@@ -314,7 +314,7 @@ describe('PopoverTrigger', () => {
     const trigger = screen.getByRole('button');
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
     expect(trigger).toHaveAttribute('aria-haspopup', 'dialog');
-    expect(trigger).not.toHaveAttribute('aria-controls');
+    expect(trigger).toHaveAttribute('aria-controls');
   });
 
   it('updates aria-controls when popover is open', async () => {

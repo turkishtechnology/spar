@@ -33,14 +33,21 @@ export interface CollapsibleTriggerRenderProps {
  */
 export interface CollapsibleOwnProps {
   /**
-   * Unique identifier for the trigger element.
+   * Custom base ID for ARIA relationships.
    * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-trigger` and `${id}-content`.
+   */
+  id?: string;
+
+  /**
+   * Unique identifier for the trigger element.
+   * If not provided, one will be derived from the base ID.
    */
   triggerId?: string;
 
   /**
    * Unique identifier for the content element.
-   * If not provided, one will be generated automatically.
+   * If not provided, one will be derived from the base ID.
    */
   contentId?: string;
 

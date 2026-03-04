@@ -8,6 +8,13 @@ import type { ButtonOwnProps } from '../Button/types';
  */
 export interface SelectOwnProps {
   /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-trigger`, `${id}-content`, `${id}-value`.
+   */
+  id?: string;
+
+  /**
    * Controlled selected value
    */
   value?: string;

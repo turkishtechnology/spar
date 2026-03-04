@@ -14,13 +14,20 @@ export interface InputContextValue {
   isInvalid: boolean;
   disabled: boolean;
   required: boolean;
-  readOnly?: boolean;
+  readOnly: boolean;
 }
 
 /**
  * Own props for Input
  */
 export interface InputOwnProps {
+  /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-field`, `${id}-label`, etc.
+   */
+  id?: string;
+
   /**
    * Input validation state
    * @defaultValue false
@@ -38,6 +45,12 @@ export interface InputOwnProps {
    * @defaultValue false
    */
   required?: boolean;
+
+  /**
+   * Input read-only state
+   * @defaultValue false
+   */
+  readOnly?: boolean;
 }
 
 /**

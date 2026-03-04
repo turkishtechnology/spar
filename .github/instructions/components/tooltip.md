@@ -3,12 +3,12 @@
 ## 1. Component Overview
 
 - **Purpose**: A popup that displays supplementary information when an element receives focus or hover, providing clarification without cluttering the interface
-- **Use Cases**: 
+- **Use Cases**:
   - Supplementary descriptions for form inputs  
   - Additional context for complex UI controls
   - Clarifying abbreviations or technical terms
 - **Compound Component Structure**: Flexible composition with Provider, Root, Trigger, Content, and Arrow parts
-- **Key Differentiators**: 
+- **Key Differentiators**:
   - Non-modal, lightweight information display
   - Dismissible with Escape or focus/hover loss
   - Never receives focus itself
@@ -87,11 +87,13 @@
 | `as` | `ElementType` | No | `'svg'` | Element type for arrow |
 
 ### Ref Support
+
 - Forwards ref to trigger element
 - Content component supports polymorphic `as` prop for semantic flexibility
 - Arrow component supports polymorphic `as` prop (defaults to `'svg'`)
 
 ### Controlled/Uncontrolled
+
 - **Uncontrolled**: Default behavior with internal show/hide state
 - **Controlled**: Provide `open` and `onOpenChange` for external state management
 
@@ -117,32 +119,38 @@
 ## 4. Accessibility
 
 ### Roles
-- **Tooltip element**: `role="tooltip"` 
+
+- **Tooltip element**: `role="tooltip"`
 - **Trigger element**: Maintains its semantic role (button, input, etc.)
 
 ### WCAG 1.4.13 Compliance (Content on Hover or Focus)
+
 - **Dismissible**: Tooltip can be dismissed with Escape key without moving pointer
 - **Hoverable**: Tooltip itself can be hovered without disappearing (critical for large pointers/magnification)
 - **Persistent**: Tooltip remains visible until hover/focus removed, dismissed, or information invalid
 
 ### Keyboard
+
 - **Tab/Shift+Tab**: Navigate to/from trigger, tooltip shows on focus
 - **Escape**: Dismiss tooltip, focus remains on trigger
 - **No direct keyboard navigation**: Tooltip never receives focus
 
 ### Focus Management
+
 - Focus always remains on trigger element
 - Tooltip appears/disappears based on trigger focus state
 - No focus trapping (tooltip is non-modal)
 - Clear focus indicators on trigger element
 
 ### Announcements (Screen Reader)
+
 - **Auxiliary Description Mode** (default):
   - Use `aria-describedby` to associate tooltip as supplementary info
   - Content announced after label and role information
 - **No live regions**: Tooltip content is not dynamically announced
 
 ### Name/Role/Value Exposure
+
 - Trigger element must have accessible name (via `aria-label`, `aria-labelledby`, or text content)
 - Tooltip content provides supplementary description
 - Proper association via `aria-describedby`
@@ -150,6 +158,7 @@
 ## 5. Implementation Architecture
 
 ### State Hooks Design
+
 ```typescript
 interface TooltipState {
   isOpen: boolean;
@@ -166,23 +175,26 @@ interface TooltipContextValue {
   onOpenChange: (open: boolean) => void;
   delay: number;
   hideDelay: number;
-  skipDelayDuration: number;
   disableHoverableContent: boolean;
   // Internal state for compound components
   triggerId: string;
   contentId: string;
+  // Hide timer control for hoverable content (WCAG 1.4.13)
+  startHideTimer: (delayMs: number, callback: () => void) => void;
+  cancelHideTimer: () => void;
 }
 
 interface TooltipProviderContextValue {
   delayDuration: number;
   skipDelayDuration: number;
   disableHoverableContent: boolean;
-  isOpenDelayed: boolean;
-  setIsOpenDelayed: (open: boolean) => void;
+  skipDelay: boolean;
+  setSkipDelay: (value: boolean) => void;
 }
 ```
 
 ### Context Requirements
+
 - **Compound API**: Provider context for shared state management across multiple tooltip instances
 - **Provider-level optimizations**: Skip delay when moving between tooltips quickly
 - **Tooltip-level context**: Each tooltip root manages its own state independently
@@ -190,10 +202,12 @@ interface TooltipProviderContextValue {
 - **Context isolation**: Multiple providers can coexist without interference
 
 ### Ref Forwarding Strategy
+
 - Forward ref to trigger element (the child)
 - Tooltip portal element gets internal ref for positioning
 
 ### Event System
+
 - Mouse enter/leave on trigger element
 - **Mouse enter/leave on tooltip element** (WCAG 1.4.13 hoverable requirement)
 - Focus/blur on trigger element  
@@ -206,6 +220,7 @@ interface TooltipProviderContextValue {
 - **Touch event handling**: Prevent tooltip on touch-only devices
 
 ### SSR/CSR Safety and Deterministic IDs
+
 - Generate stable IDs using `useId()` hook
 - Built-in portal (via `createPortal` in TooltipContent) renders only after hydration
 - No layout shift during tooltip appearance
@@ -219,16 +234,19 @@ interface TooltipProviderContextValue {
 ### Required Data Attributes
 
 #### Trigger Element
+
 - `data-state`: `"open" | "closed"`
 - `data-placement`: `"top" | "bottom" | "left" | "right"` (actual placement after collision detection)
 - `data-focus-visible`: `"true" | "false"` (focus visible state)
 - `data-disabled`: `"true" | "false"` (disabled state)
 
 #### Tooltip Element  
+
 - `data-state`: `"open" | "closed"`
 - `data-placement`: `"top" | "bottom" | "left" | "right"`
 
 ### Positioning Data
+
 - CSS custom properties for dynamic positioning:
   - `--tooltip-x`: Horizontal position
   - `--tooltip-y`: Vertical position
@@ -239,6 +257,7 @@ interface TooltipProviderContextValue {
 ## 7. Test Coverage Plan
 
 ### Unit Tests
+
 - Props validation and defaults
 - Controlled vs uncontrolled behavior
 - Event handler registration and cleanup
@@ -246,6 +265,7 @@ interface TooltipProviderContextValue {
 - Ref forwarding to trigger element
 
 ### Accessibility Tests
+
 - Proper ARIA attributes (`aria-describedby`)
 - Keyboard navigation (focus/escape)
 - Screen reader announcements
@@ -258,6 +278,7 @@ interface TooltipProviderContextValue {
 - **Screen reader timing**: Test announcement timing and content clarity
 
 ### Integration Tests
+
 - Multiple tooltips on same page (tooltip groups and isolation)
 - Tooltip within forms and complex components
 - Built-in portal rendering and positioning (via `container` prop on TooltipContent)
@@ -286,11 +307,13 @@ interface TooltipProviderContextValue {
 ## 9. Migration & Implementation Checklist
 
 ### Migration Guidance
+
 - **From title attribute**: Replace `title` with proper tooltip component
 - **From custom solutions**: Ensure proper ARIA relationships and keyboard support
 - **From libraries**: Verify accessibility compliance and touch device behavior
 
 ### Implementation Checklist
+
 - [ ] Single trigger element validation (children must be one focusable element)
 - [ ] Proper ARIA association (`aria-describedby`)
 - [ ] Hover delay implementation with cleanup

@@ -34,6 +34,7 @@ export const DialogContent = <T extends ElementType = 'div'>({
     contentRef,
     titleId,
     descriptionId,
+    contentId,
     restoreFocusRef,
     onCloseAutoFocusRef,
     restoreFocusPropRef,
@@ -211,6 +212,7 @@ export const DialogContent = <T extends ElementType = 'div'>({
   const contentElement = (
     <Component
       ref={mergedRef}
+      id={contentId}
       role={role}
       aria-modal={modal}
       aria-labelledby={titleId}

@@ -18,7 +18,7 @@ export const DialogTrigger = <T extends ElementType = 'button'>({
   ...props
 }: DialogTriggerProps<T>) => {
   const context = useDialogContext();
-  const { isOpen, setIsOpen, triggerRef, disabled: contextDisabled } = context;
+  const { isOpen, setIsOpen, triggerRef, contentId, disabled: contextDisabled } = context;
 
   // Merge external ref with internal ref
   const mergedRef = useMergedRef(triggerRef, ref);
@@ -53,6 +53,7 @@ export const DialogTrigger = <T extends ElementType = 'button'>({
     disabled,
     'aria-haspopup': 'dialog' as const,
     'aria-expanded': isOpen,
+    'aria-controls': contentId,
     'data-state': dataState,
     onClick: handleClick,
     ...props,

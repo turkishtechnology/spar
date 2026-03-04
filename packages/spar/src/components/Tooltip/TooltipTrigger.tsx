@@ -31,7 +31,7 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
       clearTimeout(showTimeoutRef.current);
       showTimeoutRef.current = null;
     }
-    context.clearHideTimeout();
+    context.cancelHideTimer();
   }, [context]);
 
   // Show tooltip with delay
@@ -39,11 +39,11 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
     (immediate = false) => {
       clearTimeouts();
 
-      const delay = immediate || provider?.isOpenDelayed ? 0 : context.delay;
+      const delay = immediate || provider?.skipDelay ? 0 : context.delay;
 
       showTimeoutRef.current = window.setTimeout(() => {
         context.onOpenChange(true);
-        provider?.setIsOpenDelayed?.(true);
+        provider?.setSkipDelay?.(true);
       }, delay);
     },
     [clearTimeouts, provider, context],
@@ -56,13 +56,10 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
 
       const delay = immediate ? 0 : context.hideDelay;
 
-      const hideTimeoutId = window.setTimeout(() => {
+      context.startHideTimer(delay, () => {
         context.onOpenChange(false);
-        provider?.setIsOpenDelayed?.(false);
-      }, delay);
-
-      // Store timeout ID in context ref so it can be cleared from content
-      context.hideTimeoutRef.current = hideTimeoutId;
+        provider?.setSkipDelay?.(false);
+      });
     },
     [clearTimeouts, context, provider],
   );
@@ -124,7 +121,7 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
       if (event.key === 'Escape') {
         // Check if the event originated from tooltip content
         const target = event.target as HTMLElement;
-        const tooltipContent = document.getElementById(context.contentId);
+        const tooltipContent = context.contentRef.current;
 
         // If the event came from tooltip content, let the content handle it
         if (tooltipContent && (target === tooltipContent || tooltipContent.contains(target))) {

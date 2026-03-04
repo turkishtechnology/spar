@@ -65,6 +65,13 @@ export interface TooltipProviderProps {
  */
 export interface TooltipProps {
   /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-trigger` and `${id}-content`.
+   */
+  id?: string;
+
+  /**
    * Tooltip trigger and content components
    */
   children?: ReactNode;
@@ -257,7 +264,6 @@ export interface TooltipContextValue {
   onOpenChange: (open: boolean) => void;
   delay: number;
   hideDelay: number;
-  skipDelayDuration: number;
   disableHoverableContent: boolean;
   triggerId: string;
   contentId: string;
@@ -268,9 +274,9 @@ export interface TooltipContextValue {
   triggerRef: RefObject<HTMLElement | null>;
   contentRef: RefObject<HTMLElement | null>;
   arrowRef: RefObject<HTMLElement | SVGSVGElement | null>;
-  // Timeout control for hoverable content
-  hideTimeoutRef: RefObject<number | null>;
-  clearHideTimeout: () => void;
+  // Hide timer control for hoverable content (WCAG 1.4.13)
+  startHideTimer: (delayMs: number, callback: () => void) => void;
+  cancelHideTimer: () => void;
 }
 
 /**
@@ -280,8 +286,8 @@ export interface TooltipProviderContextValue {
   delayDuration: number;
   skipDelayDuration: number;
   disableHoverableContent: boolean;
-  isOpenDelayed: boolean;
-  setIsOpenDelayed: (open: boolean) => void;
+  skipDelay: boolean;
+  setSkipDelay: (value: boolean) => void;
 }
 
 /**

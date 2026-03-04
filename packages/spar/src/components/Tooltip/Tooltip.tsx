@@ -1,4 +1,4 @@
-import { useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useId, useMemo, useRef, useState } from 'react';
 import type { TooltipProps, TooltipContextValue } from './types';
 import type { Side } from '../../types';
 import { useTooltipProviderContext, TooltipContext } from './hooks';
@@ -7,6 +7,7 @@ import { useTooltipProviderContext, TooltipContext } from './hooks';
  * Root component that manages tooltip state and provides context to child components
  */
 export const Tooltip = ({
+  id: providedId,
   children,
   open: controlledOpen,
   defaultOpen = false,
@@ -16,8 +17,10 @@ export const Tooltip = ({
   disabled = false,
 }: TooltipProps) => {
   const provider = useTooltipProviderContext();
-  const triggerId = useId();
-  const contentId = useId();
+  const generatedId = useId();
+  const baseId = providedId ?? generatedId;
+  const triggerId = `${baseId}-trigger`;
+  const contentId = `${baseId}-content`;
 
   // Controlled vs uncontrolled state
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
@@ -31,13 +34,11 @@ export const Tooltip = ({
   const contentRef = useRef<HTMLElement | null>(null);
   const arrowRef = useRef<HTMLElement | SVGSVGElement | null>(null);
 
-  // Timeout refs for external access
+  // Private hide timer — not exposed via context
   const hideTimeoutRef = useRef<number | null>(null);
 
   // Get delay values from provider or props
   const effectiveDelay = delay ?? provider?.delayDuration ?? 700;
-  const effectiveHideDelay = hideDelay;
-  const effectiveSkipDelay = provider?.skipDelayDuration ?? 300;
   const effectiveDisableHover = provider?.disableHoverableContent ?? false;
 
   // Handle open change
@@ -51,13 +52,23 @@ export const Tooltip = ({
     }
   };
 
-  // Clear hide timeout function
-  const clearHideTimeout = () => {
+  const cancelHideTimer = useCallback(() => {
     if (hideTimeoutRef.current) {
       clearTimeout(hideTimeoutRef.current);
       hideTimeoutRef.current = null;
     }
-  };
+  }, []);
+
+  const startHideTimer = useCallback(
+    (delayMs: number, callback: () => void) => {
+      cancelHideTimer();
+      hideTimeoutRef.current = window.setTimeout(() => {
+        hideTimeoutRef.current = null;
+        callback();
+      }, delayMs);
+    },
+    [cancelHideTimer],
+  );
 
   // Context value
   const contextValue: TooltipContextValue = useMemo(
@@ -65,8 +76,7 @@ export const Tooltip = ({
       isOpen,
       onOpenChange: handleOpenChange,
       delay: effectiveDelay,
-      hideDelay: effectiveHideDelay,
-      skipDelayDuration: effectiveSkipDelay,
+      hideDelay,
       disableHoverableContent: effectiveDisableHover,
       triggerId,
       contentId,
@@ -76,15 +86,14 @@ export const Tooltip = ({
       triggerRef,
       contentRef,
       arrowRef,
-      hideTimeoutRef,
-      clearHideTimeout,
+      startHideTimer,
+      cancelHideTimer,
     }),
     [
       isOpen,
       handleOpenChange,
       effectiveDelay,
-      effectiveHideDelay,
-      effectiveSkipDelay,
+      hideDelay,
       effectiveDisableHover,
       triggerId,
       contentId,
@@ -94,6 +103,8 @@ export const Tooltip = ({
       triggerRef,
       contentRef,
       arrowRef,
+      startHideTimer,
+      cancelHideTimer,
     ],
   );
 
