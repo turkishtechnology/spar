@@ -8,6 +8,7 @@ import type { DialogProps, DialogContextValue } from './types';
  * Supports both modal and non-modal dialogs with controlled/uncontrolled patterns.
  */
 export const Dialog = ({
+  id: providedId,
   open: controlledOpen,
   defaultOpen = false,
   onOpenChange,
@@ -17,8 +18,11 @@ export const Dialog = ({
   children,
 }: DialogProps) => {
   // Generate unique IDs for ARIA relationships
-  const titleId = useId();
-  const descriptionId = useId();
+  const generatedId = useId();
+  const baseId = providedId ?? generatedId;
+  const titleId = `${baseId}-title`;
+  const descriptionId = `${baseId}-description`;
+  const contentId = `${baseId}-content`;
 
   // Refs for focus management
   const triggerRef = useRef<HTMLElement | null>(null);
@@ -78,12 +82,13 @@ export const Dialog = ({
       contentRef,
       titleId,
       descriptionId,
+      contentId,
       restoreFocusRef,
       onCloseAutoFocusRef,
       restoreFocusPropRef,
       finalFocusPropRef,
     }),
-    [isOpen, setIsOpen, modal, disabled, forceMount, titleId, descriptionId],
+    [isOpen, setIsOpen, modal, disabled, forceMount, titleId, descriptionId, contentId],
   );
 
   return <DialogContext.Provider value={contextValue}>{children}</DialogContext.Provider>;

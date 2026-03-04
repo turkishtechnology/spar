@@ -77,7 +77,7 @@ export const PopoverTrigger = <T extends ElementType = 'button'>({
     onClick: handleClick,
     onKeyDown: handleKeyDown,
     'aria-expanded': state.isOpen,
-    'aria-controls': state.isOpen ? state.contentId : undefined,
+    'aria-controls': state.contentId,
     'aria-haspopup': 'dialog' as const,
     'data-state': state.isOpen ? 'open' : 'closed',
     ...props,

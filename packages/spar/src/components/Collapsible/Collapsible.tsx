@@ -12,6 +12,7 @@ export const Collapsible = <T extends ElementType = 'div'>({
   disabled = false,
   children,
   as,
+  id: providedId,
   triggerId: propsTriggerId,
   contentId: propsContentId,
   ref,
@@ -21,9 +22,10 @@ export const Collapsible = <T extends ElementType = 'div'>({
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
 
   // Generate stable IDs for ARIA relationships
-  const baseId = useId();
-  const triggerId = propsTriggerId || `${baseId}-trigger`;
-  const contentId = propsContentId || `${baseId}-content`;
+  const generatedId = useId();
+  const baseId = providedId ?? generatedId;
+  const triggerId = propsTriggerId ?? `${baseId}-trigger`;
+  const contentId = propsContentId ?? `${baseId}-content`;
 
   // Determine if controlled or uncontrolled
   const isControlled = controlledOpen !== undefined;

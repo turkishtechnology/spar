@@ -25,8 +25,8 @@ export const Switch = <T extends ElementType = 'button'>({
   ref,
   ...restProps
 }: SwitchProps<T>) => {
-  const internalId = useId();
-  const id = providedId || internalId;
+  const generatedId = useId();
+  const id = providedId ?? generatedId;
 
   // Refs
   const internalRef = useRef<HTMLButtonElement>(null);

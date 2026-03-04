@@ -8,6 +8,13 @@ import type { ButtonOwnProps } from '../Button/types';
  */
 export interface DialogProps {
   /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-title`, `${id}-description`, `${id}-content`.
+   */
+  id?: string;
+
+  /**
    * Controlled open state
    */
   open?: boolean;
@@ -270,6 +277,7 @@ export interface DialogContextValue {
   contentRef: RefObject<HTMLElement | null>;
   titleId: string;
   descriptionId: string;
+  contentId: string;
   restoreFocusRef: RefObject<HTMLElement | null>;
   onCloseAutoFocusRef: RefObject<((event: Event) => void) | undefined>;
   restoreFocusPropRef: RefObject<boolean>;

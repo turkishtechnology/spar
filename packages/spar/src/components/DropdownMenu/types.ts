@@ -36,6 +36,13 @@ export interface DropdownMenuTriggerRenderProps {
  */
 export interface DropdownMenuProps {
   /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-trigger` and `${id}-content`.
+   */
+  id?: string;
+
+  /**
    * Controlled open state
    */
   open?: boolean;

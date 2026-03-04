@@ -8,15 +8,18 @@ import type { InputContextValue, InputProps } from './types';
  */
 export const Input = <T extends ElementType = 'div'>({
   as,
+  id: providedId,
   isInvalid = false,
   disabled = false,
   required = false,
+  readOnly = false,
   children,
   ref,
   ...props
 }: InputProps<T>) => {
   const Component = as || 'div';
-  const id = useId();
+  const generatedId = useId();
+  const id = providedId ?? generatedId;
 
   const contextValue = useMemo<InputContextValue>(
     () => ({
@@ -27,8 +30,9 @@ export const Input = <T extends ElementType = 'div'>({
       isInvalid,
       disabled,
       required,
+      readOnly,
     }),
-    [id, isInvalid, disabled, required],
+    [id, isInvalid, disabled, required, readOnly],
   );
 
   return (
@@ -39,6 +43,7 @@ export const Input = <T extends ElementType = 'div'>({
         data-invalid={isInvalid ? '' : undefined}
         data-disabled={disabled ? '' : undefined}
         data-required={required ? '' : undefined}
+        data-readonly={readOnly ? '' : undefined}
       >
         {children}
       </Component>

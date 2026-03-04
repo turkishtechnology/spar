@@ -211,7 +211,7 @@ function ToolbarRadio() {
       <Radio.Group
         value={alignment}
         onValueChange={setAlignment}
-        isInToolbar={true}
+        selectOnFocus={false}
         orientation='horizontal'
         aria-label='Text alignment'
       >
@@ -298,7 +298,7 @@ The root container that manages the radio group state and provides keyboard navi
 | `disabled?`         | `boolean`                    | `false`      | Disables entire radio group                        |
 | `required?`         | `boolean`                    | `false`      | Marks group as required for forms                  |
 | `orientation?`      | `'horizontal' \| 'vertical'` | `'vertical'` | Layout direction for keyboard navigation           |
-| `isInToolbar?`      | `boolean`                    | `false`      | Changes keyboard behavior per WAI-ARIA guidelines  |
+| `selectOnFocus?`    | `boolean`                    | `true`       | Whether arrow keys automatically select the focused item |
 | `autoFocus?`        | `boolean`                    | `false`      | Whether to focus the first focusable item on mount |
 | `aria-label?`       | `string`                     | `undefined`  | Accessible name for the group                      |
 | `aria-labelledby?`  | `string`                     | `undefined`  | References element that labels the group           |
@@ -363,7 +363,7 @@ Individual radio option within a Radio.Group that handles selection and accessib
 
 ## Keyboard Interactions
 
-Complete keyboard behavior for the Radio component. Behavior changes based on the `isInToolbar` prop:
+Complete keyboard behavior for the Radio component. Behavior changes based on the `selectOnFocus` prop:
 
 | Key            | Standard Mode                                       | Toolbar Mode                                       |
 | -------------- | --------------------------------------------------- | -------------------------------------------------- |
@@ -380,8 +380,8 @@ Complete keyboard behavior for the Radio component. Behavior changes based on th
 
 ### Mode Configuration
 
-- **Standard Mode**: `isInToolbar={false}` (default)
-- **Toolbar Mode**: `isInToolbar={true}`
+- **Standard Mode**: `selectOnFocus={true}` (default)
+- **Toolbar Mode**: `selectOnFocus={false}`
 
 ### Behavior Summary
 

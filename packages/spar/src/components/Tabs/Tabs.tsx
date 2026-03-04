@@ -8,6 +8,7 @@ import type { TabsProps, TabsContextValue } from './types';
  * Supports controlled/uncontrolled patterns with full keyboard navigation.
  */
 export const Tabs = <T extends ElementType = 'div'>({
+  id: providedId,
   value: controlledValue,
   defaultValue,
   onValueChange,
@@ -25,7 +26,8 @@ export const Tabs = <T extends ElementType = 'div'>({
   const isControlled = controlledValue !== undefined;
 
   // Generate unique IDs for ARIA relationships
-  const tabsListId = useId();
+  const generatedId = useId();
+  const baseId = providedId ?? generatedId;
 
   // Store references to tab elements for focus management
   const tabRefs = useRef<Map<string, HTMLElement>>(new Map());
@@ -91,7 +93,7 @@ export const Tabs = <T extends ElementType = 'div'>({
       loop: true, // Default value, overridden by TabsList if needed
 
       // IDs for ARIA
-      tabsListId,
+      baseId,
 
       // Tab management
       tabRefs,
@@ -106,7 +108,7 @@ export const Tabs = <T extends ElementType = 'div'>({
       orientation,
       dir,
       activationMode,
-      tabsListId,
+      baseId,
       registerTab,
       unregisterTab,
       getTabIndex,

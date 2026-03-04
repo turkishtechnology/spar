@@ -13,9 +13,9 @@ export const TabsContent = <T extends ElementType = 'div'>({
   ...props
 }: TabsContentProps<T>) => {
   const Component = as || 'div';
-  const { selectedValue, orientation, tabsListId } = useTabsContext();
-  const panelId = `${tabsListId}-panel-${value}`;
-  const triggerId = `${tabsListId}-trigger-${value}`;
+  const { selectedValue, orientation, baseId } = useTabsContext();
+  const panelId = `${baseId}-panel-${value}`;
+  const triggerId = `${baseId}-trigger-${value}`;
 
   const isSelected = selectedValue === value;
 

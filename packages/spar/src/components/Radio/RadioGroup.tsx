@@ -17,6 +17,7 @@ import type { RadioGroupProps, RadioGroupContextValue } from './types';
  */
 export const RadioGroup = <T extends ElementType = 'div'>({
   ref,
+  id: providedId,
   value: controlledValue,
   defaultValue,
   onValueChange,
@@ -24,7 +25,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
   disabled = false,
   required = false,
   orientation = 'vertical',
-  isInToolbar = false,
+  selectOnFocus = true,
   autoFocus = false,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
@@ -39,7 +40,8 @@ export const RadioGroup = <T extends ElementType = 'div'>({
   const { registerItem, unregisterItem, getItemIds } = useItemRegistry<void>();
   const items = getItemIds(); // Get items as array for navigation
   const generatedId = useId();
-  const name = nameProp || `radio-group-${generatedId}`;
+  const baseId = providedId ?? generatedId;
+  const name = nameProp ?? `${baseId}-radio-group`;
   const hasAutoFocused = useRef(false);
 
   // Auto focus first item on mount
@@ -119,15 +121,15 @@ export const RadioGroup = <T extends ElementType = 'div'>({
         if (nextValue) {
           handleFocusMove(nextValue);
 
-          // In normal mode (not toolbar), arrow keys also change selection
-          // In toolbar mode, only Space/Enter changes selection
-          if (!isInToolbar) {
+          // When selectOnFocus is true, arrow keys also change selection
+          // When false, only Space/Enter changes selection
+          if (selectOnFocus) {
             handleValueChange(nextValue);
           }
         }
       }
     },
-    [items, focusedValue, orientation, handleFocusMove, isInToolbar, handleValueChange],
+    [items, focusedValue, orientation, handleFocusMove, selectOnFocus, handleValueChange],
   );
 
   // Focus management: Only set focus on user interaction (Tab into group)
@@ -153,7 +155,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
       focusedValue,
       setFocusedValue,
       orientation,
-      isInToolbar,
+      selectOnFocus,
       registerItem,
       unregisterItem,
     }),
@@ -165,7 +167,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
       focusedValue,
       setFocusedValue,
       orientation,
-      isInToolbar,
+      selectOnFocus,
       registerItem,
       unregisterItem,
     ],
@@ -176,7 +178,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
     'data-orientation': orientation,
     'data-disabled': disabled ? '' : undefined,
     'data-required': required ? '' : undefined,
-    'data-toolbar': isInToolbar ? '' : undefined,
+    'data-select-on-focus': selectOnFocus ? '' : undefined,
     'data-autofocus': autoFocus ? '' : undefined,
   };
 

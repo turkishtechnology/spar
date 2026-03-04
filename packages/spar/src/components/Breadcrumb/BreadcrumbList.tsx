@@ -2,11 +2,12 @@ import {
   Children,
   cloneElement,
   isValidElement,
-  Fragment,
   type ReactElement,
+  type ReactNode,
   type ElementType,
 } from 'react';
 import type { BreadcrumbListProps, BreadcrumbItemProps, BreadcrumbPosition } from './types';
+import { BreadcrumbItem } from './BreadcrumbItem';
 
 /**
  * Ordered list container for breadcrumb items. Provides semantic structure for navigation trail.
@@ -18,24 +19,32 @@ export const BreadcrumbList = <T extends ElementType = 'ol'>({
   ...props
 }: BreadcrumbListProps<T>) => {
   const Component = as || 'ol';
-  const childCount = Children.count(children);
+
+  const isBreadcrumbItem = (child: ReactNode): child is ReactElement<BreadcrumbItemProps> => {
+    if (!isValidElement(child)) return false;
+    return child.type === BreadcrumbItem;
+  };
+
+  const items = Children.toArray(children).filter(isBreadcrumbItem);
+  const itemCount = items.length;
+  let itemIndex = 0;
 
   return (
     <Component {...props}>
-      {Children.map(children, (child, index) => {
-        if (isValidElement(child)) {
-          // Skip Fragments and Separators (identified by displayName) - only pass position props to BreadcrumbItem
-          const childType = child.type as { displayName?: string };
-          if (child.type === Fragment || childType.displayName === 'BreadcrumbSeparator') {
-            return child;
-          }
+      {Children.map(children, (child) => {
+        if (isBreadcrumbItem(child)) {
+          const currentItemIndex = itemIndex++;
 
           const position: BreadcrumbPosition =
-            index === 0 ? 'first' : index === childCount - 1 ? 'last' : 'middle';
+            currentItemIndex === 0
+              ? 'first'
+              : currentItemIndex === itemCount - 1
+                ? 'last'
+                : 'middle';
 
-          return cloneElement(child as ReactElement<BreadcrumbItemProps>, {
+          return cloneElement(child, {
             position,
-            isCurrent: index === childCount - 1,
+            isCurrent: currentItemIndex === itemCount - 1,
           });
         }
         return child;

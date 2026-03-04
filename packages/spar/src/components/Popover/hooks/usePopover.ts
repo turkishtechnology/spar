@@ -19,6 +19,7 @@ import { getPlacement } from '../utils';
  */
 export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   const {
+    id: providedId,
     open: controlledOpen,
     onOpenChange,
     defaultOpen = false,
@@ -30,7 +31,8 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   } = props;
 
   const generatedId = useId();
-  const contentId = `popover-content-${generatedId}`;
+  const baseId = providedId ?? generatedId;
+  const contentId = `${baseId}-content`;
 
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isControlled = controlledOpen !== undefined;
@@ -74,11 +76,11 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
     strategy: 'absolute' as Strategy,
   });
 
-  const [isMounted, setIsMounted] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // SSR safety
   useEffect(() => {
-    setIsMounted(true);
+    setMounted(true);
   }, []);
 
   // Auto-update position
@@ -171,6 +173,6 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
     closePopover,
     togglePopover,
     onOpenChange,
-    isMounted,
+    mounted,
   };
 };

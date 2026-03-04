@@ -159,7 +159,7 @@ describe('Select Accessibility', () => {
       );
 
       const trigger = screen.getByRole('combobox');
-      expect(trigger).not.toHaveAttribute('aria-controls');
+      expect(trigger).toHaveAttribute('aria-controls');
 
       await user.click(trigger);
       expect(trigger).toHaveAttribute('aria-controls');

@@ -7,6 +7,7 @@ import type { SelectProps, SelectContextValue, SelectItemData } from './types';
  * Select root component providing context and state management for all select components. Supports controlled and uncontrolled patterns with full keyboard navigation and accessibility.
  */
 export const Select = <T extends ElementType = 'div'>({
+  id: providedId,
   value: controlledValue,
   defaultValue,
   onValueChange,
@@ -39,9 +40,11 @@ export const Select = <T extends ElementType = 'div'>({
   const valueNodeRef = useRef<HTMLElement>(null);
 
   // IDs
-  const triggerId = useId();
-  const contentId = useId();
-  const valueId = useId();
+  const generatedId = useId();
+  const baseId = providedId ?? generatedId;
+  const triggerId = `${baseId}-trigger`;
+  const contentId = `${baseId}-content`;
+  const valueId = `${baseId}-value`;
 
   // Item collection
   const { items, registerItem, unregisterItem } = useItemRegistry<SelectItemData>();

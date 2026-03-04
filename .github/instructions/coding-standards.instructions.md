@@ -121,6 +121,87 @@ interface BadProps {
 1. **First Priority**: Use `React.AriaAttributes['aria-*']` if available
 2. **Fallback**: Use `string` only for truly custom attributes
 
+## ID Generation Convention
+
+### Single `useId()` + Suffix Pattern
+
+**ALWAYS**: Generate a single base ID per component instance using `useId()`, then derive sub-element IDs with descriptive suffixes.
+
+```typescript
+// ALWAYS: Single useId() call, suffix-based derivation
+const generatedId = useId();
+const baseId = providedId ?? generatedId;
+const triggerId = `${baseId}-trigger`;
+const contentId = `${baseId}-content`;
+
+// NEVER: Multiple useId() calls per component
+const triggerId = useId();  // Wasteful, unrelated IDs
+const contentId = useId();  // No shared base
+
+// NEVER: Prefix pattern
+const contentId = `content-${baseId}`;  // Use suffix, not prefix
+```
+
+### External ID Override
+
+**ALWAYS**: Accept an optional `id` prop that overrides the generated base ID. Use nullish coalescing (`??`), not logical OR (`||`).
+
+```typescript
+// ALWAYS: Accept id prop, use ?? operator
+interface MyComponentOwnProps {
+  /** Custom base ID for ARIA relationships. */
+  id?: string;
+}
+
+export const MyComponent = ({ id: providedId, ...props }: MyComponentProps) => {
+  const generatedId = useId();
+  const baseId = providedId ?? generatedId;
+  // ...
+};
+
+// NEVER: Use || operator (treats "" as falsy)
+const baseId = providedId || generatedId;
+```
+
+### Context ID Sharing
+
+**ALWAYS**: Pass pre-computed string IDs through context. Children consume raw strings directly.
+
+```typescript
+// ALWAYS: Raw strings in context
+interface MyContextValue {
+  triggerId: string;
+  contentId: string;
+}
+
+// In root: compute IDs and pass as strings
+const contextValue = useMemo(() => ({
+  triggerId: `${baseId}-trigger`,
+  contentId: `${baseId}-content`,
+}), [baseId]);
+
+// In children: use directly
+const { triggerId, contentId } = useMyContext();
+<button id={triggerId} aria-controls={contentId} />
+
+// NEVER: Getter functions in context
+interface BadContextValue {
+  getTriggerId: (value: string) => string;  // Unnecessary abstraction
+}
+```
+
+### `aria-controls` Usage
+
+**ALWAYS**: Set `aria-controls` unconditionally. The referenced element may not be in the DOM yet, but the attribute should still be present.
+
+```typescript
+// ALWAYS: Unconditional
+<button aria-controls={contentId} />
+
+// NEVER: Conditional on open state
+<button aria-controls={isOpen ? contentId : undefined} />
+```
+
 ## File Organization Standards
 
 ### File Separation Rule
