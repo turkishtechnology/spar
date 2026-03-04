@@ -17,7 +17,6 @@ import {
   flip,
   shift,
   limitShift,
-  type Placement,
   type Middleware,
 } from '@floating-ui/react-dom';
 import type {
@@ -25,26 +24,10 @@ import type {
   DropdownMenuCollectionContextValue,
   DropdownMenuCollectionItem,
 } from './types';
+import { getPlacement } from '../../utils';
 import type { Side, Align } from '../../types';
 import { useDropdownMenuContext, DropdownMenuCollectionContext } from './hooks';
 import { isCharacterKey, TYPEAHEAD_TIMEOUT } from './utils/index';
-
-/**
- * Convert side and align to Floating UI placement.
- */
-const getPlacement = (side: Side, align: Align): Placement => {
-  if (side === 'top' || side === 'bottom') {
-    if (align === 'start') return `${side}-start`;
-    if (align === 'end') return `${side}-end`;
-    return side;
-  }
-  if (side === 'left' || side === 'right') {
-    if (align === 'start') return `${side}-start`;
-    if (align === 'end') return `${side}-end`;
-    return side;
-  }
-  return 'bottom';
-};
 
 const normalizeTypeaheadValue = (value: string) => value.trim().toLocaleLowerCase();
 

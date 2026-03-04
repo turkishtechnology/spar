@@ -19,20 +19,10 @@ import {
   hide as hideMiddleware,
   arrow as arrowMiddleware,
   autoUpdate,
-  type Placement,
 } from '@floating-ui/react-dom';
+import { getPlacement } from '../../utils';
 import type { SelectContentProps } from './types';
 import type { Side, Align } from '../../types';
-
-/**
- * Convert side and align to Floating UI placement.
- */
-const getPlacement = (side: Side, align: Align): Placement => {
-  if (align === 'center') {
-    return side as Placement;
-  }
-  return `${side}-${align}` as Placement;
-};
 
 /**
  * Dropdown container that appears when select is open. Handles keyboard navigation, focus management, and outside click detection. Positioned using Floating UI.

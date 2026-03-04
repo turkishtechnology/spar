@@ -8,22 +8,14 @@ import {
   arrow,
   hide,
   size,
-  type Placement,
   type Middleware,
 } from '@floating-ui/react-dom';
 import { createPortal } from 'react-dom';
 import { useMergedRef } from '@/hooks';
+import { getPlacement } from '../../utils';
 import { useTooltipContext } from './hooks';
 import type { TooltipContentProps } from './types';
 import type { Side, Align } from '../../types';
-
-// Helper to convert Side + Align to Placement
-const toPlacement = (side: Side, align?: Align): Placement => {
-  if (!align || align === 'center') {
-    return side;
-  }
-  return `${side}-${align}` as Placement;
-};
 
 /**
  * The content that displays in the tooltip popup
@@ -118,7 +110,7 @@ export const TooltipContent = <T extends ElementType = 'div'>({
     middlewareData,
     placement: actualPlacement,
   } = useFloating({
-    placement: toPlacement(side, align),
+    placement: getPlacement(side, align),
     middleware,
     whileElementsMounted: autoUpdate,
   });
