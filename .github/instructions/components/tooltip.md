@@ -51,7 +51,6 @@
 |------|------|-------------|
 | `isOpen` | `boolean` | Whether the tooltip is currently visible |
 | `disabled` | `boolean` | Whether the tooltip is disabled |
-| `placement` | `Side` | Current placement side of the tooltip |
 | `show` | `() => void` | Function to show the tooltip |
 | `hide` | `() => void` | Function to hide the tooltip |
 
@@ -64,14 +63,7 @@
 | `style` | `React.CSSProperties` | No | - | Inline styles |
 | `as` | `ElementType` | No | `'div'` | Element type for tooltip content container |
 | `side` | `'top' \| 'bottom' \| 'left' \| 'right'` | No | `'top'` | Preferred placement relative to trigger |
-| `sideOffset` | `number` | No | `8` | Distance in pixels from the trigger |
 | `align` | `'start' \| 'center' \| 'end'` | No | `'center'` | Alignment relative to trigger |
-| `alignOffset` | `number` | No | `0` | Offset for alignment |
-| `avoidCollisions` | `boolean` | No | `true` | Whether to avoid viewport collisions |
-| `collisionBoundary` | `Element \| Element[]` | No | - | Collision boundary elements |
-| `collisionPadding` | `number \| Partial<Record<Side, number>>` | No | `8` | Padding for collision detection |
-| `sticky` | `'partial' \| 'always'` | No | `'partial'` | Sticky behavior during scroll |
-| `hideWhenDetached` | `boolean` | No | `false` | Hide when trigger becomes detached |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Escape key handler |
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | - | Outside pointer down handler |
 | `onOpenAutoFocus` | `(event: Event) => void` | No | - | Called when auto-focusing on open |
@@ -241,7 +233,8 @@ interface TooltipProviderContextValue {
 #### Tooltip Element  
 
 - `data-state`: `"open" | "closed"`
-- `data-placement`: `"top" | "bottom" | "left" | "right"`
+- `data-side`: `"top" | "bottom" | "left" | "right"` (actual side after collision detection)
+- `data-align`: `"start" | "center" | "end"` (actual alignment after collision detection)
 
 ### Positioning Data
 
