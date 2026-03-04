@@ -286,7 +286,7 @@ function ControlledMenu() {
 
 ### Custom Positioning
 
-Control menu positioning and collision behavior.
+Control menu positioning.
 
 ```tsx
 function CustomPositionMenu() {
@@ -296,9 +296,6 @@ function CustomPositionMenu() {
       <DropdownMenu.Content
         side='right'
         align='start'
-        sideOffset={5}
-        alignOffset={10}
-        avoidCollisions={true}
       >
         <DropdownMenu.Item>Option 1</DropdownMenu.Item>
         <DropdownMenu.Item>Option 2</DropdownMenu.Item>
@@ -472,24 +469,19 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 
 **Props**
 
-| Name                    | Type                                     | Default         | Description                                           |
-| ----------------------- | ---------------------------------------- | --------------- | ----------------------------------------------------- |
-| `as?`                   | `React.ElementType`                      | `'div'`         | Polymorphic element type to render                    |
-| `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`      | Preferred side for positioning                        |
-| `align?`                | `'start' \| 'center' \| 'end'`           | `'start'`       | Alignment relative to trigger                         |
-| `sideOffset?`           | `number`                                 | `8`             | Distance in pixels from trigger                       |
-| `alignOffset?`          | `number`                                 | `0`             | Offset along alignment axis                           |
-| `avoidCollisions?`      | `boolean`                                | `true`          | Automatically adjust position to avoid viewport edges |
-| `collisionBoundary?`    | `Element \| Element[] \| null`           | `null`          | Boundary element(s) for collision detection           |
-| `collisionPadding?`     | `number`                                 | `8`             | Padding from boundary edges in pixels                 |
+| Name                    | Type                                     | Default         | Description                                   |
+| ----------------------- | ---------------------------------------- | --------------- | --------------------------------------------- |
+| `as?`                   | `React.ElementType`                      | `'div'`         | Polymorphic element type to render            |
+| `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`      | Preferred side for positioning                |
+| `align?`                | `'start' \| 'center' \| 'end'`           | `'start'`       | Alignment relative to trigger                 |
 | `loop?`                 | `boolean`                                | `false`         | Whether keyboard navigation loops through items       |
-| `container?`            | `HTMLElement \| null`                    | `document.body` | Custom portal container element                       |
-| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`   | `undefined`     | Escape key handler                                    |
-| `onPointerDownOutside?` | `(event: React.PointerEvent) => void`    | `undefined`     | Outside click handler                                 |
-| `onFocusOutside?`       | `(event: React.FocusEvent) => void`      | `undefined`     | Outside focus handler                                 |
-| `onKeyDown?`            | `(event: React.KeyboardEvent) => void`   | `undefined`     | Keyboard event handler                                |
-| `ref?`                  | `React.Ref<HTMLElement \| null>`         | `undefined`     | Forwarded ref to content element                      |
-| `children?`             | `React.ReactNode`                        | `undefined`     | Menu items and groups                                 |
+| `container?`            | `HTMLElement \| null`                    | `document.body` | Custom portal container element               |
+| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`   | `undefined`     | Escape key handler                            |
+| `onPointerDownOutside?` | `(event: React.PointerEvent) => void`    | `undefined`     | Outside click handler                         |
+| `onFocusOutside?`       | `(event: React.FocusEvent) => void`      | `undefined`     | Outside focus handler                         |
+| `onKeyDown?`            | `(event: React.KeyboardEvent) => void`   | `undefined`     | Keyboard event handler                        |
+| `ref?`                  | `React.Ref<HTMLElement \| null>`         | `undefined`     | Forwarded ref to content element              |
+| `children?`             | `React.ReactNode`                        | `undefined`     | Menu items and groups                         |
 
 **Events**
 
