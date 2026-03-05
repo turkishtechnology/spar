@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useId } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useId } from 'react';
 import { useControlledState } from '@/hooks';
 import { DialogContext } from './hooks';
 import type { DialogProps, DialogContextValue } from './types';
@@ -37,6 +37,8 @@ export const Dialog = ({
   // Controlled/uncontrolled state management
   const [isOpen, setIsOpen] = useControlledState(controlledOpen, defaultOpen, onOpenChange);
 
+  const closeDialog = useCallback(() => setIsOpen(false), [setIsOpen]);
+
   // Track previous open state for close transition detection
   const wasOpenRef = useRef(isOpen ?? false);
 
@@ -74,6 +76,7 @@ export const Dialog = ({
     () => ({
       isOpen: isOpen ?? false,
       setIsOpen,
+      closeDialog,
       modal,
       disabled,
       forceMount,
@@ -88,7 +91,17 @@ export const Dialog = ({
       restoreFocusPropRef,
       finalFocusPropRef,
     }),
-    [isOpen, setIsOpen, modal, disabled, forceMount, titleId, descriptionId, contentId],
+    [
+      isOpen,
+      setIsOpen,
+      closeDialog,
+      modal,
+      disabled,
+      forceMount,
+      titleId,
+      descriptionId,
+      contentId,
+    ],
   );
 
   return <DialogContext.Provider value={contextValue}>{children}</DialogContext.Provider>;
