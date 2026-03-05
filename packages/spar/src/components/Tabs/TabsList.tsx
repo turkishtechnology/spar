@@ -6,7 +6,6 @@ import type { TabsListProps } from './types';
  * TabsList component that contains TabsTrigger elements and handles keyboard navigation
  */
 export const TabsList = <T extends ElementType = 'div'>({
-  loop = true,
   as,
   children,
   onKeyDown,
@@ -35,16 +34,12 @@ export const TabsList = <T extends ElementType = 'div'>({
 
       let nextIndex = currentIndex + direction;
 
-      if (loop) {
-        if (nextIndex >= enabledTabs.length) nextIndex = 0;
-        if (nextIndex < 0) nextIndex = enabledTabs.length - 1;
-      } else {
-        nextIndex = Math.max(0, Math.min(nextIndex, enabledTabs.length - 1));
-      }
+      if (nextIndex >= enabledTabs.length) nextIndex = 0;
+      if (nextIndex < 0) nextIndex = enabledTabs.length - 1;
 
       return enabledTabs[nextIndex];
     },
-    [getEnabledTabs, loop],
+    [getEnabledTabs],
   );
 
   const handleKeyDown = useCallback(
