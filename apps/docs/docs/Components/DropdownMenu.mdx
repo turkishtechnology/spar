@@ -30,7 +30,7 @@ Accessible dropdown menu component for creating interactive command menus with k
             <path d='M13.2292 7.5001L9.99583 10.7334L6.7625 7.5001C6.4375 7.1751 5.9125 7.1751 5.5875 7.5001C5.2625 7.8251 5.2625 8.3501 5.5875 8.6751L9.4125 12.5001C9.7375 12.8251 10.2625 12.8251 10.5875 12.5001L14.4125 8.6751C14.7375 8.3501 14.7375 7.8251 14.4125 7.5001C14.0875 7.18343 13.5542 7.1751 13.2292 7.5001Z' />
           </svg>
         </DropdownMenu.Trigger>
-        <DropdownMenu.Content className='dropdown-content' align='end' sideOffset={4}>
+        <DropdownMenu.Content className='dropdown-content' align='end'>
           <DropdownMenu.Item className='dropdown-item'>
             <span className='dropdown-item-avatar'></span>
             Alice
@@ -47,6 +47,7 @@ Accessible dropdown menu component for creating interactive command menus with k
             <span className='dropdown-item-avatar'></span>
             Diana
           </DropdownMenu.Item>
+          <DropdownMenu.Arrow className='dropdown-arrow' />
         </DropdownMenu.Content>
       </DropdownMenu.Root>`}
     cssCode={`.dropdown-trigger {
@@ -119,6 +120,14 @@ display: block;
 width: 13.688px;
 height: 13.688px;
 background-color: #474747;
+}
+
+.dropdown-arrow {
+color: #ddd;
+}
+
+[data-theme='dark'] .dropdown-arrow {
+color: #222;
 }`}
 />
 
@@ -171,12 +180,7 @@ The DropdownMenu component is built as a compound component with multiple parts:
           <path d='M13.2292 7.5001L9.99583 10.7334L6.7625 7.5001C6.4375 7.1751 5.9125 7.1751 5.5875 7.5001C5.2625 7.8251 5.2625 8.3501 5.5875 8.6751L9.4125 12.5001C9.7375 12.8251 10.2625 12.8251 10.5875 12.5001L14.4125 8.6751C14.7375 8.3501 14.7375 7.8251 14.4125 7.5001C14.0875 7.18343 13.5542 7.1751 13.2292 7.5001Z' />
         </svg>
       </DropdownMenu.Trigger>
-      <DropdownMenu.Content
-        data-spar-part='content'
-        className='dropdown-content'
-        align='end'
-        sideOffset={4}
-      >
+      <DropdownMenu.Content data-spar-part='content' className='dropdown-content' align='end'>
         <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
           <span className='dropdown-item-avatar'></span>
           {'Alice'}
@@ -193,6 +197,7 @@ The DropdownMenu component is built as a compound component with multiple parts:
           <span className='dropdown-item-avatar'></span>
           {'Diana'}
         </DropdownMenu.Item>
+        <DropdownMenu.Arrow data-spar-part='arrow' />
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   </div>
@@ -210,6 +215,7 @@ The DropdownMenu component is built as a compound component with multiple parts:
       <DropdownMenu.Item />
     </DropdownMenu.Group>
     <DropdownMenu.Separator />
+    <DropdownMenu.Arrow />
   </DropdownMenu.Content>
 </DropdownMenu.Root>
 ```
@@ -286,20 +292,14 @@ function ControlledMenu() {
 
 ### Custom Positioning
 
-Control menu positioning and collision behavior.
+Control menu positioning.
 
 ```tsx
 function CustomPositionMenu() {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>Options</DropdownMenu.Trigger>
-      <DropdownMenu.Content
-        side='right'
-        align='start'
-        sideOffset={5}
-        alignOffset={10}
-        avoidCollisions={true}
-      >
+      <DropdownMenu.Content side='right' align='start'>
         <DropdownMenu.Item>Option 1</DropdownMenu.Item>
         <DropdownMenu.Item>Option 2</DropdownMenu.Item>
         <DropdownMenu.Item>Option 3</DropdownMenu.Item>
@@ -371,6 +371,27 @@ function NonModalMenu() {
         <DropdownMenu.Item>Preferences</DropdownMenu.Item>
         <DropdownMenu.Item>Extensions</DropdownMenu.Item>
         <DropdownMenu.Item>Keyboard Shortcuts</DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}
+```
+
+### Menu with Arrow
+
+Add a decorative arrow pointing to the trigger.
+
+```tsx
+function MenuWithArrow() {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>Options</DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item>Edit</DropdownMenu.Item>
+        <DropdownMenu.Item>Duplicate</DropdownMenu.Item>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item>Delete</DropdownMenu.Item>
+        <DropdownMenu.Arrow />
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
@@ -472,24 +493,19 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 
 **Props**
 
-| Name                    | Type                                     | Default         | Description                                           |
-| ----------------------- | ---------------------------------------- | --------------- | ----------------------------------------------------- |
-| `as?`                   | `React.ElementType`                      | `'div'`         | Polymorphic element type to render                    |
-| `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`      | Preferred side for positioning                        |
-| `align?`                | `'start' \| 'center' \| 'end'`           | `'start'`       | Alignment relative to trigger                         |
-| `sideOffset?`           | `number`                                 | `8`             | Distance in pixels from trigger                       |
-| `alignOffset?`          | `number`                                 | `0`             | Offset along alignment axis                           |
-| `avoidCollisions?`      | `boolean`                                | `true`          | Automatically adjust position to avoid viewport edges |
-| `collisionBoundary?`    | `Element \| Element[] \| null`           | `null`          | Boundary element(s) for collision detection           |
-| `collisionPadding?`     | `number`                                 | `8`             | Padding from boundary edges in pixels                 |
-| `loop?`                 | `boolean`                                | `false`         | Whether keyboard navigation loops through items       |
-| `container?`            | `HTMLElement \| null`                    | `document.body` | Custom portal container element                       |
-| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`   | `undefined`     | Escape key handler                                    |
-| `onPointerDownOutside?` | `(event: React.PointerEvent) => void`    | `undefined`     | Outside click handler                                 |
-| `onFocusOutside?`       | `(event: React.FocusEvent) => void`      | `undefined`     | Outside focus handler                                 |
-| `onKeyDown?`            | `(event: React.KeyboardEvent) => void`   | `undefined`     | Keyboard event handler                                |
-| `ref?`                  | `React.Ref<HTMLElement \| null>`         | `undefined`     | Forwarded ref to content element                      |
-| `children?`             | `React.ReactNode`                        | `undefined`     | Menu items and groups                                 |
+| Name                    | Type                                     | Default         | Description                                     |
+| ----------------------- | ---------------------------------------- | --------------- | ----------------------------------------------- |
+| `as?`                   | `React.ElementType`                      | `'div'`         | Polymorphic element type to render              |
+| `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`      | Preferred side for positioning                  |
+| `align?`                | `'start' \| 'center' \| 'end'`           | `'start'`       | Alignment relative to trigger                   |
+| `loop?`                 | `boolean`                                | `false`         | Whether keyboard navigation loops through items |
+| `container?`            | `HTMLElement \| null`                    | `document.body` | Custom portal container element                 |
+| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`   | `undefined`     | Escape key handler                              |
+| `onPointerDownOutside?` | `(event: React.PointerEvent) => void`    | `undefined`     | Outside click handler                           |
+| `onFocusOutside?`       | `(event: React.FocusEvent) => void`      | `undefined`     | Outside focus handler                           |
+| `onKeyDown?`            | `(event: React.KeyboardEvent) => void`   | `undefined`     | Keyboard event handler                          |
+| `ref?`                  | `React.Ref<HTMLElement \| null>`         | `undefined`     | Forwarded ref to content element                |
+| `children?`             | `React.ReactNode`                        | `undefined`     | Menu items and groups                           |
 
 **Events**
 
@@ -609,7 +625,7 @@ Optional decorative arrow element that points to the trigger. Headless: renders 
 
 | Name         | Type                  | Default     | Description                        |
 | ------------ | --------------------- | ----------- | ---------------------------------- |
-| `as?`        | `React.ElementType`   | `'div'`     | Polymorphic element type to render |
+| `as?`        | `React.ElementType`   | `'svg'`     | Polymorphic element type to render |
 | `ref?`       | `React.Ref<Element>`  | `undefined` | Forward ref support                |
 | `className?` | `string`              | `undefined` | CSS class names for styling        |
 | `style?`     | `React.CSSProperties` | `undefined` | Custom styles for arrow            |
@@ -622,9 +638,9 @@ Optional decorative arrow element that points to the trigger. Headless: renders 
 
 **HTML Attributes**
 
-| Attribute     | Value    | Purpose                     |
-| ------------- | -------- | --------------------------- |
-| `aria-hidden` | `"true"` | Hidden from assistive tech  |
+| Attribute     | Value    | Purpose                    |
+| ------------- | -------- | -------------------------- |
+| `aria-hidden` | `"true"` | Hidden from assistive tech |
 
 ## Keyboard Interactions
 

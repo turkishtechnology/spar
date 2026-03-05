@@ -167,6 +167,28 @@ export const LiveCode = ({ code, cssCode }: LiveCodeProps) => {
   };
 
   /* ------ Refs & stable callbacks ------ */
+  // Inject cssCode as a global <style> tag so portal-rendered elements (e.g. arrows, tooltips)
+  // also receive the demo styles regardless of where they are mounted in the DOM.
+  const styleTagRef = useRef<HTMLStyleElement | null>(null);
+  useEffect(() => {
+    if (!cssCode) return;
+
+    if (!styleTagRef.current) {
+      styleTagRef.current = document.createElement('style');
+      styleTagRef.current.setAttribute('data-live-code-demo', 'true');
+      document.head.appendChild(styleTagRef.current);
+    }
+
+    styleTagRef.current.textContent = cssCode;
+
+    return () => {
+      if (styleTagRef.current) {
+        document.head.removeChild(styleTagRef.current);
+        styleTagRef.current = null;
+      }
+    };
+  }, [cssCode]);
+
   const [resetKey, setResetKey] = useState(0);
   const [hasRenderedOnce, setHasRenderedOnce] = useState(false);
   const [isCodeCollapsed, setIsCodeCollapsed] = useState(false);
@@ -335,7 +357,6 @@ export const LiveCode = ({ code, cssCode }: LiveCodeProps) => {
                       <TooltipContent
                         className='live-code-copy-tooltip'
                         side='bottom'
-                        sideOffset={5}
                         style={{
                           borderColor: isCopied
                             ? 'var(--states-success-sub-base, #A0E6BA)'

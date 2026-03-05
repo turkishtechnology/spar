@@ -9,42 +9,26 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { useInteractOutside, useMergedRef } from '@/hooks';
 import {
+  useInteractOutside,
+  useMergedRef,
   useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  limitShift,
-  type Placement,
-  type Middleware,
-} from '@floating-ui/react-dom';
+  type UseFloatingOptions,
+  type UseFloatingReturn,
+} from '@/hooks';
+
 import type {
   DropdownMenuContentProps,
   DropdownMenuCollectionContextValue,
   DropdownMenuCollectionItem,
 } from './types';
-import type { Side, Align } from '../../types';
-import { useDropdownMenuContext, DropdownMenuCollectionContext } from './hooks';
+import {
+  useDropdownMenuContext,
+  DropdownMenuCollectionContext,
+  DropdownMenuContentContext,
+} from './hooks';
 import { isCharacterKey, TYPEAHEAD_TIMEOUT } from './utils/index';
-
-/**
- * Convert side and align to Floating UI placement.
- */
-const getPlacement = (side: Side, align: Align): Placement => {
-  if (side === 'top' || side === 'bottom') {
-    if (align === 'start') return `${side}-start`;
-    if (align === 'end') return `${side}-end`;
-    return side;
-  }
-  if (side === 'left' || side === 'right') {
-    if (align === 'start') return `${side}-start`;
-    if (align === 'end') return `${side}-end`;
-    return side;
-  }
-  return 'bottom';
-};
+import { Align, Side } from '@/types';
 
 const normalizeTypeaheadValue = (value: string) => value.trim().toLocaleLowerCase();
 
@@ -55,12 +39,7 @@ const normalizeTypeaheadValue = (value: string) => value.trim().toLocaleLowerCas
 export const DropdownMenuContent = <T extends ElementType = 'div'>({
   as,
   side = 'bottom',
-  align = 'start',
-  sideOffset = 8,
-  alignOffset = 0,
-  avoidCollisions = true,
-  collisionBoundary = null,
-  collisionPadding = 8,
+  align = 'center',
   loop = false,
   container,
   onEscapeKeyDown,
@@ -79,54 +58,27 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     setMounted(true);
   }, []);
 
-  const middleware: Middleware[] = useMemo(() => {
-    const result: Middleware[] = [offset({ mainAxis: sideOffset, alignmentAxis: alignOffset })];
+  // Use custom Floating UI hook for positioning
+  const floatingOptions: UseFloatingOptions = {
+    side,
+    align,
+    arrowRef: menu.arrowRef?.current,
+  };
 
-    if (avoidCollisions) {
-      const boundaryValue = collisionBoundary
-        ? Array.isArray(collisionBoundary)
-          ? collisionBoundary
-          : [collisionBoundary]
-        : undefined;
+  const { floatingStyles, arrowStyles, placement, refs }: UseFloatingReturn =
+    useFloating(floatingOptions);
 
-      result.push(
-        flip({
-          ...(boundaryValue && { boundary: boundaryValue }),
-          padding: collisionPadding,
-        }),
-      );
-      result.push(
-        shift({
-          ...(boundaryValue && { boundary: boundaryValue }),
-          padding: collisionPadding,
-          limiter: limitShift(),
-        }),
-      );
-    }
-
-    return result;
-  }, [sideOffset, alignOffset, avoidCollisions, collisionBoundary, collisionPadding]);
-
-  const { x, y, strategy, refs, placement } = useFloating({
-    placement: getPlacement(side, align),
-    middleware,
-    whileElementsMounted: autoUpdate,
-  });
-
-  useLayoutEffect(() => {
-    if (menu.triggerRef.current) {
-      refs.setReference(menu.triggerRef.current);
-    }
-  }, [menu.triggerRef, refs]);
+  // Set reference element
+  useEffect(() => {
+    refs.setReference(menu.triggerRef.current);
+  }, [refs, menu.triggerRef]);
 
   const mergedRef = useMergedRef(contentRef, ref);
 
   const floatingRef = useCallback(
     (node: HTMLElement | null) => {
       mergedRef(node);
-      if (node) {
-        refs.setFloating(node);
-      }
+      refs.setFloating(node);
     },
     [mergedRef, refs],
   );
@@ -480,6 +432,11 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     return [placementSide, placementAlign];
   }, [placement]);
 
+  const contentContextValue = useMemo(
+    () => ({ arrowStyles, side: currentSide }),
+    [arrowStyles, currentSide],
+  );
+
   if (!menu.open || !mounted) {
     return null;
   }
@@ -487,26 +444,26 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
   const portalContainer = container || document.body;
 
   const contentElement = (
-    <DropdownMenuCollectionContext.Provider value={collectionValue}>
-      <Component
-        {...props}
-        ref={floatingRef}
-        id={menu.contentId}
-        role='menu'
-        aria-labelledby={menu.triggerId}
-        data-state='open'
-        data-side={currentSide}
-        data-align={currentAlign}
-        tabIndex={-1}
-        onKeyDown={handleKeyDown}
-        style={{
-          position: strategy,
-          top: y ?? 0,
-          left: x ?? 0,
-          ...props.style,
-        }}
-      />
-    </DropdownMenuCollectionContext.Provider>
+    <DropdownMenuContentContext.Provider value={contentContextValue}>
+      <DropdownMenuCollectionContext.Provider value={collectionValue}>
+        <Component
+          {...props}
+          ref={floatingRef}
+          id={menu.contentId}
+          role='menu'
+          aria-labelledby={menu.triggerId}
+          data-state='open'
+          data-side={currentSide}
+          data-align={currentAlign}
+          tabIndex={-1}
+          onKeyDown={handleKeyDown}
+          style={{
+            ...floatingStyles,
+            ...props.style,
+          }}
+        />
+      </DropdownMenuCollectionContext.Provider>
+    </DropdownMenuContentContext.Provider>
   );
 
   return createPortal(contentElement, portalContainer);
