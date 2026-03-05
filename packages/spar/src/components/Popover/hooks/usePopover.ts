@@ -93,16 +93,9 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
 
   const [state, setState] = useState<PopoverState>({
     isOpen,
-    triggerRect: null,
-    contentRect: null,
-    side,
-    align,
+    contentId,
     actualSide: side,
     actualAlign: align,
-    isPositioned: false,
-    triggerElement: null,
-    contentElement: null,
-    contentId,
   });
 
   // Update state when open changes
@@ -159,7 +152,6 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
 
   return {
     state,
-    setState,
     triggerRef: refs.reference,
     contentRef: refs.floating,
     arrowRef,

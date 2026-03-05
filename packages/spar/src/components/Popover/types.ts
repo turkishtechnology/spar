@@ -262,16 +262,9 @@ export type PopoverCloseProps<T extends ElementType = 'button'> = PolymorphicPro
  */
 export interface PopoverState {
   isOpen: boolean;
-  triggerRect: DOMRect | null;
-  contentRect: DOMRect | null;
-  side: Side;
-  align: Align;
+  contentId: string;
   actualSide: Side;
   actualAlign: Align;
-  isPositioned: boolean;
-  triggerElement: HTMLElement | null;
-  contentElement: HTMLElement | null;
-  contentId: string;
 }
 
 /**
