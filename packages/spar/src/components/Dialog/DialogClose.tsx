@@ -16,10 +16,10 @@ export const DialogClose = <T extends ElementType = 'button'>({
   children,
   ...props
 }: DialogCloseProps<T>) => {
-  const { isOpen, setIsOpen } = useDialogContext();
+  const { isOpen, closeDialog } = useDialogContext();
   const { handleClick, renderProps } = useCloseButton({
     isOpen,
-    close: () => setIsOpen(false),
+    close: closeDialog,
     onClick,
   });
 
@@ -27,6 +27,7 @@ export const DialogClose = <T extends ElementType = 'button'>({
     ...(as && { as }),
     ...(ref && { ref }),
     onClick: handleClick,
+    'data-dialog-close': '',
     ...props,
   } as ButtonProps<T>;
 
