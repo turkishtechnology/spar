@@ -10,13 +10,6 @@ import { getFocusableElements } from './utils/index';
  */
 export const PopoverContent = <T extends ElementType = 'div'>({
   as,
-  side = 'bottom',
-  align = 'center',
-  sideOffset = 8,
-  alignOffset = 0,
-  avoidCollisions = true,
-  collisionBoundary,
-  hideWhenDetached = false,
   container,
   onOpenAutoFocus,
   onCloseAutoFocus,
@@ -29,18 +22,18 @@ export const PopoverContent = <T extends ElementType = 'div'>({
   style,
   onKeyDown,
   ref,
+  // Positioning props are handled by usePopover hook via Floating UI middleware.
+  // Destructured here to prevent them from being spread onto the DOM element.
+  side: _side,
+  align: _align,
+  sideOffset: _sideOffset,
+  alignOffset: _alignOffset,
+  collisionBoundary: _collisionBoundary,
+  hideWhenDetached: _hideWhenDetached,
+  avoidCollisions: _avoidCollisions,
   ...props
 }: PopoverContentProps<T>) => {
   const Component = as || 'div';
-
-  // Unused props for future implementation
-  void side;
-  void align;
-  void sideOffset;
-  void alignOffset;
-  void collisionBoundary;
-  void hideWhenDetached;
-  void avoidCollisions;
 
   const { state, triggerRef, contentRef, floatingStyles, modal, closePopover } =
     usePopoverContext();
@@ -87,9 +80,12 @@ export const PopoverContent = <T extends ElementType = 'div'>({
 
     const handleEscapeKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        event.preventDefault();
-        closePopover();
         onEscapeKeyDown?.(event);
+
+        if (!event.defaultPrevented) {
+          event.preventDefault();
+          closePopover();
+        }
       }
     };
 
@@ -118,15 +114,16 @@ export const PopoverContent = <T extends ElementType = 'div'>({
     if (!state.isOpen || !trapFocus || !contentRef.current) return;
 
     const contentElement = contentRef.current;
-    const focusableElements = getFocusableElements(contentElement);
-
-    if (focusableElements.length === 0) return;
-
-    const firstFocusable = focusableElements[0];
-    const lastFocusable = focusableElements[focusableElements.length - 1];
 
     const handleTabKey = (event: KeyboardEvent) => {
       if (event.key !== 'Tab') return;
+
+      // Query focusable elements on each Tab press to handle dynamic content
+      const focusableElements = getFocusableElements(contentElement);
+      if (focusableElements.length === 0) return;
+
+      const firstFocusable = focusableElements[0];
+      const lastFocusable = focusableElements[focusableElements.length - 1];
 
       if (event.shiftKey) {
         if (document.activeElement === firstFocusable) {

@@ -140,6 +140,7 @@ export const DialogContent = <T extends ElementType = 'div'>({
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Tab') return;
 
+      // Query focusable elements on each Tab press to handle dynamic content
       const focusableElements = contentElement.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
       );
@@ -165,9 +166,9 @@ export const DialogContent = <T extends ElementType = 'div'>({
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, mounted, modal, trapFocus]);
+    contentElement.addEventListener('keydown', handleKeyDown);
+    return () => contentElement.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, mounted, modal, trapFocus, contentRef]);
 
   // Escape key handler
   const handleKeyDown = useCallback(

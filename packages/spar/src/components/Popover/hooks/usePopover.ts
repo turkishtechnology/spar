@@ -76,13 +76,6 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
     strategy: 'absolute' as Strategy,
   });
 
-  const [mounted, setMounted] = useState(false);
-
-  // SSR safety
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   // Auto-update position
   useEffect(() => {
     if (!isOpen || !refs.reference.current || !refs.floating.current) return;
@@ -165,6 +158,5 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
     closePopover,
     togglePopover,
     onOpenChange,
-    mounted,
   };
 };
