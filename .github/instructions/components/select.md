@@ -21,18 +21,16 @@ The Select component is a headless, fully accessible dropdown UI pattern that al
   </SelectTrigger>
 
   <SelectContent>
-    <SelectViewport>
-      <SelectGroup>
-        <SelectLabel />
-        <SelectItem>
-          <SelectItemText />
-          <SelectItemIndicator />
-        </SelectItem>
-      </SelectGroup>
+    <SelectGroup>
+      <SelectLabel />
+      <SelectItem>
+        <SelectItemText />
+        <SelectItemIndicator />
+      </SelectItem>
+    </SelectGroup>
 
-      <SelectSeparator />
-      <SelectArrow />
-    </SelectViewport>
+    <SelectSeparator />
+    <SelectArrow />
   </SelectContent>
 </SelectRoot>
 ```
@@ -131,13 +129,6 @@ The dropdown container that appears when open.
 - `--select-content-available-height`: Available height
 - `--select-trigger-width`: Trigger element width
 - `--select-trigger-height`: Trigger element height
-
-### SelectViewport
-Scrollable container for select items.
-
-| Prop | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `div` | Polymorphic component type |
 
 ### SelectItem
 Individual selectable option.
@@ -622,7 +613,7 @@ export * as Select from './index';
 - ⚠️ Different component structure (compound vs single)
 - ⚠️ `Listbox` → `SelectRoot`
 - ⚠️ `Listbox.Button` → `SelectTrigger` + `SelectValue`
-- ⚠️ `Listbox.Options` → `SelectContent` + `SelectViewport`
+- ⚠️ `Listbox.Options` → `SelectContent`
 - ⚠️ `Listbox.Option` → `SelectItem`
 - ✅ `value` and `onChange` props map directly
 
@@ -648,7 +639,6 @@ export * as Select from './index';
 
 **Phase 2: Dropdown & Items** (Week 2)
 - [ ] Implement `SelectContent` with built-in portal (via `createPortal`) and positioning
-- [ ] Implement `SelectViewport` (scrollable container)
 - [ ] Implement `SelectItem` with selection logic
 - [ ] Implement `SelectItemText` and `SelectItemIndicator`
 - [ ] Add keyboard navigation (arrows, home/end)

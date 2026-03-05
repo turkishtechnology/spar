@@ -211,12 +211,6 @@ export type SelectContentProps<T extends ElementType = 'div'> = PolymorphicProps
 >;
 
 /**
- * Props for SelectViewport component
- * @remarks Scrollable container for select items
- */
-export type SelectViewportProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
-
-/**
  * Render props provided to children function for SelectItem
  */
 export interface SelectItemRenderProps {
