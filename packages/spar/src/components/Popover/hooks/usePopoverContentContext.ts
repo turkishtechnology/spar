@@ -1,8 +1,11 @@
 import { createContext, useContext, type CSSProperties } from 'react';
+import type { Side } from '../../../types';
 
 export interface PopoverContentContextValue {
   /** Ready-to-use styles for the arrow element, computed by useFloating. */
   arrowStyles: CSSProperties;
+  /** Actual computed placement side of the content. */
+  side: Side;
 }
 
 export const PopoverContentContext = createContext<PopoverContentContextValue | null>(null);

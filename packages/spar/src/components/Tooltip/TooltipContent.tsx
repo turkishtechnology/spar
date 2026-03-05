@@ -6,7 +6,7 @@ import {
   type UseFloatingOptions,
   type UseFloatingReturn,
 } from '@/hooks';
-import { useTooltipContext } from './hooks';
+import { useTooltipContext, TooltipContentContext } from './hooks';
 import type { TooltipContentProps } from './types';
 import type { Side, Align } from '../../types';
 
@@ -42,12 +42,10 @@ export const TooltipContent = <T extends ElementType = 'div'>({
   };
 
   const {
-    x,
-    y,
-    strategy,
+    floatingStyles,
+    arrowStyles,
     refs,
     placement: actualPlacement,
-    middlewareData,
   }: UseFloatingReturn = useFloating(floatingOptions);
 
   // Extract placement information for data attributes
@@ -133,6 +131,11 @@ export const TooltipContent = <T extends ElementType = 'div'>({
     }
   }, [context]);
 
+  const contentContextValue = useMemo(
+    () => ({ arrowStyles, side: currentSide }),
+    [arrowStyles, currentSide],
+  );
+
   // Don't render if not open or disabled
   if (!context.isOpen || context.disabled) {
     return null;
@@ -143,26 +146,12 @@ export const TooltipContent = <T extends ElementType = 'div'>({
     return null;
   }
 
-  // Get arrow data from middleware
-  const arrowX = middlewareData.arrow?.x;
-  const arrowY = middlewareData.arrow?.y;
-
-  const floatingStyles: React.CSSProperties = {
-    position: strategy,
-    top: y ?? 0,
-    left: x ?? 0,
-    // Arrow positioning via CSS custom properties
-    '--tooltip-arrow-x': arrowX === undefined ? undefined : `${arrowX}px`,
-    '--tooltip-arrow-y': arrowY === undefined ? undefined : `${arrowY}px`,
-    ...style,
-  } as React.CSSProperties;
-
   const contentProps = {
     ref: floatingRef,
     id: context.contentId,
     role: 'tooltip',
     className,
-    style: floatingStyles,
+    style: { ...floatingStyles, ...style },
     'data-side': currentSide,
     'data-align': currentAlign,
     onKeyDown: handleKeyDown,
@@ -173,7 +162,12 @@ export const TooltipContent = <T extends ElementType = 'div'>({
 
   const portalContainer = container || document.body;
 
-  return createPortal(<Component {...contentProps}>{children}</Component>, portalContainer);
+  return createPortal(
+    <TooltipContentContext.Provider value={contentContextValue}>
+      <Component {...contentProps}>{children}</Component>
+    </TooltipContentContext.Provider>,
+    portalContainer,
+  );
 };
 
 TooltipContent.displayName = 'TooltipContent';

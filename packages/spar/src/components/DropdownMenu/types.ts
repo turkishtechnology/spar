@@ -220,7 +220,7 @@ export type DropdownMenuGroupProps<T extends ElementType = 'div'> = PolymorphicP
  * Props for DropdownMenuArrow component
  * @remarks Purely decorative arrow element. Headless: user provides all visuals.
  */
-export type DropdownMenuArrowProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
+export type DropdownMenuArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<'svg', T>;
 
 /**
  * Internal context value for DropdownMenu

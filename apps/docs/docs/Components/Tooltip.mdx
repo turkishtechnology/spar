@@ -23,6 +23,7 @@ A popup that displays information related to an element when the element receive
           </Tooltip.Trigger>
           <Tooltip.Content className='tooltip-content'>
             Explore
+            <Tooltip.Arrow className='tooltip-arrow' />
           </Tooltip.Content>
         </Tooltip.Root>
 </Tooltip.Provider>`}
@@ -63,8 +64,15 @@ background-color: #222;
 box-shadow:
 0 2px 2px -1px rgba(82, 88, 102, 0.04),
 0 6px 12px -2px rgba(82, 88, 102, 0.04),
-0 8px 20px 0 rgba(82, 88, 102, 0.04);
-}`}
+0 8px 20px 0 rgba(82, 88, 102, 0.04);}
+
+.tooltip-arrow {
+color: #ddd;
+}
+
+
+[data-theme='dark'] .tooltip-arrow {
+color: #222;}`}
 />
 
 </div>
@@ -119,6 +127,7 @@ The Tooltip component is built as a compound component with multiple parts:
         </Tooltip.Trigger>
         <Tooltip.Content data-spar-part='content' className='tooltip-content'>
           {'Explore'}
+          <Tooltip.Arrow data-spar-part='arrow' className='tooltip-arrow' />
         </Tooltip.Content>
       </Tooltip.Root>
     </Tooltip.Provider>
@@ -407,10 +416,10 @@ The trigger element that shows/hides the tooltip on hover or focus. Extends all 
 
 **HTML Attributes**
 
-| Attribute       | Value                | Purpose                 |
-| --------------- | -------------------- | ----------------------- |
-| `id`            | `string`             | Unique identifier       |
-| `data-state`    | `"open" \| "closed"` | Indicates tooltip state |
+| Attribute       | Value                | Purpose                  |
+| --------------- | -------------------- | ------------------------ |
+| `id`            | `string`             | Unique identifier        |
+| `data-state`    | `"open" \| "closed"` | Indicates tooltip state  |
 | `data-disabled` | `boolean`            | Indicates disabled state |
 
 ### Tooltip.Content
@@ -419,23 +428,23 @@ The content that displays in the tooltip popup with smart positioning.
 
 **Props**
 
-| Name                | Type                                     | Default         | Description                             |
-| ------------------- | ---------------------------------------- | --------------- | --------------------------------------- |
-| `children`          | `React.ReactNode`                        | -               | Content to display in tooltip           |
-| `as?`               | `React.ElementType`                      | `"div"`         | Element type for tooltip content        |
-| `side?`             | `"top" \| "bottom" \| "left" \| "right"` | `"top"`         | Preferred placement relative to trigger |
-| `align?`            | `"start" \| "center" \| "end"`           | `"center"`      | Alignment relative to trigger           |
-| `onEscapeKeyDown?`  | `(event: React.KeyboardEvent) => void`   | -               | Escape key handler                      |
-| `container?`        | `HTMLElement \| null`                    | `document.body` | Custom portal container element         |
+| Name               | Type                                     | Default         | Description                             |
+| ------------------ | ---------------------------------------- | --------------- | --------------------------------------- |
+| `children`         | `React.ReactNode`                        | -               | Content to display in tooltip           |
+| `as?`              | `React.ElementType`                      | `"div"`         | Element type for tooltip content        |
+| `side?`            | `"top" \| "bottom" \| "left" \| "right"` | `"top"`         | Preferred placement relative to trigger |
+| `align?`           | `"start" \| "center" \| "end"`           | `"center"`      | Alignment relative to trigger           |
+| `onEscapeKeyDown?` | `(event: React.KeyboardEvent) => void`   | -               | Escape key handler                      |
+| `container?`       | `HTMLElement \| null`                    | `document.body` | Custom portal container element         |
 
 **Events**
 
-| Name              | Parameters                     | Description                  | When Triggered                  |
-| ----------------- | ------------------------------ | ---------------------------- | ------------------------------- |
-| `onEscapeKeyDown` | `(event: React.KeyboardEvent)` | Escape key pressed           | User presses Escape             |
-| `onPointerEnter`  | `(event: React.PointerEvent)`  | Pointer enters content       | Mouse hover or touch on tooltip |
-| `onPointerLeave`  | `(event: React.PointerEvent)`  | Pointer leaves content       | Mouse exit or touch end         |
-| `onKeyDown`       | `(event: React.KeyboardEvent)` | Key pressed in content       | Keyboard interaction            |
+| Name              | Parameters                     | Description            | When Triggered                  |
+| ----------------- | ------------------------------ | ---------------------- | ------------------------------- |
+| `onEscapeKeyDown` | `(event: React.KeyboardEvent)` | Escape key pressed     | User presses Escape             |
+| `onPointerEnter`  | `(event: React.PointerEvent)`  | Pointer enters content | Mouse hover or touch on tooltip |
+| `onPointerLeave`  | `(event: React.PointerEvent)`  | Pointer leaves content | Mouse exit or touch end         |
+| `onKeyDown`       | `(event: React.KeyboardEvent)` | Key pressed in content | Keyboard interaction            |
 
 **HTML Attributes**
 
@@ -452,12 +461,12 @@ Optional decorative arrow pointing to the trigger element. Headless: renders a p
 
 **Props**
 
-| Name         | Type                  | Default | Description                       |
-| ------------ | --------------------- | ------- | --------------------------------- |
-| `as?`        | `React.ElementType`   | `"div"` | Polymorphic element type to render |
-| `ref?`       | `React.Ref<Element>`  | -       | Forward ref support               |
-| `className?` | `string`              | -       | CSS class names for styling       |
-| `style?`     | `React.CSSProperties` | -       | Inline styles                     |
+| Name         | Type                  | Default | Description                        |
+| ------------ | --------------------- | ------- | ---------------------------------- |
+| `as?`        | `React.ElementType`   | `"svg"` | Polymorphic element type to render |
+| `ref?`       | `React.Ref<Element>`  | -       | Forward ref support                |
+| `className?` | `string`              | -       | CSS class names for styling        |
+| `style?`     | `React.CSSProperties` | -       | Inline styles                      |
 
 **Events**
 
@@ -467,9 +476,9 @@ Optional decorative arrow pointing to the trigger element. Headless: renders a p
 
 **HTML Attributes**
 
-| Attribute    | Value  | Purpose              |
-| ------------ | ------ | -------------------- |
-| `data-side`  | `Side` | Indicates arrow side |
+| Attribute    | Value   | Purpose              |
+| ------------ | ------- | -------------------- |
+| `data-side`  | `Side`  | Indicates arrow side |
 | `data-align` | `Align` | Indicates alignment  |
 
 ---

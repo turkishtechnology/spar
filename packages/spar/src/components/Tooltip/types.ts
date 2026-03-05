@@ -186,7 +186,7 @@ export type TooltipContentProps<T extends ElementType = 'div'> = PolymorphicProp
  * Props for TooltipArrow
  * @remarks Optional arrow pointing to the trigger element. Headless: user provides all visuals.
  */
-export type TooltipArrowProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
+export type TooltipArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<'svg', T>;
 
 /**
  * @internal

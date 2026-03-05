@@ -22,7 +22,11 @@ import type {
   DropdownMenuCollectionContextValue,
   DropdownMenuCollectionItem,
 } from './types';
-import { useDropdownMenuContext, DropdownMenuCollectionContext } from './hooks';
+import {
+  useDropdownMenuContext,
+  DropdownMenuCollectionContext,
+  DropdownMenuContentContext,
+} from './hooks';
 import { isCharacterKey, TYPEAHEAD_TIMEOUT } from './utils/index';
 import { Align, Side } from '@/types';
 
@@ -35,7 +39,7 @@ const normalizeTypeaheadValue = (value: string) => value.trim().toLocaleLowerCas
 export const DropdownMenuContent = <T extends ElementType = 'div'>({
   as,
   side = 'bottom',
-  align = 'start',
+  align = 'center',
   loop = false,
   container,
   onEscapeKeyDown,
@@ -61,7 +65,7 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     arrowRef: menu.arrowRef?.current,
   };
 
-  const { x, y, strategy, placement, refs, middlewareData }: UseFloatingReturn =
+  const { floatingStyles, arrowStyles, placement, refs }: UseFloatingReturn =
     useFloating(floatingOptions);
 
   // Set reference element
@@ -428,9 +432,10 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     return [placementSide, placementAlign];
   }, [placement]);
 
-  // Calculate arrow position for CSS custom properties
-  const arrowX = middlewareData.arrow?.x;
-  const arrowY = middlewareData.arrow?.y;
+  const contentContextValue = useMemo(
+    () => ({ arrowStyles, side: currentSide }),
+    [arrowStyles, currentSide],
+  );
 
   if (!menu.open || !mounted) {
     return null;
@@ -438,34 +443,27 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
 
   const portalContainer = container || document.body;
 
-  const floatingStyles: React.CSSProperties = {
-    position: strategy,
-    top: y ?? 0,
-    left: x ?? 0,
-    // Arrow positioning via CSS custom properties
-    '--dropdown-arrow-x': arrowX === undefined ? undefined : `${arrowX}px`,
-    '--dropdown-arrow-y': arrowY === undefined ? undefined : `${arrowY}px`,
-  } as React.CSSProperties;
-
   const contentElement = (
-    <DropdownMenuCollectionContext.Provider value={collectionValue}>
-      <Component
-        {...props}
-        ref={floatingRef}
-        id={menu.contentId}
-        role='menu'
-        aria-labelledby={menu.triggerId}
-        data-state='open'
-        data-side={currentSide}
-        data-align={currentAlign}
-        tabIndex={-1}
-        onKeyDown={handleKeyDown}
-        style={{
-          ...floatingStyles,
-          ...props.style,
-        }}
-      />
-    </DropdownMenuCollectionContext.Provider>
+    <DropdownMenuContentContext.Provider value={contentContextValue}>
+      <DropdownMenuCollectionContext.Provider value={collectionValue}>
+        <Component
+          {...props}
+          ref={floatingRef}
+          id={menu.contentId}
+          role='menu'
+          aria-labelledby={menu.triggerId}
+          data-state='open'
+          data-side={currentSide}
+          data-align={currentAlign}
+          tabIndex={-1}
+          onKeyDown={handleKeyDown}
+          style={{
+            ...floatingStyles,
+            ...props.style,
+          }}
+        />
+      </DropdownMenuCollectionContext.Provider>
+    </DropdownMenuContentContext.Provider>
   );
 
   return createPortal(contentElement, portalContainer);
