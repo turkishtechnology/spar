@@ -5,3 +5,8 @@ export {
   type DropdownMenuCollectionItem,
   type DropdownMenuCollectionContextValue,
 } from './useDropdownMenuCollectionContext';
+export {
+  useDropdownMenuContentContext,
+  DropdownMenuContentContext,
+} from './useDropdownMenuContentContext';
+export type { DropdownMenuContentContextValue } from './useDropdownMenuContentContext';

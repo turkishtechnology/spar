@@ -1,38 +1,15 @@
-import React, {
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useCallback,
-  useMemo,
-  useState,
-  type ElementType,
-} from 'react';
+import React, { useEffect, useRef, useCallback, useMemo, useState, type ElementType } from 'react';
 import { createPortal } from 'react-dom';
-import { useInteractOutside, useMergedRef } from '@/hooks';
-import { useSelectContext } from './hooks';
 import {
+  useInteractOutside,
+  useMergedRef,
   useFloating,
-  offset as offsetMiddleware,
-  flip as flipMiddleware,
-  shift as shiftMiddleware,
-  size as sizeMiddleware,
-  hide as hideMiddleware,
-  arrow as arrowMiddleware,
-  autoUpdate,
-  type Placement,
-} from '@floating-ui/react-dom';
+  type UseFloatingOptions,
+  type UseFloatingReturn,
+} from '@/hooks';
+import { useSelectContext, SelectContentContext } from './hooks';
 import type { SelectContentProps } from './types';
-import type { Side, Align } from '../../types';
-
-/**
- * Convert side and align to Floating UI placement.
- */
-const getPlacement = (side: Side, align: Align): Placement => {
-  if (align === 'center') {
-    return side as Placement;
-  }
-  return `${side}-${align}` as Placement;
-};
+import { Align, Side } from '@/types';
 
 /**
  * Dropdown container that appears when select is open. Handles keyboard navigation, focus management, and outside click detection. Positioned using Floating UI.
@@ -40,15 +17,7 @@ const getPlacement = (side: Side, align: Align): Placement => {
 export const SelectContent = <T extends ElementType = 'div'>({
   ref,
   side = 'bottom',
-  align = 'start',
-  sideOffset = 8,
-  alignOffset: _alignOffset = 0,
-  avoidCollisions = true,
-  collisionPadding = 8,
-  flip = true,
-  shift = true,
-  size = true,
-  hide = false,
+  align = 'center',
   container,
   onEscapeKeyDown,
   onPointerDownOutside,
@@ -69,82 +38,35 @@ export const SelectContent = <T extends ElementType = 'div'>({
     setMounted(true);
   }, []);
 
-  // Build middleware array
-  const middleware = useMemo(() => {
-    const middlewares = [];
+  // Use custom Floating UI hook for positioning
+  const floatingOptions: UseFloatingOptions = {
+    side,
+    align,
+    arrowRef: context.arrowRef?.current ?? null,
+  };
 
-    // Offset from trigger
-    middlewares.push(offsetMiddleware(sideOffset));
-
-    // Flip to opposite side when no space
-    if (avoidCollisions && flip) {
-      middlewares.push(flipMiddleware());
-    }
-
-    // Shift to stay in view
-    if (avoidCollisions && shift) {
-      middlewares.push(shiftMiddleware({ padding: collisionPadding }));
-    }
-
-    // Size to fit available space
-    if (size) {
-      middlewares.push(
-        sizeMiddleware({
-          apply({ availableHeight, elements }) {
-            Object.assign(elements.floating.style, {
-              maxHeight: `${availableHeight}px`,
-            });
-          },
-          padding: 10,
-        }),
-      );
-    }
-
-    // Hide when reference is scrolled out of view
-    if (hide) {
-      middlewares.push(hideMiddleware());
-    }
-
-    // Arrow positioning
-    if (context.arrowRef?.current) {
-      middlewares.push(arrowMiddleware({ element: context.arrowRef.current }));
-    }
-
-    return middlewares;
-  }, [sideOffset, avoidCollisions, flip, shift, collisionPadding, size, hide, context.arrowRef]);
-
-  // Use Floating UI hook for positioning
   const {
-    x,
-    y,
-    strategy: floatingStrategy,
-    refs,
+    floatingStyles,
+    arrowStyles,
     placement: finalPlacement,
-  } = useFloating({
-    placement: getPlacement(side, align),
-    middleware,
-    whileElementsMounted: autoUpdate,
-  });
+    refs,
+  }: UseFloatingReturn = useFloating(floatingOptions);
 
-  // Connect trigger ref to Floating UI reference
-  useLayoutEffect(() => {
-    if (context.triggerRef.current) {
-      refs.setReference(context.triggerRef.current);
-    }
-  }, [refs, context.triggerRef]);
-
-  // Merge internal refs with external ref, and sync with Floating UI
+  // Merge internal refs with external ref
   const mergedRef = useMergedRef(context.contentRef, ref);
 
   const floatingRef = useCallback(
     (node: HTMLDivElement | null) => {
       mergedRef(node);
-      if (node) {
-        refs.setFloating(node);
-      }
+      refs.setFloating(node);
     },
     [mergedRef, refs],
   );
+
+  // Set reference element
+  useEffect(() => {
+    refs.setReference(context.triggerRef.current);
+  }, [refs, context.triggerRef]);
 
   // Focus management - focus content when opened
   useEffect(() => {
@@ -294,15 +216,18 @@ export const SelectContent = <T extends ElementType = 'div'>({
     return [placementSide, placementAlign];
   }, [finalPlacement]);
 
+  const contentContextValue = useMemo(
+    () => ({ arrowStyles, side: currentSide }),
+    [arrowStyles, currentSide],
+  );
+
   if (!context.open || !mounted) {
     return null;
   }
 
-  // Combine Floating UI styles with user styles
-  const floatingStyles: React.CSSProperties = {
-    position: floatingStrategy,
-    top: y ?? 0,
-    left: x ?? 0,
+  // Combine Floating UI styles with component-specific extras
+  const contentStyle: React.CSSProperties = {
+    ...floatingStyles,
     minWidth: context.triggerRef.current?.offsetWidth ?? undefined,
     ...style,
   };
@@ -310,21 +235,23 @@ export const SelectContent = <T extends ElementType = 'div'>({
   const portalContainer = container || document.body;
 
   const contentElement = (
-    <Component
-      ref={floatingRef}
-      id={context.contentId}
-      role='listbox'
-      aria-labelledby={context.triggerId}
-      tabIndex={-1}
-      data-state={context.open ? 'open' : 'closed'}
-      data-side={currentSide}
-      data-align={currentAlign}
-      onKeyDown={handleKeyDown}
-      style={floatingStyles}
-      {...props}
-    >
-      {children}
-    </Component>
+    <SelectContentContext.Provider value={contentContextValue}>
+      <Component
+        ref={floatingRef}
+        id={context.contentId}
+        role='listbox'
+        aria-labelledby={context.triggerId}
+        tabIndex={-1}
+        data-state={context.open ? 'open' : 'closed'}
+        data-side={currentSide}
+        data-align={currentAlign}
+        onKeyDown={handleKeyDown}
+        style={contentStyle}
+        {...props}
+      >
+        {children}
+      </Component>
+    </SelectContentContext.Provider>
   );
 
   return createPortal(contentElement, portalContainer);

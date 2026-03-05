@@ -2,8 +2,6 @@ import type { ElementType, ReactNode, RefObject } from 'react';
 import type { Side, Align, PolymorphicProps } from '../../types';
 import type { ButtonOwnProps } from '../Button/types';
 
-export type Sticky = 'partial' | 'always';
-
 /**
  * Render props provided to TooltipTrigger children function
  */
@@ -16,10 +14,6 @@ export interface TooltipTriggerRenderProps {
    * Whether the tooltip is disabled
    */
   disabled: boolean;
-  /**
-   * Current placement side of the tooltip
-   */
-  placement: Side;
   /**
    * Function to show the tooltip
    */
@@ -142,51 +136,10 @@ export interface TooltipContentOwnProps {
   side?: Side;
 
   /**
-   * Distance in pixels from the trigger
-   * @defaultValue 8
-   */
-  sideOffset?: number;
-
-  /**
    * Alignment relative to trigger
    * @defaultValue 'center'
    */
   align?: Align;
-
-  /**
-   * Offset for alignment
-   * @defaultValue 0
-   */
-  alignOffset?: number;
-
-  /**
-   * Whether to avoid viewport collisions
-   * @defaultValue true
-   */
-  avoidCollisions?: boolean;
-
-  /**
-   * Collision boundary elements
-   */
-  collisionBoundary?: Element | Element[];
-
-  /**
-   * Padding for collision detection
-   * @defaultValue 8
-   */
-  collisionPadding?: number | Partial<Record<Side, number>>;
-
-  /**
-   * Sticky behavior during scroll
-   * @defaultValue 'partial'
-   */
-  sticky?: Sticky;
-
-  /**
-   * Hide when trigger becomes detached
-   * @defaultValue false
-   */
-  hideWhenDetached?: boolean;
 
   /**
    * Portal container element. Content is portaled to document.body by default.
@@ -233,7 +186,7 @@ export type TooltipContentProps<T extends ElementType = 'div'> = PolymorphicProp
  * Props for TooltipArrow
  * @remarks Optional arrow pointing to the trigger element. Headless: user provides all visuals.
  */
-export type TooltipArrowProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
+export type TooltipArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<'svg', T>;
 
 /**
  * @internal
@@ -246,8 +199,6 @@ export interface TooltipContextValue {
   disableHoverableContent: boolean;
   triggerId: string;
   contentId: string;
-  placement: Side;
-  setPlacement: (placement: Side) => void;
   disabled: boolean;
   // Floating UI refs
   triggerRef: RefObject<HTMLElement | null>;

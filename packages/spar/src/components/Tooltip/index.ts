@@ -28,6 +28,5 @@ export type {
   TooltipTriggerRenderProps,
   TooltipContentProps,
   TooltipArrowProps,
-  Sticky,
   TooltipContextValue,
 } from './types';

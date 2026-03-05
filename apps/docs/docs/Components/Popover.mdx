@@ -21,6 +21,7 @@ A floating panel component anchored to a trigger element with smart positioning,
           Open Popover
         </Popover.Trigger>
         <Popover.Content className='popover-content'>
+          <Popover.Arrow className='popover-arrow' />
           <div className='popover-header'>
             <span className='popover-icon'></span>
             <span className='popover-title'>Information</span>
@@ -117,6 +118,14 @@ margin-bottom: 0px;
 
 [data-theme='dark'] .popover-paragraph {
 color: #99a0ae;
+}
+
+.popover-arrow {
+color: #ebebeb;
+}
+
+[data-theme='dark'] .popover-arrow {
+color: #222;
 }`}
 />
 
@@ -169,6 +178,7 @@ The Popover component is built as a compound component with multiple parts:
       description: 'Floating panel that holds the popover content',
     },
     { name: 'close', label: 'Close', description: 'Optional button to close the popover' },
+    { name: 'arrow', label: 'Arrow', description: 'Optional decorative arrow pointing to trigger' },
   ]}
 >
   <div className='popover-demo-container'>
@@ -177,6 +187,7 @@ The Popover component is built as a compound component with multiple parts:
         {'Open Popover'}
       </Popover.Trigger>
       <Popover.Content data-spar-part='content' className='popover-content'>
+        <Popover.Arrow data-spar-part='arrow' />
         <div className='popover-header'>
           <span className='popover-icon'></span>
           <span className='popover-title'>{'Information'}</span>
@@ -310,7 +321,7 @@ Popover with specific side and alignment preferences:
 ```tsx
 export function PositionedPopover() {
   return (
-    <Popover.Root side='top' align='start' sideOffset={16}>
+    <Popover.Root side='top' align='start'>
       <Popover.Trigger>Top-Start Popover</Popover.Trigger>
       <Popover.Content>
         <p>Positioned at top-start with 16px offset</p>
@@ -441,7 +452,6 @@ The root container that provides context and manages state for all popover compo
 | `disabled?`     | `boolean`                                | `false`     | Disables all popover triggers (prevents opening) |
 | `side?`         | `"top" \| "bottom" \| "left" \| "right"` | `"bottom"`  | Preferred side for popover positioning           |
 | `align?`        | `"start" \| "center" \| "end"`           | `"center"`  | Preferred alignment relative to trigger          |
-| `sideOffset?`   | `number`                                 | `8`         | Distance in pixels between trigger and popover   |
 | `children`      | `React.ReactNode`                        | -           | Popover.Trigger and Popover.Content components   |
 
 **Events**
@@ -511,11 +521,6 @@ Floating panel container that holds the popover content.
 | ----------------------- | --------------------------------------------------------- | --------------- | ------------------------------------------------------- |
 | `side?`                 | `"top" \| "bottom" \| "left" \| "right"`                  | `"bottom"`      | Side of trigger to position against                     |
 | `align?`                | `"start" \| "center" \| "end"`                            | `"center"`      | Alignment relative to trigger                           |
-| `sideOffset?`           | `number`                                                  | `8`             | Distance from trigger in pixels                         |
-| `alignOffset?`          | `number`                                                  | `0`             | Offset along alignment axis                             |
-| `avoidCollisions?`      | `boolean`                                                 | `true`          | Whether to adjust position to avoid viewport collisions |
-| `collisionBoundary?`    | `Element \| Element[]`                                    | `undefined`     | Boundary elements for collision detection               |
-| `hideWhenDetached?`     | `boolean`                                                 | `false`         | Whether to hide when trigger is occluded                |
 | `onOpenAutoFocus?`      | `(event: Event) => void`                                  | `undefined`     | Called when popover opens and focus moves inside        |
 | `onCloseAutoFocus?`     | `(event: Event) => void`                                  | `undefined`     | Called when popover closes and focus returns to trigger |
 | `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`                    | `undefined`     | Called when escape is pressed                           |
@@ -559,7 +564,7 @@ Optional decorative arrow element that points to the trigger. Headless: renders 
 
 | Name         | Type                  | Default     | Description                        |
 | ------------ | --------------------- | ----------- | ---------------------------------- |
-| `as?`        | `React.ElementType`   | `'div'`     | Polymorphic element type to render |
+| `as?`        | `React.ElementType`   | `'svg'`     | Polymorphic element type to render |
 | `ref?`       | `React.Ref<Element>`  | `undefined` | Forward ref support                |
 | `className?` | `string`              | `undefined` | CSS class names for styling        |
 | `style?`     | `React.CSSProperties` | `undefined` | Custom styles for arrow            |

@@ -1,9 +1,17 @@
-import { useEffect, useState, useCallback, type ElementType } from 'react';
+import { useEffect, useState, useCallback, useMemo, type ElementType } from 'react';
 import { createPortal } from 'react-dom';
-import { useInteractOutside, useMergedRef } from '@/hooks';
+import {
+  useInteractOutside,
+  useMergedRef,
+  useFloating,
+  type UseFloatingOptions,
+  type UseFloatingReturn,
+} from '@/hooks';
 import { PopoverContentProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
+import { PopoverContentContext } from './hooks/usePopoverContentContext';
 import { getFocusableElements } from './utils/index';
+import type { Side } from '../../types';
 
 /**
  * Content container that holds the popover content
@@ -12,11 +20,6 @@ export const PopoverContent = <T extends ElementType = 'div'>({
   as,
   side = 'bottom',
   align = 'center',
-  sideOffset = 8,
-  alignOffset = 0,
-  avoidCollisions = true,
-  collisionBoundary,
-  hideWhenDetached = false,
   container,
   onOpenAutoFocus,
   onCloseAutoFocus,
@@ -33,19 +36,32 @@ export const PopoverContent = <T extends ElementType = 'div'>({
 }: PopoverContentProps<T>) => {
   const Component = as || 'div';
 
-  // Unused props for future implementation
-  void side;
-  void align;
-  void sideOffset;
-  void alignOffset;
-  void collisionBoundary;
-  void hideWhenDetached;
-  void avoidCollisions;
+  const { state, triggerRef, contentRef, arrowRef, modal, closePopover } = usePopoverContext();
 
-  const { state, triggerRef, contentRef, floatingStyles, modal, closePopover } =
-    usePopoverContext();
+  // Use custom Floating UI hook for positioning
+  const floatingOptions: UseFloatingOptions = {
+    side,
+    align,
+    arrowRef: arrowRef?.current ?? null,
+  };
 
-  const mergedRef = useMergedRef(contentRef as React.RefObject<HTMLDivElement | null>, ref);
+  const { floatingStyles, arrowStyles, placement, refs }: UseFloatingReturn =
+    useFloating(floatingOptions);
+
+  // Set reference element
+  useEffect(() => {
+    refs.setReference(triggerRef.current);
+  }, [refs, triggerRef]);
+
+  const mergedRef = useMergedRef(contentRef, ref);
+
+  const floatingRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      mergedRef(node);
+      refs.setFloating(node);
+    },
+    [mergedRef, refs],
+  );
 
   const [mounted, setMounted] = useState(false);
 
@@ -164,27 +180,42 @@ export const PopoverContent = <T extends ElementType = 'div'>({
     [onKeyDown],
   );
 
+  // Extract placement information for data attributes
+  const [currentSide, currentAlign] = useMemo(() => {
+    const parts = placement.split('-');
+    const placementSide = parts[0];
+    const placementAlign = parts[1] ?? 'center';
+    return [placementSide, placementAlign];
+  }, [placement]);
+
+  const contentContextValue = useMemo(
+    () => ({ arrowStyles, side: currentSide as Side }),
+    [arrowStyles, currentSide],
+  );
+
   if (!state.isOpen || !mounted) return null;
 
   const contentElement = (
-    <Component
-      ref={mergedRef}
-      id={state.contentId}
-      role={modal ? 'dialog' : undefined}
-      aria-modal={modal ? 'true' : undefined}
-      tabIndex={-1}
-      data-state='open'
-      data-side={state.actualSide}
-      data-align={state.actualAlign}
-      style={{
-        ...floatingStyles,
-        ...style,
-      }}
-      onKeyDown={handleKeyDown}
-      {...props}
-    >
-      {children}
-    </Component>
+    <PopoverContentContext.Provider value={contentContextValue}>
+      <Component
+        ref={floatingRef}
+        id={state.contentId}
+        role={modal ? 'dialog' : undefined}
+        aria-modal={modal ? 'true' : undefined}
+        tabIndex={-1}
+        data-state='open'
+        data-side={currentSide}
+        data-align={currentAlign}
+        style={{
+          ...floatingStyles,
+          ...style,
+        }}
+        onKeyDown={handleKeyDown}
+        {...props}
+      >
+        {children}
+      </Component>
+    </PopoverContentContext.Provider>
   );
 
   return createPortal(contentElement, container || document.body);
