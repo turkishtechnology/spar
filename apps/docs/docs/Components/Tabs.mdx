@@ -309,10 +309,9 @@ function ForceMountTabs() {
 
 #### Props
 
-| Name   | Type                | Default | Description                               |
-| ------ | ------------------- | ------- | ----------------------------------------- |
-| `loop` | `boolean`           | `true`  | Whether arrow key navigation wraps around |
-| `as`   | `React.ElementType` | `'div'` | Polymorphic component type                |
+| Name | Type                | Default | Description                |
+| ---- | ------------------- | ------- | -------------------------- |
+| `as` | `React.ElementType` | `'div'` | Polymorphic component type |
 
 #### ARIA
 
@@ -379,7 +378,7 @@ Extends all `Button` component props including polymorphic rendering via the `as
 
 | Name         | Type                | Default | Description                                     |
 | ------------ | ------------------- | ------- | ----------------------------------------------- |
-| `value`      | `string`            | —       | Unique identifier matching a Tabs.Trigger value  |
+| `value`      | `string`            | —       | Unique identifier matching a Tabs.Trigger value |
 | `forceMount` | `boolean`           | `false` | Force content to remain mounted when not active |
 | `as`         | `React.ElementType` | `'div'` | Polymorphic component type                      |
 
@@ -396,15 +395,15 @@ Extends all `Button` component props including polymorphic rendering via the `as
 
 ## Keyboard Interactions
 
-| Key                | Action                                        | Context                | Notes                            |
-| ------------------ | --------------------------------------------- | ---------------------- | -------------------------------- |
-| `Tab`              | Move focus to next/previous focusable element | Global                 | Standard browser behavior        |
-| `Enter` or `Space` | Activate focused tab                          | Tab trigger focused    | Changes active panel             |
-| `ArrowRight`       | Focus next tab                                | Horizontal orientation | Loops to first if `loop` is true |
-| `ArrowLeft`        | Focus previous tab                            | Horizontal orientation | Loops to last if `loop` is true  |
-| `ArrowDown`        | Focus next tab                                | Vertical orientation   | Loops to first if `loop` is true |
-| `ArrowUp`          | Focus previous tab                            | Vertical orientation   | Loops to last if `loop` is true  |
-| `Home`             | Focus first tab                               | Tab list focused       | Always moves to first tab        |
-| `End`              | Focus last tab                                | Tab list focused       | Always moves to last tab         |
+| Key                | Action                                        | Context                | Notes                     |
+| ------------------ | --------------------------------------------- | ---------------------- | ------------------------- |
+| `Tab`              | Move focus to next/previous focusable element | Global                 | Standard browser behavior |
+| `Enter` or `Space` | Activate focused tab                          | Tab trigger focused    | Changes active panel      |
+| `ArrowRight`       | Focus next tab                                | Horizontal orientation | Wraps to first tab        |
+| `ArrowLeft`        | Focus previous tab                            | Horizontal orientation | Wraps to last tab         |
+| `ArrowDown`        | Focus next tab                                | Vertical orientation   | Wraps to first tab        |
+| `ArrowUp`          | Focus previous tab                            | Vertical orientation   | Wraps to last tab         |
+| `Home`             | Focus first tab                               | Tab list focused       | Always moves to first tab |
+| `End`              | Focus last tab                                | Tab list focused       | Always moves to last tab  |
 
 **Note**: In `automatic` activation mode, arrow keys both focus and activate tabs. In `manual` mode, arrow keys only move focus - you must press Enter or Space to activate.
