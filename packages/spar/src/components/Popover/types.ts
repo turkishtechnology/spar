@@ -204,26 +204,12 @@ export type PopoverCloseProps<T extends ElementType = 'button'> = PolymorphicPro
 >;
 
 /**
- * @internal
- */
-export interface PopoverState {
-  isOpen: boolean;
-  triggerRect: DOMRect | null;
-  contentRect: DOMRect | null;
-  actualSide: Side;
-  actualAlign: Align;
-  isPositioned: boolean;
-  triggerElement: HTMLElement | null;
-  contentElement: HTMLElement | null;
-  contentId: string;
-}
-
-/**
  * Context value for sharing popover state between components
  * @internal
  */
 export interface PopoverContextValue {
-  state: PopoverState;
+  isOpen: boolean;
+  contentId: string;
   triggerRef: RefObject<HTMLElement | null>;
   contentRef: RefObject<HTMLDivElement | null>;
   arrowRef: RefObject<Element | null>;

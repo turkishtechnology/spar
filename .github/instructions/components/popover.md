@@ -170,18 +170,7 @@
 
 ### State Hooks Design
 ```typescript
-interface PopoverState {
-  isOpen: boolean;
-  triggerRect: DOMRect | null;
-  contentRect: DOMRect | null;
-  side: Side;
-  align: Align;
-  actualSide: Side;
-  actualAlign: Align;
-  isPositioned: boolean;
-  triggerElement: HTMLElement | null;
-  contentElement: HTMLElement | null;
-}
+// Positioning is fully delegated to useFloating; element tracking uses refs.
 
 // Side and Align are shared types from src/types/index.ts
 type Side = 'top' | 'right' | 'bottom' | 'left';
@@ -242,15 +231,15 @@ declare const PopoverClose: PolymorphicComponent<'button', PopoverCloseProps>;
 
 const usePopover = (props: PopoverRootProps) => {
   // Controlled/uncontrolled state management
-  // Focus management utilities
-  // Event coordination between trigger and content
-  // Built-in portal rendering (via createPortal in PopoverContent)
+  // Returns flat values: isOpen, contentId (no PopoverState wrapper object)
+  // Element tracking via refs (triggerRef, contentRef, arrowRef)
+  // Positioning delegated to useFloating in PopoverContent
 
 }
 
 const usePopoverContext = () => {
-  // Access to shared popover state
-  // Trigger and content coordination
+  // Access to flat popover state: isOpen, contentId
+  // Trigger and content coordination via refs and callbacks
   // Throws error if used outside PopoverRoot
 }
 
@@ -275,16 +264,16 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 ```
 
 ### Context Requirements
-- **PopoverContext**: Shared state between Root, Trigger, and Content components with strict TypeScript interface
+- **PopoverContext**: Flat `isOpen` and `contentId` values shared between Root, Trigger, and Content — no `PopoverState` wrapper object
 - **Provider pattern**: Context.Provider with memoized values for performance optimization
 - **Error boundaries**: Clear error messages when components used outside PopoverRoot
-- **State synchronization**: Coordinated open/close state, positioning, and focus management
+- **State synchronization**: `isOpen` is derived directly from controlled/uncontrolled logic; no separate state object or sync effects
 - **Event coordination**: Unified event handling across components with proper cleanup
-- **ID management**: Automatic ID generation for ARIA relationships using React's useId()
+- **ID management**: Automatic ID generation for ARIA relationships using React's `useId()`
 - **Type safety**: Strict TypeScript definitions with null checks and proper error handling
 - **Performance**: Memoized context values to prevent unnecessary re-renders
-- **Positioning optimization**: Debounced positioning calculations with RAF scheduling
-- **Memory efficiency**: Weak references for element tracking and automatic cleanup
+- **Positioning ownership**: Positioning state lives in `PopoverContent` via `useFloating`, not in root context
+- **Memory efficiency**: Element tracking via refs, not state fields
 - **Bundle impact**: Tree-shakeable exports targeting <5KB gzipped for core functionality
 
 ### Ref Forwarding Strategy

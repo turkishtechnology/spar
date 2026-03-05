@@ -15,9 +15,9 @@ export const PopoverClose = <T extends ElementType = 'button'>({
   ref,
   ...props
 }: PopoverCloseProps<T>) => {
-  const { closePopover, state } = usePopoverContext();
+  const { closePopover, isOpen } = usePopoverContext();
   const { handleClick, renderProps } = useCloseButton({
-    isOpen: state.isOpen,
+    isOpen,
     close: closePopover,
     onClick,
   });

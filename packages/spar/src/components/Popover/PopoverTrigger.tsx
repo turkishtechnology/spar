@@ -18,7 +18,8 @@ export const PopoverTrigger = <T extends ElementType = 'button'>({
   ...props
 }: PopoverTriggerProps<T>) => {
   const {
-    state,
+    isOpen,
+    contentId,
     triggerRef,
     togglePopover,
     openPopover,
@@ -50,20 +51,20 @@ export const PopoverTrigger = <T extends ElementType = 'button'>({
       switch (event.key) {
         case 'ArrowDown':
           event.preventDefault();
-          if (!state.isOpen) {
+          if (!isOpen) {
             openPopover();
           }
           break;
       }
     },
-    [onKeyDown, disabled, state.isOpen, openPopover],
+    [onKeyDown, disabled, isOpen, openPopover],
   );
 
   const mergedRef = useMergedRef(triggerRef as React.RefObject<HTMLElement | null>, ref);
 
   // Render props for children function
   const renderProps: PopoverTriggerRenderProps = {
-    isOpen: state.isOpen,
+    isOpen,
     disabled,
     open: openPopover,
     close: closePopover,
@@ -76,10 +77,10 @@ export const PopoverTrigger = <T extends ElementType = 'button'>({
     ref: mergedRef,
     onClick: handleClick,
     onKeyDown: handleKeyDown,
-    'aria-expanded': state.isOpen,
-    'aria-controls': state.contentId,
+    'aria-expanded': isOpen,
+    'aria-controls': contentId,
     'aria-haspopup': 'dialog' as const,
-    'data-state': state.isOpen ? 'open' : 'closed',
+    'data-state': isOpen ? 'open' : 'closed',
     ...props,
   } as ButtonProps<T>;
 

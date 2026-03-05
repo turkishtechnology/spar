@@ -36,7 +36,8 @@ export const PopoverContent = <T extends ElementType = 'div'>({
 }: PopoverContentProps<T>) => {
   const Component = as || 'div';
 
-  const { state, triggerRef, contentRef, arrowRef, modal, closePopover } = usePopoverContext();
+  const { isOpen, contentId, triggerRef, contentRef, arrowRef, modal, closePopover } =
+    usePopoverContext();
 
   // Use custom Floating UI hook for positioning
   const floatingOptions: UseFloatingOptions = {
@@ -72,7 +73,7 @@ export const PopoverContent = <T extends ElementType = 'div'>({
 
   // Focus management
   useEffect(() => {
-    if (!state.isOpen || !contentRef.current) return;
+    if (!isOpen || !contentRef.current) return;
 
     const contentElement = contentRef.current;
 
@@ -95,11 +96,11 @@ export const PopoverContent = <T extends ElementType = 'div'>({
         (triggerRef.current as HTMLElement).focus();
       }
     };
-  }, [state.isOpen, onOpenAutoFocus, onCloseAutoFocus, contentRef, triggerRef]);
+  }, [isOpen, onOpenAutoFocus, onCloseAutoFocus, contentRef, triggerRef]);
 
   // Escape key handling
   useEffect(() => {
-    if (!state.isOpen) return;
+    if (!isOpen) return;
 
     const handleEscapeKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -111,11 +112,11 @@ export const PopoverContent = <T extends ElementType = 'div'>({
 
     document.addEventListener('keydown', handleEscapeKey);
     return () => document.removeEventListener('keydown', handleEscapeKey);
-  }, [state.isOpen, closePopover, onEscapeKeyDown]);
+  }, [isOpen, closePopover, onEscapeKeyDown]);
 
   // Outside interaction handling
   useInteractOutside([contentRef, triggerRef], {
-    enabled: state.isOpen,
+    enabled: isOpen,
     includeFocus: !trapFocus, // Only include focus events if focus is not trapped
     onPointerDownOutside: (event) => {
       closePopover();
@@ -131,7 +132,7 @@ export const PopoverContent = <T extends ElementType = 'div'>({
 
   // Focus trapping
   useEffect(() => {
-    if (!state.isOpen || !trapFocus || !contentRef.current) return;
+    if (!isOpen || !trapFocus || !contentRef.current) return;
 
     const contentElement = contentRef.current;
     const focusableElements = getFocusableElements(contentElement);
@@ -159,7 +160,7 @@ export const PopoverContent = <T extends ElementType = 'div'>({
 
     contentElement.addEventListener('keydown', handleTabKey);
     return () => contentElement.removeEventListener('keydown', handleTabKey);
-  }, [state.isOpen, trapFocus, contentRef]);
+  }, [isOpen, trapFocus, contentRef]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -193,13 +194,13 @@ export const PopoverContent = <T extends ElementType = 'div'>({
     [arrowStyles, currentSide],
   );
 
-  if (!state.isOpen || !mounted) return null;
+  if (!isOpen || !mounted) return null;
 
   const contentElement = (
     <PopoverContentContext.Provider value={contentContextValue}>
       <Component
         ref={floatingRef}
-        id={state.contentId}
+        id={contentId}
         role={modal ? 'dialog' : undefined}
         aria-modal={modal ? 'true' : undefined}
         tabIndex={-1}

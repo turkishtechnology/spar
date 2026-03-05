@@ -11,7 +11,8 @@ export const Popover = ({ children, ...props }: PopoverProps) => {
 
   const contextValue: PopoverContextValue = useMemo(
     () => ({
-      state: popoverState.state,
+      isOpen: popoverState.isOpen,
+      contentId: popoverState.contentId,
       triggerRef: popoverState.triggerRef as React.RefObject<HTMLElement | null>,
       contentRef: popoverState.contentRef as React.RefObject<HTMLDivElement | null>,
       arrowRef: popoverState.arrowRef,
@@ -23,7 +24,8 @@ export const Popover = ({ children, ...props }: PopoverProps) => {
       ...(popoverState.onOpenChange && { onOpenChange: popoverState.onOpenChange }),
     }),
     [
-      popoverState.state,
+      popoverState.isOpen,
+      popoverState.contentId,
       popoverState.triggerRef,
       popoverState.contentRef,
       popoverState.arrowRef,
@@ -38,7 +40,7 @@ export const Popover = ({ children, ...props }: PopoverProps) => {
 
   return (
     <PopoverContext.Provider value={contextValue}>
-      <div data-state={popoverState.state.isOpen ? 'open' : 'closed'}>{children}</div>
+      <div data-state={popoverState.isOpen ? 'open' : 'closed'}>{children}</div>
     </PopoverContext.Provider>
   );
 };
