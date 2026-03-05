@@ -48,7 +48,6 @@ The Tabs component provides a set of layered sections of content, known as tab p
 ### TabsList
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `loop` | `boolean` | No | `true` | Whether arrow key navigation wraps around |
 | `as` | `ElementType` | No | `"div"` | Polymorphic component type |
 | `children` | `React.ReactNode` | Yes | - | TabsTrigger components |
 
@@ -123,7 +122,7 @@ The Tabs component provides a set of layered sections of content, known as tab p
 - When a tab is activated, focus typically remains on the tab trigger (not the content)
 - Tab panel content should be programmatically focusable (`tabindex="0"`) to allow screen readers to navigate to it
 - Disabled tabs are skipped during keyboard navigation
-- Focus wraps around when `loop` is true (default behavior)
+- Focus wraps around at the ends of the tab list (always enabled)
 
 ### Screen Reader Announcements
 - Tab selection changes announce the new tab name and "selected" state
@@ -163,7 +162,6 @@ const useTabsKeyboard = (props: {
   orientation: TabsOrientation;
   dir: "ltr" | "rtl";
   activationMode: "automatic" | "manual";
-  loop: boolean;
 }) => {
   // Handle arrow key navigation
   // Handle Home/End keys

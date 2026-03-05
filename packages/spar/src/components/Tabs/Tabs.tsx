@@ -90,7 +90,6 @@ export const Tabs = <T extends ElementType = 'div'>({
       orientation,
       dir,
       activationMode,
-      loop: true, // Default value, overridden by TabsList if needed
 
       // IDs for ARIA
       baseId,

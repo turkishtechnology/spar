@@ -58,25 +58,10 @@ export interface TabsOwnProps {
 export type TabsProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T, TabsOwnProps>;
 
 /**
- * Own props for TabsList component
- */
-export interface TabsListOwnProps {
-  /**
-   * Whether arrow key navigation wraps around
-   * @defaultValue true
-   */
-  loop?: boolean;
-}
-
-/**
  * Props for TabsList component
  * @remarks Container for tab trigger buttons with keyboard navigation
  */
-export type TabsListProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  TabsListOwnProps
->;
+export type TabsListProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * Render props provided to children function for TabsTrigger
@@ -165,7 +150,6 @@ export interface TabsContextValue {
   orientation: Orientation;
   dir: Direction;
   activationMode: TabsActivationMode;
-  loop: boolean;
   baseId: string;
   tabRefs: RefObject<Map<string, HTMLElement>>;
   registerTab: (value: string, element: HTMLElement) => void;

@@ -363,12 +363,12 @@ describe('Tabs', () => {
     });
   });
 
-  describe('Loop Support', () => {
-    it('supports looping navigation', async () => {
+  describe('Loop Navigation', () => {
+    it('wraps around when navigating past the last tab', async () => {
       const user = userEvent.setup();
       render(
         <BasicTabs>
-          <TabsList loop>
+          <TabsList>
             <TabsTrigger value='tab1'>Tab 1</TabsTrigger>
             <TabsTrigger value='tab2'>Tab 2</TabsTrigger>
           </TabsList>
@@ -387,11 +387,11 @@ describe('Tabs', () => {
       expect(tab1).toHaveAttribute('aria-selected', 'true');
     });
 
-    it('supports non-looping navigation', async () => {
+    it('wraps around when navigating before the first tab', async () => {
       const user = userEvent.setup();
       render(
         <BasicTabs>
-          <TabsList loop={false}>
+          <TabsList>
             <TabsTrigger value='tab1'>Tab 1</TabsTrigger>
             <TabsTrigger value='tab2'>Tab 2</TabsTrigger>
           </TabsList>
@@ -400,10 +400,11 @@ describe('Tabs', () => {
         </BasicTabs>,
       );
 
+      const tab1 = screen.getByRole('tab', { name: 'Tab 1' });
       const tab2 = screen.getByRole('tab', { name: 'Tab 2' });
 
-      await user.click(tab2); // Go to last tab
-      await user.keyboard('{ArrowRight}'); // Should stay on last
+      await user.click(tab1); // Start at first tab
+      await user.keyboard('{ArrowLeft}'); // Should loop to last
 
       expect(tab2).toHaveFocus();
       expect(tab2).toHaveAttribute('aria-selected', 'true');
