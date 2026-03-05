@@ -33,20 +33,18 @@ A headless, fully accessible dropdown component that allows users to choose a si
       </Select.Icon>
     </Select.Trigger>
     <Select.Content className='select-content'>
-      <Select.Viewport className='select-viewport'>
-        <Select.Item className='select-item' value='option1'>
-          <Select.ItemText className='select-item-text'>Option 1</Select.ItemText>
-          <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
-        </Select.Item>
-        <Select.Item className='select-item' value='option2'>
-          <Select.ItemText className='select-item-text'>Option 2</Select.ItemText>
-          <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
-        </Select.Item>
-        <Select.Item className='select-item' value='option3'>
-          <Select.ItemText className='select-item-text'>Option 3</Select.ItemText>
-          <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
-        </Select.Item>
-      </Select.Viewport>
+      <Select.Item className='select-item' value='option1'>
+        <Select.ItemText className='select-item-text'>Option 1</Select.ItemText>
+        <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
+      </Select.Item>
+      <Select.Item className='select-item' value='option2'>
+        <Select.ItemText className='select-item-text'>Option 2</Select.ItemText>
+        <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
+      </Select.Item>
+      <Select.Item className='select-item' value='option3'>
+        <Select.ItemText className='select-item-text'>Option 3</Select.ItemText>
+        <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
+      </Select.Item>
       <Select.Arrow className='select-arrow' />
     </Select.Content>
   </Select.Root>`}
@@ -148,7 +146,6 @@ The Select component is built as a compound component with multiple parts:
       label: 'Content',
       description: 'Dropdown container with smart positioning',
     },
-    { name: 'viewport', label: 'Viewport', description: 'Scrollable container for items' },
     { name: 'group', label: 'Group', description: 'Groups related items together' },
     { name: 'label', label: 'Label', description: 'Label for item groups' },
     { name: 'item', label: 'Item', description: 'Individual selectable option' },
@@ -180,32 +177,30 @@ The Select component is built as a compound component with multiple parts:
         </Select.Icon>
       </Select.Trigger>
       <Select.Content data-spar-part='content' className='select-content'>
-        <Select.Viewport data-spar-part='viewport' className='select-viewport'>
-          <Select.Item data-spar-part='item' className='select-item' value='option1'>
-            <Select.ItemText data-spar-part='itemText' className='select-item-text'>
-              {'Option 1'}
-            </Select.ItemText>
-            <Select.ItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
-              {'✓'}
-            </Select.ItemIndicator>
-          </Select.Item>
-          <Select.Item data-spar-part='item' className='select-item' value='option2'>
-            <Select.ItemText data-spar-part='itemText' className='select-item-text'>
-              {'Option 2'}
-            </Select.ItemText>
-            <Select.ItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
-              {'✓'}
-            </Select.ItemIndicator>
-          </Select.Item>
-          <Select.Item data-spar-part='item' className='select-item' value='option3'>
-            <Select.ItemText data-spar-part='itemText' className='select-item-text'>
-              {'Option 3'}
-            </Select.ItemText>
-            <Select.ItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
-              {'✓'}
-            </Select.ItemIndicator>
-          </Select.Item>
-        </Select.Viewport>
+        <Select.Item data-spar-part='item' className='select-item' value='option1'>
+          <Select.ItemText data-spar-part='itemText' className='select-item-text'>
+            {'Option 1'}
+          </Select.ItemText>
+          <Select.ItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
+            {'✓'}
+          </Select.ItemIndicator>
+        </Select.Item>
+        <Select.Item data-spar-part='item' className='select-item' value='option2'>
+          <Select.ItemText data-spar-part='itemText' className='select-item-text'>
+            {'Option 2'}
+          </Select.ItemText>
+          <Select.ItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
+            {'✓'}
+          </Select.ItemIndicator>
+        </Select.Item>
+        <Select.Item data-spar-part='item' className='select-item' value='option3'>
+          <Select.ItemText data-spar-part='itemText' className='select-item-text'>
+            {'Option 3'}
+          </Select.ItemText>
+          <Select.ItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
+            {'✓'}
+          </Select.ItemIndicator>
+        </Select.Item>
         <Select.Arrow data-spar-part='arrow' />
       </Select.Content>
     </Select.Root>
@@ -222,17 +217,15 @@ The Select component is built as a compound component with multiple parts:
   </Select.Trigger>
 
   <Select.Content>
-    <Select.Viewport>
-      <Select.Group>
-        <Select.Label />
-        <Select.Item>
-          <Select.ItemText />
-          <Select.ItemIndicator />
-        </Select.Item>
-      </Select.Group>
+    <Select.Group>
+      <Select.Label />
+      <Select.Item>
+        <Select.ItemText />
+        <Select.ItemIndicator />
+      </Select.Item>
+    </Select.Group>
 
-      <Select.Separator />
-    </Select.Viewport>
+    <Select.Separator />
     <Select.Arrow />
   </Select.Content>
 </Select.Root>
@@ -245,7 +238,6 @@ The Select component is built as a compound component with multiple parts:
 - `Select.Value` displays the selected item's text or placeholder when nothing is selected
 - `Select.Icon` provides visual feedback for the dropdown state (optional)
 - `Select.Content` portals to `document.body` by default and uses custom `useFloating` hook for intelligent positioning relative to trigger
-- `Select.Viewport` provides scrollable container when items exceed available space
 - `Select.Group` organizes related items and associates them with labels
 - `Select.Label` provides semantic grouping labels for screen readers
 - `Select.Item` registers with root context and handles selection on click/keyboard
@@ -285,20 +277,18 @@ function SelectWithArrow() {
       </Select.Trigger>
 
       <Select.Content>
-        <Select.Viewport>
-          <Select.Item value='option1'>
-            <Select.ItemText>Option 1</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-          <Select.Item value='option2'>
-            <Select.ItemText>Option 2</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-          <Select.Item value='option3'>
-            <Select.ItemText>Option 3</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-        </Select.Viewport>
+        <Select.Item value='option1'>
+          <Select.ItemText>Option 1</Select.ItemText>
+          <Select.ItemIndicator>✓</Select.ItemIndicator>
+        </Select.Item>
+        <Select.Item value='option2'>
+          <Select.ItemText>Option 2</Select.ItemText>
+          <Select.ItemIndicator>✓</Select.ItemIndicator>
+        </Select.Item>
+        <Select.Item value='option3'>
+          <Select.ItemText>Option 3</Select.ItemText>
+          <Select.ItemIndicator>✓</Select.ItemIndicator>
+        </Select.Item>
         <Select.Arrow />
       </Select.Content>
     </Select.Root>
@@ -322,20 +312,18 @@ function ControlledSelect() {
       </Select.Trigger>
 
       <Select.Content>
-        <Select.Viewport>
-          <Select.Item value='apple'>
-            <Select.ItemText>Apple</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-          <Select.Item value='banana'>
-            <Select.ItemText>Banana</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-          <Select.Item value='orange'>
-            <Select.ItemText>Orange</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-        </Select.Viewport>
+        <Select.Item value='apple'>
+          <Select.ItemText>Apple</Select.ItemText>
+          <Select.ItemIndicator>✓</Select.ItemIndicator>
+        </Select.Item>
+        <Select.Item value='banana'>
+          <Select.ItemText>Banana</Select.ItemText>
+          <Select.ItemIndicator>✓</Select.ItemIndicator>
+        </Select.Item>
+        <Select.Item value='orange'>
+          <Select.ItemText>Orange</Select.ItemText>
+          <Select.ItemIndicator>✓</Select.ItemIndicator>
+        </Select.Item>
       </Select.Content>
     </Select.Root>
   );
@@ -359,20 +347,18 @@ function UncontrolledSelect() {
       </Select.Trigger>
 
       <Select.Content>
-        <Select.Viewport>
-          <Select.Item value='small'>
-            <Select.ItemText>Small</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-          <Select.Item value='medium'>
-            <Select.ItemText>Medium</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-          <Select.Item value='large'>
-            <Select.ItemText>Large</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-        </Select.Viewport>
+        <Select.Item value='small'>
+          <Select.ItemText>Small</Select.ItemText>
+          <Select.ItemIndicator>✓</Select.ItemIndicator>
+        </Select.Item>
+        <Select.Item value='medium'>
+          <Select.ItemText>Medium</Select.ItemText>
+          <Select.ItemIndicator>✓</Select.ItemIndicator>
+        </Select.Item>
+        <Select.Item value='large'>
+          <Select.ItemText>Large</Select.ItemText>
+          <Select.ItemIndicator>✓</Select.ItemIndicator>
+        </Select.Item>
       </Select.Content>
     </Select.Root>
   );
@@ -395,41 +381,39 @@ function GroupedSelect() {
       </Select.Trigger>
 
       <Select.Content>
-        <Select.Viewport>
-          <Select.Group>
-            <Select.Label>North America</Select.Label>
-            <Select.Item value='us'>
-              <Select.ItemText>United States</Select.ItemText>
-              <Select.ItemIndicator>✓</Select.ItemIndicator>
-            </Select.Item>
-            <Select.Item value='ca'>
-              <Select.ItemText>Canada</Select.ItemText>
-              <Select.ItemIndicator>✓</Select.ItemIndicator>
-            </Select.Item>
-            <Select.Item value='mx'>
-              <Select.ItemText>Mexico</Select.ItemText>
-              <Select.ItemIndicator>✓</Select.ItemIndicator>
-            </Select.Item>
-          </Select.Group>
+        <Select.Group>
+          <Select.Label>North America</Select.Label>
+          <Select.Item value='us'>
+            <Select.ItemText>United States</Select.ItemText>
+            <Select.ItemIndicator>✓</Select.ItemIndicator>
+          </Select.Item>
+          <Select.Item value='ca'>
+            <Select.ItemText>Canada</Select.ItemText>
+            <Select.ItemIndicator>✓</Select.ItemIndicator>
+          </Select.Item>
+          <Select.Item value='mx'>
+            <Select.ItemText>Mexico</Select.ItemText>
+            <Select.ItemIndicator>✓</Select.ItemIndicator>
+          </Select.Item>
+        </Select.Group>
 
-          <Select.Separator />
+        <Select.Separator />
 
-          <Select.Group>
-            <Select.Label>Europe</Select.Label>
-            <Select.Item value='uk'>
-              <Select.ItemText>United Kingdom</Select.ItemText>
-              <Select.ItemIndicator>✓</Select.ItemIndicator>
-            </Select.Item>
-            <Select.Item value='de'>
-              <Select.ItemText>Germany</Select.ItemText>
-              <Select.ItemIndicator>✓</Select.ItemIndicator>
-            </Select.Item>
-            <Select.Item value='fr'>
-              <Select.ItemText>France</Select.ItemText>
-              <Select.ItemIndicator>✓</Select.ItemIndicator>
-            </Select.Item>
-          </Select.Group>
-        </Select.Viewport>
+        <Select.Group>
+          <Select.Label>Europe</Select.Label>
+          <Select.Item value='uk'>
+            <Select.ItemText>United Kingdom</Select.ItemText>
+            <Select.ItemIndicator>✓</Select.ItemIndicator>
+          </Select.Item>
+          <Select.Item value='de'>
+            <Select.ItemText>Germany</Select.ItemText>
+            <Select.ItemIndicator>✓</Select.ItemIndicator>
+          </Select.Item>
+          <Select.Item value='fr'>
+            <Select.ItemText>France</Select.ItemText>
+            <Select.ItemIndicator>✓</Select.ItemIndicator>
+          </Select.Item>
+        </Select.Group>
       </Select.Content>
     </Select.Root>
   );
@@ -452,22 +436,20 @@ function SelectWithDisabledItems() {
       </Select.Trigger>
 
       <Select.Content>
-        <Select.Viewport>
-          <Select.Item value='free'>
-            <Select.ItemText>Free Plan</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-          <Select.Item value='basic'>
-            <Select.ItemText>Basic Plan - $9/month</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-          </Select.Item>
-          <Select.Item value='premium' disabled>
-            <Select.ItemText>Premium Plan - Coming Soon</Select.ItemText>
-          </Select.Item>
-          <Select.Item value='enterprise' disabled>
-            <Select.ItemText>Enterprise - Contact Sales</Select.ItemText>
-          </Select.Item>
-        </Select.Viewport>
+        <Select.Item value='free'>
+          <Select.ItemText>Free Plan</Select.ItemText>
+          <Select.ItemIndicator>✓</Select.ItemIndicator>
+        </Select.Item>
+        <Select.Item value='basic'>
+          <Select.ItemText>Basic Plan - $9/month</Select.ItemText>
+          <Select.ItemIndicator>✓</Select.ItemIndicator>
+        </Select.Item>
+        <Select.Item value='premium' disabled>
+          <Select.ItemText>Premium Plan - Coming Soon</Select.ItemText>
+        </Select.Item>
+        <Select.Item value='enterprise' disabled>
+          <Select.ItemText>Enterprise - Contact Sales</Select.ItemText>
+        </Select.Item>
       </Select.Content>
     </Select.Root>
   );
@@ -497,20 +479,18 @@ function SelectInForm() {
         </Select.Trigger>
 
         <Select.Content>
-          <Select.Viewport>
-            <Select.Item value='electronics'>
-              <Select.ItemText>Electronics</Select.ItemText>
-              <Select.ItemIndicator>✓</Select.ItemIndicator>
-            </Select.Item>
-            <Select.Item value='clothing'>
-              <Select.ItemText>Clothing</Select.ItemText>
-              <Select.ItemIndicator>✓</Select.ItemIndicator>
-            </Select.Item>
-            <Select.Item value='books'>
-              <Select.ItemText>Books</Select.ItemText>
-              <Select.ItemIndicator>✓</Select.ItemIndicator>
-            </Select.Item>
-          </Select.Viewport>
+          <Select.Item value='electronics'>
+            <Select.ItemText>Electronics</Select.ItemText>
+            <Select.ItemIndicator>✓</Select.ItemIndicator>
+          </Select.Item>
+          <Select.Item value='clothing'>
+            <Select.ItemText>Clothing</Select.ItemText>
+            <Select.ItemIndicator>✓</Select.ItemIndicator>
+          </Select.Item>
+          <Select.Item value='books'>
+            <Select.ItemText>Books</Select.ItemText>
+            <Select.ItemIndicator>✓</Select.ItemIndicator>
+          </Select.Item>
         </Select.Content>
       </Select.Root>
       <button type='submit'>Submit</button>
@@ -535,16 +515,14 @@ function RTLSelect() {
       </Select.Trigger>
 
       <Select.Content>
-        <Select.Viewport>
-          <Select.Item value='option1'>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-            <Select.ItemText>אפשרות 1</Select.ItemText>
-          </Select.Item>
-          <Select.Item value='option2'>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
-            <Select.ItemText>אפשרות 2</Select.ItemText>
-          </Select.Item>
-        </Select.Viewport>
+        <Select.Item value='option1'>
+          <Select.ItemIndicator>✓</Select.ItemIndicator>
+          <Select.ItemText>אפשרות 1</Select.ItemText>
+        </Select.Item>
+        <Select.Item value='option2'>
+          <Select.ItemIndicator>✓</Select.ItemIndicator>
+          <Select.ItemText>אפשרות 2</Select.ItemText>
+        </Select.Item>
       </Select.Content>
     </Select.Root>
   );
@@ -707,21 +685,6 @@ Select.Content uses custom `useFloating` hook for positioning. The component aut
 - Matches trigger width as minimum width
 
 For arrow positioning, render `<Select.Arrow />` inside `<Select.Content>`. The arrow ref is automatically managed through context.
-
-### Select.Viewport
-
-Scrollable container for select items within the content.
-
-**Props**
-
-| Name       | Type                | Default | Description                |
-| ---------- | ------------------- | ------- | -------------------------- |
-| `as?`      | `React.ElementType` | `'div'` | Polymorphic component type |
-| `children` | `React.ReactNode`   | -       | Viewport children          |
-
-**Events**
-
-No specific events.
 
 ### Select.Item
 
