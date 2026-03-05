@@ -323,7 +323,7 @@ export type SelectSeparatorProps<T extends ElementType = 'div'> = PolymorphicPro
  * Props for SelectArrow component
  * @remarks Optional arrow pointing to trigger. Headless: user provides all visuals.
  */
-export type SelectArrowProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
+export type SelectArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<'svg', T>;
 
 /**
  * @internal

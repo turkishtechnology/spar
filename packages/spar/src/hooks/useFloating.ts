@@ -29,14 +29,6 @@ const OPPOSITE_SIDE: Record<Side, Side> = {
   left: 'right',
 };
 
-/** Translate the arrow element fully outside the content edge it is anchored to. */
-const ARROW_TRANSLATE_OUT: Record<Side, string> = {
-  top: 'translateY(100%)',
-  right: 'translateX(-100%)',
-  bottom: 'translateY(-100%)',
-  left: 'translateX(100%)',
-};
-
 export interface UseFloatingOptions {
   /**
    * The preferred side of the floating element.
@@ -165,7 +157,18 @@ export const useFloating = (options: UseFloatingOptions = {}): UseFloatingReturn
       ...(arrowData?.x !== undefined && { left: `${arrowData.x}px` }),
       ...(arrowData?.y !== undefined && { top: `${arrowData.y}px` }),
       [baseSide]: '0px',
-      transform: ARROW_TRANSLATE_OUT[placedSide],
+      transformOrigin: {
+        top: '',
+        right: '0 0',
+        bottom: 'center 0',
+        left: '100% 0',
+      }[placedSide],
+      transform: {
+        top: 'translateY(100%)',
+        right: 'translateY(50%) rotate(90deg) translateX(-50%)',
+        bottom: `rotate(180deg)`,
+        left: 'translateY(50%) rotate(-90deg) translateX(50%)',
+      }[placedSide],
       ...(shouldHide && { visibility: 'hidden' as const }),
     };
   }, [floating.placement, floating.middlewareData.arrow]);

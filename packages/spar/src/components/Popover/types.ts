@@ -188,7 +188,7 @@ export type PopoverContentProps<T extends ElementType = 'div'> = PolymorphicProp
  * Props for PopoverArrow component
  * @remarks Purely decorative arrow element. Headless: user provides all visuals.
  */
-export type PopoverArrowProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
+export type PopoverArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<'svg', T>;
 
 /**
  * Own props for PopoverClose component

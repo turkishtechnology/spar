@@ -21,7 +21,7 @@ A floating panel component anchored to a trigger element with smart positioning,
           Open Popover
         </Popover.Trigger>
         <Popover.Content className='popover-content'>
-          <Popover.Arrow as="span" >x</Popover.Arrow>
+          <Popover.Arrow className='popover-arrow' />
           <div className='popover-header'>
             <span className='popover-icon'></span>
             <span className='popover-title'>Information</span>
@@ -118,6 +118,14 @@ margin-bottom: 0px;
 
 [data-theme='dark'] .popover-paragraph {
 color: #99a0ae;
+}
+
+.popover-arrow {
+color: #ebebeb;
+}
+
+[data-theme='dark'] .popover-arrow {
+color: #222;
 }`}
 />
 
@@ -170,6 +178,7 @@ The Popover component is built as a compound component with multiple parts:
       description: 'Floating panel that holds the popover content',
     },
     { name: 'close', label: 'Close', description: 'Optional button to close the popover' },
+    { name: 'arrow', label: 'Arrow', description: 'Optional decorative arrow pointing to trigger' },
   ]}
 >
   <div className='popover-demo-container'>
@@ -178,6 +187,7 @@ The Popover component is built as a compound component with multiple parts:
         {'Open Popover'}
       </Popover.Trigger>
       <Popover.Content data-spar-part='content' className='popover-content'>
+        <Popover.Arrow data-spar-part='arrow' />
         <div className='popover-header'>
           <span className='popover-icon'></span>
           <span className='popover-title'>{'Information'}</span>
@@ -554,7 +564,7 @@ Optional decorative arrow element that points to the trigger. Headless: renders 
 
 | Name         | Type                  | Default     | Description                        |
 | ------------ | --------------------- | ----------- | ---------------------------------- |
-| `as?`        | `React.ElementType`   | `'div'`     | Polymorphic element type to render |
+| `as?`        | `React.ElementType`   | `'svg'`     | Polymorphic element type to render |
 | `ref?`       | `React.Ref<Element>`  | `undefined` | Forward ref support                |
 | `className?` | `string`              | `undefined` | CSS class names for styling        |
 | `style?`     | `React.CSSProperties` | `undefined` | Custom styles for arrow            |

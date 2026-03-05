@@ -47,6 +47,7 @@ A headless, fully accessible dropdown component that allows users to choose a si
           <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
         </Select.Item>
       </Select.Viewport>
+      <Select.Arrow className='select-arrow' />
     </Select.Content>
   </Select.Root>`}
   cssCode={`.select-trigger {
@@ -97,6 +98,14 @@ background: #ddd;
 [data-theme='dark'] .select-content {
 border-color: #2b303b;
 background: #222;
+}
+
+.select-arrow {
+color: #ddd;
+}
+
+[data-theme='dark'] .select-arrow {
+color: #222;
 }`}
 />
 
@@ -197,6 +206,7 @@ The Select component is built as a compound component with multiple parts:
             </Select.ItemIndicator>
           </Select.Item>
         </Select.Viewport>
+        <Select.Arrow data-spar-part='arrow' />
       </Select.Content>
     </Select.Root>
   </div>
@@ -222,8 +232,8 @@ The Select component is built as a compound component with multiple parts:
       </Select.Group>
 
       <Select.Separator />
-      <Select.Arrow />
     </Select.Viewport>
+    <Select.Arrow />
   </Select.Content>
 </Select.Root>
 ```
@@ -258,6 +268,43 @@ import { SelectRoot, SelectTrigger, SelectValue } from '@turkish-technology/spar
 ```
 
 ## Code Examples
+
+### Select with Arrow
+
+Add a decorative arrow pointing to the trigger.
+
+```tsx
+function SelectWithArrow() {
+  const [value, setValue] = React.useState('');
+
+  return (
+    <Select.Root value={value} onValueChange={setValue}>
+      <Select.Trigger>
+        <Select.Value placeholder='Choose an option' />
+        <Select.Icon>▼</Select.Icon>
+      </Select.Trigger>
+
+      <Select.Content>
+        <Select.Viewport>
+          <Select.Item value='option1'>
+            <Select.ItemText>Option 1</Select.ItemText>
+            <Select.ItemIndicator>✓</Select.ItemIndicator>
+          </Select.Item>
+          <Select.Item value='option2'>
+            <Select.ItemText>Option 2</Select.ItemText>
+            <Select.ItemIndicator>✓</Select.ItemIndicator>
+          </Select.Item>
+          <Select.Item value='option3'>
+            <Select.ItemText>Option 3</Select.ItemText>
+            <Select.ItemIndicator>✓</Select.ItemIndicator>
+          </Select.Item>
+        </Select.Viewport>
+        <Select.Arrow />
+      </Select.Content>
+    </Select.Root>
+  );
+}
+```
 
 ### Basic Controlled Select
 
@@ -622,17 +669,17 @@ The dropdown container that appears when select is open. Uses Floating UI for in
 
 **Props**
 
-| Name                   | Type                            | Default         | Description                                              |
-| ---------------------- | ------------------------------- | --------------- | -------------------------------------------------------- |
-| `side?`                | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`      | Preferred placement side                                 |
-| `align?`               | `'start' \| 'center' \| 'end'`  | `'start'`       | Alignment relative to trigger                            |
-| `as?`                  | `React.ElementType`             | `'div'`         | Polymorphic component type                               |
-| `ref?`                 | `React.RefObject`               | `undefined`     | Forward ref support                                      |
-| `children`             | `React.ReactNode`               | -               | Content children                                         |
-| `container?`           | `HTMLElement \| null`           | `document.body` | Custom portal container element                          |
-| `onEscapeKeyDown?`     | `(event: React.KeyboardEvent)`  | `undefined`     | Escape key handler                                       |
-| `onPointerDownOutside?`| `(event: React.PointerEvent)`   | `undefined`     | Outside click handler                                    |
-| `onCloseAutoFocus?`    | `(event: React.FocusEvent)`     | `undefined`     | Focus handler on close                                   |
+| Name                    | Type                                     | Default         | Description                     |
+| ----------------------- | ---------------------------------------- | --------------- | ------------------------------- |
+| `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`      | Preferred placement side        |
+| `align?`                | `'start' \| 'center' \| 'end'`           | `'start'`       | Alignment relative to trigger   |
+| `as?`                   | `React.ElementType`                      | `'div'`         | Polymorphic component type      |
+| `ref?`                  | `React.RefObject`                        | `undefined`     | Forward ref support             |
+| `children`              | `React.ReactNode`                        | -               | Content children                |
+| `container?`            | `HTMLElement \| null`                    | `document.body` | Custom portal container element |
+| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent)`           | `undefined`     | Escape key handler              |
+| `onPointerDownOutside?` | `(event: React.PointerEvent)`            | `undefined`     | Outside click handler           |
+| `onCloseAutoFocus?`     | `(event: React.FocusEvent)`              | `undefined`     | Focus handler on close          |
 
 **Events**
 
@@ -811,11 +858,11 @@ Optional decorative arrow element pointing to the trigger. Headless: renders a p
 **Props**
 
 | Name         | Type                  | Default     | Description                        |
-| ------------ | --------------------- | ----------- | ---------------------------------------------------- |
-| `as?`        | `React.ElementType`   | `'div'`     | Polymorphic element type to render                   |
-| `ref?`       | `React.Ref<Element>`  | `undefined` | Forward ref support                                  |
-| `className?` | `string`              | `undefined` | CSS class names for styling                          |
-| `style?`     | `React.CSSProperties` | `undefined` | Custom styles for arrow                              |
+| ------------ | --------------------- | ----------- | ---------------------------------- |
+| `as?`        | `React.ElementType`   | `'svg'`     | Polymorphic element type to render |
+| `ref?`       | `React.Ref<Element>`  | `undefined` | Forward ref support                |
+| `className?` | `string`              | `undefined` | CSS class names for styling        |
+| `style?`     | `React.CSSProperties` | `undefined` | Custom styles for arrow            |
 
 **Events**
 

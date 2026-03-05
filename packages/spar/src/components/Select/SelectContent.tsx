@@ -7,7 +7,7 @@ import {
   type UseFloatingOptions,
   type UseFloatingReturn,
 } from '@/hooks';
-import { useSelectContext } from './hooks';
+import { useSelectContext, SelectContentContext } from './hooks';
 import type { SelectContentProps } from './types';
 import { Align, Side } from '@/types';
 
@@ -17,7 +17,7 @@ import { Align, Side } from '@/types';
 export const SelectContent = <T extends ElementType = 'div'>({
   ref,
   side = 'bottom',
-  align = 'start',
+  align = 'center',
   container,
   onEscapeKeyDown,
   onPointerDownOutside,
@@ -46,12 +46,10 @@ export const SelectContent = <T extends ElementType = 'div'>({
   };
 
   const {
-    x,
-    y,
-    strategy,
+    floatingStyles,
+    arrowStyles,
     placement: finalPlacement,
     refs,
-    middlewareData,
   }: UseFloatingReturn = useFloating(floatingOptions);
 
   // Merge internal refs with external ref
@@ -218,44 +216,42 @@ export const SelectContent = <T extends ElementType = 'div'>({
     return [placementSide, placementAlign];
   }, [finalPlacement]);
 
-  // Calculate arrow position for CSS custom properties
-  const arrowX = middlewareData.arrow?.x;
-  const arrowY = middlewareData.arrow?.y;
+  const contentContextValue = useMemo(
+    () => ({ arrowStyles, side: currentSide }),
+    [arrowStyles, currentSide],
+  );
 
   if (!context.open || !mounted) {
     return null;
   }
 
-  // Combine Floating UI styles with user styles
-  const floatingStyles: React.CSSProperties = {
-    position: strategy,
-    top: y ?? 0,
-    left: x ?? 0,
+  // Combine Floating UI styles with component-specific extras
+  const contentStyle: React.CSSProperties = {
+    ...floatingStyles,
     minWidth: context.triggerRef.current?.offsetWidth ?? undefined,
-    // Arrow positioning via CSS custom properties
-    '--select-arrow-x': arrowX === undefined ? undefined : `${arrowX}px`,
-    '--select-arrow-y': arrowY === undefined ? undefined : `${arrowY}px`,
     ...style,
-  } as React.CSSProperties;
+  };
 
   const portalContainer = container || document.body;
 
   const contentElement = (
-    <Component
-      ref={floatingRef}
-      id={context.contentId}
-      role='listbox'
-      aria-labelledby={context.triggerId}
-      tabIndex={-1}
-      data-state={context.open ? 'open' : 'closed'}
-      data-side={currentSide}
-      data-align={currentAlign}
-      onKeyDown={handleKeyDown}
-      style={floatingStyles}
-      {...props}
-    >
-      {children}
-    </Component>
+    <SelectContentContext.Provider value={contentContextValue}>
+      <Component
+        ref={floatingRef}
+        id={context.contentId}
+        role='listbox'
+        aria-labelledby={context.triggerId}
+        tabIndex={-1}
+        data-state={context.open ? 'open' : 'closed'}
+        data-side={currentSide}
+        data-align={currentAlign}
+        onKeyDown={handleKeyDown}
+        style={contentStyle}
+        {...props}
+      >
+        {children}
+      </Component>
+    </SelectContentContext.Provider>
   );
 
   return createPortal(contentElement, portalContainer);
