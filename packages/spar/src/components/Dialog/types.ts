@@ -1,6 +1,7 @@
 import type { ElementType, ReactNode, AriaRole, RefObject } from 'react';
 import type { PolymorphicProps } from '../../types';
 import type { ButtonOwnProps } from '../Button/types';
+import type { CloseButtonRenderProps } from '../../hooks/useCloseButton';
 
 /**
  * Props for Dialog
@@ -103,17 +104,9 @@ export type DialogTriggerProps<T extends ElementType = 'button'> = PolymorphicPr
 
 /**
  * Render props provided to children function for DialogClose
+ * @remarks Alias of {@link CloseButtonRenderProps} from useCloseButton
  */
-export interface DialogCloseRenderProps {
-  /**
-   * Whether the dialog is currently open
-   */
-  isOpen: boolean;
-  /**
-   * Function to close the dialog
-   */
-  close: () => void;
-}
+export type DialogCloseRenderProps = CloseButtonRenderProps;
 
 /**
  * Own props for DialogOverlay
@@ -269,6 +262,7 @@ export type DialogCloseProps<T extends ElementType = 'button'> = PolymorphicProp
 export interface DialogContextValue {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  closeDialog: () => void;
   modal: boolean;
   disabled: boolean;
   forceMount: boolean;

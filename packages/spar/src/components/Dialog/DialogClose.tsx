@@ -1,6 +1,7 @@
-import { useCallback, ElementType } from 'react';
+import { ElementType } from 'react';
 import { useDialogContext } from './hooks';
-import type { DialogCloseProps, DialogCloseRenderProps } from './types';
+import { useCloseButton } from '@/hooks';
+import type { DialogCloseProps } from './types';
 import { Button } from '../Button';
 import type { ButtonProps } from '../Button/types';
 
@@ -15,27 +16,18 @@ export const DialogClose = <T extends ElementType = 'button'>({
   children,
   ...props
 }: DialogCloseProps<T>) => {
-  const context = useDialogContext();
-  const { isOpen, setIsOpen } = context;
-
-  const handleClick = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setIsOpen(false);
-      onClick?.(event);
-    },
-    [setIsOpen, onClick],
-  );
-
-  // Render props for children function
-  const renderProps: DialogCloseRenderProps = {
+  const { isOpen, closeDialog } = useDialogContext();
+  const { handleClick, renderProps } = useCloseButton({
     isOpen,
-    close: () => setIsOpen(false),
-  };
+    close: closeDialog,
+    onClick,
+  });
 
   const buttonProps = {
     ...(as && { as }),
     ...(ref && { ref }),
     onClick: handleClick,
+    'data-dialog-close': '',
     ...props,
   } as ButtonProps<T>;
 

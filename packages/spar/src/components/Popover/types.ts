@@ -1,6 +1,7 @@
 import type { ElementType, ReactNode, RefObject } from 'react';
 import type { Side, Align, PolymorphicProps } from '../../types';
 import type { ButtonOwnProps } from '../Button/types';
+import type { CloseButtonRenderProps } from '../../hooks/useCloseButton';
 
 /**
  * Render props provided to PopoverTrigger children function
@@ -30,17 +31,9 @@ export interface PopoverTriggerRenderProps {
 
 /**
  * Render props provided to PopoverClose children function
+ * @remarks Alias of {@link CloseButtonRenderProps} from useCloseButton
  */
-export interface PopoverCloseRenderProps {
-  /**
-   * Whether the popover is currently open
-   */
-  isOpen: boolean;
-  /**
-   * Function to close the popover
-   */
-  close: () => void;
-}
+export type PopoverCloseRenderProps = CloseButtonRenderProps;
 
 /**
  * Props for Popover component
