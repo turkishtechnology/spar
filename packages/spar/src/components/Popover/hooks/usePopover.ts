@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback, useEffect, useId } from 'react';
-import type { PopoverProps, PopoverState } from '../types';
+import { useState, useRef, useCallback, useId } from 'react';
+import type { PopoverProps } from '../types';
 
 /**
  * Custom hook for popover state management
@@ -26,46 +26,18 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   const triggerRef = useRef<HTMLElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
 
-  const [mounted, setMounted] = useState(false);
-
-  // SSR safety
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const [state, setState] = useState<PopoverState>({
-    isOpen,
-    triggerRect: null,
-    contentRect: null,
-    actualSide: 'bottom',
-    actualAlign: 'center',
-    isPositioned: false,
-    triggerElement: null,
-    contentElement: null,
-    contentId,
-  });
-
-  // Update state when open changes
-  useEffect(() => {
-    setState((prev) => ({ ...prev, isOpen }));
-  }, [isOpen]);
-
   const openPopover = useCallback(() => {
-    const newOpen = true;
     if (!isControlled) {
-      setInternalOpen(newOpen);
+      setInternalOpen(true);
     }
-    onOpenChange?.(newOpen);
-    setState((prev) => ({ ...prev, isOpen: newOpen }));
+    onOpenChange?.(true);
   }, [isControlled, onOpenChange]);
 
   const closePopover = useCallback(() => {
-    const newOpen = false;
     if (!isControlled) {
-      setInternalOpen(newOpen);
+      setInternalOpen(false);
     }
-    onOpenChange?.(newOpen);
-    setState((prev) => ({ ...prev, isOpen: newOpen }));
+    onOpenChange?.(false);
   }, [isControlled, onOpenChange]);
 
   const togglePopover = useCallback(() => {
@@ -77,8 +49,8 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   }, [isOpen, openPopover, closePopover]);
 
   return {
-    state,
-    setState,
+    isOpen,
+    contentId,
     triggerRef,
     contentRef,
     arrowRef,
@@ -88,6 +60,5 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
     closePopover,
     togglePopover,
     onOpenChange,
-    mounted,
   };
 };
