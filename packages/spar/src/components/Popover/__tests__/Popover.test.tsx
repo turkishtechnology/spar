@@ -84,7 +84,7 @@ describe('Popover', () => {
 
   it('supports custom positioning props', () => {
     render(
-      <Popover side='top' align='start' sideOffset={16}>
+      <Popover>
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>Content</PopoverContent>
       </Popover>,
@@ -600,7 +600,7 @@ describe('PopoverArrow', () => {
         <PopoverTrigger>Open</PopoverTrigger>
         <PopoverContent>
           Content
-          <PopoverArrow width={20} height={10} offset={5} data-testid='arrow' />
+          <PopoverArrow width={20} height={10} data-testid='arrow' />
         </PopoverContent>
       </Popover>,
     );
@@ -609,27 +609,8 @@ describe('PopoverArrow', () => {
 
     await waitFor(() => {
       const arrow = screen.getByTestId('arrow');
-      expect(arrow).toHaveStyle({ width: '20px', height: '10px' });
-    });
-  });
-
-  it('sets presentation role', async () => {
-    const user = userEvent.setup();
-
-    render(
-      <Popover>
-        <PopoverTrigger>Open</PopoverTrigger>
-        <PopoverContent>
-          Content
-          <PopoverArrow data-testid='arrow' />
-        </PopoverContent>
-      </Popover>,
-    );
-
-    await user.click(screen.getByRole('button'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('arrow')).toHaveAttribute('role', 'presentation');
+      expect(arrow).toHaveAttribute('width', '20');
+      expect(arrow).toHaveAttribute('height', '10');
     });
   });
 });

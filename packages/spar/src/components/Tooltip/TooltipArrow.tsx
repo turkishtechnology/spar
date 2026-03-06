@@ -2,6 +2,7 @@ import { type ElementType } from 'react';
 import { useMergedRef } from '@/hooks';
 import type { TooltipArrowProps } from './types';
 import { useTooltipContext, useTooltipContentContext } from './hooks';
+import { getPlacement } from '@/utils';
 
 /**
  * Optional decorative arrow element for tooltip.
@@ -18,14 +19,14 @@ export const TooltipArrow = <T extends ElementType = 'svg'>({
 }: TooltipArrowProps<T>) => {
   const Component = as || 'svg';
   const { arrowRef } = useTooltipContext();
-  const { arrowStyles, side } = useTooltipContentContext();
+  const { arrowStyles, side, align } = useTooltipContentContext();
   const mergedRef = useMergedRef(arrowRef, ref as React.Ref<Element | null>);
-
+  const placement = getPlacement(side, align);
   return (
     <Component
       ref={mergedRef}
       aria-hidden='true'
-      data-side={side}
+      data-placement={placement}
       width={10}
       height={5}
       viewBox='0 0 10 5'

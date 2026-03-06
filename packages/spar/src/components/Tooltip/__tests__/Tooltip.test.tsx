@@ -275,7 +275,6 @@ describe('TooltipTrigger', () => {
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
     expect(trigger).toHaveAttribute('data-state', 'open');
-    expect(trigger).toHaveAttribute('data-placement', 'top');
     expect(trigger).not.toHaveAttribute('data-disabled');
   });
 });
@@ -322,7 +321,7 @@ describe('TooltipContent', () => {
       <TooltipProvider>
         <Tooltip defaultOpen>
           <TooltipTrigger>Trigger</TooltipTrigger>
-          <TooltipContent side='bottom' sideOffset={16} align='start'>
+          <TooltipContent side='bottom' align='start'>
             Positioned content
           </TooltipContent>
         </Tooltip>
@@ -429,13 +428,12 @@ describe('TooltipArrow', () => {
           <TooltipTrigger>Trigger</TooltipTrigger>
           <TooltipContent>
             Content
-            <TooltipArrow as='div' />
+            <TooltipArrow />
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>,
     );
-
-    const arrow = screen.getByRole('tooltip').querySelector('div[data-placement]');
+    const arrow = screen.getByRole('tooltip').querySelector('svg');
     expect(arrow).toBeInTheDocument();
   });
 

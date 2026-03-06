@@ -433,8 +433,8 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
   }, [placement]);
 
   const contentContextValue = useMemo(
-    () => ({ arrowStyles, side: currentSide }),
-    [arrowStyles, currentSide],
+    () => ({ arrowStyles, side: currentSide, align: currentAlign }),
+    [arrowStyles, currentSide, currentAlign],
   );
 
   if (!menu.open || !mounted) {

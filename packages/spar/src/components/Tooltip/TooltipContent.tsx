@@ -9,6 +9,7 @@ import {
 import { useTooltipContext, TooltipContentContext } from './hooks';
 import type { TooltipContentProps } from './types';
 import type { Side, Align } from '../../types';
+import { getPlacement } from '@/utils';
 
 /**
  * The content that displays in the tooltip popup
@@ -132,8 +133,8 @@ export const TooltipContent = <T extends ElementType = 'div'>({
   }, [context]);
 
   const contentContextValue = useMemo(
-    () => ({ arrowStyles, side: currentSide }),
-    [arrowStyles, currentSide],
+    () => ({ arrowStyles, side: currentSide, align: currentAlign }),
+    [arrowStyles, currentSide, currentAlign],
   );
 
   // Don't render if not open or disabled
@@ -152,8 +153,8 @@ export const TooltipContent = <T extends ElementType = 'div'>({
     role: 'tooltip',
     className,
     style: { ...floatingStyles, ...style },
-    'data-side': currentSide,
-    'data-align': currentAlign,
+    'data-state': context.isOpen ? 'open' : 'closed',
+    'data-placement': getPlacement(currentSide, currentAlign),
     onKeyDown: handleKeyDown,
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,

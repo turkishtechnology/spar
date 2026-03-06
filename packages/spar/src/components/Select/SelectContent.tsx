@@ -217,8 +217,8 @@ export const SelectContent = <T extends ElementType = 'div'>({
   }, [finalPlacement]);
 
   const contentContextValue = useMemo(
-    () => ({ arrowStyles, side: currentSide }),
-    [arrowStyles, currentSide],
+    () => ({ arrowStyles, side: currentSide, align: currentAlign }),
+    [arrowStyles, currentSide, currentAlign],
   );
 
   if (!context.open || !mounted) {
