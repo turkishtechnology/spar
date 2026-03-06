@@ -385,7 +385,7 @@ The root container that provides context and manages the state for all accordion
 | `disabled?`      | `boolean`                             | `false`      | Disables all accordion items                           |
 | `orientation?`   | `"vertical" \| "horizontal"`          | `"vertical"` | Orientation for keyboard navigation                    |
 | `as?`            | `React.ElementType`                   | `"div"`      | Polymorphic component type                             |
-| `children`       | `React.ReactNode`                     | -            | Accordion.Item components                               |
+| `children`       | `React.ReactNode`                     | -            | Accordion.Item components                              |
 
 **Events**
 
@@ -405,11 +405,11 @@ Individual accordion item that contains a header and content panel.
 
 **Props**
 
-| Name        | Type                | Default | Description                                     |
-| ----------- | ------------------- | ------- | ----------------------------------------------- |
-| `value`     | `string`            | -       | Unique identifier for the item                  |
-| `disabled?` | `boolean`           | `false` | Disables this specific item                     |
-| `as?`       | `React.ElementType` | `"div"` | Polymorphic component type                      |
+| Name        | Type                | Default | Description                                       |
+| ----------- | ------------------- | ------- | ------------------------------------------------- |
+| `value`     | `string`            | -       | Unique identifier for the item                    |
+| `disabled?` | `boolean`           | `false` | Disables this specific item                       |
+| `as?`       | `React.ElementType` | `"div"` | Polymorphic component type                        |
 | `children`  | `React.ReactNode`   | -       | Accordion.Header and Accordion.Content components |
 
 **Events**
@@ -435,7 +435,7 @@ Semantic heading wrapper for the accordion trigger button.
 | ---------- | ------------------- | ------- | -------------------------------------------- |
 | `level?`   | `number`            | `3`     | Heading level (1-6) for document hierarchy   |
 | `as?`      | `React.ElementType` | `"h3"`  | Polymorphic component type (heading element) |
-| `children` | `React.ReactNode`   | -       | Accordion.Trigger component                   |
+| `children` | `React.ReactNode`   | -       | Accordion.Trigger component                  |
 
 **Events**
 
