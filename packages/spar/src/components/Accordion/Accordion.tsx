@@ -29,13 +29,24 @@ export const Accordion = <T extends ElementType = 'div'>({
 
   const [internalValue, setInternalValue] = useState<string | string[]>(getInitialValue);
   const {
+    items: accordionItems,
     registerItem,
     unregisterItem,
     getItemIndex,
     getItemAtIndex,
     count: itemCount,
-  } = useItemRegistry<void>();
+  } = useItemRegistry<HTMLElement>();
   const [focusedIndex, setFocusedIndex] = useState(-1);
+
+  const focusItemAtIndex = useCallback(
+    (index: number): void => {
+      const key = getItemAtIndex(index);
+      if (key !== undefined) {
+        accordionItems.get(key)?.focus();
+      }
+    },
+    [accordionItems, getItemAtIndex],
+  );
 
   // Use controlled value if provided, otherwise use internal state
   const currentValue = controlledValue !== undefined ? controlledValue : internalValue;
@@ -85,6 +96,7 @@ export const Accordion = <T extends ElementType = 'div'>({
       setFocusedIndex,
       getItemIndex,
       getItemAtIndex,
+      focusItemAtIndex,
       itemCount,
     }),
     [
@@ -100,6 +112,7 @@ export const Accordion = <T extends ElementType = 'div'>({
       setFocusedIndex,
       getItemIndex,
       getItemAtIndex,
+      focusItemAtIndex,
       itemCount,
     ],
   );

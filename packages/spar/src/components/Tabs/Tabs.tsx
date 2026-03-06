@@ -1,5 +1,5 @@
 import { useMemo, useCallback, useRef, useId, type ElementType } from 'react';
-import { useControlledState } from '@/hooks';
+import { useControlledState, useItemRegistry } from '@/hooks';
 import { TabsContext } from './hooks';
 import type { TabsProps, TabsContextValue } from './types';
 
@@ -29,8 +29,13 @@ export const Tabs = <T extends ElementType = 'div'>({
   const generatedId = useId();
   const baseId = providedId ?? generatedId;
 
-  // Store references to tab elements for focus management
-  const tabRefs = useRef<Map<string, HTMLElement>>(new Map());
+  // Item registry for tab element references and ordered tracking
+  const {
+    items: tabItems,
+    registerItem,
+    unregisterItem,
+    getItemIndex,
+  } = useItemRegistry<HTMLElement>();
 
   // Track if auto-selection has occurred to prevent multiple selections
   const hasAutoSelectedRef = useRef(false);
@@ -44,7 +49,7 @@ export const Tabs = <T extends ElementType = 'div'>({
 
   const registerTab = useCallback(
     (value: string, element: HTMLElement): void => {
-      tabRefs.current.set(value, element);
+      registerItem(value, element);
 
       // Only auto-select for uncontrolled mode
       const shouldAutoSelectFirstTab =
@@ -55,22 +60,29 @@ export const Tabs = <T extends ElementType = 'div'>({
         setSelectedValue(value);
       }
     },
-    [isControlled, selectedValue, defaultValue, setSelectedValue],
+    [isControlled, selectedValue, defaultValue, setSelectedValue, registerItem],
   );
 
-  const unregisterTab = useCallback((value: string): void => {
-    tabRefs.current.delete(value);
-  }, []);
+  const unregisterTab = useCallback(
+    (value: string): void => {
+      unregisterItem(value);
+    },
+    [unregisterItem],
+  );
 
-  const getTabIndex = useCallback((value: string): number => {
-    const registeredTabValues = Array.from(tabRefs.current.keys());
-    return registeredTabValues.indexOf(value);
-  }, []);
+  const getTabIndex = useCallback(
+    (value: string): number => {
+      return getItemIndex(value);
+    },
+    [getItemIndex],
+  );
 
-  const focusTab = useCallback((value: string): void => {
-    const targetTabElement = tabRefs.current.get(value);
-    targetTabElement?.focus();
-  }, []);
+  const focusTab = useCallback(
+    (value: string): void => {
+      tabItems.get(value)?.focus();
+    },
+    [tabItems],
+  );
 
   const handleValueChange = useCallback(
     (value: string): void => {
@@ -95,7 +107,7 @@ export const Tabs = <T extends ElementType = 'div'>({
       baseId,
 
       // Tab management
-      tabRefs,
+      tabItems,
       registerTab,
       unregisterTab,
       getTabIndex,
@@ -108,6 +120,7 @@ export const Tabs = <T extends ElementType = 'div'>({
       dir,
       activationMode,
       baseId,
+      tabItems,
       registerTab,
       unregisterTab,
       getTabIndex,

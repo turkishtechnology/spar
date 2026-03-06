@@ -1,4 +1,4 @@
-import React, { useCallback, ElementType } from 'react';
+import React, { useCallback, useEffect, useRef, ElementType } from 'react';
 import type { AccordionTriggerProps, AccordionTriggerRenderProps } from './types';
 import { useAccordionContext, useAccordionItemContext } from './hooks';
 import { CollapsibleTrigger } from '../Collapsible';
@@ -16,6 +16,14 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
   const Component = as || 'button';
   const accordionContext = useAccordionContext();
   const itemContext = useAccordionItemContext();
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (triggerRef.current) {
+      accordionContext.registerItem(itemContext.value, triggerRef.current);
+    }
+    return () => accordionContext.unregisterItem(itemContext.value);
+  }, [itemContext.value, accordionContext.registerItem, accordionContext.unregisterItem]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
@@ -33,15 +41,7 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
           const nextIndex = isDown
             ? (currentIndex + 1) % totalItems
             : (currentIndex - 1 + totalItems) % totalItems;
-
-          const nextItemValue = accordionContext.getItemAtIndex(nextIndex);
-          if (nextItemValue) {
-            // Focus the next trigger
-            const nextTrigger = document.querySelector(
-              `[data-accordion-trigger][data-value="${nextItemValue}"]`,
-            ) as HTMLElement;
-            nextTrigger?.focus();
-          }
+          accordionContext.focusItemAtIndex(nextIndex);
           break;
         }
 
@@ -53,39 +53,19 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
           const nextIndex = isRight
             ? (currentIndex + 1) % totalItems
             : (currentIndex - 1 + totalItems) % totalItems;
-
-          const nextItemValue = accordionContext.getItemAtIndex(nextIndex);
-          if (nextItemValue) {
-            // Focus the next trigger
-            const nextTrigger = document.querySelector(
-              `[data-accordion-trigger][data-value="${nextItemValue}"]`,
-            ) as HTMLElement;
-            nextTrigger?.focus();
-          }
+          accordionContext.focusItemAtIndex(nextIndex);
           break;
         }
 
         case 'Home': {
           event.preventDefault();
-          const firstItemValue = accordionContext.getItemAtIndex(0);
-          if (firstItemValue) {
-            const firstTrigger = document.querySelector(
-              `[data-accordion-trigger][data-value="${firstItemValue}"]`,
-            ) as HTMLElement;
-            firstTrigger?.focus();
-          }
+          accordionContext.focusItemAtIndex(0);
           break;
         }
 
         case 'End': {
           event.preventDefault();
-          const lastItemValue = accordionContext.getItemAtIndex(totalItems - 1);
-          if (lastItemValue) {
-            const lastTrigger = document.querySelector(
-              `[data-accordion-trigger][data-value="${lastItemValue}"]`,
-            ) as HTMLElement;
-            lastTrigger?.focus();
-          }
+          accordionContext.focusItemAtIndex(totalItems - 1);
           break;
         }
 
@@ -110,6 +90,7 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
   return (
     <CollapsibleTrigger
       as={Component}
+      ref={triggerRef}
       onClick={onClick}
       onKeyDown={handleKeyDown}
       data-accordion-trigger=''

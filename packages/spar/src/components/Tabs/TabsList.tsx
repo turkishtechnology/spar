@@ -13,17 +13,17 @@ export const TabsList = <T extends ElementType = 'div'>({
 }: TabsListProps<T>) => {
   const Component = as || 'div';
   const context = useTabsContext();
-  const { orientation, dir, activationMode, tabRefs, onValueChange, focusTab } = context;
+  const { orientation, dir, activationMode, tabItems, onValueChange, focusTab } = context;
 
   const getEnabledTabs = useCallback(() => {
     const isDisabled = (el: HTMLElement) =>
       el.hasAttribute('disabled') ||
       el.getAttribute('aria-disabled') === 'true' ||
       el.hasAttribute('data-disabled');
-    return Array.from(tabRefs.current.entries())
+    return Array.from(tabItems.entries())
       .filter(([, el]) => !isDisabled(el))
       .map(([value]) => value);
-  }, []);
+  }, [tabItems]);
 
   const getNextTab = useCallback(
     (currentValue: string, direction: 1 | -1) => {

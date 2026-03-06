@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useCallback, useId, ElementType } from 'react';
+import { useMemo, useCallback, useId, ElementType } from 'react';
 import type { AccordionItemProps, AccordionItemContextValue } from './types';
 import { useAccordionContext, AccordionItemContext } from './hooks';
 import { Collapsible } from '../Collapsible';
@@ -20,12 +20,6 @@ export const AccordionItem = <T extends ElementType = 'div'>({
   const baseId = providedId ?? generatedId;
   const triggerId = `${baseId}-trigger`;
   const contentId = `${baseId}-content`;
-
-  // Register/unregister item with accordion
-  useEffect(() => {
-    accordionContext.registerItem(value);
-    return () => accordionContext.unregisterItem(value);
-  }, [accordionContext, value]);
 
   // Determine if this item is expanded
   const isOpen = useMemo(() => {

@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode, RefObject } from 'react';
+import type { ElementType, ReactNode } from 'react';
 import type { Direction, Orientation, PolymorphicProps } from '../../types';
 import type { ButtonOwnProps } from '../Button/types';
 
@@ -151,7 +151,7 @@ export interface TabsContextValue {
   dir: Direction;
   activationMode: TabsActivationMode;
   baseId: string;
-  tabRefs: RefObject<Map<string, HTMLElement>>;
+  tabItems: Map<string, HTMLElement>;
   registerTab: (value: string, element: HTMLElement) => void;
   unregisterTab: (value: string) => void;
   getTabIndex: (value: string) => number;
