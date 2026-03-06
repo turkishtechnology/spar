@@ -1,16 +1,25 @@
 #!/bin/sh
 
-# Hata durumunda script'i durdur
-set -e
-
 echo "🔍 Pre-commit kontrollerine başlanıyor..."
 
-# Staged dosyaları kontrol et
-echo "📝 Lint-staged çalıştırılıyor..."
-pnpm lint-staged
+TMPDIR=$(mktemp -d)
 
-# TypeScript tip kontrolü
-echo "🔍 TypeScript tip kontrolü yapılıyor..."
-pnpm check-types
+pnpm lint-staged >"$TMPDIR/lint.log" 2>&1 &
+PID1=$!
 
-echo "✅ Pre-commit kontrolleri tamamlandı!"
+pnpm check-types >"$TMPDIR/types.log" 2>&1 &
+PID2=$!
+
+FAIL=0
+wait $PID1 || FAIL=1
+wait $PID2 || FAIL=1
+
+echo "📝 lint-staged:"
+cat "$TMPDIR/lint.log"
+
+echo "🔍 check-types:"
+cat "$TMPDIR/types.log"
+
+rm -rf "$TMPDIR"
+
+[ $FAIL -eq 0 ] && echo "✅ Pre-commit kontrolleri tamamlandı!" || exit 1
