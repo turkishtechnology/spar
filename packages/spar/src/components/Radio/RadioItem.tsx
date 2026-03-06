@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, ElementType } from 'react';
 import type { RadioItemProps, RadioItemRenderProps } from './types';
 import { useRadioGroupContext } from './hooks';
-import { useFocusItem, useMergedRef } from '@/hooks';
+import { useMergedRef } from '@/hooks';
 
 /**
  * RadioItem component representing individual radio options within a RadioGroup.
@@ -42,14 +42,13 @@ export const RadioItem = <T extends ElementType = 'label'>({
   const isFocusable =
     !isDisabled && focusedValue === null && (isFocused || isChecked || isFirstItemFallback);
 
-  // Register/unregister with group
+  // Register/unregister with group, providing the DOM element for imperative focus management
   useEffect(() => {
-    registerItem(itemValue);
+    if (itemRef.current) {
+      registerItem(itemValue, itemRef.current);
+    }
     return () => unregisterItem(itemValue);
   }, [itemValue, registerItem, unregisterItem]);
-
-  // Focus management - direct implementation to avoid SSR issues
-  useFocusItem(isFocused, itemRef);
 
   // Handle selection
   const handleClick = useCallback(() => {

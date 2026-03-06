@@ -142,6 +142,6 @@ export interface RadioGroupContextValue {
   setFocusedValue: (value: string | null) => void;
   orientation: Orientation;
   selectOnFocus: boolean;
-  registerItem: (value: string) => void;
+  registerItem: (value: string, element: HTMLElement) => void;
   unregisterItem: (value: string) => void;
 }

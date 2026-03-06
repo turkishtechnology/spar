@@ -147,12 +147,13 @@ export interface AccordionContextValue {
   onItemToggle: (itemValue: string) => void;
   disabled: boolean;
   orientation: Orientation;
-  registerItem: (itemValue: string) => void;
+  registerItem: (itemValue: string, element: HTMLElement) => void;
   unregisterItem: (itemValue: string) => void;
   focusedIndex: number;
   setFocusedIndex: (index: number) => void;
   getItemIndex: (itemValue: string) => number;
   getItemAtIndex: (index: number) => string | undefined;
+  focusItemAtIndex: (index: number) => void;
   itemCount: number;
 }
 
