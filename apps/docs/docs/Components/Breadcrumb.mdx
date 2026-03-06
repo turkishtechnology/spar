@@ -516,11 +516,11 @@ function RenderPropsBreadcrumb() {
 
 The render function receives the following properties:
 
-| Property     | Type                            | Description                                           |
-| ------------ | ------------------------------- | ----------------------------------------------------- |
-| `position`   | `'first' \| 'middle' \| 'last'` | Position of the item in the breadcrumb trail          |
-| `isCurrent`  | `boolean`                       | Whether this item is the current (last) page          |
-| `isDisabled` | `boolean`                       | Whether breadcrumb navigation is disabled from root   |
+| Property     | Type                            | Description                                         |
+| ------------ | ------------------------------- | --------------------------------------------------- |
+| `position`   | `'first' \| 'middle' \| 'last'` | Position of the item in the breadcrumb trail        |
+| `isCurrent`  | `boolean`                       | Whether this item is the current (last) page        |
+| `isDisabled` | `boolean`                       | Whether breadcrumb navigation is disabled from root |
 
 ### Polymorphic Usage
 
@@ -597,12 +597,12 @@ List item wrapper that receives position and current state from parent Breadcrum
 
 **Props**
 
-| Name         | Type                 | Default    | Description                                             |
-| ------------ | -------------------- | ---------- | ------------------------------------------------------- |
-| `children`   | `React.ReactNode \| ((props: BreadcrumbItemRenderProps) => React.ReactNode)` | -          | Item content or render function receiving item state |
-| `as?`        | `React.ElementType`  | `'li'`     | Polymorphic element type                                |
-| `position?`  | `BreadcrumbPosition` | `'middle'` | Position in trail (automatically calculated)            |
-| `isCurrent?` | `boolean`            | `false`    | Whether this is current page (automatically calculated) |
+| Name         | Type                                                                         | Default    | Description                                             |
+| ------------ | ---------------------------------------------------------------------------- | ---------- | ------------------------------------------------------- |
+| `children`   | `React.ReactNode \| ((props: BreadcrumbItemRenderProps) => React.ReactNode)` | -          | Item content or render function receiving item state    |
+| `as?`        | `React.ElementType`                                                          | `'li'`     | Polymorphic element type                                |
+| `position?`  | `BreadcrumbPosition`                                                         | `'middle'` | Position in trail (automatically calculated)            |
+| `isCurrent?` | `boolean`                                                                    | `false`    | Whether this is current page (automatically calculated) |
 
 **Events**
 
