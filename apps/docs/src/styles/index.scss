@@ -88,3 +88,9 @@
     border-bottom-width: 2px;
   }
 }
+
+/* Override Infima's display:block on tables for full-width layout */
+.theme-doc-markdown.markdown table {
+  display: table;
+  width: 100%;
+}
