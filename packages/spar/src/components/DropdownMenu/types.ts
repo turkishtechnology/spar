@@ -126,12 +126,6 @@ export interface DropdownMenuContentOwnProps {
   align?: Align;
 
   /**
-   * Allow focus to loop through items
-   * @defaultValue false
-   */
-  loop?: boolean;
-
-  /**
    * Portal container element. Content is portaled to document.body by default.
    * @defaultValue document.body
    */
@@ -268,6 +262,5 @@ export interface DropdownMenuCollectionContextValue {
   highlightedId: string | null;
   closeOnSelect: boolean;
   closeMenu: (options?: { focusTrigger?: boolean }) => void;
-  loop: boolean;
   dir: Direction;
 }

@@ -40,7 +40,6 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
   as,
   side = 'bottom',
   align = 'center',
-  loop = false,
   container,
   onEscapeKeyDown,
   onPointerDownOutside,
@@ -143,7 +142,6 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     for (let step = 0; step < items.length; step += 1) {
       index = index === -1 ? 0 : index + 1;
       if (index >= items.length) {
-        if (!loop) return;
         index = 0;
       }
       const candidate = items[index];
@@ -151,9 +149,8 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
         setHighlightedId(candidate.id);
         return;
       }
-      if (!loop && index === items.length - 1) return;
     }
-  }, [items, highlightedId, loop]);
+  }, [items, highlightedId]);
 
   const highlightPrevious = useCallback(() => {
     if (!items.length) return;
@@ -165,7 +162,6 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     for (let step = 0; step < items.length; step += 1) {
       index = index === items.length ? items.length - 1 : index - 1;
       if (index < 0) {
-        if (!loop) return;
         index = items.length - 1;
       }
       const candidate = items[index];
@@ -173,9 +169,8 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
         setHighlightedId(candidate.id);
         return;
       }
-      if (!loop && index === 0) return;
     }
-  }, [items, highlightedId, loop]);
+  }, [items, highlightedId]);
 
   // --- Typeahead ---
 
@@ -405,7 +400,6 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
       highlightedId,
       closeOnSelect: menu.closeOnSelect,
       closeMenu: menu.closeMenu,
-      loop,
       dir: menu.dir,
     }),
     [
@@ -420,7 +414,6 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
       highlightedId,
       menu.closeOnSelect,
       menu.closeMenu,
-      loop,
       menu.dir,
     ],
   );
