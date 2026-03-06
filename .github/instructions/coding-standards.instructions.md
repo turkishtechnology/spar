@@ -304,31 +304,56 @@ const [requestState, setRequestState] = useState<RequestState>({
 **When NOT to use:**
 - Static navigation structures
 - Components without keyboard navigation
-- Components where DOM order is sufficient
+- Components where DOM order alone isn't sufficient (e.g. DropdownMenu uses `compareDocumentPosition` sort)
 
-### Usage Pattern
+### Usage Patterns
 
 ```typescript
 // Root component
 import { useItemRegistry } from '@/hooks';
 
-// For ID-only tracking
-const { registerItem, unregisterItem, getItemIds } = useItemRegistry<void>();
-const items = getItemIds(); // Returns string[]
+// For DOM focus management (Tabs, Accordion, RadioGroup)
+// Store the HTMLElement so the root can call .focus() imperatively
+const { items, registerItem, unregisterItem, getItemIndex, getItemAtIndex, count } =
+  useItemRegistry<HTMLElement>();
 
-// For data tracking
-const { registerItem, unregisterItem, getItemAtIndex } = useItemRegistry<ItemData>();
+// Expose a focusItemAtIndex helper via context instead of exposing items directly
+const focusItemAtIndex = useCallback(
+  (index: number): void => {
+    const key = getItemAtIndex(index);
+    if (key !== undefined) {
+      items.get(key)?.focus();
+    }
+  },
+  [items, getItemAtIndex],
+);
+
+// For rich data tracking (Select)
+// When type-ahead, disabled filtering, or extra metadata is needed alongside the ref
+const { items, registerItem, unregisterItem } = useItemRegistry<ItemData>();
 ```
 
 ### Child Component Registration
 
 ```typescript
-// Child component
+// Child component — register with the DOM element
+const itemRef = useRef<HTMLElement>(null);
+
 useEffect(() => {
-  registerItem(id, data); // data optional for ID-only tracking
+  if (itemRef.current) {
+    registerItem(id, itemRef.current);
+  }
   return () => unregisterItem(id);
 }, [id, registerItem, unregisterItem]);
 ```
+
+### Pattern Selection Guide
+
+| Need | `useItemRegistry<T>` generic |
+|---|---|
+| Imperative focus (Tabs, Accordion, Radio) | `HTMLElement` |
+| Rich metadata + ref (Select) | Custom `ItemData` interface |
+| DropdownMenu (DOM-order sort) | Custom `useState` — do NOT use `useItemRegistry` |
 
 **Critical:** Use `items.size` in dependency arrays, NOT `items` Map directly (prevents infinite loops).
 

@@ -173,6 +173,12 @@ interface RadioGroupContextValue {
   focusedValue: string | null;
   setFocusedValue: (value: string | null) => void;
   orientation: 'horizontal' | 'vertical';
+  selectOnFocus: boolean;
+  // Item registry — stores HTMLElement refs for imperative focus management
+  registerItem: (value: string, element: HTMLElement) => void;
+  unregisterItem: (value: string) => void;
+  // Called by the root's keyboard handler to move focus imperatively
+  // RadioItem.onFocus then syncs focusedValue state
 }
 
 const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
