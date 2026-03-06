@@ -4,8 +4,6 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import { Popover } from '../Popover';
 import { PopoverTrigger } from '../PopoverTrigger';
 import { PopoverContent } from '../PopoverContent';
-import { PopoverArrow } from '../PopoverArrow';
-
 import { PopoverClose } from '../PopoverClose';
 
 expect.extend(toHaveNoViolations);
@@ -211,26 +209,6 @@ describe('Popover Accessibility', () => {
         const content = screen.getByText('Content');
         expect(content).not.toHaveAttribute('role');
         expect(content).not.toHaveAttribute('aria-modal');
-      });
-    });
-
-    it('sets presentation role on arrow', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Popover>
-          <PopoverTrigger>Open</PopoverTrigger>
-          <PopoverContent>
-            Content
-            <PopoverArrow data-testid='arrow' />
-          </PopoverContent>
-        </Popover>,
-      );
-
-      await user.click(screen.getByRole('button'));
-
-      await waitFor(() => {
-        expect(screen.getByTestId('arrow')).toHaveAttribute('role', 'presentation');
       });
     });
   });

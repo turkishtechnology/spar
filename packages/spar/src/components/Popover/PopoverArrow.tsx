@@ -3,6 +3,7 @@ import { useMergedRef } from '@/hooks';
 import type { PopoverArrowProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 import { usePopoverContentContext } from './hooks/usePopoverContentContext';
+import { getPlacement } from '@/utils';
 
 /**
  * Optional decorative arrow element for popover.
@@ -19,14 +20,15 @@ export const PopoverArrow = <T extends ElementType = 'svg'>({
 }: PopoverArrowProps<T>) => {
   const Component = as || 'svg';
   const { arrowRef } = usePopoverContext();
-  const { arrowStyles, side } = usePopoverContentContext();
+  const { arrowStyles, side, align } = usePopoverContentContext();
   const mergedRef = useMergedRef(arrowRef, ref as React.Ref<Element | null>);
+  const placement = getPlacement(side, align);
 
   return (
     <Component
       ref={mergedRef}
       aria-hidden='true'
-      data-side={side}
+      data-placement={placement}
       width={10}
       height={5}
       viewBox='0 0 10 5'

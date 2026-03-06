@@ -2,6 +2,7 @@ import { type ElementType } from 'react';
 import { useMergedRef } from '@/hooks';
 import type { DropdownMenuArrowProps } from './types';
 import { useDropdownMenuContext, useDropdownMenuContentContext } from './hooks';
+import { getPlacement } from '@/utils';
 
 /**
  * Optional decorative arrow element for dropdown menu.
@@ -18,14 +19,15 @@ export const DropdownMenuArrow = <T extends ElementType = 'svg'>({
 }: DropdownMenuArrowProps<T>) => {
   const Component = as || 'svg';
   const { arrowRef } = useDropdownMenuContext();
-  const { arrowStyles, side } = useDropdownMenuContentContext();
+  const { arrowStyles, side, align } = useDropdownMenuContentContext();
   const mergedRef = useMergedRef(arrowRef, ref as React.Ref<Element | null>);
+  const placement = getPlacement(side, align);
 
   return (
     <Component
       ref={mergedRef}
       aria-hidden='true'
-      data-side={side}
+      data-placement={placement}
       width={10}
       height={5}
       viewBox='0 0 10 5'

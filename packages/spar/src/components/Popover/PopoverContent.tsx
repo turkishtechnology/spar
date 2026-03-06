@@ -11,7 +11,7 @@ import { PopoverContentProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 import { PopoverContentContext } from './hooks/usePopoverContentContext';
 import { getFocusableElements } from './utils/index';
-import type { Side } from '../../types';
+import type { Side, Align } from '../../types';
 
 /**
  * Content container that holds the popover content
@@ -190,8 +190,8 @@ export const PopoverContent = <T extends ElementType = 'div'>({
   }, [placement]);
 
   const contentContextValue = useMemo(
-    () => ({ arrowStyles, side: currentSide as Side }),
-    [arrowStyles, currentSide],
+    () => ({ arrowStyles, side: currentSide as Side, align: currentAlign as Align }),
+    [arrowStyles, currentSide, currentAlign],
   );
 
   if (!isOpen || !mounted) return null;
