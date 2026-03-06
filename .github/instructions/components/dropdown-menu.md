@@ -66,7 +66,6 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
 | `side` | `'top' | 'right' | 'bottom' | 'left'` | No | `'bottom'` | Preferred placement side |
 | `align` | `'start' | 'center' | 'end'` | No | `'start'` | Alignment on placement side |
-| `loop` | `boolean` | No | `false` | Allow focus to loop through items |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | `undefined` | Escape key handler |
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | `undefined` | Outside click handler |
 | `onFocusOutside` | `(event: FocusEvent) => void` | No | `undefined` | Outside focus handler |
@@ -105,8 +104,8 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 | Closed | Up Arrow on trigger | Opens menu, focuses last item | `aria-expanded="true"`, removes `hidden` |
 | Open | Click item | Closes menu, returns focus to trigger, executes action | `aria-expanded="false"`, adds `hidden` |
 | Open | Enter/Space on item | Closes menu, returns focus to trigger, executes action | `aria-expanded="false"`, adds `hidden` |
-| Open | Down Arrow | Moves focus to next item (loops if loop=true) | Roving tabindex updates |
-| Open | Up Arrow | Moves focus to previous item (loops if loop=true) | Roving tabindex updates |
+| Open | Down Arrow | Moves focus to next item (loops through items) | Roving tabindex updates |
+| Open | Up Arrow | Moves focus to previous item (loops through items) | Roving tabindex updates |
 | Open | Home | Moves focus to first item | Roving tabindex updates |
 | Open | End | Moves focus to last item | Roving tabindex updates |
 | Open | Escape | Closes menu, returns focus to trigger | `aria-expanded="false"`, adds `hidden` |
