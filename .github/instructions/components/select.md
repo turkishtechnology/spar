@@ -108,9 +108,8 @@ The dropdown container that appears when open.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `position` | `'item-aligned' \| 'popper'` | No | `'item-aligned'` | Positioning strategy |
-| `side` | `'top' \| 'right' \| 'bottom' \| 'left'` | No | `'bottom'` | Preferred placement side (popper only) |
-| `align` | `'start' \| 'center' \| 'end'` | No | `'start'` | Alignment relative to trigger |
+| `side` | `'top' \| 'right' \| 'bottom' \| 'left'` | No | `'bottom'` | Preferred placement side |
+| `align` | `'start' \| 'center' \| 'end'` | No | `'center'` | Alignment relative to trigger |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Escape key handler |
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | - | Outside click handler |
 | `onCloseAutoFocus` | `(event: FocusEvent) => void` | No | - | Focus handler on close |
@@ -122,13 +121,6 @@ The dropdown container that appears when open.
 - `data-state`: `"open" | "closed"`
 - `data-side`: `"top" | "right" | "bottom" | "left"`
 - `data-align`: `"start" | "center" | "end"`
-
-**CSS Variables (popper mode):**
-- `--select-content-transform-origin`: Transform origin for animations
-- `--select-content-available-width`: Available width
-- `--select-content-available-height`: Available height
-- `--select-trigger-width`: Trigger element width
-- `--select-trigger-height`: Trigger element height
 
 ### SelectItem
 Individual selectable option.
@@ -272,46 +264,46 @@ Following WAI-ARIA Listbox pattern:
 ### Additional Accessibility Requirements
 - Disabled items are not focusable, use `aria-disabled="true"`
 - Empty groups are skipped in navigation
-- Type-ahead timeout: 1000ms between character inputs
+- Type-ahead timeout: ~700ms between character inputs
 - Required fields must have `aria-required="true"` or `required` attribute
 - Error states should use `aria-invalid="true"` and `aria-errormessage`
 
 ## 5. Implementation Architecture
 
 ### State Management
+
+**Root (`Select.tsx`)** owns open/value state and a `focusStrategy` signal:
 ```tsx
-interface SelectState {
-  // Open state
-  open: boolean;
-  setOpen: (open: boolean) => void;
+// Controlled / uncontrolled open & value (manual pattern, no custom hook)
+const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue);
+const [internalOpen, setInternalOpen]   = useState<boolean>(defaultOpen);
 
-  // Value state
-  value: string | undefined;
-  setValue: (value: string) => void;
-
-  // Focus management
-  activeIndex: number;
-  setActiveIndex: (index: number) => void;
-
-  // Type-ahead
-  searchString: string;
-  searchTimeout: NodeJS.Timeout | null;
-}
-
-// Hook: useSelectState
-const useSelectState = (props: SelectRootProps) => {
-  const [open, setOpen] = useControlledState(props.open, props.defaultOpen, props.onOpenChange);
-  const [value, setValue] = useControlledState(props.value, props.defaultValue, props.onValueChange);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const [searchString, setSearchString] = useState('');
-
-  // ... implementation
-
-  return { open, setOpen, value, setValue, activeIndex, setActiveIndex };
-};
+// Focus strategy — tells SelectContent which item to highlight on open
+const [focusStrategy, setFocusStrategy] = useState<SelectFocusStrategy>('none');
+// Reset to 'none' inside handleOpenChange when closing
 ```
 
+**Content (`SelectContent.tsx`)** owns highlight state locally (two-layer context):
+```tsx
+const [highlightedId, setHighlightedId] = useState<string | null>(null);
+
+// Consumed via useLayoutEffect to avoid re-trigger loops:
+useLayoutEffect(() => {
+  if (!context.open) { setHighlightedId(null); resetTypeahead(); return; }
+  if (context.focusStrategy === 'selected') { /* highlight selected or first */ }
+  else if (context.focusStrategy === 'first') { highlightFirst(); }
+  else if (context.focusStrategy === 'last')  { highlightLast(); }
+  context.setFocusStrategy('none');
+}, [context.open, context.focusStrategy, ...]);
+```
+
+**Type `SelectFocusStrategy`**: `'first' | 'last' | 'selected' | 'none'`
+
 ### Context Requirements
+
+Two-layer context architecture (mirrors DropdownMenu pattern):
+
+**Root context** (`SelectContext`) — provided by `Select.tsx`:
 ```tsx
 interface SelectContextValue {
   // State
@@ -319,16 +311,18 @@ interface SelectContextValue {
   value: string | undefined;
   disabled: boolean;
   required: boolean;
-  dir: 'ltr' | 'rtl';
+  dir: Direction;
+  autoFocus: boolean;
 
   // Actions
   onValueChange: (value: string) => void;
   onOpenChange: (open: boolean) => void;
 
   // Refs
-  triggerRef: RefObject<HTMLElement>;
-  contentRef: RefObject<HTMLElement>;
-  valueRef: RefObject<HTMLElement>;
+  triggerRef: RefObject<HTMLButtonElement | null>;
+  contentRef: RefObject<HTMLDivElement | null>;
+  valueNodeRef: RefObject<HTMLElement | null>;
+  arrowRef: RefObject<Element | null>;
 
   // IDs
   triggerId: string;
@@ -339,13 +333,27 @@ interface SelectContextValue {
   items: Map<string, SelectItemData>;
   registerItem: (value: string, data: SelectItemData) => void;
   unregisterItem: (value: string) => void;
-}
 
-// Provider
-<SelectContext.Provider value={contextValue}>
-  {children}
-</SelectContext.Provider>
+  // Focus strategy (consumed by SelectContent)
+  focusStrategy: SelectFocusStrategy;
+  setFocusStrategy: (strategy: SelectFocusStrategy) => void;
+}
 ```
+
+**Collection context** (`SelectCollectionContext`) — provided by `SelectContent.tsx`:
+```tsx
+interface SelectCollectionContextValue {
+  highlightItem: (id: string | null) => void;
+  highlightFirst: () => void;
+  highlightLast: () => void;
+  highlightNext: () => void;
+  highlightPrevious: () => void;
+  isItemHighlighted: (id: string) => boolean;
+  highlightedId: string | null;
+}
+```
+
+This separation keeps highlight state out of root context, preventing unnecessary re-renders of the trigger and other root-level consumers when the highlighted item changes.
 
 ### Ref Forwarding Strategy
 All interactive components support ref forwarding:
@@ -360,52 +368,34 @@ const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>((props, 
 
 ### Event System
 ```tsx
-// Keyboard event delegation
-const handleKeyDown = (event: KeyboardEvent) => {
+// Keyboard event delegation in SelectContent
+// Typeahead is called BEFORE the switch statement (consistent with DropdownMenu)
+const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  onKeyDown?.(event);
+  if (event.defaultPrevented) return;
+
+  // Typeahead first
+  if (performTypeahead(event)) {
+    event.preventDefault();
+    return;
+  }
+
   switch (event.key) {
-    case 'Enter':
-    case ' ':
-      // Handle selection
-      break;
-    case 'ArrowDown':
-      // Move focus down
-      break;
-    case 'ArrowUp':
-      // Move focus up
-      break;
-    case 'Home':
-    case 'PageUp':
-      // Focus first
-      break;
-    case 'End':
-    case 'PageDown':
-      // Focus last
-      break;
-    case 'Escape':
-      // Close
-      break;
-    default:
-      // Type-ahead
-      if (event.key.length === 1) {
-        handleTypeAhead(event.key);
-      }
+    case 'Escape':      // Close, restore focus to trigger
+    case 'Enter':       // Select highlighted item, close
+    case ' ':           // Select highlighted item, close
+    case 'ArrowDown':   // highlightNext()
+    case 'ArrowUp':     // highlightPrevious()
+    case 'Home':        // highlightFirst()
+    case 'PageUp':      // highlightFirst()
+    case 'End':         // highlightLast()
+    case 'PageDown':    // highlightLast()
+    case 'Tab':         // Close without selection
   }
-};
-
-// Type-ahead implementation
-const handleTypeAhead = (char: string) => {
-  clearTimeout(searchTimeout);
-  const newSearch = searchString + char;
-  const match = findMatchingItem(newSearch);
-
-  if (match) {
-    focusItem(match.index);
-  }
-
-  setSearchString(newSearch);
-  setSearchTimeout(setTimeout(() => setSearchString(''), 1000));
 };
 ```
+
+**Type-ahead** is provided by the shared `useTypeahead` hook (~700ms buffer timeout, repeated-key cycling, wrap-around search). `resetTypeahead()` is called on close via `useLayoutEffect`.
 
 ### SSR/CSR Safety
 ```tsx
@@ -678,9 +668,9 @@ export * as Select from './index';
 - [ ] Troubleshooting guide
 
 ### Key Technical Decisions
-1. **Positioning Strategy**: Item-aligned by default, popper optional (matches Radix approach)
-2. **Focus Management**: Use `aria-activedescendant` for virtual focus (better screen reader support)
-3. **Type-Ahead**: 1000ms timeout, matches ARIA APG recommendations
+1. **Positioning Strategy**: Floating UI based positioning with side/align props
+2. **Focus Management**: Content-level focus with `data-highlighted` attribute for visual indication
+3. **Type-Ahead**: ~700ms buffer timeout via shared `useTypeahead` hook, with repeated-key cycling and wrap-around search
 4. **Form Integration**: Hidden input approach for native form submission
 5. **Portal**: Built into `SelectContent` via `createPortal`, defaults to `document.body`, customizable via `container` prop
 6. **Item Registration**: Use collection pattern (context-based) for dynamic items
