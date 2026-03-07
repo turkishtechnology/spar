@@ -3,6 +3,8 @@ import type { Side, Align, Direction, PolymorphicProps } from '../../types';
 import type { LabelProps } from '../Label/types';
 import type { ButtonOwnProps } from '../Button/types';
 
+export type SelectFocusStrategy = 'first' | 'last' | 'selected' | 'none';
+
 /**
  * Own props for Select root component
  */
@@ -361,13 +363,22 @@ export interface SelectContextValue {
   registerItem: (value: string, data: SelectItemData) => void;
   unregisterItem: (value: string) => void;
 
-  // Focus management
-  highlightedIndex: number;
-  setHighlightedIndex: (index: number) => void;
+  // Focus strategy (consumed by SelectContent)
+  focusStrategy: SelectFocusStrategy;
+  setFocusStrategy: (strategy: SelectFocusStrategy) => void;
+}
 
-  // Type-ahead
-  searchString: string;
-  setSearchString: (search: string) => void;
+/**
+ * @internal
+ */
+export interface SelectCollectionContextValue {
+  highlightItem: (id: string | null) => void;
+  highlightFirst: () => void;
+  highlightLast: () => void;
+  highlightNext: () => void;
+  highlightPrevious: () => void;
+  isItemHighlighted: (id: string) => boolean;
+  highlightedId: string | null;
 }
 
 /**

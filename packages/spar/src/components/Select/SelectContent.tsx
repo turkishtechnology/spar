@@ -1,14 +1,22 @@
-import React, { useEffect, useRef, useCallback, useMemo, useState, type ElementType } from 'react';
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useMemo,
+  useState,
+  type ElementType,
+} from 'react';
 import { createPortal } from 'react-dom';
 import {
   useInteractOutside,
   useMergedRef,
   useFloating,
+  useTypeahead,
   type UseFloatingOptions,
   type UseFloatingReturn,
 } from '@/hooks';
-import { useSelectContext, SelectContentContext } from './hooks';
-import type { SelectContentProps } from './types';
+import { useSelectContext, SelectContentContext, SelectCollectionContext } from './hooks';
+import type { SelectContentProps, SelectCollectionContextValue } from './types';
 import { Align, Side } from '@/types';
 
 /**
@@ -30,7 +38,6 @@ export const SelectContent = <T extends ElementType = 'div'>({
 }: SelectContentProps<T>) => {
   const Component = as || 'div';
   const context = useSelectContext();
-  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // SSR safety - only render portal after mount
   const [mounted, setMounted] = useState(false);
@@ -87,36 +94,100 @@ export const SelectContent = <T extends ElementType = 'div'>({
     },
   });
 
-  // Get non-disabled items
-  const getNonDisabledItems = useCallback(() => {
-    return Array.from(context.items.values()).filter((item) => !item.disabled);
-  }, [context.items]);
+  // --- Highlight state (owned by Content, not Root) ---
+  const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
-  // Type-ahead search
-  const handleTypeAhead = useCallback(
-    (char: string) => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-
-      const newSearch = context.searchString + char.toLowerCase();
-      context.setSearchString(newSearch);
-
-      const items = getNonDisabledItems();
-      const matchIndex = items.findIndex((item) =>
-        item.textValue.toLowerCase().startsWith(newSearch),
-      );
-
-      if (matchIndex !== -1) {
-        context.setHighlightedIndex(matchIndex);
-      }
-
-      searchTimeoutRef.current = setTimeout(() => {
-        context.setSearchString('');
-      }, 1000);
-    },
-    [context, getNonDisabledItems],
+  // Enabled items for keyboard navigation
+  const enabledItems = useMemo(
+    () => Array.from(context.items.values()).filter((item) => !item.disabled),
+    [context.items],
   );
+
+  // Items mapped for typeahead (id = value string)
+  const typeaheadItems = useMemo(
+    () =>
+      Array.from(context.items.values()).map((item) => ({
+        id: item.value,
+        textValue: item.textValue,
+        disabled: item.disabled,
+      })),
+    [context.items],
+  );
+
+  // --- Highlight helpers ---
+  const highlightItem = useCallback((id: string | null) => {
+    setHighlightedId(id);
+  }, []);
+
+  const isItemHighlighted = useCallback((id: string) => highlightedId === id, [highlightedId]);
+
+  const highlightFirst = useCallback(() => {
+    const candidate = enabledItems[0];
+    setHighlightedId(candidate?.value ?? null);
+  }, [enabledItems]);
+
+  const highlightLast = useCallback(() => {
+    const candidate = enabledItems[enabledItems.length - 1];
+    setHighlightedId(candidate?.value ?? null);
+  }, [enabledItems]);
+
+  const highlightNext = useCallback(() => {
+    if (!enabledItems.length) return;
+    const currentIndex = highlightedId
+      ? enabledItems.findIndex((item) => item.value === highlightedId)
+      : -1;
+    const nextIndex = (currentIndex + 1) % enabledItems.length;
+    const candidate = enabledItems[nextIndex];
+    if (candidate) setHighlightedId(candidate.value);
+  }, [enabledItems, highlightedId]);
+
+  const highlightPrevious = useCallback(() => {
+    if (!enabledItems.length) return;
+    const currentIndex = highlightedId
+      ? enabledItems.findIndex((item) => item.value === highlightedId)
+      : enabledItems.length;
+    const prevIndex = currentIndex <= 0 ? enabledItems.length - 1 : currentIndex - 1;
+    const candidate = enabledItems[prevIndex];
+    if (candidate) setHighlightedId(candidate.value);
+  }, [enabledItems, highlightedId]);
+
+  // --- Typeahead ---
+  const { performTypeahead, resetTypeahead } = useTypeahead({
+    items: typeaheadItems,
+    highlightedId,
+    onHighlight: highlightItem,
+  });
+
+  // --- Focus strategy ---
+  // highlightFirst/Last/Selected and setFocusStrategy('none') must stay in the same
+  // synchronous layout effect to avoid re-trigger loops during item registration.
+  useLayoutEffect(() => {
+    if (!context.open) {
+      setHighlightedId(null);
+      resetTypeahead();
+      return;
+    }
+    if (context.focusStrategy === 'selected') {
+      const selectedItem = enabledItems.find((item) => item.value === context.value);
+      setHighlightedId(selectedItem?.value ?? enabledItems[0]?.value ?? null);
+      context.setFocusStrategy('none');
+    } else if (context.focusStrategy === 'first') {
+      highlightFirst();
+      context.setFocusStrategy('none');
+    } else if (context.focusStrategy === 'last') {
+      highlightLast();
+      context.setFocusStrategy('none');
+    }
+  }, [
+    context.open,
+    context.focusStrategy,
+    context.value,
+    enabledItems,
+    highlightFirst,
+    highlightLast,
+    resetTypeahead,
+    context.setFocusStrategy,
+  ]);
 
   // Keyboard navigation
   const handleKeyDown = useCallback(
@@ -124,10 +195,13 @@ export const SelectContent = <T extends ElementType = 'div'>({
       onKeyDown?.(event);
       if (event.defaultPrevented) return;
 
-      const { key } = event;
-      const items = getNonDisabledItems();
+      // Typeahead first (consistent with DropdownMenu)
+      if (performTypeahead(event)) {
+        event.preventDefault();
+        return;
+      }
 
-      switch (key) {
+      switch (event.key) {
         case 'Escape':
           onEscapeKeyDown?.(event.nativeEvent);
           if (!event.defaultPrevented) {
@@ -140,8 +214,8 @@ export const SelectContent = <T extends ElementType = 'div'>({
         case 'Enter':
         case ' ':
           event.preventDefault();
-          if (context.highlightedIndex >= 0 && context.highlightedIndex < items.length) {
-            const selectedItem = items[context.highlightedIndex];
+          if (highlightedId) {
+            const selectedItem = enabledItems.find((item) => item.value === highlightedId);
             if (selectedItem) {
               context.onValueChange(selectedItem.value);
               context.onOpenChange(false);
@@ -152,34 +226,24 @@ export const SelectContent = <T extends ElementType = 'div'>({
 
         case 'ArrowDown':
           event.preventDefault();
-          if (context.highlightedIndex < items.length - 1) {
-            context.setHighlightedIndex(context.highlightedIndex + 1);
-          } else {
-            // Wrap to first
-            context.setHighlightedIndex(0);
-          }
+          highlightNext();
           break;
 
         case 'ArrowUp':
           event.preventDefault();
-          if (context.highlightedIndex > 0) {
-            context.setHighlightedIndex(context.highlightedIndex - 1);
-          } else {
-            // Wrap to last
-            context.setHighlightedIndex(items.length - 1);
-          }
+          highlightPrevious();
           break;
 
         case 'Home':
         case 'PageUp':
           event.preventDefault();
-          context.setHighlightedIndex(0);
+          highlightFirst();
           break;
 
         case 'End':
         case 'PageDown':
           event.preventDefault();
-          context.setHighlightedIndex(items.length - 1);
+          highlightLast();
           break;
 
         case 'Tab':
@@ -188,25 +252,22 @@ export const SelectContent = <T extends ElementType = 'div'>({
           break;
 
         default:
-          // Type-ahead for single character keys
-          if (key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
-            event.preventDefault();
-            handleTypeAhead(key);
-          }
           break;
       }
     },
-    [context, getNonDisabledItems, handleTypeAhead, onKeyDown, onEscapeKeyDown],
+    [
+      context,
+      enabledItems,
+      highlightedId,
+      performTypeahead,
+      highlightNext,
+      highlightPrevious,
+      highlightFirst,
+      highlightLast,
+      onKeyDown,
+      onEscapeKeyDown,
+    ],
   );
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-    };
-  }, []);
 
   // Extract placement information for data attributes
   const [currentSide, currentAlign] = useMemo(() => {
@@ -219,6 +280,29 @@ export const SelectContent = <T extends ElementType = 'div'>({
   const contentContextValue = useMemo(
     () => ({ arrowStyles, side: currentSide, align: currentAlign }),
     [arrowStyles, currentSide, currentAlign],
+  );
+
+  // Collection context value — provided to SelectItem descendants
+  // Must be computed before the early return to keep hook call order stable.
+  const collectionValue = useMemo<SelectCollectionContextValue>(
+    () => ({
+      highlightItem,
+      highlightFirst,
+      highlightLast,
+      highlightNext,
+      highlightPrevious,
+      isItemHighlighted,
+      highlightedId,
+    }),
+    [
+      highlightItem,
+      highlightFirst,
+      highlightLast,
+      highlightNext,
+      highlightPrevious,
+      isItemHighlighted,
+      highlightedId,
+    ],
   );
 
   if (!context.open || !mounted) {
@@ -236,21 +320,23 @@ export const SelectContent = <T extends ElementType = 'div'>({
 
   const contentElement = (
     <SelectContentContext.Provider value={contentContextValue}>
-      <Component
-        ref={floatingRef}
-        id={context.contentId}
-        role='listbox'
-        aria-labelledby={context.triggerId}
-        tabIndex={-1}
-        data-state={context.open ? 'open' : 'closed'}
-        data-side={currentSide}
-        data-align={currentAlign}
-        onKeyDown={handleKeyDown}
-        style={contentStyle}
-        {...props}
-      >
-        {children}
-      </Component>
+      <SelectCollectionContext.Provider value={collectionValue}>
+        <Component
+          ref={floatingRef}
+          id={context.contentId}
+          role='listbox'
+          aria-labelledby={context.triggerId}
+          tabIndex={-1}
+          data-state={context.open ? 'open' : 'closed'}
+          data-side={currentSide}
+          data-align={currentAlign}
+          onKeyDown={handleKeyDown}
+          style={contentStyle}
+          {...props}
+        >
+          {children}
+        </Component>
+      </SelectCollectionContext.Provider>
     </SelectContentContext.Provider>
   );
 

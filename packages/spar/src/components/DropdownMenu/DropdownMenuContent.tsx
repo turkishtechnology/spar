@@ -13,6 +13,7 @@ import {
   useInteractOutside,
   useMergedRef,
   useFloating,
+  useTypeahead,
   type UseFloatingOptions,
   type UseFloatingReturn,
 } from '@/hooks';
@@ -27,10 +28,7 @@ import {
   DropdownMenuCollectionContext,
   DropdownMenuContentContext,
 } from './hooks';
-import { isCharacterKey, TYPEAHEAD_TIMEOUT } from './utils/index';
 import { Align, Side } from '@/types';
-
-const normalizeTypeaheadValue = (value: string) => value.trim().toLocaleLowerCase();
 
 /**
  * Floating content panel for the dropdown menu.
@@ -85,8 +83,6 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
   // --- Item collection ---
   const [items, setItems] = useState<DropdownMenuCollectionItem[]>([]);
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
-  const typeaheadRef = useRef('');
-  const typeaheadTimeoutId = useRef<number | null>(null);
   const hadHighlightRef = useRef(false);
 
   const registerItem = useCallback((item: DropdownMenuCollectionItem) => {
@@ -174,57 +170,11 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
 
   // --- Typeahead ---
 
-  const resetTypeahead = useCallback(() => {
-    typeaheadRef.current = '';
-    if (typeaheadTimeoutId.current !== null) {
-      window.clearTimeout(typeaheadTimeoutId.current);
-      typeaheadTimeoutId.current = null;
-    }
-  }, []);
-
-  const performTypeahead = useCallback(
-    (event: ReactKeyboardEvent<HTMLElement>) => {
-      if (!isCharacterKey(event)) return false;
-
-      const key = normalizeTypeaheadValue(event.key);
-      if (!key) return false;
-
-      const nextSearch = `${typeaheadRef.current}${key}`;
-      const isRepeatedKey =
-        nextSearch.length > 1 && nextSearch.split('').every((char) => char === nextSearch[0]);
-      const search = isRepeatedKey ? key : nextSearch;
-      if (!search) return false;
-
-      const enabledItems = items
-        .filter((item) => !item.disabled)
-        .map((item) => ({ item, value: normalizeTypeaheadValue(item.textValue) }))
-        .filter((entry) => entry.value.length > 0);
-      if (!enabledItems.length) return false;
-
-      const currentIndex = highlightedId
-        ? enabledItems.findIndex((entry) => entry.item.id === highlightedId)
-        : -1;
-
-      const findMatch = (startIndex: number) => {
-        for (let step = 1; step <= enabledItems.length; step += 1) {
-          const index = (startIndex + step) % enabledItems.length;
-          const candidate = enabledItems[index];
-          if (candidate?.value.startsWith(search)) return candidate.item;
-        }
-        return null;
-      };
-
-      const match = findMatch(currentIndex);
-      if (match) setHighlightedId(match.id);
-
-      typeaheadRef.current = search;
-      if (typeaheadTimeoutId.current !== null) window.clearTimeout(typeaheadTimeoutId.current);
-      typeaheadTimeoutId.current = window.setTimeout(resetTypeahead, TYPEAHEAD_TIMEOUT);
-
-      return true;
-    },
-    [items, highlightedId, resetTypeahead],
-  );
+  const { performTypeahead, resetTypeahead } = useTypeahead({
+    items,
+    highlightedId,
+    onHighlight: highlightItem,
+  });
 
   // --- Activation ---
 
@@ -282,15 +232,6 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
       }
     }
   }, [menu.open, highlightedId, items]);
-
-  useEffect(
-    () => () => {
-      if (typeaheadTimeoutId.current !== null) {
-        window.clearTimeout(typeaheadTimeoutId.current);
-      }
-    },
-    [],
-  );
 
   // --- Outside interaction ---
   useInteractOutside([contentRef, menu.triggerRef], {

@@ -1,7 +1,7 @@
 import { useId, useMemo, useState, useCallback, useRef, type ElementType } from 'react';
 import { useItemRegistry } from '@/hooks';
 import { SelectContext } from './hooks';
-import type { SelectProps, SelectContextValue, SelectItemData } from './types';
+import type { SelectProps, SelectContextValue, SelectItemData, SelectFocusStrategy } from './types';
 
 /**
  * Select root component providing context and state management for all select components. Supports controlled and uncontrolled patterns with full keyboard navigation and accessibility.
@@ -50,9 +50,8 @@ export const Select = <T extends ElementType = 'div'>({
   // Item collection
   const { items, registerItem, unregisterItem } = useItemRegistry<SelectItemData>();
 
-  // Focus and type-ahead state
-  const [highlightedIndex, setHighlightedIndex] = useState(-1);
-  const [searchString, setSearchString] = useState('');
+  // Focus strategy (consumed by SelectContent to decide initial highlight)
+  const [focusStrategy, setFocusStrategy] = useState<SelectFocusStrategy>('none');
 
   // Value change handler
   const handleValueChange = useCallback(
@@ -77,10 +76,9 @@ export const Select = <T extends ElementType = 'div'>({
       }
       onOpenChange?.(newOpen);
 
-      // Reset highlighted index when closing
+      // Reset focus strategy when closing
       if (!newOpen) {
-        setHighlightedIndex(-1);
-        setSearchString('');
+        setFocusStrategy('none');
       }
     },
     [disabled, isOpenControlled, onOpenChange],
@@ -117,13 +115,9 @@ export const Select = <T extends ElementType = 'div'>({
       registerItem,
       unregisterItem,
 
-      // Focus management
-      highlightedIndex,
-      setHighlightedIndex,
-
-      // Type-ahead
-      searchString,
-      setSearchString,
+      // Focus strategy
+      focusStrategy,
+      setFocusStrategy,
     }),
     [
       currentOpen,
@@ -139,8 +133,8 @@ export const Select = <T extends ElementType = 'div'>({
       valueId,
       registerItem,
       unregisterItem,
-      highlightedIndex,
-      searchString,
+      focusStrategy,
+      setFocusStrategy,
     ],
   );
 

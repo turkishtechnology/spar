@@ -48,11 +48,8 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
         if (!context.open) {
           context.onOpenChange(true);
 
-          // Set initial highlighted index to selected item or first item
-          const selectedIndex = Array.from(context.items.values()).findIndex(
-            (item) => item.value === context.value,
-          );
-          context.setHighlightedIndex(selectedIndex !== -1 ? selectedIndex : 0);
+          // Signal content to highlight the selected item (or first if none selected)
+          context.setFocusStrategy(context.value ? 'selected' : 'first');
         }
       }
     },

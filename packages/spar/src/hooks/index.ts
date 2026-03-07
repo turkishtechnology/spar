@@ -6,3 +6,9 @@ export { useItemRegistry } from './useItemRegistry';
 export { useFloating, type UseFloatingOptions, type UseFloatingReturn } from './useFloating';
 export type { ItemRegistry } from './useItemRegistry';
 export { useCloseButton, type CloseButtonRenderProps } from './useCloseButton';
+export {
+  useTypeahead,
+  type TypeaheadItem,
+  type UseTypeaheadOptions,
+  type UseTypeaheadReturn,
+} from './useTypeahead';

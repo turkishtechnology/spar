@@ -3,3 +3,4 @@ export { SelectGroupContext, useSelectGroupContext } from './useSelectGroupConte
 export { SelectItemContext, useSelectItemContext } from './useSelectItemContext';
 export { useSelectContentContext, SelectContentContext } from './useSelectContentContext';
 export type { SelectContentContextValue } from './useSelectContentContext';
+export { SelectCollectionContext, useSelectCollectionContext } from './useSelectCollectionContext';

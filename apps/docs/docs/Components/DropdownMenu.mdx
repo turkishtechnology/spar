@@ -108,10 +108,25 @@ gap: 4px;
 border-radius: 4.977px;
 background: rgba(255, 255, 255, 0.48);
 width: 125px;
+cursor: pointer;
+outline: none;
 }
 
 [data-theme='dark'] .dropdown-item {
 background: rgba(0, 0, 0, 0.48);
+}
+
+.dropdown-item[data-highlighted] {
+background: rgba(0, 0, 0, 0.12);
+}
+
+[data-theme='dark'] .dropdown-item[data-highlighted] {
+background: rgba(255, 255, 255, 0.16);
+}
+
+.dropdown-item[data-disabled] {
+opacity: 0.5;
+cursor: not-allowed;
 }
 
 .dropdown-item-avatar {
