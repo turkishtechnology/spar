@@ -12,6 +12,8 @@ import { Select } from '@turkish-technology/spar';
 
 A headless, fully accessible dropdown component that allows users to choose a single value from a list of options with complete WAI-ARIA Listbox pattern implementation.
 
+`Select` does not include dedicated trigger-icon or selected-indicator primitives. Add any chevron, caret, or selected marker directly inside `Select.Trigger` and `Select.Item` so the visual layer stays fully application-owned.
+
 ## Live Demo
 
 <div className='select-demo-container'>
@@ -19,37 +21,26 @@ A headless, fully accessible dropdown component that allows users to choose a si
   code={`<Select.Root>
     <Select.Trigger className='select-trigger'>
       <Select.Value className='select-value' placeholder='Options' />
-      <Select.Icon className='select-icon'>
-        <svg
-          className='select-svg'
-          xmlns='http://www.w3.org/2000/svg'
-          width='20'
-          height='20'
-          viewBox='0 0 20 20'
-          fill='none'
-        >
-          <path d='M13.2292 7.5001L9.99583 10.7334L6.7625 7.5001C6.4375 7.1751 5.9125 7.1751 5.5875 7.5001C5.2625 7.8251 5.2625 8.3501 5.5875 8.6751L9.4125 12.5001C9.7375 12.8251 10.2625 12.8251 10.5875 12.5001L14.4125 8.6751C14.7375 8.3501 14.7375 7.8251 14.4125 7.5001C14.0875 7.18343 13.5542 7.1751 13.2292 7.5001Z' />
-        </svg>
-      </Select.Icon>
+      <span aria-hidden='true' className='select-trigger-addon'>▾</span>
     </Select.Trigger>
     <Select.Content className='select-content'>
       <Select.Item className='select-item' value='option1'>
         <Select.ItemText className='select-item-text'>Option 1</Select.ItemText>
-        <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
+        <span aria-hidden='true' className='select-item-check'>✓</span>
       </Select.Item>
       <Select.Item className='select-item' value='option2'>
         <Select.ItemText className='select-item-text'>Option 2</Select.ItemText>
-        <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
+        <span aria-hidden='true' className='select-item-check'>✓</span>
       </Select.Item>
       <Select.Item className='select-item' value='option3'>
         <Select.ItemText className='select-item-text'>Option 3</Select.ItemText>
-        <Select.ItemIndicator className='select-item-indicator'>✓</Select.ItemIndicator>
+        <span aria-hidden='true' className='select-item-check'>✓</span>
       </Select.Item>
       <Select.Arrow className='select-arrow' />
     </Select.Content>
   </Select.Root>`}
   cssCode={`.select-trigger {
-  width: 100px;
+  width: 120px;
   display: flex;
   padding: 10px;
   align-items: center;
@@ -72,18 +63,19 @@ color: #222530;
 color: #f2f5f8;
 }
 
-.select-icon {
-height: 20px;
+.select-trigger-addon {
+color: #222530;
+font-size: 12px;
+line-height: 1;
+transition: transform 0.2s ease;
 }
 
-.select-svg {
-width: 20px;
-height: 20px;
-fill: #222530;
+[data-theme='dark'] .select-trigger-addon {
+color: #f2f5f8;
 }
 
-[data-theme='dark'] .select-svg {
-fill: #f2f5f8;
+.select-trigger[data-state='open'] .select-trigger-addon {
+transform: rotate(180deg);
 }
 
 .select-item {
@@ -93,6 +85,7 @@ cursor: pointer;
 display: flex;
 align-items: center;
 justify-content: space-between;
+gap: 12px;
 }
 
 .select-item[data-highlighted] {
@@ -107,6 +100,20 @@ background: rgba(255, 255, 255, 0.12);
 .select-item[data-disabled] {
 opacity: 0.5;
 cursor: not-allowed;
+}
+
+.select-item-check {
+opacity: 0;
+color: #222530;
+transition: opacity 0.2s ease;
+}
+
+[data-theme='dark'] .select-item-check {
+color: #f2f5f8;
+}
+
+.select-item[data-state='checked'] .select-item-check {
+opacity: 1;
 }
 
 .select-content {
@@ -142,6 +149,7 @@ color: #222;
 - ✅ Form integration with native HTML support
 - ✅ Automatic portal rendering to document.body
 - ✅ Grouped items with labels and separators
+- ✅ Custom trigger and item visuals via normal React composition
 - ✅ Optional visual arrow indicator with automatic positioning
 - ✅ Disabled state for items and entire select
 - ✅ RTL (right-to-left) language support
@@ -163,7 +171,6 @@ The Select component is built as a compound component with multiple parts:
     { name: 'root', label: 'Root', description: 'Main container managing state and context' },
     { name: 'trigger', label: 'Trigger', description: 'Button that toggles dropdown visibility' },
     { name: 'value', label: 'Value', description: 'Displays selected value or placeholder' },
-    { name: 'icon', label: 'Icon', description: 'Visual indicator (chevron/arrow)' },
     {
       name: 'content',
       label: 'Content',
@@ -173,56 +180,42 @@ The Select component is built as a compound component with multiple parts:
     { name: 'label', label: 'Label', description: 'Label for item groups' },
     { name: 'item', label: 'Item', description: 'Individual selectable option' },
     { name: 'itemText', label: 'ItemText', description: 'Text content of an item' },
-    {
-      name: 'itemIndicator',
-      label: 'ItemIndicator',
-      description: 'Visual indicator for selected state',
-    },
     { name: 'separator', label: 'Separator', description: 'Visual separator between items/groups' },
     { name: 'arrow', label: 'Arrow', description: 'Optional arrow pointing to trigger' },
   ]}
 >
   <div className='select-demo-container'>
-    <Select.Root data-spar-part='root'>
+    <Select.Root data-spar-part='root' defaultValue='option2'>
       <Select.Trigger data-spar-part='trigger' className='select-trigger'>
         <Select.Value data-spar-part='value' className='select-value' placeholder='Options' />
-        <Select.Icon data-spar-part='icon' className='select-icon'>
-          <svg
-            className='select-svg'
-            xmlns='http://www.w3.org/2000/svg'
-            width='20'
-            height='20'
-            viewBox='0 0 20 20'
-            fill='none'
-          >
-            <path d='M13.2292 7.5001L9.99583 10.7334L6.7625 7.5001C6.4375 7.1751 5.9125 7.1751 5.5875 7.5001C5.2625 7.8251 5.2625 8.3501 5.5875 8.6751L9.4125 12.5001C9.7375 12.8251 10.2625 12.8251 10.5875 12.5001L14.4125 8.6751C14.7375 8.3501 14.7375 7.8251 14.4125 7.5001C14.0875 7.18343 13.5542 7.1751 13.2292 7.5001Z' />
-          </svg>
-        </Select.Icon>
+        <span aria-hidden='true' className='select-trigger-addon'>
+          {'▾'}
+        </span>
       </Select.Trigger>
       <Select.Content data-spar-part='content' className='select-content'>
         <Select.Item data-spar-part='item' className='select-item' value='option1'>
           <Select.ItemText data-spar-part='itemText' className='select-item-text'>
             {'Option 1'}
           </Select.ItemText>
-          <Select.ItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
+          <span aria-hidden='true' className='select-item-check'>
             {'✓'}
-          </Select.ItemIndicator>
+          </span>
         </Select.Item>
         <Select.Item data-spar-part='item' className='select-item' value='option2'>
           <Select.ItemText data-spar-part='itemText' className='select-item-text'>
             {'Option 2'}
           </Select.ItemText>
-          <Select.ItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
+          <span aria-hidden='true' className='select-item-check'>
             {'✓'}
-          </Select.ItemIndicator>
+          </span>
         </Select.Item>
         <Select.Item data-spar-part='item' className='select-item' value='option3'>
           <Select.ItemText data-spar-part='itemText' className='select-item-text'>
             {'Option 3'}
           </Select.ItemText>
-          <Select.ItemIndicator data-spar-part='itemIndicator' className='select-item-indicator'>
+          <span aria-hidden='true' className='select-item-check'>
             {'✓'}
-          </Select.ItemIndicator>
+          </span>
         </Select.Item>
         <Select.Arrow data-spar-part='arrow' />
       </Select.Content>
@@ -236,7 +229,6 @@ The Select component is built as a compound component with multiple parts:
 <Select.Root>
   <Select.Trigger>
     <Select.Value />
-    <Select.Icon />
   </Select.Trigger>
 
   <Select.Content>
@@ -244,7 +236,6 @@ The Select component is built as a compound component with multiple parts:
       <Select.Label />
       <Select.Item>
         <Select.ItemText />
-        <Select.ItemIndicator />
       </Select.Item>
     </Select.Group>
 
@@ -259,13 +250,11 @@ The Select component is built as a compound component with multiple parts:
 - `Select.Root` manages state (open/value) and provides context to all child components
 - `Select.Trigger` toggles dropdown open/closed state and displays current selection
 - `Select.Value` displays the selected item's text or placeholder when nothing is selected
-- `Select.Icon` provides visual feedback for the dropdown state (optional)
 - `Select.Content` portals to `document.body` by default and uses custom `useFloating` hook for intelligent positioning relative to trigger
 - `Select.Group` organizes related items and associates them with labels
 - `Select.Label` provides semantic grouping labels for screen readers
 - `Select.Item` registers with root context and handles selection on click/keyboard
 - `Select.ItemText` provides the text value for type-ahead search and display
-- `Select.ItemIndicator` shows selected state visually (checkmark, icon, etc.)
 - `Select.Separator` provides visual separation between groups or items
 - `Select.Arrow` points to trigger with automatic positioning (optional)
 
@@ -282,35 +271,77 @@ import { SelectRoot, SelectTrigger, SelectValue } from '@turkish-technology/spar
 </SelectRoot>;
 ```
 
-## Code Examples
+### Custom Visual Composition
 
-### Select with Arrow
-
-Add a decorative arrow pointing to the trigger.
+Compose any trigger chevron or selected-item marker with normal elements inside the existing primitives. Style them with the state data attributes that `Select` already exposes.
 
 ```tsx
-function SelectWithArrow() {
+<Select.Trigger className='select-trigger'>
+  <Select.Value placeholder='Choose an option' />
+  <span aria-hidden='true' className='select-trigger-addon'>
+    ▾
+  </span>
+</Select.Trigger>
+
+<Select.Item className='select-item' value='option1'>
+  <Select.ItemText>Option 1</Select.ItemText>
+  <span aria-hidden='true' className='select-item-check'>
+    ✓
+  </span>
+</Select.Item>
+```
+
+```css
+.select-trigger[data-state='open'] .select-trigger-addon {
+  transform: rotate(180deg);
+}
+
+.select-item-check {
+  opacity: 0;
+}
+
+.select-item[data-state='checked'] .select-item-check {
+  opacity: 1;
+}
+```
+
+## Code Examples
+
+### Select with Custom Visual Elements
+
+Add your own trigger chevron and selected-item checkmark with regular elements, then let `Select.Arrow` handle popper arrow positioning.
+
+```tsx
+function SelectWithCustomVisuals() {
   const [value, setValue] = React.useState('');
 
   return (
     <Select.Root value={value} onValueChange={setValue}>
-      <Select.Trigger>
+      <Select.Trigger className='select-trigger'>
         <Select.Value placeholder='Choose an option' />
-        <Select.Icon>▼</Select.Icon>
+        <span aria-hidden='true' className='select-trigger-addon'>
+          ▾
+        </span>
       </Select.Trigger>
 
-      <Select.Content>
-        <Select.Item value='option1'>
+      <Select.Content className='select-content'>
+        <Select.Item className='select-item' value='option1'>
           <Select.ItemText>Option 1</Select.ItemText>
-          <Select.ItemIndicator>✓</Select.ItemIndicator>
+          <span aria-hidden='true' className='select-item-check'>
+            ✓
+          </span>
         </Select.Item>
-        <Select.Item value='option2'>
+        <Select.Item className='select-item' value='option2'>
           <Select.ItemText>Option 2</Select.ItemText>
-          <Select.ItemIndicator>✓</Select.ItemIndicator>
+          <span aria-hidden='true' className='select-item-check'>
+            ✓
+          </span>
         </Select.Item>
-        <Select.Item value='option3'>
+        <Select.Item className='select-item' value='option3'>
           <Select.ItemText>Option 3</Select.ItemText>
-          <Select.ItemIndicator>✓</Select.ItemIndicator>
+          <span aria-hidden='true' className='select-item-check'>
+            ✓
+          </span>
         </Select.Item>
         <Select.Arrow />
       </Select.Content>
@@ -329,58 +360,31 @@ function ControlledSelect() {
 
   return (
     <Select.Root value={selectedFruit} onValueChange={setSelectedFruit}>
-      <Select.Trigger>
+      <Select.Trigger className='select-trigger'>
         <Select.Value placeholder='Choose a fruit' />
-        <Select.Icon>▼</Select.Icon>
+        <span aria-hidden='true' className='select-trigger-addon'>
+          ▾
+        </span>
       </Select.Trigger>
 
-      <Select.Content>
-        <Select.Item value='apple'>
+      <Select.Content className='select-content'>
+        <Select.Item className='select-item' value='apple'>
           <Select.ItemText>Apple</Select.ItemText>
-          <Select.ItemIndicator>✓</Select.ItemIndicator>
+          <span aria-hidden='true' className='select-item-check'>
+            ✓
+          </span>
         </Select.Item>
-        <Select.Item value='banana'>
+        <Select.Item className='select-item' value='banana'>
           <Select.ItemText>Banana</Select.ItemText>
-          <Select.ItemIndicator>✓</Select.ItemIndicator>
+          <span aria-hidden='true' className='select-item-check'>
+            ✓
+          </span>
         </Select.Item>
-        <Select.Item value='orange'>
+        <Select.Item className='select-item' value='orange'>
           <Select.ItemText>Orange</Select.ItemText>
-          <Select.ItemIndicator>✓</Select.ItemIndicator>
-        </Select.Item>
-      </Select.Content>
-    </Select.Root>
-  );
-}
-```
-
-### Uncontrolled Select with Default Value
-
-Select component managing its own state internally.
-
-```tsx
-function UncontrolledSelect() {
-  const handleValueChange = (value: string) => {
-    console.log('Selected value:', value);
-  };
-
-  return (
-    <Select.Root defaultValue='medium' onValueChange={handleValueChange}>
-      <Select.Trigger>
-        <Select.Value placeholder='Select size' />
-      </Select.Trigger>
-
-      <Select.Content>
-        <Select.Item value='small'>
-          <Select.ItemText>Small</Select.ItemText>
-          <Select.ItemIndicator>✓</Select.ItemIndicator>
-        </Select.Item>
-        <Select.Item value='medium'>
-          <Select.ItemText>Medium</Select.ItemText>
-          <Select.ItemIndicator>✓</Select.ItemIndicator>
-        </Select.Item>
-        <Select.Item value='large'>
-          <Select.ItemText>Large</Select.ItemText>
-          <Select.ItemIndicator>✓</Select.ItemIndicator>
+          <span aria-hidden='true' className='select-item-check'>
+            ✓
+          </span>
         </Select.Item>
       </Select.Content>
     </Select.Root>
@@ -398,25 +402,33 @@ function GroupedSelect() {
 
   return (
     <Select.Root value={value} onValueChange={setValue}>
-      <Select.Trigger>
+      <Select.Trigger className='select-trigger'>
         <Select.Value placeholder='Select a country' />
-        <Select.Icon>▼</Select.Icon>
+        <span aria-hidden='true' className='select-trigger-addon'>
+          ▾
+        </span>
       </Select.Trigger>
 
-      <Select.Content>
+      <Select.Content className='select-content'>
         <Select.Group>
           <Select.Label>North America</Select.Label>
-          <Select.Item value='us'>
+          <Select.Item className='select-item' value='us'>
             <Select.ItemText>United States</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
+            <span aria-hidden='true' className='select-item-check'>
+              ✓
+            </span>
           </Select.Item>
-          <Select.Item value='ca'>
+          <Select.Item className='select-item' value='ca'>
             <Select.ItemText>Canada</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
+            <span aria-hidden='true' className='select-item-check'>
+              ✓
+            </span>
           </Select.Item>
-          <Select.Item value='mx'>
+          <Select.Item className='select-item' value='mx'>
             <Select.ItemText>Mexico</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
+            <span aria-hidden='true' className='select-item-check'>
+              ✓
+            </span>
           </Select.Item>
         </Select.Group>
 
@@ -424,55 +436,25 @@ function GroupedSelect() {
 
         <Select.Group>
           <Select.Label>Europe</Select.Label>
-          <Select.Item value='uk'>
+          <Select.Item className='select-item' value='uk'>
             <Select.ItemText>United Kingdom</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
+            <span aria-hidden='true' className='select-item-check'>
+              ✓
+            </span>
           </Select.Item>
-          <Select.Item value='de'>
+          <Select.Item className='select-item' value='de'>
             <Select.ItemText>Germany</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
+            <span aria-hidden='true' className='select-item-check'>
+              ✓
+            </span>
           </Select.Item>
-          <Select.Item value='fr'>
+          <Select.Item className='select-item' value='fr'>
             <Select.ItemText>France</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
+            <span aria-hidden='true' className='select-item-check'>
+              ✓
+            </span>
           </Select.Item>
         </Select.Group>
-      </Select.Content>
-    </Select.Root>
-  );
-}
-```
-
-### Disabled Items
-
-Prevent selection of specific items while keeping them visible.
-
-```tsx
-function SelectWithDisabledItems() {
-  const [plan, setPlan] = React.useState('free');
-
-  return (
-    <Select.Root value={plan} onValueChange={setPlan}>
-      <Select.Trigger>
-        <Select.Value />
-        <Select.Icon>▼</Select.Icon>
-      </Select.Trigger>
-
-      <Select.Content>
-        <Select.Item value='free'>
-          <Select.ItemText>Free Plan</Select.ItemText>
-          <Select.ItemIndicator>✓</Select.ItemIndicator>
-        </Select.Item>
-        <Select.Item value='basic'>
-          <Select.ItemText>Basic Plan - $9/month</Select.ItemText>
-          <Select.ItemIndicator>✓</Select.ItemIndicator>
-        </Select.Item>
-        <Select.Item value='premium' disabled>
-          <Select.ItemText>Premium Plan - Coming Soon</Select.ItemText>
-        </Select.Item>
-        <Select.Item value='enterprise' disabled>
-          <Select.ItemText>Enterprise - Contact Sales</Select.ItemText>
-        </Select.Item>
       </Select.Content>
     </Select.Root>
   );
@@ -481,7 +463,7 @@ function SelectWithDisabledItems() {
 
 ### Form Integration
 
-Integrate Select with HTML forms using the name prop.
+Integrate Select with HTML forms using the `name` prop.
 
 ```tsx
 function SelectInForm() {
@@ -497,22 +479,31 @@ function SelectInForm() {
     <form onSubmit={handleSubmit}>
       <label htmlFor='category-select'>Product Category</label>
       <Select.Root name='category' value={category} onValueChange={setCategory} required>
-        <Select.Trigger id='category-select'>
+        <Select.Trigger id='category-select' className='select-trigger'>
           <Select.Value placeholder='Select category' />
+          <span aria-hidden='true' className='select-trigger-addon'>
+            ▾
+          </span>
         </Select.Trigger>
 
-        <Select.Content>
-          <Select.Item value='electronics'>
+        <Select.Content className='select-content'>
+          <Select.Item className='select-item' value='electronics'>
             <Select.ItemText>Electronics</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
+            <span aria-hidden='true' className='select-item-check'>
+              ✓
+            </span>
           </Select.Item>
-          <Select.Item value='clothing'>
+          <Select.Item className='select-item' value='clothing'>
             <Select.ItemText>Clothing</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
+            <span aria-hidden='true' className='select-item-check'>
+              ✓
+            </span>
           </Select.Item>
-          <Select.Item value='books'>
+          <Select.Item className='select-item' value='books'>
             <Select.ItemText>Books</Select.ItemText>
-            <Select.ItemIndicator>✓</Select.ItemIndicator>
+            <span aria-hidden='true' className='select-item-check'>
+              ✓
+            </span>
           </Select.Item>
         </Select.Content>
       </Select.Root>
@@ -532,18 +523,24 @@ function RTLSelect() {
 
   return (
     <Select.Root value={value} onValueChange={setValue} dir='rtl'>
-      <Select.Trigger>
-        <Select.Icon>▼</Select.Icon>
+      <Select.Trigger className='select-trigger'>
+        <span aria-hidden='true' className='select-trigger-addon'>
+          ▾
+        </span>
         <Select.Value placeholder='בחר אפשרות' />
       </Select.Trigger>
 
-      <Select.Content>
-        <Select.Item value='option1'>
-          <Select.ItemIndicator>✓</Select.ItemIndicator>
+      <Select.Content className='select-content'>
+        <Select.Item className='select-item' value='option1'>
+          <span aria-hidden='true' className='select-item-check'>
+            ✓
+          </span>
           <Select.ItemText>אפשרות 1</Select.ItemText>
         </Select.Item>
-        <Select.Item value='option2'>
-          <Select.ItemIndicator>✓</Select.ItemIndicator>
+        <Select.Item className='select-item' value='option2'>
+          <span aria-hidden='true' className='select-item-check'>
+            ✓
+          </span>
           <Select.ItemText>אפשרות 2</Select.ItemText>
         </Select.Item>
       </Select.Content>
@@ -591,7 +588,7 @@ The main container that manages all select state and behavior.
 
 ### Select.Trigger
 
-The button that toggles the dropdown open and closed. Extends all `Button` component props including polymorphic rendering via the `as` prop.
+The button that toggles the dropdown open and closed. Extends all `Button` component props including polymorphic rendering via the `as` prop. Any trigger chevron or adornment should be rendered as a normal child inside this component.
 
 **Props**
 
@@ -649,21 +646,6 @@ Displays the currently selected value or placeholder text.
 
 No specific events.
 
-### Select.Icon
-
-Optional visual indicator element (typically a chevron or arrow).
-
-**Props**
-
-| Name        | Type                | Default     | Description                |
-| ----------- | ------------------- | ----------- | -------------------------- |
-| `as?`       | `React.ElementType` | `'span'`    | Polymorphic component type |
-| `children?` | `React.ReactNode`   | `undefined` | Icon content               |
-
-**Events**
-
-No specific events.
-
 ### Select.Content
 
 The dropdown container that appears when select is open. Uses Floating UI for intelligent positioning.
@@ -711,7 +693,7 @@ For arrow positioning, render `<Select.Arrow />` inside `<Select.Content>`. The 
 
 ### Select.Item
 
-Individual selectable option within the dropdown.
+Individual selectable option within the dropdown. Selected-state visuals should be composed inside the item itself by using regular elements plus `data-state="checked"` or the render props API.
 
 **Props**
 
@@ -762,30 +744,6 @@ The text content of a select item.
 
 No specific events.
 
-### Select.ItemIndicator
-
-Visual indicator for selected state (checkmark, icon, etc).
-
-**Props**
-
-| Name          | Type                | Default     | Description                |
-| ------------- | ------------------- | ----------- | -------------------------- |
-| `forceMount?` | `boolean`           | `false`     | Force mount for animation  |
-| `as?`         | `React.ElementType` | `'span'`    | Polymorphic component type |
-| `children?`   | `React.ReactNode`   | `undefined` | Indicator content          |
-
-**Events**
-
-No specific events.
-
-**HTML Attributes**
-
-| Attribute      | Value | Purpose                   |
-| -------------- | ----- | ------------------------- |
-| `data-checked` | `""`  | Present when item checked |
-
-**Note**: Only renders when parent item is selected.
-
 ### Select.Group
 
 Groups related select items together.
@@ -809,7 +767,7 @@ Label for a group of select items.
 
 | Name       | Type                | Default | Description                |
 | ---------- | ------------------- | ------- | -------------------------- |
-| `as?`      | `React.ElementType` | `'div'` | Polymorphic component type |
+| `as?`      | `React.ElementType` | `'label'` | Polymorphic component type |
 | `children` | `React.ReactNode`   | -       | Label content              |
 
 **Events**
@@ -839,19 +797,19 @@ No specific events.
 
 ### Select.Arrow
 
-Optional decorative arrow element pointing to the trigger. Headless: renders a plain element with no visual opinions — user provides all styling. Arrow ref is automatically managed via context.
+Optional decorative arrow element pointing to the trigger. Headless: renders a plain element with no visual opinions and is separate from any custom trigger chevron or selected-item marker you place yourself. Arrow ref is automatically managed via context.
 
 Supports polymorphic rendering via the `as` prop. When rendered as the default `svg`, sensible SVG defaults (`width`, `height`, `viewBox`, and a triangle `polygon`) are applied automatically. When rendered as another element (e.g., `as="div"`), SVG-specific attributes and default children are omitted.
 
 **Props**
 
-| Name         | Type                  | Default     | Description                                                                 |
-| ------------ | --------------------- | ----------- | --------------------------------------------------------------------------- |
-| `as?`        | `React.ElementType`   | `'svg'`     | Polymorphic element type to render                                          |
-| `ref?`       | `React.Ref<Element>`  | `undefined` | Forward ref support                                                         |
+| Name         | Type                  | Default     | Description                                                                       |
+| ------------ | --------------------- | ----------- | --------------------------------------------------------------------------------- |
+| `as?`        | `React.ElementType`   | `'svg'`     | Polymorphic element type to render                                                |
+| `ref?`       | `React.Ref<Element>`  | `undefined` | Forward ref support                                                               |
 | `children?`  | `React.ReactNode`     | `undefined` | Custom arrow content. When `as="svg"` (default), falls back to a triangle polygon |
-| `className?` | `string`              | `undefined` | CSS class names for styling                                                 |
-| `style?`     | `React.CSSProperties` | `undefined` | Custom styles for arrow                                                     |
+| `className?` | `string`              | `undefined` | CSS class names for styling                                                       |
+| `style?`     | `React.CSSProperties` | `undefined` | Custom styles for arrow                                                           |
 
 **Events**
 
