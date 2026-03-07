@@ -1,4 +1,5 @@
-import { useCallback, useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useId, useMemo, useRef } from 'react';
+import { useControlledState } from '@/hooks';
 import type { TooltipProps, TooltipContextValue } from './types';
 import { useTooltipProviderContext, TooltipContext } from './hooks';
 
@@ -22,9 +23,7 @@ export const Tooltip = ({
   const contentId = `${baseId}-content`;
 
   // Controlled vs uncontrolled state
-  const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
-  const isControlled = controlledOpen !== undefined;
-  const isOpen = isControlled ? controlledOpen : uncontrolledOpen;
+  const [isOpen = false, setIsOpen] = useControlledState(controlledOpen, defaultOpen, onOpenChange);
 
   // Floating UI refs
   const triggerRef = useRef<HTMLElement | null>(null);
@@ -39,15 +38,13 @@ export const Tooltip = ({
   const effectiveDisableHover = provider?.disableHoverableContent ?? false;
 
   // Handle open change
-  const handleOpenChange = (open: boolean) => {
-    if (disabled) return;
-
-    if (isControlled) {
-      onOpenChange?.(open);
-    } else {
-      setUncontrolledOpen(open);
-    }
-  };
+  const handleOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      if (disabled) return;
+      setIsOpen(nextOpen);
+    },
+    [disabled, setIsOpen],
+  );
 
   const cancelHideTimer = useCallback(() => {
     if (hideTimeoutRef.current) {

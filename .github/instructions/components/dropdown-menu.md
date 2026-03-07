@@ -171,16 +171,16 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 
 **Root (`DropdownMenu.tsx`)** owns open state and a `focusStrategy` signal:
 ```tsx
-const [internalOpen, setInternalOpen] = useState(defaultOpen);
+const [isOpen = false, setIsOpen] = useControlledState(open, defaultOpen, onOpenChange);
 const [focusStrategy, setFocusStrategy] = useState<DropdownMenuFocusStrategy>('none');
 const restoreFocusRef = useRef(true);
 
 const closeMenu = useCallback(
   (options?: { focusTrigger?: boolean }) => {
     restoreFocusRef.current = options?.focusTrigger !== false;
-    handleOpenChange(false);
+    setIsOpen(false);
   },
-  [handleOpenChange],
+  [setIsOpen],
 );
 ```
 
