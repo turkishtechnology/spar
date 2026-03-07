@@ -1,5 +1,5 @@
 import { useId, useMemo, useState, useCallback, useRef, type ElementType } from 'react';
-import { useItemRegistry } from '@/hooks';
+import { useItemRegistry, useControlledState } from '@/hooks';
 import { SelectContext } from './hooks';
 import type { SelectProps, SelectContextValue, SelectItemData, SelectFocusStrategy } from './types';
 
@@ -24,15 +24,17 @@ export const Select = <T extends ElementType = 'div'>({
   ...props
 }: SelectProps<T>) => {
   const Component = as || 'div';
-  // State management for value
-  const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue);
-  const isValueControlled = controlledValue !== undefined;
-  const currentValue = isValueControlled ? controlledValue : internalValue;
-
-  // State management for open
-  const [internalOpen, setInternalOpen] = useState<boolean>(defaultOpen);
-  const isOpenControlled = controlledOpen !== undefined;
-  const currentOpen = isOpenControlled ? controlledOpen : internalOpen;
+  // State management - controlled/uncontrolled
+  const [currentValue, setValueState] = useControlledState(
+    controlledValue,
+    defaultValue,
+    onValueChange,
+  );
+  const [currentOpen = false, setOpenState] = useControlledState(
+    controlledOpen,
+    defaultOpen,
+    onOpenChange,
+  );
 
   // Refs
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -57,31 +59,23 @@ export const Select = <T extends ElementType = 'div'>({
   const handleValueChange = useCallback(
     (newValue: string) => {
       if (disabled) return;
-
-      if (!isValueControlled) {
-        setInternalValue(newValue);
-      }
-      onValueChange?.(newValue);
+      setValueState(newValue);
     },
-    [disabled, isValueControlled, onValueChange],
+    [disabled, setValueState],
   );
 
   // Open change handler
   const handleOpenChange = useCallback(
     (newOpen: boolean) => {
       if (disabled) return;
-
-      if (!isOpenControlled) {
-        setInternalOpen(newOpen);
-      }
-      onOpenChange?.(newOpen);
+      setOpenState(newOpen);
 
       // Reset focus strategy when closing
       if (!newOpen) {
         setFocusStrategy('none');
       }
     },
-    [disabled, isOpenControlled, onOpenChange],
+    [disabled, setOpenState],
   );
 
   // Context value

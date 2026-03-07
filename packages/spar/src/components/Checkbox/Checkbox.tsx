@@ -1,5 +1,5 @@
 import { useId, useState, useRef, useEffect, useMemo, ElementType } from 'react';
-import { useMergedRef, useAutoFocus } from '@/hooks';
+import { useMergedRef, useAutoFocus, useControlledState } from '@/hooks';
 import { visuallyHidden } from '@/utils';
 import type { CheckboxProps, CheckboxRenderProps } from './types';
 import type { CheckedState } from '../../types';
@@ -37,10 +37,12 @@ export const Checkbox = <T extends ElementType = 'span'>({
   const generatedId = useId();
   const id = providedId ?? generatedId;
 
-  // State management - controlled vs uncontrolled
-  const isControlled = controlledChecked !== undefined;
-  const [internalChecked, setInternalChecked] = useState<CheckedState>(defaultChecked);
-  const checked = isControlled ? controlledChecked : internalChecked;
+  // State management - controlled/uncontrolled
+  const [checked = defaultChecked, updateChecked] = useControlledState<CheckedState>(
+    controlledChecked,
+    defaultChecked,
+    onChange,
+  );
 
   // Interaction state
   const [isFocused, setIsFocused] = useState(false);
@@ -68,12 +70,7 @@ export const Checkbox = <T extends ElementType = 'span'>({
     if (disabled || readOnly) return;
 
     const newChecked: CheckedState = checked === 'indeterminate' ? true : !checked;
-
-    if (!isControlled) {
-      setInternalChecked(newChecked);
-    }
-
-    onChange?.(newChecked);
+    updateChecked(newChecked);
   };
 
   // Event handlers
@@ -149,12 +146,7 @@ export const Checkbox = <T extends ElementType = 'span'>({
   // Function to programmatically set checked state
   const setCheckedState = (newChecked: CheckedState) => {
     if (disabled || readOnly) return;
-
-    if (!isControlled) {
-      setInternalChecked(newChecked);
-    }
-
-    onChange?.(newChecked);
+    updateChecked(newChecked);
   };
 
   // Render props for children function
