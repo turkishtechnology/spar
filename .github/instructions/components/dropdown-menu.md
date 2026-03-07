@@ -168,43 +168,80 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 ## 5. Implementation Architecture
 
 ### State Hooks Design
-```tsx
-interface DropdownMenuState {
-  open: boolean;
-  activeIndex: number;
-  selectedItems: Set<string>;
-}
 
-const useDropdownMenuState = (props: DropdownMenuProps) => {
-  const [state, setState] = useState<DropdownMenuState>();
-  // Controlled/uncontrolled pattern handling
-  // Focus management
-  // Keyboard event handlers
-  // Selection state management
-};
+**Root (`DropdownMenu.tsx`)** owns open state and a `focusStrategy` signal:
+```tsx
+const [internalOpen, setInternalOpen] = useState(defaultOpen);
+const [focusStrategy, setFocusStrategy] = useState<DropdownMenuFocusStrategy>('none');
+const restoreFocusRef = useRef(true);
+
+const closeMenu = useCallback(
+  (options?: { focusTrigger?: boolean }) => {
+    restoreFocusRef.current = options?.focusTrigger !== false;
+    handleOpenChange(false);
+  },
+  [handleOpenChange],
+);
 ```
 
+**Content (`DropdownMenuContent.tsx`)** owns highlight & item collection state locally (two-layer context):
+```tsx
+const [items, setItems] = useState<DropdownMenuCollectionItem[]>([]);
+const [highlightedId, setHighlightedId] = useState<string | null>(null);
+
+// Consumed via useLayoutEffect to avoid re-trigger loops:
+useLayoutEffect(() => {
+  if (!menu.open) { setHighlightedId(null); resetTypeahead(); return; }
+  if (menu.focusStrategy === 'first') { highlightFirst(); }
+  else if (menu.focusStrategy === 'last') { highlightLast(); }
+  menu.setFocusStrategy('none');
+}, [menu.open, menu.focusStrategy, ...]);
+```
+
+**Type `DropdownMenuFocusStrategy`**: `'first' | 'last' | 'none'`
+
 ### Context Requirements
+
+Two-layer context architecture:
+
+**Root context** (`DropdownMenuContext`) — provided by `DropdownMenu.tsx`:
 ```tsx
 interface DropdownMenuContextValue {
-  // Root context
   open: boolean;
   onOpenChange: (open: boolean) => void;
   triggerId: string;
   contentId: string;
-  
-  // Selection context
-  onItemSelect: (value: string) => void;
-  selectedValues: Set<string>;
-  
-  // Navigation context
-  focusedIndex: number;
-  onFocusIndexChange: (index: number) => void;
-  items: MenuItemRef[];
-  registerItem: (item: MenuItemRef) => void;
-  unregisterItem: (id: string) => void;
+  modal: boolean;
+  disabled: boolean;
+  dir: Direction;
+  closeOnSelect: boolean;
+  focusStrategy: DropdownMenuFocusStrategy;
+  setFocusStrategy: (strategy: DropdownMenuFocusStrategy) => void;
+  triggerRef: RefObject<HTMLElement | null>;
+  arrowRef: RefObject<Element | null>;
+  closeMenu: (options?: { focusTrigger?: boolean }) => void;
 }
 ```
+
+**Collection context** (`DropdownMenuCollectionContext`) — provided by `DropdownMenuContent.tsx`:
+```tsx
+interface DropdownMenuCollectionContextValue {
+  registerItem: (item: DropdownMenuCollectionItem) => void;
+  unregisterItem: (id: string) => void;
+  highlightItem: (id: string | null) => void;
+  highlightFirst: () => void;
+  highlightLast: () => void;
+  highlightNext: () => void;
+  highlightPrevious: () => void;
+  isItemHighlighted: (id: string) => boolean;
+  highlightedId: string | null;
+  closeOnSelect: boolean;
+  closeMenu: (options?: { focusTrigger?: boolean }) => void;
+  dir: Direction;
+}
+```
+
+This separation keeps highlight and item collection state out of root context, preventing unnecessary re-renders of the trigger when the highlighted item changes.
 
 ### Ref Forwarding Strategy
 - **ForwardRef**: All components support ref forwarding to DOM elements
