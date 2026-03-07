@@ -1,4 +1,5 @@
-import { useState, useRef, useCallback, useId } from 'react';
+import { useRef, useCallback, useId } from 'react';
+import { useControlledState } from '@/hooks';
 import type { PopoverProps } from '../types';
 
 /**
@@ -18,27 +19,19 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
   const baseId = providedId ?? generatedId;
   const contentId = `${baseId}-content`;
 
-  const [internalOpen, setInternalOpen] = useState(defaultOpen);
-  const isControlled = controlledOpen !== undefined;
-  const isOpen = isControlled ? controlledOpen : internalOpen;
+  const [isOpen = false, setIsOpen] = useControlledState(controlledOpen, defaultOpen, onOpenChange);
 
   const arrowRef = useRef<Element | null>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   const openPopover = useCallback(() => {
-    if (!isControlled) {
-      setInternalOpen(true);
-    }
-    onOpenChange?.(true);
-  }, [isControlled, onOpenChange]);
+    setIsOpen(true);
+  }, [setIsOpen]);
 
   const closePopover = useCallback(() => {
-    if (!isControlled) {
-      setInternalOpen(false);
-    }
-    onOpenChange?.(false);
-  }, [isControlled, onOpenChange]);
+    setIsOpen(false);
+  }, [setIsOpen]);
 
   const togglePopover = useCallback(() => {
     if (isOpen) {

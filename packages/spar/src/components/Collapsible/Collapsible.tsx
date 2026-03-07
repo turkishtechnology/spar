@@ -1,4 +1,5 @@
-import { useMemo, useState, useCallback, useId, ElementType } from 'react';
+import { useMemo, useCallback, useId, ElementType } from 'react';
+import { useControlledState } from '@/hooks';
 import { CollapsibleContext } from './hooks';
 import type { CollapsibleProps } from './types';
 
@@ -19,7 +20,9 @@ export const Collapsible = <T extends ElementType = 'div'>({
   ...props
 }: CollapsibleProps<T>) => {
   const Component = as || 'div';
-  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+
+  // State management - controlled/uncontrolled
+  const [isOpen = false, setIsOpen] = useControlledState(controlledOpen, defaultOpen, onOpenChange);
 
   // Generate stable IDs for ARIA relationships
   const generatedId = useId();
@@ -27,47 +30,20 @@ export const Collapsible = <T extends ElementType = 'div'>({
   const triggerId = propsTriggerId ?? `${baseId}-trigger`;
   const contentId = propsContentId ?? `${baseId}-content`;
 
-  // Determine if controlled or uncontrolled
-  const isControlled = controlledOpen !== undefined;
-  const isOpen = isControlled ? controlledOpen : internalOpen;
-
   const toggle = useCallback(() => {
     if (disabled) return;
-
-    const nextOpen = !isOpen;
-
-    // Update internal state for uncontrolled usage
-    if (!isControlled) {
-      setInternalOpen(nextOpen);
-    }
-
-    // Call callback for both controlled and uncontrolled
-    onOpenChange?.(nextOpen);
-  }, [disabled, isOpen, isControlled, onOpenChange]);
+    setIsOpen(!isOpen);
+  }, [disabled, isOpen, setIsOpen]);
 
   const open = useCallback(() => {
     if (disabled || isOpen) return;
-
-    // Update internal state for uncontrolled usage
-    if (!isControlled) {
-      setInternalOpen(true);
-    }
-
-    // Call callback for both controlled and uncontrolled
-    onOpenChange?.(true);
-  }, [disabled, isOpen, isControlled, onOpenChange]);
+    setIsOpen(true);
+  }, [disabled, isOpen, setIsOpen]);
 
   const close = useCallback(() => {
     if (disabled || !isOpen) return;
-
-    // Update internal state for uncontrolled usage
-    if (!isControlled) {
-      setInternalOpen(false);
-    }
-
-    // Call callback for both controlled and uncontrolled
-    onOpenChange?.(false);
-  }, [disabled, isOpen, isControlled, onOpenChange]);
+    setIsOpen(false);
+  }, [disabled, isOpen, setIsOpen]);
 
   // Memoize context value to prevent unnecessary re-renders
   const contextValue = useMemo(

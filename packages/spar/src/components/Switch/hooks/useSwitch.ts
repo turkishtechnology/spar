@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useControlledState } from '@/hooks';
 import { visuallyHidden } from '@/utils';
 import type { UseSwitchProps, UseSwitchReturn } from '../types';
 
@@ -14,14 +15,12 @@ export const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
     readOnly = false,
   } = props;
 
-  // Determine if component is controlled
-  const isControlled = controlledChecked !== undefined;
-
-  // Internal state for uncontrolled mode
-  const [internalChecked, setInternalChecked] = useState<boolean>(defaultChecked);
-
-  // Current checked state (controlled or uncontrolled)
-  const checked = isControlled ? controlledChecked : internalChecked;
+  // State management - controlled/uncontrolled
+  const [checked = false, setCheckedValue] = useControlledState(
+    controlledChecked,
+    defaultChecked,
+    onChange,
+  );
 
   // State for interaction tracking
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -31,15 +30,8 @@ export const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
   // Toggle function
   const handleToggle = useCallback(() => {
     if (disabled || readOnly) return;
-
-    const newChecked = !checked;
-
-    if (!isControlled) {
-      setInternalChecked(newChecked);
-    }
-
-    onChange?.(newChecked);
-  }, [checked, disabled, readOnly, isControlled, onChange]);
+    setCheckedValue(!checked);
+  }, [checked, disabled, readOnly, setCheckedValue]);
 
   // Keyboard event handler
   const handleKeyDown = useCallback(
@@ -152,10 +144,7 @@ export const useSwitch = (props: UseSwitchProps): UseSwitchReturn => {
     isActive,
     setChecked: (newChecked: boolean) => {
       if (disabled || readOnly) return;
-      if (!isControlled) {
-        setInternalChecked(newChecked);
-      }
-      onChange?.(newChecked);
+      setCheckedValue(newChecked);
     },
     switchProps,
     hiddenInputProps,
