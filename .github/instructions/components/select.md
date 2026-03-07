@@ -263,9 +263,9 @@ Following WAI-ARIA Listbox pattern:
 
 **Root (`Select.tsx`)** owns open/value state and a `focusStrategy` signal:
 ```tsx
-// Controlled / uncontrolled open & value (manual pattern, no custom hook)
-const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue);
-const [internalOpen, setInternalOpen]   = useState<boolean>(defaultOpen);
+// Controlled / uncontrolled open & value via useControlledState
+const [currentValue, setValueState] = useControlledState(controlledValue, defaultValue, onValueChange);
+const [currentOpen = false, setOpenState] = useControlledState(controlledOpen, defaultOpen, onOpenChange);
 
 // Focus strategy — tells SelectContent which item to highlight on open
 const [focusStrategy, setFocusStrategy] = useState<SelectFocusStrategy>('none');

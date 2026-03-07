@@ -170,16 +170,12 @@ const useCollapsibleState = (props: {
   onOpenChange?: (open: boolean) => void;
   disabled?: boolean;
 }) => {
-  const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false);
-  const isControlled = open !== undefined;
-  const isOpen = isControlled ? open : internalOpen;
+  const [isOpen = false, setIsOpen] = useControlledState(open, defaultOpen ?? false, onOpenChange);
   
   const toggle = useCallback(() => {
     if (disabled) return;
-    const nextOpen = !isOpen;
-    if (!isControlled) setInternalOpen(nextOpen);
-    onOpenChange?.(nextOpen);
-  }, [disabled, isOpen, isControlled, onOpenChange]);
+    setIsOpen(!isOpen);
+  }, [disabled, isOpen, setIsOpen]);
   
   return { isOpen, toggle, disabled };
 };
@@ -535,7 +531,7 @@ From existing disclosure/collapsible implementations:
 ### Implementation Checklist
 
 #### Core Functionality
-- [ ] `useCollapsibleState` hook with controlled/uncontrolled support
+- [ ] Controlled/uncontrolled state management via `useControlledState` hook
 - [ ] `CollapsibleContext` for state sharing
 - [ ] `CollapsibleRoot` context provider component
 - [ ] `CollapsibleTrigger` button component with keyboard handling

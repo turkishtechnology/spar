@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useId } from 'react';
+import { useControlledState } from '@/hooks';
 import type {
   DropdownMenuProps,
   DropdownMenuContextValue,
@@ -21,9 +22,7 @@ export const DropdownMenu = ({
   closeOnSelect = true,
   children,
 }: DropdownMenuProps) => {
-  const isControlled = open !== undefined;
-  const [internalOpen, setInternalOpen] = useState(defaultOpen);
-  const isOpen = isControlled ? Boolean(open) : internalOpen;
+  const [isOpen = false, setIsOpen] = useControlledState(open, defaultOpen, onOpenChange);
   const triggerRef = useRef<HTMLElement | null>(null);
   const arrowRef = useRef<Element | null>(null);
   const generatedId = useId();
@@ -34,22 +33,12 @@ export const DropdownMenu = ({
   const restoreFocusRef = useRef(true);
   const previousOpenRef = useRef(isOpen);
 
-  const handleOpenChange = useCallback(
-    (nextOpen: boolean) => {
-      if (!isControlled) {
-        setInternalOpen(nextOpen);
-      }
-      onOpenChange?.(nextOpen);
-    },
-    [isControlled, onOpenChange],
-  );
-
   const closeMenu = useCallback(
     (options?: { focusTrigger?: boolean }) => {
       restoreFocusRef.current = options?.focusTrigger !== false;
-      handleOpenChange(false);
+      setIsOpen(false);
     },
-    [handleOpenChange],
+    [setIsOpen],
   );
 
   useEffect(() => {
@@ -67,7 +56,7 @@ export const DropdownMenu = ({
   const contextValue = useMemo<DropdownMenuContextValue>(
     () => ({
       open: isOpen,
-      onOpenChange: handleOpenChange,
+      onOpenChange: setIsOpen,
       triggerId,
       contentId,
       modal,
@@ -82,7 +71,7 @@ export const DropdownMenu = ({
     }),
     [
       isOpen,
-      handleOpenChange,
+      setIsOpen,
       triggerId,
       contentId,
       modal,

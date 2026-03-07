@@ -284,7 +284,7 @@ For developers migrating from other accordion libraries:
 - [ ] Create compound component structure with proper TypeScript interfaces
 - [ ] Implement AccordionHeader component with heading semantics
 - [ ] Implement context for state sharing between components
-- [ ] Set up controlled/uncontrolled state management with `useControllableState`
+- [ ] Set up controlled/uncontrolled state management with `useControlledState`
 
 #### Core Functionality
 - [ ] Single vs multiple expansion modes

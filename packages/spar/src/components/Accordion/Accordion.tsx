@@ -1,5 +1,5 @@
 import { useMemo, useState, useCallback, ElementType } from 'react';
-import { useItemRegistry } from '@/hooks';
+import { useItemRegistry, useControlledState } from '@/hooks';
 import type { AccordionProps, AccordionContextValue } from './types';
 import { AccordionContext } from './hooks';
 
@@ -20,14 +20,13 @@ export const Accordion = <T extends ElementType = 'div'>({
   ...props
 }: AccordionProps<T>) => {
   const Component = as || 'div';
-  // Initialize state based on type
-  const getInitialValue = (): string | string[] => {
-    if (controlledValue !== undefined) return controlledValue;
-    if (defaultValue !== undefined) return defaultValue;
-    return type === 'multiple' ? [] : '';
-  };
-
-  const [internalValue, setInternalValue] = useState<string | string[]>(getInitialValue);
+  // State management - controlled/uncontrolled
+  const defaultVal = defaultValue !== undefined ? defaultValue : type === 'multiple' ? [] : '';
+  const [currentValue = defaultVal, setValue] = useControlledState<string | string[]>(
+    controlledValue,
+    defaultVal,
+    onValueChange,
+  );
   const {
     items: accordionItems,
     registerItem,
@@ -47,9 +46,6 @@ export const Accordion = <T extends ElementType = 'div'>({
     },
     [accordionItems, getItemAtIndex],
   );
-
-  // Use controlled value if provided, otherwise use internal state
-  const currentValue = controlledValue !== undefined ? controlledValue : internalValue;
 
   const handleItemToggle = useCallback(
     (itemValue: string) => {
@@ -73,13 +69,9 @@ export const Accordion = <T extends ElementType = 'div'>({
           : [...currentArray, itemValue];
       }
 
-      if (controlledValue === undefined) {
-        setInternalValue(newValue);
-      }
-
-      onValueChange?.(newValue);
+      setValue(newValue);
     },
-    [type, isCollapsible, currentValue, disabled, controlledValue, onValueChange],
+    [type, isCollapsible, currentValue, disabled, setValue],
   );
 
   const contextValue = useMemo<AccordionContextValue>(
