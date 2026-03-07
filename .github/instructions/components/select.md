@@ -17,7 +17,6 @@ The Select component is a headless, fully accessible dropdown UI pattern that al
 <SelectRoot>
   <SelectTrigger>
     <SelectValue />
-    <SelectIcon />
   </SelectTrigger>
 
   <SelectContent>
@@ -25,7 +24,6 @@ The Select component is a headless, fully accessible dropdown UI pattern that al
       <SelectLabel />
       <SelectItem>
         <SelectItemText />
-        <SelectItemIndicator />
       </SelectItem>
     </SelectGroup>
 
@@ -42,6 +40,7 @@ The Select component is a headless, fully accessible dropdown UI pattern that al
 - **Controlled/Uncontrolled**: Both patterns supported
 - **Type-ahead search**: Built-in character navigation
 - **Form integration**: Native HTML form support
+- **Composable visuals**: Trigger chevrons and selected-item marks are user-owned elements inside `SelectTrigger` and `SelectItem`
 - **SSR safe**: Deterministic IDs and hydration-safe
 
 ## 2. API
@@ -72,6 +71,8 @@ The button that toggles the dropdown.
 | `ref` | `RefObject` | No | - | Forward ref support |
 | `children` | `ReactNode \| ((state: SelectTriggerRenderProps) => ReactNode)` | No | - | Trigger content or render function for render props pattern |
 
+Render any chevron, caret, or trigger adornment as a normal child inside `SelectTrigger`. Trigger visuals are intentionally user-owned.
+
 ### SelectTriggerRenderProps
 
 | Name | Type | Description |
@@ -96,12 +97,6 @@ Displays the selected value or placeholder.
 | `placeholder` | `ReactNode` | No | - | Text shown when no value selected |
 | `as` | `ElementType` | No | `span` | Polymorphic component type |
 
-### SelectIcon
-Optional visual indicator (chevron, arrow).
-
-| Prop | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `span` | Polymorphic component type |
 
 ### SelectContent
 The dropdown container that appears when open.
@@ -109,7 +104,7 @@ The dropdown container that appears when open.
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `side` | `'top' \| 'right' \| 'bottom' \| 'left'` | No | `'bottom'` | Preferred placement side |
-| `align` | `'start' \| 'center' \| 'end'` | No | `'center'` | Alignment relative to trigger |
+| `align` | `'start' \| 'center' \| 'end'` | No | `'start'` | Alignment relative to trigger |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Escape key handler |
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | - | Outside click handler |
 | `onCloseAutoFocus` | `(event: FocusEvent) => void` | No | - | Focus handler on close |
@@ -134,6 +129,8 @@ Individual selectable option.
 | `ref` | `RefObject` | No | - | Forward ref support |
 | `children` | `ReactNode \| ((state: SelectItemRenderProps) => ReactNode)` | No | - | Item content or render function for render props pattern |
 
+Render selected-state marks directly inside `SelectItem` and style them with `data-state="checked"` or the render props API.
+
 ### SelectItemRenderProps
 
 | Name | Type | Description |
@@ -155,14 +152,6 @@ The text content of an item.
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `span` | Polymorphic component type |
 
-### SelectItemIndicator
-Visual indicator for selected state (checkmark, etc).
-
-| Prop | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `forceMount` | `boolean` | No | `false` | Force mount for animation |
-| `as` | `ElementType` | No | `span` | Polymorphic component type |
-
 ### SelectGroup
 Groups related items together.
 
@@ -175,7 +164,7 @@ Label for a group of items.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `div` | Polymorphic component type |
+| `as` | `ElementType` | No | `label` | Polymorphic component type |
 
 ### SelectSeparator
 Visual separator between items or groups.
@@ -189,7 +178,7 @@ Optional decorative arrow element pointing to trigger. Headless: user provides a
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `div` | Polymorphic element type to render |
+| `as` | `ElementType` | No | `svg` | Polymorphic element type to render |
 
 ## 3. Behavior Matrix
 
@@ -207,7 +196,7 @@ Optional decorative arrow element pointing to trigger. Headless: user provides a
 | Open | Click outside | Closes dropdown without selection | `aria-expanded="false"`, `data-state="closed"` |
 | Any | Trigger loses focus | If `onBlur` provided, fires callback | No state change unless controlled |
 | Disabled | Any interaction | No action | No updates |
-| Selected item | Render | Item marked with indicator | `data-state="checked"`, `aria-selected="true"` |
+| Selected item | Render | Item exposes checked state for user-owned visuals | `data-state="checked"`, `aria-selected="true"` |
 
 ## 4. Accessibility
 
@@ -439,10 +428,6 @@ if (!isMounted) {
 - `data-disabled`: Present when `disabled={true}`
 - `data-highlighted`: Present when focused via keyboard
 
-**SelectItemIndicator**
-- Renders only when item is selected (`data-state="checked"`)
-
-### Variants & Sizes
 No built-in variants. Apply via data attributes:
 ```tsx
 <SelectTrigger data-variant="outline" data-size="md">
@@ -621,7 +606,6 @@ export * as Select from './index';
 - [ ] Implement `SelectRoot` with context provider
 - [ ] Implement `SelectTrigger` with ARIA attributes
 - [ ] Implement `SelectValue` with placeholder support
-- [ ] Implement `SelectIcon` (optional)
 - [ ] Create internal state management hooks
 - [ ] Implement controlled/uncontrolled patterns
 - [ ] Add ref forwarding to all components
@@ -630,7 +614,7 @@ export * as Select from './index';
 **Phase 2: Dropdown & Items** (Week 2)
 - [ ] Implement `SelectContent` with built-in portal (via `createPortal`) and positioning
 - [ ] Implement `SelectItem` with selection logic
-- [ ] Implement `SelectItemText` and `SelectItemIndicator`
+- [ ] Implement `SelectItemText`
 - [ ] Add keyboard navigation (arrows, home/end)
 - [ ] Add type-ahead search functionality
 - [ ] Implement focus management
