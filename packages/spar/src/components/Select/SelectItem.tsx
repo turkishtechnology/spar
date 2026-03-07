@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useCallback, useRef, useState, type ElementType } from 'react';
-import { useSelectContext, SelectItemContext } from './hooks';
+import { useSelectContext, useSelectCollectionContext, SelectItemContext } from './hooks';
 import type { SelectItemProps, SelectItemContextValue, SelectItemRenderProps } from './types';
 import { useMergedRef } from '@/hooks';
 
@@ -19,6 +19,7 @@ export const SelectItem = <T extends ElementType = 'div'>({
 }: SelectItemProps<T>) => {
   const Component = as || 'div';
   const context = useSelectContext();
+  const collection = useSelectCollectionContext();
   const itemRef = useRef<HTMLDivElement>(null);
   const [textValue, setTextValue] = useState(providedTextValue || '');
 
@@ -43,9 +44,7 @@ export const SelectItem = <T extends ElementType = 'div'>({
   const isSelected = context.value === value;
 
   // Determine if this item is highlighted
-  const items = Array.from(context.items.values()).filter((item) => !item.disabled);
-  const itemIndex = items.findIndex((item) => item.value === value);
-  const isHighlighted = context.highlightedIndex === itemIndex;
+  const isHighlighted = collection.isItemHighlighted(value);
 
   // Scroll into view when highlighted
   useEffect(() => {
@@ -67,11 +66,11 @@ export const SelectItem = <T extends ElementType = 'div'>({
       onPointerMove?.(event);
       if (event.defaultPrevented) return;
 
-      if (!disabled && itemIndex !== -1) {
-        context.setHighlightedIndex(itemIndex);
+      if (!disabled) {
+        collection.highlightItem(value);
       }
     },
-    [context, itemIndex, disabled, onPointerMove],
+    [collection, value, disabled, onPointerMove],
   );
 
   const handleClick = useCallback(

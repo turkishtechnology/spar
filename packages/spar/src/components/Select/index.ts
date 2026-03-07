@@ -10,7 +10,12 @@ import { SelectItemText } from './SelectItemText';
 import { SelectItemIndicator } from './SelectItemIndicator';
 import { SelectSeparator } from './SelectSeparator';
 import { SelectArrow } from './SelectArrow';
-export { useSelectContext, useSelectGroupContext, useSelectItemContext } from './hooks';
+export {
+  useSelectContext,
+  useSelectGroupContext,
+  useSelectItemContext,
+  useSelectCollectionContext,
+} from './hooks';
 
 const Select = SelectRoot as typeof SelectRoot & {
   Root: typeof SelectRoot;
