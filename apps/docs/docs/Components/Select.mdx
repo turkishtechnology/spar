@@ -841,14 +841,17 @@ No specific events.
 
 Optional decorative arrow element pointing to the trigger. Headless: renders a plain element with no visual opinions — user provides all styling. Arrow ref is automatically managed via context.
 
+Supports polymorphic rendering via the `as` prop. When rendered as the default `svg`, sensible SVG defaults (`width`, `height`, `viewBox`, and a triangle `polygon`) are applied automatically. When rendered as another element (e.g., `as="div"`), SVG-specific attributes and default children are omitted.
+
 **Props**
 
-| Name         | Type                  | Default     | Description                        |
-| ------------ | --------------------- | ----------- | ---------------------------------- |
-| `as?`        | `React.ElementType`   | `'svg'`     | Polymorphic element type to render |
-| `ref?`       | `React.Ref<Element>`  | `undefined` | Forward ref support                |
-| `className?` | `string`              | `undefined` | CSS class names for styling        |
-| `style?`     | `React.CSSProperties` | `undefined` | Custom styles for arrow            |
+| Name         | Type                  | Default     | Description                                                                 |
+| ------------ | --------------------- | ----------- | --------------------------------------------------------------------------- |
+| `as?`        | `React.ElementType`   | `'svg'`     | Polymorphic element type to render                                          |
+| `ref?`       | `React.Ref<Element>`  | `undefined` | Forward ref support                                                         |
+| `children?`  | `React.ReactNode`     | `undefined` | Custom arrow content. When `as="svg"` (default), falls back to a triangle polygon |
+| `className?` | `string`              | `undefined` | CSS class names for styling                                                 |
+| `style?`     | `React.CSSProperties` | `undefined` | Custom styles for arrow                                                     |
 
 **Events**
 
@@ -856,9 +859,10 @@ No specific events.
 
 **HTML Attributes**
 
-| Attribute   | Value                                    | Purpose              |
-| ----------- | ---------------------------------------- | -------------------- |
-| `data-side` | `"top" \| "bottom" \| "left" \| "right"` | Indicates arrow side |
+| Attribute        | Value                                                          | Purpose                          |
+| ---------------- | -------------------------------------------------------------- | -------------------------------- |
+| `aria-hidden`    | `"true"`                                                       | Hidden from assistive technology |
+| `data-placement` | `"top" \| "bottom" \| "left" \| "right"` (with optional align) | Indicates arrow placement        |
 
 **Arrow Positioning**
 
