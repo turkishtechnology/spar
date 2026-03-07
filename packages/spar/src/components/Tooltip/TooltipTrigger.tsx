@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback, ElementType } from 'react';
-import { useMergedRef } from '@/hooks';
+import { useMergedRef, useDocumentEvent } from '@/hooks';
 import type { TooltipTriggerProps, TooltipTriggerRenderProps } from './types';
 import { useTooltipContext, useTooltipProviderContext } from './hooks';
 import { Button } from '../Button';
@@ -114,10 +114,8 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
   );
 
   // Global escape key handler for better accessibility
-  useEffect(() => {
-    if (!context.isOpen) return;
-
-    const handleGlobalKeyDown = (event: KeyboardEvent) => {
+  const handleGlobalKeyDown = useCallback(
+    (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         // Check if the event originated from tooltip content
         const target = event.target as HTMLElement;
@@ -134,13 +132,11 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
         // Refocus trigger
         context.triggerRef.current?.focus();
       }
-    };
+    },
+    [context],
+  );
 
-    document.addEventListener('keydown', handleGlobalKeyDown, true);
-    return () => {
-      document.removeEventListener('keydown', handleGlobalKeyDown, true);
-    };
-  }, [context.isOpen, context]);
+  useDocumentEvent('keydown', handleGlobalKeyDown, context.isOpen, true);
 
   // Cleanup on unmount
   useEffect(() => {

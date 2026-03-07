@@ -4,6 +4,7 @@ import {
   useInteractOutside,
   useMergedRef,
   useFloating,
+  useDocumentEvent,
   type UseFloatingOptions,
   type UseFloatingReturn,
 } from '@/hooks';
@@ -99,20 +100,18 @@ export const PopoverContent = <T extends ElementType = 'div'>({
   }, [isOpen, onOpenAutoFocus, onCloseAutoFocus, contentRef, triggerRef]);
 
   // Escape key handling
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleEscapeKey = (event: KeyboardEvent) => {
+  const handleEscapeKey = useCallback(
+    (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault();
         closePopover();
         onEscapeKeyDown?.(event);
       }
-    };
+    },
+    [closePopover, onEscapeKeyDown],
+  );
 
-    document.addEventListener('keydown', handleEscapeKey);
-    return () => document.removeEventListener('keydown', handleEscapeKey);
-  }, [isOpen, closePopover, onEscapeKeyDown]);
+  useDocumentEvent('keydown', handleEscapeKey, isOpen);
 
   // Outside interaction handling
   useInteractOutside([contentRef, triggerRef], {
@@ -130,40 +129,29 @@ export const PopoverContent = <T extends ElementType = 'div'>({
     },
   });
 
-  // Focus trapping
-  useEffect(() => {
-    if (!isOpen || !trapFocus || !contentRef.current) return;
-
-    const contentElement = contentRef.current;
-    const focusableElements = getFocusableElements(contentElement);
-
-    if (focusableElements.length === 0) return;
-
-    const firstFocusable = focusableElements[0];
-    const lastFocusable = focusableElements[focusableElements.length - 1];
-
-    const handleTabKey = (event: KeyboardEvent) => {
-      if (event.key !== 'Tab') return;
-
-      if (event.shiftKey) {
-        if (document.activeElement === firstFocusable) {
-          event.preventDefault();
-          lastFocusable?.focus();
-        }
-      } else {
-        if (document.activeElement === lastFocusable) {
-          event.preventDefault();
-          firstFocusable?.focus();
-        }
-      }
-    };
-
-    contentElement.addEventListener('keydown', handleTabKey);
-    return () => contentElement.removeEventListener('keydown', handleTabKey);
-  }, [isOpen, trapFocus, contentRef]);
-
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
+      // Focus trap: handle Tab key
+      if (trapFocus && event.key === 'Tab') {
+        const focusableElements = getFocusableElements(event.currentTarget);
+        if (focusableElements.length > 0) {
+          const firstFocusable = focusableElements[0];
+          const lastFocusable = focusableElements[focusableElements.length - 1];
+
+          if (event.shiftKey) {
+            if (document.activeElement === firstFocusable) {
+              event.preventDefault();
+              lastFocusable?.focus();
+            }
+          } else {
+            if (document.activeElement === lastFocusable) {
+              event.preventDefault();
+              firstFocusable?.focus();
+            }
+          }
+        }
+      }
+
       // Handle Home/End keys within content
       if (event.key === 'Home' || event.key === 'End') {
         const focusableElements = getFocusableElements(event.currentTarget);
@@ -178,7 +166,7 @@ export const PopoverContent = <T extends ElementType = 'div'>({
       }
       onKeyDown?.(event);
     },
-    [onKeyDown],
+    [trapFocus, onKeyDown],
   );
 
   // Extract placement information for data attributes
