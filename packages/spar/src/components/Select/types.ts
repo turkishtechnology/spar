@@ -156,12 +156,6 @@ export type SelectValueProps<T extends ElementType = 'span'> = PolymorphicProps<
 >;
 
 /**
- * Props for SelectIcon component
- * @remarks Optional visual indicator (chevron, arrow)
- */
-export type SelectIconProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
-
-/**
  * Own props for SelectContent component
  */
 export interface SelectContentOwnProps {
@@ -275,27 +269,6 @@ export type SelectItemProps<T extends ElementType = 'div'> = PolymorphicProps<
  * @remarks The text content of an item
  */
 export type SelectItemTextProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
-
-/**
- * Own props for SelectItemIndicator component
- */
-export interface SelectItemIndicatorOwnProps {
-  /**
-   * Force mount for animation
-   * @defaultValue false
-   */
-  forceMount?: boolean;
-}
-
-/**
- * Props for SelectItemIndicator component
- * @remarks Visual indicator for selected state (checkmark, etc)
- */
-export type SelectItemIndicatorProps<T extends ElementType = 'span'> = PolymorphicProps<
-  'span',
-  T,
-  SelectItemIndicatorOwnProps
->;
 
 /**
  * Props for SelectGroup component
