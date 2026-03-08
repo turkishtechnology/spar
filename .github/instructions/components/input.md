@@ -30,11 +30,12 @@ The Input component provides accessible form input primitives with zero styling 
 
 | Name       | Type        | Required | Default | Description             |
 | ---------- | ----------- | -------- | ------- | ----------------------- |
-| `invalid`  | `boolean`   | No       | `false` | Input validation state  |
+| `id`       | `string`    | No       | `undefined` | Custom base ID for compound ARIA relationships |
+| `isInvalid`  | `boolean`   | No       | `false` | Input validation state  |
 | `disabled` | `boolean`   | No       | `false` | Input disabled state    |
 | `required` | `boolean`   | No       | `false` | Input required state    |
 | `readOnly` | `boolean`   | No       | `false` | Input read-only state   |
-| `children` | `ReactNode` | Yes      | -       | Compound input elements |
+| `children` | `ReactNode` | No       | -       | Compound input elements |
 
 ### InputField Props
 
@@ -42,6 +43,7 @@ The Input component provides accessible form input primitives with zero styling 
 | ------ | ------------- | -------- | --------- | ----------------------------- |
 | `as`   | `ElementType` | No       | `"input"` | Element type (input/textarea) |
 | `type` | `string`      | No       | `"text"`  | HTML input type               |
+| `autoFocus` | `boolean` | No       | `false` | Whether to focus field on mount |
 
 ### InputLabel Props
 
@@ -54,7 +56,7 @@ The Input component provides accessible form input primitives with zero styling 
 - `disabled` — mirrors `InputRoot`'s `disabled` prop
 - `required` — mirrors `InputRoot`'s `required` prop
 - `readOnly` — mirrors `InputRoot`'s `readOnly` prop
-- `isInvalid` — mirrors `InputRoot`'s `invalid` prop
+- `isInvalid` — mirrors `InputRoot`'s `isInvalid` prop
 
 These produce corresponding `data-disabled`, `data-required`, `data-readonly`, and `data-invalid` attributes on the rendered label element for styling hooks.
 
@@ -74,7 +76,7 @@ These produce corresponding `data-disabled`, `data-required`, `data-readonly`, a
 
 | State        | ARIA/DOM Result                                             |
 | ------------ | ----------------------------------------------------------- |
-| **Initial**  | `aria-invalid="false"`, proper label association            |
+| **Initial**  | Proper label association; `aria-invalid` reflects `isInvalid` |
 | **Focus**    | Focus visible, label association announced                  |
 | **Invalid**  | `aria-invalid="true"`, `aria-describedby` includes error ID |
 | **Disabled** | `disabled` attribute, non-interactive                       |
@@ -88,13 +90,14 @@ These produce corresponding `data-disabled`, `data-required`, `data-readonly`, a
 ```tsx
 // InputField
 aria-labelledby={labelId}
-aria-describedby={invalid ? errorId : descriptionId}
+aria-describedby={isInvalid ? errorId : descriptionId}
 aria-required={required}
-aria-invalid={invalid}
+aria-invalid={isInvalid}
 disabled={disabled}
 
 // InputErrorMessage
 role="alert"
+aria-live="assertive"
 id={errorId}
 ```
 
@@ -111,21 +114,20 @@ id={errorId}
 ```tsx
 const useInputContext = () => {
   const id = useId();
-  const [invalid, setInvalid] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-  const [required, setRequired] = useState(false);
+  const isInvalid = false;
+  const disabled = false;
+  const required = false;
+  const readOnly = false;
 
   return {
     fieldId: `${id}-field`,
     labelId: `${id}-label`,
     descriptionId: `${id}-description`,
     errorId: `${id}-error`,
-    invalid,
+    isInvalid,
     disabled,
     required,
-    setInvalid,
-    setDisabled,
-    setRequired,
+    readOnly,
   };
 };
 ```
@@ -139,7 +141,8 @@ const useInputContext = () => {
 ### Events
 
 - All native input events forwarded through InputField
-- Context state updates trigger ARIA attribute changes
+- Focus/blur updates local `data-focused` state
+- `InputField` supports standalone usage without `InputRoot` context
 
 ## 6. Styling & Data Attributes
 
@@ -155,6 +158,10 @@ const useInputContext = () => {
 **InputField**:
 
 - `data-focused` - When input focused
+- `data-autofocus` - When autoFocus is enabled
+- `data-disabled` - Disabled state (context or standalone)
+- `data-required` - Required state (context or standalone)
+- `data-readonly` - Read-only state (context or standalone)
 
 **InputLabel** (auto-forwarded from context):
 
