@@ -57,17 +57,19 @@ A floating panel component anchored to a trigger element with smart positioning,
   color: #f2f5f8;
 }
 
-.popover-demo-container .popover-content {
+.popover-content {
+  --popover-surface: #f7f8fa;
   width: 320px;
   border-radius: 12px;
   border: 1px solid #e1e4ea;
-  background-color: #f7f8fa;
+  background-color: var(--popover-surface);
   box-shadow:
     0 12px 32px rgba(34, 37, 48, 0.08),
     0 4px 12px rgba(34, 37, 48, 0.06);
 }
 
-[data-theme='dark'] .popover-demo-container .popover-content {
+[data-theme='dark'] .popover-content {
+  --popover-surface: #1f232b;
   border-color: #2b303b;
   background-color: #1f232b;
 }
@@ -133,12 +135,8 @@ A floating panel component anchored to a trigger element with smart positioning,
   color: #99a0ae;
 }
 
-.popover-demo-container .popover-arrow {
-  color: #f7f8fa;
-}
-
-[data-theme='dark'] .popover-demo-container .popover-arrow {
-  color: #1f232b;
+.popover-arrow {
+  color: var(--popover-surface);
 }`}
 />
 
@@ -197,7 +195,7 @@ The Popover component is built as a compound component with multiple parts:
         {'Open Popover'}
       </Popover.Trigger>
       <Popover.Content data-spar-part='content' className='popover-content'>
-        <Popover.Arrow data-spar-part='arrow' />
+        <Popover.Arrow data-spar-part='arrow' className='popover-arrow' />
         <div className='popover-header'>
           <span className='popover-icon'></span>
           <span className='popover-title'>{'Information'}</span>

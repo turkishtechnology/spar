@@ -75,18 +75,19 @@ A headless, fully accessible dropdown component that allows users to choose a si
   transform: rotate(180deg);
 }
 
-.select-demo-container .select-content {
-  min-width: 180px;
+.select-content {
+  --select-surface: #f7f8fa;
   padding: 8px;
   border-radius: 12px;
   border: 1px solid #e1e4ea;
-  background: #f7f8fa;
+  background: var(--select-surface);
   box-shadow:
     0 12px 32px rgba(34, 37, 48, 0.08),
     0 4px 12px rgba(34, 37, 48, 0.06);
 }
 
-[data-theme='dark'] .select-demo-container .select-content {
+[data-theme='dark'] .select-content {
+  --select-surface: #1f232b;
   border-color: #2b303b;
   background: #1f232b;
 }
@@ -137,12 +138,8 @@ A headless, fully accessible dropdown component that allows users to choose a si
   opacity: 1;
 }
 
-.select-demo-container .select-arrow {
-  color: #f7f8fa;
-}
-
-[data-theme='dark'] .select-demo-container .select-arrow {
-  color: #1f232b;
+.select-arrow {
+  color: var(--select-surface);
 }`}
 />
 
@@ -222,7 +219,7 @@ import { Select } from '@turkish-technology/spar';
             {'✓'}
           </span>
         </Select.Item>
-        <Select.Arrow data-spar-part='arrow' />
+        <Select.Arrow data-spar-part='arrow' className='select-arrow' />
       </Select.Content>
     </Select.Root>
   </div>
