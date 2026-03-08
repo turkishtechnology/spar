@@ -423,16 +423,16 @@ The root container that manages dialog state and provides context to all child c
 
 **Props**
 
-| Name            | Type                      | Default     | Description                                                  |
-| --------------- | ------------------------- | ----------- | ------------------------------------------------------------ |
-| `children`      | `React.ReactNode`         | -               | Dialog trigger, overlay, and content components                                                                    |
-| `id?`           | `string`                  | auto-generated  | Custom base ID for ARIA relationships; sub-IDs are derived as `${id}-title`, `${id}-description`, `${id}-content` |
-| `open?`         | `boolean`                 | `undefined`     | Controlled open state                                                                                              |
-| `onOpenChange?` | `(open: boolean) => void` | `undefined` | Callback when open state changes                             |
-| `defaultOpen?`  | `boolean`                 | `false`     | Initial open state for uncontrolled usage                    |
-| `modal?`        | `boolean`                 | `true`      | Whether dialog is modal (blocks interaction outside)         |
-| `disabled?`     | `boolean`                 | `false`     | Disables all dialog triggers (prevents opening)              |
-| `forceMount?`   | `boolean`                 | `false`     | Always render portal/overlay/content for animation libraries |
+| Name            | Type                      | Default        | Description                                                                                                       |
+| --------------- | ------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `children`      | `React.ReactNode`         | -              | Dialog trigger, overlay, and content components                                                                   |
+| `id?`           | `string`                  | auto-generated | Custom base ID for ARIA relationships; sub-IDs are derived as `${id}-title`, `${id}-description`, `${id}-content` |
+| `open?`         | `boolean`                 | `undefined`    | Controlled open state                                                                                             |
+| `onOpenChange?` | `(open: boolean) => void` | `undefined`    | Callback when open state changes                                                                                  |
+| `defaultOpen?`  | `boolean`                 | `false`        | Initial open state for uncontrolled usage                                                                         |
+| `modal?`        | `boolean`                 | `true`         | Whether dialog is modal (blocks interaction outside)                                                              |
+| `disabled?`     | `boolean`                 | `false`        | Disables all dialog triggers (prevents opening)                                                                   |
+| `forceMount?`   | `boolean`                 | `false`        | Always render portal/overlay/content for animation libraries                                                      |
 
 **Events**
 
@@ -529,21 +529,21 @@ Main dialog container that handles focus management and keyboard interactions.
 
 **Events**
 
-| Name                   | Parameters                     | Description                   | When Triggered                          |
-| ---------------------- | ------------------------------ | ----------------------------- | --------------------------------------- |
-| `onOpenAutoFocus`      | `(event: Event)`               | Before auto-focus on open     | Dialog opens                            |
-| `onCloseAutoFocus`     | `(event: Event)`               | Before focus restore on close | Dialog closes                           |
-| `onEscapeKeyDown`      | `(event: KeyboardEvent)`       | Escape key pressed            | Escape key interaction                  |
-| `onPointerDownOutside` | `(event: PointerEvent)`        | Pointer down outside content  | Outside interaction                     |
-| `onInteractOutside`    | `(event: PointerEvent)`        | Interaction outside content   | Outside interaction with preventDefault |
+| Name                   | Parameters               | Description                   | When Triggered                          |
+| ---------------------- | ------------------------ | ----------------------------- | --------------------------------------- |
+| `onOpenAutoFocus`      | `(event: Event)`         | Before auto-focus on open     | Dialog opens                            |
+| `onCloseAutoFocus`     | `(event: Event)`         | Before focus restore on close | Dialog closes                           |
+| `onEscapeKeyDown`      | `(event: KeyboardEvent)` | Escape key pressed            | Escape key interaction                  |
+| `onPointerDownOutside` | `(event: PointerEvent)`  | Pointer down outside content  | Outside interaction                     |
+| `onInteractOutside`    | `(event: PointerEvent)`  | Interaction outside content   | Outside interaction with preventDefault |
 
 **HTML Attributes**
 
-| Attribute    | Value                | Purpose                                  |
-| ------------ | -------------------- | ---------------------------------------- |
-| `data-state` | `"open" \| "closed"` | Current dialog state                     |
-| `data-modal` | `"true" \| "false"`  | Indicates whether the dialog is modal    |
-| `data-role`  | `string`             | ARIA role value applied to the element   |
+| Attribute    | Value                | Purpose                                |
+| ------------ | -------------------- | -------------------------------------- |
+| `data-state` | `"open" \| "closed"` | Current dialog state                   |
+| `data-modal` | `"true" \| "false"`  | Indicates whether the dialog is modal  |
+| `data-role`  | `string`             | ARIA role value applied to the element |
 
 ### Dialog.Title
 
@@ -622,13 +622,13 @@ Button that closes the dialog when activated. Extends all `Button` component pro
 
 **HTML Attributes**
 
-| Attribute            | Value                | Purpose                                |
-| -------------------- | -------------------- | -------------------------------------- |
-| `data-dialog-close`  | `""`                 | Always present, marks the close button |
-| `data-disabled`      | `""`                 | Present when disabled                  |
-| `data-loading`       | `""`                 | Present when loading                   |
-| `data-pressed`       | `""`                 | Present when toggle button is active   |
-| `data-autofocus`     | `""`                 | Present when autoFocus is true         |
+| Attribute           | Value | Purpose                                |
+| ------------------- | ----- | -------------------------------------- |
+| `data-dialog-close` | `""`  | Always present, marks the close button |
+| `data-disabled`     | `""`  | Present when disabled                  |
+| `data-loading`      | `""`  | Present when loading                   |
+| `data-pressed`      | `""`  | Present when toggle button is active   |
+| `data-autofocus`    | `""`  | Present when autoFocus is true         |
 
 ## Keyboard Interactions
 

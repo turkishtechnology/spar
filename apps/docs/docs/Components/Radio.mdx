@@ -288,53 +288,53 @@ Root container that manages selection state, registration, and keyboard behavior
 
 **Props**
 
-| Name                | Type                         | Default      | Description                                              |
-| ------------------- | ---------------------------- | ------------ | -------------------------------------------------------- |
-| `id?`               | `string`                     | `undefined`  | Base id used when generating fallback form `name`        |
-| `value?`            | `string`                     | `undefined`  | Controlled selected value                                |
-| `defaultValue?`     | `string`                     | `undefined`  | Uncontrolled initial value                               |
-| `onValueChange?`    | `(value: string) => void`    | `undefined`  | Selection change handler                                 |
+| Name                | Type                         | Default      | Description                                                                             |
+| ------------------- | ---------------------------- | ------------ | --------------------------------------------------------------------------------------- |
+| `id?`               | `string`                     | `undefined`  | Base id used when generating fallback form `name`                                       |
+| `value?`            | `string`                     | `undefined`  | Controlled selected value                                                               |
+| `defaultValue?`     | `string`                     | `undefined`  | Uncontrolled initial value                                                              |
+| `onValueChange?`    | `(value: string) => void`    | `undefined`  | Selection change handler                                                                |
 | `name?`             | `string`                     | `undefined`  | Form key for hidden root input (fallback: `${id}-radio-group` or `useId()-radio-group`) |
-| `disabled?`         | `boolean`                    | `false`      | Disables entire radio group                              |
-| `required?`         | `boolean`                    | `false`      | Marks group as required for forms                        |
-| `orientation?`      | `'horizontal' \| 'vertical'` | `'vertical'` | Layout direction for keyboard navigation                 |
-| `selectOnFocus?`    | `boolean`                    | `true`       | Whether arrow keys automatically select the focused item |
-| `autoFocus?`        | `boolean`                    | `false`      | Whether to focus the first focusable item on mount       |
-| `aria-label?`       | `string`                     | `undefined`  | Accessible name for the group                            |
-| `aria-labelledby?`  | `string`                     | `undefined`  | References element that labels the group                 |
-| `aria-describedby?` | `string`                     | `undefined`  | References element that describes the group              |
-| `as?`               | `React.ElementType`          | `'div'`      | Polymorphic root element                                 |
-| `children?`         | `React.ReactNode`            | `undefined`  | Radio.Item components                                    |
+| `disabled?`         | `boolean`                    | `false`      | Disables entire radio group                                                             |
+| `required?`         | `boolean`                    | `false`      | Marks group as required for forms                                                       |
+| `orientation?`      | `'horizontal' \| 'vertical'` | `'vertical'` | Layout direction for keyboard navigation                                                |
+| `selectOnFocus?`    | `boolean`                    | `true`       | Whether arrow keys automatically select the focused item                                |
+| `autoFocus?`        | `boolean`                    | `false`      | Whether to focus the first focusable item on mount                                      |
+| `aria-label?`       | `string`                     | `undefined`  | Accessible name for the group                                                           |
+| `aria-labelledby?`  | `string`                     | `undefined`  | References element that labels the group                                                |
+| `aria-describedby?` | `string`                     | `undefined`  | References element that describes the group                                             |
+| `as?`               | `React.ElementType`          | `'div'`      | Polymorphic root element                                                                |
+| `children?`         | `React.ReactNode`            | `undefined`  | Radio.Item components                                                                   |
 
 **Events**
 
-| Name            | Parameters                     | Description             | When Triggered                    |
-| --------------- | ------------------------------ | ----------------------- | --------------------------------- |
-| `onValueChange` | `(value: string)`              | Selection state changes | User selects different radio item |
-| `onKeyDown`     | `(event: React.KeyboardEvent)` | Internal navigation handler | Arrow/Home/End key handling on root element |
+| Name            | Parameters                     | Description                 | When Triggered                                     |
+| --------------- | ------------------------------ | --------------------------- | -------------------------------------------------- |
+| `onValueChange` | `(value: string)`              | Selection state changes     | User selects different radio item                  |
+| `onKeyDown`     | `(event: React.KeyboardEvent)` | Internal navigation handler | Arrow/Home/End key handling on root element        |
 | `onFocus`       | `(event: React.FocusEvent)`    | Internal focus sync handler | Root receives focus and initializes `focusedValue` |
 
 **HTML Attributes**
 
-| Attribute          | Value                        | Purpose                     |
-| ------------------ | ---------------------------- | --------------------------- |
-| `role`             | `"radiogroup"`               | Identifies root as a radio group |
-| `aria-required`    | `true`                       | Present when `required` is `true` |
-| `data-orientation` | `"horizontal" \| "vertical"` | Indicates layout direction  |
-| `data-disabled`    | `""`                         | Present when group disabled |
-| `data-required`    | `""`                         | Present when group is required |
-| `data-select-on-focus` | `""`                     | Present when `selectOnFocus` is `true` |
-| `data-autofocus`   | `""`                         | Present when `autoFocus` is `true` |
+| Attribute              | Value                        | Purpose                                |
+| ---------------------- | ---------------------------- | -------------------------------------- |
+| `role`                 | `"radiogroup"`               | Identifies root as a radio group       |
+| `aria-required`        | `true`                       | Present when `required` is `true`      |
+| `data-orientation`     | `"horizontal" \| "vertical"` | Indicates layout direction             |
+| `data-disabled`        | `""`                         | Present when group disabled            |
+| `data-required`        | `""`                         | Present when group is required         |
+| `data-select-on-focus` | `""`                         | Present when `selectOnFocus` is `true` |
+| `data-autofocus`       | `""`                         | Present when `autoFocus` is `true`     |
 
 **Internal Hidden Input (`Radio.Root`)**
 
-| Attribute | Value | Purpose |
-| --------- | ----- | ------- |
-| `type` | `"hidden"` | Submits selected value with forms |
-| `name` | `string` | Uses `name` prop or generated fallback |
-| `value` | `string` | Currently selected value |
-| `disabled` | `boolean` | Mirrors root disabled state |
-| `data-disabled` | `""` | Present when root is disabled |
+| Attribute       | Value      | Purpose                                |
+| --------------- | ---------- | -------------------------------------- |
+| `type`          | `"hidden"` | Submits selected value with forms      |
+| `name`          | `string`   | Uses `name` prop or generated fallback |
+| `value`         | `string`   | Currently selected value               |
+| `disabled`      | `boolean`  | Mirrors root disabled state            |
+| `data-disabled` | `""`       | Present when root is disabled          |
 
 ### Radio.Item
 
@@ -362,11 +362,11 @@ Individual option inside `Radio.Root`.
 
 **Events**
 
-| Name        | Parameters                     | Description         | When Triggered            |
-| ----------- | ------------------------------ | ------------------- | ------------------------- |
-| `onClick`   | `(event: React.MouseEvent)`    | Internal selection handler | Item is clicked |
-| `onKeyDown` | `(event: React.KeyboardEvent)` | Internal key handler | Focused item receives `Space` or `Enter` |
-| `onFocus`   | `(event: React.FocusEvent)`    | Internal focus handler | Item receives focus |
+| Name        | Parameters                     | Description                | When Triggered                           |
+| ----------- | ------------------------------ | -------------------------- | ---------------------------------------- |
+| `onClick`   | `(event: React.MouseEvent)`    | Internal selection handler | Item is clicked                          |
+| `onKeyDown` | `(event: React.KeyboardEvent)` | Internal key handler       | Focused item receives `Space` or `Enter` |
+| `onFocus`   | `(event: React.FocusEvent)`    | Internal focus handler     | Item receives focus                      |
 
 **HTML Attributes**
 
@@ -382,36 +382,37 @@ Individual option inside `Radio.Root`.
 
 **Internal Hidden Input (`Radio.Item`)**
 
-| Attribute | Value | Purpose |
-| --------- | ----- | ------- |
-| `type` | `"radio"` | Native radio semantics for forms |
-| `name` | `string` | Comes from `Radio.Root` context |
-| `value` | `string` | Item value |
-| `checked` | `boolean` | Mirrors item checked state |
-| `disabled` | `boolean` | True when root or item is disabled |
-| `tabIndex` | `-1` | Excludes hidden input from tab order |
-| `data-hidden` | `""` | Marks internal helper input |
-| `data-disabled` | `""` | Present when disabled |
-| `readOnly` | `true` | Prevents React controlled/uncontrolled warnings |
+| Attribute       | Value     | Purpose                                         |
+| --------------- | --------- | ----------------------------------------------- |
+| `type`          | `"radio"` | Native radio semantics for forms                |
+| `name`          | `string`  | Comes from `Radio.Root` context                 |
+| `value`         | `string`  | Item value                                      |
+| `checked`       | `boolean` | Mirrors item checked state                      |
+| `disabled`      | `boolean` | True when root or item is disabled              |
+| `tabIndex`      | `-1`      | Excludes hidden input from tab order            |
+| `data-hidden`   | `""`      | Marks internal helper input                     |
+| `data-disabled` | `""`      | Present when disabled                           |
+| `readOnly`      | `true`    | Prevents React controlled/uncontrolled warnings |
 
 ## Keyboard Interactions
 
 Keyboard behavior implemented by `Radio.Root` and `Radio.Item`:
 
-| Key | Action | Context | Notes |
-| --- | ------ | ------- | ----- |
-| `Tab` | Moves focus into the current tab stop in the group | Tabbing into group | Initial tab stop is driven by each item's computed `tabIndex` |
-| `Shift + Tab` | Moves focus out of the group | Tabbing backward | Browser default behavior |
-| `ArrowDown` | Moves focus to next item (wraps) | `orientation="vertical"` | Also selects when `selectOnFocus={true}` |
-| `ArrowUp` | Moves focus to previous item (wraps) | `orientation="vertical"` | Also selects when `selectOnFocus={true}` |
-| `ArrowRight` | Moves focus to next item (wraps) | `orientation="horizontal"` | Also selects when `selectOnFocus={true}` |
-| `ArrowLeft` | Moves focus to previous item (wraps) | `orientation="horizontal"` | Also selects when `selectOnFocus={true}` |
-| `Home` | Moves focus to first item | Any orientation | Also selects when `selectOnFocus={true}` |
-| `End` | Moves focus to last item | Any orientation | Also selects when `selectOnFocus={true}` |
-| `Space` | Selects focused item | On `Radio.Item` | Calls internal click/select logic |
-| `Enter` | Selects focused item | On `Radio.Item` | Calls internal click/select logic |
+| Key           | Action                                             | Context                    | Notes                                                         |
+| ------------- | -------------------------------------------------- | -------------------------- | ------------------------------------------------------------- |
+| `Tab`         | Moves focus into the current tab stop in the group | Tabbing into group         | Initial tab stop is driven by each item's computed `tabIndex` |
+| `Shift + Tab` | Moves focus out of the group                       | Tabbing backward           | Browser default behavior                                      |
+| `ArrowDown`   | Moves focus to next item (wraps)                   | `orientation="vertical"`   | Also selects when `selectOnFocus={true}`                      |
+| `ArrowUp`     | Moves focus to previous item (wraps)               | `orientation="vertical"`   | Also selects when `selectOnFocus={true}`                      |
+| `ArrowRight`  | Moves focus to next item (wraps)                   | `orientation="horizontal"` | Also selects when `selectOnFocus={true}`                      |
+| `ArrowLeft`   | Moves focus to previous item (wraps)               | `orientation="horizontal"` | Also selects when `selectOnFocus={true}`                      |
+| `Home`        | Moves focus to first item                          | Any orientation            | Also selects when `selectOnFocus={true}`                      |
+| `End`         | Moves focus to last item                           | Any orientation            | Also selects when `selectOnFocus={true}`                      |
+| `Space`       | Selects focused item                               | On `Radio.Item`            | Calls internal click/select logic                             |
+| `Enter`       | Selects focused item                               | On `Radio.Item`            | Calls internal click/select logic                             |
 
 Notes:
+
 - `ArrowUp` / `ArrowDown` do not navigate in horizontal mode.
 - `ArrowLeft` / `ArrowRight` do not navigate in vertical mode.
 - Disabled items are not skipped by index-based arrow navigation logic.

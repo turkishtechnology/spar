@@ -442,16 +442,16 @@ The root container that manages the dropdown menu state and provides context to 
 
 **Props**
 
-| Name             | Type                      | Default     | Description                                               |
-| ---------------- | ------------------------- | ----------- | --------------------------------------------------------- |
+| Name             | Type                      | Default     | Description                                                                                                                                |
+| ---------------- | ------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `id?`            | `string`                  | `undefined` | Custom base ID for ARIA relationships. Auto-generated if not provided. Sub-element IDs are derived as `${id}-trigger` and `${id}-content`. |
-| `open?`          | `boolean`                 | `undefined` | Controlled open state                                     |
-| `defaultOpen?`   | `boolean`                 | `false`     | Initial open state (uncontrolled)                         |
-| `onOpenChange?`  | `(open: boolean) => void` | `undefined` | Callback when open state changes                          |
-| `modal?`         | `boolean`                 | `true`      | Whether menu traps focus (modal) or allows focus to leave |
-| `disabled?`      | `boolean`                 | `false`     | Disables all dropdown menu triggers (prevents opening)    |
-| `closeOnSelect?` | `boolean`                 | `true`      | Whether to close menu on item selection                   |
-| `children?`      | `React.ReactNode`         | `undefined` | Menu trigger and content                                  |
+| `open?`          | `boolean`                 | `undefined` | Controlled open state                                                                                                                      |
+| `defaultOpen?`   | `boolean`                 | `false`     | Initial open state (uncontrolled)                                                                                                          |
+| `onOpenChange?`  | `(open: boolean) => void` | `undefined` | Callback when open state changes                                                                                                           |
+| `modal?`         | `boolean`                 | `true`      | Whether menu traps focus (modal) or allows focus to leave                                                                                  |
+| `disabled?`      | `boolean`                 | `false`     | Disables all dropdown menu triggers (prevents opening)                                                                                     |
+| `closeOnSelect?` | `boolean`                 | `true`      | Whether to close menu on item selection                                                                                                    |
+| `children?`      | `React.ReactNode`         | `undefined` | Menu trigger and content                                                                                                                   |
 
 **Events**
 
@@ -546,35 +546,35 @@ A selectable menu item.
 
 **Props**
 
-| Name         | Type                                    | Default       | Description                                                           |
-| ------------ | --------------------------------------- | ------------- | --------------------------------------------------------------------- |
-| `as?`        | `React.ElementType`                     | `'div'`       | Polymorphic element type to render                                    |
-| `role?`      | `string`                                | `'menuitem'`  | ARIA role for the item element                                        |
-| `disabled?`  | `boolean`                               | `false`       | Whether item is disabled                                              |
-| `onSelect?`  | `(event: React.SyntheticEvent) => void` | `undefined` | Selection handler                                                     |
-| `textValue?` | `string`                                | `undefined` | Text value for typeahead (auto-detected from content if not provided) |
-| `ref?`       | `React.Ref<HTMLElement \| null>`        | `undefined` | Forwarded ref to item element                                         |
-| `children?`  | `React.ReactNode`                       | `undefined` | Item content                                                          |
+| Name         | Type                                    | Default      | Description                                                           |
+| ------------ | --------------------------------------- | ------------ | --------------------------------------------------------------------- |
+| `as?`        | `React.ElementType`                     | `'div'`      | Polymorphic element type to render                                    |
+| `role?`      | `string`                                | `'menuitem'` | ARIA role for the item element                                        |
+| `disabled?`  | `boolean`                               | `false`      | Whether item is disabled                                              |
+| `onSelect?`  | `(event: React.SyntheticEvent) => void` | `undefined`  | Selection handler                                                     |
+| `textValue?` | `string`                                | `undefined`  | Text value for typeahead (auto-detected from content if not provided) |
+| `ref?`       | `React.Ref<HTMLElement \| null>`        | `undefined`  | Forwarded ref to item element                                         |
+| `children?`  | `React.ReactNode`                       | `undefined`  | Item content                                                          |
 
 **Events**
 
-| Name            | Parameters                      | Description         | When Triggered                              |
-| --------------- | ------------------------------- | ------------------- | ------------------------------------------- |
-| `onSelect`      | `(event: React.SyntheticEvent)` | Item selected       | User clicks or activates item with keyboard |
-| `onClick`       | `(event: React.MouseEvent)`     | Mouse click         | User clicks item                            |
-| `onKeyDown`     | `(event: React.KeyboardEvent)`  | Key pressed         | User presses key while item focused         |
-| `onPointerMove`  | `(event: React.PointerEvent)`   | Pointer movement    | Pointer moves over item              |
-| `onPointerLeave` | `(event: React.PointerEvent)`   | Pointer leaves item | Pointer moves away from item         |
-| `onFocus`        | `(event: React.FocusEvent)`     | Item receives focus | Item gains focus                     |
+| Name             | Parameters                      | Description         | When Triggered                              |
+| ---------------- | ------------------------------- | ------------------- | ------------------------------------------- |
+| `onSelect`       | `(event: React.SyntheticEvent)` | Item selected       | User clicks or activates item with keyboard |
+| `onClick`        | `(event: React.MouseEvent)`     | Mouse click         | User clicks item                            |
+| `onKeyDown`      | `(event: React.KeyboardEvent)`  | Key pressed         | User presses key while item focused         |
+| `onPointerMove`  | `(event: React.PointerEvent)`   | Pointer movement    | Pointer moves over item                     |
+| `onPointerLeave` | `(event: React.PointerEvent)`   | Pointer leaves item | Pointer moves away from item                |
+| `onFocus`        | `(event: React.FocusEvent)`     | Item receives focus | Item gains focus                            |
 
 **HTML Attributes**
 
-| Attribute          | Value     | Purpose                                                    |
-| ------------------ | --------- | ---------------------------------------------------------- |
-| `tabIndex`         | `0 \| -1` | Controls keyboard focus (0 when highlighted, -1 otherwise) |
+| Attribute          | Value     | Purpose                                                               |
+| ------------------ | --------- | --------------------------------------------------------------------- |
+| `tabIndex`         | `0 \| -1` | Controls keyboard focus (0 when highlighted, -1 otherwise)            |
 | `aria-disabled`    | `true`    | Present when disabled; conveys disabled state to assistive technology |
-| `data-disabled`    | `''`      | Present when disabled                                      |
-| `data-highlighted` | `''`      | Present when highlighted                                   |
+| `data-disabled`    | `''`      | Present when disabled                                                 |
+| `data-highlighted` | `''`      | Present when highlighted                                              |
 
 ### DropdownMenu.Separator
 
@@ -637,9 +637,9 @@ A logical grouping container for related menu items.
 
 **HTML Attributes**
 
-| Attribute | Value     | Purpose                                          |
-| --------- | --------- | ------------------------------------------------ |
-| `role`    | `'group'` | Semantic grouping role for assistive technology  |
+| Attribute | Value     | Purpose                                         |
+| --------- | --------- | ----------------------------------------------- |
+| `role`    | `'group'` | Semantic grouping role for assistive technology |
 
 ### DropdownMenu.Arrow
 
