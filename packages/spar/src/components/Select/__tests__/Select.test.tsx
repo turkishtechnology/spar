@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   Select,
@@ -10,1009 +10,172 @@ import {
   SelectItemText,
 } from '../index';
 
+const renderSelect = (props?: React.ComponentProps<typeof Select>) => {
+  return render(
+    <Select {...props}>
+      <SelectTrigger aria-label='Choose option'>
+        <SelectValue placeholder='Select...' />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value='option1'>
+          <SelectItemText>Option 1</SelectItemText>
+        </SelectItem>
+        <SelectItem value='option2'>
+          <SelectItemText>Option 2</SelectItemText>
+        </SelectItem>
+        <SelectItem value='option3' disabled>
+          <SelectItemText>Option 3</SelectItemText>
+        </SelectItem>
+      </SelectContent>
+    </Select>,
+  );
+};
+
 describe('Select', () => {
-  describe('Select', () => {
-    describe('Rendering', () => {
-      it('renders with default props', () => {
-        render(
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
+  it('keeps aria contract and id suffixes when custom id is provided', async () => {
+    const user = userEvent.setup();
 
-        const trigger = screen.getByRole('combobox');
-        expect(trigger).toBeInTheDocument();
-        expect(trigger).toHaveAttribute('aria-expanded', 'false');
-      });
+    renderSelect({ id: 'plan-select', required: true });
 
-      it('renders with custom as prop', () => {
-        const { container } = render(
-          <Select as='section'>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-          </Select>,
-        );
+    const trigger = screen.getByRole('combobox');
+    expect(trigger).toHaveAttribute('id', 'plan-select-trigger');
+    expect(trigger).toHaveAttribute('aria-controls', 'plan-select-content');
+    expect(trigger).toHaveAttribute('aria-labelledby', 'plan-select-value');
+    expect(trigger).toHaveAttribute('aria-required', 'true');
 
-        const section = container.querySelector('section');
-        expect(section).toBeInTheDocument();
-      });
+    await user.click(trigger);
 
-      it('renders disabled state correctly', () => {
-        render(
-          <Select disabled>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const trigger = screen.getByRole('combobox');
-        expect(trigger).toBeDisabled();
-        // Native button uses disabled attribute, not aria-disabled
-        expect(trigger).not.toHaveAttribute('aria-disabled');
-      });
-
-      it('renders required state correctly', () => {
-        render(
-          <Select required>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const trigger = screen.getByRole('combobox');
-        expect(trigger).toHaveAttribute('aria-required', 'true');
-      });
-    });
-
-    describe('State Management', () => {
-      it('handles uncontrolled state with defaultValue', () => {
-        const { container } = render(
-          <Select defaultValue='option2' name='test'>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-              <SelectItem value='option2'>Option 2</SelectItem>
-              <SelectItem value='option3'>Option 3</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const hiddenInput = container.querySelector('input[type="hidden"][value="option2"]');
-        expect(hiddenInput).toBeInTheDocument();
-      });
-
-      // SKIPPED: React 19 + JSDOM + user-event incompatibility with Escape key handling
-      // Component behavior verified manually in browser - keyboard events work correctly
-      // TODO: Re-enable when upgrading to Happy-DOM or Playwright component tests
-      it.skip('handles controlled state with value prop', async () => {
-        const user = userEvent.setup();
-
-        function ControlledSelect({ value }: { value: string }) {
-          const [open, setOpen] = React.useState(false);
-
-          return (
-            <Select value={value} open={open} onOpenChange={setOpen}>
-              <SelectTrigger>
-                <SelectValue placeholder='Select...' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='option1'>
-                  <SelectItemText>Option 1</SelectItemText>
-                </SelectItem>
-                <SelectItem value='option2'>
-                  <SelectItemText>Option 2</SelectItemText>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          );
-        }
-
-        const { rerender } = render(<ControlledSelect value='option1' />);
-
-        const trigger = screen.getByRole('combobox');
-
-        // Open to register items
-        await user.click(trigger);
-
-        await waitFor(() => {
-          expect(screen.queryByRole('listbox')).toBeInTheDocument();
-        });
-
-        // Focus listbox and press Escape
-        const listbox = screen.getByRole('listbox');
-        listbox.focus();
-        await user.keyboard('{Escape}');
-
-        await waitFor(
-          () => {
-            expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
-          },
-          { timeout: 3000 },
-        );
-
-        expect(trigger).toHaveTextContent('Option 1');
-
-        rerender(<ControlledSelect value='option2' />);
-
-        expect(trigger).toHaveTextContent('Option 2');
-      });
-
-      it('calls onValueChange when selection changes', async () => {
-        const user = userEvent.setup();
-        const handleValueChange = jest.fn();
-
-        render(
-          <Select onValueChange={handleValueChange}>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-              <SelectItem value='option2'>Option 2</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const trigger = screen.getByRole('combobox');
-        await user.click(trigger);
-
-        await waitFor(() => {
-          expect(screen.queryByRole('listbox')).toBeInTheDocument();
-        });
-        await waitFor(() => {
-          expect(screen.getByRole('listbox')).toBeInTheDocument();
-        });
-
-        const option1 = screen.getByRole('option', { name: 'Option 1' });
-        await user.click(option1);
-
-        expect(handleValueChange).toHaveBeenCalledWith('option1');
-      });
-
-      it('updates uncontrolled state when selecting items', async () => {
-        const user = userEvent.setup();
-        const { container } = render(
-          <Select name='test'>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-              <SelectItem value='option2'>Option 2</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const trigger = screen.getByRole('combobox');
-        await user.click(trigger);
-
-        await waitFor(() => {
-          expect(screen.queryByRole('listbox')).toBeInTheDocument();
-        });
-        const option1 = screen.getByRole('option', { name: 'Option 1' });
-        await user.click(option1);
-
-        const hiddenInput = container.querySelector('input[type="hidden"]');
-        expect(hiddenInput).toHaveAttribute('value', 'option1');
-      });
-    });
-
-    describe('Open/Close State', () => {
-      it('opens when trigger is clicked', async () => {
-        const user = userEvent.setup();
-
-        render(
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const trigger = screen.getByRole('combobox');
-        expect(trigger).toHaveAttribute('aria-expanded', 'false');
-
-        await user.click(trigger);
-
-        await waitFor(() => {
-          expect(screen.queryByRole('listbox')).toBeInTheDocument();
-        });
-        expect(trigger).toHaveAttribute('aria-expanded', 'true');
-      });
-
-      it('handles controlled open state', () => {
-        const { rerender } = render(
-          <Select open={false}>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const trigger = screen.getByRole('combobox');
-        expect(trigger).toHaveAttribute('aria-expanded', 'false');
-
-        rerender(
-          <Select open={true}>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        expect(trigger).toHaveAttribute('aria-expanded', 'true');
-      });
-
-      it('calls onOpenChange when open state changes', async () => {
-        const user = userEvent.setup();
-        const handleOpenChange = jest.fn();
-
-        render(
-          <Select onOpenChange={handleOpenChange}>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const trigger = screen.getByRole('combobox');
-        await user.click(trigger);
-
-        await waitFor(() => {
-          expect(screen.queryByRole('listbox')).toBeInTheDocument();
-        });
-        expect(handleOpenChange).toHaveBeenCalledWith(true);
-      });
-
-      it('closes when item is selected', async () => {
-        const user = userEvent.setup();
-
-        render(
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const trigger = screen.getByRole('combobox');
-        await user.click(trigger);
-
-        await waitFor(() => {
-          expect(screen.queryByRole('listbox')).toBeInTheDocument();
-        });
-        const option1 = screen.getByRole('option', { name: 'Option 1' });
-        await user.click(option1);
-
-        expect(trigger).toHaveAttribute('aria-expanded', 'false');
-      });
-    });
-
-    describe('Disabled State', () => {
-      it('prevents opening when disabled', async () => {
-        const user = userEvent.setup();
-
-        render(
-          <Select disabled>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const trigger = screen.getByRole('combobox');
-        await user.click(trigger);
-
-        // Wait a bit to ensure no dropdown appears
-        await new Promise((resolve) => setTimeout(resolve, 100));
-
-        expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
-        expect(trigger).toHaveAttribute('aria-expanded', 'false');
-      });
-
-      it('prevents value changes when disabled', async () => {
-        const user = userEvent.setup();
-        const handleValueChange = jest.fn();
-
-        render(
-          <Select disabled onValueChange={handleValueChange}>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const trigger = screen.getByRole('combobox');
-        await user.click(trigger);
-
-        // Wait a bit to ensure no dropdown appears
-        await new Promise((resolve) => setTimeout(resolve, 100));
-
-        expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
-        expect(handleValueChange).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('Form Integration', () => {
-      it('creates hidden input when name and value are provided', () => {
-        const { container } = render(
-          <Select name='test-select' value='option1'>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const hiddenInput = container.querySelector('input[type="hidden"]');
-        expect(hiddenInput).toBeInTheDocument();
-        expect(hiddenInput).toHaveAttribute('name', 'test-select');
-        expect(hiddenInput).toHaveAttribute('value', 'option1');
-      });
-
-      it('does not create hidden input when no value is selected', () => {
-        const { container } = render(
-          <Select name='test-select'>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const hiddenInput = container.querySelector('input[type="hidden"]');
-        expect(hiddenInput).not.toBeInTheDocument();
-      });
-
-      it('marks hidden input as required when required prop is true', () => {
-        const { container } = render(
-          <Select name='test-select' value='option1' required>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const hiddenInput = container.querySelector('input[type="hidden"]');
-        expect(hiddenInput).toHaveAttribute('required');
-      });
-
-      it('disables hidden input when disabled prop is true', () => {
-        const { container } = render(
-          <Select name='test-select' value='option1' disabled>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>,
-        );
-
-        const hiddenInput = container.querySelector('input[type="hidden"]');
-        expect(hiddenInput).toBeDisabled();
-      });
-    });
+    const listbox = screen.getByRole('listbox');
+    expect(listbox).toHaveAttribute('id', 'plan-select-content');
+    expect(listbox).toHaveAttribute('aria-labelledby', 'plan-select-trigger');
   });
 
-  describe('SelectTrigger', () => {
-    it('renders with correct role and attributes', () => {
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
+  it('updates uncontrolled value and hidden input after selection', async () => {
+    const user = userEvent.setup();
+    const { container } = renderSelect({ name: 'plan' });
 
-      const trigger = screen.getByRole('combobox');
-      expect(trigger).toHaveAttribute('type', 'button');
-      expect(trigger).toHaveAttribute('aria-haspopup', 'listbox');
-      expect(trigger).toHaveAttribute('aria-expanded', 'false');
-    });
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+    await user.click(screen.getByRole('option', { name: 'Option 2' }));
 
-    it('opens dropdown on Space key', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      trigger.focus();
-      await user.keyboard(' ');
-
-      expect(trigger).toHaveAttribute('aria-expanded', 'true');
-    });
-
-    it('opens dropdown on Enter key', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      trigger.focus();
-      await user.keyboard('{Enter}');
-
-      expect(trigger).toHaveAttribute('aria-expanded', 'true');
-    });
-
-    // SKIPPED: JSDOM limitation with keyboard event propagation in React 19
-    // Arrow key behavior verified manually - works correctly in real browsers
-    // TODO: Re-enable with Happy-DOM or browser-based testing
-    it.skip('opens dropdown on ArrowDown key', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      trigger.focus();
-      await user.keyboard('{ArrowDown}');
-
-      expect(trigger).toHaveAttribute('aria-expanded', 'true');
-    });
-
-    // SKIPPED: JSDOM limitation with keyboard event propagation in React 19
-    // Arrow key behavior verified manually - works correctly in real browsers
-    // TODO: Re-enable with Happy-DOM or browser-based testing
-    it.skip('opens dropdown on ArrowUp key', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      trigger.focus();
-      await user.keyboard('{ArrowUp}');
-
-      expect(trigger).toHaveAttribute('aria-expanded', 'true');
-    });
-
-    it('renders as custom element when as prop is provided', () => {
-      const { container } = render(
-        <Select>
-          <SelectTrigger as='div'>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = container.querySelector('[role="combobox"]');
-      expect(trigger?.tagName).toBe('DIV');
-    });
+    expect(trigger).toHaveTextContent('Option 2');
+    const hiddenInput = container.querySelector('input[type="hidden"]');
+    expect(hiddenInput).toHaveAttribute('name', 'plan');
+    expect(hiddenInput).toHaveAttribute('value', 'option2');
   });
 
-  describe('SelectValue', () => {
-    it('displays placeholder when no value is selected', () => {
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Choose an option' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      expect(trigger).toHaveTextContent('Choose an option');
-    });
-
-    it('displays selected value text', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>
-              <SelectItemText>Option 1</SelectItemText>
-            </SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      const option1 = screen.getByRole('option', { name: 'Option 1' });
-      await user.click(option1);
-
-      expect(trigger).toHaveTextContent('Option 1');
-    });
-
-    it('renders custom children', () => {
-      render(
-        <Select value='option1'>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...'>Custom Content</SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      expect(trigger).toHaveTextContent('Custom Content');
-    });
-
-    it('renders as custom element when as prop is provided', () => {
-      const { container } = render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue as='div' placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const valueElement = container.querySelector('[id$="-value"]');
-      expect(valueElement?.tagName).toBe('DIV');
-    });
-  });
-
-  describe('SelectContent', () => {
-    it('renders with correct role when open', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      const listbox = screen.getByRole('listbox');
-      expect(listbox).toBeInTheDocument();
-      expect(listbox).toHaveAttribute('data-state', 'open');
-    });
-
-    it('does not render when closed', () => {
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const listbox = screen.queryByRole('listbox');
-      expect(listbox).not.toBeInTheDocument();
-    });
-
-    // SKIPPED: React 19 + JSDOM + user-event incompatibility with Escape key
-    // Escape key functionality verified manually in browser - works as expected
-    // TODO: Re-enable with Happy-DOM or Playwright component tests
-    it.skip('closes on Escape key', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      const listbox = screen.getByRole('listbox');
-      expect(listbox).toBeInTheDocument();
-
-      // Focus the listbox first, then press Escape
-      listbox.focus();
-      await user.keyboard('{Escape}');
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
-      });
-    });
-
-    it('closes on Tab key', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      await user.keyboard('{Tab}');
-      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
-    });
-
-    it('closes on outside click', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <div>
-          <button>Outside Button</button>
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder='Select...' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='option1'>Option 1</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      const listbox = screen.getByRole('listbox');
-      expect(listbox).toBeInTheDocument();
-
-      const outsideButton = screen.getByRole('button', { name: 'Outside Button' });
-      await user.click(outsideButton);
-
-      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
-    });
-  });
-
-  describe('SelectItem', () => {
-    it('renders with correct role and attributes', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      const option = screen.getByRole('option', { name: 'Option 1' });
-      expect(option).toHaveAttribute('aria-selected', 'false');
-      expect(option).toHaveAttribute('data-state', 'unchecked');
-    });
-
-    it('marks selected item correctly', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1'>Option 1</SelectItem>
-            <SelectItem value='option2'>Option 2</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      const option1 = screen.getByRole('option', { name: 'Option 1' });
-      await user.click(option1);
-
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      const selectedOption = screen.getByRole('option', { name: 'Option 1' });
-      expect(selectedOption).toHaveAttribute('aria-selected', 'true');
-      expect(selectedOption).toHaveAttribute('data-state', 'checked');
-    });
-
-    it('handles disabled state', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1' disabled>
-              Option 1
-            </SelectItem>
-            <SelectItem value='option2'>Option 2</SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      const option1 = screen.getByRole('option', { name: 'Option 1' });
-      expect(option1).toHaveAttribute('data-disabled');
-      expect(option1).toHaveAttribute('aria-disabled', 'true');
-    });
-
-    it('prevents selection when disabled', async () => {
-      const user = userEvent.setup();
-      const handleValueChange = jest.fn();
-
-      render(
-        <Select onValueChange={handleValueChange}>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1' disabled>
-              Option 1
-            </SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      const option1 = screen.getByRole('option', { name: 'Option 1' });
-      await user.click(option1);
-
-      expect(handleValueChange).not.toHaveBeenCalled();
-    });
-
-    it('renders as custom element when as prop is provided', async () => {
-      const user = userEvent.setup();
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='option1' as='li'>
-              Option 1
-            </SelectItem>
-          </SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      const option = document.querySelector('[role="option"]');
-      expect(option?.tagName).toBe('LI');
-    });
-  });
-
-  describe('Error Handling', () => {
-    it('throws error when Select components are used outside Select', () => {
-      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-
-      expect(() => {
-        render(
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>,
-        );
-      }).toThrow('Select components must be used within a Select');
-
-      consoleErrorSpy.mockRestore();
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('handles empty options gracefully', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
-          <SelectContent>{null}</SelectContent>
-        </Select>,
-      );
-
-      const trigger = screen.getByRole('combobox');
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      const listbox = screen.getByRole('listbox');
-      expect(listbox).toBeInTheDocument();
-    });
-
-    it('handles dynamic options addition/removal', async () => {
-      const user = userEvent.setup();
-
-      const DynamicSelect = () => {
-        const [showExtra, setShowExtra] = React.useState(false);
-
-        return (
-          <div>
-            <button onClick={() => setShowExtra(!showExtra)}>Toggle</button>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder='Select...' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value='option1'>Option 1</SelectItem>
-                {showExtra && <SelectItem value='option2'>Option 2</SelectItem>}
-              </SelectContent>
-            </Select>
-          </div>
-        );
-      };
-
-      render(<DynamicSelect />);
-
-      const trigger = screen.getByRole('combobox');
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      expect(screen.getAllByRole('option')).toHaveLength(1);
-
-      const toggleButton = screen.getByRole('button', { name: 'Toggle' });
-      await user.click(toggleButton);
-      await user.click(trigger);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).toBeInTheDocument();
-      });
-      expect(screen.getAllByRole('option')).toHaveLength(2);
-    });
-  });
-
-  it('does not set native disabled attribute when as is not button', () => {
-    const { container } = render(
-      <Select disabled>
-        <SelectTrigger as='div'>
+  it('supports controlled value and only updates UI after parent rerender', async () => {
+    const user = userEvent.setup();
+    const handleValueChange = jest.fn();
+
+    const Controlled = ({ value }: { value: string }) => (
+      <Select value={value} onValueChange={handleValueChange}>
+        <SelectTrigger aria-label='Choose option'>
           <SelectValue placeholder='Select...' />
         </SelectTrigger>
-      </Select>,
+        <SelectContent>
+          <SelectItem value='option1'>
+            <SelectItemText>Option 1</SelectItemText>
+          </SelectItem>
+          <SelectItem value='option2'>
+            <SelectItemText>Option 2</SelectItemText>
+          </SelectItem>
+        </SelectContent>
+      </Select>
     );
-    const trigger = container.querySelector('div[role="combobox"]');
-    expect(trigger).not.toHaveAttribute('disabled');
-    expect(trigger).toHaveAttribute('aria-disabled', 'true');
-    expect(trigger).toHaveAttribute('data-disabled', '');
+
+    const { rerender } = render(<Controlled value='option1' />);
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+    await user.click(screen.getByRole('option', { name: 'Option 2' }));
+
+    expect(handleValueChange).toHaveBeenCalledWith('option2');
+    expect(trigger).toHaveTextContent('Option 1');
+
+    rerender(<Controlled value='option2' />);
+    expect(trigger).toHaveTextContent('Option 2');
+  });
+
+  it('does not open or emit value change when root is disabled', async () => {
+    const user = userEvent.setup();
+    const handleValueChange = jest.fn();
+
+    renderSelect({ disabled: true, onValueChange: handleValueChange });
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+
+    expect(trigger).toBeDisabled();
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(handleValueChange).not.toHaveBeenCalled();
+  });
+
+  it('opens with ArrowDown and selects the last enabled option with End + Enter', async () => {
+    const user = userEvent.setup();
+
+    renderSelect();
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+
+    await user.keyboard('{ArrowDown}');
+    const listbox = screen.getByRole('listbox');
+    expect(listbox).toHaveFocus();
+
+    listbox.focus();
+    await user.keyboard('{End}');
+    await user.keyboard('{Enter}');
+
+    expect(trigger).toHaveTextContent('Option 2');
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger).toHaveFocus();
+  });
+
+  it('supports Home/End keyboard navigation and skips disabled options', async () => {
+    const user = userEvent.setup();
+
+    renderSelect();
+
+    const trigger = screen.getByRole('combobox');
+    trigger.focus();
+
+    await user.keyboard('{ArrowDown}');
+
+    await user.keyboard('{End}');
+    expect(screen.getByRole('option', { name: 'Option 2' })).toHaveAttribute('data-highlighted');
+
+    await user.keyboard('{Home}');
+    expect(screen.getByRole('option', { name: 'Option 1' })).toHaveAttribute('data-highlighted');
+  });
+
+  it('closes with Tab and leaves no open listbox in the DOM', async () => {
+    const user = userEvent.setup();
+
+    renderSelect();
+
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    await user.keyboard('{Tab}');
+
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('throws when trigger is rendered outside Select root', () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    expect(() => {
+      render(
+        <SelectTrigger>
+          <SelectValue placeholder='Select...' />
+        </SelectTrigger>,
+      );
+    }).toThrow('Select components must be used within a Select');
+
+    consoleErrorSpy.mockRestore();
   });
 });

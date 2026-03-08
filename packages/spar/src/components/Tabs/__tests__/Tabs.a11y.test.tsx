@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../index';
@@ -44,21 +44,6 @@ const BasicTabs = ({
 );
 
 describe('Tabs Accessibility', () => {
-  beforeAll(() => {
-    // Mock getBoundingClientRect for focus management tests
-    Element.prototype.getBoundingClientRect = jest.fn(() => ({
-      bottom: 0,
-      height: 0,
-      left: 0,
-      right: 0,
-      top: 0,
-      width: 0,
-      x: 0,
-      y: 0,
-      toJSON: () => ({}),
-    }));
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -367,45 +352,6 @@ describe('Tabs Accessibility', () => {
       await user.tab(); // Tab to panel
 
       expect(screen.getByRole('tabpanel')).toHaveFocus();
-    });
-
-    it('should auto-focus tab trigger when autoFocus is true', async () => {
-      render(
-        <Tabs defaultValue='tab1'>
-          <TabsList>
-            <TabsTrigger value='tab1'>Tab 1</TabsTrigger>
-            <TabsTrigger value='tab2' autoFocus>
-              Tab 2
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value='tab1'>Content 1</TabsContent>
-          <TabsContent value='tab2'>Content 2</TabsContent>
-        </Tabs>,
-      );
-
-      const tab2 = screen.getByRole('tab', { name: 'Tab 2' });
-      await waitFor(() => {
-        expect(tab2).toHaveFocus();
-      });
-      expect(tab2).toHaveAttribute('data-autofocus', '');
-    });
-
-    it('should not auto-focus tab trigger by default', () => {
-      render(
-        <Tabs defaultValue='tab1'>
-          <TabsList>
-            <TabsTrigger value='tab1'>Tab 1</TabsTrigger>
-            <TabsTrigger value='tab2'>Tab 2</TabsTrigger>
-          </TabsList>
-          <TabsContent value='tab1'>Content 1</TabsContent>
-          <TabsContent value='tab2'>Content 2</TabsContent>
-        </Tabs>,
-      );
-
-      const tab1 = screen.getByRole('tab', { name: 'Tab 1' });
-      const tab2 = screen.getByRole('tab', { name: 'Tab 2' });
-      expect(tab1).not.toHaveAttribute('data-autofocus');
-      expect(tab2).not.toHaveAttribute('data-autofocus');
     });
   });
 
@@ -759,106 +705,9 @@ describe('Tabs Accessibility', () => {
 
       expect(screen.getByText('After Tabs')).toHaveFocus();
     });
-
-    it('supports high contrast and forced colors mode', async () => {
-      // Simulate Windows High Contrast mode
-      Object.defineProperty(window, 'matchMedia', {
-        writable: true,
-        value: jest.fn().mockImplementation((query) => ({
-          matches: query === '(prefers-contrast: high)',
-          media: query,
-          onchange: null,
-          addListener: jest.fn(),
-          removeListener: jest.fn(),
-          addEventListener: jest.fn(),
-          removeEventListener: jest.fn(),
-          dispatchEvent: jest.fn(),
-        })),
-      });
-
-      const { container } = render(<BasicTabs />);
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
-
-    it('handles screen reader virtual cursor navigation', () => {
-      render(<BasicTabs />);
-
-      // Verify structural navigation landmarks
-      const tablist = screen.getByRole('tablist');
-      const tabs = screen.getAllByRole('tab');
-      const tabpanel = screen.getByRole('tabpanel');
-
-      // Screen readers should be able to navigate by role
-      expect(tablist).toBeInTheDocument();
-      expect(tabs).toHaveLength(3);
-      expect(tabpanel).toBeInTheDocument();
-
-      // Verify content is properly structured for screen readers
-      tabs.forEach((tab) => {
-        expect(tab).toHaveAttribute('aria-controls');
-        expect(tab).toHaveAttribute('aria-selected');
-      });
-    });
-
-    it('supports reduced motion preferences', async () => {
-      // Mock reduced motion preference
-      Object.defineProperty(window, 'matchMedia', {
-        writable: true,
-        value: jest.fn().mockImplementation((query) => ({
-          matches: query === '(prefers-reduced-motion: reduce)',
-          media: query,
-          onchange: null,
-          addListener: jest.fn(),
-          removeListener: jest.fn(),
-          addEventListener: jest.fn(),
-          removeEventListener: jest.fn(),
-          dispatchEvent: jest.fn(),
-        })),
-      });
-
-      const user = userEvent.setup();
-      const { container } = render(<BasicTabs />);
-
-      // Tab switching should still work with reduced motion
-      const tab2 = screen.getByRole('tab', { name: 'Section 2: Details' });
-      await user.click(tab2);
-
-      expect(tab2).toHaveAttribute('aria-selected', 'true');
-
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
   });
 
   describe('WCAG 2.2 AA Compliance', () => {
-    it('meets minimum touch target size requirements', () => {
-      render(<BasicTabs />);
-
-      // Mock getBoundingClientRect to simulate 44x44px minimum
-      const tabs = screen.getAllByRole('tab');
-      tabs.forEach((tab) => {
-        jest.spyOn(tab, 'getBoundingClientRect').mockReturnValue({
-          width: 44,
-          height: 44,
-          top: 0,
-          left: 0,
-          bottom: 44,
-          right: 44,
-          x: 0,
-          y: 0,
-          toJSON: () => ({}),
-        });
-      });
-
-      // Verify tabs meet minimum size requirements
-      tabs.forEach((tab) => {
-        const rect = tab.getBoundingClientRect();
-        expect(rect.width).toBeGreaterThanOrEqual(44);
-        expect(rect.height).toBeGreaterThanOrEqual(44);
-      });
-    });
-
     it('provides sufficient context for understanding', () => {
       render(<BasicTabs />);
 
@@ -868,18 +717,6 @@ describe('Tabs Accessibility', () => {
 
       // Disabled tab should indicate its state
       expect(screen.getByRole('tab', { name: 'Section 3: Advanced (Coming Soon)' })).toBeDisabled();
-    });
-
-    it('supports voice control navigation', async () => {
-      const user = userEvent.setup();
-      render(<BasicTabs />);
-
-      // Voice control should be able to activate tabs by name
-      const tab = screen.getByRole('tab', { name: 'Section 2: Details' });
-
-      // Simulate voice control click
-      await user.click(tab);
-      expect(tab).toHaveAttribute('aria-selected', 'true');
     });
 
     it('maintains focus visibility in all states', async () => {

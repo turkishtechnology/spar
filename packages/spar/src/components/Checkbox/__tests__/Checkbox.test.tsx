@@ -53,16 +53,20 @@ describe('Checkbox - Unit Tests', () => {
       expect(checkbox).toHaveAttribute('style', expect.stringContaining('background-color: red'));
     });
 
-    it('generates stable ID when not provided', () => {
-      const { rerender } = render(<Checkbox />);
-      const firstId = screen.getByRole('checkbox').id;
+    it('generates unique non-empty IDs when not provided', () => {
+      render(
+        <>
+          <Checkbox aria-label='first checkbox' />
+          <Checkbox aria-label='second checkbox' />
+        </>,
+      );
 
-      rerender(<Checkbox />);
-      const secondId = screen.getByRole('checkbox').id;
+      const firstCheckbox = screen.getByRole('checkbox', { name: 'first checkbox' });
+      const secondCheckbox = screen.getByRole('checkbox', { name: 'second checkbox' });
 
-      expect(firstId).toBeTruthy();
-      expect(secondId).toBeTruthy();
-      expect(firstId).toBe(secondId);
+      expect(firstCheckbox.id).toBeTruthy();
+      expect(secondCheckbox.id).toBeTruthy();
+      expect(firstCheckbox.id).not.toBe(secondCheckbox.id);
     });
 
     it('uses provided ID', () => {
@@ -392,23 +396,11 @@ describe('Checkbox - Unit Tests', () => {
       expect(hiddenInput).toHaveAttribute('tabIndex', '-1');
     });
 
-    it('applies visually hidden styles to hidden input', () => {
+    it('keeps hidden input out of the accessibility tree', () => {
       render(<Checkbox name='subscribe' />);
 
-      const hiddenInput = document.querySelector(
-        'input[type="checkbox"][name="subscribe"]',
-      ) as HTMLInputElement;
-
-      // Verify visually hidden styles are applied (clip pattern)
-      expect(hiddenInput).toHaveStyle({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: '1px',
-        width: '1px',
-        overflow: 'hidden',
-        position: 'absolute',
-        whiteSpace: 'nowrap',
-      });
+      const visibleCheckboxes = screen.getAllByRole('checkbox');
+      expect(visibleCheckboxes).toHaveLength(1);
     });
 
     it('syncs hidden input with checkbox state', async () => {

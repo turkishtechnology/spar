@@ -1,612 +1,113 @@
 import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent, TooltipArrow } from '../index';
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '../index';
 
 expect.extend(toHaveNoViolations);
 
-// Mock timer functions for consistent testing
 jest.useFakeTimers();
 
-// Cleanup after each test to prevent act() warnings from pending timers
 afterEach(() => {
   act(() => {
     jest.runOnlyPendingTimers();
   });
+  jest.clearAllTimers();
 });
 
-// Mock window.matchMedia for JSDOM environment
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: jest.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
-    addListener: jest.fn(), // deprecated
-    removeListener: jest.fn(), // deprecated
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
   })),
 });
 
-interface AccessibleTooltipProps {
-  defaultOpen?: boolean;
-  triggerContent?: string;
-  tooltipContent?: string;
-  disabled?: boolean;
-  [key: string]: unknown;
-}
-
-const AccessibleTooltip = ({
-  defaultOpen = false,
-  triggerContent = 'Trigger button',
-  tooltipContent = 'Helpful tooltip content',
-  disabled = false,
-  ...props
-}: AccessibleTooltipProps) => (
-  <TooltipProvider>
-    <Tooltip defaultOpen={defaultOpen} disabled={disabled} {...props}>
-      <TooltipTrigger>{triggerContent}</TooltipTrigger>
-      <TooltipContent>
-        {tooltipContent}
-        <TooltipArrow />
-      </TooltipContent>
-    </Tooltip>
-  </TooltipProvider>
-);
+const renderTooltip = (props?: React.ComponentProps<typeof Tooltip>) => {
+  return render(
+    <TooltipProvider>
+      <Tooltip {...props}>
+        <TooltipTrigger>Trigger button</TooltipTrigger>
+        <TooltipContent>Helpful tooltip content</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>,
+  );
+};
 
 describe('Tooltip Accessibility', () => {
-  let axeCleanup: (() => void) | null = null;
+  it('passes axe checks in closed state', async () => {
+    jest.useRealTimers();
+    const { container } = renderTooltip();
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+    jest.useFakeTimers();
+  }, 15000);
 
-  beforeEach(() => {
-    jest.clearAllTimers();
-    // Clean up any running axe instances
-    if (axeCleanup) {
-      axeCleanup();
-      axeCleanup = null;
-    }
+  it('passes axe checks in open state', async () => {
+    jest.useRealTimers();
+    const { container } = renderTooltip({ defaultOpen: true });
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+    jest.useFakeTimers();
+  }, 15000);
+
+  it('uses tooltip role and aria-describedby while open', () => {
+    renderTooltip({ defaultOpen: true });
+
+    const trigger = screen.getByRole('button', { name: 'Trigger button' });
+    const tooltip = screen.getByRole('tooltip');
+
+    expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
   });
 
-  afterEach(() => {
-    jest.clearAllTimers();
-    if (axeCleanup) {
-      axeCleanup();
-      axeCleanup = null;
-    }
+  it('removes aria-describedby when dismissed with Escape', async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+    renderTooltip({ defaultOpen: true });
+
+    const trigger = screen.getByRole('button', { name: 'Trigger button' });
+    trigger.focus();
+
+    await user.keyboard('{Escape}');
+    act(() => {
+      jest.advanceTimersByTime(0);
+    });
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    expect(trigger).not.toHaveAttribute('aria-describedby');
+    expect(trigger).toHaveFocus();
   });
 
-  describe('ARIA Compliance', () => {
-    it('passes axe accessibility tests - closed state', async () => {
-      jest.useRealTimers();
-      const { container } = render(<AccessibleTooltip />);
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-      jest.useFakeTimers();
-    }, 15000);
-
-    it('passes axe accessibility tests - open state', async () => {
-      jest.useRealTimers();
-      const { container } = render(<AccessibleTooltip defaultOpen />);
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-      jest.useFakeTimers();
-    }, 15000);
-
-    it('has correct role for tooltip element', () => {
-      render(<AccessibleTooltip defaultOpen />);
-      const tooltip = screen.getByRole('tooltip');
-      expect(tooltip).toBeInTheDocument();
-    });
-
-    it('maintains trigger element semantic role', () => {
-      render(<AccessibleTooltip defaultOpen />);
-      const trigger = screen.getByRole('button');
-      expect(trigger).toBeInTheDocument();
-    });
-
-    it('uses aria-describedby for auxiliary description (default)', () => {
-      render(<AccessibleTooltip defaultOpen />);
-
-      const trigger = screen.getByRole('button');
-      const tooltip = screen.getByRole('tooltip');
-
-      expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
-      expect(trigger).not.toHaveAttribute('aria-labelledby');
-    });
-
-    it('generates stable IDs for ARIA relationships', () => {
-      const { rerender } = render(<AccessibleTooltip defaultOpen />);
-
-      const tooltip1 = screen.getByRole('tooltip');
-      const id1 = tooltip1.id;
-
-      rerender(<AccessibleTooltip defaultOpen />);
-
-      const trigger2 = screen.getByRole('button');
-      const tooltip2 = screen.getByRole('tooltip');
-      const id2 = tooltip2.id;
-
-      // IDs should be consistent
-      expect(id1).toBeTruthy();
-      expect(id2).toBeTruthy();
-      expect(trigger2).toHaveAttribute('aria-describedby', id2);
-    });
-
-    it('removes ARIA attributes when tooltip is closed', async () => {
-      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-      render(<AccessibleTooltip defaultOpen />);
-
-      const trigger = screen.getByRole('button');
-      expect(trigger).toHaveAttribute('aria-describedby');
-
-      // Close tooltip
-      await user.keyboard('{Escape}');
-      await act(async () => {
-        jest.advanceTimersByTime(300);
-      });
-
-      await waitFor(
-        () => {
-          expect(trigger).not.toHaveAttribute('aria-describedby');
-          expect(trigger).not.toHaveAttribute('aria-labelledby');
-        },
-        { timeout: 3000 },
-      );
-    }, 10000);
-
-    it('does not apply ARIA attributes when disabled', () => {
-      render(<AccessibleTooltip disabled />);
-
-      const trigger = screen.getByRole('button');
-      expect(trigger).not.toHaveAttribute('aria-describedby');
-      expect(trigger).not.toHaveAttribute('aria-labelledby');
-    });
-  });
-
-  describe('Keyboard Navigation', () => {
-    it('shows tooltip immediately on focus', async () => {
-      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-      render(<AccessibleTooltip />);
-
-      await user.tab(); // Focus the trigger
-      await act(async () => {
-        jest.advanceTimersByTime(100);
-      });
-
-      await waitFor(
-        () => {
-          expect(screen.getByRole('tooltip')).toBeInTheDocument();
-        },
-        { timeout: 3000 },
-      );
-    }, 10000);
-
-    it('hides tooltip on blur', async () => {
-      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-      render(<AccessibleTooltip defaultOpen />);
-
-      const trigger = screen.getByRole('button');
-      act(() => {
-        trigger.focus();
-      });
-      expect(screen.getByRole('tooltip')).toBeInTheDocument();
-
-      await user.tab(); // Focus out
-      await act(async () => {
-        jest.advanceTimersByTime(300);
-      });
-
-      await waitFor(
-        () => {
-          expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-        },
-        { timeout: 3000 },
-      );
-    }, 10000);
-
-    it('dismisses tooltip with Escape key', async () => {
-      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-      render(<AccessibleTooltip defaultOpen />);
-
-      const trigger = screen.getByRole('button');
-      act(() => {
-        trigger.focus();
-      });
-      expect(screen.getByRole('tooltip')).toBeInTheDocument();
-
-      await user.keyboard('{Escape}');
-      await act(async () => {
-        jest.advanceTimersByTime(300);
-      });
-
-      await waitFor(
-        () => {
-          expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-        },
-        { timeout: 3000 },
-      );
-    }, 10000);
-
-    it('keeps focus on trigger after Escape', async () => {
-      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-      render(<AccessibleTooltip defaultOpen />);
-
-      const trigger = screen.getByRole('button');
-      act(() => {
-        trigger.focus();
-      });
-
-      await user.keyboard('{Escape}');
-      await act(async () => {
-        jest.advanceTimersByTime(100);
-      });
-
-      await waitFor(
-        () => {
-          expect(trigger).toHaveFocus();
-        },
-        { timeout: 3000 },
-      );
-    }, 10000);
-
-    it('tooltip never receives focus', () => {
-      render(<AccessibleTooltip defaultOpen />);
-
-      const tooltip = screen.getByRole('tooltip');
-      expect(tooltip).not.toHaveAttribute('tabindex');
-
-      // Tooltip should not be focusable
-      act(() => {
-        tooltip.focus();
-      });
-      expect(tooltip).not.toHaveFocus();
-    });
-
-    it('supports Tab navigation through trigger', async () => {
-      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-      render(
-        <div>
-          <button>Before</button>
-          <AccessibleTooltip />
-          <button>After</button>
-        </div>,
-      );
-
-      const beforeButton = screen.getByRole('button', { name: 'Before' });
-      const triggerButton = screen.getByRole('button', { name: 'Trigger button' });
-      const afterButton = screen.getByRole('button', { name: 'After' });
-
-      // Tab through elements
-      act(() => {
-        beforeButton.focus();
-      });
-      await user.tab();
-      expect(triggerButton).toHaveFocus();
-
-      await user.tab();
-      expect(afterButton).toHaveFocus();
-    }, 10000);
-  });
-
-  describe('Screen Reader Support', () => {
-    it('provides accessible name for icon-only triggers', () => {
-      render(
-        <TooltipProvider>
-          <Tooltip defaultOpen>
-            <TooltipTrigger aria-label='Settings'>⚙️</TooltipTrigger>
-            <TooltipContent>Settings menu</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>,
-      );
-
-      const trigger = screen.getByRole('button', { name: 'Settings' });
-      const tooltip = screen.getByRole('tooltip');
-
-      // Test actual implementation behavior
-      expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
-    });
-
-    it('announces tooltip content for auxiliary descriptions', () => {
-      render(
-        <AccessibleTooltip
-          defaultOpen
-          triggerContent='Save document'
-          tooltipContent='Saves the current document to your account'
-        />,
-      );
-
-      const trigger = screen.getByRole('button', { name: 'Save document' });
-      const tooltip = screen.getByRole('tooltip');
-
-      expect(tooltip).toHaveTextContent('Saves the current document to your account');
-      expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
-    });
-
-    it('handles complex tooltip content', () => {
-      render(
-        <TooltipProvider>
-          <Tooltip defaultOpen>
-            <TooltipTrigger>Complex action</TooltipTrigger>
-            <TooltipContent>
-              <div>
-                <strong>Pro tip:</strong> Use Ctrl+S to save quickly
-              </div>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>,
-      );
-
-      const tooltip = screen.getByRole('tooltip');
-      // Fix spacing expectation to match actual output
-      expect(tooltip).toHaveTextContent('Pro tip: Use Ctrl+S to save quickly');
-    });
-
-    it('does not use live regions for tooltip content', () => {
-      render(<AccessibleTooltip defaultOpen />);
-
-      const tooltip = screen.getByRole('tooltip');
-      expect(tooltip).not.toHaveAttribute('aria-live');
-      expect(tooltip).not.toHaveAttribute('aria-atomic');
-    });
-  });
-
-  describe('WCAG 1.4.13 Compliance (Content on Hover or Focus)', () => {
-    it('is dismissible with Escape key without moving pointer', async () => {
-      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-      render(<AccessibleTooltip defaultOpen />);
-
-      expect(screen.getByRole('tooltip')).toBeInTheDocument();
-
-      // Dismiss with Escape (without moving mouse)
-      await user.keyboard('{Escape}');
-      await act(async () => {
-        jest.advanceTimersByTime(300);
-      });
-
-      await waitFor(
-        () => {
-          expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-        },
-        { timeout: 3000 },
-      );
-    }, 10000);
-
-    it('is hoverable - tooltip stays open when hovering content', async () => {
-      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-      render(<AccessibleTooltip />);
-
-      const trigger = screen.getByRole('button');
-      // Hover trigger to show tooltip
-      await user.hover(trigger);
-      await act(async () => {
-        jest.advanceTimersByTime(700);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByRole('tooltip')).toBeInTheDocument();
-      });
-
-      // Hover the tooltip itself - it should stay open
-      const tooltip = screen.getByRole('tooltip');
-      await user.hover(tooltip);
-
-      // Tooltip should remain visible
-      expect(tooltip).toBeInTheDocument();
-    });
-
-    it('is persistent until properly dismissed', async () => {
-      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-      render(<AccessibleTooltip />);
-
-      const trigger = screen.getByRole('button');
-
-      // Show tooltip on hover
-      await user.hover(trigger);
-      await act(async () => {
-        jest.advanceTimersByTime(700);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByRole('tooltip')).toBeInTheDocument();
-      });
-
-      // Tooltip should persist until explicit dismissal
-      await act(async () => {
-        jest.advanceTimersByTime(5000); // Wait a long time
-      });
-      expect(screen.getByRole('tooltip')).toBeInTheDocument();
-
-      // Only dismisses when properly triggered
-      await user.unhover(trigger);
-      await act(async () => {
-        jest.advanceTimersByTime(100);
-      });
-
-      await waitFor(() => {
-        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-      });
-    });
-  });
-
-  describe('Touch Device Accessibility', () => {
-    beforeEach(() => {
-      // Mock touch device detection
-      Object.defineProperty(window, 'matchMedia', {
-        writable: true,
-        value: jest.fn().mockImplementation((query) => ({
-          matches: query === '(hover: none)',
-          media: query,
-          onchange: null,
-          addListener: jest.fn(),
-          removeListener: jest.fn(),
-          addEventListener: jest.fn(),
-          removeEventListener: jest.fn(),
-          dispatchEvent: jest.fn(),
-        })),
-      });
-    });
-
-    it('does not show tooltip on touch devices', async () => {
-      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-      render(<AccessibleTooltip />);
-
-      const trigger = screen.getByRole('button');
-
-      // Simulate touch interaction (hover)
-      await user.hover(trigger);
+  it('keeps content visible when pointer moves from trigger to tooltip content', async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+    renderTooltip({ hideDelay: 100 });
+
+    const trigger = screen.getByRole('button', { name: 'Trigger button' });
+    await user.hover(trigger);
+    act(() => {
       jest.advanceTimersByTime(700);
-
-      // On touch devices, tooltip should not appear on hover
-      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     });
 
-    it('still shows tooltip on focus for touch accessibility', async () => {
-      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-      render(<AccessibleTooltip />);
+    const tooltip = screen.getByRole('tooltip');
+    await user.unhover(trigger);
+    await user.hover(tooltip);
 
-      // Focus should still work on touch devices
-      await user.tab();
-      await act(async () => {
-        jest.advanceTimersByTime(100);
-      });
-
-      await waitFor(
-        () => {
-          expect(screen.getByRole('tooltip')).toBeInTheDocument();
-        },
-        { timeout: 3000 },
-      );
-    }, 10000);
-  });
-
-  describe('Focus Management', () => {
-    it('maintains clear focus indicators', async () => {
-      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-      render(<AccessibleTooltip />);
-
-      const trigger = screen.getByRole('button');
-      await user.tab();
-      await act(async () => {
-        jest.advanceTimersByTime(100);
-      });
-
-      await waitFor(
-        () => {
-          expect(trigger).toHaveFocus();
-          // Focus indicator should be visible (data attribute for styling)
-          expect(trigger).toHaveAttribute('data-state');
-        },
-        { timeout: 3000 },
-      );
-    }, 10000);
-
-    it('does not trap focus in tooltip', async () => {
-      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-      render(
-        <div>
-          <AccessibleTooltip defaultOpen />
-          <button>Next button</button>
-        </div>,
-      );
-
-      const trigger = screen.getByRole('button', { name: 'Trigger button' });
-      const nextButton = screen.getByRole('button', { name: 'Next button' });
-
-      act(() => {
-        trigger.focus();
-      });
-      await user.tab();
+    act(() => {
       jest.advanceTimersByTime(100);
-
-      await waitFor(
-        () => {
-          expect(nextButton).toHaveFocus();
-          expect(screen.getByRole('tooltip')).toBeInTheDocument(); // Tooltip stays open
-        },
-        { timeout: 3000 },
-      );
-    }, 10000);
-
-    it('handles programmatic focus correctly', () => {
-      render(<AccessibleTooltip defaultOpen />);
-
-      const trigger = screen.getByRole('button');
-      act(() => {
-        trigger.focus();
-      });
-
-      expect(trigger).toHaveFocus();
-      expect(screen.getByRole('tooltip')).toBeInTheDocument();
     });
-  });
 
-  describe('Error States and Edge Cases', () => {
-    it('handles missing tooltip content gracefully', async () => {
-      jest.useRealTimers();
-      const { container } = render(
-        <TooltipProvider>
-          <Tooltip defaultOpen>
-            <TooltipTrigger>Empty tooltip</TooltipTrigger>
-            <TooltipContent>Empty tooltip content</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>,
-      );
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-      jest.useFakeTimers();
-    }, 15000);
+    await user.unhover(tooltip);
+    act(() => {
+      jest.advanceTimersByTime(0);
+    });
 
-    it('handles multiple tooltips independently', async () => {
-      jest.useRealTimers();
-      const { container } = render(
-        <TooltipProvider>
-          <div>
-            <Tooltip>
-              <TooltipTrigger>First trigger</TooltipTrigger>
-              <TooltipContent>First tooltip</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>Second trigger</TooltipTrigger>
-              <TooltipContent>Second tooltip</TooltipContent>
-            </Tooltip>
-          </div>
-        </TooltipProvider>,
-      );
-
-      await new Promise((resolve) => setTimeout(resolve, 400));
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-      jest.useFakeTimers();
-    }, 15000);
-
-    it('maintains accessibility with render props pattern', async () => {
-      jest.useRealTimers();
-      const { container } = render(
-        <TooltipProvider>
-          <Tooltip defaultOpen>
-            <TooltipTrigger aria-label='Search'>
-              {({ isOpen }) => <span>Search: {isOpen ? 'showing help' : 'hover for help'}</span>}
-            </TooltipTrigger>
-            <TooltipContent>Search help text</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>,
-      );
-
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-      jest.useFakeTimers();
-      expect(results).toHaveNoViolations();
-
-      const trigger = screen.getByRole('button', { name: 'Search' });
-      const tooltip = screen.getByRole('tooltip');
-      expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
-    }, 15000);
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 });

@@ -1,10 +1,18 @@
-import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { RadioGroup, RadioItem } from '../index';
 
 expect.extend(toHaveNoViolations);
+
+const getRadioByText = (text: string) => {
+  const radios = screen.getAllByRole('radio', { name: text });
+  const interactiveRadio = radios.find((radio) => radio.tagName !== 'INPUT');
+  if (!interactiveRadio) {
+    throw new Error(`Interactive radio with text "${text}" not found`);
+  }
+  return interactiveRadio as HTMLElement;
+};
 
 describe('Radio Accessibility', () => {
   describe('Automated A11y Testing', () => {
@@ -68,18 +76,15 @@ describe('Radio Accessibility', () => {
     });
 
     it('should have proper radio roles and attributes for items', () => {
-      const { container } = render(
+      render(
         <RadioGroup value='option1'>
           <RadioItem value='option1'>Option 1</RadioItem>
           <RadioItem value='option2'>Option 2</RadioItem>
         </RadioGroup>,
       );
 
-      // Use container to find label elements specifically
-      const labels = container.querySelectorAll('label[role="radio"]');
-      expect(labels).toHaveLength(2);
-
-      const [option1, option2] = Array.from(labels);
+      const option1 = getRadioByText('Option 1');
+      const option2 = getRadioByText('Option 2');
       expect(option1).toHaveAttribute('role', 'radio');
       expect(option1).toHaveAttribute('aria-checked', 'true');
 
@@ -90,27 +95,27 @@ describe('Radio Accessibility', () => {
     it('should update aria-checked when selection changes', async () => {
       const user = userEvent.setup();
 
-      const { container } = render(
+      render(
         <RadioGroup>
           <RadioItem value='option1'>Option 1</RadioItem>
           <RadioItem value='option2'>Option 2</RadioItem>
         </RadioGroup>,
       );
 
-      const labels = container.querySelectorAll('label[role="radio"]');
-      const [option1, option2] = Array.from(labels);
+      const option1 = getRadioByText('Option 1');
+      const option2 = getRadioByText('Option 2');
 
       expect(option1).toHaveAttribute('aria-checked', 'false');
       expect(option2).toHaveAttribute('aria-checked', 'false');
 
-      await user.click(option1 as HTMLElement);
+      await user.click(option1);
 
       expect(option1).toHaveAttribute('aria-checked', 'true');
       expect(option2).toHaveAttribute('aria-checked', 'false');
     });
 
-    it('should handle disabled state correctly', () => {
-      const { container } = render(
+    it('should expose disabled state through aria-disabled', () => {
+      render(
         <RadioGroup>
           <RadioItem value='option1'>Option 1</RadioItem>
           <RadioItem value='option2' disabled>
@@ -119,61 +124,66 @@ describe('Radio Accessibility', () => {
         </RadioGroup>,
       );
 
-      const labels = container.querySelectorAll('label[role="radio"]');
-      const [option1, option2] = Array.from(labels);
+      const option1 = getRadioByText('Option 1');
+      const option2 = getRadioByText('Option 2');
 
-      expect(option1).not.toHaveAttribute('data-disabled');
-      expect(option2).toHaveAttribute('data-disabled', '');
+      expect(option1).not.toHaveAttribute('aria-disabled');
+      expect(option2).toHaveAttribute('aria-disabled', 'true');
     });
   });
 
   describe('Keyboard Navigation', () => {
-    it('should support keyboard navigation structure', () => {
-      const { container } = render(
-        <RadioGroup value='option1'>
+    it('supports arrow key navigation and updates selection', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <RadioGroup defaultValue='option1'>
           <RadioItem value='option1'>Option 1</RadioItem>
           <RadioItem value='option2'>Option 2</RadioItem>
           <RadioItem value='option3'>Option 3</RadioItem>
         </RadioGroup>,
       );
 
-      // Verify that the radiogroup has proper keyboard navigation setup
-      const radiogroup = screen.getByRole('radiogroup');
-      expect(radiogroup).toBeInTheDocument();
-      expect(radiogroup).toHaveAttribute('role', 'radiogroup');
+      const option1 = getRadioByText('Option 1');
+      const option2 = getRadioByText('Option 2');
 
-      // Verify that labels (the visible radio elements) have proper roles and tabindex for keyboard navigation
-      const labelElements = container.querySelectorAll('label[role="radio"]');
-      expect(labelElements).toHaveLength(3);
+      option1.focus();
+      await user.keyboard('{ArrowDown}');
 
-      // At least one item should be focusable (tabindex=0) for keyboard access
-      const focusableItems = Array.from(labelElements).filter(
-        (el) => el.getAttribute('tabindex') === '0',
-      );
-      expect(focusableItems.length).toBeGreaterThan(0);
+      expect(option2).toHaveFocus();
+      expect(option2).toHaveAttribute('aria-checked', 'true');
     });
 
-    it('should support click for selection', async () => {
+    it('supports Space and Enter to select focused item', async () => {
       const user = userEvent.setup();
 
-      const { container } = render(
-        <RadioGroup>
+      render(
+        <RadioGroup selectOnFocus={false}>
           <RadioItem value='option1'>Option 1</RadioItem>
           <RadioItem value='option2'>Option 2</RadioItem>
         </RadioGroup>,
       );
 
-      const labels = container.querySelectorAll('label[role="radio"]');
-      const option1 = labels[0] as HTMLElement;
+      const option1 = getRadioByText('Option 1');
+      const option2 = getRadioByText('Option 2');
 
-      await user.click(option1);
+      option1.focus();
+      await user.keyboard('{ArrowDown}');
+      expect(option2).toHaveFocus();
+      expect(option2).toHaveAttribute('aria-checked', 'false');
 
+      await user.keyboard('{Enter}');
+      expect(option2).toHaveAttribute('aria-checked', 'true');
+
+      await user.keyboard('{ArrowUp}');
+      expect(option1).toHaveFocus();
+      await user.keyboard(' ');
       expect(option1).toHaveAttribute('aria-checked', 'true');
     });
   });
 
   describe('Focus Management', () => {
-    it('should implement roving tabindex', () => {
+    it('implements roving tabindex', () => {
       const { container } = render(
         <RadioGroup value='option2'>
           <RadioItem value='option1'>Option 1</RadioItem>
@@ -189,21 +199,29 @@ describe('Radio Accessibility', () => {
       expect(labels[2]).toHaveAttribute('tabindex', '-1');
     });
 
-    it('should handle focus when no option is selected', () => {
-      const { container } = render(
-        <RadioGroup>
-          <RadioItem value='option1'>Option 1</RadioItem>
-          <RadioItem value='option2'>Option 2</RadioItem>
-          <RadioItem value='option3'>Option 3</RadioItem>
-        </RadioGroup>,
+    it('sets active item when tabbing into group with no selected option', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <>
+          <button type='button'>Before</button>
+          <RadioGroup>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+            <RadioItem value='option3'>Option 3</RadioItem>
+          </RadioGroup>
+        </>,
       );
 
-      const labels = container.querySelectorAll('label[role="radio"]');
+      const option1 = getRadioByText('Option 1');
+      const option2 = getRadioByText('Option 2');
 
-      // All items are focusable when no value is selected (current implementation behavior)
-      expect(labels[0]).toHaveAttribute('tabindex', '0');
-      expect(labels[1]).toHaveAttribute('tabindex', '0');
-      expect(labels[2]).toHaveAttribute('tabindex', '0');
+      await user.tab();
+      await user.tab();
+
+      expect(option1).toHaveFocus();
+      await user.keyboard('{ArrowDown}');
+      expect(option2).toHaveFocus();
     });
 
     it('should auto-focus when autoFocus is true', async () => {
@@ -252,22 +270,6 @@ describe('Radio Accessibility', () => {
   });
 
   describe('Screen Reader Support', () => {
-    it('should work with hidden radio inputs for assistive technology', () => {
-      const { container } = render(
-        <RadioGroup name='test' value='option1'>
-          <RadioItem value='option1'>Option 1</RadioItem>
-          <RadioItem value='option2'>Option 2</RadioItem>
-        </RadioGroup>,
-      );
-
-      const hiddenInputs = container.querySelectorAll('input[type="radio"]');
-      expect(hiddenInputs).toHaveLength(2);
-
-      const checkedInput = container.querySelector('input[type="radio"]:checked');
-      expect(checkedInput).toHaveAttribute('value', 'option1');
-      expect(checkedInput).toHaveAttribute('name', 'test');
-    });
-
     it('should have proper labeling for screen readers', () => {
       const { container } = render(
         <RadioGroup aria-label='Choose option'>

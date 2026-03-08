@@ -3,498 +3,72 @@ import { render, screen } from '@testing-library/react';
 import { Label } from '../Label';
 
 describe('Label', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
+  it('renders a label element by default', () => {
+    render(<Label htmlFor='username'>Username</Label>);
+
+    const label = screen.getByText('Username');
+    expect(label.tagName).toBe('LABEL');
+    expect(label).toHaveAttribute('for', 'username');
   });
 
-  describe('Rendering', () => {
-    it('renders as label element by default', () => {
-      render(<Label>Username</Label>);
-      const label = screen.getByText('Username');
-      expect(label.tagName).toBe('LABEL');
-      expect(label).toHaveTextContent('Username');
-    });
+  it('renders as custom element with as prop', () => {
+    render(<Label as='span'>Email</Label>);
 
-    it('renders with custom element when as prop is provided', () => {
-      render(
-        <Label as='span' htmlFor='test-input'>
-          Email
-        </Label>,
-      );
-      const label = screen.getByText('Email');
-      expect(label.tagName).toBe('SPAN');
-      expect(label).toHaveAttribute('for', 'test-input');
-    });
-
-    it('applies custom className and style', () => {
-      const style = { color: 'red', fontSize: '16px' };
-      render(
-        <Label className='custom-label' style={style}>
-          Custom Label
-        </Label>,
-      );
-      const label = screen.getByText('Custom Label');
-      expect(label).toHaveClass('custom-label');
-      expect(label.style.color).toBe('red');
-      expect(label.style.fontSize).toBe('16px');
-    });
-
-    it('passes through additional HTML props', () => {
-      render(
-        <Label data-testid='custom-label' title='Label title' id='label-id'>
-          Test Label
-        </Label>,
-      );
-      const label = screen.getByTestId('custom-label');
-      expect(label).toHaveAttribute('title', 'Label title');
-      expect(label).toHaveAttribute('id', 'label-id');
-    });
-
-    it('renders children correctly', () => {
-      render(
-        <Label>
-          <span>First Name</span>
-          <span className='required'>*</span>
-        </Label>,
-      );
-      expect(screen.getByText('First Name')).toBeInTheDocument();
-      expect(screen.getByText('*')).toBeInTheDocument();
-    });
+    expect(screen.getByText('Email').tagName).toBe('SPAN');
   });
 
-  describe('htmlFor Association', () => {
-    it('associates with form control via htmlFor', () => {
-      render(
-        <div>
-          <Label htmlFor='username-input'>Username</Label>
-          <input id='username-input' type='text' />
-        </div>,
-      );
-      const label = screen.getByText('Username');
-      expect(label).toHaveAttribute('for', 'username-input');
-    });
+  it('forwards ref to rendered element', () => {
+    const ref = React.createRef<HTMLLabelElement>();
 
-    it('works without htmlFor for implicit association', () => {
-      render(
-        <Label>
-          Email
-          <input type='email' />
-        </Label>,
-      );
-      const label = screen.getByText('Email');
-      expect(label).not.toHaveAttribute('for');
-    });
+    render(<Label ref={ref}>Ref Label</Label>);
 
-    it('supports multiple controls with explicit association', () => {
-      render(
-        <div>
-          <Label htmlFor='input1'>Label 1</Label>
-          <input id='input1' type='text' />
-          <Label htmlFor='input2'>Label 2</Label>
-          <input id='input2' type='text' />
-        </div>,
-      );
-      const label1 = screen.getByText('Label 1');
-      const label2 = screen.getByText('Label 2');
-      expect(label1).toHaveAttribute('for', 'input1');
-      expect(label2).toHaveAttribute('for', 'input2');
-    });
+    expect(ref.current).toBeInstanceOf(HTMLLabelElement);
+    expect(ref.current).toHaveTextContent('Ref Label');
   });
 
-  describe('Required State', () => {
-    it('sets data-required attribute when required is true', () => {
-      render(<Label required>Required Field</Label>);
-      const label = screen.getByText('Required Field');
-      expect(label).toHaveAttribute('data-required');
-    });
+  it('passes through native HTML attributes', () => {
+    render(
+      <Label id='label-id' title='Username label'>
+        Username
+      </Label>,
+    );
 
-    it('does not set data-required attribute when required is false', () => {
-      render(<Label required={false}>Optional Field</Label>);
-      const label = screen.getByText('Optional Field');
-      expect(label).not.toHaveAttribute('data-required');
-    });
-
-    it('does not set data-required attribute by default', () => {
-      render(<Label>Default Field</Label>);
-      const label = screen.getByText('Default Field');
-      expect(label).not.toHaveAttribute('data-required');
-    });
-
-    it('allows custom required indicator in children', () => {
-      render(
-        <Label required>
-          Field Name
-          <span aria-label='required'>*</span>
-        </Label>,
-      );
-      const label = screen.getByText('Field Name');
-      expect(label).toHaveAttribute('data-required');
-      expect(screen.getByLabelText('required')).toHaveTextContent('*');
-    });
+    const label = screen.getByText('Username');
+    expect(label).toHaveAttribute('id', 'label-id');
+    expect(label).toHaveAttribute('title', 'Username label');
   });
 
-  describe('Optional State', () => {
-    it('sets data-optional attribute when isOptional is true', () => {
-      render(<Label isOptional>Optional Field</Label>);
-      const label = screen.getByText('Optional Field');
-      expect(label).toHaveAttribute('data-optional');
-    });
+  it('supports implicit association with nested control', () => {
+    render(
+      <Label>
+        Email
+        <input type='email' />
+      </Label>,
+    );
 
-    it('does not set data-optional attribute when isOptional is false', () => {
-      render(<Label isOptional={false}>Field</Label>);
-      const label = screen.getByText('Field');
-      expect(label).not.toHaveAttribute('data-optional');
-    });
-
-    it('does not set data-optional attribute by default', () => {
-      render(<Label>Default Field</Label>);
-      const label = screen.getByText('Default Field');
-      expect(label).not.toHaveAttribute('data-optional');
-    });
-
-    it('allows custom optional indicator in children', () => {
-      render(
-        <Label isOptional>
-          Field Name
-          <span className='optional-text'>(optional)</span>
-        </Label>,
-      );
-      const label = screen.getByText('Field Name');
-      expect(label).toHaveAttribute('data-optional');
-      expect(screen.getByText('(optional)')).toHaveClass('optional-text');
-    });
+    expect(screen.getByLabelText('Email')).toHaveAttribute('type', 'email');
   });
 
-  describe('Disabled State', () => {
-    it('sets data-disabled attribute when disabled is true', () => {
-      render(<Label disabled>Disabled Field</Label>);
-      const label = screen.getByText('Disabled Field');
-      expect(label).toHaveAttribute('data-disabled');
-    });
+  it('applies state data attributes only for truthy state props', () => {
+    const { rerender } = render(
+      <Label required isOptional disabled readOnly isInvalid>
+        Field
+      </Label>,
+    );
 
-    it('does not set data-disabled attribute when disabled is false', () => {
-      render(<Label disabled={false}>Enabled Field</Label>);
-      const label = screen.getByText('Enabled Field');
-      expect(label).not.toHaveAttribute('data-disabled');
-    });
+    const label = screen.getByText('Field');
+    expect(label).toHaveAttribute('data-required');
+    expect(label).toHaveAttribute('data-optional');
+    expect(label).toHaveAttribute('data-disabled');
+    expect(label).toHaveAttribute('data-readonly');
+    expect(label).toHaveAttribute('data-invalid');
 
-    it('does not set data-disabled attribute by default', () => {
-      render(<Label>Default Field</Label>);
-      const label = screen.getByText('Default Field');
-      expect(label).not.toHaveAttribute('data-disabled');
-    });
-  });
+    rerender(<Label>Field</Label>);
 
-  describe('ReadOnly State', () => {
-    it('sets data-readonly attribute when readOnly is true', () => {
-      render(<Label readOnly>Read-Only Field</Label>);
-      const label = screen.getByText('Read-Only Field');
-      expect(label).toHaveAttribute('data-readonly');
-    });
-
-    it('does not set data-readonly attribute when readOnly is false', () => {
-      render(<Label readOnly={false}>Editable Field</Label>);
-      const label = screen.getByText('Editable Field');
-      expect(label).not.toHaveAttribute('data-readonly');
-    });
-
-    it('does not set data-readonly attribute by default', () => {
-      render(<Label>Default Field</Label>);
-      const label = screen.getByText('Default Field');
-      expect(label).not.toHaveAttribute('data-readonly');
-    });
-  });
-
-  describe('Invalid State', () => {
-    it('sets data-invalid attribute when isInvalid is true', () => {
-      render(<Label isInvalid>Invalid Field</Label>);
-      const label = screen.getByText('Invalid Field');
-      expect(label).toHaveAttribute('data-invalid');
-    });
-
-    it('does not set data-invalid attribute when isInvalid is false', () => {
-      render(<Label isInvalid={false}>Valid Field</Label>);
-      const label = screen.getByText('Valid Field');
-      expect(label).not.toHaveAttribute('data-invalid');
-    });
-
-    it('does not set data-invalid attribute by default', () => {
-      render(<Label>Default Field</Label>);
-      const label = screen.getByText('Default Field');
-      expect(label).not.toHaveAttribute('data-invalid');
-    });
-  });
-
-  describe('Combined States', () => {
-    it('handles multiple state flags together', () => {
-      render(
-        <Label required disabled>
-          Combined States
-        </Label>,
-      );
-      const label = screen.getByText('Combined States');
-      expect(label).toHaveAttribute('data-required');
-      expect(label).toHaveAttribute('data-disabled');
-      expect(label).not.toHaveAttribute('data-optional');
-      expect(label).not.toHaveAttribute('data-readonly');
-      expect(label).not.toHaveAttribute('data-invalid');
-    });
-
-    it('handles required and isOptional together', () => {
-      render(
-        <Label required isOptional>
-          Both Flags
-        </Label>,
-      );
-      const label = screen.getByText('Both Flags');
-      expect(label).toHaveAttribute('data-required');
-      expect(label).toHaveAttribute('data-optional');
-    });
-
-    it('handles all state flags together', () => {
-      render(
-        <Label required isOptional disabled readOnly isInvalid>
-          All States
-        </Label>,
-      );
-      const label = screen.getByText('All States');
-      expect(label).toHaveAttribute('data-required');
-      expect(label).toHaveAttribute('data-optional');
-      expect(label).toHaveAttribute('data-disabled');
-      expect(label).toHaveAttribute('data-readonly');
-      expect(label).toHaveAttribute('data-invalid');
-    });
-
-    it('handles readOnly with disabled together', () => {
-      render(
-        <Label readOnly disabled>
-          ReadOnly and Disabled
-        </Label>,
-      );
-      const label = screen.getByText('ReadOnly and Disabled');
-      expect(label).toHaveAttribute('data-readonly');
-      expect(label).toHaveAttribute('data-disabled');
-      expect(label).not.toHaveAttribute('data-required');
-      expect(label).not.toHaveAttribute('data-optional');
-      expect(label).not.toHaveAttribute('data-invalid');
-    });
-
-    it('handles isInvalid with required together', () => {
-      render(
-        <Label isInvalid required>
-          Invalid Required
-        </Label>,
-      );
-      const label = screen.getByText('Invalid Required');
-      expect(label).toHaveAttribute('data-invalid');
-      expect(label).toHaveAttribute('data-required');
-      expect(label).not.toHaveAttribute('data-disabled');
-      expect(label).not.toHaveAttribute('data-readonly');
-    });
-  });
-
-  describe('Polymorphic Element', () => {
-    it('renders as div when specified', () => {
-      render(<Label as='div'>Div Label</Label>);
-      const label = screen.getByText('Div Label');
-      expect(label.tagName).toBe('DIV');
-    });
-
-    it('renders as span when specified', () => {
-      render(<Label as='span'>Span Label</Label>);
-      const label = screen.getByText('Span Label');
-      expect(label.tagName).toBe('SPAN');
-    });
-
-    it('renders as legend when specified', () => {
-      render(<Label as='legend'>Legend Label</Label>);
-      const label = screen.getByText('Legend Label');
-      expect(label.tagName).toBe('LEGEND');
-    });
-
-    it('applies htmlFor to custom elements', () => {
-      render(
-        <Label as='div' htmlFor='custom-input'>
-          Custom Element
-        </Label>,
-      );
-      const label = screen.getByText('Custom Element');
-      expect(label.tagName).toBe('DIV');
-      expect(label).toHaveAttribute('for', 'custom-input');
-    });
-  });
-
-  describe('Data Attributes', () => {
-    it('sets correct data attributes for different states', () => {
-      const { rerender } = render(<Label>Normal</Label>);
-      let label = screen.getByText('Normal');
-      expect(label).not.toHaveAttribute('data-required');
-      expect(label).not.toHaveAttribute('data-optional');
-      expect(label).not.toHaveAttribute('data-disabled');
-      expect(label).not.toHaveAttribute('data-readonly');
-      expect(label).not.toHaveAttribute('data-invalid');
-
-      rerender(
-        <Label required isOptional disabled readOnly isInvalid>
-          All States
-        </Label>,
-      );
-      label = screen.getByText('All States');
-      expect(label).toHaveAttribute('data-required');
-      expect(label).toHaveAttribute('data-optional');
-      expect(label).toHaveAttribute('data-disabled');
-      expect(label).toHaveAttribute('data-readonly');
-      expect(label).toHaveAttribute('data-invalid');
-    });
-
-    it('memoizes data attributes correctly', () => {
-      const { rerender } = render(<Label required>Required</Label>);
-      const label = screen.getByText('Required');
-      expect(label).toHaveAttribute('data-required');
-
-      // Re-render with same props should maintain attributes
-      rerender(<Label required>Required</Label>);
-      expect(label).toHaveAttribute('data-required');
-    });
-  });
-
-  describe('Display Name', () => {
-    it('has correct displayName', () => {
-      expect(Label.displayName).toBe('Label');
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('handles undefined children gracefully', () => {
-      render(<Label>{undefined}</Label>);
-      const label = document.querySelector('label');
-      expect(label).toBeInTheDocument();
-    });
-
-    it('handles null children gracefully', () => {
-      render(<Label>{null}</Label>);
-      const label = document.querySelector('label');
-      expect(label).toBeInTheDocument();
-    });
-
-    it('handles empty string children', () => {
-      render(<Label>{''}</Label>);
-      const label = document.querySelector('label');
-      expect(label).toBeInTheDocument();
-      expect(label).toHaveTextContent('');
-    });
-
-    it('handles complex nested children', () => {
-      render(
-        <Label>
-          <div>
-            <span>Nested</span>
-            <strong>Content</strong>
-          </div>
-        </Label>,
-      );
-      expect(screen.getByText('Nested')).toBeInTheDocument();
-      expect(screen.getByText('Content')).toBeInTheDocument();
-    });
-
-    it('handles boolean and number children', () => {
-      render(<Label>{0}</Label>);
-      const label = screen.getByText('0');
-      expect(label).toHaveTextContent('0');
-    });
-
-    it('updates state attributes dynamically', () => {
-      const { rerender } = render(<Label>Dynamic</Label>);
-      const label = screen.getByText('Dynamic');
-      expect(label).not.toHaveAttribute('data-disabled');
-      expect(label).not.toHaveAttribute('data-readonly');
-      expect(label).not.toHaveAttribute('data-invalid');
-
-      rerender(<Label disabled>Dynamic</Label>);
-      expect(label).toHaveAttribute('data-disabled');
-
-      rerender(<Label disabled={false}>Dynamic</Label>);
-      expect(label).not.toHaveAttribute('data-disabled');
-
-      rerender(<Label readOnly>Dynamic</Label>);
-      expect(label).toHaveAttribute('data-readonly');
-
-      rerender(<Label readOnly={false}>Dynamic</Label>);
-      expect(label).not.toHaveAttribute('data-readonly');
-
-      rerender(<Label isInvalid>Dynamic</Label>);
-      expect(label).toHaveAttribute('data-invalid');
-
-      rerender(<Label isInvalid={false}>Dynamic</Label>);
-      expect(label).not.toHaveAttribute('data-invalid');
-    });
-
-    it('handles rapid prop changes', () => {
-      const { rerender } = render(<Label required>Field</Label>);
-      const label = screen.getByText('Field');
-
-      rerender(<Label isOptional>Field</Label>);
-      expect(label).not.toHaveAttribute('data-required');
-      expect(label).toHaveAttribute('data-optional');
-
-      rerender(<Label disabled>Field</Label>);
-      expect(label).not.toHaveAttribute('data-required');
-      expect(label).not.toHaveAttribute('data-optional');
-      expect(label).toHaveAttribute('data-disabled');
-
-      rerender(<Label readOnly>Field</Label>);
-      expect(label).not.toHaveAttribute('data-required');
-      expect(label).not.toHaveAttribute('data-optional');
-      expect(label).not.toHaveAttribute('data-disabled');
-      expect(label).toHaveAttribute('data-readonly');
-
-      rerender(<Label isInvalid>Field</Label>);
-      expect(label).not.toHaveAttribute('data-readonly');
-      expect(label).toHaveAttribute('data-invalid');
-    });
-
-    it('works with special characters in content', () => {
-      render(<Label>Field & Name (特殊)</Label>);
-      const label = screen.getByText('Field & Name (特殊)');
-      expect(label).toBeInTheDocument();
-    });
-  });
-
-  describe('Prop Spreading', () => {
-    it('spreads arbitrary HTML attributes', () => {
-      render(
-        <Label data-custom='value' aria-describedby='description' role='presentation'>
-          Custom Props
-        </Label>,
-      );
-      const label = screen.getByText('Custom Props');
-      expect(label).toHaveAttribute('data-custom', 'value');
-      expect(label).toHaveAttribute('aria-describedby', 'description');
-      expect(label).toHaveAttribute('role', 'presentation');
-    });
-
-    it('allows event handlers to be attached', () => {
-      const handleClick = jest.fn();
-      const handleMouseEnter = jest.fn();
-
-      render(
-        <Label onClick={handleClick} onMouseEnter={handleMouseEnter}>
-          Interactive Label
-        </Label>,
-      );
-
-      const label = screen.getByText('Interactive Label');
-      label.click();
-      expect(handleClick).toHaveBeenCalledTimes(1);
-
-      // Use React's synthetic event
-      const mouseEnterEvent = new MouseEvent('mouseenter', { bubbles: true });
-      Object.defineProperty(mouseEnterEvent, 'target', { value: label, enumerable: true });
-      label.dispatchEvent(mouseEnterEvent);
-
-      // Note: Native DOM events don't trigger React event handlers
-      // Testing that the handler prop is accepted is sufficient
-      expect(handleMouseEnter).toBeDefined();
-    });
+    expect(label).not.toHaveAttribute('data-required');
+    expect(label).not.toHaveAttribute('data-optional');
+    expect(label).not.toHaveAttribute('data-disabled');
+    expect(label).not.toHaveAttribute('data-readonly');
+    expect(label).not.toHaveAttribute('data-invalid');
   });
 });

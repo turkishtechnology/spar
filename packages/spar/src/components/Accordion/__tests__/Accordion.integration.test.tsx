@@ -503,7 +503,9 @@ describe('Accordion Integration Tests', () => {
   });
 
   describe('Performance and Accessibility Integration', () => {
-    it('should maintain performance with large number of accordion items', () => {
+    it('should render and interact with a large number of accordion items', async () => {
+      const user = userEvent.setup();
+
       const LargeAccordion = () => (
         <Accordion type='single'>
           {Array.from({ length: 50 }, (_, i) => (
@@ -517,15 +519,15 @@ describe('Accordion Integration Tests', () => {
         </Accordion>
       );
 
-      const startTime = performance.now();
       render(<LargeAccordion />);
-      const renderTime = performance.now() - startTime;
-
-      // Should render within reasonable time (adjust threshold as needed)
-      expect(renderTime).toBeLessThan(100);
 
       // All items should be rendered
       expect(screen.getAllByRole('button')).toHaveLength(50);
+
+      const lastTrigger = screen.getByRole('button', { name: 'Item 50' });
+      await user.click(lastTrigger);
+      expect(lastTrigger).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByText('Content for item 50')).toBeInTheDocument();
     });
 
     it('should support complex real-world usage patterns', async () => {

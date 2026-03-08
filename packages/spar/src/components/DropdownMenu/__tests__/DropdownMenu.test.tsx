@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   DropdownMenu,
@@ -35,7 +35,8 @@ describe('DropdownMenu', () => {
       expect(screen.getByRole('menu')).toBeInTheDocument();
     });
 
-    it('should respect controlled open state', () => {
+    it('should respect controlled open state', async () => {
+      const user = userEvent.setup();
       const onOpenChange = jest.fn();
       const { rerender } = render(
         <DropdownMenu open={false} onOpenChange={onOpenChange}>
@@ -48,6 +49,10 @@ describe('DropdownMenu', () => {
 
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
+      await user.click(screen.getByRole('button', { name: 'Open Menu' }));
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+
       rerender(
         <DropdownMenu open={true} onOpenChange={onOpenChange}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
@@ -58,6 +63,25 @@ describe('DropdownMenu', () => {
       );
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
+    });
+
+    it('should derive trigger and content ids from provided id', () => {
+      render(
+        <DropdownMenu id='file-menu' defaultOpen={true}>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button', { name: 'Open Menu' });
+      const menu = screen.getByRole('menu');
+
+      expect(trigger).toHaveAttribute('id', 'file-menu-trigger');
+      expect(trigger).toHaveAttribute('aria-controls', 'file-menu-content');
+      expect(menu).toHaveAttribute('id', 'file-menu-content');
+      expect(menu).toHaveAttribute('aria-labelledby', 'file-menu-trigger');
     });
 
     it('should call onOpenChange when state changes', async () => {
@@ -434,7 +458,8 @@ describe('DropdownMenu', () => {
       expect(content).toHaveAttribute('data-align', 'end');
     });
 
-    it('should close on Escape key', () => {
+    it('should close on Escape key', async () => {
+      const user = userEvent.setup();
       render(
         <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
@@ -446,9 +471,11 @@ describe('DropdownMenu', () => {
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
 
-      fireEvent.keyDown(document, { key: 'Escape' });
+      const content = screen.getByRole('menu');
+      content.focus();
+      await user.keyboard('{Escape}');
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument();
       });
     });
@@ -478,9 +505,10 @@ describe('DropdownMenu', () => {
       expect(onEscapeKeyDown).toHaveBeenCalled();
     });
 
-    it('should close on Tab key', () => {
+    it('should close on Tab key in non-modal mode', async () => {
+      const user = userEvent.setup();
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenu defaultOpen={true} modal={false}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
@@ -490,9 +518,11 @@ describe('DropdownMenu', () => {
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
 
-      fireEvent.keyDown(document, { key: 'Tab' });
+      const content = screen.getByRole('menu');
+      content.focus();
+      await user.keyboard('{Tab}');
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument();
       });
     });
@@ -514,7 +544,7 @@ describe('DropdownMenu', () => {
       expect(item.tagName).toBe('DIV');
     });
 
-    it('should have proper ARIA attributes', async () => {
+    it('should keep disabled item non-focusable and announced', async () => {
       const user = userEvent.setup();
       render(
         <DropdownMenu>
@@ -527,55 +557,23 @@ describe('DropdownMenu', () => {
       );
 
       const trigger = screen.getByRole('button');
-
       await user.click(trigger);
-      await user.keyboard('[Escape]');
-
-      trigger.focus();
-      await user.keyboard('[ArrowDown]');
-
-      await waitFor(() => {
-        expect(screen.getByRole('menu')).toBeInTheDocument();
-        expect(screen.getAllByRole('menuitem')).toHaveLength(2);
-      });
-
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 200));
-      });
-
-      let highlightedItems: Element[] = [];
-      let attempts = 0;
-      const maxAttempts = 10;
-
-      while (highlightedItems.length === 0 && attempts < maxAttempts) {
-        await act(async () => {
-          await new Promise((resolve) => setTimeout(resolve, 50 * (attempts + 1)));
-        });
-
-        const items = screen.getAllByRole('menuitem');
-        highlightedItems = items.filter((item) => item.getAttribute('tabIndex') === '0');
-        attempts++;
-      }
 
       const items = screen.getAllByRole('menuitem');
+      const enabledItem = items[0];
+      const disabledItem = items[1];
 
-      if (highlightedItems.length === 1) {
-        expect(highlightedItems[0]).toBe(items[0]);
-        expect(items[0]).toHaveAttribute('tabIndex', '0');
-        expect(items[0]).not.toHaveAttribute('aria-disabled');
-        expect(items[1]).toHaveAttribute('tabIndex', '-1');
-        expect(items[1]).toHaveAttribute('aria-disabled', 'true');
-        expect(items[1]).toHaveAttribute('data-disabled');
-      } else {
-        expect(items[0]).toHaveAttribute('role', 'menuitem');
-        expect(items[1]).toHaveAttribute('role', 'menuitem');
-        expect(items[1]).toHaveAttribute('aria-disabled', 'true');
-        expect(items[1]).toHaveAttribute('data-disabled');
+      expect(enabledItem).toHaveAttribute('role', 'menuitem');
+      expect(disabledItem).toHaveAttribute('aria-disabled', 'true');
+      expect(disabledItem).toHaveAttribute('data-disabled');
 
-        expect(items[0]).toHaveAttribute('tabIndex', '-1');
-        expect(items[1]).toHaveAttribute('tabIndex', '-1');
-      }
-    }, 10000);
+      await user.keyboard('{ArrowDown}');
+
+      await waitFor(() => {
+        expect(enabledItem).toHaveAttribute('tabIndex', '0');
+      });
+      expect(disabledItem).toHaveAttribute('tabIndex', '-1');
+    });
 
     it('should call onSelect on click', async () => {
       const onSelect = jest.fn();

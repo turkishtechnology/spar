@@ -1,439 +1,212 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Input, InputField, InputLabel, InputDescription, InputErrorMessage } from '../index';
+import { useState } from 'react';
+import { Input, InputDescription, InputErrorMessage, InputField, InputLabel } from '../index';
 
-describe('Input', () => {
+describe('Input - Unit Tests', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('Simple Usage (Default Behavior)', () => {
-    it('renders as simple input with default behavior', () => {
-      render(<InputField placeholder='Enter text' />);
+  it('renders InputField standalone with default input behavior', () => {
+    render(<InputField placeholder='Enter text' />);
 
-      const input = screen.getByRole('textbox');
-      expect(input).toBeInTheDocument();
-      expect(input).toHaveAttribute('placeholder', 'Enter text');
-    });
-
-    it('renders as simple textarea when as="textarea"', () => {
-      render(<InputField as='textarea' placeholder='Enter message' />);
-
-      const textarea = screen.getByRole('textbox');
-      expect(textarea).toBeInTheDocument();
-      expect(textarea.tagName).toBe('TEXTAREA');
-      expect(textarea).toHaveAttribute('placeholder', 'Enter message');
-    });
-
-    it('handles simple input interactions', async () => {
-      const user = userEvent.setup();
-      const onChange = jest.fn();
-
-      render(<InputField placeholder='Enter text' onChange={onChange} />);
-
-      const input = screen.getByRole('textbox');
-
-      await user.type(input, 'Hello');
-
-      expect(onChange).toHaveBeenCalled();
-      expect(input).toHaveValue('Hello');
-    });
-
-    it('renders simple input without wrapper div', () => {
-      render(<InputField data-testid='simple-input' />);
-
-      const input = screen.getByTestId('simple-input');
-
-      // Should render as standalone input (no wrapper)
-      expect(input.tagName).toBe('INPUT');
-
-      // Should NOT have context-specific ID (standalone mode)
-      expect(input).not.toHaveAttribute('id');
-    });
+    const field = screen.getByRole('textbox');
+    expect(field).toHaveAttribute('type', 'text');
+    expect(field).toHaveAttribute('placeholder', 'Enter text');
+    expect(field).not.toHaveAttribute('id');
+    expect(field).not.toHaveAttribute('aria-labelledby');
+    expect(field).not.toHaveAttribute('aria-describedby');
   });
 
-  describe('Input (Root)', () => {
-    it('renders with default props', () => {
-      render(
-        <Input>
-          <InputField />
-        </Input>,
-      );
+  it('supports standalone textarea via as prop', () => {
+    render(<InputField as='textarea' aria-label='Message' />);
 
-      const root = screen.getByRole('textbox').parentElement;
-      expect(root).toBeInTheDocument();
-      expect(root).not.toHaveAttribute('data-invalid');
-      expect(root).not.toHaveAttribute('data-disabled');
-      expect(root).not.toHaveAttribute('data-required');
-    });
-
-    it('renders with invalid state', () => {
-      render(
-        <Input isInvalid>
-          <InputField />
-        </Input>,
-      );
-
-      const root = screen.getByRole('textbox').parentElement;
-      expect(root).toHaveAttribute('data-invalid', '');
-    });
-
-    it('renders with disabled state', () => {
-      render(
-        <Input disabled>
-          <InputField />
-        </Input>,
-      );
-
-      const root = screen.getByRole('textbox').parentElement;
-      expect(root).toHaveAttribute('data-disabled', '');
-    });
-
-    it('renders with required state', () => {
-      render(
-        <Input required>
-          <InputField />
-        </Input>,
-      );
-
-      const root = screen.getByRole('textbox').parentElement;
-      expect(root).toHaveAttribute('data-required', '');
-    });
-
-    it('updates state when props change', () => {
-      const { rerender } = render(
-        <Input isInvalid={false}>
-          <InputField />
-        </Input>,
-      );
-
-      let root = screen.getByRole('textbox').parentElement;
-      expect(root).not.toHaveAttribute('data-invalid');
-
-      rerender(
-        <Input isInvalid={true}>
-          <InputField />
-        </Input>,
-      );
-
-      root = screen.getByRole('textbox').parentElement;
-      expect(root).toHaveAttribute('data-invalid', '');
-    });
-
-    it('passes through additional props', () => {
-      render(
-        <Input className='custom-class' data-testid='input-root'>
-          <InputField />
-        </Input>,
-      );
-
-      const root = screen.getByTestId('input-root');
-      expect(root).toHaveClass('custom-class');
-    });
-
-    it('Input alias works the same as Input', () => {
-      render(
-        <Input>
-          <InputField />
-        </Input>,
-      );
-
-      const root = screen.getByRole('textbox').parentElement;
-      expect(root).toBeInTheDocument();
-    });
+    const field = screen.getByRole('textbox', { name: 'Message' });
+    expect(field.tagName).toBe('TEXTAREA');
+    expect(field).not.toHaveAttribute('type');
   });
 
-  describe('InputField', () => {
-    it('renders as input by default', () => {
-      render(
-        <Input>
-          <InputField />
-        </Input>,
-      );
+  it('derives deterministic ids from provided root id', () => {
+    render(
+      <Input id='profile-email'>
+        <InputLabel>Email</InputLabel>
+        <InputField />
+        <InputDescription>Use your work email</InputDescription>
+      </Input>,
+    );
 
-      const field = screen.getByRole('textbox');
-      expect(field.tagName).toBe('INPUT');
-      expect(field).toHaveAttribute('type', 'text');
-    });
+    const field = screen.getByRole('textbox', { name: 'Email' });
+    const description = screen.getByText('Use your work email');
 
-    it('renders with custom type', () => {
-      render(
-        <Input>
-          <InputField type='email' />
-        </Input>,
-      );
-
-      const field = screen.getByRole('textbox');
-      expect(field).toHaveAttribute('type', 'email');
-    });
-
-    it('renders as textarea when specified', () => {
-      render(
-        <Input>
-          <InputField as='textarea' />
-        </Input>,
-      );
-
-      const field = screen.getByRole('textbox');
-      expect(field.tagName).toBe('TEXTAREA');
-      expect(field).not.toHaveAttribute('type');
-    });
-
-    it('applies disabled state from context', () => {
-      render(
-        <Input disabled>
-          <InputField />
-        </Input>,
-      );
-
-      const field = screen.getByRole('textbox');
-      expect(field).toBeDisabled();
-    });
-
-    it('applies required state from context', () => {
-      render(
-        <Input required>
-          <InputField />
-        </Input>,
-      );
-
-      const field = screen.getByRole('textbox');
-      expect(field).toBeRequired();
-    });
-
-    it('applies invalid state from context', () => {
-      render(
-        <Input isInvalid>
-          <InputField />
-        </Input>,
-      );
-
-      const field = screen.getByRole('textbox');
-      expect(field).toHaveAttribute('aria-invalid', 'true');
-    });
-
-    it('handles focus and blur events', async () => {
-      const user = userEvent.setup();
-      const onFocus = jest.fn();
-      const onBlur = jest.fn();
-
-      render(
-        <Input>
-          <InputField onFocus={onFocus} onBlur={onBlur} />
-        </Input>,
-      );
-
-      const field = screen.getByRole('textbox');
-
-      await user.click(field);
-      expect(onFocus).toHaveBeenCalledTimes(1);
-      expect(field).toHaveAttribute('data-focused', '');
-
-      await user.tab();
-      expect(onBlur).toHaveBeenCalledTimes(1);
-      expect(field).not.toHaveAttribute('data-focused');
-    });
-
-    it('handles user input', async () => {
-      const user = userEvent.setup();
-      const onChange = jest.fn();
-
-      render(
-        <Input>
-          <InputField onChange={onChange} />
-        </Input>,
-      );
-
-      const field = screen.getByRole('textbox');
-      await user.type(field, 'hello');
-
-      expect(onChange).toHaveBeenCalledTimes(5); // One call per character
-      expect(field).toHaveValue('hello');
-    });
-
-    it('passes through additional props', () => {
-      render(
-        <Input>
-          <InputField placeholder='Enter text' className='custom-input' />
-        </Input>,
-      );
-
-      const field = screen.getByRole('textbox');
-      expect(field).toHaveAttribute('placeholder', 'Enter text');
-      expect(field).toHaveClass('custom-input');
-    });
-
-    it('renders as standalone input when used outside Input', () => {
-      render(<InputField data-testid='standalone-field' />);
-
-      const field = screen.getByTestId('standalone-field');
-
-      // Should render without errors (no context required)
-      expect(field).toBeInTheDocument();
-
-      // Should not have context-specific attributes
-      expect(field).not.toHaveAttribute('aria-labelledby');
-      expect(field).not.toHaveAttribute('aria-describedby');
-    });
+    expect(field).toHaveAttribute('id', 'profile-email-field');
+    expect(field).toHaveAttribute('aria-labelledby', 'profile-email-label');
+    expect(field).toHaveAttribute('aria-describedby', 'profile-email-description');
+    expect(description).toHaveAttribute('id', 'profile-email-description');
   });
 
-  describe('InputLabel', () => {
-    it('renders and associates with field', () => {
-      render(
+  it('keeps generated ids unique across instances', () => {
+    render(
+      <>
+        <Input>
+          <InputLabel>First Name</InputLabel>
+          <InputField />
+        </Input>
+        <Input>
+          <InputLabel>Last Name</InputLabel>
+          <InputField />
+        </Input>
+      </>,
+    );
+
+    const first = screen.getByRole('textbox', { name: 'First Name' });
+    const last = screen.getByRole('textbox', { name: 'Last Name' });
+
+    expect(first.id).toBeTruthy();
+    expect(last.id).toBeTruthy();
+    expect(first.id).not.toBe(last.id);
+  });
+
+  it('renders root as custom element and keeps state data attributes absent by default', () => {
+    render(
+      <Input as='section' data-testid='root'>
+        <InputLabel>Username</InputLabel>
+        <InputField />
+      </Input>,
+    );
+
+    const root = screen.getByTestId('root');
+
+    expect(root.tagName).toBe('SECTION');
+    expect(root).not.toHaveAttribute('data-invalid');
+    expect(root).not.toHaveAttribute('data-disabled');
+    expect(root).not.toHaveAttribute('data-required');
+    expect(root).not.toHaveAttribute('data-readonly');
+  });
+
+  it('applies root and field state attributes from context', () => {
+    render(
+      <Input isInvalid disabled required readOnly data-testid='root'>
+        <InputLabel>Username</InputLabel>
+        <InputField />
+      </Input>,
+    );
+
+    const root = screen.getByTestId('root');
+    const field = screen.getByRole('textbox', { name: 'Username' });
+
+    expect(root).toHaveAttribute('data-invalid', '');
+    expect(root).toHaveAttribute('data-disabled', '');
+    expect(root).toHaveAttribute('data-required', '');
+    expect(root).toHaveAttribute('data-readonly', '');
+
+    expect(field).toBeDisabled();
+    expect(field).toBeRequired();
+    expect(field).toHaveAttribute('readOnly');
+    expect(field).toHaveAttribute('aria-invalid', 'true');
+    expect(field).toHaveAttribute('aria-required', 'true');
+    expect(field).toHaveAttribute('data-disabled', '');
+    expect(field).toHaveAttribute('data-required', '');
+    expect(field).toHaveAttribute('data-readonly', '');
+  });
+
+  it('uses description when valid and switches to error id when invalid', () => {
+    const { rerender } = render(
+      <Input isInvalid={false}>
+        <InputLabel>Username</InputLabel>
+        <InputField />
+        <InputDescription>At least 3 characters</InputDescription>
+        <InputErrorMessage>Username is required</InputErrorMessage>
+      </Input>,
+    );
+
+    const field = screen.getByRole('textbox', { name: 'Username' });
+    const description = screen.getByText('At least 3 characters');
+
+    expect(field).toHaveAttribute('aria-describedby', description.id);
+    expect(screen.queryByText('Username is required')).not.toBeInTheDocument();
+
+    rerender(
+      <Input isInvalid>
+        <InputLabel>Username</InputLabel>
+        <InputField />
+        <InputDescription>At least 3 characters</InputDescription>
+        <InputErrorMessage>Username is required</InputErrorMessage>
+      </Input>,
+    );
+
+    const error = screen.getByText('Username is required');
+    expect(field).toHaveAttribute('aria-describedby', error.id);
+    expect(error).toHaveAttribute('role', 'alert');
+    expect(error).toHaveAttribute('aria-live', 'assertive');
+  });
+
+  it('toggles focused data attribute and calls focus handlers', async () => {
+    const user = userEvent.setup();
+    const onFocus = jest.fn();
+    const onBlur = jest.fn();
+
+    render(
+      <>
         <Input>
           <InputLabel>Username</InputLabel>
-          <InputField />
-        </Input>,
-      );
+          <InputField onFocus={onFocus} onBlur={onBlur} />
+        </Input>
+        <button type='button'>Next</button>
+      </>,
+    );
 
-      const label = screen.getByText('Username');
-      const field = screen.getByRole('textbox');
+    const field = screen.getByRole('textbox', { name: 'Username' });
 
-      expect(label.tagName).toBe('LABEL');
-      expect(label).toHaveAttribute('for', field.id);
-      expect(field).toHaveAttribute('aria-labelledby', label.id);
-    });
+    await user.click(field);
+    expect(onFocus).toHaveBeenCalledTimes(1);
+    expect(field).toHaveAttribute('data-focused', '');
 
-    it('passes through additional props', () => {
-      render(
-        <Input>
-          <InputLabel className='custom-label'>Username</InputLabel>
-          <InputField />
-        </Input>,
-      );
-
-      const label = screen.getByText('Username');
-      expect(label).toHaveClass('custom-label');
-    });
-
-    it('throws error when used outside Input', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {});
-
-      expect(() => {
-        render(<InputLabel>Username</InputLabel>);
-      }).toThrow('Input compound components must be used within Input');
-
-      jest.restoreAllMocks();
-    });
+    await user.tab();
+    expect(onBlur).toHaveBeenCalledTimes(1);
+    expect(field).not.toHaveAttribute('data-focused');
   });
 
-  describe('InputDescription', () => {
-    it('renders and associates with field when valid', () => {
-      render(
-        <Input>
-          <InputField />
-          <InputDescription>Enter your username</InputDescription>
-        </Input>,
+  it('supports uncontrolled and controlled value flows', async () => {
+    const user = userEvent.setup();
+
+    render(<InputField aria-label='Uncontrolled' defaultValue='start' />);
+    const uncontrolled = screen.getByRole('textbox', { name: 'Uncontrolled' });
+
+    await user.type(uncontrolled, ' value');
+    expect(uncontrolled).toHaveValue('start value');
+
+    const ControlledExample = () => {
+      const [value, setValue] = useState('');
+      return (
+        <InputField
+          aria-label='Controlled'
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
       );
+    };
 
-      const description = screen.getByText('Enter your username');
-      const field = screen.getByRole('textbox');
+    render(<ControlledExample />);
+    const controlled = screen.getByRole('textbox', { name: 'Controlled' });
 
-      expect(field).toHaveAttribute('aria-describedby', description.id);
-    });
-
-    it('passes through additional props', () => {
-      render(
-        <Input>
-          <InputField />
-          <InputDescription className='custom-description'>Enter your username</InputDescription>
-        </Input>,
-      );
-
-      const description = screen.getByText('Enter your username');
-      expect(description).toHaveClass('custom-description');
-    });
-
-    it('throws error when used outside Input', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {});
-
-      expect(() => {
-        render(<InputDescription>Help text</InputDescription>);
-      }).toThrow('Input compound components must be used within Input');
-
-      jest.restoreAllMocks();
-    });
+    await user.type(controlled, 'hello');
+    expect(controlled).toHaveValue('hello');
   });
 
-  describe('InputErrorMessage', () => {
-    it('renders when input is invalid', () => {
-      render(
-        <Input isInvalid>
-          <InputField />
-          <InputErrorMessage>Username is required</InputErrorMessage>
-        </Input>,
-      );
+  it('throws when compound-only parts are used outside Input', () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
 
-      const error = screen.getByText('Username is required');
-      const field = screen.getByRole('textbox');
+    expect(() => render(<InputLabel>Username</InputLabel>)).toThrow(
+      'Input compound components must be used within Input',
+    );
+    expect(() => render(<InputDescription>Help text</InputDescription>)).toThrow(
+      'Input compound components must be used within Input',
+    );
+    expect(() => render(<InputErrorMessage>Error</InputErrorMessage>)).toThrow(
+      'Input compound components must be used within Input',
+    );
 
-      expect(error).toBeInTheDocument();
-      expect(error).toHaveAttribute('role', 'alert');
-      expect(field).toHaveAttribute('aria-describedby', error.id);
-    });
-
-    it('does not render when input is valid', () => {
-      render(
-        <Input isInvalid={false}>
-          <InputField />
-          <InputErrorMessage>Username is required</InputErrorMessage>
-        </Input>,
-      );
-
-      const error = screen.queryByText('Username is required');
-      expect(error).not.toBeInTheDocument();
-    });
-
-    it('updates visibility when invalid state changes', () => {
-      const { rerender } = render(
-        <Input isInvalid={false}>
-          <InputField />
-          <InputErrorMessage>Username is required</InputErrorMessage>
-        </Input>,
-      );
-
-      expect(screen.queryByText('Username is required')).not.toBeInTheDocument();
-
-      rerender(
-        <Input isInvalid={true}>
-          <InputField />
-          <InputErrorMessage>Username is required</InputErrorMessage>
-        </Input>,
-      );
-
-      expect(screen.getByText('Username is required')).toBeInTheDocument();
-    });
-
-    it('passes through additional props when visible', () => {
-      render(
-        <Input isInvalid>
-          <InputField />
-          <InputErrorMessage className='custom-error'>Username is required</InputErrorMessage>
-        </Input>,
-      );
-
-      const error = screen.getByText('Username is required');
-      expect(error).toHaveClass('custom-error');
-    });
-
-    it('throws error when used outside Input', () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {});
-
-      expect(() => {
-        render(<InputErrorMessage>Error</InputErrorMessage>);
-      }).toThrow('Input compound components must be used within Input');
-
-      jest.restoreAllMocks();
-    });
-  });
-
-  describe('Component Display Names', () => {
-    it('has correct display names', () => {
-      expect(Input.displayName).toBe('Input');
-      expect(InputField.displayName).toBe('InputField');
-      expect(InputLabel.displayName).toBe('InputLabel');
-      expect(InputDescription.displayName).toBe('InputDescription');
-      expect(InputErrorMessage.displayName).toBe('InputErrorMessage');
-    });
+    jest.restoreAllMocks();
   });
 });
