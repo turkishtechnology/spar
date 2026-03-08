@@ -35,6 +35,7 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 ### DropdownMenuRoot Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
+| `id` | `string` | No | `undefined` | Custom base ID for trigger/content ARIA relationships |
 | `open` | `boolean` | No | `undefined` | Controlled open state |
 | `defaultOpen` | `boolean` | No | `false` | Uncontrolled default open state |
 | `onOpenChange` | `(open: boolean) => void` | No | `undefined` | Callback when open state changes |
@@ -65,18 +66,18 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
 | `side` | `'top' | 'right' | 'bottom' | 'left'` | No | `'bottom'` | Preferred placement side |
-| `align` | `'start' | 'center' | 'end'` | No | `'start'` | Alignment on placement side |
+| `align` | `'start' | 'center' | 'end'` | No | `'center'` | Alignment on placement side |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | `undefined` | Escape key handler |
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | `undefined` | Outside click handler |
 | `onFocusOutside` | `(event: FocusEvent) => void` | No | `undefined` | Outside focus handler |
-| `container` | `HTMLElement` | No | `document.body` | Portal target container for the menu content |
+| `container` | `HTMLElement \| null` | No | `document.body` | Portal target container for the menu content |
 
 ### DropdownMenuItem Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
 | `disabled` | `boolean` | No | `false` | Whether item is disabled (disabled items are skipped in focus order) |
-| `onSelect` | `(event: Event) => void` | No | `undefined` | Selection handler |
+| `onSelect` | `(event: SyntheticEvent<HTMLElement>) => void` | No | `undefined` | Selection handler |
 | `textValue` | `string` | No | `undefined` | Value for typeahead search |
 
 ### DropdownMenuSeparator Props
@@ -98,21 +99,21 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 
 | State | Trigger | Result | ARIA/DOM Update |
 |-------|---------|---------|-----------------|
-| Closed | Click trigger | Opens menu, focuses first item | `aria-expanded="true"`, removes `hidden` |
-| Closed | Enter/Space on trigger | Opens menu, focuses first item | `aria-expanded="true"`, removes `hidden` |
-| Closed | Down Arrow on trigger | Opens menu, focuses first item | `aria-expanded="true"`, removes `hidden` |
-| Closed | Up Arrow on trigger | Opens menu, focuses last item | `aria-expanded="true"`, removes `hidden` |
-| Open | Click item | Closes menu, returns focus to trigger, executes action | `aria-expanded="false"`, adds `hidden` |
-| Open | Enter/Space on item | Closes menu, returns focus to trigger, executes action | `aria-expanded="false"`, adds `hidden` |
+| Closed | Click trigger | Opens menu, highlights/focuses first enabled item | `aria-expanded="true"`, content is mounted |
+| Closed | Enter/Space on trigger | Opens menu, highlights/focuses first enabled item | `aria-expanded="true"`, content is mounted |
+| Closed | Down Arrow on trigger | Opens menu, highlights/focuses first enabled item | `aria-expanded="true"`, content is mounted |
+| Closed | Up Arrow on trigger | Opens menu, highlights/focuses last enabled item | `aria-expanded="true"`, content is mounted |
+| Open | Click item | Executes selection; closes when `closeOnSelect=true` | `aria-expanded` updates via open state |
+| Open | Enter/Space on item | Executes selection; closes when `closeOnSelect=true` | `aria-expanded` updates via open state |
 | Open | Down Arrow | Moves focus to next item (loops through items) | Roving tabindex updates |
 | Open | Up Arrow | Moves focus to previous item (loops through items) | Roving tabindex updates |
 | Open | Home | Moves focus to first item | Roving tabindex updates |
 | Open | End | Moves focus to last item | Roving tabindex updates |
-| Open | Escape | Closes menu, returns focus to trigger | `aria-expanded="false"`, adds `hidden` |
-| Open | Tab | Closes menu, moves focus to next focusable element | `aria-expanded="false"`, adds `hidden` |
-| Open | Shift+Tab | Closes menu, moves focus to previous focusable element | `aria-expanded="false"`, adds `hidden` |
-| Open | Character key(s) | Typeahead buffer (~700ms) to next matching item (wrap) | Roving tabindex updates |
-| Outside click | Click | Closes menu if open | `aria-expanded="false"`, adds `hidden` |
+| Open | Escape | Closes menu and focuses trigger | `aria-expanded="false"`, content unmounts |
+| Open | Tab | `modal=true`: keep focus in menu; `modal=false`: close and continue tab flow | Highlight/focus updates |
+| Open | Shift+Tab | `modal=true`: keep focus in menu; `modal=false`: close and continue reverse tab flow | Highlight/focus updates |
+| Open | Character key(s) | Typeahead to next matching item (wrap) | Roving tabindex updates |
+| Outside click | Click | Closes menu if open (without forcing focus trigger) | `aria-expanded="false"`, content unmounts |
 
 ## 4. Accessibility
 
@@ -133,7 +134,7 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 - **End**: Last item in current menu
 - **Escape**: Close menu and return focus to trigger
 - **Character keys**: Jump to next item starting with that character
-  - Multiple quick keystrokes within ~700ms compose a search buffer
+  - Multiple quick keystrokes compose a search buffer
 
 ### Focus Management
 - **Initial focus**: First enabled (non-disabled) item when menu opens
@@ -145,7 +146,6 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 
 ### Screen Reader Announcements
 - **Menu state**: "Menu expanded/collapsed" via `aria-expanded`
-- **Item context**: Item position in menu via `aria-setsize`/`aria-posinset`
 - **Disabled state**: "Disabled" or "unavailable" for disabled items
 
 ### Name/Role/Value Exposure
@@ -159,11 +159,10 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 - **Keyboard Support**: Full Tab/Shift+Tab, Enter/Space, Arrows, Escape, Home/End navigation
 - **ARIA Usage**: Semantic HTML first, ARIA roles and properties as specified above
 - **Focus Management**: Visible indicators, proper trapping, restoration on close
-- **Screen Reader Support**: `aria-live` for dynamic content, proper announcements
-- **Color & Contrast**: WCAG 2.2 AA contrast ratios (4.5:1 text, 3:1 UI components)
+- **Screen Reader Support**: Proper announcements through semantic roles and ARIA state
 - **Testing**: jest-axe tests must pass with zero violations
 
-> Note: Roving tabindex model is authoritative; `aria-activedescendant` is intentionally not used. A multi-character typeahead buffer (~700ms timeout) is standard.
+> Note: Roving tabindex model is authoritative; `aria-activedescendant` is intentionally not used.
 
 ## 5. Implementation Architecture
 
@@ -264,15 +263,12 @@ This separation keeps highlight and item collection state out of root context, p
 ## 6. Styling & Data Attributes
 
 ### Required Data Attributes
-- **Root**:
-  - `data-state="open|closed"` - Menu open state
-  
 - **Trigger**:
   - `data-state="open|closed"` - Menu open state
   - `data-disabled` - When disabled
   
 - **Content**:
-  - `data-state="open|closed"` - Menu open state
+  - `data-state="open"` - Present while content is mounted/open
   - `data-side="top|right|bottom|left"` - Placement side
   - `data-align="start|center|end"` - Alignment
   
@@ -324,7 +320,6 @@ This separation keeps highlight and item collection state out of root context, p
 
 ### Tree-Shakeable Exports
 - **Named exports**: Individual component exports for tree-shaking
-- **No barrel exports**: Direct imports to reduce bundle size
 - **Side-effect free**: No global state or initialization code
 - **Minimal dependencies**: Keep external dependencies to minimum
 
@@ -345,7 +340,6 @@ This separation keeps highlight and item collection state out of root context, p
 - **Dual mode**: Support both controlled and uncontrolled usage patterns
 - **State synchronization**: Proper handling of controlled value changes
 - **Default props**: Sensible defaults for uncontrolled mode
-- **Warning system**: Development warnings for incorrect usage patterns
 
 ## 9. Migration & Implementation Checklist
 

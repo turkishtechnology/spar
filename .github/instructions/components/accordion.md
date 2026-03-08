@@ -38,7 +38,7 @@ The Accordion component provides a vertically stacked set of interactive heading
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `type` | `"single" \| "multiple"` | No | `"single"` | Single panel or multiple panels can be expanded |
-| `collapsible` | `boolean` | No | `false` | Whether panels can be collapsed (only for single type) |
+| `isCollapsible` | `boolean` | No | `false` | Whether panels can be collapsed (only for single type) |
 | `value` | `string \| string[]` | No | `undefined` | Controlled state - single value or array for multiple |
 | `defaultValue` | `string \| string[]` | No | `undefined` | Uncontrolled initial state |
 | `onValueChange` | `(value: string \| string[]) => void` | No | `undefined` | Callback when state changes |

@@ -23,17 +23,19 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
+| `id` | `string` | No | - | Custom base ID for ARIA relationships |
 | `open` | `boolean` | No | - | Controlled state for popover visibility |
 | `onOpenChange` | `(open: boolean) => void` | No | - | Callback when popover open state changes |
 | `defaultOpen` | `boolean` | No | `false` | Initial open state for uncontrolled mode |
 | `modal` | `boolean` | No | `false` | Whether popover should behave modally (focus trap + backdrop) |
 | `disabled` | `boolean` | No | `false` | Disables all popover triggers (prevents opening) |
-| `children` | `React.ReactNode` | Yes | - | PopoverTrigger and PopoverContent components |
+| `children` | `React.ReactNode` | No | - | PopoverTrigger and PopoverContent components |
 
 ### PopoverTrigger Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
+| `as` | `ElementType` | No | `'button'` | Polymorphic element type |
 | `children` | `ReactNode \| ((state: PopoverTriggerRenderProps) => ReactNode)` | Yes | - | Trigger element content or render function for render props pattern |
 | `disabled` | `boolean` | No | `false` | Whether trigger is disabled |
 
@@ -51,6 +53,7 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
+| `as` | `ElementType` | No | `'div'` | Polymorphic element type |
 | `side` | `'top' \| 'bottom' \| 'left' \| 'right'` | No | `'bottom'` | Side of trigger to position against |
 | `align` | `'start' \| 'center' \| 'end'` | No | `'center'` | Alignment relative to trigger |
 | `onOpenAutoFocus` | `(event: Event) => void` | No | - | Called when popover opens and focus moves inside. Call `event.preventDefault()` to prevent default focus behavior |
@@ -58,22 +61,22 @@
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Called when escape is pressed. Call `event.preventDefault()` to prevent closing |
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | - | Called when pointer down occurs outside the content. Call `event.preventDefault()` to prevent closing |
 | `onFocusOutside` | `(event: FocusEvent) => void` | No | - | Called when focus moves outside the content. Call `event.preventDefault()` to prevent closing |
-| `onInteractOutside` | `(event: PointerEvent \| FocusEvent) => void` | No | - | Called when interaction occurs outside the content. Call `event.preventDefault()` to prevent closing |
 | `trapFocus` | `boolean` | No | `false` | Whether to trap focus within content |
-| `container` | `HTMLElement` | No | `document.body` | Portal target container for the popover content |
+| `container` | `HTMLElement \| null` | No | `document.body` | Portal target container for the popover content |
 | `children` | `React.ReactNode` | Yes | - | Popover content |
 
 ### PopoverArrow Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'div'` | Polymorphic element type to render |
+| `as` | `ElementType` | No | `'svg'` | Polymorphic element type to render |
 
 ### PopoverClose Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `children` | `ReactNode \| ((state: PopoverCloseRenderProps) => ReactNode)` | Yes | - | Close trigger element content or render function for render props pattern |
+| `as` | `ElementType` | No | `'button'` | Polymorphic element type |
+| `children` | `ReactNode \| ((state: PopoverCloseRenderProps) => ReactNode)` | No | - | Close trigger element content or render function for render props pattern |
 | `onClick` | `(event: MouseEvent) => void` | No | - | Additional click handler (popover will close automatically) |
 
 ### PopoverCloseRenderProps
@@ -99,15 +102,14 @@
 | Closed | Click trigger | Open popover, focus first focusable element | `aria-expanded="true"`, `aria-controls` points to content |
 | Closed | Enter/Space on trigger | Open popover, focus first focusable element | `aria-expanded="true"`, `aria-controls` points to content |
 | Closed | Down Arrow on trigger | Open popover, focus first focusable element | `aria-expanded="true"`, `aria-controls` points to content |
-| Open | Click trigger | Close popover, return focus to trigger | `aria-expanded="false"`, remove `aria-controls` |
-| Open | Enter/Space on trigger | Close popover, return focus to trigger | `aria-expanded="false"`, remove `aria-controls` |
-| Open | Escape anywhere | Close popover, return focus to trigger | `aria-expanded="false"`, remove `aria-controls` |
-| Open | Click outside content | Close popover, return focus to trigger | `aria-expanded="false"`, remove `aria-controls` |
-| Open | Focus outside content (when not trapped) | Close popover | `aria-expanded="false"`, remove `aria-controls` |
+| Open | Click trigger | Close popover, return focus to trigger | `aria-expanded="false"` |
+| Open | Escape anywhere | Close popover, return focus to trigger | `aria-expanded="false"` |
+| Open | Click outside content | Close popover, return focus to trigger | `aria-expanded="false"` |
+| Open | Focus outside content (when not trapped) | Close popover | `aria-expanded="false"` |
 | Open | Tab within content | Navigate between focusable elements | No change |
 | Open | Shift+Tab from first element (when trapped) | Focus last element | No change |
-| Open | Tab from last element (when trapped) | Focus first element | No change |:
-| Open | Click PopoverClose | Close popover, return focus to trigger | aria-expanded="false" |
+| Open | Tab from last element (when trapped) | Focus first element | No change |
+| Open | Click PopoverClose | Close popover, return focus to trigger | `aria-expanded="false"` |
 | Modal | Focus outside attempt | Block focus change, return to content | No change |
 | Disabled | Any trigger interaction | No action | No attributes applied |
 
@@ -127,7 +129,6 @@
 - **Escape**: Close popover, return focus to trigger
 - **Home/End within content**: Move to first/last focusable element (when appropriate)
 - **Arrow keys within content**: Navigate between actionable items when appropriate
-- **Page Up/Page Down**: Scroll content when overflow exists
 
 
 ### Focus Management
@@ -215,7 +216,6 @@ interface PopoverContentProps<T extends React.ElementType = 'div'>
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
   onPointerDownOutside?: (event: PointerEvent) => void;
   onFocusOutside?: (event: FocusEvent) => void;
-  onInteractOutside?: (event: PointerEvent | FocusEvent) => void;
   trapFocus?: boolean;
 }
 
@@ -331,25 +331,18 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 #### PopoverTrigger  
 - `data-state`: `"open" | "closed"`
 - `data-disabled`: Present when disabled
-- `data-focused`: Present when trigger has focus
-- `data-pressed`: Present during active/pressed state
 
 #### PopoverContent
-- `data-state`: `"open" | "closed"`
+- `data-state`: `"open"` (content renders only while open)
 - `data-side`: `"top" | "bottom" | "left" | "right"` (actual side)
 - `data-align`: `"start" | "center" | "end"` (actual alignment)
-- `data-modal`: Present when popover behaves modally
-- `data-focus-trapped`: Present when focus is trapped within content
+- `data-modal`: `"true"` when popover behaves modally
 
 #### PopoverArrow
 - `data-side`: Matches content side for styling
 
 #### PopoverClose
-- `data-state`: `"open" | "closed"`
-
-#### Animation States (All Components)
-- `data-entering`: Present during enter animation
-- `data-exiting`: Present during exit animation
+- `data-popover-close`: Present on close trigger
 
 ### Positioning Data
 - CSS custom properties for dynamic positioning:
@@ -358,7 +351,6 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 
 ### Animation Hooks
 - `data-state` changes provide CSS transition hooks
-- `data-entering`/`data-exiting` for fine-grained animation control
 - `data-side` and `data-align` for directional animations
 - Enter/exit animations via CSS transitions or CSS-in-JS
 - Transform origin automatically set for natural scaling animations
@@ -435,7 +427,7 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 ### Implementation Boundaries
 - **No styling assumptions**: Zero opinions about visual design or layout
 - **No animation libraries**: CSS-based animations via data attributes only
-- **No positioning libraries**: Custom collision detection and placement logic
+- **Positioning via hooks**: Placement and collision handling are delegated to `useFloating`
 - **No accessibility shortcuts**: Full WCAG compliance without third-party dependencies
 
 ## 9. Migration & Implementation Checklist
@@ -488,7 +480,7 @@ const usePopoverContent = <T extends React.ElementType = 'div'>(
 #### Styling & Animation
 - [ ] **Data attribute system**: Comprehensive styling hooks via data-* attributes
 - [ ] **Animation support**: CSS custom properties for smooth transitions and transform origins
-- [ ] **State visualization**: data-entering, data-exiting, data-state for animation hooks
+- [ ] **State visualization**: data-state, data-side, data-align, data-modal for animation hooks
 - [ ] **Zero styling opinions**: No CSS imports or visual assumptions
 
 #### Testing & Quality

@@ -34,14 +34,15 @@ The Tabs component provides a set of layered sections of content, known as tab p
 ### Tabs (Root)
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
+| `id` | `string` | No | `undefined` | Custom base ID for trigger/panel ARIA relationships |
 | `value` | `string` | No | `undefined` | Controlled selected tab value |
-| `defaultValue` | `string` | No | First tab value | Uncontrolled initial tab selection |
+| `defaultValue` | `string` | No | `undefined` | Uncontrolled initial tab selection |
 | `onValueChange` | `(value: string) => void` | No | `undefined` | Callback when tab selection changes |
 | `orientation` | `"horizontal" \| "vertical"` | No | `"horizontal"` | Tabs orientation affecting keyboard navigation |
 | `dir` | `"ltr" \| "rtl"` | No | `"ltr"` | Text direction for arrow key navigation |
 | `activationMode` | `"automatic" \| "manual"` | No | `"automatic"` | Whether tabs activate on focus or require explicit activation |
 | `as` | `ElementType` | No | `"div"` | Polymorphic component type |
-| `children` | `React.ReactNode` | Yes | - | TabsList and TabsContent components |
+| `children` | `React.ReactNode` | No | - | TabsList and TabsContent components |
 
 **Note**: All components also accept standard HTML attributes (className, style, data-*, aria-*, etc.) which are forwarded to the underlying element.
 
@@ -49,7 +50,7 @@ The Tabs component provides a set of layered sections of content, known as tab p
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `"div"` | Polymorphic component type |
-| `children` | `React.ReactNode` | Yes | - | TabsTrigger components |
+| `children` | `React.ReactNode` | No | - | TabsTrigger components |
 
 ### TabsTrigger
 | Prop | Type | Required | Default | Description |
@@ -57,7 +58,8 @@ The Tabs component provides a set of layered sections of content, known as tab p
 | `value` | `string` | Yes | - | Unique identifier for the tab |
 | `disabled` | `boolean` | No | `false` | Disables this specific tab |
 | `as` | `ElementType` | No | `"button"` | Polymorphic component type |
-| `children` | `ReactNode \| ((state: TabsTriggerRenderProps) => ReactNode)` | Yes | - | Tab trigger content or render function |
+| `autoFocus` | `boolean` | No | `false` | Whether this tab trigger receives focus on mount |
+| `children` | `ReactNode \| ((state: TabsTriggerRenderProps) => ReactNode)` | No | - | Tab trigger content or render function |
 
 ### TabsTriggerRenderProps
 | Property | Type | Description |
@@ -74,7 +76,7 @@ The Tabs component provides a set of layered sections of content, known as tab p
 | `value` | `string` | Yes | - | Unique identifier matching a TabsTrigger value |
 | `forceMount` | `boolean` | No | `false` | Force content to remain mounted when not active |
 | `as` | `ElementType` | No | `"div"` | Polymorphic component type |
-| `children` | `React.ReactNode` | Yes | - | Tab panel content |
+| `children` | `React.ReactNode` | No | - | Tab panel content |
 
 ## 3. Behavior Matrix
 
@@ -114,8 +116,6 @@ The Tabs component provides a set of layered sections of content, known as tab p
 - **Home**: Moves focus to the first non-disabled tab
 - **End**: Moves focus to the last non-disabled tab
 - **Enter/Space**: In manual activation mode, activates the focused tab
-- **Page Down**: When focus is on a tab, moves focus to the next tab and activates it (optional enhancement)
-- **Page Up**: When focus is on a tab, moves focus to the previous tab and activates it (optional enhancement)
 
 ### Focus Management
 - Focus moves to the currently selected tab when entering the tablist via Tab key
@@ -128,7 +128,6 @@ The Tabs component provides a set of layered sections of content, known as tab p
 - Tab selection changes announce the new tab name and "selected" state
 - Tab panels should be properly labeled via `aria-labelledby` pointing to their associated tab
 - Dynamic content changes within panels should use appropriate live regions
-- Tab count and position can be announced: "Tab 2 of 4" using `aria-setsize` and `aria-posinset`
 
 ### Name/Role/Value Exposure
 - Each tab has an accessible name (from its text content or `aria-label`)
@@ -216,7 +215,6 @@ interface TabsContextValue {
 - `data-state`: `"active" | "inactive"` - Selection state
 - `data-disabled`: Present when disabled
 - `data-orientation`: `"horizontal" | "vertical"` - Current orientation
-- `data-focus-visible`: Present when focused via keyboard (not mouse)
 
 #### TabsContent
 - `data-state`: `"active" | "inactive"` - Visibility state

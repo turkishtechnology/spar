@@ -50,14 +50,14 @@ Single component pattern - Label is a simple primitive that wraps label content 
 | `as` | `ElementType` | No | `'label'` | Polymorphic element type |
 | `children` | `React.ReactNode` | Yes | — | Label content (text, icons, form controls) |
 
-**Note**: All standard HTML label attributes (`htmlFor`, `className`, `style`, `ref`, etc.) are inherited from `React.LabelHTMLAttributes<HTMLLabelElement>`.
+**Note**: All standard element attributes (`htmlFor`, `className`, `style`, `id`, `aria-*`, `data-*`, event handlers, etc.) are forwarded through polymorphic props.
 
 **⚠️ Important Notes:**
 - `required`, `isOptional`, `disabled`, `readOnly`, and `isInvalid` are for **styling purposes only**. Always set `required`, `aria-required`, `disabled`, `readOnly`, and `aria-invalid` attributes on the **form control itself** for proper functionality.
 - When using `as` prop with non-label elements, `htmlFor` will not create native association. You must use `aria-labelledby` or other ARIA labeling techniques on the control.
 
 ### Ref Forwarding
-- **Label**: Forwards ref to root element (native `<label>` by default)
+- **Label**: Accepts and forwards `ref` to the rendered root element (native `<label>` by default)
 
 ### Polymorphic Support
 The `as` prop allows rendering as any valid element, but **breaks native label behavior**:
@@ -178,20 +178,17 @@ Labels do not receive focus. Focus is automatically transferred to the associate
 ### Component Structure
 ```tsx
 export const Label = ({
-  htmlFor,
   required = false,
   isOptional = false,
   disabled = false,
   readOnly = false,
   isInvalid = false,
-  as = 'label',
+  as,
   children,
-  className,
-  style,
   ref,
   ...rest
 }: LabelProps) => {
-  const Component = as;
+  const Component = as || 'label';
   
   // Data attributes for styling hooks
   const dataAttributes = {
@@ -205,9 +202,6 @@ export const Label = ({
   return (
     <Component
       ref={ref}
-      htmlFor={htmlFor}
-      className={className}
-      style={style}
       {...dataAttributes}
       {...rest}
     >
@@ -220,6 +214,7 @@ export const Label = ({
 ### State Management
 - **Stateless**: Label is a presentational component with no internal state
 - **Props-driven**: All behavior controlled via props
+- **Memoized attributes**: Data attributes are memoized with `useMemo`
 
 ### Ref Forwarding
 - Forwards ref directly to root element
@@ -297,7 +292,7 @@ const styles = {
 
 ### Unit Tests
 - ✅ Renders with correct element type (default `label`)
-- ✅ Forwards ref to root element
+- ✅ Accepts and forwards `ref` to rendered root element
 - ✅ Applies `htmlFor` attribute correctly
 - ✅ Renders children content
 - ✅ Applies className and style props

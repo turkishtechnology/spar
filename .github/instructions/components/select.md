@@ -50,6 +50,7 @@ The main container that manages all select state and behavior.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
+| `id` | `string` | No | - | Custom base ID for trigger/content/value ARIA relationships |
 | `value` | `string` | No | - | Controlled selected value |
 | `defaultValue` | `string` | No | - | Uncontrolled initial value |
 | `onValueChange` | `(value: string) => void` | No | - | Callback when selection changes |
@@ -60,7 +61,8 @@ The main container that manages all select state and behavior.
 | `required` | `boolean` | No | `false` | Makes the select required for forms |
 | `name` | `string` | No | - | Form field name |
 | `dir` | `'ltr' \| 'rtl'` | No | `'ltr'` | Reading direction |
-| `as` | `ElementType` | No | - | Polymorphic component type |
+| `autoFocus` | `boolean` | No | `false` | Whether to focus trigger on mount |
+| `as` | `ElementType` | No | `'div'` | Polymorphic component type |
 
 ### SelectTrigger
 The button that toggles the dropdown.
@@ -104,11 +106,11 @@ The dropdown container that appears when open.
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `side` | `'top' \| 'right' \| 'bottom' \| 'left'` | No | `'bottom'` | Preferred placement side |
-| `align` | `'start' \| 'center' \| 'end'` | No | `'start'` | Alignment relative to trigger |
+| `align` | `'start' \| 'center' \| 'end'` | No | `'center'` | Alignment relative to trigger |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Escape key handler |
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | - | Outside click handler |
 | `onCloseAutoFocus` | `(event: FocusEvent) => void` | No | - | Focus handler on close |
-| `container` | `HTMLElement` | No | `document.body` | Portal target container for the dropdown content |
+| `container` | `HTMLElement \| null` | No | `document.body` | Portal target container for the dropdown content |
 | `as` | `ElementType` | No | `div` | Polymorphic component type |
 | `ref` | `RefObject` | No | - | Forward ref support |
 
@@ -188,11 +190,11 @@ Optional decorative arrow element pointing to trigger. Headless: user provides a
 | Closed, Trigger focused | `ArrowDown` / `ArrowUp` | Opens dropdown, focuses selected/first item | `aria-expanded="true"`, `data-state="open"` |
 | Open | `Escape` | Closes dropdown, returns focus to trigger | `aria-expanded="false"`, `data-state="closed"` |
 | Open, item focused | `Enter` / `Space` | Selects focused item, closes dropdown | `value` updates, `aria-expanded="false"`, fires `onValueChange` |
-| Open, item focused | `ArrowDown` | Moves focus to next non-disabled item | `aria-activedescendant` updates |
-| Open, item focused | `ArrowUp` | Moves focus to previous non-disabled item | `aria-activedescendant` updates |
-| Open, item focused | `Home` / `PageUp` | Moves focus to first non-disabled item | `aria-activedescendant` updates |
-| Open, item focused | `End` / `PageDown` | Moves focus to last non-disabled item | `aria-activedescendant` updates |
-| Open, item focused | `A-Z` or `a-z` | Type-ahead: finds and focuses matching item | `aria-activedescendant` updates |
+| Open, item highlighted | `ArrowDown` | Highlights next non-disabled item | Highlight state updates (`data-highlighted`) |
+| Open, item highlighted | `ArrowUp` | Highlights previous non-disabled item | Highlight state updates (`data-highlighted`) |
+| Open, item highlighted | `Home` / `PageUp` | Highlights first non-disabled item | Highlight state updates (`data-highlighted`) |
+| Open, item highlighted | `End` / `PageDown` | Highlights last non-disabled item | Highlight state updates (`data-highlighted`) |
+| Open, item highlighted | `A-Z` or `a-z` | Type-ahead: highlights matching item | Highlight state updates (`data-highlighted`) |
 | Open | Click outside | Closes dropdown without selection | `aria-expanded="false"`, `data-state="closed"` |
 | Any | Trigger loses focus | If `onBlur` provided, fires callback | No state change unless controlled |
 | Disabled | Any interaction | No action | No updates |
@@ -222,11 +224,11 @@ Following WAI-ARIA Listbox pattern:
 - `Home` / `PageUp` → Focus first item
 - `End` / `PageDown` → Focus last item
 - `A-Z` / `a-z` → Type-ahead search (focus matching item)
-- `Tab` → Close dropdown, move focus to next tabbable element
+- `Tab` → Close dropdown (default tab flow continues)
 
 ### Focus Management
 1. **Initial focus**: When opened, focus moves to selected item (or first item if none selected)
-2. **Focus trap**: While open, focus remains within dropdown (or on trigger via aria-activedescendant)
+2. **Content focus**: Content receives focus; highlighted item is tracked in internal collection state
 3. **Focus restoration**: On close (Escape, selection, outside click), focus returns to trigger
 4. **Visual indicator**: Focus must have visible outline (WCAG 2.4.7)
 5. **Focus not obscured**: Focused item must be visible (WCAG 2.4.11 - new in 2.2)
@@ -240,8 +242,8 @@ Following WAI-ARIA Listbox pattern:
 ### Name/Role/Value Exposure
 - **Name**: Via `aria-label`, `aria-labelledby`, or associated `<label>`
 - **Role**: `combobox` on trigger, `listbox` on content, `option` on items
-- **Value**: Current selection exposed via `aria-valuenow` or trigger text content
-- **State**: `aria-expanded`, `aria-selected`, `aria-disabled`, `aria-activedescendant`
+- **Value**: Current selection exposed through trigger text content (`SelectValue`)
+- **State**: `aria-expanded`, `aria-selected`, `aria-disabled`
 
 ### WCAG 2.2 AA Compliance
 - ✅ **1.4.13 Content on Hover or Focus**: Dismissable, hoverable, persistent
@@ -253,7 +255,7 @@ Following WAI-ARIA Listbox pattern:
 ### Additional Accessibility Requirements
 - Disabled items are not focusable, use `aria-disabled="true"`
 - Empty groups are skipped in navigation
-- Type-ahead timeout: ~700ms between character inputs
+- Type-ahead timeout behavior is provided by shared `useTypeahead` hook
 - Required fields must have `aria-required="true"` or `required` attribute
 - Error states should use `aria-invalid="true"` and `aria-errormessage`
 
@@ -411,7 +413,8 @@ if (!isMounted) {
 ### Required Data Attributes
 
 **SelectRoot**
-- No visual attributes (non-rendering)
+- `data-disabled` - Present when `disabled={true}`
+- `data-autofocus` - Present when `autoFocus={true}`
 
 **SelectTrigger**
 - `data-state`: `"open" | "closed"` - Dropdown open state
@@ -419,7 +422,7 @@ if (!isMounted) {
 - `data-placeholder`: Present when no value selected
 
 **SelectContent**
-- `data-state`: `"open" | "closed"` - Dropdown open state
+- `data-state`: `"open"` - Dropdown renders only while open
 - `data-side`: `"top" | "right" | "bottom" | "left"` - Placement side (popper mode)
 - `data-align`: `"start" | "center" | "end"` - Alignment (popper mode)
 
@@ -498,7 +501,6 @@ Using `jest-axe`:
 - ✅ `aria-expanded` updates on open/close
 - ✅ `aria-selected` on selected item
 - ✅ `aria-disabled` on disabled items
-- ✅ `aria-activedescendant` updates on navigation
 - ✅ `aria-labelledby` connects trigger to label
 - ✅ Focus visible indicators present
 - ✅ Focus restoration on close
@@ -544,13 +546,8 @@ Using `jest-axe`:
 ### Tree-Shakeable Exports
 ```tsx
 // Named exports for optimal tree-shaking
-export { SelectRoot as Root } from './SelectRoot';
-export { SelectTrigger as Trigger } from './SelectTrigger';
-export { SelectValue as Value } from './SelectValue';
-// ... etc
-
-// Namespace export for convenience
-export * as Select from './index';
+export { Select, SelectRoot, SelectTrigger, SelectValue, SelectContent } from './index';
+export { SelectItem, SelectGroup, SelectLabel, SelectItemText, SelectSeparator, SelectArrow } from './index';
 ```
 
 ### TypeScript Strict Mode

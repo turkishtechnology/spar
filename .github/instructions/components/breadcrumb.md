@@ -79,7 +79,7 @@ The Breadcrumb component provides a navigation trail showing the hierarchical pa
 | `as` | `ElementType` | No | `'nav'` | Polymorphic element type |
 | `children` | `ReactNode` | Yes | - | Breadcrumb content |
 | `aria-label` | `string` | No | `'Breadcrumb'` | Accessible name for navigation landmark |
-| `onNavigate` | `(href: string, event: MouseEvent) => void` | No | - | Navigation event handler for routing integration |
+| `onNavigate` | `(href: string, event: PressEvent) => void` | No | - | Navigation event handler for routing integration |
 | `disabled` | `boolean` | No | `false` | Disable all breadcrumb navigation |
 
 ### BreadcrumbList
@@ -130,7 +130,7 @@ The Breadcrumb component provides a navigation trail showing the hierarchical pa
 // Generic polymorphic component types
 interface BreadcrumbRootProps<T extends ElementType = 'nav'> extends ComponentPropsWithoutRef<T> {
   as?: T;
-  onNavigate?: (href: string, event: MouseEvent) => void;
+  onNavigate?: NavigationHandler;
   disabled?: boolean;
 }
 
@@ -143,8 +143,8 @@ interface BreadcrumbLinkProps<T extends ElementType = 'a'> extends ComponentProp
 }
 
 // Event handler types
-type NavigationHandler = (href: string, event: MouseEvent) => void;
-type PressEvent = MouseEvent | KeyboardEvent;
+export type PressEvent = MouseEvent | KeyboardEvent;
+export type NavigationHandler = (href: string, event: PressEvent) => void;
 ```
 
 ## 3. Behavior Matrix
@@ -210,27 +210,14 @@ type PressEvent = MouseEvent | KeyboardEvent;
 
 ### State Hooks Design
 ```tsx
-// Enhanced context for component communication
+// Context for compound component communication
 interface BreadcrumbContextValue {
   disabled?: boolean;
-  onNavigate?: (href: string, event: MouseEvent) => void;
-  currentPath?: string;
-  separator?: ReactNode;
-  itemCount?: number;
-  registerItem?: (id: string) => void;
-  unregisterItem?: (id: string) => void;
+  onNavigate?: NavigationHandler;
 }
 
-const useBreadcrumb = () => {
+const useBreadcrumbContext = () => {
   return useContext(BreadcrumbContext);
-}
-
-const useBreadcrumbItem = () => {
-  const context = useBreadcrumb();
-  const [position, setPosition] = useState<'first' | 'middle' | 'last'>('middle');
-  
-  // Position calculation logic based on context
-  return { position, ...context };
 }
 ```
 
@@ -272,25 +259,24 @@ const useId = () => {
 ### Required Data Attributes
 
 **BreadcrumbRoot**
-- `data-disabled="true"`: Applied when root is disabled
+- `data-disabled`: Present when root is disabled
 
 **BreadcrumbItem**
 - `data-position="first|middle|last"`: Item position in breadcrumb trail
+- `data-current`: Present when item is the current page
 
 **BreadcrumbLink**
-- `data-disabled="true"`: Applied when link is disabled
-- `data-external="true"`: Applied to external links
-- `data-focus-visible="true"`: Applied during keyboard focus
+- `data-disabled`: Present when link is disabled
+- `data-external`: Present on external links
 
 **BreadcrumbPage**
-- `data-current="true"`: Indicates current page
+- `data-current`: Always present (marks current page)
 
 ### State-Based Data Attributes
-- `data-current="true"`: Applied to current page item/page component
-- `data-disabled="true"`: Applied to disabled root or links
-- `data-external="true"`: Applied to external links for security styling
+- `data-current`: Present on current page item/page component
+- `data-disabled`: Present on disabled root or links
+- `data-external`: Present on external links for security styling
 - `data-position="first|middle|last"`: Applied to items for contextual styling
-- `data-focus-visible="true"`: Applied during keyboard navigation
 
 ## 7. Test Coverage Plan
 

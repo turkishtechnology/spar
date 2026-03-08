@@ -63,7 +63,7 @@ The Checkbox component provides a headless, accessible checkbox implementation t
 
 ### Polymorphic Support
 - Supports `as` prop for rendering as different elements
-- Proper ref forwarding with `React.forwardRef`
+- Supports React ref forwarding via polymorphic props
 - Type-safe polymorphic props with generic constraints
 
 ### Controlled/Uncontrolled
@@ -105,19 +105,17 @@ The Checkbox component provides a headless, accessible checkbox implementation t
 - Checkbox must be focusable (`tabindex="0"` when not disabled)
 - Clear visible focus indicators required (`data-focus` attribute for styling)
 - Focus is never trapped or moved automatically
-- When disabled with `accessibleWhenDisabled=true`, remains focusable but non-interactive
 
 ### Screen Reader Announcements
 - Checkbox role and current state (checked/unchecked/indeterminate) announced on focus
 - State changes announced immediately when toggled
 - Label association via `aria-labelledby` or `aria-label`
 - Description association via `aria-describedby` when provided
-- Error state announced via `aria-invalid` and `aria-errormessage`
 
 ### ARIA Attributes
 - **aria-checked**: `"true"` | `"false"` | `"mixed"` (for indeterminate)
 - **aria-disabled**: `"true"` when disabled
-- **aria-invalid**: `"true"` when validation fails
+- **aria-readonly**: `"true"` when read-only
 - **aria-required**: `"true"` when required
 - **aria-describedby**: References description element ID
 - **aria-labelledby**: References label element ID
@@ -152,7 +150,6 @@ const useCheckboxState = (props: CheckboxProps) => {
 
 ### Ref Forwarding Strategy
 - Forward ref to the root element (span/button/div)
-- Expose imperative methods: `focus()`, `blur()`, `click()`
 
 ### Event System
 - Synthetic event handling for cross-browser compatibility
@@ -175,10 +172,11 @@ const useCheckboxState = (props: CheckboxProps) => {
 | `data-checked` | `"true"` \| `undefined` | Present when checkbox is checked |
 | `data-indeterminate` | `"true"` \| `undefined` | Present when checkbox is indeterminate |
 | `data-disabled` | `"true"` \| `undefined` | Present when checkbox is disabled |
+| `data-readonly` | `"true"` \| `undefined` | Present when checkbox is read-only |
 | `data-focus` | `"true"` \| `undefined` | Present when checkbox has focus |
 | `data-hover` | `"true"` \| `undefined` | Present when checkbox is hovered |
 | `data-active` | `"true"` \| `undefined` | Present when checkbox is being pressed |
-| `data-invalid` | `"true"` \| `undefined` | Present when checkbox has validation errors |
+| `data-invalid` | `"true"` \| `undefined` | Reserved for validation integration (not set internally yet) |
 | `data-required` | `"true"` \| `undefined` | Present when checkbox is required |
 
 ### State-based Styling Examples
@@ -310,7 +308,7 @@ const useCheckboxState = (props: CheckboxProps) => {
 
 #### Accessibility
 - [ ] Checkbox role applied
-- [ ] ARIA attributes (checked, disabled, invalid, required)
+- [ ] ARIA attributes (checked, disabled, readonly, required)
 - [ ] Keyboard navigation (Space, Enter, Tab)
 - [ ] Focus management and indicators
 - [ ] Screen reader announcements

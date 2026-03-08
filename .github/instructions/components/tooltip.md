@@ -30,6 +30,7 @@
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
+| `id` | `string` | No | auto-generated (`useId`) | Base ID used to derive trigger/content IDs |
 | `children` | `React.ReactNode` | No | - | Tooltip trigger and content components |
 | `open` | `boolean` | No | - | Controlled state for tooltip visibility |
 | `defaultOpen` | `boolean` | No | `false` | Default open state for uncontrolled tooltip |
@@ -68,19 +69,19 @@
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | - | Outside pointer down handler |
 | `onOpenAutoFocus` | `(event: Event) => void` | No | - | Called when auto-focusing on open |
 | `onCloseAutoFocus` | `(event: Event) => void` | No | - | Called when auto-focusing on close |
-| `container` | `HTMLElement` | No | `document.body` | Portal target container for the tooltip content |
+| `container` | `HTMLElement \| null` | No | `document.body` | Portal target container for the tooltip content |
 
 #### TooltipArrow Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `ElementType` | No | `'div'` | Polymorphic element type to render |
+| `as` | `ElementType` | No | `'svg'` | Polymorphic element type to render |
 
 ### Ref Support
 
 - Forwards ref to trigger element
 - Content component supports polymorphic `as` prop for semantic flexibility
-- Arrow component supports polymorphic `as` prop (defaults to `'div'`)
+- Arrow component supports polymorphic `as` prop (defaults to `'svg'`)
 
 ### Controlled/Uncontrolled
 
@@ -93,16 +94,13 @@
 |-------|---------|--------|-----------------|
 | Closed | Mouse hover on trigger | Show tooltip after delay | `aria-describedby` points to tooltip |
 | Closed | Focus trigger | Show tooltip immediately | `aria-describedby` points to tooltip |
-| Closed | Touch trigger | No tooltip shown | No change |
 | Open | Mouse enter tooltip | Tooltip stays open | No change (WCAG 1.4.13 hoverable requirement) |
 | Open | Mouse leave trigger | Hide tooltip after hideDelay | Remove `aria-describedby` |
 | Open | Blur trigger | Hide tooltip | Remove `aria-describedby` |
 | Open | Press Escape | Hide tooltip | Remove `aria-describedby`, focus remains on trigger |
-| Open | Click outside | Hide tooltip | Remove `aria-describedby` |
-| Open | Trigger click (when closeOnClick=true) | Hide tooltip | Remove `aria-describedby` |
 | Disabled | Any interaction | No tooltip | No ARIA attributes applied |
-| **Controlled** | `isOpen=true` prop | Show tooltip immediately | ARIA attributes applied |
-| **Controlled** | `isOpen=false` prop | Hide tooltip immediately | ARIA attributes removed |
+| **Controlled** | `open=true` prop | Show tooltip immediately | ARIA attributes applied |
+| **Controlled** | `open=false` prop | Hide tooltip immediately | ARIA attributes removed |
 | **Provider Context** | Multiple tooltips hover quickly | Skip delay for subsequent tooltips | Optimized timing coordination |
 | **Provider Context** | Tooltip hover while another open | Close previous, open new with skip delay | Provider state coordination |
 
@@ -202,12 +200,9 @@ interface TooltipProviderContextValue {
 - **Mouse enter/leave on tooltip element** (WCAG 1.4.13 hoverable requirement)
 - Focus/blur on trigger element  
 - Keydown (Escape) on trigger element
-- Click outside detection via document listener
 - Debounced hover delay using setTimeout
 - **Hide delay** for mouse leave events
-- **Pointer grace area**: Allow pointer to move from trigger to tooltip without dismissing
 - **Skip delay optimization**: Reduce delay when moving between tooltips quickly
-- **Touch event handling**: Prevent tooltip on touch-only devices
 
 ### SSR/CSR Safety and Deterministic IDs
 
@@ -226,24 +221,17 @@ interface TooltipProviderContextValue {
 #### Trigger Element
 
 - `data-state`: `"open" | "closed"`
-- `data-placement`: `"top" | "bottom" | "left" | "right"` (actual placement after collision detection)
-- `data-focus-visible`: `"true" | "false"` (focus visible state)
-- `data-disabled`: `"true" | "false"` (disabled state)
+- `data-disabled`: present when disabled (inherited from `Button`)
 
 #### Tooltip Element  
 
 - `data-state`: `"open" | "closed"`
-- `data-side`: `"top" | "bottom" | "left" | "right"` (actual side after collision detection)
-- `data-align`: `"start" | "center" | "end"` (actual alignment after collision detection)
+- `data-placement`: computed placement from floating positioning (`side` + `align`)
 
 ### Positioning Data
 
-- CSS custom properties for dynamic positioning:
-  - `--tooltip-x`: Horizontal position
-  - `--tooltip-y`: Vertical position
-  - `--tooltip-offset`: Distance from trigger
-  - `--tooltip-arrow-x`: Arrow horizontal position
-  - `--tooltip-arrow-y`: Arrow vertical position
+- Position is applied via inline `style` from floating hook output.
+- Arrow positioning is provided to `TooltipArrow` through content context.
 
 ## 7. Test Coverage Plan
 
@@ -305,7 +293,6 @@ interface TooltipProviderContextValue {
 
 ### Implementation Checklist
 
-- [ ] Single trigger element validation (children must be one focusable element)
 - [ ] Proper ARIA association (`aria-describedby`)
 - [ ] Hover delay implementation with cleanup
 - [ ] Focus-based immediate showing
@@ -313,11 +300,8 @@ interface TooltipProviderContextValue {
 - [ ] **Tooltip hoverable**: Mouse can move from trigger to tooltip without dismissing
 - [ ] **Hide delay implementation**: Prevents accidental dismissal during pointer movement
 - [ ] Escape key dismissal
-- [ ] Click outside dismissal
 - [ ] Built-in portal via `createPortal` in TooltipContent for z-index independence
 - [ ] Collision detection and placement adjustment
-- [ ] **Touch device accessibility**: Alternative content access patterns
-- [ ] **Media query detection**: Proper hover capability detection
 - [ ] SSR compatibility and hydration safety
 - [ ] Performance optimization for multiple tooltips
 - [ ] TypeScript strict mode compliance
@@ -327,7 +311,6 @@ interface TooltipProviderContextValue {
 - [ ] **Arrow component**: Optional arrow with customizable size and styling hooks
 - [ ] **Advanced positioning**: Collision detection, alignment, sticky behavior, and boundary constraints
 - [ ] **Provider optimizations**: Skip delay and inter-tooltip coordination
-- [ ] **Pointer grace area**: Smooth pointer movement between trigger and tooltip
 - [ ] **Performance monitoring**: Event listener cleanup and memory leak prevention
 - [ ] **Bundle size analysis**: Tree-shaking verification and side effects audit
 - [ ] **Dead code elimination**: Test partial imports work correctly (`import { Tooltip } from '@turkish-technology/spar'`)
