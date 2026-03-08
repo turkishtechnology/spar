@@ -1,5 +1,5 @@
 import type { ElementType, ReactNode, RefObject } from 'react';
-import type { Side, Align, Direction, PolymorphicProps } from '../../types';
+import type { Side, Align, PolymorphicProps } from '../../types';
 import type { LabelProps } from '../Label/types';
 import type { ButtonOwnProps } from '../Button/types';
 
@@ -65,12 +65,6 @@ export interface SelectOwnProps {
    * Form field name
    */
   name?: string;
-
-  /**
-   * Reading direction
-   * @defaultValue 'ltr'
-   */
-  dir?: Direction;
 
   /**
    * Whether to focus the trigger on mount
@@ -313,7 +307,6 @@ export interface SelectContextValue {
   value: string | undefined;
   disabled: boolean;
   required: boolean;
-  dir: Direction;
   autoFocus: boolean;
 
   // Actions

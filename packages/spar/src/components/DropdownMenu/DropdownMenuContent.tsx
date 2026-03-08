@@ -341,7 +341,6 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
       highlightedId,
       closeOnSelect: menu.closeOnSelect,
       closeMenu: menu.closeMenu,
-      dir: menu.dir,
     }),
     [
       registerItem,
@@ -355,7 +354,6 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
       highlightedId,
       menu.closeOnSelect,
       menu.closeMenu,
-      menu.dir,
     ],
   );
 

@@ -60,7 +60,6 @@ The main container that manages all select state and behavior.
 | `disabled` | `boolean` | No | `false` | Disables the entire select |
 | `required` | `boolean` | No | `false` | Makes the select required for forms |
 | `name` | `string` | No | - | Form field name |
-| `dir` | `'ltr' \| 'rtl'` | No | `'ltr'` | Reading direction |
 | `autoFocus` | `boolean` | No | `false` | Whether to focus trigger on mount |
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
 
@@ -302,7 +301,6 @@ interface SelectContextValue {
   value: string | undefined;
   disabled: boolean;
   required: boolean;
-  dir: Direction;
   autoFocus: boolean;
 
   // Actions
@@ -492,7 +490,6 @@ Consumers define styling:
 - ✅ Open change callback fires
 - ✅ Built-in portal rendering (via `container` prop on SelectContent)
 - ✅ Type-ahead search
-- ✅ RTL support
 
 ### Accessibility Tests
 Using `jest-axe`:
@@ -623,7 +620,6 @@ export { SelectItem, SelectGroup, SelectLabel, SelectItemText, SelectSeparator, 
 - [ ] Implement `SelectArrow` (optional)
 - [ ] Add collision detection (viewport boundaries)
 - [ ] Add popper positioning mode
-- [ ] Implement RTL support
 - [ ] Add form integration (hidden input)
 - [ ] Integration tests
 
