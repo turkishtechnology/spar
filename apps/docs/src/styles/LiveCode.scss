@@ -3,11 +3,15 @@
 .live-code-container {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 0;
 
   /* ---- Preview card: owns the border, contains canvas + footer ---- */
   .live-preview-card {
     display: grid;
     grid-template-rows: 1fr auto;
+    width: 100%;
+    min-width: 0;
     border: 1px solid #e1e4ea;
     border-radius: 12px;
     overflow: hidden;
@@ -24,9 +28,11 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    width: 100%;
 
     .live-preview {
       width: 100%;
+      min-width: 0;
       padding: 24px;
       display: flex;
       justify-content: center;
@@ -315,6 +321,7 @@
   .collapsible-code-block {
     overflow: hidden;
     margin-top: 12px;
+    width: 100%;
 
     .collapsible-toggle {
       width: 100%;
@@ -477,6 +484,9 @@
 }
 
 .live-code-wrapper {
+  width: 100%;
+  min-width: 0;
+
   [data-theme='dark'] & {
     background: #1a1d24;
   }

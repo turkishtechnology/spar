@@ -20,36 +20,37 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
   <Switch className='switch'/>
 </div>`}
   cssCode={`.switch-demo-container .switch {
-  background-color: rgba(0, 0, 0, 0.08);
-  border: 0;
-  width: 56px;
+  width: 52px;
   height: 32px;
   padding: 4px;
-  border-radius: 24px;
+  border: 1px solid #e1e4ea;
+  border-radius: 999px;
+  background-color: rgba(0, 0, 0, 0.08);
   position: relative;
   display: flex;
   align-items: center;
 }
 
 .switch-demo-container .switch::after {
-content: '';
-width: 24px;
-height: 24px;
-border-radius: 50%;
-background: rgba(0, 0, 0, 0.72);
-transition: transform 0.2s ease;
+  content: '';
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.72);
+  transition: transform 0.2s ease;
 }
 
 .switch-demo-container .switch[data-checked]::after {
-transform: translateX(100%);
+  transform: translateX(20px);
 }
 
 [data-theme='dark'] .switch-demo-container .switch {
-background-color: rgba(255, 255, 255, 0.12);
+  border-color: #2b303b;
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 [data-theme='dark'] .switch-demo-container .switch::after {
-background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.72);
 }`}
 />
 
