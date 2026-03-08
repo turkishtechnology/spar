@@ -99,7 +99,6 @@ border-color: rgba(255, 255, 255, 0.72);
 - ✅ Polymorphic rendering with `as` prop
 - ✅ Render props pattern for Tabs.Trigger customization
 - ✅ Disabled tab support
-- ✅ LTR and RTL direction support
 
 ## Installation
 
@@ -289,7 +288,6 @@ function ForceMountTabs() {
 | `defaultValue?`   | `string`                  | `undefined`    | Initial selected tab value for uncontrolled usage                           |
 | `onValueChange?`  | `(value: string) => void` | `undefined`    | Called when selected value changes                                          |
 | `orientation?`    | `'horizontal' \| 'vertical'` | `'horizontal'` | Orientation used by list/panels and keyboard rules                          |
-| `dir?`            | `'ltr' \| 'rtl'`          | `'ltr'`        | Direction used by horizontal arrow navigation                               |
 | `activationMode?` | `'automatic' \| 'manual'` | `'automatic'`  | `automatic`: focus activates, `manual`: Enter/Space activates               |
 | `as?`             | `React.ElementType`       | `'div'`        | Element type to render                                                      |
 | `...props`        | `ComponentPropsWithRef<'div'>` + `as` element props | — | Forwards supported HTML attributes/events to the rendered root element |
@@ -305,7 +303,6 @@ function ForceMountTabs() {
 | Attribute          | Value                    | Purpose                                    |
 | ------------------ | ------------------------ | ------------------------------------------ |
 | `data-orientation` | `horizontal \| vertical` | Exposes configured orientation             |
-| `data-dir`         | `ltr \| rtl`             | Exposes configured text direction          |
 
 ### Tabs.List
 
@@ -417,8 +414,8 @@ No component-specific events are defined. Standard forwarded DOM events can be p
 | Key                | Action                                 | Context                     | Notes                                                            |
 | ------------------ | -------------------------------------- | --------------------------- | ---------------------------------------------------------------- |
 | `Tab`              | Moves focus in document tab order      | Global                      | Browser-native behavior; not intercepted by `Tabs`               |
-| `ArrowRight`       | Focuses next enabled tab               | Horizontal list             | Uses `dir`; wraps when end is reached; skips disabled tabs       |
-| `ArrowLeft`        | Focuses previous enabled tab           | Horizontal list             | Uses `dir`; wraps when start is reached; skips disabled tabs     |
+| `ArrowRight`       | Focuses next enabled tab               | Horizontal list             | Wraps when end is reached; skips disabled tabs       |
+| `ArrowLeft`        | Focuses previous enabled tab           | Horizontal list             | Wraps when start is reached; skips disabled tabs     |
 | `ArrowDown`        | Focuses next enabled tab               | Vertical list               | Wraps when end is reached; skips disabled tabs                   |
 | `ArrowUp`          | Focuses previous enabled tab           | Vertical list               | Wraps when start is reached; skips disabled tabs                 |
 | `Home`             | Focuses first enabled tab              | List focused                | Selects it in `automatic` mode                                   |

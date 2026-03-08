@@ -17,7 +17,6 @@ export const Select = <T extends ElementType = 'div'>({
   disabled = false,
   required = false,
   name,
-  dir = 'ltr',
   autoFocus = false,
   as,
   children,
@@ -86,7 +85,6 @@ export const Select = <T extends ElementType = 'div'>({
       value: currentValue,
       disabled,
       required,
-      dir,
       autoFocus,
 
       // Actions
@@ -118,7 +116,6 @@ export const Select = <T extends ElementType = 'div'>({
       currentValue,
       disabled,
       required,
-      dir,
       autoFocus,
       handleValueChange,
       handleOpenChange,

@@ -149,7 +149,6 @@ color: #222;
 - ✅ Portal ile içerik render etme (`container` veya `document.body`)
 - ✅ Grup, etiket ve ayırıcı ile listeleri bölümleme
 - ✅ Root veya Item bazında devre dışı bırakma
-- ✅ RTL/LTR yön desteği (`dir`)
 - ✅ Root/Trigger/Content/Item tabanlı compound yapı
 
 ## Installation
@@ -412,33 +411,6 @@ function SelectInForm() {
 }
 ```
 
-### RTL Support
-
-`dir='rtl'` ile sağdan sola yön desteği:
-
-```tsx
-function RTLSelect() {
-  const [value, setValue] = React.useState('');
-
-  return (
-    <Select.Root value={value} onValueChange={setValue} dir='rtl'>
-      <Select.Trigger>
-        <Select.Value placeholder='בחר אפשרות' />
-      </Select.Trigger>
-
-      <Select.Content>
-        <Select.Item value='option1'>
-          <Select.ItemText>אפשרות 1</Select.ItemText>
-        </Select.Item>
-        <Select.Item value='option2'>
-          <Select.ItemText>אפשרות 2</Select.ItemText>
-        </Select.Item>
-      </Select.Content>
-    </Select.Root>
-  );
-}
-```
-
 ## API Reference
 
 ### Select.Root
@@ -459,7 +431,6 @@ Root state ve context sağlayıcısıdır.
 | `disabled?`      | `boolean`                 | `false`     | Tüm Select'i devre dışı bırakır |
 | `required?`      | `boolean`                 | `false`     | Form için zorunlu alan yapar |
 | `name?`          | `string`                  | `undefined` | Form alan adı; `value` tanımlıysa hidden input üretilir |
-| `dir?`           | `'ltr' \| 'rtl'`          | `'ltr'`     | Yazım yönü |
 | `autoFocus?`     | `boolean`                 | `false`     | Trigger'a mount sırasında odak verir |
 | `as?`            | `React.ElementType`       | `'div'`     | Root için polymorphic element |
 | `children?`      | `React.ReactNode`         | `undefined` | Root içeriği |

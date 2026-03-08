@@ -103,16 +103,6 @@ describe('DropdownMenu', () => {
       expect(onOpenChange).toHaveBeenCalledWith(true);
     });
 
-    it('should support custom dir prop', () => {
-      const { container } = render(
-        <DropdownMenu dir='rtl'>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-        </DropdownMenu>,
-      );
-
-      expect(container).toBeInTheDocument();
-    });
-
     it('should disable all triggers when root disabled is true', async () => {
       const user = userEvent.setup();
       const onOpenChange = jest.fn();
