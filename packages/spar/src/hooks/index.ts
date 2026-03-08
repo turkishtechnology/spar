@@ -1,6 +1,7 @@
 export { useAutoFocus } from './useAutoFocus';
 export { useControlledState } from './useControlledState';
 export { useDocumentEvent } from './useDocumentEvent';
+export { useFocusTrap } from './useFocusTrap';
 export { useMergedRef } from './useMergedRef';
 export { useInteractOutside, type UseInteractOutsideOptions } from './useInteractOutside';
 export { useItemRegistry } from './useItemRegistry';

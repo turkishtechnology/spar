@@ -5,6 +5,7 @@ import {
   useMergedRef,
   useFloating,
   useDocumentEvent,
+  useFocusTrap,
   type UseFloatingOptions,
   type UseFloatingReturn,
 } from '@/hooks';
@@ -112,6 +113,7 @@ export const PopoverContent = <T extends ElementType = 'div'>({
   );
 
   useDocumentEvent('keydown', handleEscapeKey, isOpen);
+  useFocusTrap(contentRef, !!(isOpen && trapFocus));
 
   // Outside interaction handling
   useInteractOutside([contentRef, triggerRef], {
@@ -131,27 +133,6 @@ export const PopoverContent = <T extends ElementType = 'div'>({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
-      // Focus trap: handle Tab key
-      if (trapFocus && event.key === 'Tab') {
-        const focusableElements = getFocusableElements(event.currentTarget);
-        if (focusableElements.length > 0) {
-          const firstFocusable = focusableElements[0];
-          const lastFocusable = focusableElements[focusableElements.length - 1];
-
-          if (event.shiftKey) {
-            if (document.activeElement === firstFocusable) {
-              event.preventDefault();
-              lastFocusable?.focus();
-            }
-          } else {
-            if (document.activeElement === lastFocusable) {
-              event.preventDefault();
-              firstFocusable?.focus();
-            }
-          }
-        }
-      }
-
       // Handle Home/End keys within content
       if (event.key === 'Home' || event.key === 'End') {
         const focusableElements = getFocusableElements(event.currentTarget);
@@ -166,7 +147,7 @@ export const PopoverContent = <T extends ElementType = 'div'>({
       }
       onKeyDown?.(event);
     },
-    [trapFocus, onKeyDown],
+    [onKeyDown],
   );
 
   // Extract placement information for data attributes
