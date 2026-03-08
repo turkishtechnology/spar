@@ -166,15 +166,11 @@ background: rgba(255, 255, 255, 0.08);
 - ✅ Single or multiple panel expansion modes
 - ✅ Controlled and uncontrolled state management
 - ✅ Optional collapsible behavior for single mode
-- ✅ Comprehensive keyboard navigation with arrow keys
-- ✅ Screen reader support with proper ARIA attributes
-- ✅ Focus management and visual focus indicators
 - ✅ Disabled state support for individual items or entire accordion
-- ✅ Semantic heading structure with configurable levels
+- ✅ Semantic heading structure with configurable heading levels
 - ✅ Horizontal and vertical orientation support
 - ✅ Polymorphic component support with `as` prop
 - ✅ Force mount option for content preservation
-- ✅ Find-in-Page Support\*\*: Hidden content is searchable via browser "Find" command (`Ctrl+F` / `Cmd+F`) thanks to `hidden="until-found"` support
 
 ## Installation
 
@@ -398,6 +394,7 @@ The root container that provides context and manages the state for all accordion
 | Attribute          | Value                        | Purpose                          |
 | ------------------ | ---------------------------- | -------------------------------- |
 | `data-orientation` | `"vertical" \| "horizontal"` | Indicates navigation orientation |
+| `data-type`        | `"single" \| "multiple"`      | Indicates the expansion mode     |
 
 ### Accordion.Item
 
@@ -405,12 +402,13 @@ Individual accordion item that contains a header and content panel.
 
 **Props**
 
-| Name        | Type                | Default | Description                                       |
-| ----------- | ------------------- | ------- | ------------------------------------------------- |
-| `value`     | `string`            | -       | Unique identifier for the item                    |
-| `disabled?` | `boolean`           | `false` | Disables this specific item                       |
-| `as?`       | `React.ElementType` | `"div"` | Polymorphic component type                        |
-| `children`  | `React.ReactNode`   | -       | Accordion.Header and Accordion.Content components |
+| Name        | Type                | Default     | Description                                                            |
+| ----------- | ------------------- | ----------- | ---------------------------------------------------------------------- |
+| `value`     | `string`            | -           | Unique identifier for the item                                         |
+| `id?`       | `string`            | `undefined` | Custom base ID for ARIA relationships; derives trigger and content IDs |
+| `disabled?` | `boolean`           | `false`     | Disables this specific item                                            |
+| `as?`       | `React.ElementType` | `"div"`     | Polymorphic component type                                             |
+| `children`  | `React.ReactNode`   | -           | Accordion.Header and Accordion.Content components                      |
 
 **Events**
 
@@ -420,10 +418,10 @@ Individual accordion item that contains a header and content panel.
 
 **HTML Attributes**
 
-| Attribute       | Value                | Purpose                   |
-| --------------- | -------------------- | ------------------------- |
-| `data-state`    | `"open" \| "closed"` | Indicates expansion state |
-| `data-disabled` | `boolean`            | Indicates disabled state  |
+| Attribute       | Value                | Purpose                                  |
+| --------------- | -------------------- | ---------------------------------------- |
+| `data-state`    | `"open" \| "closed"` | Reflects the expansion state of the item |
+| `data-disabled` | `""`                 | Present when the item is disabled        |
 
 ### Accordion.Header
 
@@ -442,6 +440,14 @@ Semantic heading wrapper for the accordion trigger button.
 | Name | Parameters | Description               | When Triggered |
 | ---- | ---------- | ------------------------- | -------------- |
 | None | -          | Header is purely semantic | -              |
+
+**HTML Attributes**
+
+| Attribute       | Value                | Purpose                                       |
+| --------------- | -------------------- | --------------------------------------------- |
+| `data-state`    | `"open" \| "closed"` | Reflects the expansion state of the item      |
+| `data-level`    | `number`             | Reflects the rendered heading level           |
+| `data-disabled` | `""`                 | Present when the item is disabled             |
 
 ### Accordion.Trigger
 
@@ -475,11 +481,15 @@ Button that toggles the visibility of the associated content panel.
 
 **HTML Attributes**
 
-| Attribute       | Value                | Purpose                   |
-| --------------- | -------------------- | ------------------------- |
-| `id`            | `string`             | Unique identifier         |
-| `data-state`    | `"open" \| "closed"` | Indicates expansion state |
-| `data-disabled` | `""`                 | Present when disabled     |
+| Attribute                | Value                | Purpose                                                          |
+| ------------------------ | -------------------- | ---------------------------------------------------------------- |
+| `id`                     | `string`             | Unique identifier matching the trigger element ARIA ID           |
+| `aria-expanded`          | `boolean`            | Indicates whether the associated panel is expanded               |
+| `aria-controls`          | `string`             | References the content panel element ID                          |
+| `data-state`             | `"open" \| "closed"` | Reflects the expansion state of the item                         |
+| `data-disabled`          | `""`                 | Present when the trigger is disabled                             |
+| `data-accordion-trigger` | `""`                 | Always present; identifies the element as an accordion trigger   |
+| `data-value`             | `string`             | The value of the accordion item this trigger belongs to          |
 
 ### Accordion.Content
 
@@ -487,24 +497,29 @@ Collapsible panel containing the accordion item content.
 
 **Props**
 
-| Name          | Type                | Default | Description                                    |
-| ------------- | ------------------- | ------- | ---------------------------------------------- |
-| `forceMount?` | `boolean`           | `false` | Force content to remain mounted when collapsed |
-| `as?`         | `React.ElementType` | `"div"` | Polymorphic component type                     |
-| `children`    | `React.ReactNode`   | -       | Panel content                                  |
+| Name             | Type                       | Default     | Description                                                           |
+| ---------------- | -------------------------- | ----------- | --------------------------------------------------------------------- |
+| `forceMount?`    | `boolean`                  | `false`     | Force content to remain mounted when collapsed                        |
+| `onBeforeMatch?` | `(event: Event) => void`   | `undefined` | Callback fired when content is found via browser Find command         |
+| `as?`            | `React.ElementType`        | `"div"`     | Polymorphic component type                                            |
+| `children`       | `React.ReactNode`          | -           | Panel content                                                         |
 
 **Events**
 
-| Name | Parameters | Description                           | When Triggered |
-| ---- | ---------- | ------------------------------------- | -------------- |
-| None | -          | Content visibility managed by context | -              |
+| Name             | Parameters       | Description                                                    | When Triggered                                                                                  |
+| ---------------- | ---------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `onBeforeMatch`  | `(event: Event)` | Fired when hidden content is matched via browser Find command  | Browser Find (`Ctrl+F`/`Cmd+F`) matches content inside a closed, `forceMount`ed panel           |
 
 **HTML Attributes**
 
-| Attribute    | Value                | Purpose                    |
-| ------------ | -------------------- | -------------------------- |
-| `id`         | `string`             | Unique identifier          |
-| `data-state` | `"open" \| "closed"` | Indicates visibility state |
+| Attribute          | Value                     | Purpose                                                                                           |
+| ------------------ | ------------------------- | ------------------------------------------------------------------------------------------------- |
+| `id`               | `string`                  | Unique identifier matching the content element ARIA ID                                            |
+| `role`             | `"region"`                | Always present; marks the panel as a landmark region                                              |
+| `aria-labelledby`  | `string`                  | References the trigger element that labels this panel                                             |
+| `data-state`       | `"open" \| "closed"`      | Reflects the visibility state of the panel                                                        |
+| `data-disabled`    | `""`                      | Present when the item is disabled                                                                 |
+| `hidden`           | `true \| "until-found"`   | Present when closed and `forceMount` is `true`; `"until-found"` in modern browsers, `true` as fallback |
 
 ## Keyboard Interactions
 
@@ -522,4 +537,3 @@ Complete keyboard behavior for the accordion component:
 | `ArrowLeft`   | Previous trigger  | Focused trigger (horizontal) | Moves focus to previous accordion trigger          |
 | `Home`        | First trigger     | Focused trigger              | Moves focus to first accordion trigger             |
 | `End`         | Last trigger      | Focused trigger              | Moves focus to last accordion trigger              |
-| `Escape`      | No action         | Any context                  | Reserved for potential future use                  |

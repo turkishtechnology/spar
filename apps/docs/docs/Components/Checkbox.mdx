@@ -75,7 +75,6 @@ fill: #000;
 - ✅ **Polymorphic rendering** - Customizable root element via `as` prop
 - ✅ **Interaction states** - Focus, hover, pressed, and disabled state tracking
 - ✅ **Auto-focus support** - Focus on mount capability
-- ✅ **Screen reader announcements** - Proper ARIA labels and state communication
 
 ## Installation
 
@@ -161,9 +160,9 @@ function ControlledCheckbox() {
 
 ```tsx
 function IndeterminateCheckbox() {
-  const [checked, setChecked] = useState('indeterminate');
+  const [checked, setChecked] = useState<CheckedState>('indeterminate');
 
-  const handleChange = (newChecked) => {
+  const handleChange = (newChecked: CheckedState) => {
     // Cycle: indeterminate → true → false → indeterminate
     if (newChecked === true) {
       setChecked(false);
@@ -391,13 +390,16 @@ When using the render props pattern, the following state properties are passed t
 
 **HTML Attributes**
 
-| Attribute       | Value                                         | Purpose                                    |
-| --------------- | --------------------------------------------- | ------------------------------------------ |
-| `data-state`    | `"checked" \| "unchecked" \| "indeterminate"` | Indicates checked state                    |
-| `data-disabled` | `""`                                          | Present when disabled                      |
-| `data-invalid`  | `""`                                          | Present when validation error              |
-| `data-required` | `""`                                          | Present when required field                |
-| `tabIndex`      | `number`                                      | Controls keyboard focus (-1 when disabled) |
+| Attribute          | Value  | Purpose                                        |
+| ------------------ | ------ | ---------------------------------------------- |
+| `data-checked`     | `""`   | Present when `checked` is `true`               |
+| `data-indeterminate` | `""` | Present when `checked` is `'indeterminate'`    |
+| `data-disabled`    | `""`   | Present when `disabled` is `true`              |
+| `data-readonly`    | `""`   | Present when `readOnly` is `true`              |
+| `data-required`    | `""`   | Present when `required` is `true`              |
+| `data-focus`       | `""`   | Present when the checkbox has focus            |
+| `data-hover`       | `""`   | Present when the checkbox is hovered           |
+| `data-active`      | `""`   | Present when the checkbox is being pressed     |
 
 ## Keyboard Interactions
 

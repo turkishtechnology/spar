@@ -41,13 +41,11 @@ color: #f2f5f8;
 
 ## Features
 
-- ✅ Polymorphic rendering - renders as any HTML element or component
+- ✅ Polymorphic rendering via `as` prop — renders as any HTML element or component
 - ✅ Toggle button functionality with controlled and uncontrolled modes
-- ✅ Loading state with screen reader announcements
-- ✅ Auto-focus support for enhanced UX
-- ✅ Complete keyboard navigation (Enter and Space activation)
+- ✅ Loading state management with `isLoading` prop
+- ✅ Auto-focus support on mount
 - ✅ Disabled state management
-- ✅ Custom element type support via `as` prop
 
 ## Installation
 
@@ -221,7 +219,7 @@ A headless, accessible button component with complete keyboard support and toggl
 | ---------------- | ----- | ---------------------------------------------------- |
 | `data-disabled`  | `""`  | Styling hook for disabled state                      |
 | `data-loading`   | `""`  | Styling hook for loading state                       |
-| `data-pressed`   | `""`  | Styling hook for toggle state (present when pressed) |
+| `data-pressed`   | `""`  | Present when component is in toggle mode and currently pressed |
 | `data-autofocus` | `""`  | Styling hook for auto-focused buttons                |
 
 ## Keyboard Interactions

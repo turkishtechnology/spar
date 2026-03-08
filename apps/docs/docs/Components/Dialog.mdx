@@ -147,13 +147,11 @@ color: #f2f5f8;
 - ✅ Modal and non-modal dialog support
 - ✅ Controlled and uncontrolled state management
 - ✅ Focus trapping and restoration
-- ✅ Escape key handling
 - ✅ Click outside to close
 - ✅ Automatic portal rendering to document.body
 - ✅ Polymorphic components with `as` prop
 - ✅ Custom focus management with initial and final focus
 - ✅ Force mount for animation libraries
-- ✅ Customizable ARIA roles and attributes
 
 ## Installation
 
@@ -427,8 +425,9 @@ The root container that manages dialog state and provides context to all child c
 
 | Name            | Type                      | Default     | Description                                                  |
 | --------------- | ------------------------- | ----------- | ------------------------------------------------------------ |
-| `children`      | `React.ReactNode`         | -           | Dialog trigger, overlay, and content components              |
-| `open?`         | `boolean`                 | `undefined` | Controlled open state                                        |
+| `children`      | `React.ReactNode`         | -               | Dialog trigger, overlay, and content components                                                                    |
+| `id?`           | `string`                  | auto-generated  | Custom base ID for ARIA relationships; sub-IDs are derived as `${id}-title`, `${id}-description`, `${id}-content` |
+| `open?`         | `boolean`                 | `undefined`     | Controlled open state                                                                                              |
 | `onOpenChange?` | `(open: boolean) => void` | `undefined` | Callback when open state changes                             |
 | `defaultOpen?`  | `boolean`                 | `false`     | Initial open state for uncontrolled usage                    |
 | `modal?`        | `boolean`                 | `true`      | Whether dialog is modal (blocks interaction outside)         |
@@ -440,12 +439,6 @@ The root container that manages dialog state and provides context to all child c
 | Name           | Parameters        | Description        | When Triggered                          |
 | -------------- | ----------------- | ------------------ | --------------------------------------- |
 | `onOpenChange` | `(open: boolean)` | Open state changes | User interaction or programmatic change |
-
-**HTML Attributes**
-
-| Attribute    | Value                | Purpose              |
-| ------------ | -------------------- | -------------------- |
-| `data-state` | `"open" \| "closed"` | Current dialog state |
 
 ### Dialog.Trigger
 
@@ -483,10 +476,13 @@ Interactive element that opens the dialog when activated. Extends all `Button` c
 
 **HTML Attributes**
 
-| Attribute       | Value                 | Purpose                  |
-| --------------- | --------------------- | ------------------------ |
-| `data-state`    | `"open" \| "closed"`  | Current dialog state     |
-| `data-disabled` | `string \| undefined` | Disabled state indicator |
+| Attribute        | Value                | Purpose                              |
+| ---------------- | -------------------- | ------------------------------------ |
+| `data-state`     | `"open" \| "closed"` | Current dialog state                 |
+| `data-disabled`  | `""`                 | Present when disabled                |
+| `data-loading`   | `""`                 | Present when loading                 |
+| `data-pressed`   | `""`                 | Present when toggle button is active |
+| `data-autofocus` | `""`                 | Present when autoFocus is true       |
 
 ### Dialog.Overlay
 
@@ -537,15 +533,17 @@ Main dialog container that handles focus management and keyboard interactions.
 | ---------------------- | ------------------------------ | ----------------------------- | --------------------------------------- |
 | `onOpenAutoFocus`      | `(event: Event)`               | Before auto-focus on open     | Dialog opens                            |
 | `onCloseAutoFocus`     | `(event: Event)`               | Before focus restore on close | Dialog closes                           |
-| `onEscapeKeyDown`      | `(event: React.KeyboardEvent)` | Escape key pressed            | Escape key interaction                  |
-| `onPointerDownOutside` | `(event: React.PointerEvent)`  | Pointer down outside content  | Outside interaction                     |
-| `onInteractOutside`    | `(event: React.PointerEvent)`  | Interaction outside content   | Outside interaction with preventDefault |
+| `onEscapeKeyDown`      | `(event: KeyboardEvent)`       | Escape key pressed            | Escape key interaction                  |
+| `onPointerDownOutside` | `(event: PointerEvent)`        | Pointer down outside content  | Outside interaction                     |
+| `onInteractOutside`    | `(event: PointerEvent)`        | Interaction outside content   | Outside interaction with preventDefault |
 
 **HTML Attributes**
 
-| Attribute    | Value                | Purpose              |
-| ------------ | -------------------- | -------------------- |
-| `data-state` | `"open" \| "closed"` | Current dialog state |
+| Attribute    | Value                | Purpose                                  |
+| ------------ | -------------------- | ---------------------------------------- |
+| `data-state` | `"open" \| "closed"` | Current dialog state                     |
+| `data-modal` | `"true" \| "false"`  | Indicates whether the dialog is modal    |
+| `data-role`  | `string`             | ARIA role value applied to the element   |
 
 ### Dialog.Title
 
@@ -565,6 +563,12 @@ Dialog title that provides an accessible name for the dialog.
 | Name | Parameters | Description | When Triggered |
 | ---- | ---------- | ----------- | -------------- |
 | -    | -          | No events   | -              |
+
+**HTML Attributes**
+
+| Attribute    | Value    | Purpose                                    |
+| ------------ | -------- | ------------------------------------------ |
+| `data-level` | `string` | Heading level applied to the title element |
 
 ### Dialog.Description
 
@@ -618,9 +622,13 @@ Button that closes the dialog when activated. Extends all `Button` component pro
 
 **HTML Attributes**
 
-| Attribute | Value      | Purpose                                    |
-| --------- | ---------- | ------------------------------------------ |
-| `type`    | `"button"` | Button type for form submission prevention |
+| Attribute            | Value                | Purpose                                |
+| -------------------- | -------------------- | -------------------------------------- |
+| `data-dialog-close`  | `""`                 | Always present, marks the close button |
+| `data-disabled`      | `""`                 | Present when disabled                  |
+| `data-loading`       | `""`                 | Present when loading                   |
+| `data-pressed`       | `""`                 | Present when toggle button is active   |
+| `data-autofocus`     | `""`                 | Present when autoFocus is true         |
 
 ## Keyboard Interactions
 
@@ -633,8 +641,6 @@ Complete keyboard behavior for the entire Dialog component:
 | `Enter`       | Activate          | Trigger/Close buttons | Opens or closes dialog                                 |
 | `Space`       | Activate          | Trigger/Close buttons | Alternative activation method for buttons              |
 | `Escape`      | Close dialog      | Dialog open           | Closes dialog and returns focus to trigger             |
-| `Enter`       | Activate          | Any focusable element | Triggers primary action of focused element             |
-| `Space`       | Activate          | Any button element    | Triggers button action                                 |
 
 **Focus Management:**
 
