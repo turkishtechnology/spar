@@ -22,20 +22,24 @@ A headless, accessible button component that provides complete keyboard support 
       </Button>
     </div>`}
   cssCode={`.button-demo-container .button {
-  border-radius: 8px;
-  padding: 12px 14px;
-  font-weight: 400;
-
-/_ Light mode styles _/
-background: rgba(0, 0, 0, 0.08);
-color: #222530;
-font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid #e1e4ea;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.08);
+  color: #222530;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
 }
 
-/_ Dark mode styles _/
 [data-theme='dark'] .button-demo-container .button {
-background: rgba(255, 255, 255, 0.12);
-color: #f2f5f8;
+  border-color: #2b303b;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f2f5f8;
 }`}
 />
 

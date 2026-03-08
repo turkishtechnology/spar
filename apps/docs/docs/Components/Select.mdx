@@ -42,100 +42,107 @@ A headless, fully accessible dropdown component that allows users to choose a si
   </Select.Root>
 </div>`}
   cssCode={`.select-demo-container .select-trigger {
-  width: 120px;
+  min-width: 180px;
+  min-height: 40px;
   display: flex;
-  padding: 10px;
   align-items: center;
   justify-content: space-between;
-  border-radius: 5px;
+  gap: 12px;
+  padding: 0 14px;
+  border-radius: 10px;
   border: 1px solid #e1e4ea;
-  background: rgba(0, 0, 0, 0.16);
+  background: rgba(0, 0, 0, 0.08);
 }
 
 [data-theme='dark'] .select-demo-container .select-trigger {
-border-color: #2b303b;
-background: rgba(255, 255, 255, 0.16);
+  border-color: #2b303b;
+  background: rgba(255, 255, 255, 0.12);
 }
 
-.select-demo-container .select-value {
-color: #222530;
-}
-
-[data-theme='dark'] .select-demo-container .select-value {
-color: #f2f5f8;
-}
-
+.select-demo-container .select-value,
 .select-demo-container .select-trigger-addon {
-color: #222530;
-font-size: 12px;
-line-height: 1;
-transition: transform 0.2s ease;
+  color: #222530;
+  font-size: 14px;
+  line-height: 20px;
 }
 
+[data-theme='dark'] .select-demo-container .select-value,
 [data-theme='dark'] .select-demo-container .select-trigger-addon {
-color: #f2f5f8;
+  color: #f2f5f8;
 }
 
 .select-demo-container .select-trigger[data-state='open'] .select-trigger-addon {
-transform: rotate(180deg);
-}
-
-.select-demo-container .select-item {
-padding: 6px 8px;
-border-radius: 4px;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: space-between;
-gap: 12px;
-}
-
-.select-demo-container .select-item[data-highlighted] {
-background: rgba(0, 0, 0, 0.08);
-outline: none;
-}
-
-[data-theme='dark'] .select-demo-container .select-item[data-highlighted] {
-background: rgba(255, 255, 255, 0.12);
-}
-
-.select-demo-container .select-item[data-disabled] {
-opacity: 0.5;
-cursor: not-allowed;
-}
-
-.select-demo-container .select-item-check {
-opacity: 0;
-color: #222530;
-transition: opacity 0.2s ease;
-}
-
-[data-theme='dark'] .select-demo-container .select-item-check {
-color: #f2f5f8;
-}
-
-.select-demo-container .select-item[data-state='checked'] .select-item-check {
-opacity: 1;
+  transform: rotate(180deg);
 }
 
 .select-demo-container .select-content {
-padding: 4px 8px;
-border-radius: 5px;
-border: 1px solid #e1e4ea;
-background: #ddd;
+  min-width: 180px;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid #e1e4ea;
+  background: #f7f8fa;
+  box-shadow:
+    0 12px 32px rgba(34, 37, 48, 0.08),
+    0 4px 12px rgba(34, 37, 48, 0.06);
 }
 
 [data-theme='dark'] .select-demo-container .select-content {
-border-color: #2b303b;
-background: #222;
+  border-color: #2b303b;
+  background: #1f232b;
+}
+
+.select-demo-container .select-item {
+  min-height: 36px;
+  padding: 0 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #222530;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+[data-theme='dark'] .select-demo-container .select-item {
+  color: #f2f5f8;
+}
+
+.select-demo-container .select-item[data-highlighted] {
+  background: rgba(0, 0, 0, 0.08);
+  outline: none;
+}
+
+[data-theme='dark'] .select-demo-container .select-item[data-highlighted] {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.select-demo-container .select-item[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.select-demo-container .select-item-check {
+  opacity: 0;
+  color: #222530;
+  transition: opacity 0.2s ease;
+}
+
+[data-theme='dark'] .select-demo-container .select-item-check {
+  color: #f2f5f8;
+}
+
+.select-demo-container .select-item[data-state='checked'] .select-item-check {
+  opacity: 1;
 }
 
 .select-demo-container .select-arrow {
-color: #ddd;
+  color: #f7f8fa;
 }
 
 [data-theme='dark'] .select-demo-container .select-arrow {
-color: #222;
+  color: #1f232b;
 }`}
 />
 

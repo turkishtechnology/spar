@@ -49,96 +49,97 @@ A headless modal and non-modal dialog component that provides accessibility feat
 cssCode={`.dialog-demo-container .dialog-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(17, 24, 39, 0.48);
 }
 
-.dialog-demo-container .dialog-trigger {
-border-radius: 8px;
-border: none;
-padding: 12px 14px;
-font-weight: 400;
-
-/_ Light mode styles _/
-background-color: rgba(0, 0, 0, 0.08);
-color: #222530;
-font-size: 13px;
+.dialog-demo-container .dialog-trigger,
+.dialog-demo-container .dialog-continue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid #e1e4ea;
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #222530;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
 }
 
-[data-theme='dark'] .dialog-demo-container .dialog-trigger {
-/_ Dark mode styles _/
-background-color: rgba(255, 255, 255, 0.12);
-color: #f2f5f8;
+[data-theme='dark'] .dialog-demo-container .dialog-trigger,
+[data-theme='dark'] .dialog-demo-container .dialog-continue {
+  border-color: #2b303b;
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #f2f5f8;
 }
 
 .dialog-demo-container .dialog-content {
-position: fixed;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-border-radius: 16px;
-border: 0.625px solid #e1e4ea;
-background-color: #ebebeb;
-width: 480px;
-padding: 16px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 420px;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e1e4ea;
+  background-color: #f7f8fa;
+  box-shadow:
+    0 12px 32px rgba(34, 37, 48, 0.08),
+    0 4px 12px rgba(34, 37, 48, 0.06);
 }
 
 [data-theme='dark'] .dialog-demo-container .dialog-content {
-border-color: #2b303b;
-background-color: #292929;
+  border-color: #2b303b;
+  background-color: #1f232b;
 }
 
 .dialog-demo-container .dialog-title {
-color: #222530;
-font-size: 20px;
-margin-bottom: 8px;
+  color: #222530;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
 [data-theme='dark'] .dialog-demo-container .dialog-title {
-color: #f2f5f8;
+  color: #f2f5f8;
 }
 
 .dialog-demo-container .dialog-description {
-color: #717784;
-font-size: 14px;
-font-weight: 300;
-line-height: 20px;
+  color: #717784;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 [data-theme='dark'] .dialog-demo-container .dialog-description {
-color: #99a0ae;
+  color: #99a0ae;
 }
 
 .dialog-demo-container .dialog-actions {
-display: flex;
-align-items: center;
-justify-content: flex-end;
-gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
 }
 
 .dialog-demo-container .dialog-close {
-background-color: transparent;
-border: none;
-padding: 12px 14px;
-border-radius: 8px;
-cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background-color: transparent;
+  color: #717784;
+  cursor: pointer;
 }
 
-.dialog-demo-container .dialog-continue {
-border-radius: 8px;
-border: none;
-padding: 12px 14px;
-font-weight: 400;
-
-/_ Light mode styles _/
-background-color: rgba(0, 0, 0, 0.08);
-color: #222530;
-font-size: 13px;
-}
-
-[data-theme='dark'] .dialog-demo-container .dialog-continue {
-/_ Dark mode styles _/
-background-color: rgba(255, 255, 255, 0.12);
-color: #f2f5f8;
+[data-theme='dark'] .dialog-demo-container .dialog-close {
+  color: #99a0ae;
 }`}
 />
 

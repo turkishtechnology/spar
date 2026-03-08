@@ -35,49 +35,58 @@ A headless collapsible component that manages the visibility of content sections
         </Collapsible.Content>
       </Collapsible.Root>
   `}
-  cssCode={`.collapsible-demo-container .collapsible-trigger {
+  cssCode={`.collapsible-demo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.collapsible-demo-container .collapsible-trigger {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 26.667px;
-  padding: 5px;
-  border: none;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid #e1e4ea;
+  border-radius: 10px;
   background: rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  margin-bottom: 10px;
-  margin-inline: auto;
 }
 
 [data-theme='dark'] .collapsible-demo-container .collapsible-trigger {
-background-color: rgba(255, 255, 255, 0.12);
+  border-color: #2b303b;
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 .collapsible-demo-container .collapsible-trigger-icon {
-fill: #222530;
+  width: 16px;
+  height: 16px;
+  fill: #222530;
 }
 
 [data-theme='dark'] .collapsible-demo-container .collapsible-trigger-icon {
-fill: #f2f5f8;
+  fill: #f2f5f8;
 }
 
 .collapsible-demo-container .collapsible-content {
-display: flex;
-flex-direction: column;
-width: 216px;
-gap: 8px;
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  gap: 8px;
 }
 
 .collapsible-demo-container .collapsible-item {
-height: 27px;
-border-radius: 5.4px;
-border: 0.675px solid #e1e4ea;
-background: rgba(0, 0, 0, 0.08);
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #e1e4ea;
+  background: rgba(0, 0, 0, 0.08);
 }
 
 [data-theme='dark'] .collapsible-demo-container .collapsible-item {
-border-color: #2b303b;
-background-color: rgba(255, 255, 255, 0.12);
+  border-color: #2b303b;
+  background-color: rgba(255, 255, 255, 0.12);
 }
 `}
 />

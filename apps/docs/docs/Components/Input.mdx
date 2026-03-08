@@ -27,57 +27,67 @@ A headless input component providing accessible form input primitives with compo
     This field is required
   </Input.ErrorMessage>
 </Input.Root>`}
-cssCode={`.input-demo-container .input {
-  border-radius: 5px;
+cssCode={`.input-demo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 240px;
+  margin-inline: auto;
+}
+
+.input-demo-container .input {
+  width: 240px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
   border: 1px solid #e1e4ea;
   background: rgba(0, 0, 0, 0.08);
-  height: 27px;
-  width: 200px;
-  padding: 7px;
+  color: #222530;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 [data-theme='dark'] .input-demo-container .input {
-border: 1px solid #2b303b;
-background: rgba(255, 255, 255, 0.12);
+  border-color: #2b303b;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f2f5f8;
 }
 
 .input-demo-container .label {
-color: #222530;
-display: block;
-font-size: 9px;
-line-height: 13px;
-padding-left: 5px;
-margin-bottom: 2px;
+  color: #222530;
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  margin: 0;
 }
 
 [data-theme='dark'] .input-demo-container .label {
-color: #f2f5f8;
+  color: #f2f5f8;
 }
 
 .input-demo-container .description {
-color: #666;
-display: block;
-font-size: 9px;
-line-height: 13px;
-padding-left: 5px;
-margin-top: 2px;
+  color: #717784;
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0;
 }
 
 [data-theme='dark'] .input-demo-container .description {
-color: #aaa;
+  color: #99a0ae;
 }
 
 .input-demo-container .error {
-color: #ff6b6b;
-display: block;
-font-size: 9px;
-line-height: 13px;
-padding-left: 5px;
-margin-top: 2px;
+  color: #d14343;
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0;
 }
 
 [data-theme='dark'] .input-demo-container .error {
-color: #ff6b6b;
+  color: #ff8a8a;
 }`}
 />
 
