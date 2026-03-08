@@ -86,18 +86,14 @@ describe('Tabs', () => {
         <BasicTabs>
           <TabsList>
             <TabsTrigger value='tab1'>
-              {({ isSelected }) => (
-                <span data-testid='custom-trigger'>{isSelected ? 'Selected Tab' : 'Tab'}</span>
-              )}
+              {({ isSelected }) => <span>{isSelected ? 'Selected Tab' : 'Tab'}</span>}
             </TabsTrigger>
           </TabsList>
           <TabsContent value='tab1'>Custom Content</TabsContent>
         </BasicTabs>,
       );
 
-      const customTrigger = screen.getByTestId('custom-trigger');
-      expect(customTrigger).toBeInTheDocument();
-      expect(customTrigger).toHaveTextContent('Selected Tab');
+      expect(screen.getByRole('tab', { name: 'Selected Tab' })).toBeInTheDocument();
     });
   });
 
@@ -119,6 +115,19 @@ describe('Tabs', () => {
       rerender(<BasicTabs value='tab2' onValueChange={handleValueChange} />);
 
       expect(screen.getByRole('tab', { name: 'Tab 2' })).toHaveAttribute('aria-selected', 'true');
+    });
+
+    it('does not update selected tab internally in controlled mode until value prop changes', async () => {
+      const user = userEvent.setup();
+      const handleValueChange = jest.fn();
+
+      render(<BasicTabs value='tab1' onValueChange={handleValueChange} />);
+
+      await user.click(screen.getByRole('tab', { name: 'Tab 2' }));
+
+      expect(handleValueChange).toHaveBeenCalledWith('tab2');
+      expect(screen.getByRole('tab', { name: 'Tab 1' })).toHaveAttribute('aria-selected', 'true');
+      expect(screen.getByRole('tab', { name: 'Tab 2' })).toHaveAttribute('aria-selected', 'false');
     });
 
     it('defaults to first tab when no value provided', () => {
@@ -195,6 +204,21 @@ describe('Tabs', () => {
 
       expect(screen.getByRole('tabpanel')).toHaveAttribute('data-orientation', 'vertical');
     });
+
+    it('ignores unsupported arrow keys for current orientation', async () => {
+      const user = userEvent.setup();
+
+      render(<BasicTabs orientation='horizontal' />);
+      const tab1 = screen.getByRole('tab', { name: 'Tab 1' });
+      const tab2 = screen.getByRole('tab', { name: 'Tab 2' });
+
+      await user.click(tab1);
+      await user.keyboard('{ArrowDown}');
+
+      expect(tab1).toHaveFocus();
+      expect(tab1).toHaveAttribute('aria-selected', 'true');
+      expect(tab2).toHaveAttribute('aria-selected', 'false');
+    });
   });
 
   describe('Activation Mode', () => {
@@ -270,6 +294,50 @@ describe('Tabs', () => {
     });
   });
 
+  describe('ID Contract', () => {
+    it('uses provided root id to derive trigger/panel ids and ARIA relationships', () => {
+      render(
+        <BasicTabs id='docs-tabs'>
+          <TabsList>
+            <TabsTrigger value='intro'>Intro</TabsTrigger>
+            <TabsTrigger value='api'>API</TabsTrigger>
+          </TabsList>
+          <TabsContent value='intro'>Intro content</TabsContent>
+          <TabsContent value='api'>API content</TabsContent>
+        </BasicTabs>,
+      );
+
+      const introTab = screen.getByRole('tab', { name: 'Intro' });
+      const introPanel = screen.getByRole('tabpanel');
+
+      expect(introTab).toHaveAttribute('id', 'docs-tabs-trigger-intro');
+      expect(introTab).toHaveAttribute('aria-controls', 'docs-tabs-panel-intro');
+      expect(introPanel).toHaveAttribute('id', 'docs-tabs-panel-intro');
+      expect(introPanel).toHaveAttribute('aria-labelledby', 'docs-tabs-trigger-intro');
+    });
+
+    it('keeps generated trigger/panel relationships consistent without custom id', async () => {
+      const user = userEvent.setup();
+
+      render(<BasicTabs />);
+
+      await user.click(screen.getByRole('tab', { name: 'Tab 2' }));
+
+      const tab2 = screen.getByRole('tab', { name: 'Tab 2' });
+      const panel2 = screen.getByRole('tabpanel');
+
+      const controlsId = tab2.getAttribute('aria-controls');
+      const labelledById = panel2.getAttribute('aria-labelledby');
+
+      expect(controlsId).toBeTruthy();
+      expect(labelledById).toBeTruthy();
+      expect(panel2).toHaveAttribute('id', controlsId);
+      expect(tab2).toHaveAttribute('id', labelledById);
+      expect(controlsId).toContain('-panel-tab2');
+      expect(labelledById).toContain('-trigger-tab2');
+    });
+  });
+
   describe('Error Handling', () => {
     it('throws error when Tabs components are used outside context', () => {
       jest.spyOn(console, 'error').mockImplementation(() => {});
@@ -305,22 +373,22 @@ describe('Tabs', () => {
   describe('Custom Props', () => {
     it('forwards props to components', () => {
       render(
-        <BasicTabs data-testid='tabs-root'>
-          <TabsList data-testid='tabs-list'>
-            <TabsTrigger value='tab1' data-testid='tab-trigger'>
+        <BasicTabs aria-label='docs tabs root'>
+          <TabsList aria-label='docs tabs list'>
+            <TabsTrigger value='tab1' aria-label='docs tab trigger'>
               Tab 1
             </TabsTrigger>
           </TabsList>
-          <TabsContent value='tab1' data-testid='tab-content'>
+          <TabsContent value='tab1' aria-label='docs tab panel'>
             Content 1
           </TabsContent>
         </BasicTabs>,
       );
 
-      expect(screen.getByTestId('tabs-root')).toBeInTheDocument();
-      expect(screen.getByTestId('tabs-list')).toBeInTheDocument();
-      expect(screen.getByTestId('tab-trigger')).toBeInTheDocument();
-      expect(screen.getByTestId('tab-content')).toBeInTheDocument();
+      expect(screen.getByLabelText('docs tabs root')).toBeInTheDocument();
+      expect(screen.getByRole('tablist', { name: 'docs tabs list' })).toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: 'docs tab trigger' })).toBeInTheDocument();
+      expect(screen.getByLabelText('docs tab panel')).toBeInTheDocument();
     });
 
     it('handles custom event handlers', async () => {
@@ -348,18 +416,32 @@ describe('Tabs', () => {
   });
 
   describe('Direction Support', () => {
-    it('handles LTR direction by default', () => {
-      render(<BasicTabs />);
+    it('reverses horizontal arrow navigation when direction is RTL', async () => {
+      const user = userEvent.setup();
+      render(
+        <BasicTabs dir='rtl'>
+          <TabsList>
+            <TabsTrigger value='tab1'>Tab 1</TabsTrigger>
+            <TabsTrigger value='tab2'>Tab 2</TabsTrigger>
+          </TabsList>
+          <TabsContent value='tab1'>Content 1</TabsContent>
+          <TabsContent value='tab2'>Content 2</TabsContent>
+        </BasicTabs>,
+      );
 
-      // Default LTR behavior is tested in keyboard navigation
-      expect(screen.getByRole('tablist')).toBeInTheDocument();
-    });
+      const tab1 = screen.getByRole('tab', { name: 'Tab 1' });
+      const tab2 = screen.getByRole('tab', { name: 'Tab 2' });
 
-    it('handles RTL direction', () => {
-      render(<BasicTabs dir='rtl' />);
+      await user.click(tab1);
+      await user.keyboard('{ArrowRight}');
 
-      // RTL behavior is tested in keyboard navigation
-      expect(screen.getByRole('tablist')).toBeInTheDocument();
+      expect(tab2).toHaveFocus();
+      expect(tab2).toHaveAttribute('aria-selected', 'true');
+
+      await user.keyboard('{ArrowLeft}');
+
+      expect(tab1).toHaveFocus();
+      expect(tab1).toHaveAttribute('aria-selected', 'true');
     });
   });
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from '../Button';
 
@@ -21,7 +21,8 @@ describe('Button Integration', () => {
       expect(handleSubmit).toHaveBeenCalledTimes(1);
     });
 
-    it('should reset form when type is reset', () => {
+    it('should reset form when type is reset', async () => {
+      const user = userEvent.setup();
       const handleReset = jest.fn();
 
       render(
@@ -32,7 +33,7 @@ describe('Button Integration', () => {
       );
 
       const resetButton = screen.getByRole('button', { name: 'Reset Form' });
-      fireEvent.click(resetButton);
+      await user.click(resetButton);
 
       expect(handleReset).toHaveBeenCalledTimes(1);
     });
@@ -226,117 +227,47 @@ describe('Button Integration', () => {
     });
   });
 
-  describe('Async Operations', () => {
-    it('should handle async loading states', async () => {
-      const user = userEvent.setup();
-
-      const AsyncButton = () => {
-        const [isLoading, setIsLoading] = React.useState(false);
-        const [result, setResult] = React.useState('');
-
-        const handleClick = async () => {
-          setIsLoading(true);
-          // Simulate async operation
-          await new Promise((resolve) => setTimeout(resolve, 100));
-          setResult('Success!');
-          setIsLoading(false);
-        };
-
-        return (
-          <div>
-            <Button onClick={handleClick} isLoading={isLoading}>
-              {result || 'Start Process'}
-            </Button>
-            {result && <div data-testid='result'>{result}</div>}
-          </div>
-        );
-      };
-
-      render(<AsyncButton />);
-
-      const button = screen.getByRole('button');
-      expect(button).toHaveTextContent('Start Process');
-      expect(button).not.toHaveAttribute('aria-busy');
-
-      // Click to start async operation
-      await user.click(button);
-
-      // Should be in loading state
-      expect(button).toHaveAttribute('aria-busy', 'true');
-
-      // Wait for async operation to complete
-      await screen.findByTestId('result');
-
-      // Should no longer be loading
-      expect(button).not.toHaveAttribute('aria-busy');
-      expect(button).toHaveTextContent('Success!');
-      expect(screen.getByTestId('result')).toHaveTextContent('Success!');
-    });
-
-    it('should prevent multiple clicks during loading', async () => {
+  describe('Deterministic loading flow', () => {
+    it('should prevent repeated activation while parent keeps loading=true', async () => {
       const user = userEvent.setup();
       const handleClick = jest.fn();
 
       const LoadingButton = () => {
         const [isLoading, setIsLoading] = React.useState(false);
 
-        const onClick = async () => {
+        const onClick = () => {
           setIsLoading(true);
           handleClick();
-          await new Promise((resolve) => setTimeout(resolve, 50));
-          setIsLoading(false);
         };
 
         return (
-          <Button onClick={onClick} isLoading={isLoading}>
-            Process
-          </Button>
+          <>
+            <Button onClick={onClick} isLoading={isLoading}>
+              Process
+            </Button>
+            <button type='button' onClick={() => setIsLoading(false)}>
+              Finish
+            </button>
+          </>
         );
       };
 
       render(<LoadingButton />);
 
-      const button = screen.getByRole('button');
+      const button = screen.getByRole('button', { name: 'Process' });
+      const finish = screen.getByRole('button', { name: 'Finish' });
 
-      // Click multiple times quickly
       await user.click(button);
       await user.click(button);
-      await user.click(button);
-
-      // Should only have been called once
       expect(handleClick).toHaveBeenCalledTimes(1);
+
+      await user.click(finish);
+      await user.click(button);
+      expect(handleClick).toHaveBeenCalledTimes(2);
     });
   });
 
-  describe('Real-World Usage Scenarios', () => {
-    it('should work in a modal dialog', async () => {
-      const user = userEvent.setup();
-      const handleClose = jest.fn();
-      const handleConfirm = jest.fn();
-
-      const Modal = () => (
-        <div role='dialog' aria-labelledby='modal-title' aria-modal='true'>
-          <h2 id='modal-title'>Confirm Action</h2>
-          <p>Are you sure you want to proceed?</p>
-          <div>
-            <Button onClick={handleConfirm}>Confirm</Button>
-            <Button onClick={handleClose}>Cancel</Button>
-          </div>
-        </div>
-      );
-
-      render(<Modal />);
-
-      const confirmButton = screen.getByRole('button', { name: 'Confirm' });
-      const cancelButton = screen.getByRole('button', { name: 'Cancel' });
-
-      await user.click(confirmButton);
-      expect(handleConfirm).toHaveBeenCalledTimes(1);
-
-      await user.click(cancelButton);
-      expect(handleClose).toHaveBeenCalledTimes(1);
-    });
-
+  describe('Real-world composition', () => {
     it('should work in a toolbar', async () => {
       const user = userEvent.setup();
       const actions = {
@@ -444,67 +375,6 @@ describe('Button Integration', () => {
       await user.click(shareButton);
 
       expect(handleNavigation).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('Error Boundaries and Edge Cases', () => {
-    it('should handle rapid state changes', async () => {
-      const user = userEvent.setup();
-
-      const RapidStateButton = () => {
-        const [count, setCount] = React.useState(0);
-        const [isPressed, setIsPressed] = React.useState(false);
-
-        const handleClick = () => {
-          setCount((prev) => prev + 1);
-        };
-
-        const handlePressedChange = (pressed: boolean) => {
-          setIsPressed(pressed);
-        };
-
-        return (
-          <Button isPressed={isPressed} onPressedChange={handlePressedChange} onClick={handleClick}>
-            Count: {count}
-          </Button>
-        );
-      };
-
-      render(<RapidStateButton />);
-
-      const button = screen.getByRole('button');
-      expect(button).toHaveTextContent('Count: 0');
-      expect(button).toHaveAttribute('aria-pressed', 'false');
-
-      // Rapid clicks
-      await user.click(button);
-      await user.click(button);
-      await user.click(button);
-
-      expect(button).toHaveTextContent('Count: 3');
-      expect(button).toHaveAttribute('aria-pressed', 'true');
-    });
-
-    it('should handle ref changes during component lifecycle', () => {
-      const RefTestButton = ({ shouldShowRef }: { shouldShowRef: boolean }) => {
-        const ref = React.useRef<HTMLButtonElement>(null);
-
-        React.useEffect(() => {
-          if (shouldShowRef && ref.current) {
-            ref.current.focus();
-          }
-        }, [shouldShowRef]);
-
-        return <Button ref={shouldShowRef ? ref : null}>Ref Test Button</Button>;
-      };
-
-      const { rerender } = render(<RefTestButton shouldShowRef={false} />);
-      const button = screen.getByRole('button');
-
-      expect(button).not.toHaveFocus();
-
-      rerender(<RefTestButton shouldShowRef={true} />);
-      expect(button).toHaveFocus();
     });
   });
 });

@@ -26,33 +26,62 @@ describe('Dialog', () => {
       );
     });
 
-    it('should provide context to child components', () => {
-      const TestComponent = () => {
-        return (
-          <Dialog>
-            <DialogTrigger>Open</DialogTrigger>
-          </Dialog>
-        );
-      };
+    it('should keep ARIA id contract when custom id is provided', async () => {
+      const user = userEvent.setup();
 
-      expect(() => render(<TestComponent />)).not.toThrow();
+      render(
+        <Dialog id='settings-dialog'>
+          <DialogTrigger>Open</DialogTrigger>
+          <DialogContent>
+            <DialogTitle>Settings</DialogTitle>
+            <DialogDescription>Manage preferences</DialogDescription>
+          </DialogContent>
+        </Dialog>,
+      );
+
+      const trigger = screen.getByRole('button', { name: 'Open' });
+      expect(trigger).toHaveAttribute('aria-controls', 'settings-dialog-content');
+
+      await user.click(trigger);
+
+      const dialog = screen.getByRole('dialog');
+      const title = screen.getByRole('heading', { name: 'Settings' });
+      const description = screen.getByText('Manage preferences');
+
+      expect(dialog).toHaveAttribute('id', 'settings-dialog-content');
+      expect(title).toHaveAttribute('id', 'settings-dialog-title');
+      expect(description).toHaveAttribute('id', 'settings-dialog-description');
+      expect(dialog).toHaveAttribute('aria-labelledby', 'settings-dialog-title');
+      expect(dialog).toHaveAttribute('aria-describedby', 'settings-dialog-description');
     });
 
-    it('should handle controlled state', () => {
+    it('should use controlled mode by emitting change without opening until prop changes', async () => {
+      const user = userEvent.setup();
       const onOpenChange = jest.fn();
       const { rerender } = render(
         <Dialog open={false} onOpenChange={onOpenChange}>
           <DialogTrigger>Open</DialogTrigger>
+          <DialogContent>
+            <DialogTitle>Controlled</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
+
+      await user.click(screen.getByRole('button', { name: 'Open' }));
+
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 
       rerender(
         <Dialog open={true} onOpenChange={onOpenChange}>
           <DialogTrigger>Open</DialogTrigger>
+          <DialogContent>
+            <DialogTitle>Controlled</DialogTitle>
+          </DialogContent>
         </Dialog>,
       );
 
-      expect(onOpenChange).not.toHaveBeenCalled();
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
     it('should handle uncontrolled state with defaultOpen', () => {

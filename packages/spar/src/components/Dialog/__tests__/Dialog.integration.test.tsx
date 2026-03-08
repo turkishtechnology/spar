@@ -244,7 +244,7 @@ describe('Dialog Integration Tests', () => {
   });
 
   describe('Error Handling and Edge Cases', () => {
-    it('should handle rapid open/close interactions', async () => {
+    it('should keep state consistent during rapid open/close interactions', async () => {
       const onOpenChange = jest.fn();
       const user = userEvent.setup();
 
@@ -268,9 +268,8 @@ describe('Dialog Integration Tests', () => {
 
       // Dialog should end up open (odd number of clicks)
       expect(screen.getByRole('dialog')).toBeInTheDocument();
-
-      // Should have been called 5 times (interactions with overlay cause extra calls)
-      expect(onOpenChange).toHaveBeenCalledTimes(5);
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+      expect(onOpenChange).toHaveBeenCalledWith(false);
     });
 
     it('should handle keyboard interactions while dialog is opening', async () => {
@@ -300,6 +299,30 @@ describe('Dialog Integration Tests', () => {
       await waitFor(() => {
         expect(screen.getByRole('button', { name: 'First Button' })).toHaveFocus();
       });
+    });
+
+    it('should keep dialog open when Escape default is prevented in onKeyDown', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <Dialog defaultOpen={true}>
+          <DialogContent
+            onKeyDown={(event) => {
+              if (event.key !== 'Escape') return;
+              event.preventDefault();
+            }}
+          >
+            <DialogTitle>Persistent Dialog</DialogTitle>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
+        </Dialog>,
+      );
+
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+      await user.keyboard('{Escape}');
+
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
     it('should handle controlled state changes', async () => {

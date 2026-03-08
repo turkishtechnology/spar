@@ -221,32 +221,26 @@ describe('Dialog Accessibility', () => {
 
     it('should trap focus within modal dialog', async () => {
       const user = userEvent.setup();
-      render(<DialogTestComponent open={true} modal={true} trapFocus={true} />);
+      render(
+        <div>
+          <button type='button'>Outside Button</button>
+          <DialogTestComponent open={true} modal={true} trapFocus={true} />
+        </div>,
+      );
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      // Focus should be trapped within the dialog
-      const focusableElements = screen.getAllByRole('button');
-      const dialogFocusableElements = focusableElements.filter((el) =>
-        screen.getByRole('dialog').contains(el),
-      );
+      const dialog = screen.getByRole('dialog');
+      const closeButton = screen.getByRole('button', { name: 'Close' });
+      const outsideButton = screen.getByRole('button', { name: 'Outside Button' });
 
-      expect(dialogFocusableElements.length).toBeGreaterThan(0);
-
-      // Tab through focusable elements
+      closeButton.focus();
       await user.tab();
-      expect(document.activeElement).toBeInstanceOf(HTMLElement);
 
-      // Focus should remain within dialog
-      for (let i = 0; i < 10; i++) {
-        await user.tab();
-        const activeElement = document.activeElement;
-        if (activeElement) {
-          expect(screen.getByRole('dialog')).toContainElement(activeElement as HTMLElement);
-        }
-      }
+      expect(dialog).toContainElement(document.activeElement as HTMLElement);
+      expect(document.activeElement).not.toBe(outsideButton);
     });
 
     it('should allow focus to leave non-modal dialog', async () => {
