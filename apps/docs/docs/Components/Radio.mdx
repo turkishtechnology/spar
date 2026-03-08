@@ -16,12 +16,14 @@ Headless radio component for creating mutually exclusive selections in forms and
 
 <div className="radio-demo-container">
 <LiveCode
-  code={`<Radio.Root>
+  code={`<div className='radio-demo-container'>
+      <Radio.Root>
         <Radio.Item value="option1"></Radio.Item>
         <Radio.Item value='option2' className='radio-item'></Radio.Item>
         <Radio.Item value='option3' className='radio-item'></Radio.Item>
-</Radio.Root>`}
-cssCode={`input[type='radio'] {
+</Radio.Root>
+</div>`}
+cssCode={`.radio-demo-container input[type='radio'] {
   position: relative;
   appearance: none;
   width: 40px;
@@ -31,7 +33,7 @@ cssCode={`input[type='radio'] {
   border: 4px solid rgba(0, 0, 0, 0.16);
 }
 
-input[type='radio']:checked:before {
+.radio-demo-container input[type='radio']:checked:before {
 content: '';
 width: 24px;
 height: 24px;
@@ -43,11 +45,11 @@ left: 50%;
 transform: translate(-50%, -50%);
 }
 
-[data-theme='dark'] input[type='radio'] {
+[data-theme='dark'] .radio-demo-container input[type='radio'] {
 border-color: rgba(255, 255, 255, 0.16);
 }
 
-[data-theme='dark'] input[type='radio']:checked:before {
+[data-theme='dark'] .radio-demo-container input[type='radio']:checked:before {
 background-color: rgba(255, 255, 255, 0.72);
 }
 `}

@@ -16,8 +16,10 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
 
 <div className='switch-demo-container'>
 <LiveCode
-  code={`<Switch className='switch'/>`}
-  cssCode={`.switch {
+  code={`<div className='switch-demo-container'>
+  <Switch className='switch'/>
+</div>`}
+  cssCode={`.switch-demo-container .switch {
   background-color: rgba(0, 0, 0, 0.08);
   border: 0;
   width: 56px;
@@ -29,7 +31,7 @@ A headless boolean toggle control that provides switch-specific ARIA semantics a
   align-items: center;
 }
 
-.switch::after {
+.switch-demo-container .switch::after {
 content: '';
 width: 24px;
 height: 24px;
@@ -38,15 +40,15 @@ background: rgba(0, 0, 0, 0.72);
 transition: transform 0.2s ease;
 }
 
-.switch[data-checked]::after {
+.switch-demo-container .switch[data-checked]::after {
 transform: translateX(100%);
 }
 
-[data-theme='dark'] .switch {
+[data-theme='dark'] .switch-demo-container .switch {
 background-color: rgba(255, 255, 255, 0.12);
 }
 
-[data-theme='dark'] .switch::after {
+[data-theme='dark'] .switch-demo-container .switch::after {
 background: rgba(255, 255, 255, 0.72);
 }`}
 />

@@ -16,18 +16,20 @@ A fully accessible headless breadcrumb component for displaying hierarchical nav
 
 <div className='breadcrumb-demo-container'>
   <LiveCode
-    code={`<Breadcrumb.Root>
-    <Breadcrumb.List className='breadcrumb-list'>
-      <Breadcrumb.Item className='breadcrumb-item'>
-        <Breadcrumb.Link className='breadcrumb-link'>step 0</Breadcrumb.Link>
-      </Breadcrumb.Item>
-      <Breadcrumb.Separator className='breadcrumb-separator'>/</Breadcrumb.Separator>
-      <Breadcrumb.Item className='breadcrumb-item'>
-        <Breadcrumb.Page className='breadcrumb-page'>step 1</Breadcrumb.Page>
-      </Breadcrumb.Item>
-    </Breadcrumb.List>
-  </Breadcrumb.Root>`}
-    cssCode={`.breadcrumb-list {
+    code={`<div className='breadcrumb-demo-container'>
+    <Breadcrumb.Root>
+      <Breadcrumb.List className='breadcrumb-list'>
+        <Breadcrumb.Item className='breadcrumb-item'>
+          <Breadcrumb.Link className='breadcrumb-link'>step 0</Breadcrumb.Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Separator className='breadcrumb-separator'>/</Breadcrumb.Separator>
+        <Breadcrumb.Item className='breadcrumb-item'>
+          <Breadcrumb.Page className='breadcrumb-page'>step 1</Breadcrumb.Page>
+        </Breadcrumb.Item>
+      </Breadcrumb.List>
+    </Breadcrumb.Root>
+  </div>`}
+    cssCode={`.breadcrumb-demo-container .breadcrumb-list {
   padding: 0;
   margin: 0;
   list-style: none;
@@ -36,24 +38,24 @@ A fully accessible headless breadcrumb component for displaying hierarchical nav
   gap: 4.8px;
 }
 
-.breadcrumb-link {
+.breadcrumb-demo-container .breadcrumb-link {
 padding: 2.4px 12px 2.4px 7.2px;
 border-radius: 9.6px;
 border: 1.2px solid #e1e4ea;
 background: rgba(0, 0, 0, 0.02);
 }
 
-[data-theme='dark'] .breadcrumb-link {
+[data-theme='dark'] .breadcrumb-demo-container .breadcrumb-link {
 border-color: #2b303b;
 background-color: rgba(255, 255, 255, 0.02);
 }
 
-.breadcrumb-separator {
+.breadcrumb-demo-container .breadcrumb-separator {
 text-align: center;
 width: 24px;
 }
 
-.breadcrumb-page {
+.breadcrumb-demo-container .breadcrumb-page {
 padding: 2.4px 12px 2.4px 7.2px;
 border-radius: 9.6px;
 border: 1.2px solid #cacfd8;
@@ -61,25 +63,25 @@ background: rgba(0, 0, 0, 0.02);
 color: #222530;
 }
 
-[data-theme='dark'] .breadcrumb-page {
+[data-theme='dark'] .breadcrumb-demo-container .breadcrumb-page {
 border-color: 1.2px solid #2b303b;
 background-color: rgba(255, 255, 255, 0.02);
 color: #f2f5f8;
 }
 
-.breadcrumb-item,
-.breadcrumb-separator {
+.breadcrumb-demo-container .breadcrumb-item,
+.breadcrumb-demo-container .breadcrumb-separator {
 margin-top: 0;
 font-size: 16.8px;
 }
 
-.breadcrumb-link,
-.breadcrumb-separator {
+.breadcrumb-demo-container .breadcrumb-link,
+.breadcrumb-demo-container .breadcrumb-separator {
 color: #99a0ae;
 }
 
-[data-theme='dark'] .breadcrumb-link,
-[data-theme='dark'] .breadcrumb-separator {
+[data-theme='dark'] .breadcrumb-demo-container .breadcrumb-link,
+[data-theme='dark'] .breadcrumb-demo-container .breadcrumb-separator {
 color: #717784;
 }`}
 />

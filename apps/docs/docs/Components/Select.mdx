@@ -18,7 +18,8 @@ A headless, fully accessible dropdown component that allows users to choose a si
 
 <div className='select-demo-container'>
 <LiveCode
-  code={`<Select.Root>
+  code={`<div className='select-demo-container'>
+  <Select.Root>
     <Select.Trigger className='select-trigger'>
       <Select.Value className='select-value' placeholder='Options' />
       <span aria-hidden='true' className='select-trigger-addon'>▾</span>
@@ -38,8 +39,9 @@ A headless, fully accessible dropdown component that allows users to choose a si
       </Select.Item>
       <Select.Arrow className='select-arrow' />
     </Select.Content>
-  </Select.Root>`}
-  cssCode={`.select-trigger {
+  </Select.Root>
+</div>`}
+  cssCode={`.select-demo-container .select-trigger {
   width: 120px;
   display: flex;
   padding: 10px;
@@ -50,35 +52,35 @@ A headless, fully accessible dropdown component that allows users to choose a si
   background: rgba(0, 0, 0, 0.16);
 }
 
-[data-theme='dark'] .select-trigger {
+[data-theme='dark'] .select-demo-container .select-trigger {
 border-color: #2b303b;
 background: rgba(255, 255, 255, 0.16);
 }
 
-.select-value {
+.select-demo-container .select-value {
 color: #222530;
 }
 
-[data-theme='dark'] .select-value {
+[data-theme='dark'] .select-demo-container .select-value {
 color: #f2f5f8;
 }
 
-.select-trigger-addon {
+.select-demo-container .select-trigger-addon {
 color: #222530;
 font-size: 12px;
 line-height: 1;
 transition: transform 0.2s ease;
 }
 
-[data-theme='dark'] .select-trigger-addon {
+[data-theme='dark'] .select-demo-container .select-trigger-addon {
 color: #f2f5f8;
 }
 
-.select-trigger[data-state='open'] .select-trigger-addon {
+.select-demo-container .select-trigger[data-state='open'] .select-trigger-addon {
 transform: rotate(180deg);
 }
 
-.select-item {
+.select-demo-container .select-item {
 padding: 6px 8px;
 border-radius: 4px;
 cursor: pointer;
@@ -88,51 +90,51 @@ justify-content: space-between;
 gap: 12px;
 }
 
-.select-item[data-highlighted] {
+.select-demo-container .select-item[data-highlighted] {
 background: rgba(0, 0, 0, 0.08);
 outline: none;
 }
 
-[data-theme='dark'] .select-item[data-highlighted] {
+[data-theme='dark'] .select-demo-container .select-item[data-highlighted] {
 background: rgba(255, 255, 255, 0.12);
 }
 
-.select-item[data-disabled] {
+.select-demo-container .select-item[data-disabled] {
 opacity: 0.5;
 cursor: not-allowed;
 }
 
-.select-item-check {
+.select-demo-container .select-item-check {
 opacity: 0;
 color: #222530;
 transition: opacity 0.2s ease;
 }
 
-[data-theme='dark'] .select-item-check {
+[data-theme='dark'] .select-demo-container .select-item-check {
 color: #f2f5f8;
 }
 
-.select-item[data-state='checked'] .select-item-check {
+.select-demo-container .select-item[data-state='checked'] .select-item-check {
 opacity: 1;
 }
 
-.select-content {
+.select-demo-container .select-content {
 padding: 4px 8px;
 border-radius: 5px;
 border: 1px solid #e1e4ea;
 background: #ddd;
 }
 
-[data-theme='dark'] .select-content {
+[data-theme='dark'] .select-demo-container .select-content {
 border-color: #2b303b;
 background: #222;
 }
 
-.select-arrow {
+.select-demo-container .select-arrow {
 color: #ddd;
 }
 
-[data-theme='dark'] .select-arrow {
+[data-theme='dark'] .select-demo-container .select-arrow {
 color: #222;
 }`}
 />

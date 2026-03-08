@@ -16,7 +16,8 @@ A collapsible content component that supports single or multiple panel expansion
 
 <div className='accordion-demo-container'>
 <LiveCode
-  code={`<Accordion.Root className='accordion' defaultValue="2">
+  code={`<div className='accordion-demo-container'>
+      <Accordion.Root className='accordion' defaultValue="2">
         <Accordion.Item className='accordion-item' value="1">
           <Accordion.Header className='accordion-header'>
             <Accordion.Trigger className='accordion-trigger'>
@@ -65,15 +66,16 @@ A collapsible content component that supports single or multiple panel expansion
             The accordion component is a customizable area. Users can add content as per their request.
           </Accordion.Content>
         </Accordion.Item>
-      </Accordion.Root>`}
-cssCode={`.accordion {
+      </Accordion.Root>
+    </div>`}
+cssCode={`.accordion-demo-container .accordion {
 width: 420px;
 display: flex;
 flex-direction: column;
 gap: 6px;
 }
 
-.accordion-header {
+.accordion-demo-container .accordion-header {
 border-radius: 8px;
 margin-bottom: 0;
 background: rgba(0, 0, 0, 0.08);
@@ -83,7 +85,7 @@ box-shadow:
 0 5.419px 13.547px 0 rgba(82, 88, 102, 0.04);
 }
 
-[data-theme='dark'] .accordion-header {
+[data-theme='dark'] .accordion-demo-container .accordion-header {
 background: rgba(255, 255, 255, 0.12);
 box-shadow:
 0 1.355px 1.355px -0.677px rgba(82, 88, 102, 0.04),
@@ -91,7 +93,7 @@ box-shadow:
 0 5.419px 13.547px 0 rgba(82, 88, 102, 0.04);
 }
 
-.accordion-trigger {
+.accordion-demo-container .accordion-trigger {
 width: 100%;
 display: flex;
 align-items: center;
@@ -101,7 +103,7 @@ border: none;
 background: transparent;
 }
 
-.accordion-icon {
+.accordion-demo-container .accordion-icon {
 width: 16px;
 height: 16px;
 border-radius: 4px;
@@ -109,40 +111,40 @@ border: 0.625px solid #cacfd8;
 background: rgba(0, 0, 0, 0.72);
 }
 
-[data-theme='dark'] .accordion-icon {
+[data-theme='dark'] .accordion-demo-container .accordion-icon {
 border-color: #525866;
 background-color: #c0c0c0;
 }
 
-.accordion-title {
+.accordion-demo-container .accordion-title {
 color: #222530;
 font-size: 14px;
 }
 
-[data-theme='dark'] .accordion-title {
+[data-theme='dark'] .accordion-demo-container .accordion-title {
 color: #f2f5f8;
 }
 
-.accordion-expand {
+.accordion-demo-container .accordion-expand {
 margin-left: auto;
 display: flex;
 align-items: center;
 transition: transform 0.2s ease-in-out;
 }
 
-.accordion-item[data-state='open'] .accordion-expand {
+.accordion-demo-container .accordion-item[data-state='open'] .accordion-expand {
 transform: rotate(180deg);
 }
 
-.accordion-expand-icon {
+.accordion-demo-container .accordion-expand-icon {
 fill: #222530;
 }
 
-[data-theme='dark'] .accordion-expand-icon {
+[data-theme='dark'] .accordion-demo-container .accordion-expand-icon {
 fill: #f2f5f8;
 }
 
-.accordion-content {
+.accordion-demo-container .accordion-content {
 margin-top: 4px;
 padding: 8px;
 border-radius: 8px;
@@ -153,7 +155,7 @@ font-weight: 300;
 line-height: 18px;
 }
 
-[data-theme='dark'] .accordion-content {
+[data-theme='dark'] .accordion-demo-container .accordion-content {
 border: 0.677px solid #2b303b;
 background: rgba(255, 255, 255, 0.08);
 }`}

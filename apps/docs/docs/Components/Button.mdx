@@ -16,10 +16,12 @@ A headless, accessible button component that provides complete keyboard support 
 
 <div className='button-demo-container'>
 <LiveCode
-  code={`<Button className="button">
-      button
-    </Button>`}
-  cssCode={`.button {
+  code={`<div className='button-demo-container'>
+      <Button className="button">
+        button
+      </Button>
+    </div>`}
+  cssCode={`.button-demo-container .button {
   border-radius: 8px;
   padding: 12px 14px;
   font-weight: 400;
@@ -31,7 +33,7 @@ font-size: 13px;
 }
 
 /_ Dark mode styles _/
-[data-theme='dark'] .button {
+[data-theme='dark'] .button-demo-container .button {
 background: rgba(255, 255, 255, 0.12);
 color: #f2f5f8;
 }`}

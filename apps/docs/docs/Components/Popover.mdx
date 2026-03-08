@@ -16,7 +16,8 @@ A floating panel component anchored to a trigger element with smart positioning,
 
 <div className='popover-demo-container'>
 <LiveCode
-  code={`<Popover.Root>
+  code={`<div className='popover-demo-container'>
+      <Popover.Root>
         <Popover.Trigger className='popover-trigger'>
           Open Popover
         </Popover.Trigger>
@@ -33,8 +34,9 @@ A floating panel component anchored to a trigger element with smart positioning,
           </div>
           <p className='popover-paragraph'>Lorem ipsum dolor sit amet consectetur. Duis cras laeet ultrices tellus. Vitae id interdum sagittis </p>
         </Popover.Content>
-      </Popover.Root>`}
-  cssCode={`.popover-trigger {
+      </Popover.Root>
+    </div>`}
+  cssCode={`.popover-demo-container .popover-trigger {
   border-radius: 8px;
   padding: 12px 14px;
   font-weight: 400;
@@ -46,32 +48,32 @@ color: #222530;
 font-size: 13px;
 }
 
-[data-theme='dark'] .popover-trigger {
+[data-theme='dark'] .popover-demo-container .popover-trigger {
 /_ Dark mode styles _/
 background-color: rgba(255, 255, 255, 0.12);
 color: #f2f5f8;
 }
 
-.popover-content {
+.popover-demo-container .popover-content {
 width: 200px;
 border-radius: 5px;
 border: 0.625px solid #e1e4ea;
 background-color: #ebebeb;
 }
 
-[data-theme='dark'] .popover-content {
+[data-theme='dark'] .popover-demo-container .popover-content {
 border-color: #2b303b;
 background-color: #222;
 }
 
-.popover-header {
+.popover-demo-container .popover-header {
 display: flex;
 align-items: center;
 gap: 5px;
 padding: 7.5px;
 }
 
-.popover-icon {
+.popover-demo-container .popover-icon {
 width: 12.5px;
 height: 12.5px;
 border-radius: 2.5px;
@@ -79,36 +81,36 @@ border: 0.625px solid #cacfd8;
 background: rgba(0, 0, 0, 0.72);
 }
 
-[data-theme='dark'] .popover-icon {
+[data-theme='dark'] .popover-demo-container .popover-icon {
 border-color: #525866;
 background-color: #c0c0c0;
 }
 
-.popover-title {
+.popover-demo-container .popover-title {
 color: #222530;
 font-size: 8.757px;
 }
 
-[data-theme='dark'] .popover-title {
+[data-theme='dark'] .popover-demo-container .popover-title {
 color: #f2f5f8;
 }
 
-.popover-close {
+.popover-demo-container .popover-close {
 margin-left: auto;
 border: none;
 cursor: pointer;
 background-color: transparent;
 }
 
-.popover-close path {
+.popover-demo-container .popover-close path {
 fill: #222530;
 }
 
-[data-theme='dark'] path {
+[data-theme='dark'] .popover-demo-container path {
 fill: #f2f5f8;
 }
 
-.popover-paragraph {
+.popover-demo-container .popover-paragraph {
 color: #717784;
 font-size: 7.5px;
 padding: 7.5px;
@@ -116,15 +118,15 @@ padding-top: 2.5px;
 margin-bottom: 0px;
 }
 
-[data-theme='dark'] .popover-paragraph {
+[data-theme='dark'] .popover-demo-container .popover-paragraph {
 color: #99a0ae;
 }
 
-.popover-arrow {
+.popover-demo-container .popover-arrow {
 color: #ebebeb;
 }
 
-[data-theme='dark'] .popover-arrow {
+[data-theme='dark'] .popover-demo-container .popover-arrow {
 color: #222;
 }`}
 />
