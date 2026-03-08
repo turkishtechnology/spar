@@ -3,14 +3,14 @@
   "version": "0.1.1",
   "description": "A modern headless React component library providing unstyled, accessible UI primitives",
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.esm.js",
-      "require": "./dist/index.js",
+      "require": "./dist/index.cjs",
       "default": "./dist/index.esm.js"
     },
     "./package.json": "./package.json"
@@ -25,6 +25,7 @@
   "sideEffects": false,
   "files": [
     "dist/**/*.js",
+    "dist/**/*.cjs",
     "dist/**/*.d.ts",
     "README.md",
     "LICENSE",

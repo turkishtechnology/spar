@@ -7,7 +7,7 @@
   },
   {
     "name": "@turkish-technology/spar (CJS)",
-    "path": "dist/index.js",
+    "path": "dist/index.cjs",
     "limit": "50 KB",
     "gzip": true
   }
