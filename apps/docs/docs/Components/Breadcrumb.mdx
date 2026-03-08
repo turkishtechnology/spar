@@ -86,121 +86,13 @@ color: #717784;
 
 </div>
 
-## Live Demo with Icons
-
-<LiveCode 
-  code={`function IconBreadcrumb() {
-  const [currentPath, setCurrentPath] = React.useState('/documents/reports');
-  
-  const handleNavigate = (href, event) => {
-    event.preventDefault();
-    setCurrentPath(href);
-    console.log('Navigate to:', href);
-  };
-
-// Simple SVG icon components
-const HomeIcon = () => (
-
-<svg width='16' height='16' viewBox='0 0 16 16' fill='currentColor'>
-  <path d='M8 1l7 7-1.5 1.5L12 8v6H9V9H7v5H4V8L2.5 9.5 1 8z' />
-</svg>
-);
-
-const FolderIcon = () => (
-
-<svg width='16' height='16' viewBox='0 0 16 16' fill='currentColor'>
-  <path d='M7 3l2 2h5v8H2V3h5z' />
-</svg>
-);
-
-const FileIcon = () => (
-
-<svg width='16' height='16' viewBox='0 0 16 16' fill='currentColor'>
-  <path d='M9 1H3v14h10V5L9 1z' />
-</svg>
-);
-
-const breadcrumbs = [
-{ href: '/', label: 'Home', Icon: HomeIcon },
-{ href: '/documents', label: 'Documents', Icon: FolderIcon },
-{ href: '/documents/reports', label: 'Reports', Icon: FileIcon },
-];
-
-return (
-
-<Breadcrumb.Root
-onNavigate={handleNavigate}
-style={{ padding: '16px', border: '1px solid #e0e0e0', borderRadius: '8px' }} >
-<Breadcrumb.List
-style={{
-          display: 'flex',
-          alignItems: 'center',
-          listStyle: 'none',
-          margin: 0,
-          padding: 0
-        }} >
-{breadcrumbs.map((item, index) => {
-const isLast = index === breadcrumbs.length - 1;
-const isCurrent = item.href === currentPath;
-const Icon = item.Icon;
-
-          return (
-            <React.Fragment key={item.href}>
-              <Breadcrumb.Item style={{ margin: 0, padding: 0 }}>
-                {isCurrent ? (
-                  <Breadcrumb.Page
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      color: '#333',
-                      fontWeight: '500'
-                    }}
-                  >
-                    <Icon />
-                    <span>{item.label}</span>
-                  </Breadcrumb.Page>
-                ) : (
-                  <Breadcrumb.Link
-                    href={item.href}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      color: '#0066cc',
-                      textDecoration: 'none',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <Icon />
-                    <span>{item.label}</span>
-                  </Breadcrumb.Link>
-                )}
-              </Breadcrumb.Item>
-              {!isLast && (
-                <Breadcrumb.Separator style={{ color: '#666', margin: '0 8px' }}>›</Breadcrumb.Separator>
-              )}
-            </React.Fragment>
-          );
-        })}
-      </Breadcrumb.List>
-    </Breadcrumb.Root>
-
-);
-}`}
-/>
-
 ## Features
 
-- ✅ Complete keyboard navigation (Tab, Enter, Space)
-- ✅ Screen reader optimized with proper ARIA structure
 - ✅ Automatic position detection for styling hooks
 - ✅ External link security (rel="noopener noreferrer")
 - ✅ Polymorphic components with 'as' prop support
 - ✅ Navigation integration with custom routing
 - ✅ Individual and global disabled states
-- ✅ Current page identification with aria-current
-- ✅ Separator elements hidden from assistive technology
 - ✅ Render props support for conditional rendering based on item state
 - ✅ Full support for icons and custom content in links
 
@@ -492,7 +384,7 @@ function RenderPropsBreadcrumb() {
             isCurrent ? (
               <Breadcrumb.Page>{`Current (${position})`}</Breadcrumb.Page>
             ) : (
-              <Breadcrumb.Link as={NextLink} href='/home' isDisabled={isDisabled}>
+              <Breadcrumb.Link as={NextLink} href='/home' disabled={isDisabled}>
                 Home
               </Breadcrumb.Link>
             )
@@ -570,9 +462,11 @@ Navigation landmark container that provides context and manages shared state for
 
 **HTML Attributes**
 
-| Attribute       | Value | Purpose               |
-| --------------- | ----- | --------------------- |
-| `data-disabled` | `""`  | Present when disabled |
+| Attribute       | Value    | Purpose                                   |
+| --------------- | -------- | ----------------------------------------- |
+| `aria-label`    | `string` | Value from `aria-label` prop              |
+| `aria-disabled` | `"true"` | Present when `disabled` is `true`         |
+| `data-disabled` | `""`     | Present when `disabled` is `true`         |
 
 ### Breadcrumb.List
 
@@ -646,9 +540,10 @@ Interactive link component with accessibility features, routing integration, and
 
 | Attribute       | Value    | Purpose                                  |
 | --------------- | -------- | ---------------------------------------- |
-| `data-disabled` | `""`     | Present when disabled                    |
+| `aria-disabled` | `"true"` | Present when link is disabled            |
+| `data-disabled` | `""`     | Present when link is disabled            |
 | `data-external` | `""`     | Present when link is external            |
-| `tabIndex`      | `number` | Controls focusability (-1 when disabled) |
+| `tabIndex`      | `-1`     | Set to `-1` when disabled                |
 
 ### Breadcrumb.Page
 
@@ -669,9 +564,10 @@ Non-interactive current page indicator with proper semantic marking for screen r
 
 **HTML Attributes**
 
-| Attribute      | Value | Purpose                 |
-| -------------- | ----- | ----------------------- |
-| `data-current` | `""`  | Present on current page |
+| Attribute       | Value    | Purpose                                    |
+| --------------- | -------- | ------------------------------------------ |
+| `aria-current`  | `"page"` | Always present; marks the current page     |
+| `data-current`  | `""`     | Always present on the current page element |
 
 ### Breadcrumb.Separator
 

@@ -150,12 +150,10 @@ color: #222;
 
 ## Features
 
-- ✅ Full keyboard navigation with arrow keys
 - ✅ Typeahead search for quick item selection
 - ✅ Controlled and uncontrolled state management
 - ✅ Automatic positioning with collision detection
 - ✅ Modal and non-modal modes
-- ✅ Focus management and restoration
 - ✅ Customizable close behavior per item type
 - ✅ Automatic portal rendering to document.body
 - ✅ Polymorphic component API
@@ -177,6 +175,9 @@ The DropdownMenu component is built as a compound component with multiple parts:
     { name: 'trigger', label: 'Trigger', description: 'Button that toggles menu visibility' },
     { name: 'content', label: 'Content', description: 'Menu container with positioning' },
     { name: 'item', label: 'Item', description: 'Individual selectable menu option' },
+    { name: 'group', label: 'Group', description: 'Semantic grouping container for related items' },
+    { name: 'label', label: 'Label', description: 'Non-interactive label for a menu group' },
+    { name: 'separator', label: 'Separator', description: 'Visual divider between menu sections' },
     { name: 'arrow', label: 'Arrow', description: 'Optional decorative arrow element' },
   ]}
 >
@@ -443,6 +444,7 @@ The root container that manages the dropdown menu state and provides context to 
 
 | Name             | Type                      | Default     | Description                                               |
 | ---------------- | ------------------------- | ----------- | --------------------------------------------------------- |
+| `id?`            | `string`                  | `undefined` | Custom base ID for ARIA relationships. Auto-generated if not provided. Sub-element IDs are derived as `${id}-trigger` and `${id}-content`. |
 | `open?`          | `boolean`                 | `undefined` | Controlled open state                                     |
 | `defaultOpen?`   | `boolean`                 | `false`     | Initial open state (uncontrolled)                         |
 | `onOpenChange?`  | `(open: boolean) => void` | `undefined` | Callback when open state changes                          |
@@ -512,11 +514,11 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 | ----------------------- | ---------------------------------------- | --------------- | ---------------------------------- |
 | `as?`                   | `React.ElementType`                      | `'div'`         | Polymorphic element type to render |
 | `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`      | Preferred side for positioning     |
-| `align?`                | `'start' \| 'center' \| 'end'`           | `'start'`       | Alignment relative to trigger      |
+| `align?`                | `'start' \| 'center' \| 'end'`           | `'center'`      | Alignment relative to trigger      |
 | `container?`            | `HTMLElement \| null`                    | `document.body` | Custom portal container element    |
-| `onEscapeKeyDown?`      | `(event: React.KeyboardEvent) => void`   | `undefined`     | Escape key handler                 |
-| `onPointerDownOutside?` | `(event: React.PointerEvent) => void`    | `undefined`     | Outside click handler              |
-| `onFocusOutside?`       | `(event: React.FocusEvent) => void`      | `undefined`     | Outside focus handler              |
+| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`         | `undefined`     | Escape key handler                 |
+| `onPointerDownOutside?` | `(event: PointerEvent) => void`          | `undefined`     | Outside click handler              |
+| `onFocusOutside?`       | `(event: FocusEvent) => void`            | `undefined`     | Outside focus handler              |
 | `onKeyDown?`            | `(event: React.KeyboardEvent) => void`   | `undefined`     | Keyboard event handler             |
 | `ref?`                  | `React.Ref<HTMLElement \| null>`         | `undefined`     | Forwarded ref to content element   |
 | `children?`             | `React.ReactNode`                        | `undefined`     | Menu items and groups              |
@@ -525,9 +527,9 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 
 | Name                   | Parameters                     | Description         | When Triggered                             |
 | ---------------------- | ------------------------------ | ------------------- | ------------------------------------------ |
-| `onEscapeKeyDown`      | `(event: React.KeyboardEvent)` | Escape key pressed  | User presses Escape while menu is open     |
-| `onPointerDownOutside` | `(event: React.PointerEvent)`  | Click outside menu  | User clicks outside menu bounds            |
-| `onFocusOutside`       | `(event: React.FocusEvent)`    | Focus leaves menu   | Focus moves outside menu (non-modal mode)  |
+| `onEscapeKeyDown`      | `(event: KeyboardEvent)`       | Escape key pressed  | User presses Escape while menu is open     |
+| `onPointerDownOutside` | `(event: PointerEvent)`        | Click outside menu  | User clicks outside menu bounds            |
+| `onFocusOutside`       | `(event: FocusEvent)`          | Focus leaves menu   | Focus moves outside menu (non-modal mode)  |
 | `onKeyDown`            | `(event: React.KeyboardEvent)` | Key pressed in menu | User presses any key while menu is focused |
 
 **HTML Attributes**
@@ -545,10 +547,11 @@ A selectable menu item.
 
 **Props**
 
-| Name         | Type                                    | Default     | Description                                                           |
-| ------------ | --------------------------------------- | ----------- | --------------------------------------------------------------------- |
-| `as?`        | `React.ElementType`                     | `'div'`     | Polymorphic element type to render                                    |
-| `disabled?`  | `boolean`                               | `false`     | Whether item is disabled                                              |
+| Name         | Type                                    | Default       | Description                                                           |
+| ------------ | --------------------------------------- | ------------- | --------------------------------------------------------------------- |
+| `as?`        | `React.ElementType`                     | `'div'`       | Polymorphic element type to render                                    |
+| `role?`      | `string`                                | `'menuitem'`  | ARIA role for the item element                                        |
+| `disabled?`  | `boolean`                               | `false`       | Whether item is disabled                                              |
 | `onSelect?`  | `(event: React.SyntheticEvent) => void` | `undefined` | Selection handler                                                     |
 | `textValue?` | `string`                                | `undefined` | Text value for typeahead (auto-detected from content if not provided) |
 | `ref?`       | `React.Ref<HTMLElement \| null>`        | `undefined` | Forwarded ref to item element                                         |
@@ -561,14 +564,16 @@ A selectable menu item.
 | `onSelect`      | `(event: React.SyntheticEvent)` | Item selected       | User clicks or activates item with keyboard |
 | `onClick`       | `(event: React.MouseEvent)`     | Mouse click         | User clicks item                            |
 | `onKeyDown`     | `(event: React.KeyboardEvent)`  | Key pressed         | User presses key while item focused         |
-| `onPointerMove` | `(event: React.PointerEvent)`   | Pointer movement    | Pointer moves over item                     |
-| `onFocus`       | `(event: React.FocusEvent)`     | Item receives focus | Item gains focus                            |
+| `onPointerMove`  | `(event: React.PointerEvent)`   | Pointer movement    | Pointer moves over item              |
+| `onPointerLeave` | `(event: React.PointerEvent)`   | Pointer leaves item | Pointer moves away from item         |
+| `onFocus`        | `(event: React.FocusEvent)`     | Item receives focus | Item gains focus                     |
 
 **HTML Attributes**
 
 | Attribute          | Value     | Purpose                                                    |
 | ------------------ | --------- | ---------------------------------------------------------- |
 | `tabIndex`         | `0 \| -1` | Controls keyboard focus (0 when highlighted, -1 otherwise) |
+| `aria-disabled`    | `true`    | Present when disabled; conveys disabled state to assistive technology |
 | `data-disabled`    | `''`      | Present when disabled                                      |
 | `data-highlighted` | `''`      | Present when highlighted                                   |
 
@@ -630,6 +635,12 @@ A logical grouping container for related menu items.
 | Name | Parameters | Description           | When Triggered                     |
 | ---- | ---------- | --------------------- | ---------------------------------- |
 | N/A  | N/A        | No interactive events | Group is non-interactive container |
+
+**HTML Attributes**
+
+| Attribute | Value     | Purpose                                          |
+| --------- | --------- | ------------------------------------------------ |
+| `role`    | `'group'` | Semantic grouping role for assistive technology  |
 
 ### DropdownMenu.Arrow
 
