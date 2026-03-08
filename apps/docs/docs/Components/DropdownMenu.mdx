@@ -16,7 +16,8 @@ Accessible dropdown menu component for creating interactive command menus with k
 
 <div className='dropdown-demo-container'>
 <LiveCode
-  code={`<DropdownMenu.Root>
+  code={`<div className='dropdown-demo-container'>
+      <DropdownMenu.Root>
         <DropdownMenu.Trigger className='dropdown-trigger'>
           Options
           <svg
@@ -49,8 +50,9 @@ Accessible dropdown menu component for creating interactive command menus with k
           </DropdownMenu.Item>
           <DropdownMenu.Arrow className='dropdown-arrow' />
         </DropdownMenu.Content>
-      </DropdownMenu.Root>`}
-    cssCode={`.dropdown-trigger {
+      </DropdownMenu.Root>
+    </div>`}
+    cssCode={`.dropdown-demo-container .dropdown-trigger {
   margin-inline: auto;
   width: 100px;
   display: flex;
@@ -62,22 +64,22 @@ Accessible dropdown menu component for creating interactive command menus with k
   background: rgba(0, 0, 0, 0.16);
 }
 
-[data-theme='dark'] .dropdown-trigger {
+[data-theme='dark'] .dropdown-demo-container .dropdown-trigger {
 border-color: #2b303b;
 background: rgba(255, 255, 255, 0.16);
 }
 
-.dropdown-svg {
+.dropdown-demo-container .dropdown-svg {
 width: 20px;
 height: 20px;
 fill: #222530;
 }
 
-[data-theme='dark'] .dropdown-svg {
+[data-theme='dark'] .dropdown-demo-container .dropdown-svg {
 fill: #f2f5f8;
 }
 
-.dropdown-content {
+.dropdown-demo-container .dropdown-content {
 padding: 8px;
 border-radius: 11px;
 border: 0.684px solid #e1e4ea;
@@ -91,7 +93,7 @@ flex-direction: column;
 gap: 4px;
 }
 
-[data-theme='dark'] .dropdown-content {
+[data-theme='dark'] .dropdown-demo-container .dropdown-content {
 border: 0.684px solid #2b303b;
 background: #222;
 box-shadow:
@@ -100,7 +102,7 @@ box-shadow:
 0 8px 20px 0 rgba(82, 88, 102, 0.04);
 }
 
-.dropdown-item {
+.dropdown-demo-container .dropdown-item {
 padding: 5.475px 8px;
 display: flex;
 align-items: center;
@@ -112,24 +114,24 @@ cursor: pointer;
 outline: none;
 }
 
-[data-theme='dark'] .dropdown-item {
+[data-theme='dark'] .dropdown-demo-container .dropdown-item {
 background: rgba(0, 0, 0, 0.48);
 }
 
-.dropdown-item[data-highlighted] {
+.dropdown-demo-container .dropdown-item[data-highlighted] {
 background: rgba(0, 0, 0, 0.12);
 }
 
-[data-theme='dark'] .dropdown-item[data-highlighted] {
+[data-theme='dark'] .dropdown-demo-container .dropdown-item[data-highlighted] {
 background: rgba(255, 255, 255, 0.16);
 }
 
-.dropdown-item[data-disabled] {
+.dropdown-demo-container .dropdown-item[data-disabled] {
 opacity: 0.5;
 cursor: not-allowed;
 }
 
-.dropdown-item-avatar {
+.dropdown-demo-container .dropdown-item-avatar {
 border-radius: 50%;
 display: block;
 width: 13.688px;
@@ -137,11 +139,11 @@ height: 13.688px;
 background-color: #474747;
 }
 
-.dropdown-arrow {
+.dropdown-demo-container .dropdown-arrow {
 color: #ddd;
 }
 
-[data-theme='dark'] .dropdown-arrow {
+[data-theme='dark'] .dropdown-demo-container .dropdown-arrow {
 color: #222;
 }`}
 />

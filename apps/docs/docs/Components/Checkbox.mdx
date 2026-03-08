@@ -19,6 +19,7 @@ Headless checkbox component providing accessibility and behavior without styling
   code={`function CheckboxDemo() {
   const [checked, setChecked] = React.useState(true);
   return (
+    <div className='checkbox-demo-container'>
       <Checkbox
         className='checkbox'
         checked={checked}
@@ -30,9 +31,10 @@ Headless checkbox component providing accessibility and behavior without styling
           </svg>
         )}
       </Checkbox>
+    </div>
   );
 }`}
-  cssCode={`.checkbox {
+  cssCode={`.checkbox-demo-container .checkbox {
   border-radius: 12px;
   border: 4px solid rgba(0, 0, 0, 0.16);
   background: #fff;
@@ -43,12 +45,12 @@ Headless checkbox component providing accessibility and behavior without styling
   justify-content: center;
 }
 
-[data-theme='dark'] .checkbox {
+[data-theme='dark'] .checkbox-demo-container .checkbox {
 border-color: rgba(255, 255, 255, 0.16);
 background: #000;
 }
 
-.checkbox-icon {
+.checkbox-demo-container .checkbox-icon {
 border-radius: 4px;
 width: 24px;
 height: 24px;
@@ -57,7 +59,7 @@ background: rgba(0, 0, 0, 0.72);
 fill: #fff;
 }
 
-[data-theme='dark'] .checkbox-icon {
+[data-theme='dark'] .checkbox-demo-container .checkbox-icon {
 background: rgba(255, 255, 255, 0.72);
 fill: #000;
 }

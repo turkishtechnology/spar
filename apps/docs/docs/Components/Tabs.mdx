@@ -32,7 +32,7 @@ A headless, accessible tabs component that provides complete keyboard navigation
         </Tabs.Content>
 </Tabs.Root>
 </div>`}
-cssCode={`.tabs {
+cssCode={`.tabs-demo-container .tabs {
   height: 29.288px;
   padding: 0 11.715px;
   border-radius: 5.858px;
@@ -40,18 +40,18 @@ cssCode={`.tabs {
   background: rgba(0, 0, 0, 0.08);
 }
 
-[data-theme='dark'] .tabs {
+[data-theme='dark'] .tabs-demo-container .tabs {
 border: 0.732px solid rgba(255, 255, 255, 0.16);
 background: rgba(255, 255, 255, 0.12);
 }
 
-.tabs-list {
+.tabs-demo-container .tabs-list {
 display: flex;
 align-items: center;
 gap: 5.858px;
 }
 
-.tab {
+.tabs-demo-container .tab {
 border: none;
 background: transparent;
 color: #717784;
@@ -59,30 +59,30 @@ font-size: 10.251px;
 height: 100%;
 }
 
-[data-theme='dark'] .tab {
+[data-theme='dark'] .tabs-demo-container .tab {
 color: #99a0ae;
 }
 
-.tab[data-state='active'] {
+.tabs-demo-container .tab[data-state='active'] {
 color: #222530;
 }
 
-[data-theme='dark'] .tab[data-state='active'] {
+[data-theme='dark'] .tabs-demo-container .tab[data-state='active'] {
 color: #f2f5f8;
 }
 
-.tab-label {
+.tabs-demo-container .tab-label {
 display: flex;
 align-items: center;
 justify-content: center;
 height: 100%;
 }
 
-.tab[data-state='active'] .tab-label {
+.tabs-demo-container .tab[data-state='active'] .tab-label {
 border-bottom: 1.464px solid rgba(0, 0, 0, 0.72);
 }
 
-[data-theme='dark'] .tab[data-state='active'] .tab-label {
+[data-theme='dark'] .tabs-demo-container .tab[data-state='active'] .tab-label {
 border-color: rgba(255, 255, 255, 0.72);
 }
 `}

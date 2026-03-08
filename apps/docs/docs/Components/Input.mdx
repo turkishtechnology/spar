@@ -15,19 +15,19 @@ A headless input component providing accessible form input primitives with compo
 ## Live Demo
 
 <LiveCode
-  code={`<Input className='input-demo-container' isInvalid>
-  <InputLabel htmlFor='my-input' className='label'>
+  code={`<Input.Root className='input-demo-container' isInvalid>
+  <Input.Label htmlFor='my-input' className='label'>
     Label
-  </InputLabel>
-  <InputField id='my-input' className='input' />
-  <InputDescription className='description'>
+  </Input.Label>
+  <Input.Field id='my-input' className='input' />
+  <Input.Description className='description'>
     Helper text for guidance
-  </InputDescription>
-  <InputErrorMessage className='error'>
+  </Input.Description>
+  <Input.ErrorMessage className='error'>
     This field is required
-  </InputErrorMessage>
-</Input>`}
-cssCode={`.input {
+  </Input.ErrorMessage>
+</Input.Root>`}
+cssCode={`.input-demo-container .input {
   border-radius: 5px;
   border: 1px solid #e1e4ea;
   background: rgba(0, 0, 0, 0.08);
@@ -36,12 +36,12 @@ cssCode={`.input {
   padding: 7px;
 }
 
-[data-theme='dark'] .input {
+[data-theme='dark'] .input-demo-container .input {
 border: 1px solid #2b303b;
 background: rgba(255, 255, 255, 0.12);
 }
 
-.label {
+.input-demo-container .label {
 color: #222530;
 display: block;
 font-size: 9px;
@@ -50,11 +50,11 @@ padding-left: 5px;
 margin-bottom: 2px;
 }
 
-[data-theme='dark'] .label {
+[data-theme='dark'] .input-demo-container .label {
 color: #f2f5f8;
 }
 
-.description {
+.input-demo-container .description {
 color: #666;
 display: block;
 font-size: 9px;
@@ -63,11 +63,11 @@ padding-left: 5px;
 margin-top: 2px;
 }
 
-[data-theme='dark'] .description {
+[data-theme='dark'] .input-demo-container .description {
 color: #aaa;
 }
 
-.error {
+.input-demo-container .error {
 color: #ff6b6b;
 display: block;
 font-size: 9px;
@@ -76,7 +76,7 @@ padding-left: 5px;
 margin-top: 2px;
 }
 
-[data-theme='dark'] .error {
+[data-theme='dark'] .input-demo-container .error {
 color: #ff6b6b;
 }`}
 />

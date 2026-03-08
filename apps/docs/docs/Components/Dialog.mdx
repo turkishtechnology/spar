@@ -19,38 +19,40 @@ A headless modal and non-modal dialog component that provides accessibility feat
     code={`function DialogDemo() {
   const [open, setOpen] = React.useState(false);
   return (
-    <Dialog.Root className='dialog' open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger className='dialog-trigger'>
-        Open Dialog
-      </Dialog.Trigger>
-      <Dialog.Overlay className='dialog-overlay'/>
-      <Dialog.Content className='dialog-content'>
-        <Dialog.Title className='dialog-title'>
-          Dialog Title
-        </Dialog.Title>
-        <Dialog.Description className='dialog-description'>
-          If you delete this item, it will be permanently removed. Are you sure you want to delete
-          it?
-        </Dialog.Description>
-        <div className='dialog-actions'>
-          <Dialog.Close className='dialog-close'>
-            Close
-          </Dialog.Close>
-          <Button className='dialog-continue'>
-            Continue
-          </Button>
-        </div>
-      </Dialog.Content>
-    </Dialog.Root>
+    <div className='dialog-demo-container'>
+      <Dialog.Root className='dialog' open={open} onOpenChange={setOpen}>
+        <Dialog.Trigger className='dialog-trigger'>
+          Open Dialog
+        </Dialog.Trigger>
+        <Dialog.Overlay className='dialog-overlay'/>
+        <Dialog.Content className='dialog-content'>
+          <Dialog.Title className='dialog-title'>
+            Dialog Title
+          </Dialog.Title>
+          <Dialog.Description className='dialog-description'>
+            If you delete this item, it will be permanently removed. Are you sure you want to delete
+            it?
+          </Dialog.Description>
+          <div className='dialog-actions'>
+            <Dialog.Close className='dialog-close'>
+              Close
+            </Dialog.Close>
+            <Button className='dialog-continue'>
+              Continue
+            </Button>
+          </div>
+        </Dialog.Content>
+      </Dialog.Root>
+    </div>
   );
 }`}
-cssCode={`.dialog-overlay {
+cssCode={`.dialog-demo-container .dialog-overlay {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.dialog-trigger {
+.dialog-demo-container .dialog-trigger {
 border-radius: 8px;
 border: none;
 padding: 12px 14px;
@@ -62,13 +64,13 @@ color: #222530;
 font-size: 13px;
 }
 
-[data-theme='dark'] .dialog-trigger {
+[data-theme='dark'] .dialog-demo-container .dialog-trigger {
 /_ Dark mode styles _/
 background-color: rgba(255, 255, 255, 0.12);
 color: #f2f5f8;
 }
 
-.dialog-content {
+.dialog-demo-container .dialog-content {
 position: fixed;
 top: 50%;
 left: 50%;
@@ -80,40 +82,40 @@ width: 480px;
 padding: 16px;
 }
 
-[data-theme='dark'] .dialog-content {
+[data-theme='dark'] .dialog-demo-container .dialog-content {
 border-color: #2b303b;
 background-color: #292929;
 }
 
-.dialog-title {
+.dialog-demo-container .dialog-title {
 color: #222530;
 font-size: 20px;
 margin-bottom: 8px;
 }
 
-[data-theme='dark'] .dialog-title {
+[data-theme='dark'] .dialog-demo-container .dialog-title {
 color: #f2f5f8;
 }
 
-.dialog-description {
+.dialog-demo-container .dialog-description {
 color: #717784;
 font-size: 14px;
 font-weight: 300;
 line-height: 20px;
 }
 
-[data-theme='dark'] .dialog-description {
+[data-theme='dark'] .dialog-demo-container .dialog-description {
 color: #99a0ae;
 }
 
-.dialog-actions {
+.dialog-demo-container .dialog-actions {
 display: flex;
 align-items: center;
 justify-content: flex-end;
 gap: 8px;
 }
 
-.dialog-close {
+.dialog-demo-container .dialog-close {
 background-color: transparent;
 border: none;
 padding: 12px 14px;
@@ -121,7 +123,7 @@ border-radius: 8px;
 cursor: pointer;
 }
 
-.dialog-continue {
+.dialog-demo-container .dialog-continue {
 border-radius: 8px;
 border: none;
 padding: 12px 14px;
@@ -133,7 +135,7 @@ color: #222530;
 font-size: 13px;
 }
 
-[data-theme='dark'] .dialog-continue {
+[data-theme='dark'] .dialog-demo-container .dialog-continue {
 /_ Dark mode styles _/
 background-color: rgba(255, 255, 255, 0.12);
 color: #f2f5f8;
