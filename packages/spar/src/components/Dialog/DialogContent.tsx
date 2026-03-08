@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useRef, useState, ElementType } from 'react';
 import { createPortal } from 'react-dom';
-import { useMergedRef, useInteractOutside, useDocumentEvent } from '@/hooks';
+import { useMergedRef, useInteractOutside, useFocusTrap } from '@/hooks';
 import { useDialogContext } from './hooks';
 import type { DialogContentProps } from './types';
 
@@ -131,41 +131,7 @@ export const DialogContent = <T extends ElementType = 'div'>({
   }, [isOpen, mounted, role, contentRef]);
 
   // Focus trap for modal dialogs
-  const handleFocusTrap = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.key !== 'Tab') return;
-
-      const contentElement = contentRef.current;
-      if (!contentElement) return;
-
-      const focusableElements = contentElement.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-      const focusableArray = Array.from(focusableElements) as HTMLElement[];
-
-      if (focusableArray.length === 0) return;
-
-      const firstElement = focusableArray[0];
-      const lastElement = focusableArray[focusableArray.length - 1];
-
-      if (event.shiftKey) {
-        // Shift + Tab
-        if (document.activeElement === firstElement) {
-          event.preventDefault();
-          lastElement?.focus();
-        }
-      } else {
-        // Tab
-        if (document.activeElement === lastElement) {
-          event.preventDefault();
-          firstElement?.focus();
-        }
-      }
-    },
-    [contentRef],
-  );
-
-  useDocumentEvent('keydown', handleFocusTrap, !!(isOpen && mounted && modal && trapFocus));
+  useFocusTrap(contentRef, !!(isOpen && mounted && modal && trapFocus));
 
   // Escape key handler
   const handleKeyDown = useCallback(
