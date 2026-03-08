@@ -104,30 +104,44 @@ export const PopoverContent = <T extends ElementType = 'div'>({
   const handleEscapeKey = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        onEscapeKeyDown?.(event);
+
+        if (event.defaultPrevented) {
+          return;
+        }
+
         event.preventDefault();
         closePopover();
-        onEscapeKeyDown?.(event);
       }
     },
     [closePopover, onEscapeKeyDown],
   );
 
   useDocumentEvent('keydown', handleEscapeKey, isOpen);
-  useFocusTrap(contentRef, !!(isOpen && trapFocus));
+
+  const isFocusTrapped = modal || trapFocus;
+
+  useFocusTrap(contentRef, !!(isOpen && isFocusTrapped));
 
   // Outside interaction handling
   useInteractOutside([contentRef, triggerRef], {
     enabled: isOpen,
-    includeFocus: !trapFocus, // Only include focus events if focus is not trapped
+    includeFocus: !isFocusTrapped, // Only include focus events if focus is not trapped
     onPointerDownOutside: (event) => {
-      closePopover();
       onPointerDownOutside?.(event);
       onInteractOutside?.(event);
+
+      if (!event.defaultPrevented) {
+        closePopover();
+      }
     },
     onFocusOutside: (event) => {
-      closePopover();
       onFocusOutside?.(event);
       onInteractOutside?.(event);
+
+      if (!event.defaultPrevented) {
+        closePopover();
+      }
     },
   });
 

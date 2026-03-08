@@ -57,7 +57,8 @@ Apply sequential checks; record findings with severity for each heading.
 ### D. Headlessness
 **Reference**: `copilot-instructions.md` (Core Rules - Headless Only)
 
-- No style, className forcing, inline style patterns (only optional `className` pass-through allowed).
+- No visual styling opinions, className forcing, or CSS imports.
+- Behavioral inline styles are allowed only when required for runtime mechanics (e.g., floating/positioning coordinates, collision offsets, transform origin) and must not introduce visual design tokens (color, typography, shadows, spacing aesthetics).
 - No styling added when adding A11y required attributes.
 - Zero styling opinions, no CSS imports.
 
