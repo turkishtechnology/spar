@@ -26,7 +26,6 @@ export const RadioItem = <T extends ElementType = 'label'>({
     name,
     focusedValue,
     setFocusedValue,
-    selectOnFocus,
     registerItem,
     unregisterItem,
   } = context;
@@ -59,14 +58,12 @@ export const RadioItem = <T extends ElementType = 'label'>({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
-      // When selectOnFocus is false, Space/Enter is required to select
-      // When true, arrow keys already handle focus + selection
-      if (!selectOnFocus && (event.key === ' ' || event.key === 'Enter')) {
+      if ((event.key === ' ' || event.key === 'Enter') && !isDisabled) {
         event.preventDefault();
         handleClick();
       }
     },
-    [handleClick, selectOnFocus],
+    [handleClick, isDisabled],
   );
 
   const handleFocus = useCallback(() => {
@@ -98,6 +95,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
       ref={mergedRef}
       role='radio'
       aria-checked={isChecked}
+      aria-disabled={isDisabled || undefined}
       aria-label={ariaLabel}
       aria-describedby={ariaDescribedBy}
       tabIndex={isFocusable ? 0 : -1}

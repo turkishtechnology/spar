@@ -6,12 +6,6 @@ import type { PolymorphicProps } from '../../types';
  */
 export interface ButtonOwnProps {
   /**
-   * Whether the button should receive focus when first rendered
-   * @defaultValue false
-   */
-  autoFocus?: boolean;
-
-  /**
    * Loading state with screen reader support
    * @defaultValue false
    */

@@ -21,6 +21,7 @@ export const DialogContent = <T extends ElementType = 'div'>({
   onEscapeKeyDown,
   onPointerDownOutside,
   onInteractOutside,
+  onKeyDown,
   ref,
   children,
   ...props
@@ -136,6 +137,12 @@ export const DialogContent = <T extends ElementType = 'div'>({
   // Escape key handler
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
+      onKeyDown?.(event);
+
+      if (event.defaultPrevented) {
+        return;
+      }
+
       if (event.key === 'Escape') {
         onEscapeKeyDown?.(event.nativeEvent);
         if (!event.defaultPrevented) {
@@ -143,7 +150,7 @@ export const DialogContent = <T extends ElementType = 'div'>({
         }
       }
     },
-    [onEscapeKeyDown, setIsOpen],
+    [onEscapeKeyDown, onKeyDown, setIsOpen],
   );
 
   // Outside interaction handler
@@ -176,6 +183,7 @@ export const DialogContent = <T extends ElementType = 'div'>({
   const contentElement = (
     <Component
       ref={mergedRef}
+      {...props}
       id={contentId}
       role={role}
       aria-modal={modal}
@@ -185,7 +193,6 @@ export const DialogContent = <T extends ElementType = 'div'>({
       data-modal={modal ? 'true' : 'false'}
       data-role={role}
       onKeyDown={handleKeyDown}
-      {...props}
     >
       {children}
     </Component>
