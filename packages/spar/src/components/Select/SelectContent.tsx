@@ -312,7 +312,6 @@ export const SelectContent = <T extends ElementType = 'div'>({
   // Combine Floating UI styles with component-specific extras
   const contentStyle: React.CSSProperties = {
     ...floatingStyles,
-    minWidth: context.triggerRef.current?.offsetWidth ?? undefined,
     ...style,
   };
 

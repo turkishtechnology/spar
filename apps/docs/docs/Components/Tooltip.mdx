@@ -50,11 +50,12 @@ cssCode={`.tooltip-demo-container .tooltip-trigger {
   color: #f2f5f8;
 }
 
-.tooltip-demo-container .tooltip-content {
+.tooltip-content {
+  --tooltip-surface: #f7f8fa;
   padding: 8px 12px;
   border-radius: 12px;
   border: 1px solid #e1e4ea;
-  background-color: #f7f8fa;
+  background-color: var(--tooltip-surface);
   color: #222530;
   font-size: 13px;
   line-height: 18px;
@@ -63,18 +64,15 @@ cssCode={`.tooltip-demo-container .tooltip-trigger {
     0 4px 12px rgba(34, 37, 48, 0.06);
 }
 
-[data-theme='dark'] .tooltip-demo-container .tooltip-content {
+[data-theme='dark'] .tooltip-content {
+  --tooltip-surface: #1f232b;
   border-color: #2b303b;
   background-color: #1f232b;
   color: #f2f5f8;
 }
 
-.tooltip-demo-container .tooltip-arrow {
-  color: #f7f8fa;
-}
-
-[data-theme='dark'] .tooltip-demo-container .tooltip-arrow {
-  color: #1f232b;
+.tooltip-arrow {
+  color: var(--tooltip-surface);
 }`}
 />
 

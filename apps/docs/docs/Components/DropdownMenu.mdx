@@ -31,7 +31,7 @@ Accessible dropdown menu component for creating interactive command menus with k
             <path d='M13.2292 7.5001L9.99583 10.7334L6.7625 7.5001C6.4375 7.1751 5.9125 7.1751 5.5875 7.5001C5.2625 7.8251 5.2625 8.3501 5.5875 8.6751L9.4125 12.5001C9.7375 12.8251 10.2625 12.8251 10.5875 12.5001L14.4125 8.6751C14.7375 8.3501 14.7375 7.8251 14.4125 7.5001C14.0875 7.18343 13.5542 7.1751 13.2292 7.5001Z' />
           </svg>
         </DropdownMenu.Trigger>
-        <DropdownMenu.Content className='dropdown-content' align='end'>
+        <DropdownMenu.Content className='dropdown-content'>
           <DropdownMenu.Item className='dropdown-item'>
             <span className='dropdown-item-avatar'></span>
             Alice
@@ -80,11 +80,12 @@ Accessible dropdown menu component for creating interactive command menus with k
   fill: #f2f5f8;
 }
 
-.dropdown-demo-container .dropdown-content {
+.dropdown-content {
+  --dropdown-surface: #f7f8fa;
   padding: 8px;
   border-radius: 12px;
   border: 1px solid #e1e4ea;
-  background: #f7f8fa;
+  background: var(--dropdown-surface);
   box-shadow:
     0 12px 32px rgba(34, 37, 48, 0.08),
     0 4px 12px rgba(34, 37, 48, 0.06);
@@ -93,7 +94,8 @@ Accessible dropdown menu component for creating interactive command menus with k
   gap: 4px;
 }
 
-[data-theme='dark'] .dropdown-demo-container .dropdown-content {
+[data-theme='dark'] .dropdown-content {
+  --dropdown-surface: #1f232b;
   border-color: #2b303b;
   background: #1f232b;
 }
@@ -140,12 +142,8 @@ Accessible dropdown menu component for creating interactive command menus with k
   background-color: rgba(255, 255, 255, 0.72);
 }
 
-.dropdown-demo-container .dropdown-arrow {
-  color: #f7f8fa;
-}
-
-[data-theme='dark'] .dropdown-demo-container .dropdown-arrow {
-  color: #1f232b;
+.dropdown-arrow {
+  color: var(--dropdown-surface);
 }`}
 />
 
@@ -216,7 +214,7 @@ The DropdownMenu component is built as a compound component with multiple parts:
           <span className='dropdown-item-avatar'></span>
           {'Diana'}
         </DropdownMenu.Item>
-        <DropdownMenu.Arrow data-spar-part='arrow' />
+        <DropdownMenu.Arrow data-spar-part='arrow' className='dropdown-arrow' />
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   </div>
