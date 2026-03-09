@@ -69,9 +69,9 @@ function App() {
 
 ### Next.js
 
-Spar is fully compatible with Next.js 14+ (App Router & Server Components supported).
+Spar is compatible with Next.js 14+ and the App Router.
 
-Spar provides **per-component sub-path imports** for seamless Server Component support. Use `import * as ComponentName` to get the familiar compound pattern (`Accordion.Root`, `Accordion.Item`, etc.) working in both Server and Client Components:
+All published Spar entrypoints are client-marked modules, so importing a Spar component from an App Router page or layout creates a client boundary automatically:
 
 ```ts
 import * as Accordion from '@turkish-technology/spar/accordion';
@@ -80,7 +80,7 @@ import * as Dialog from '@turkish-technology/spar/dialog';
 import { Button } from '@turkish-technology/spar/button';
 ```
 
-#### Server Component Example
+#### App Router Page Example
 
 ```tsx title="app/page.tsx"
 import * as Breadcrumb from '@turkish-technology/spar/breadcrumb';
@@ -132,10 +132,6 @@ export function AccordionSection() {
   );
 }
 ```
-
-:::tip Why sub-path imports?
-The standard barrel import (`import { Accordion } from '@turkish-technology/spar'`) uses a compound pattern where sub-components are attached as static properties (`Accordion.Root`). React Server Components cannot serialize these static properties across the server-client boundary. Sub-path imports solve this by exposing each sub-component as a proper named export.
-:::
 
 #### Available Sub-path Imports
 
