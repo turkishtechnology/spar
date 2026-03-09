@@ -1,2 +1,3 @@
 export { Switch } from './Switch';
-export type { SwitchProps } from './types';
+export { useSwitch } from './hooks';
+export type { SwitchProps, SwitchRenderProps } from './types';

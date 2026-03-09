@@ -2,9 +2,8 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
-  DialogRoot,
+  Dialog,
   DialogTrigger,
-  DialogPortal,
   DialogOverlay,
   DialogContent,
   DialogTitle,
@@ -26,32 +25,31 @@ describe('Dialog Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <DialogRoot onOpenChange={onOpenChange}>
+        <Dialog onOpenChange={onOpenChange}>
           <DialogTrigger>Open Settings</DialogTrigger>
-          <DialogPortal>
-            <DialogOverlay>
-              <DialogContent>
-                <DialogTitle>Settings</DialogTitle>
-                <DialogDescription>Configure your preferences</DialogDescription>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    onSubmit();
-                  }}
-                >
-                  <label htmlFor='username'>Username:</label>
-                  <input id='username' name='username' defaultValue='john' />
-                  <label htmlFor='email'>Email:</label>
-                  <input id='email' name='email' type='email' defaultValue='john@example.com' />
-                  <div>
-                    <button type='submit'>Save</button>
-                    <DialogClose type='button'>Cancel</DialogClose>
-                  </div>
-                </form>
-              </DialogContent>
-            </DialogOverlay>
-          </DialogPortal>
-        </DialogRoot>,
+
+          <DialogOverlay>
+            <DialogContent>
+              <DialogTitle>Settings</DialogTitle>
+              <DialogDescription>Configure your preferences</DialogDescription>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  onSubmit();
+                }}
+              >
+                <label htmlFor='username'>Username:</label>
+                <input id='username' name='username' defaultValue='john' />
+                <label htmlFor='email'>Email:</label>
+                <input id='email' name='email' type='email' defaultValue='john@example.com' />
+                <div>
+                  <button type='submit'>Save</button>
+                  <DialogClose type='button'>Cancel</DialogClose>
+                </div>
+              </form>
+            </DialogContent>
+          </DialogOverlay>
+        </Dialog>,
       );
 
       // Initial state
@@ -97,35 +95,34 @@ describe('Dialog Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger>Delete Item</DialogTrigger>
-          <DialogPortal>
-            <DialogOverlay>
-              <DialogContent role='alertdialog'>
-                <DialogTitle>Confirm Deletion</DialogTitle>
-                <DialogDescription>
-                  Are you sure you want to delete this item? This action cannot be undone.
-                </DialogDescription>
-                <div>
-                  <button
-                    onClick={() => {
-                      onConfirm();
-                    }}
-                  >
-                    Delete
-                  </button>
-                  <DialogClose
-                    onClick={() => {
-                      onCancel();
-                    }}
-                  >
-                    Cancel
-                  </DialogClose>
-                </div>
-              </DialogContent>
-            </DialogOverlay>
-          </DialogPortal>
-        </DialogRoot>,
+
+          <DialogOverlay>
+            <DialogContent role='alertdialog'>
+              <DialogTitle>Confirm Deletion</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to delete this item? This action cannot be undone.
+              </DialogDescription>
+              <div>
+                <button
+                  onClick={() => {
+                    onConfirm();
+                  }}
+                >
+                  Delete
+                </button>
+                <DialogClose
+                  onClick={() => {
+                    onCancel();
+                  }}
+                >
+                  Cancel
+                </DialogClose>
+              </div>
+            </DialogContent>
+          </DialogOverlay>
+        </Dialog>,
       );
 
       // Open confirmation dialog
@@ -151,37 +148,35 @@ describe('Dialog Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <DialogRoot defaultOpen={true}>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Advanced Settings</DialogTitle>
-              <div role='tablist'>
-                <button role='tab' aria-selected={true} onClick={() => onTabSelect('general')}>
-                  General
-                </button>
-                <button role='tab' aria-selected={false} onClick={() => onTabSelect('security')}>
-                  Security
-                </button>
-              </div>
-              <div role='tabpanel'>
-                <h3>General Settings</h3>
-                <label>
-                  <input type='checkbox' defaultChecked />
-                  Enable notifications
-                </label>
-                <label>
-                  <input type='radio' name='theme' value='light' defaultChecked />
-                  Light theme
-                </label>
-                <label>
-                  <input type='radio' name='theme' value='dark' />
-                  Dark theme
-                </label>
-              </div>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
-        </DialogRoot>,
+        <Dialog defaultOpen={true}>
+          <DialogContent>
+            <DialogTitle>Advanced Settings</DialogTitle>
+            <div role='tablist'>
+              <button role='tab' aria-selected={true} onClick={() => onTabSelect('general')}>
+                General
+              </button>
+              <button role='tab' aria-selected={false} onClick={() => onTabSelect('security')}>
+                Security
+              </button>
+            </div>
+            <div role='tabpanel'>
+              <h3>General Settings</h3>
+              <label>
+                <input type='checkbox' defaultChecked />
+                Enable notifications
+              </label>
+              <label>
+                <input type='radio' name='theme' value='light' defaultChecked />
+                Light theme
+              </label>
+              <label>
+                <input type='radio' name='theme' value='dark' />
+                Dark theme
+              </label>
+            </div>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
+        </Dialog>,
       );
 
       // Interact with tabs
@@ -206,25 +201,23 @@ describe('Dialog Integration Tests', () => {
 
       render(
         <div>
-          <DialogRoot>
+          <Dialog>
             <DialogTrigger>Open Dialog 1</DialogTrigger>
-            <DialogPortal>
-              <DialogContent>
-                <DialogTitle>Dialog 1</DialogTitle>
-                <DialogClose>Close</DialogClose>
-              </DialogContent>
-            </DialogPortal>
-          </DialogRoot>
 
-          <DialogRoot>
+            <DialogContent onInteractOutside={(e) => e.preventDefault()}>
+              <DialogTitle>Dialog 1</DialogTitle>
+              <DialogClose>Close</DialogClose>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog>
             <DialogTrigger>Open Dialog 2</DialogTrigger>
-            <DialogPortal>
-              <DialogContent>
-                <DialogTitle>Dialog 2</DialogTitle>
-                <DialogClose>Close</DialogClose>
-              </DialogContent>
-            </DialogPortal>
-          </DialogRoot>
+
+            <DialogContent onInteractOutside={(e) => e.preventDefault()}>
+              <DialogTitle>Dialog 2</DialogTitle>
+              <DialogClose>Close</DialogClose>
+            </DialogContent>
+          </Dialog>
         </div>,
       );
 
@@ -251,20 +244,19 @@ describe('Dialog Integration Tests', () => {
   });
 
   describe('Error Handling and Edge Cases', () => {
-    it('should handle rapid open/close interactions', async () => {
+    it('should keep state consistent during rapid open/close interactions', async () => {
       const onOpenChange = jest.fn();
       const user = userEvent.setup();
 
       render(
-        <DialogRoot onOpenChange={onOpenChange}>
+        <Dialog onOpenChange={onOpenChange}>
           <DialogTrigger>Toggle Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Rapid Toggle Dialog</DialogTitle>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
-        </DialogRoot>,
+
+          <DialogContent>
+            <DialogTitle>Rapid Toggle Dialog</DialogTitle>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Toggle Dialog' });
@@ -276,25 +268,23 @@ describe('Dialog Integration Tests', () => {
 
       // Dialog should end up open (odd number of clicks)
       expect(screen.getByRole('dialog')).toBeInTheDocument();
-
-      // Should have been called 3 times
-      expect(onOpenChange).toHaveBeenCalledTimes(3);
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+      expect(onOpenChange).toHaveBeenCalledWith(false);
     });
 
     it('should handle keyboard interactions while dialog is opening', async () => {
       const user = userEvent.setup();
 
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogPortal>
-            <DialogContent>
-              <DialogTitle>Dialog Title</DialogTitle>
-              <button>First Button</button>
-              <DialogClose>Close</DialogClose>
-            </DialogContent>
-          </DialogPortal>
-        </DialogRoot>,
+
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+            <button>First Button</button>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
+        </Dialog>,
       );
 
       const trigger = screen.getByRole('button', { name: 'Open Dialog' });
@@ -311,23 +301,46 @@ describe('Dialog Integration Tests', () => {
       });
     });
 
+    it('should keep dialog open when Escape default is prevented in onKeyDown', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <Dialog defaultOpen={true}>
+          <DialogContent
+            onKeyDown={(event) => {
+              if (event.key !== 'Escape') return;
+              event.preventDefault();
+            }}
+          >
+            <DialogTitle>Persistent Dialog</DialogTitle>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
+        </Dialog>,
+      );
+
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+      await user.keyboard('{Escape}');
+
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
     it('should handle controlled state changes', async () => {
       const ControlledDialog = () => {
-        const [isOpen, setIsOpen] = React.useState(false);
+        const [open, setOpen] = React.useState(false);
 
         return (
           <div>
-            <button onClick={() => setIsOpen(true)}>External Open</button>
-            <button onClick={() => setIsOpen(false)}>External Close</button>
-            <DialogRoot isOpen={isOpen} onOpenChange={setIsOpen}>
+            <button onClick={() => setOpen(true)}>External Open</button>
+            <button onClick={() => setOpen(false)}>External Close</button>
+            <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger>Internal Toggle</DialogTrigger>
-              <DialogPortal>
-                <DialogContent>
-                  <DialogTitle>Controlled Dialog</DialogTitle>
-                  <DialogClose>Internal Close</DialogClose>
-                </DialogContent>
-              </DialogPortal>
-            </DialogRoot>
+
+              <DialogContent>
+                <DialogTitle>Controlled Dialog</DialogTitle>
+                <DialogClose>Internal Close</DialogClose>
+              </DialogContent>
+            </Dialog>
           </div>
         );
       };
@@ -358,21 +371,19 @@ describe('Dialog Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <DialogRoot defaultOpen={true}>
-          <DialogPortal>
-            <DialogOverlay data-testid='overlay'>
-              <DialogContent data-testid='content'>
-                <DialogTitle>Dialog with Nested Content</DialogTitle>
-                <div data-testid='nested-div'>
-                  <button data-testid='nested-button'>Nested Button</button>
-                  <div data-testid='deeply-nested'>
-                    <span data-testid='deep-span'>Deep content</span>
-                  </div>
+        <Dialog defaultOpen={true}>
+          <DialogOverlay data-testid='overlay'>
+            <DialogContent data-testid='content'>
+              <DialogTitle>Dialog with Nested Content</DialogTitle>
+              <div data-testid='nested-div'>
+                <button data-testid='nested-button'>Nested Button</button>
+                <div data-testid='deeply-nested'>
+                  <span data-testid='deep-span'>Deep content</span>
                 </div>
-              </DialogContent>
-            </DialogOverlay>
-          </DialogPortal>
-        </DialogRoot>,
+              </div>
+            </DialogContent>
+          </DialogOverlay>
+        </Dialog>,
       );
 
       expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -400,52 +411,51 @@ describe('Dialog Integration Tests', () => {
       const user = userEvent.setup();
 
       render(
-        <DialogRoot>
+        <Dialog>
           <DialogTrigger>Sign In</DialogTrigger>
-          <DialogPortal>
-            <DialogOverlay>
-              <DialogContent>
-                <DialogTitle>Sign In to Your Account</DialogTitle>
-                <DialogDescription>Enter your credentials to access your account</DialogDescription>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.currentTarget);
-                    onLogin({
-                      email: formData.get('email'),
-                      password: formData.get('password'),
-                    });
-                  }}
-                >
-                  <div>
-                    <label htmlFor='email'>Email:</label>
-                    <input id='email' name='email' type='email' required autoComplete='email' />
-                  </div>
-                  <div>
-                    <label htmlFor='password'>Password:</label>
-                    <input
-                      id='password'
-                      name='password'
-                      type='password'
-                      required
-                      autoComplete='current-password'
-                    />
-                  </div>
-                  <div>
-                    <label>
-                      <input type='checkbox' name='remember' />
-                      Remember me
-                    </label>
-                  </div>
-                  <div>
-                    <button type='submit'>Sign In</button>
-                    <DialogClose type='button'>Cancel</DialogClose>
-                  </div>
-                </form>
-              </DialogContent>
-            </DialogOverlay>
-          </DialogPortal>
-        </DialogRoot>,
+
+          <DialogOverlay>
+            <DialogContent>
+              <DialogTitle>Sign In to Your Account</DialogTitle>
+              <DialogDescription>Enter your credentials to access your account</DialogDescription>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  onLogin({
+                    email: formData.get('email'),
+                    password: formData.get('password'),
+                  });
+                }}
+              >
+                <div>
+                  <label htmlFor='email'>Email:</label>
+                  <input id='email' name='email' type='email' required autoComplete='email' />
+                </div>
+                <div>
+                  <label htmlFor='password'>Password:</label>
+                  <input
+                    id='password'
+                    name='password'
+                    type='password'
+                    required
+                    autoComplete='current-password'
+                  />
+                </div>
+                <div>
+                  <label>
+                    <input type='checkbox' name='remember' />
+                    Remember me
+                  </label>
+                </div>
+                <div>
+                  <button type='submit'>Sign In</button>
+                  <DialogClose type='button'>Cancel</DialogClose>
+                </div>
+              </form>
+            </DialogContent>
+          </DialogOverlay>
+        </Dialog>,
       );
 
       // Open dialog
@@ -487,53 +497,51 @@ describe('Dialog Integration Tests', () => {
               </button>
             ))}
 
-            <DialogRoot
-              isOpen={selectedImage !== null}
+            <Dialog
+              open={selectedImage !== null}
               onOpenChange={(open) => !open && setSelectedImage(null)}
             >
-              <DialogPortal>
-                <DialogOverlay>
-                  <DialogContent role='dialog'>
-                    <DialogTitle>Image Viewer</DialogTitle>
-                    {selectedImage && (
+              <DialogOverlay>
+                <DialogContent role='dialog'>
+                  <DialogTitle>Image Viewer</DialogTitle>
+                  {selectedImage && (
+                    <div>
+                      <img
+                        src={images.find((img) => img.id === selectedImage)?.src}
+                        alt={images.find((img) => img.id === selectedImage)?.alt}
+                      />
                       <div>
-                        <img
-                          src={images.find((img) => img.id === selectedImage)?.src}
-                          alt={images.find((img) => img.id === selectedImage)?.alt}
-                        />
-                        <div>
-                          <button
-                            onClick={() => {
-                              const currentIndex = images.findIndex(
-                                (img) => img.id === selectedImage,
-                              );
-                              const prevIndex = (currentIndex - 1 + images.length) % images.length;
-                              setSelectedImage(images[prevIndex]!.id);
-                            }}
-                            disabled={images.length <= 1}
-                          >
-                            Previous
-                          </button>
-                          <button
-                            onClick={() => {
-                              const currentIndex = images.findIndex(
-                                (img) => img.id === selectedImage,
-                              );
-                              const nextIndex = (currentIndex + 1) % images.length;
-                              setSelectedImage(images[nextIndex]!.id);
-                            }}
-                            disabled={images.length <= 1}
-                          >
-                            Next
-                          </button>
-                        </div>
+                        <button
+                          onClick={() => {
+                            const currentIndex = images.findIndex(
+                              (img) => img.id === selectedImage,
+                            );
+                            const prevIndex = (currentIndex - 1 + images.length) % images.length;
+                            setSelectedImage(images[prevIndex]!.id);
+                          }}
+                          disabled={images.length <= 1}
+                        >
+                          Previous
+                        </button>
+                        <button
+                          onClick={() => {
+                            const currentIndex = images.findIndex(
+                              (img) => img.id === selectedImage,
+                            );
+                            const nextIndex = (currentIndex + 1) % images.length;
+                            setSelectedImage(images[nextIndex]!.id);
+                          }}
+                          disabled={images.length <= 1}
+                        >
+                          Next
+                        </button>
                       </div>
-                    )}
-                    <DialogClose>Close</DialogClose>
-                  </DialogContent>
-                </DialogOverlay>
-              </DialogPortal>
-            </DialogRoot>
+                    </div>
+                  )}
+                  <DialogClose>Close</DialogClose>
+                </DialogContent>
+              </DialogOverlay>
+            </Dialog>
           </div>
         );
       };

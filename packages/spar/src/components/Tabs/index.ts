@@ -2,8 +2,8 @@ import { Tabs as TabsRoot } from './Tabs';
 import { TabsList } from './TabsList';
 import { TabsTrigger } from './TabsTrigger';
 import { TabsContent } from './TabsContent';
+export { useTabsContext } from './hooks';
 
-// Create compound component with dot notation support
 const Tabs = TabsRoot as typeof TabsRoot & {
   Root: typeof TabsRoot;
   List: typeof TabsList;
@@ -16,25 +16,13 @@ Tabs.List = TabsList;
 Tabs.Trigger = TabsTrigger;
 Tabs.Content = TabsContent;
 
-// Export both patterns
-export {
-  // Compound component (with dot notation)
-  Tabs,
+export { Tabs, TabsRoot, TabsList, TabsTrigger, TabsContent };
 
-  // Named exports (tree-shakeable)
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-
-  // Root alias for explicit usage
-  TabsRoot,
-};
-
-// Export types
 export type {
   TabsProps,
   TabsListProps,
   TabsTriggerProps,
+  TabsTriggerRenderProps,
   TabsContentProps,
   TabsActivationMode,
 } from './types';

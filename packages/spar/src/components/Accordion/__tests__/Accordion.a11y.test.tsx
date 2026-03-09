@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import {
@@ -42,7 +42,7 @@ const BasicAccordion = ({
             <button type='button'>Take Action</button>
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value='item-3' isDisabled>
+        <AccordionItem value='item-3' disabled>
           <AccordionHeader level={2}>
             <AccordionTrigger>Section 3: Advanced (Coming Soon)</AccordionTrigger>
           </AccordionHeader>
@@ -252,102 +252,100 @@ describe('Accordion Accessibility', () => {
       expect(screen.getByText(/This section contains detailed information/)).toBeInTheDocument();
     });
 
-    it('should navigate with arrow keys in vertical orientation', async () => {
+    it('should move focus with Arrow keys in vertical orientation', async () => {
+      const user = userEvent.setup();
       render(<BasicAccordion orientation='vertical' />);
 
-      const triggers = screen.getAllByRole('button');
-      triggers[0]!.focus();
+      const trigger1 = screen.getByRole('button', { name: 'Section 1: Introduction' });
+      const trigger2 = screen.getByRole('button', { name: 'Section 2: Details' });
 
-      // Test that arrow key events are handled (preventDefault called)
-      const arrowDownEvent = new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true });
-      const preventDefault = jest.spyOn(arrowDownEvent, 'preventDefault');
+      trigger1.focus();
+      await user.keyboard('{ArrowDown}');
+      expect(trigger2).toHaveFocus();
 
-      triggers[0]!.dispatchEvent(arrowDownEvent);
-      expect(preventDefault).toHaveBeenCalled();
-
-      // Test that triggers have correct attributes for navigation
-      expect(triggers[0]).toHaveAttribute('data-accordion-trigger');
-      expect(triggers[1]).toHaveAttribute('data-accordion-trigger');
-      expect(triggers[2]).toHaveAttribute('data-accordion-trigger');
+      await user.keyboard('{ArrowUp}');
+      expect(trigger1).toHaveFocus();
     });
 
-    it('should navigate with arrow keys in horizontal orientation', async () => {
+    it('should move focus with Arrow keys in horizontal orientation', async () => {
+      const user = userEvent.setup();
       render(<BasicAccordion orientation='horizontal' />);
 
-      const triggers = screen.getAllByRole('button');
-      triggers[0]!.focus();
+      const trigger1 = screen.getByRole('button', { name: 'Section 1: Introduction' });
+      const trigger2 = screen.getByRole('button', { name: 'Section 2: Details' });
 
-      // Test keyboard event handling for horizontal orientation
-      await act(async () => {
-        fireEvent.keyDown(triggers[0]!, { key: 'ArrowRight' });
-      });
+      trigger1.focus();
+      await user.keyboard('{ArrowRight}');
+      expect(trigger2).toHaveFocus();
 
-      // Test that triggers have correct attributes for navigation
-      expect(triggers[0]).toHaveAttribute('data-accordion-trigger');
-      expect(triggers[1]).toHaveAttribute('data-accordion-trigger');
-      expect(triggers[2]).toHaveAttribute('data-accordion-trigger');
+      await user.keyboard('{ArrowLeft}');
+      expect(trigger1).toHaveFocus();
     });
 
-    it('should navigate to first item with Home key', async () => {
-      render(<BasicAccordion />);
+    it('should move focus to first item with Home key', async () => {
+      const user = userEvent.setup();
+      render(
+        <Accordion>
+          <AccordionItem value='item-1'>
+            <AccordionHeader>
+              <AccordionTrigger>First section</AccordionTrigger>
+            </AccordionHeader>
+            <AccordionContent>First content</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value='item-2'>
+            <AccordionHeader>
+              <AccordionTrigger>Second section</AccordionTrigger>
+            </AccordionHeader>
+            <AccordionContent>Second content</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value='item-3'>
+            <AccordionHeader>
+              <AccordionTrigger>Third section</AccordionTrigger>
+            </AccordionHeader>
+            <AccordionContent>Third content</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
 
-      const triggers = screen.getAllByRole('button');
-      triggers[2]!.focus(); // Focus on last trigger
+      const trigger1 = screen.getByRole('button', { name: 'First section' });
+      const trigger2 = screen.getByRole('button', { name: 'Second section' });
 
-      // Test that Home key event is handled (preventDefault called)
-      const homeEvent = new KeyboardEvent('keydown', { key: 'Home', bubbles: true });
-      const preventDefault = jest.spyOn(homeEvent, 'preventDefault');
-
-      triggers[2]!.dispatchEvent(homeEvent);
-      expect(preventDefault).toHaveBeenCalled();
-
-      // Test that all triggers have correct navigation attributes
-      expect(triggers[0]).toHaveAttribute('data-accordion-trigger');
-      expect(triggers[1]).toHaveAttribute('data-accordion-trigger');
-      expect(triggers[2]).toHaveAttribute('data-accordion-trigger');
+      trigger2.focus();
+      await user.keyboard('{Home}');
+      expect(trigger1).toHaveFocus();
     });
 
-    it('should navigate to last item with End key', async () => {
-      render(<BasicAccordion />);
+    it('should move focus to last item with End key', async () => {
+      const user = userEvent.setup();
+      render(
+        <Accordion>
+          <AccordionItem value='item-1'>
+            <AccordionHeader>
+              <AccordionTrigger>First section</AccordionTrigger>
+            </AccordionHeader>
+            <AccordionContent>First content</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value='item-2'>
+            <AccordionHeader>
+              <AccordionTrigger>Second section</AccordionTrigger>
+            </AccordionHeader>
+            <AccordionContent>Second content</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value='item-3'>
+            <AccordionHeader>
+              <AccordionTrigger>Third section</AccordionTrigger>
+            </AccordionHeader>
+            <AccordionContent>Third content</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
 
-      const triggers = screen.getAllByRole('button');
-      triggers[0]!.focus(); // Focus on first trigger
+      const trigger1 = screen.getByRole('button', { name: 'First section' });
+      const trigger3 = screen.getByRole('button', { name: 'Third section' });
 
-      // Test that End key event is handled (preventDefault called)
-      const endEvent = new KeyboardEvent('keydown', { key: 'End', bubbles: true });
-      const preventDefault = jest.spyOn(endEvent, 'preventDefault');
-
-      triggers[0]!.dispatchEvent(endEvent);
-      expect(preventDefault).toHaveBeenCalled();
-
-      // Test that all triggers have correct navigation attributes
-      expect(triggers[0]).toHaveAttribute('data-accordion-trigger');
-      expect(triggers[1]).toHaveAttribute('data-accordion-trigger');
-      expect(triggers[2]).toHaveAttribute('data-accordion-trigger');
-    });
-
-    it('should skip disabled items during keyboard navigation', async () => {
-      render(<BasicAccordion />);
-
-      const triggers = screen.getAllByRole('button');
-      const disabledTrigger = screen.getByRole('button', {
-        name: 'Section 3: Advanced (Coming Soon)',
-      });
-
-      // Test that disabled trigger has correct attributes
-      expect(disabledTrigger).toBeDisabled();
-      expect(disabledTrigger).toHaveAttribute('disabled');
-
-      // Test that arrow key events are handled even with disabled items
-      const arrowDownEvent = new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true });
-      const preventDefault = jest.spyOn(arrowDownEvent, 'preventDefault');
-
-      triggers[1]!.dispatchEvent(arrowDownEvent);
-      expect(preventDefault).toHaveBeenCalled();
-
-      // Verify enabled items can be interacted with
-      expect(triggers[0]).not.toBeDisabled();
-      expect(triggers[1]).not.toBeDisabled();
+      trigger1.focus();
+      await user.keyboard('{End}');
+      expect(trigger3).toHaveFocus();
     });
 
     it('should not activate disabled triggers with keyboard', async () => {
@@ -376,6 +374,7 @@ describe('Accordion Accessibility', () => {
 
   describe('Focus Management', () => {
     it('should maintain focus on trigger after activation', async () => {
+      const user = userEvent.setup();
       render(<BasicAccordion />);
 
       const trigger = screen.getByRole('button', { name: 'Section 1: Introduction' });
@@ -384,13 +383,12 @@ describe('Accordion Accessibility', () => {
       expect(trigger).not.toBeDisabled();
       expect(trigger).toHaveAttribute('data-accordion-trigger');
 
-      // Test activation via keyboard events with act wrapper
-      await act(async () => {
-        fireEvent.keyDown(trigger, { key: 'Enter' });
-      });
+      trigger.focus();
+      await user.keyboard('{Enter}');
 
       // Should expand but trigger remains focusable
       expect(trigger).toHaveAttribute('aria-expanded', 'true');
+      expect(trigger).toHaveFocus();
     });
 
     it('should manage focus properly when content contains focusable elements', async () => {
@@ -466,25 +464,20 @@ describe('Accordion Accessibility', () => {
       expect(disabledTrigger).toHaveAttribute('data-disabled', '');
     });
 
-    it('should skip disabled items in keyboard navigation', async () => {
+    it('should keep disabled trigger non-interactive when focused', async () => {
+      const user = userEvent.setup();
       render(<BasicAccordion />);
 
-      const triggers = screen.getAllByRole('button');
-      const disabledTrigger = triggers[2]; // Third trigger is disabled
-
-      // Verify the disabled state
-      expect(disabledTrigger).toBeDisabled();
-      expect(disabledTrigger).toHaveAttribute('disabled');
-
-      // Test that navigation logic handles disabled items
-      await act(async () => {
-        fireEvent.keyDown(triggers[1]!, { key: 'ArrowDown' });
+      const disabledTrigger = screen.getByRole('button', {
+        name: 'Section 3: Advanced (Coming Soon)',
       });
 
-      // Verify that navigation attributes are correct
-      expect(triggers[0]).toHaveAttribute('data-accordion-trigger');
-      expect(triggers[1]).toHaveAttribute('data-accordion-trigger');
-      expect(disabledTrigger).toHaveAttribute('data-accordion-trigger');
+      disabledTrigger.focus();
+      await user.keyboard('{Enter}');
+      await user.keyboard('{ }');
+
+      expect(disabledTrigger).toHaveAttribute('aria-expanded', 'false');
+      expect(screen.queryByText('This content is not yet available.')).not.toBeInTheDocument();
     });
   });
 

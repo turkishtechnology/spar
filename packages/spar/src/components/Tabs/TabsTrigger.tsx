@@ -1,31 +1,38 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import { useTabsContext } from './Tabs';
-import type { TabsTriggerProps } from './types';
+import { useCallback, useEffect, useRef, useState, ElementType } from 'react';
+import { useMergedRef } from '@/hooks';
+import { useTabsContext } from './hooks';
+import type { TabsTriggerProps, TabsTriggerRenderProps } from './types';
+import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
- * TabsTrigger component representing a clickable tab button with full accessibility support
+ * TabsTrigger component representing a clickable tab button with full accessibility support.
+ * Supports render props pattern for complete rendering control.
  */
-export const TabsTrigger = ({
+export const TabsTrigger = <T extends ElementType = 'button'>({
   value,
   disabled = false,
-  asChild = false,
-  as: Component = 'button',
+  autoFocus = false,
+  as,
   children,
   onClick,
   onFocus,
   onBlur,
+  ref,
   ...props
-}: TabsTriggerProps) => {
-  const { selectedValue, onValueChange, orientation, registerTab, unregisterTab, tabsListId } =
+}: TabsTriggerProps<T>) => {
+  const { selectedValue, onValueChange, orientation, registerTab, unregisterTab, baseId } =
     useTabsContext();
-  const triggerRef = useRef<HTMLElement>(null);
-  const triggerId = `${tabsListId}-trigger-${value}`;
-  const panelId = `${tabsListId}-panel-${value}`;
+  const internalRef = useRef<HTMLButtonElement>(null);
+  const mergedRef = useMergedRef(internalRef, ref);
+  const triggerId = `${baseId}-trigger-${value}`;
+  const panelId = `${baseId}-panel-${value}`;
+  const [isFocused, setIsFocused] = useState(false);
 
   const isSelected = selectedValue === value;
 
   useEffect(() => {
-    const element = triggerRef.current;
+    const element = internalRef.current;
     if (element) {
       registerTab(value, element);
       return () => unregisterTab(value);
@@ -45,6 +52,7 @@ export const TabsTrigger = ({
 
   const handleFocus = useCallback(
     (event: React.FocusEvent<HTMLButtonElement>) => {
+      setIsFocused(true);
       onFocus?.(event as React.FocusEvent<HTMLButtonElement>);
     },
     [onFocus],
@@ -52,55 +60,51 @@ export const TabsTrigger = ({
 
   const handleBlur = useCallback(
     (event: React.FocusEvent<HTMLButtonElement>) => {
+      setIsFocused(false);
       onBlur?.(event as React.FocusEvent<HTMLButtonElement>);
     },
     [onBlur],
   );
 
-  if (asChild && React.isValidElement(children)) {
-    const childProps = {
-      ref: triggerRef,
-      id: triggerId,
-      role: 'tab',
-      'aria-selected': isSelected,
-      'aria-controls': panelId,
-      'aria-disabled': disabled,
-      'data-state': isSelected ? 'active' : 'inactive',
-      'data-disabled': disabled ? '' : undefined,
-      'data-orientation': orientation,
-      'data-value': value,
-      tabIndex: isSelected ? 0 : -1,
-      onClick: handleClick,
-      onFocus: handleFocus,
-      onBlur: handleBlur,
-      ...props,
-    } as React.HTMLAttributes<HTMLElement>;
+  // Function to select this tab programmatically
+  const selectTab = useCallback(() => {
+    if (!disabled) {
+      onValueChange(value);
+    }
+  }, [disabled, onValueChange, value]);
 
-    return React.cloneElement(children, childProps);
-  }
+  // Render props for children function
+  const renderProps: TabsTriggerRenderProps = {
+    isSelected,
+    select: selectTab,
+    disabled,
+    isFocused,
+    orientation,
+  };
+
+  const buttonProps = {
+    ...(as && { as }),
+    ref: mergedRef,
+    id: triggerId,
+    disabled,
+    autoFocus,
+    role: 'tab' as const,
+    'aria-selected': isSelected,
+    'aria-controls': panelId,
+    'data-state': isSelected ? 'active' : 'inactive',
+    'data-orientation': orientation,
+    'data-value': value,
+    tabIndex: isSelected ? 0 : -1,
+    onClick: handleClick,
+    onFocus: handleFocus,
+    onBlur: handleBlur,
+    ...props,
+  } as ButtonProps<T>;
 
   return (
-    <Component
-      ref={triggerRef}
-      id={triggerId}
-      role='tab'
-      type={Component === 'button' ? 'button' : undefined}
-      aria-selected={isSelected}
-      aria-controls={panelId}
-      aria-disabled={disabled}
-      data-state={isSelected ? 'active' : 'inactive'}
-      data-disabled={disabled ? '' : undefined}
-      data-orientation={orientation}
-      data-value={value}
-      tabIndex={isSelected ? 0 : -1}
-      disabled={Component === 'button' ? disabled : undefined}
-      onClick={handleClick}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      {...props}
-    >
-      {children}
-    </Component>
+    <Button {...buttonProps}>
+      {typeof children === 'function' ? children(renderProps) : children}
+    </Button>
   );
 };
 

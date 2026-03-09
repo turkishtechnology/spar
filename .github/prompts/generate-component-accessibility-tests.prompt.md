@@ -1,7 +1,7 @@
 ---
-mode: agent
-model: Claude Sonnet 4 (copilot)
-description: Generate comprehensive accessibility test suite for Spar components
+agent: agent
+model: Claude Opus 4.5 (copilot)
+description: Generate comprehensive accessibility test suite for Glide components
 ---
 
 # Accessibility Test Generator

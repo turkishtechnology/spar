@@ -1,53 +1,40 @@
-import { useCallback } from 'react';
-import { useDialogContext } from './DialogRoot';
+import { ElementType } from 'react';
+import { useDialogContext } from './hooks';
+import { useCloseButton } from '@/hooks';
 import type { DialogCloseProps } from './types';
+import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * Close button component that closes the dialog when activated.
  * Supports keyboard navigation and proper event handling.
  */
-export const DialogClose = ({
-  as: Component = 'button',
+export const DialogClose = <T extends ElementType = 'button'>({
+  as,
   ref,
   onClick,
-  onKeyDown,
   children,
   ...props
-}: DialogCloseProps) => {
-  const context = useDialogContext();
-  const { setIsOpen } = context;
+}: DialogCloseProps<T>) => {
+  const { isOpen, closeDialog } = useDialogContext();
+  const { handleClick, renderProps } = useCloseButton({
+    isOpen,
+    close: closeDialog,
+    onClick,
+  });
 
-  const handleClick = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setIsOpen(false);
-      onClick?.(event);
-    },
-    [setIsOpen, onClick],
-  );
-
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLButtonElement>) => {
-      // Handle Enter and Space keys for button activation
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        setIsOpen(false);
-      }
-
-      onKeyDown?.(event);
-    },
-    [setIsOpen, onKeyDown],
-  );
+  const buttonProps = {
+    ...(as && { as }),
+    ...(ref && { ref }),
+    onClick: handleClick,
+    'data-dialog-close': '',
+    ...props,
+  } as ButtonProps<T>;
 
   return (
-    <Component
-      ref={ref}
-      type={Component === 'button' ? 'button' : undefined}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      {...props}
-    >
-      {children}
-    </Component>
+    <Button {...buttonProps}>
+      {typeof children === 'function' ? children(renderProps) : children}
+    </Button>
   );
 };
 

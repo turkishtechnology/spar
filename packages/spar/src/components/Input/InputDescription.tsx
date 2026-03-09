@@ -1,18 +1,25 @@
+import { type ElementType } from 'react';
 import type { InputDescriptionProps } from './types';
-import { useInputContext } from './InputRoot';
+import { useInputContext } from './hooks';
 
 /**
  * Input description component that provides helper text for the input field.
  * Automatically linked to the input field via aria-describedby.
  */
-export const InputDescription = ({ children, ref, ...props }: InputDescriptionProps) => {
+export const InputDescription = <T extends ElementType = 'div'>({
+  as,
+  children,
+  ref,
+  ...props
+}: InputDescriptionProps<T>) => {
+  const Component = as || 'div';
   const context = useInputContext();
 
   return (
-    <div {...props} ref={ref} id={context.descriptionId} data-spar-input-description>
+    <Component {...props} ref={ref} id={context.descriptionId}>
       {children}
-    </div>
+    </Component>
   );
 };
 
-InputDescription.displayName = 'Input.Description';
+InputDescription.displayName = 'InputDescription';

@@ -1,49 +1,15 @@
-import { PopoverArrowProps } from './types';
+import { createArrowComponent } from '@/utils';
 import { usePopoverContext } from './hooks/usePopoverContext';
+import { usePopoverContentContext } from './hooks/usePopoverContentContext';
 
 /**
- * Optional arrow element for popover visual enhancement
+ * Optional decorative arrow element for popover.
+ * Automatically positioned by Floating UI middleware — sits at the edge of the
+ * content element pointing toward the trigger. Headless: no visual opinions,
+ * user is responsible for shape/rotation styling.
  */
-export const PopoverArrow = ({
-  width = 10,
-  height = 5,
-  offset = 0,
-  style,
-  ref,
-  ...props
-}: PopoverArrowProps) => {
-  const { state, arrowRef } = usePopoverContext();
-
-  // Unused prop for future implementation
-  void offset;
-
-  if (!state.isOpen) return null;
-
-  return (
-    <div
-      ref={(element: HTMLDivElement | null) => {
-        if (arrowRef && 'current' in arrowRef) {
-          arrowRef.current = element;
-        }
-        if (typeof ref === 'function') {
-          ref(element);
-        } else if (ref) {
-          ref.current = element;
-        }
-      }}
-      role='presentation'
-      data-side={state.actualSide}
-      style={
-        {
-          position: 'absolute',
-          width,
-          height,
-          ...style,
-        } as React.CSSProperties
-      }
-      {...props}
-    />
-  );
-};
-
-PopoverArrow.displayName = 'PopoverArrow';
+export const PopoverArrow = createArrowComponent({
+  displayName: 'PopoverArrow',
+  useRootContext: usePopoverContext,
+  useContentContext: usePopoverContentContext,
+});

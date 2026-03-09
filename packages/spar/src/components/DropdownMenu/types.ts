@@ -1,12 +1,47 @@
-import type { ElementType, ReactNode, HTMLAttributes, Ref, SyntheticEvent, RefObject } from 'react';
-import type { CheckedState, Side, Align, Direction } from '../../types';
+import type { ElementType, ReactNode, SyntheticEvent, RefObject } from 'react';
+import type { Side, Align, PolymorphicProps } from '../../types';
+import type { ButtonOwnProps } from '../Button/types';
 
 export type DropdownMenuFocusStrategy = 'first' | 'last' | 'none';
 
 /**
- * Props for DropdownMenu.Root component
+ * Render props provided to DropdownMenuTrigger children function
+ */
+export interface DropdownMenuTriggerRenderProps {
+  /**
+   * Whether the dropdown menu is currently open
+   */
+  isOpen: boolean;
+  /**
+   * Whether the trigger is disabled
+   */
+  disabled: boolean;
+  /**
+   * Function to open the dropdown menu
+   */
+  open: () => void;
+  /**
+   * Function to close the dropdown menu
+   */
+  close: () => void;
+  /**
+   * Function to toggle the dropdown menu open/closed state
+   */
+  toggle: () => void;
+}
+
+/**
+ * Props for DropdownMenu component
+ * @remarks Root component managing menu state and context
  */
 export interface DropdownMenuProps {
+  /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-trigger` and `${id}-content`.
+   */
+  id?: string;
+
   /**
    * Controlled open state
    */
@@ -20,6 +55,7 @@ export interface DropdownMenuProps {
 
   /**
    * Callback when open state changes
+   * @param open - The new open state
    */
   onOpenChange?: (open: boolean) => void;
 
@@ -30,16 +66,16 @@ export interface DropdownMenuProps {
   modal?: boolean;
 
   /**
-   * Reading direction for positioning
-   * @defaultValue 'ltr'
+   * Disables all dropdown menu triggers (prevents opening)
+   * @defaultValue false
    */
-  dir?: Direction;
+  disabled?: boolean;
 
   /**
-   * Selection close policy
-   * @defaultValue 'auto'
+   * Whether to close the menu after an item is selected
+   * @defaultValue true
    */
-  closeOnSelect?: boolean | 'auto';
+  closeOnSelect?: boolean;
 
   /**
    * Component content
@@ -48,42 +84,29 @@ export interface DropdownMenuProps {
 }
 
 /**
- * Props for DropdownMenu.Trigger component
+ * Own props for DropdownMenuTrigger component
  */
-export interface DropdownMenuTriggerProps extends HTMLAttributes<HTMLElement> {
+export interface DropdownMenuTriggerOwnProps extends ButtonOwnProps {
   /**
-   * Polymorphic component type
-   * @defaultValue 'button'
+   * Children content or render function for render props pattern
    */
-  as?: ElementType;
-
-  /**
-   * Render as child element
-   * @defaultValue false
-   */
-  asChild?: boolean;
-
-  /**
-   * Whether trigger is disabled
-   */
-  disabled?: boolean;
-
-  /**
-   * Ref forwarded to trigger element
-   */
-  ref?: Ref<HTMLElement | null>;
+  children?: ReactNode | ((state: DropdownMenuTriggerRenderProps) => ReactNode);
 }
 
 /**
- * Props for DropdownMenu.Content component
+ * Props for DropdownMenuTrigger component
+ * @remarks Button that toggles menu visibility
  */
-export interface DropdownMenuContentProps extends HTMLAttributes<HTMLElement> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: ElementType;
+export type DropdownMenuTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  DropdownMenuTriggerOwnProps
+>;
 
+/**
+ * Own props for DropdownMenuContent component
+ */
+export interface DropdownMenuContentOwnProps {
   /**
    * Preferred placement side
    * @defaultValue 'bottom'
@@ -97,72 +120,44 @@ export interface DropdownMenuContentProps extends HTMLAttributes<HTMLElement> {
   align?: Align;
 
   /**
-   * Offset from trigger (in pixels)
-   * @defaultValue 0
+   * Portal container element. Content is portaled to document.body by default.
+   * @defaultValue document.body
    */
-  sideOffset?: number;
-
-  /**
-   * Alignment offset (in pixels)
-   * @defaultValue 0
-   */
-  alignOffset?: number;
-
-  /**
-   * Automatically adjust position to avoid collisions
-   * @defaultValue true
-   */
-  avoidCollisions?: boolean;
-
-  /**
-   * Boundary element for collision detection
-   * @defaultValue clippingAncestors
-   */
-  collisionBoundary?: Element | Element[] | null;
-
-  /**
-   * Padding from boundary edges (in pixels)
-   * @defaultValue 8
-   */
-  collisionPadding?: number;
-
-  /**
-   * Allow focus to loop through items
-   * @defaultValue false
-   */
-  loop?: boolean;
+  container?: HTMLElement | null;
 
   /**
    * Escape key handler
+   * @param event - The keyboard event (call preventDefault to prevent close)
    */
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
 
   /**
    * Outside click handler
+   * @param event - The pointer event (call preventDefault to prevent close)
    */
   onPointerDownOutside?: (event: PointerEvent) => void;
 
   /**
    * Outside focus handler
+   * @param event - The focus event (call preventDefault to prevent close)
    */
   onFocusOutside?: (event: FocusEvent) => void;
-
-  /**
-   * Ref forwarded to content element
-   */
-  ref?: Ref<HTMLElement | null>;
 }
 
 /**
- * Props for DropdownMenu.Item component
+ * Props for DropdownMenuContent component
+ * @remarks Floating content panel with positioning and keyboard navigation
  */
-export interface DropdownMenuItemProps extends Omit<HTMLAttributes<HTMLElement>, 'onSelect'> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: ElementType;
+export type DropdownMenuContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DropdownMenuContentOwnProps
+>;
 
+/**
+ * Own props for DropdownMenuItem component
+ */
+export interface DropdownMenuItemOwnProps {
   /**
    * Whether item is disabled
    * @defaultValue false
@@ -171,6 +166,7 @@ export interface DropdownMenuItemProps extends Omit<HTMLAttributes<HTMLElement>,
 
   /**
    * Selection handler
+   * @param event - The selection event (call preventDefault to prevent menu close)
    */
   onSelect?: (event: SyntheticEvent<HTMLElement>) => void;
 
@@ -178,140 +174,45 @@ export interface DropdownMenuItemProps extends Omit<HTMLAttributes<HTMLElement>,
    * Value for typeahead search
    */
   textValue?: string;
-
-  /**
-   * Ref forwarded to item element
-   */
-  ref?: Ref<HTMLElement | null>;
 }
 
 /**
- * Props for DropdownMenu.CheckboxItem component
+ * Props for DropdownMenuItem component
+ * @remarks Actionable item within the menu
  */
-export interface DropdownMenuCheckboxItemProps extends DropdownMenuItemProps {
-  /**
-   * Controlled checked state
-   * @defaultValue false
-   */
-  checked?: CheckedState;
-
-  /**
-   * Checked state change handler
-   */
-  onCheckedChange?: (checked: boolean) => void;
-}
+export type DropdownMenuItemProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DropdownMenuItemOwnProps
+>;
 
 /**
- * Props for DropdownMenu.RadioGroup component
+ * Props for DropdownMenuSeparator component
+ * @remarks Visual divider between menu item groups
  */
-export interface DropdownMenuRadioGroupProps extends HTMLAttributes<HTMLElement> {
-  /**
-   * Controlled selected value
-   */
-  value?: string;
-
-  /**
-   * Value change handler
-   */
-  onValueChange?: (value: string) => void;
-}
+export type DropdownMenuSeparatorProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
- * Props for DropdownMenu.RadioItem component
+ * Props for DropdownMenuLabel component
+ * @remarks Non-interactive label for a menu group
  */
-export interface DropdownMenuRadioItemProps extends DropdownMenuItemProps {
-  /**
-   * Unique value for this radio item
-   */
-  value: string;
-}
+export type DropdownMenuLabelProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
- * Props for DropdownMenu.Separator component
+ * Props for DropdownMenuGroup component
+ * @remarks Semantic grouping container for related items
  */
-export interface DropdownMenuSeparatorProps extends HTMLAttributes<HTMLElement> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: ElementType;
-
-  /**
-   * Ref forwarded to separator element
-   */
-  ref?: Ref<HTMLElement | null>;
-}
+export type DropdownMenuGroupProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
- * Props for DropdownMenu.Label component
+ * Props for DropdownMenuArrow component
+ * @remarks Purely decorative arrow element. Headless: user provides all visuals.
  */
-export interface DropdownMenuLabelProps extends HTMLAttributes<HTMLElement> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: ElementType;
-
-  /**
-   * Ref forwarded to label element
-   */
-  ref?: Ref<HTMLElement | null>;
-}
-
-/**
- * Props for DropdownMenu.Group component
- */
-export interface DropdownMenuGroupProps extends HTMLAttributes<HTMLElement> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: ElementType;
-
-  /**
-   * Ref forwarded to group element
-   */
-  ref?: Ref<HTMLElement | null>;
-}
-
-/**
- * Props for DropdownMenu.Sub component
- */
-export interface DropdownMenuSubProps {
-  /**
-   * Controlled submenu open state
-   */
-  open?: boolean;
-
-  /**
-   * Default submenu open state
-   * @defaultValue false
-   */
-  defaultOpen?: boolean;
-
-  /**
-   * Submenu open change handler
-   */
-  onOpenChange?: (open: boolean) => void;
-
-  /**
-   * Component content
-   */
-  children?: ReactNode;
-}
-
-/**
- * Props for DropdownMenu.SubTrigger component
- */
-export interface DropdownMenuSubTriggerProps extends DropdownMenuItemProps {}
-
-/**
- * Props for DropdownMenu.SubContent component
- */
-export interface DropdownMenuSubContentProps extends DropdownMenuContentProps {}
+export type DropdownMenuArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<'svg', T>;
 
 /**
  * Internal context value for DropdownMenu
+ * @internal
  */
 export interface DropdownMenuContextValue {
   open: boolean;
@@ -319,35 +220,39 @@ export interface DropdownMenuContextValue {
   triggerId: string;
   contentId: string;
   modal: boolean;
-  dir: Direction;
-  closeOnSelect: boolean | 'auto';
+  disabled: boolean;
+  closeOnSelect: boolean;
   focusStrategy: DropdownMenuFocusStrategy;
   setFocusStrategy: (strategy: DropdownMenuFocusStrategy) => void;
   triggerRef: RefObject<HTMLElement | null>;
+  arrowRef: RefObject<Element | null>;
   closeMenu: (options?: { focusTrigger?: boolean }) => void;
 }
 
 /**
- * Context value for DropdownMenu.RadioGroup
+ * @internal
  */
-export interface DropdownMenuRadioGroupContextValue {
-  value: string | undefined;
-  onValueChange: ((value: string) => void) | undefined;
+export interface DropdownMenuCollectionItem {
+  id: string;
+  ref: RefObject<HTMLElement | null>;
+  disabled: boolean;
+  textValue: string;
 }
 
 /**
- * Context value for DropdownMenu.Sub
+ * Context value for DropdownMenuCollection
+ * @internal
  */
-export interface DropdownMenuSubContextValue {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  triggerId: string;
-  contentId: string;
-  modal: boolean;
-  dir: Direction;
-  closeOnSelect: boolean | 'auto';
-  focusStrategy: DropdownMenuFocusStrategy;
-  setFocusStrategy: (strategy: DropdownMenuFocusStrategy) => void;
-  triggerRef: RefObject<HTMLElement | null>;
+export interface DropdownMenuCollectionContextValue {
+  registerItem: (item: DropdownMenuCollectionItem) => void;
+  unregisterItem: (id: string) => void;
+  highlightItem: (id: string | null) => void;
+  highlightFirst: () => void;
+  highlightLast: () => void;
+  highlightNext: () => void;
+  highlightPrevious: () => void;
+  isItemHighlighted: (id: string) => boolean;
+  highlightedId: string | null;
+  closeOnSelect: boolean;
   closeMenu: (options?: { focusTrigger?: boolean }) => void;
 }

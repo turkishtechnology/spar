@@ -1,21 +1,28 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo, type ElementType } from 'react';
 import { createPortal } from 'react-dom';
-import { useInteractOutside } from '@/hooks';
+import {
+  useInteractOutside,
+  useMergedRef,
+  useFloating,
+  useDocumentEvent,
+  useFocusTrap,
+  type UseFloatingOptions,
+  type UseFloatingReturn,
+} from '@/hooks';
 import { PopoverContentProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
-import { getFocusableElements } from './utils';
+import { PopoverContentContext } from './hooks/usePopoverContentContext';
+import { getFocusableElements } from './utils/index';
+import type { Side, Align } from '../../types';
 
 /**
  * Content container that holds the popover content
  */
-export const PopoverContent = ({
+export const PopoverContent = <T extends ElementType = 'div'>({
+  as,
   side = 'bottom',
   align = 'center',
-  sideOffset = 8,
-  alignOffset = 0,
-  avoidCollisions = true,
-  collisionBoundary,
-  hideWhenDetached = false,
+  container,
   onOpenAutoFocus,
   onCloseAutoFocus,
   onEscapeKeyDown,
@@ -28,29 +35,47 @@ export const PopoverContent = ({
   onKeyDown,
   ref,
   ...props
-}: PopoverContentProps) => {
-  // Unused props for future implementation
-  void side;
-  void align;
-  void sideOffset;
-  void alignOffset;
-  void collisionBoundary;
-  void hideWhenDetached;
-  void avoidCollisions;
+}: PopoverContentProps<T>) => {
+  const Component = as || 'div';
 
-  const { state, triggerRef, contentRef, floatingStyles, modal, closePopover } =
+  const { isOpen, contentId, triggerRef, contentRef, arrowRef, modal, closePopover } =
     usePopoverContext();
 
-  const [isMounted, setIsMounted] = useState(false);
+  // Use custom Floating UI hook for positioning
+  const floatingOptions: UseFloatingOptions = {
+    side,
+    align,
+    arrowRef: arrowRef?.current ?? null,
+  };
+
+  const { floatingStyles, arrowStyles, placement, refs }: UseFloatingReturn =
+    useFloating(floatingOptions);
+
+  // Set reference element
+  useEffect(() => {
+    refs.setReference(triggerRef.current);
+  }, [refs, triggerRef]);
+
+  const mergedRef = useMergedRef(contentRef, ref);
+
+  const floatingRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      mergedRef(node);
+      refs.setFloating(node);
+    },
+    [mergedRef, refs],
+  );
+
+  const [mounted, setMounted] = useState(false);
 
   // SSR safety
   useEffect(() => {
-    setIsMounted(true);
+    setMounted(true);
   }, []);
 
   // Focus management
   useEffect(() => {
-    if (!state.isOpen || !contentRef.current) return;
+    if (!isOpen || !contentRef.current) return;
 
     const contentElement = contentRef.current;
 
@@ -66,76 +91,59 @@ export const PopoverContent = ({
 
     return () => {
       // Return focus to trigger when closing
-      if (triggerRef.current) {
+      const event = new Event('closeautofocus', { cancelable: true });
+      onCloseAutoFocus?.(event);
+
+      if (!event.defaultPrevented && triggerRef.current) {
         (triggerRef.current as HTMLElement).focus();
-        onCloseAutoFocus?.(new Event('closeautofocus'));
       }
     };
-  }, [state.isOpen, onOpenAutoFocus, onCloseAutoFocus, contentRef, triggerRef]);
+  }, [isOpen, onOpenAutoFocus, onCloseAutoFocus, contentRef, triggerRef]);
 
   // Escape key handling
-  useEffect(() => {
-    if (!state.isOpen) return;
-
-    const handleEscapeKey = (event: KeyboardEvent) => {
+  const handleEscapeKey = useCallback(
+    (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        onEscapeKeyDown?.(event);
+
+        if (event.defaultPrevented) {
+          return;
+        }
+
         event.preventDefault();
         closePopover();
-        onEscapeKeyDown?.(event);
       }
-    };
+    },
+    [closePopover, onEscapeKeyDown],
+  );
 
-    document.addEventListener('keydown', handleEscapeKey);
-    return () => document.removeEventListener('keydown', handleEscapeKey);
-  }, [state.isOpen, closePopover, onEscapeKeyDown]);
+  useDocumentEvent('keydown', handleEscapeKey, isOpen);
+
+  const isFocusTrapped = modal || trapFocus;
+
+  useFocusTrap(contentRef, !!(isOpen && isFocusTrapped));
 
   // Outside interaction handling
   useInteractOutside([contentRef, triggerRef], {
-    enabled: state.isOpen,
-    includeFocus: !trapFocus, // Only include focus events if focus is not trapped
+    enabled: isOpen,
+    includeFocus: !isFocusTrapped, // Only include focus events if focus is not trapped
     onPointerDownOutside: (event) => {
-      closePopover();
       onPointerDownOutside?.(event);
       onInteractOutside?.(event);
+
+      if (!event.defaultPrevented) {
+        closePopover();
+      }
     },
     onFocusOutside: (event) => {
-      closePopover();
       onFocusOutside?.(event);
       onInteractOutside?.(event);
+
+      if (!event.defaultPrevented) {
+        closePopover();
+      }
     },
   });
-
-  // Focus trapping
-  useEffect(() => {
-    if (!state.isOpen || !trapFocus || !contentRef.current) return;
-
-    const contentElement = contentRef.current;
-    const focusableElements = getFocusableElements(contentElement);
-
-    if (focusableElements.length === 0) return;
-
-    const firstFocusable = focusableElements[0];
-    const lastFocusable = focusableElements[focusableElements.length - 1];
-
-    const handleTabKey = (event: KeyboardEvent) => {
-      if (event.key !== 'Tab') return;
-
-      if (event.shiftKey) {
-        if (document.activeElement === firstFocusable) {
-          event.preventDefault();
-          lastFocusable?.focus();
-        }
-      } else {
-        if (document.activeElement === lastFocusable) {
-          event.preventDefault();
-          firstFocusable?.focus();
-        }
-      }
-    };
-
-    contentElement.addEventListener('keydown', handleTabKey);
-    return () => contentElement.removeEventListener('keydown', handleTabKey);
-  }, [state.isOpen, trapFocus, contentRef]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -156,39 +164,45 @@ export const PopoverContent = ({
     [onKeyDown],
   );
 
-  if (!state.isOpen || !isMounted) return null;
+  // Extract placement information for data attributes
+  const [currentSide, currentAlign] = useMemo(() => {
+    const parts = placement.split('-');
+    const placementSide = parts[0];
+    const placementAlign = parts[1] ?? 'center';
+    return [placementSide, placementAlign];
+  }, [placement]);
 
-  const contentElement = (
-    <div
-      ref={(element: HTMLDivElement | null) => {
-        if (contentRef && 'current' in contentRef) {
-          contentRef.current = element;
-        }
-        if (typeof ref === 'function') {
-          ref(element);
-        } else if (ref) {
-          ref.current = element;
-        }
-      }}
-      id={state.contentId}
-      role={modal ? 'dialog' : undefined}
-      aria-modal={modal ? 'true' : undefined}
-      tabIndex={-1}
-      data-state='open'
-      data-side={state.actualSide}
-      data-align={state.actualAlign}
-      style={{
-        ...floatingStyles,
-        ...style,
-      }}
-      onKeyDown={handleKeyDown}
-      {...props}
-    >
-      {children}
-    </div>
+  const contentContextValue = useMemo(
+    () => ({ arrowStyles, side: currentSide as Side, align: currentAlign as Align }),
+    [arrowStyles, currentSide, currentAlign],
   );
 
-  return createPortal(contentElement, document.body);
+  if (!isOpen || !mounted) return null;
+
+  const contentElement = (
+    <PopoverContentContext.Provider value={contentContextValue}>
+      <Component
+        ref={floatingRef}
+        id={contentId}
+        role={modal ? 'dialog' : undefined}
+        aria-modal={modal ? 'true' : undefined}
+        tabIndex={-1}
+        data-state='open'
+        data-side={currentSide}
+        data-align={currentAlign}
+        style={{
+          ...floatingStyles,
+          ...style,
+        }}
+        onKeyDown={handleKeyDown}
+        {...props}
+      >
+        {children}
+      </Component>
+    </PopoverContentContext.Provider>
+  );
+
+  return createPortal(contentElement, container || document.body);
 };
 
 PopoverContent.displayName = 'PopoverContent';

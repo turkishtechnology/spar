@@ -11,11 +11,11 @@
 
 ### Compound Component Structure
 ```tsx
-<Radio.Group>
-  <Radio.Item value="option1">Option 1</Radio.Item>
-  <Radio.Item value="option2">Option 2</Radio.Item>
-  <Radio.Item value="option3">Option 3</Radio.Item>
-</Radio.Group>
+<RadioGroup>
+  <RadioItem value="option1">Option 1</RadioItem>
+  <RadioItem value="option2">Option 2</RadioItem>
+  <RadioItem value="option3">Option 3</RadioItem>
+</RadioGroup>
 ```
 
 ### Key Differentiators
@@ -27,10 +27,11 @@
 
 ## 2. API
 
-### Radio.Group Props
+### RadioGroup Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
+| `id` | `string` | No | `undefined` | Custom base ID used for generated group name when `name` is not provided |
 | `value` | `string \| undefined` | No | `undefined` | Controlled value of selected radio item |
 | `defaultValue` | `string \| undefined` | No | `undefined` | Uncontrolled default selected value |
 | `onValueChange` | `(value: string) => void` | No | `undefined` | Callback when selection changes |
@@ -38,32 +39,41 @@
 | `disabled` | `boolean` | No | `false` | Disables entire radio group |
 | `required` | `boolean` | No | `false` | Marks group as required for form validation |
 | `orientation` | `'horizontal' \| 'vertical'` | No | `'vertical'` | Layout direction affecting keyboard navigation |
-| `isInToolbar` | `boolean` | No | `false` | Changes keyboard behavior per WAI-ARIA guidelines |
-| `children` | `React.ReactNode` | Yes | — | Radio.Item components |
+| `selectOnFocus` | `boolean` | No | `true` | Whether arrow keys automatically select the focused item |
+| `autoFocus` | `boolean` | No | `false` | Whether to focus selected/first item on mount |
+| `children` | `React.ReactNode` | No | — | RadioItem components |
 | `aria-label` | `string` | No | `undefined` | Accessible name for the group |
 | `aria-labelledby` | `string` | No | `undefined` | References element that labels the group |
 | `aria-describedby` | `string` | No | `undefined` | References element that describes the group |
-| `as` | `React.ElementType` | No | `'div'` | Polymorphic root element |
+| `as` | `ElementType` | No | `'div'` | Polymorphic root element |
 
-### Radio.Item Props
+### RadioItem Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `value` | `string` | Yes | — | Unique value for this radio item |
 | `disabled` | `boolean` | No | `false` | Disables this specific radio item |
-| `children` | `React.ReactNode` | Yes | — | Label content for the radio item |
+| `children` | `React.ReactNode \| ((state: RadioItemRenderProps) => React.ReactNode)` | No | — | Label content or render function for render props pattern |
 | `aria-label` | `string` | No | `undefined` | Accessible name when children insufficient |
 | `aria-describedby` | `string` | No | `undefined` | References element that describes this item |
-| `as` | `React.ElementType` | No | `'label'` | Polymorphic root element |
+| `as` | `ElementType` | No | `'label'` | Polymorphic root element |
+
+### RadioItemRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isChecked` | `boolean` | Whether this radio item is currently selected |
+| `disabled` | `boolean` | Whether this radio item is disabled |
+| `isFocused` | `boolean` | Whether this radio item currently has focus |
+| `select` | `() => void` | Function to programmatically select this radio item |
 
 ### Ref Forwarding
-- **Radio.Group**: Forwards ref to root element (div by default)
-- **Radio.Item**: Forwards ref to root element (label by default)
+- **RadioGroup**: Forwards ref to root element (div by default)
+- **RadioItem**: Forwards ref to root element (label by default)
 
 ### Controlled/Uncontrolled Support
 - **Controlled**: Provide `value` and `onValueChange` props
 - **Uncontrolled**: Provide only `defaultValue` prop
-- **Mixed**: Not supported - component will warn in development
 
 ## 3. Behavior Matrix
 
@@ -71,8 +81,7 @@
 |-------|---------|--------|-----------------|
 | **Initial Load** | Component mounts | Focus on first item or checked item | `tabindex="0"` on focusable item, `-1` on others |
 | **Tab Into Group** | Tab key | Focus moves to checked item or first item | Focus visible on target item |
-| **Space on Focused** | Space key | Check focused item, uncheck others | `aria-checked="true"` on focused, `false` on others |
-| **Enter on Focused** | Enter key | Check focused item, uncheck others (toolbar mode) | `aria-checked="true"` on focused, `false` on others |
+| **Space/Enter on Focused** | Space/Enter key | Select focused item when `selectOnFocus={false}` | `aria-checked="true"` on focused, `false` on others |
 | **Arrow Keys (Normal)** | ↓/→ or ↑/← | Move focus and selection to next/prev item | Focus moves, `aria-checked` updates, `tabindex` shifts |
 | **Arrow Keys (Toolbar)** | ↓/→ or ↑/← | Move focus only (no selection change) | Focus moves, `tabindex` shifts, selection unchanged |
 | **End Key (Normal)** | End key | Focus and select last item | Focus on last item, selection updates |
@@ -92,7 +101,7 @@
 
 ### Keyboard Navigation
 
-#### Standard Radio Group (isInToolbar={false})
+#### Standard Radio Group (selectOnFocus={true})
 - **Tab/Shift+Tab**: Move focus into/out of radio group (single tab stop)
 - **Arrow Keys**: Navigate between items and change selection
   - **Down Arrow/Right Arrow**: Next item (wraps to first)
@@ -101,7 +110,7 @@
 - **Home**: Move focus to and select first item
 - **End**: Move focus to and select last item
 
-#### Toolbar Radio Group (isInToolbar={true})
+#### Toolbar Radio Group (selectOnFocus={false})
 - **Tab/Shift+Tab**: Move focus into/out of radio group (single tab stop)
 - **Arrow Keys**: Navigate between items (focus only, no selection change)
   - **Down Arrow/Right Arrow**: Next item (wraps to first)
@@ -164,6 +173,12 @@ interface RadioGroupContextValue {
   focusedValue: string | null;
   setFocusedValue: (value: string | null) => void;
   orientation: 'horizontal' | 'vertical';
+  selectOnFocus: boolean;
+  // Item registry — stores HTMLElement refs for imperative focus management
+  registerItem: (value: string, element: HTMLElement) => void;
+  unregisterItem: (value: string) => void;
+  // Called by the root's keyboard handler to move focus imperatively
+  // RadioItem.onFocus then syncs focusedValue state
 }
 
 const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
@@ -188,15 +203,16 @@ const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
 
 ### Required Data Attributes
 
-#### Radio.Group
+#### RadioGroup
 ```tsx
 data-orientation="horizontal" | "vertical"
 data-disabled="true" | undefined
 data-required="true" | undefined
-data-toolbar="true" | undefined
+data-select-on-focus="true" | undefined
+data-autofocus="true" | undefined
 ```
 
-#### Radio.Item
+#### RadioItem
 ```tsx
 data-state="checked" | "unchecked"
 data-disabled="true" | undefined
@@ -207,7 +223,8 @@ data-focused="true" | undefined
 - **data-state**: `"checked"` when selected, `"unchecked"` when not selected
 - **data-disabled**: `"true"` when disabled, undefined when enabled
 - **data-focused**: `"true"` when focused, undefined when not focused
-- **data-toolbar**: `"true"` when in toolbar mode, undefined when in standard mode
+- **data-select-on-focus**: `"true"` when selectOnFocus is enabled, undefined when disabled
+- **data-autofocus**: `"true"` when autoFocus is enabled, undefined when disabled
 - **data-orientation**: `"horizontal"` or `"vertical"` for layout styling
 - **data-required**: `"true"` when required, undefined when optional
 
@@ -271,7 +288,7 @@ data-focused="true" | undefined
 ## 9. Migration & Implementation Checklist
 
 ### Migration Guidance
-- **From HTML radios**: Replace `<input type="radio">` with `<Radio.Group>` and `<Radio.Item>`
+- **From HTML radios**: Replace `<input type="radio">` with `<RadioGroup>` and `<RadioItem>`
 - **From other libraries**: Map existing radio group props to new API structure
 - **Form integration**: Use `name` prop for form submission compatibility
 - **Styling migration**: Convert CSS selectors to data attribute selectors
@@ -279,7 +296,7 @@ data-focused="true" | undefined
 ### Implementation Checklist
 
 #### Core Functionality
-- [ ] Create compound component structure (Radio.Group + Radio.Item)
+- [ ] Create compound component structure (RadioGroup + RadioItem)
 - [ ] Implement controlled/uncontrolled state management
 - [ ] Add roving tabindex focus management
 - [ ] Support keyboard navigation (arrows, home/end, space)

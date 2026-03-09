@@ -1,54 +1,54 @@
-import { createContext, useContext, useId } from 'react';
-import type { InputContextValue, InputRootProps } from './types';
-
-const InputContext = createContext<InputContextValue | null>(null);
-
-const useInputContext = () => {
-  const context = useContext(InputContext);
-  if (!context) {
-    throw new Error('Input compound components must be used within Input.Root');
-  }
-  return context;
-};
-
-export { InputContext, useInputContext };
+import { useId, useMemo, type ElementType } from 'react';
+import { InputContext } from './hooks';
+import type { InputContextValue, InputProps } from './types';
 
 /**
  * Input root component that provides state context for compound input elements.
  * Manages validation, disabled, and required states with proper ARIA coordination.
  */
-export const InputRoot = ({
+export const Input = <T extends ElementType = 'div'>({
+  as,
+  id: providedId,
   isInvalid = false,
-  isDisabled = false,
-  isRequired = false,
+  disabled = false,
+  required = false,
+  readOnly = false,
   children,
+  ref,
   ...props
-}: InputRootProps) => {
-  const id = useId();
+}: InputProps<T>) => {
+  const Component = as || 'div';
+  const generatedId = useId();
+  const id = providedId ?? generatedId;
 
-  const contextValue: InputContextValue = {
-    fieldId: `${id}-field`,
-    labelId: `${id}-label`,
-    descriptionId: `${id}-description`,
-    errorId: `${id}-error`,
-    isInvalid,
-    isDisabled,
-    isRequired,
-  };
+  const contextValue = useMemo<InputContextValue>(
+    () => ({
+      fieldId: `${id}-field`,
+      labelId: `${id}-label`,
+      descriptionId: `${id}-description`,
+      errorId: `${id}-error`,
+      isInvalid,
+      disabled,
+      required,
+      readOnly,
+    }),
+    [id, isInvalid, disabled, required, readOnly],
+  );
 
   return (
     <InputContext.Provider value={contextValue}>
-      <div
+      <Component
+        ref={ref}
         {...props}
-        data-spar-input
         data-invalid={isInvalid ? '' : undefined}
-        data-disabled={isDisabled ? '' : undefined}
-        data-required={isRequired ? '' : undefined}
+        data-disabled={disabled ? '' : undefined}
+        data-required={required ? '' : undefined}
+        data-readonly={readOnly ? '' : undefined}
       >
         {children}
-      </div>
+      </Component>
     </InputContext.Provider>
   );
 };
 
-InputRoot.displayName = 'Input.Root';
+Input.displayName = 'Input';

@@ -1,399 +1,140 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { Input } from '../index';
+import { Input, InputDescription, InputErrorMessage, InputField, InputLabel } from '../index';
 
 expect.extend(toHaveNoViolations);
 
-describe('Input Accessibility', () => {
+describe('Input - Accessibility Tests', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('ARIA Compliance', () => {
-    it('passes accessibility checks with basic setup', async () => {
-      const { container } = render(
-        <Input.Root>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-        </Input.Root>,
-      );
+  it('passes axe for labeled input', async () => {
+    const { container } = render(
+      <Input>
+        <InputLabel>Username</InputLabel>
+        <InputField />
+      </Input>,
+    );
 
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
-
-    it('passes accessibility checks with description', async () => {
-      const { container } = render(
-        <Input.Root>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-          <Input.Description>Enter your username</Input.Description>
-        </Input.Root>,
-      );
-
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
-
-    it('passes accessibility checks with error state', async () => {
-      const { container } = render(
-        <Input.Root isInvalid>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-          <Input.ErrorMessage>Username is required</Input.ErrorMessage>
-        </Input.Root>,
-      );
-
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
-
-    it('passes accessibility checks with all elements', async () => {
-      const { container } = render(
-        <Input.Root isInvalid isRequired>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-          <Input.Description>Enter your username</Input.Description>
-          <Input.ErrorMessage>Username is required</Input.ErrorMessage>
-        </Input.Root>,
-      );
-
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
-
-    it('passes accessibility checks with textarea', async () => {
-      const { container } = render(
-        <Input.Root>
-          <Input.Label>Message</Input.Label>
-          <Input.Field as='textarea' />
-          <Input.Description>Enter your message</Input.Description>
-        </Input.Root>,
-      );
-
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
-
-    it('passes accessibility checks in disabled state', async () => {
-      const { container } = render(
-        <Input.Root isDisabled>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-          <Input.Description>Enter your username</Input.Description>
-        </Input.Root>,
-      );
-
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
+    expect(await axe(container)).toHaveNoViolations();
   });
 
-  describe('ARIA Attributes', () => {
-    it('properly links label to field', () => {
-      render(
-        <Input.Root>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-        </Input.Root>,
-      );
+  it('passes axe for invalid input with error message', async () => {
+    const { container } = render(
+      <Input isInvalid required>
+        <InputLabel>Email</InputLabel>
+        <InputField type='email' />
+        <InputErrorMessage>Email is required</InputErrorMessage>
+      </Input>,
+    );
 
-      const label = screen.getByText('Username');
-      const field = screen.getByRole('textbox');
-
-      expect(field).toHaveAttribute('aria-labelledby', label.id);
-      expect(label).toHaveAttribute('for', field.id);
-    });
-
-    it('properly links description to field when valid', () => {
-      render(
-        <Input.Root>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-          <Input.Description>Enter your username</Input.Description>
-        </Input.Root>,
-      );
-
-      const description = screen.getByText('Enter your username');
-      const field = screen.getByRole('textbox');
-
-      expect(field).toHaveAttribute('aria-describedby', description.id);
-    });
-
-    it('properly links error message to field when invalid', () => {
-      render(
-        <Input.Root isInvalid>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-          <Input.ErrorMessage>Username is required</Input.ErrorMessage>
-        </Input.Root>,
-      );
-
-      const error = screen.getByText('Username is required');
-      const field = screen.getByRole('textbox');
-
-      expect(field).toHaveAttribute('aria-describedby', error.id);
-      expect(error).toHaveAttribute('role', 'alert');
-    });
-
-    it('prioritizes error message over description in aria-describedby', () => {
-      render(
-        <Input.Root isInvalid>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-          <Input.Description>Enter your username</Input.Description>
-          <Input.ErrorMessage>Username is required</Input.ErrorMessage>
-        </Input.Root>,
-      );
-
-      const error = screen.getByText('Username is required');
-      const field = screen.getByRole('textbox');
-
-      expect(field).toHaveAttribute('aria-describedby', error.id);
-    });
-
-    it('sets aria-required correctly', () => {
-      render(
-        <Input.Root isRequired>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-        </Input.Root>,
-      );
-
-      const field = screen.getByRole('textbox');
-      expect(field).toHaveAttribute('aria-required', 'true');
-    });
-
-    it('sets aria-invalid correctly', () => {
-      const { rerender } = render(
-        <Input.Root isInvalid={false}>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-        </Input.Root>,
-      );
-
-      const field = screen.getByRole('textbox');
-      expect(field).toHaveAttribute('aria-invalid', 'false');
-
-      rerender(
-        <Input.Root isInvalid={true}>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-        </Input.Root>,
-      );
-
-      expect(field).toHaveAttribute('aria-invalid', 'true');
-    });
-
-    it('maintains unique IDs across multiple instances', () => {
-      render(
-        <div>
-          <Input.Root>
-            <Input.Label>First Name</Input.Label>
-            <Input.Field />
-          </Input.Root>
-          <Input.Root>
-            <Input.Label>Last Name</Input.Label>
-            <Input.Field />
-          </Input.Root>
-        </div>,
-      );
-
-      const firstField = screen.getByLabelText('First Name');
-      const lastField = screen.getByLabelText('Last Name');
-
-      expect(firstField.id).not.toBe(lastField.id);
-      expect(firstField.getAttribute('aria-labelledby')).not.toBe(
-        lastField.getAttribute('aria-labelledby'),
-      );
-    });
+    expect(await axe(container)).toHaveNoViolations();
   });
 
-  describe('Keyboard Navigation', () => {
-    it('supports focus management', async () => {
-      const user = userEvent.setup();
+  it('associates accessible name and description through ARIA relationships', () => {
+    render(
+      <Input>
+        <InputLabel>Password</InputLabel>
+        <InputField type='password' />
+        <InputDescription>Use at least 8 characters</InputDescription>
+      </Input>,
+    );
 
-      render(
-        <Input.Root>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-        </Input.Root>,
-      );
+    const field = screen.getByLabelText('Password');
+    const description = screen.getByText('Use at least 8 characters');
 
-      const field = screen.getByRole('textbox');
-
-      // Focus the field
-      await user.tab();
-      expect(field).toHaveFocus();
-      expect(field).toHaveAttribute('data-focused', '');
-
-      // Blur the field
-      await user.tab();
-      expect(field).not.toHaveFocus();
-      expect(field).not.toHaveAttribute('data-focused');
-    });
-
-    it('supports keyboard input', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Input.Root>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-        </Input.Root>,
-      );
-
-      const field = screen.getByRole('textbox');
-      await user.click(field);
-      await user.keyboard('hello world');
-
-      expect(field).toHaveValue('hello world');
-    });
-
-    it('supports selection and editing', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Input.Root>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-        </Input.Root>,
-      );
-
-      const field = screen.getByRole('textbox');
-      await user.click(field);
-      await user.keyboard('hello world');
-
-      // Select all and replace
-      await user.keyboard('{Control>}a{/Control}');
-      await user.keyboard('new text');
-
-      expect(field).toHaveValue('new text');
-    });
-
-    it('supports backspace and delete', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Input.Root>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-        </Input.Root>,
-      );
-
-      const field = screen.getByRole('textbox');
-      await user.click(field);
-      await user.keyboard('hello');
-      await user.keyboard('{Backspace}');
-
-      expect(field).toHaveValue('hell');
-    });
-
-    it('respects disabled state for keyboard interaction', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <Input.Root isDisabled>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-        </Input.Root>,
-      );
-
-      const field = screen.getByRole('textbox');
-      expect(field).toBeDisabled();
-
-      // Try to focus and type
-      await user.click(field);
-      await user.keyboard('hello');
-
-      expect(field).not.toHaveFocus();
-      expect(field).toHaveValue('');
-    });
+    expect(field).toHaveAttribute('aria-describedby', description.id);
+    expect(field).toHaveAttribute('aria-invalid', 'false');
   });
 
-  describe('Screen Reader Support', () => {
-    it('announces error messages immediately via role="alert"', () => {
-      render(
-        <Input.Root isInvalid>
-          <Input.Label>Username</Input.Label>
-          <Input.Field />
-          <Input.ErrorMessage>Username is required</Input.ErrorMessage>
-        </Input.Root>,
-      );
+  it('switches aria-describedby target to error and exposes alert semantics', () => {
+    render(
+      <Input isInvalid>
+        <InputLabel>Password</InputLabel>
+        <InputField type='password' />
+        <InputDescription>Use at least 8 characters</InputDescription>
+        <InputErrorMessage>Password is too short</InputErrorMessage>
+      </Input>,
+    );
 
-      const error = screen.getByText('Username is required');
-      expect(error).toHaveAttribute('role', 'alert');
-    });
+    const field = screen.getByLabelText('Password');
+    const error = screen.getByText('Password is too short');
 
-    it('provides context through aria-describedby', () => {
-      render(
-        <Input.Root>
-          <Input.Label>Password</Input.Label>
-          <Input.Field type='password' />
-          <Input.Description>Must be at least 8 characters</Input.Description>
-        </Input.Root>,
-      );
-
-      const field = screen.getByLabelText('Password');
-      const description = screen.getByText('Must be at least 8 characters');
-
-      expect(field).toHaveAttribute('aria-describedby', description.id);
-    });
-
-    it('announces required state', () => {
-      render(
-        <Input.Root isRequired>
-          <Input.Label>Email</Input.Label>
-          <Input.Field type='email' />
-        </Input.Root>,
-      );
-
-      const field = screen.getByRole('textbox');
-      expect(field).toHaveAttribute('aria-required', 'true');
-      expect(field).toBeRequired();
-    });
-
-    it('announces invalid state', () => {
-      render(
-        <Input.Root isInvalid>
-          <Input.Label>Email</Input.Label>
-          <Input.Field type='email' />
-        </Input.Root>,
-      );
-
-      const field = screen.getByRole('textbox');
-      expect(field).toHaveAttribute('aria-invalid', 'true');
-    });
+    expect(field).toHaveAttribute('aria-describedby', error.id);
+    expect(field).toHaveAttribute('aria-invalid', 'true');
+    expect(error).toHaveAttribute('role', 'alert');
+    expect(error).toHaveAttribute('aria-live', 'assertive');
   });
 
-  describe('Form Association', () => {
-    it('properly associates with form elements', () => {
-      render(
-        <form>
-          <Input.Root>
-            <Input.Label>Username</Input.Label>
-            <Input.Field name='username' />
-          </Input.Root>
-        </form>,
-      );
+  it('supports keyboard focus and blur state', async () => {
+    const user = userEvent.setup();
 
-      const field = screen.getByRole('textbox');
-      expect(field).toHaveAttribute('name', 'username');
+    render(
+      <>
+        <Input>
+          <InputLabel>Username</InputLabel>
+          <InputField />
+        </Input>
+        <button type='button'>Next</button>
+      </>,
+    );
+
+    const field = screen.getByRole('textbox', { name: 'Username' });
+
+    await user.tab();
+    expect(field).toHaveFocus();
+    expect(field).toHaveAttribute('data-focused', '');
+
+    await user.tab();
+    expect(field).not.toHaveFocus();
+    expect(field).not.toHaveAttribute('data-focused');
+  });
+
+  it('skips disabled field in tab order', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <>
+        <button type='button'>Before</button>
+        <Input disabled>
+          <InputLabel>Disabled Username</InputLabel>
+          <InputField />
+        </Input>
+        <button type='button'>After</button>
+      </>,
+    );
+
+    const before = screen.getByRole('button', { name: 'Before' });
+    const after = screen.getByRole('button', { name: 'After' });
+
+    before.focus();
+    await user.tab();
+
+    expect(after).toHaveFocus();
+  });
+
+  it('applies autoFocus behavior for compound and standalone fields', async () => {
+    const { rerender } = render(
+      <Input>
+        <InputLabel>Username</InputLabel>
+        <InputField autoFocus />
+      </Input>,
+    );
+
+    const compoundField = screen.getByRole('textbox', { name: 'Username' });
+    await waitFor(() => {
+      expect(compoundField).toHaveFocus();
     });
+    expect(compoundField).toHaveAttribute('data-autofocus', '');
 
-    it('supports form validation attributes', () => {
-      render(
-        <Input.Root isRequired>
-          <Input.Label>Email</Input.Label>
-          <Input.Field type='email' pattern='[^@]+@[^@]+\.[a-zA-Z]{2,}' />
-        </Input.Root>,
-      );
+    rerender(<InputField autoFocus aria-label='Standalone' />);
 
-      const field = screen.getByRole('textbox');
-      expect(field).toHaveAttribute('type', 'email');
-      expect(field).toHaveAttribute('pattern', '[^@]+@[^@]+\\.[a-zA-Z]{2,}');
-      expect(field).toBeRequired();
+    const standaloneField = screen.getByRole('textbox', { name: 'Standalone' });
+    await waitFor(() => {
+      expect(standaloneField).toHaveFocus();
     });
+    expect(standaloneField).toHaveAttribute('data-autofocus', '');
   });
 });

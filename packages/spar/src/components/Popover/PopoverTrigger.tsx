@@ -1,87 +1,93 @@
-import { cloneElement, isValidElement, useCallback, useMemo } from 'react';
-import { PopoverTriggerProps } from './types';
+import { useCallback, ElementType } from 'react';
+import { useMergedRef } from '@/hooks';
+import { PopoverTriggerProps, PopoverTriggerRenderProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
+import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * Trigger element that opens/closes the popover
  */
-export const PopoverTrigger = ({
-  asChild = false,
+export const PopoverTrigger = <T extends ElementType = 'button'>({
+  as,
   children,
-  isDisabled = false,
+  disabled: disabledProp,
   onClick,
   onKeyDown,
   ref,
   ...props
-}: PopoverTriggerProps) => {
-  const { state, triggerRef, togglePopover, openPopover } = usePopoverContext();
+}: PopoverTriggerProps<T>) => {
+  const {
+    isOpen,
+    contentId,
+    triggerRef,
+    togglePopover,
+    openPopover,
+    closePopover,
+    disabled: contextDisabled,
+  } = usePopoverContext();
+
+  // Use prop if explicitly provided, otherwise use context
+  const disabled = disabledProp ?? contextDisabled;
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
-      if (isDisabled) return;
+      if (disabled) return;
 
       event.preventDefault();
       togglePopover();
       onClick?.(event);
     },
-    [isDisabled, togglePopover, onClick],
+    [disabled, togglePopover, onClick],
   );
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>) => {
-      if (isDisabled) return;
+      if (disabled) return;
+
+      onKeyDown?.(event);
+      if (event.defaultPrevented) return;
 
       switch (event.key) {
-        case 'Enter':
-        case ' ':
-          event.preventDefault();
-          togglePopover();
-          break;
         case 'ArrowDown':
           event.preventDefault();
-          if (!state.isOpen) {
+          if (!isOpen) {
             openPopover();
           }
           break;
       }
-      onKeyDown?.(event);
     },
-    [isDisabled, state.isOpen, togglePopover, openPopover, onKeyDown],
+    [onKeyDown, disabled, isOpen, openPopover],
   );
 
-  const triggerProps = useMemo(
-    () => ({
-      ref: (element: HTMLButtonElement | null) => {
-        if (triggerRef && 'current' in triggerRef) {
-          triggerRef.current = element;
-        }
-        if (typeof ref === 'function') {
-          ref(element);
-        } else if (ref) {
-          ref.current = element;
-        }
-      },
-      onClick: handleClick,
-      onKeyDown: handleKeyDown,
-      'aria-expanded': state.isOpen,
-      'aria-controls': state.isOpen ? state.contentId : undefined,
-      'aria-haspopup': 'dialog' as const,
-      disabled: isDisabled,
-      'data-state': state.isOpen ? 'open' : 'closed',
-      'data-disabled': isDisabled ? '' : undefined,
-      ...props,
-    }),
-    [handleClick, handleKeyDown, state.isOpen, state.contentId, isDisabled, props, triggerRef, ref],
-  );
+  const mergedRef = useMergedRef(triggerRef as React.RefObject<HTMLElement | null>, ref);
 
-  if (asChild && isValidElement(children)) {
-    return cloneElement(children, triggerProps);
-  }
+  // Render props for children function
+  const renderProps: PopoverTriggerRenderProps = {
+    isOpen,
+    disabled,
+    open: openPopover,
+    close: closePopover,
+    toggle: togglePopover,
+  };
+
+  const buttonProps = {
+    ...(as && { as }),
+    disabled,
+    ref: mergedRef,
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    'aria-expanded': isOpen,
+    'aria-controls': contentId,
+    'aria-haspopup': 'dialog' as const,
+    'data-state': isOpen ? 'open' : 'closed',
+    ...props,
+  } as ButtonProps<T>;
 
   return (
-    <button type='button' {...triggerProps}>
-      {children}
-    </button>
+    <Button {...buttonProps}>
+      {typeof children === 'function' ? children(renderProps) : children}
+    </Button>
   );
 };
 

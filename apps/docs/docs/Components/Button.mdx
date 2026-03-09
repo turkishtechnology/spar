@@ -12,66 +12,46 @@ import { Button } from '@turkish-technology/spar';
 
 A headless, accessible button component that provides complete keyboard support and toggle functionality.
 
-![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
-![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
-
 ## Live Demo
 
+<div className='button-demo-container'>
 <LiveCode
-  code={`function BasicExample() {
-  return (
-    <div className="button-demo-container">
+  code={`<div className='button-demo-container'>
       <Button className="button">
         button
       </Button>
-    </div>
-  );
+    </div>`}
+  cssCode={`.button-demo-container .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid #e1e4ea;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.08);
+  color: #222530;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+[data-theme='dark'] .button-demo-container .button {
+border-color: #2b303b;
+background: rgba(255, 255, 255, 0.12);
+color: #f2f5f8;
 }`}
 />
 
-### button.tsx
-
-```tsx
-import { Button } from '@turkish-technology/spar';
-
-function ButtonDemo() {
-  return <Button className='button'>button</Button>;
-}
-
-export default ButtonDemo;
-```
-
-### button.css
-
-```css
-.button {
-  border-radius: 8px;
-  padding: 12px 14px;
-  font-weight: 400;
-
-  /* Light mode styles */
-  background: rgba(0, 0, 0, 0.08);
-  color: #222530;
-  font-size: 13px;
-}
-
-/* Dark mode styles */
-[data-theme='dark'] .button {
-  background: rgba(255, 255, 255, 0.12);
-  color: #f2f5f8;
-}
-```
+</div>
 
 ## Features
 
-- ✅ Polymorphic rendering - renders as any HTML element or component
+- ✅ Polymorphic rendering via `as` prop — renders as any HTML element or component
 - ✅ Toggle button functionality with controlled and uncontrolled modes
-- ✅ Loading state with screen reader announcements
-- ✅ Auto-focus support for enhanced UX
-- ✅ Complete keyboard navigation (Enter and Space activation)
+- ✅ Loading state management with `isLoading` prop
+- ✅ Auto-focus support on mount
 - ✅ Disabled state management
-- ✅ Custom element type support via `as` prop
 
 ## Installation
 
@@ -79,32 +59,23 @@ export default ButtonDemo;
 import { Button } from '@turkish-technology/spar';
 ```
 
+**Next.js (App Router):** Use the sub-path import for Server Component support:
+
+```ts
+import { Button } from '@turkish-technology/spar/button';
+```
+
 ## Anatomy
 
 The Button is a single component that can be configured for different use cases:
 
 <AnatomyViewer
-  parts={[
-    { name: 'button', label: 'Button', description: 'Interactive button element' },
-  ]}
+  parts={[{ name: 'button', label: 'Button', description: 'Interactive button element' }]}
 >
-  <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
-    <Button
-      data-spar-part="button"
-      onClick={() => {}}
-      style={{ padding: '8px 16px', marginRight: '8px' }}
-    >
-      Click me
+  <div className='button-demo-container'>
+    <Button data-spar-part='button' className='button'>
+      {'button'}
     </Button>
-
-    <Button
-      data-spar-part="button"
-      isDisabled
-      style={{ padding: '8px 16px' }}
-    >
-      Disabled Button
-    </Button>
-
   </div>
 </AnatomyViewer>
 
@@ -154,7 +125,7 @@ function ToggleButton() {
 
 ### Loading State
 
-Button with loading state and custom loading text:
+Button with loading state:
 
 ```tsx
 function LoadingButton() {
@@ -170,7 +141,7 @@ function LoadingButton() {
   };
 
   return (
-    <Button onClick={handleSubmit} isLoading={isLoading} loadingText='Submitting form, please wait'>
+    <Button onClick={handleSubmit} isLoading={isLoading}>
       {isLoading ? 'Submitting...' : 'Submit Form'}
     </Button>
   );
@@ -206,16 +177,16 @@ Button with auto-focus and disabled state management:
 
 ```tsx
 function AccessibilityExample() {
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   return (
     <>
-      <Button shouldAutoFocus isDisabled={isDisabled}>
-        {isDisabled ? 'Cannot click' : 'Auto-focused button'}
+      <Button autoFocus disabled={disabled}>
+        {disabled ? 'Cannot click' : 'Auto-focused button'}
       </Button>
 
-      <Button onClick={() => setIsDisabled(!isDisabled)}>
-        {isDisabled ? 'Enable' : 'Disable'} first button
+      <Button onClick={() => setDisabled(!disabled)}>
+        {disabled ? 'Enable' : 'Disable'} first button
       </Button>
     </>
   );
@@ -230,50 +201,38 @@ A headless, accessible button component with complete keyboard support and toggl
 
 **Props**
 
-| Name               | Type                                      | Default     | Description                                                 |
-| ------------------ | ----------------------------------------- | ----------- | ----------------------------------------------------------- |
-| `as?`              | `ElementType`                             | `"button"`  | The element type to render as                               |
-| `type?`            | `"button" \| "submit" \| "reset"`         | `"button"`  | Button type (only applies when as="button")                 |
-| `isDisabled?`      | `boolean`                                 | `false`     | Disabled state - properly announced to screen readers       |
-| `shouldAutoFocus?` | `boolean`                                 | `false`     | Whether the button should receive focus when first rendered |
-| `isLoading?`       | `boolean`                                 | `false`     | Loading state with screen reader support                    |
-| `isPressed?`       | `boolean`                                 | `undefined` | Toggle state - when defined, creates a toggle button        |
-| `onPressedChange?` | `(pressed: boolean) => void`              | `undefined` | Callback fired when toggle state changes                    |
-| `loadingText?`     | `string`                                  | `"Loading"` | Screen reader text announced during loading                 |
-| `children?`        | `ReactNode`                               | `undefined` | Component content                                           |
-| `onClick?`         | `MouseEventHandler<HTMLButtonElement>`    | `undefined` | Click event handler                                         |
-| `onKeyDown?`       | `KeyboardEventHandler<HTMLButtonElement>` | `undefined` | Keyboard event handler                                      |
-| `className?`       | `string`                                  | `undefined` | CSS class names                                             |
-| `style?`           | `React.CSSProperties`                     | `undefined` | Inline styles                                               |
-| `ref?`             | `React.Ref<HTMLElement>`                  | `undefined` | Ref to the underlying element                               |
+| Name               | Type                                            | Default     | Description                                                 |
+| ------------------ | ----------------------------------------------- | ----------- | ----------------------------------------------------------- |
+| `as?`              | `React.ElementType`                             | `"button"`  | The element type to render as                               |
+| `type?`            | `"button" \| "submit" \| "reset"`               | `"button"`  | Button type (only applies when as="button")                 |
+| `disabled?`        | `boolean`                                       | `false`     | Disabled state - properly announced to screen readers       |
+| `autoFocus?`       | `boolean`                                       | `false`     | Whether the button should receive focus when first rendered |
+| `isLoading?`       | `boolean`                                       | `false`     | Loading state with screen reader support                    |
+| `isPressed?`       | `boolean`                                       | `undefined` | Toggle state - when defined, creates a toggle button        |
+| `onPressedChange?` | `(pressed: boolean) => void`                    | `undefined` | Callback fired when toggle state changes                    |
+| `children?`        | `React.ReactNode`                               | `undefined` | Component content                                           |
+| `onClick?`         | `React.MouseEventHandler<HTMLButtonElement>`    | `undefined` | Click event handler                                         |
+| `onKeyDown?`       | `React.KeyboardEventHandler<HTMLButtonElement>` | `undefined` | Keyboard event handler                                      |
+| `className?`       | `string`                                        | `undefined` | CSS class names                                             |
+| `style?`           | `React.CSSProperties`                           | `undefined` | Inline styles                                               |
+| `ref?`             | `React.Ref<HTMLElement>`                        | `undefined` | Ref to the underlying element                               |
 
 **Events**
 
-| Name              | Parameters                                  | Description         | When Triggered                                           |
-| ----------------- | ------------------------------------------- | ------------------- | -------------------------------------------------------- |
-| `onClick`         | `(event: MouseEvent<HTMLButtonElement>)`    | Mouse click event   | User clicks the button                                   |
-| `onKeyDown`       | `(event: KeyboardEvent<HTMLButtonElement>)` | Keyboard event      | User presses a key while button is focused               |
-| `onPressedChange` | `(pressed: boolean)`                        | Toggle state change | Toggle button state changes (controlled or uncontrolled) |
+| Name              | Parameters                                        | Description         | When Triggered                                           |
+| ----------------- | ------------------------------------------------- | ------------------- | -------------------------------------------------------- |
+| `onClick`         | `(event: React.MouseEvent<HTMLButtonElement>)`    | Mouse click event   | User clicks the button                                   |
+| `onKeyDown`       | `(event: React.KeyboardEvent<HTMLButtonElement>)` | Keyboard event      | User presses a key while button is focused               |
+| `onPressedChange` | `(pressed: boolean)`                              | Toggle state change | Toggle button state changes (controlled or uncontrolled) |
 
-**ARIA Attributes**
+**HTML Attributes**
 
-| Attribute       | Value      | Purpose                             | Applied To                                |
-| --------------- | ---------- | ----------------------------------- | ----------------------------------------- |
-| `aria-pressed`  | `boolean`  | Indicates toggle state              | Button element (only for toggle buttons)  |
-| `aria-busy`     | `true`     | Indicates loading state             | Button element (when loading)             |
-| `aria-disabled` | `true`     | Indicates disabled state            | Button element (when disabled)            |
-| `aria-live`     | `"polite"` | Announces loading text              | Screen reader content (when loading)      |
-| `aria-atomic`   | `true`     | Entire loading message is announced | Screen reader content (when loading)      |
-| `role`          | `"button"` | Identifies as button                | Non-button elements (when as != "button") |
-
-**Data Attributes**
-
-| Attribute        | Value               | Purpose                               | Applied To                           |
-| ---------------- | ------------------- | ------------------------------------- | ------------------------------------ |
-| `data-disabled`  | `"true"`            | Styling hook for disabled state       | Button element                       |
-| `data-loading`   | `"true"`            | Styling hook for loading state        | Button element                       |
-| `data-pressed`   | `"true" \| "false"` | Styling hook for toggle state         | Button element (toggle buttons only) |
-| `data-autofocus` | `"true"`            | Styling hook for auto-focused buttons | Button element                       |
+| Attribute        | Value | Purpose                                                        |
+| ---------------- | ----- | -------------------------------------------------------------- |
+| `data-disabled`  | `""`  | Styling hook for disabled state                                |
+| `data-loading`   | `""`  | Styling hook for loading state                                 |
+| `data-pressed`   | `""`  | Present when component is in toggle mode and currently pressed |
+| `data-autofocus` | `""`  | Styling hook for auto-focused buttons                          |
 
 ## Keyboard Interactions
 

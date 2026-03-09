@@ -1,127 +1,77 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState, type ElementType, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import {
+  useMergedRef,
   useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  arrow,
-  hide,
-  size,
-  type Placement,
-  type Middleware,
-} from '@floating-ui/react-dom';
+  type UseFloatingOptions,
+  type UseFloatingReturn,
+} from '@/hooks';
+import { useTooltipContext, TooltipContentContext } from './hooks';
 import type { TooltipContentProps } from './types';
 import type { Side, Align } from '../../types';
-import { useTooltip } from './useTooltip';
-
-// Helper to convert Side + Align to Placement
-const toPlacement = (side: Side, align?: Align): Placement => {
-  if (!align || align === 'center') {
-    return side;
-  }
-  return `${side}-${align}` as Placement;
-};
+import { getPlacement } from '@/utils';
 
 /**
  * The content that displays in the tooltip popup
  */
-export const TooltipContent = ({
+export const TooltipContent = <T extends ElementType = 'div'>({
   children,
   className,
   style,
-  as: Component = 'div',
-  asLabel = false,
+  as,
   side = 'top',
-  sideOffset = 8,
   align = 'center',
-  alignOffset = 0,
-  avoidCollisions = true,
-  collisionBoundary,
-  collisionPadding = 10,
-  hideWhenDetached = false,
+  container,
   onEscapeKeyDown,
+  ref,
   ...props
-}: TooltipContentProps) => {
-  const context = useTooltip();
+}: TooltipContentProps<T>) => {
+  const Component = as || 'div';
+  const context = useTooltipContext();
 
-  // Update placement
+  // SSR safety - only render portal after mount
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    context.setPlacement(side);
-  }, [side, context]);
-
-  // Build middleware array
-  const middleware: Middleware[] = [offset(sideOffset + alignOffset)];
-
-  if (context.arrowRef.current) {
-    middleware.push(
-      arrow({
-        element: context.arrowRef.current,
-      }),
-    );
-  }
-
-  if (avoidCollisions) {
-    const flipOptions: Parameters<typeof flip>[0] = {
-      padding: collisionPadding,
-    };
-    if (collisionBoundary !== undefined) {
-      flipOptions.boundary = collisionBoundary;
-    }
-
-    const shiftOptions: Parameters<typeof shift>[0] = {
-      padding: collisionPadding,
-    };
-    if (collisionBoundary !== undefined) {
-      shiftOptions.boundary = collisionBoundary;
-    }
-
-    middleware.push(flip(flipOptions));
-    middleware.push(shift(shiftOptions));
-  }
-
-  if (hideWhenDetached) {
-    middleware.push(hide());
-  }
-
-  // Size constraint middleware
-  middleware.push(
-    size({
-      apply({ availableWidth, availableHeight, elements }) {
-        Object.assign(elements.floating.style, {
-          maxWidth: `${availableWidth}px`,
-          maxHeight: `${availableHeight}px`,
-        });
-      },
-      padding: typeof collisionPadding === 'number' ? collisionPadding : 10,
-    }),
-  );
+    setMounted(true);
+  }, []);
 
   // Floating UI positioning
-  const {
-    x,
-    y,
-    strategy,
-    refs,
-    middlewareData,
-    placement: actualPlacement,
-  } = useFloating({
-    placement: toPlacement(side, align),
-    middleware,
-    whileElementsMounted: autoUpdate,
-  });
+  const floatingOptions: UseFloatingOptions = {
+    side,
+    align,
+    arrowRef: context.arrowRef.current,
+  };
 
-  // Update refs from context
+  const {
+    floatingStyles,
+    arrowStyles,
+    refs,
+    placement: actualPlacement,
+  }: UseFloatingReturn = useFloating(floatingOptions);
+
+  // Extract placement information for data attributes
+  const [currentSide, currentAlign] = useMemo(() => {
+    const parts = actualPlacement.split('-');
+    const placementSide = parts[0] as Side;
+    const placementAlign = parts[1] ? (parts[1] as Align) : 'center';
+    return [placementSide, placementAlign];
+  }, [actualPlacement]);
+
+  // Merge internal refs with external ref
+  const mergedRef = useMergedRef(context.contentRef, ref);
+
+  const floatingRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      mergedRef(node);
+      refs.setFloating(node);
+    },
+    [mergedRef, refs],
+  );
+
+  // Set reference element
   useEffect(() => {
     refs.setReference(context.triggerRef.current);
-    refs.setFloating(context.contentRef.current);
-  }, [refs, context.triggerRef, context.contentRef]);
-
-  // Update actual placement in context
-  useEffect(() => {
-    const [placementSide] = actualPlacement.split('-') as [Side, Align?];
-    context.setPlacement(placementSide);
-  }, [actualPlacement, context]);
+  }, [refs, context.triggerRef]);
 
   // Handle escape key
   const handleKeyDown = useCallback(
@@ -139,40 +89,12 @@ export const TooltipContent = ({
     [onEscapeKeyDown, context],
   );
 
-  // Handle native escape key events (for testing and edge cases)
-  useEffect(() => {
-    if (!context.isOpen) return;
-
-    const handleNativeKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        const target = event.target as HTMLElement;
-        const contentElement = context.contentRef.current;
-
-        // Only handle if the event originated from this tooltip content
-        if (contentElement && (target === contentElement || contentElement.contains(target))) {
-          event.preventDefault();
-          event.stopPropagation();
-          onEscapeKeyDown?.(event);
-          context.onOpenChange(false);
-          // Refocus the trigger after closing
-          const trigger = document.getElementById(context.triggerId);
-          trigger?.focus();
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleNativeKeyDown, true);
-    return () => {
-      document.removeEventListener('keydown', handleNativeKeyDown, true);
-    };
-  }, [context.isOpen, context.contentId, context.triggerId, onEscapeKeyDown, context]);
-
   // Handle mouse enter/leave for hoverable content
   const handleMouseEnter = useCallback(() => {
     // Cancel any pending hide timeout when hovering over content (WCAG 1.4.13)
     // Only if hoverable content is not disabled
     if (!context.disableHoverableContent) {
-      context.clearHideTimeout();
+      context.cancelHideTimer();
     }
   }, [context]);
 
@@ -182,50 +104,43 @@ export const TooltipContent = ({
     }
   }, [context]);
 
+  const contentContextValue = useMemo(
+    () => ({ arrowStyles, side: currentSide, align: currentAlign }),
+    [arrowStyles, currentSide, currentAlign],
+  );
+
   // Don't render if not open or disabled
-  if (!context.isOpen || context.isDisabled) {
+  if (!context.isOpen || context.disabled) {
     return null;
   }
 
-  // Check if hidden by middleware
-  const isHidden = hideWhenDetached && middlewareData.hide?.referenceHidden;
-  if (isHidden) {
+  // Don't render on server
+  if (!mounted) {
     return null;
   }
-
-  // Ref callback
-  const refCallback = (node: HTMLElement | null) => {
-    context.contentRef.current = node;
-    refs.setFloating(node);
-  };
-
-  // Get arrow data
-  const arrowX = middlewareData.arrow?.x;
-  const arrowY = middlewareData.arrow?.y;
 
   const contentProps = {
-    ref: refCallback,
+    ref: floatingRef,
     id: context.contentId,
     role: 'tooltip',
     className,
-    style: {
-      ...style,
-      position: strategy as React.CSSProperties['position'],
-      top: y ?? 0,
-      left: x ?? 0,
-      '--tooltip-arrow-x': arrowX !== undefined ? `${arrowX}px` : undefined,
-      '--tooltip-arrow-y': arrowY !== undefined ? `${arrowY}px` : undefined,
-    } as React.CSSProperties,
+    style: { ...floatingStyles, ...style },
     'data-state': context.isOpen ? 'open' : 'closed',
-    'data-placement': actualPlacement,
-    'data-as-label': asLabel ? 'true' : 'false',
+    'data-placement': getPlacement(currentSide, currentAlign),
     onKeyDown: handleKeyDown,
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
     ...props,
   };
 
-  return React.createElement(Component, contentProps, children);
+  const portalContainer = container || document.body;
+
+  return createPortal(
+    <TooltipContentContext.Provider value={contentContextValue}>
+      <Component {...contentProps}>{children}</Component>
+    </TooltipContentContext.Provider>,
+    portalContainer,
+  );
 };
 
 TooltipContent.displayName = 'TooltipContent';

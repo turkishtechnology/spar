@@ -1,22 +1,23 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import type { RadioItemProps } from './types';
-import { useRadioGroupContext } from './RadioGroup';
-import { useFocusItem, useMergedRef } from '@/hooks';
+import React, { useCallback, useEffect, useRef, ElementType } from 'react';
+import type { RadioItemProps, RadioItemRenderProps } from './types';
+import { useRadioGroupContext } from './hooks';
+import { useMergedRef } from '@/hooks';
 
 /**
  * RadioItem component representing individual radio options within a RadioGroup.
  * Implements roving tabindex and full accessibility features.
  */
-export const RadioItem = ({
+export const RadioItem = <T extends ElementType = 'label'>({
   ref,
   value: itemValue,
   disabled: itemDisabled = false,
   'aria-label': ariaLabel,
   'aria-describedby': ariaDescribedBy,
-  as: Component = 'label',
+  as,
   children,
   ...rest
-}: RadioItemProps) => {
+}: RadioItemProps<T>) => {
+  const Component = as || 'label';
   const context = useRadioGroupContext();
   const {
     value: groupValue,
@@ -25,7 +26,6 @@ export const RadioItem = ({
     name,
     focusedValue,
     setFocusedValue,
-    isInToolbar,
     registerItem,
     unregisterItem,
   } = context;
@@ -33,22 +33,21 @@ export const RadioItem = ({
   const itemRef = useRef<HTMLElement>(null);
   const isChecked = groupValue === itemValue;
   const isDisabled = groupDisabled || itemDisabled;
+  const isFocused = focusedValue === itemValue;
 
   // Determine if this item should be focusable (tabIndex={0})
+  // Uses roving tabindex: exactly one item in the group should have tabIndex={0}
+  const isFirstItemFallback = groupValue === undefined;
   const isFocusable =
-    !isDisabled &&
-    (focusedValue === itemValue || // Currently focused
-      (focusedValue === null && (isChecked || groupValue === itemValue)) || // No focus, but this is selected
-      (focusedValue === null && !groupValue && itemValue)); // No focus, no selection, accept any item (first will win)
+    !isDisabled && focusedValue === null && (isFocused || isChecked || isFirstItemFallback);
 
-  // Register/unregister with group
+  // Register/unregister with group, providing the DOM element for imperative focus management
   useEffect(() => {
-    registerItem(itemValue);
+    if (itemRef.current) {
+      registerItem(itemValue, itemRef.current);
+    }
     return () => unregisterItem(itemValue);
   }, [itemValue, registerItem, unregisterItem]);
-
-  // Focus management - direct implementation to avoid SSR issues
-  useFocusItem(focusedValue === itemValue, itemRef);
 
   // Handle selection
   const handleClick = useCallback(() => {
@@ -59,14 +58,12 @@ export const RadioItem = ({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
-      // Only handle Space/Enter in toolbar mode
-      // In normal mode, arrow keys already handle focus + selection
-      if (isInToolbar && (event.key === ' ' || event.key === 'Enter')) {
+      if ((event.key === ' ' || event.key === 'Enter') && !isDisabled) {
         event.preventDefault();
         handleClick();
       }
     },
-    [handleClick, isInToolbar],
+    [handleClick, isDisabled],
   );
 
   const handleFocus = useCallback(() => {
@@ -78,11 +75,19 @@ export const RadioItem = ({
   // Merge refs
   const mergedRef = useMergedRef(itemRef, ref);
 
+  // Render props for children function
+  const renderProps: RadioItemRenderProps = {
+    isChecked,
+    select: handleClick,
+    disabled: isDisabled,
+    isFocused,
+  };
+
   // Data attributes for styling
   const dataAttributes = {
     'data-state': isChecked ? 'checked' : 'unchecked',
-    'data-disabled': isDisabled || undefined,
-    'data-focused': focusedValue === itemValue || undefined,
+    'data-disabled': isDisabled ? '' : undefined,
+    'data-focused': isFocused ? '' : undefined,
   };
 
   return (
@@ -90,6 +95,7 @@ export const RadioItem = ({
       ref={mergedRef}
       role='radio'
       aria-checked={isChecked}
+      aria-disabled={isDisabled || undefined}
       aria-label={ariaLabel}
       aria-describedby={ariaDescribedBy}
       tabIndex={isFocusable ? 0 : -1}
@@ -99,7 +105,7 @@ export const RadioItem = ({
       {...dataAttributes}
       {...rest}
     >
-      {children}
+      {typeof children === 'function' ? children(renderProps) : children}
       {/* Hidden radio input for form submission and accessibility */}
       <input
         type='radio'
@@ -109,7 +115,8 @@ export const RadioItem = ({
         disabled={isDisabled}
         tabIndex={-1}
         data-hidden
-        onChange={() => {}} // Controlled by parent
+        data-disabled={isDisabled ? '' : undefined}
+        readOnly
       />
     </Component>
   );

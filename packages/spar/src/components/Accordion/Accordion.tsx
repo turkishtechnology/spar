@@ -1,55 +1,55 @@
-import React, { createContext, useContext, useMemo, useState, useCallback } from 'react';
-import { useItemRegistry } from '@/hooks';
+import { useMemo, useState, useCallback, ElementType } from 'react';
+import { useItemRegistry, useControlledState } from '@/hooks';
 import type { AccordionProps, AccordionContextValue } from './types';
-
-const AccordionContext = createContext<AccordionContextValue | null>(null);
-
-export const useAccordionContext = () => {
-  const context = useContext(AccordionContext);
-  if (!context) {
-    throw new Error('Accordion components must be used within an Accordion');
-  }
-  return context;
-};
+import { AccordionContext } from './hooks';
 
 /**
  * Accordion root component providing context and state management for accordion items. Supports single or multiple panel expansion with full keyboard navigation.
  */
-export const Accordion = ({
+export const Accordion = <T extends ElementType = 'div'>({
   type = 'single',
   isCollapsible = false,
   value: controlledValue,
   defaultValue,
   onValueChange,
-  isDisabled = false,
+  disabled = false,
   orientation = 'vertical',
-  as: Component = 'div',
+  as,
   children,
+  ref,
   ...props
-}: AccordionProps) => {
-  // Initialize state based on type
-  const getInitialValue = (): string | string[] => {
-    if (controlledValue !== undefined) return controlledValue;
-    if (defaultValue !== undefined) return defaultValue;
-    return type === 'multiple' ? [] : '';
-  };
-
-  const [internalValue, setInternalValue] = useState<string | string[]>(getInitialValue);
+}: AccordionProps<T>) => {
+  const Component = as || 'div';
+  // State management - controlled/uncontrolled
+  const defaultVal = defaultValue !== undefined ? defaultValue : type === 'multiple' ? [] : '';
+  const [currentValue = defaultVal, setValue] = useControlledState<string | string[]>(
+    controlledValue,
+    defaultVal,
+    onValueChange,
+  );
   const {
+    items: accordionItems,
     registerItem,
     unregisterItem,
     getItemIndex,
     getItemAtIndex,
     count: itemCount,
-  } = useItemRegistry<void>();
+  } = useItemRegistry<HTMLElement>();
   const [focusedIndex, setFocusedIndex] = useState(-1);
 
-  // Use controlled value if provided, otherwise use internal state
-  const currentValue = controlledValue !== undefined ? controlledValue : internalValue;
+  const focusItemAtIndex = useCallback(
+    (index: number): void => {
+      const key = getItemAtIndex(index);
+      if (key !== undefined) {
+        accordionItems.get(key)?.focus();
+      }
+    },
+    [accordionItems, getItemAtIndex],
+  );
 
   const handleItemToggle = useCallback(
     (itemValue: string) => {
-      if (isDisabled) return;
+      if (disabled) return;
 
       let newValue: string | string[];
 
@@ -69,13 +69,9 @@ export const Accordion = ({
           : [...currentArray, itemValue];
       }
 
-      if (controlledValue === undefined) {
-        setInternalValue(newValue);
-      }
-
-      onValueChange?.(newValue);
+      setValue(newValue);
     },
-    [type, isCollapsible, currentValue, isDisabled, controlledValue, onValueChange],
+    [type, isCollapsible, currentValue, disabled, setValue],
   );
 
   const contextValue = useMemo<AccordionContextValue>(
@@ -84,7 +80,7 @@ export const Accordion = ({
       isCollapsible,
       value: currentValue,
       onItemToggle: handleItemToggle,
-      isDisabled,
+      disabled,
       orientation,
       registerItem,
       unregisterItem,
@@ -92,6 +88,7 @@ export const Accordion = ({
       setFocusedIndex,
       getItemIndex,
       getItemAtIndex,
+      focusItemAtIndex,
       itemCount,
     }),
     [
@@ -99,7 +96,7 @@ export const Accordion = ({
       isCollapsible,
       currentValue,
       handleItemToggle,
-      isDisabled,
+      disabled,
       orientation,
       registerItem,
       unregisterItem,
@@ -107,13 +104,14 @@ export const Accordion = ({
       setFocusedIndex,
       getItemIndex,
       getItemAtIndex,
+      focusItemAtIndex,
       itemCount,
     ],
   );
 
   return (
     <AccordionContext.Provider value={contextValue}>
-      <Component {...props} data-orientation={orientation} data-type={type}>
+      <Component ref={ref} {...props} data-orientation={orientation} data-type={type}>
         {children}
       </Component>
     </AccordionContext.Provider>

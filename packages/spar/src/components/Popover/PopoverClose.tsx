@@ -1,42 +1,39 @@
-import { cloneElement, isValidElement, useCallback } from 'react';
-import { PopoverCloseProps } from './types';
+import { ElementType } from 'react';
+import type { PopoverCloseProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
+import { useCloseButton } from '@/hooks';
+import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * Close button component that automatically closes the popover
  */
-export const PopoverClose = ({
-  asChild = false,
+export const PopoverClose = <T extends ElementType = 'button'>({
+  as,
   children,
   onClick,
   ref,
   ...props
-}: PopoverCloseProps) => {
-  const { closePopover } = usePopoverContext();
+}: PopoverCloseProps<T>) => {
+  const { closePopover, isOpen } = usePopoverContext();
+  const { handleClick, renderProps } = useCloseButton({
+    isOpen,
+    close: closePopover,
+    onClick,
+  });
 
-  const handleClick = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      closePopover();
-      onClick?.(event);
-    },
-    [closePopover, onClick],
-  );
-
-  const closeProps = {
-    ref,
+  const buttonProps = {
+    ...(as && { as }),
+    ...(ref && { ref }),
     onClick: handleClick,
     'data-popover-close': '',
     ...props,
-  };
-
-  if (asChild && isValidElement(children)) {
-    return cloneElement(children, closeProps);
-  }
+  } as ButtonProps<T>;
 
   return (
-    <button type='button' {...closeProps}>
-      {children}
-    </button>
+    <Button {...buttonProps}>
+      {typeof children === 'function' ? children(renderProps) : children}
+    </Button>
   );
 };
 

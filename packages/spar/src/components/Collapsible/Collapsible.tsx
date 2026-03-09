@@ -1,62 +1,62 @@
-import React, { createContext, useContext, useMemo, useState, useCallback, useId } from 'react';
-import type { CollapsibleProps, CollapsibleContextValue } from './types';
-
-const CollapsibleContext = createContext<CollapsibleContextValue | null>(null);
-
-export const useCollapsibleContext = () => {
-  const context = useContext(CollapsibleContext);
-  if (!context) {
-    throw new Error('Collapsible components must be used within a Collapsible');
-  }
-  return context;
-};
+import { useMemo, useCallback, useId, ElementType } from 'react';
+import { useControlledState } from '@/hooks';
+import { CollapsibleContext } from './hooks';
+import type { CollapsibleProps } from './types';
 
 /**
  * Collapsible root component providing context and state management for show/hide content functionality.
  */
-export const Collapsible = ({
+export const Collapsible = <T extends ElementType = 'div'>({
   open: controlledOpen,
   defaultOpen = false,
   onOpenChange,
-  isDisabled = false,
+  disabled = false,
   children,
+  as,
+  id: providedId,
+  triggerId: propsTriggerId,
+  contentId: propsContentId,
+  ref,
   ...props
-}: CollapsibleProps) => {
-  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+}: CollapsibleProps<T>) => {
+  const Component = as || 'div';
+
+  // State management - controlled/uncontrolled
+  const [isOpen = false, setIsOpen] = useControlledState(controlledOpen, defaultOpen, onOpenChange);
 
   // Generate stable IDs for ARIA relationships
-  const baseId = useId();
-  const triggerId = `${baseId}-trigger`;
-  const contentId = `${baseId}-content`;
-
-  // Determine if controlled or uncontrolled
-  const isControlled = controlledOpen !== undefined;
-  const isOpen = isControlled ? controlledOpen : internalOpen;
+  const generatedId = useId();
+  const baseId = providedId ?? generatedId;
+  const triggerId = propsTriggerId ?? `${baseId}-trigger`;
+  const contentId = propsContentId ?? `${baseId}-content`;
 
   const toggle = useCallback(() => {
-    if (isDisabled) return;
+    if (disabled) return;
+    setIsOpen(!isOpen);
+  }, [disabled, isOpen, setIsOpen]);
 
-    const nextOpen = !isOpen;
+  const open = useCallback(() => {
+    if (disabled || isOpen) return;
+    setIsOpen(true);
+  }, [disabled, isOpen, setIsOpen]);
 
-    // Update internal state for uncontrolled usage
-    if (!isControlled) {
-      setInternalOpen(nextOpen);
-    }
-
-    // Call callback for both controlled and uncontrolled
-    onOpenChange?.(nextOpen);
-  }, [isDisabled, isOpen, isControlled, onOpenChange]);
+  const close = useCallback(() => {
+    if (disabled || !isOpen) return;
+    setIsOpen(false);
+  }, [disabled, isOpen, setIsOpen]);
 
   // Memoize context value to prevent unnecessary re-renders
   const contextValue = useMemo(
     () => ({
       isOpen,
+      open,
+      close,
       toggle,
-      isDisabled,
+      disabled,
       triggerId,
       contentId,
     }),
-    [isOpen, toggle, isDisabled, triggerId, contentId],
+    [isOpen, open, close, toggle, disabled, triggerId, contentId],
   );
 
   // Get data attributes for styling
@@ -64,9 +64,14 @@ export const Collapsible = ({
 
   return (
     <CollapsibleContext.Provider value={contextValue}>
-      <div data-state={dataState} data-disabled={isDisabled ? '' : undefined} {...props}>
+      <Component
+        ref={ref}
+        data-state={dataState}
+        data-disabled={disabled ? '' : undefined}
+        {...props}
+      >
         {children}
-      </div>
+      </Component>
     </CollapsibleContext.Provider>
   );
 };

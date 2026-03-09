@@ -13,54 +13,54 @@ The Breadcrumb component provides a navigation trail showing the hierarchical pa
 ### Compound Component Structure
 ```tsx
 // Basic usage
-<Breadcrumb.Root>
-  <Breadcrumb.List>
-    <Breadcrumb.Item>
-      <Breadcrumb.Link href="/home">Home</Breadcrumb.Link>
-    </Breadcrumb.Item>
-    <Breadcrumb.Separator />
-    <Breadcrumb.Item>
-      <Breadcrumb.Link href="/products">Products</Breadcrumb.Link>
-    </Breadcrumb.Item>
-    <Breadcrumb.Separator />
-    <Breadcrumb.Item>
-      <Breadcrumb.Page>Current Page</Breadcrumb.Page>
-    </Breadcrumb.Item>
-  </Breadcrumb.List>
-</Breadcrumb.Root>
+<BreadcrumbRoot>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/home">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/products">Products</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Current Page</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</BreadcrumbRoot>
 
 // With routing integration
-<Breadcrumb.Root onNavigate={(href, event) => {
+<BreadcrumbRoot onNavigate={(href, event) => {
   event.preventDefault();
   router.push(href);
 }}>
-  <Breadcrumb.List>
-    <Breadcrumb.Item>
-      <Breadcrumb.Link href="/home">Home</Breadcrumb.Link>
-    </Breadcrumb.Item>
-    <Breadcrumb.Separator />
-    <Breadcrumb.Item>
-      <Breadcrumb.Link href="/products" disabled={!hasAccess}>Products</Breadcrumb.Link>
-    </Breadcrumb.Item>
-    <Breadcrumb.Separator />
-    <Breadcrumb.Item>
-      <Breadcrumb.Link href="https://external.com" isExternal>External</Breadcrumb.Link>
-    </Breadcrumb.Item>
-  </Breadcrumb.List>
-</Breadcrumb.Root>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/home">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/products" disabled={!hasAccess}>Products</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="https://external.com" isExternal>External</BreadcrumbLink>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</BreadcrumbRoot>
 
 // With custom components (polymorphic)
-<Breadcrumb.Root>
-  <Breadcrumb.List>
-    <Breadcrumb.Item>
-      <Breadcrumb.Link as={NextLink} href="/home">Home</Breadcrumb.Link>
-    </Breadcrumb.Item>
-    <Breadcrumb.Separator as="span">→</Breadcrumb.Separator>
-    <Breadcrumb.Item>
-      <Breadcrumb.Page as="strong">Current Page</Breadcrumb.Page>
-    </Breadcrumb.Item>
-  </Breadcrumb.List>
-</Breadcrumb.Root>
+<BreadcrumbRoot>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink as={NextLink} href="/home">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator as="span">→</BreadcrumbSeparator>
+    <BreadcrumbItem>
+      <BreadcrumbPage as="strong">Current Page</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</BreadcrumbRoot>
 ```
 
 ### Key Differentiators
@@ -73,28 +73,28 @@ The Breadcrumb component provides a navigation trail showing the hierarchical pa
 
 ## 2. API
 
-### Breadcrumb.Root
+### BreadcrumbRoot
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'nav'` | Polymorphic element type |
 | `children` | `ReactNode` | Yes | - | Breadcrumb content |
 | `aria-label` | `string` | No | `'Breadcrumb'` | Accessible name for navigation landmark |
-| `onNavigate` | `(href: string, event: MouseEvent) => void` | No | - | Navigation event handler for routing integration |
+| `onNavigate` | `(href: string, event: PressEvent) => void` | No | - | Navigation event handler for routing integration |
 | `disabled` | `boolean` | No | `false` | Disable all breadcrumb navigation |
 
-### Breadcrumb.List
+### BreadcrumbList
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'ol'` | Polymorphic element type |
 | `children` | `ReactNode` | Yes | - | List items content |
 
-### Breadcrumb.Item
+### BreadcrumbItem
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'li'` | Polymorphic element type |
 | `children` | `ReactNode` | Yes | - | Item content (Link or Page) |
 
-### Breadcrumb.Link
+### BreadcrumbLink
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'a'` | Polymorphic element type |
@@ -106,13 +106,13 @@ The Breadcrumb component provides a navigation trail showing the hierarchical pa
 | `rel` | `string` | No | - | Link relationship attribute |
 | `onPress` | `(event: PressEvent) => void` | No | - | Press event handler (overrides default navigation) |
 
-### Breadcrumb.Page
+### BreadcrumbPage
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'span'` | Polymorphic element type |
 | `children` | `ReactNode` | Yes | - | Current page name |
 
-### Breadcrumb.Separator
+### BreadcrumbSeparator
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'li'` | Polymorphic element type |
@@ -130,7 +130,7 @@ The Breadcrumb component provides a navigation trail showing the hierarchical pa
 // Generic polymorphic component types
 interface BreadcrumbRootProps<T extends ElementType = 'nav'> extends ComponentPropsWithoutRef<T> {
   as?: T;
-  onNavigate?: (href: string, event: MouseEvent) => void;
+  onNavigate?: NavigationHandler;
   disabled?: boolean;
 }
 
@@ -143,8 +143,8 @@ interface BreadcrumbLinkProps<T extends ElementType = 'a'> extends ComponentProp
 }
 
 // Event handler types
-type NavigationHandler = (href: string, event: MouseEvent) => void;
-type PressEvent = MouseEvent | KeyboardEvent;
+export type PressEvent = MouseEvent | KeyboardEvent;
+export type NavigationHandler = (href: string, event: PressEvent) => void;
 ```
 
 ## 3. Behavior Matrix
@@ -210,27 +210,14 @@ type PressEvent = MouseEvent | KeyboardEvent;
 
 ### State Hooks Design
 ```tsx
-// Enhanced context for component communication
+// Context for compound component communication
 interface BreadcrumbContextValue {
   disabled?: boolean;
-  onNavigate?: (href: string, event: MouseEvent) => void;
-  currentPath?: string;
-  separator?: ReactNode;
-  itemCount?: number;
-  registerItem?: (id: string) => void;
-  unregisterItem?: (id: string) => void;
+  onNavigate?: NavigationHandler;
 }
 
-const useBreadcrumb = () => {
+const useBreadcrumbContext = () => {
   return useContext(BreadcrumbContext);
-}
-
-const useBreadcrumbItem = () => {
-  const context = useBreadcrumb();
-  const [position, setPosition] = useState<'first' | 'middle' | 'last'>('middle');
-  
-  // Position calculation logic based on context
-  return { position, ...context };
 }
 ```
 
@@ -271,36 +258,25 @@ const useId = () => {
 
 ### Required Data Attributes
 
-**Breadcrumb.Root**
-- `data-spar-breadcrumb-root`: Component identifier
-- `data-disabled="true"`: Applied when root is disabled
+**BreadcrumbRoot**
+- `data-disabled`: Present when root is disabled
 
-**Breadcrumb.List**
-- `data-spar-breadcrumb-list`: Component identifier
-
-**Breadcrumb.Item**
-- `data-spar-breadcrumb-item`: Component identifier
+**BreadcrumbItem**
 - `data-position="first|middle|last"`: Item position in breadcrumb trail
+- `data-current`: Present when item is the current page
 
-**Breadcrumb.Link**
-- `data-spar-breadcrumb-link`: Component identifier
-- `data-disabled="true"`: Applied when link is disabled
-- `data-external="true"`: Applied to external links
-- `data-focus-visible="true"`: Applied during keyboard focus
+**BreadcrumbLink**
+- `data-disabled`: Present when link is disabled
+- `data-external`: Present on external links
 
-**Breadcrumb.Page**
-- `data-spar-breadcrumb-page`: Component identifier
-- `data-current="true"`: Indicates current page
-
-**Breadcrumb.Separator**
-- `data-spar-breadcrumb-separator`: Component identifier
+**BreadcrumbPage**
+- `data-current`: Always present (marks current page)
 
 ### State-Based Data Attributes
-- `data-current="true"`: Applied to current page item/page component
-- `data-disabled="true"`: Applied to disabled root or links
-- `data-external="true"`: Applied to external links for security styling
+- `data-current`: Present on current page item/page component
+- `data-disabled`: Present on disabled root or links
+- `data-external`: Present on external links for security styling
 - `data-position="first|middle|last"`: Applied to items for contextual styling
-- `data-focus-visible="true"`: Applied during keyboard navigation
 
 ## 7. Test Coverage Plan
 
@@ -321,37 +297,37 @@ describe('Breadcrumb Accessibility', () => {
   });
 
   it('should provide navigation landmark', () => {
-    render(<Breadcrumb.Root />);
+    render(<BreadcrumbRoot />);
     expect(screen.getByRole('navigation', { name: 'Breadcrumb' })).toBeInTheDocument();
   });
 
   it('should mark current page with aria-current', () => {
     render(
-      <Breadcrumb.Root>
-        <Breadcrumb.List>
-          <Breadcrumb.Item>
-            <Breadcrumb.Page>Current</Breadcrumb.Page>
-          </Breadcrumb.Item>
-        </Breadcrumb.List>
-      </Breadcrumb.Root>
+      <BreadcrumbRoot>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbPage>Current</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </BreadcrumbRoot>
     );
     expect(screen.getByText('Current')).toHaveAttribute('aria-current', 'page');
   });
 
   it('should hide separators from screen readers', () => {
-    render(<Breadcrumb.Separator />);
+    render(<BreadcrumbSeparator />);
     expect(screen.getByRole('listitem')).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('should handle disabled state accessibility', () => {
     render(
-      <Breadcrumb.Root disabled>
-        <Breadcrumb.List>
-          <Breadcrumb.Item>
-            <Breadcrumb.Link href="/test">Test</Breadcrumb.Link>
-          </Breadcrumb.Item>
-        </Breadcrumb.List>
-      </Breadcrumb.Root>
+      <BreadcrumbRoot disabled>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/test">Test</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </BreadcrumbRoot>
     );
     expect(screen.getByRole('navigation')).toHaveAttribute('aria-disabled', 'true');
     expect(screen.getByRole('link')).toHaveAttribute('aria-disabled', 'true');
@@ -359,9 +335,9 @@ describe('Breadcrumb Accessibility', () => {
 
   it('should handle external links with security attributes', () => {
     render(
-      <Breadcrumb.Link href="https://external.com" isExternal>
+      <BreadcrumbLink href="https://external.com" isExternal>
         External
-      </Breadcrumb.Link>
+      </BreadcrumbLink>
     );
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('target', '_blank');
@@ -371,13 +347,13 @@ describe('Breadcrumb Accessibility', () => {
   it('should call navigation handler instead of default navigation', () => {
     const onNavigate = jest.fn();
     render(
-      <Breadcrumb.Root onNavigate={onNavigate}>
-        <Breadcrumb.List>
-          <Breadcrumb.Item>
-            <Breadcrumb.Link href="/test">Test</Breadcrumb.Link>
-          </Breadcrumb.Item>
-        </Breadcrumb.List>
-      </Breadcrumb.Root>
+      <BreadcrumbRoot onNavigate={onNavigate}>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/test">Test</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </BreadcrumbRoot>
     );
     
     fireEvent.click(screen.getByRole('link'));
@@ -450,36 +426,36 @@ describe('Breadcrumb Accessibility', () => {
 // Next.js App Router
 import { useRouter } from 'next/navigation';
 
-<Breadcrumb.Root onNavigate={(href, event) => {
+<BreadcrumbRoot onNavigate={(href, event) => {
   event.preventDefault();
   router.push(href);
 }}>
   {/* breadcrumb items */}
-</Breadcrumb.Root>
+</BreadcrumbRoot>
 
 // Next.js Pages Router  
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-<Breadcrumb.Root>
-  <Breadcrumb.Item>
-    <Breadcrumb.Link as={Link} href="/home">Home</Breadcrumb.Link>
-  </Breadcrumb.Item>
-</Breadcrumb.Root>
+<BreadcrumbRoot>
+  <BreadcrumbItem>
+    <BreadcrumbLink as={Link} href="/home">Home</BreadcrumbLink>
+  </BreadcrumbItem>
+</BreadcrumbRoot>
 
 // React Router
 import { useNavigate, Link } from 'react-router-dom';
 
-<Breadcrumb.Root onNavigate={(href, event) => {
+<BreadcrumbRoot onNavigate={(href, event) => {
   event.preventDefault();
   navigate(href);
 }}>
   {/* or use as prop */}
-  <Breadcrumb.Link as={Link} to="/home">Home</Breadcrumb.Link>
-</Breadcrumb.Root>
+  <BreadcrumbLink as={Link} to="/home">Home</BreadcrumbLink>
+</BreadcrumbRoot>
 
 // Custom router with disabled state
-<Breadcrumb.Root 
+<BreadcrumbRoot 
   disabled={loading}
   onNavigate={async (href, event) => {
     event.preventDefault();
@@ -489,7 +465,7 @@ import { useNavigate, Link } from 'react-router-dom';
   }}
 >
   {/* breadcrumb items */}
-</Breadcrumb.Root>
+</BreadcrumbRoot>
 ```
 
 **Best Practices:**

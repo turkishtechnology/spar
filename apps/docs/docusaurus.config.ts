@@ -1,6 +1,12 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config({ path: '.env.local' });
+dotenv.config();
+
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
@@ -14,7 +20,7 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://headless-ui-docs.turkishtechnology.com',
+  url: 'https://spar.app.turkishtechlab.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -25,14 +31,12 @@ const config: Config = {
   projectName: 'headless', // Usually your repo name.
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
-
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'tr'],
+    locales: ['en' /* , 'tr' */],
     path: 'i18n',
     localeConfigs: {
       en: {
@@ -42,6 +46,7 @@ const config: Config = {
         calendar: 'gregory',
         path: 'en',
       },
+      /*
       tr: {
         label: 'Türkçe',
         direction: 'ltr',
@@ -49,6 +54,7 @@ const config: Config = {
         calendar: 'gregory',
         path: 'tr',
       },
+      */
     },
   },
   plugins: ['docusaurus-plugin-sass'],
@@ -87,20 +93,48 @@ const config: Config = {
         },
         // { to: "/blog", label: "Blog", position: "left" },
         {
-          href: 'https://github.com/turkishtechnology/headless',
+          type: 'search',
+          position: 'right',
+        },
+        {
+          href: 'https://github.com/turkishtechnology/spar',
           label: 'Github',
           position: 'right',
         },
+        /*
         {
           type: 'localeDropdown',
           position: 'right',
         },
+        */
       ],
       hideOnScroll: true,
     },
     prism: {
       theme: prismThemes.vsDark,
       darkTheme: prismThemes.vsDark,
+    },
+    // Algolia DocSearch Configuration
+    // Get your credentials by applying at: https://docsearch.algolia.com/apply
+    // Replace with your own credentials after DocSearch approval
+    algolia: {
+      // The application ID provided by Algolia
+      appId: process.env.ALGOLIA_APP_ID || 'X1Z85QJPUV',
+
+      // Public API key: it is safe to commit it
+      apiKey: process.env.ALGOLIA_SEARCH_API_KEY || 'bf7211c161e8205da2f933a02534105a',
+
+      // The index name provided by Algolia
+      indexName: process.env.ALGOLIA_INDEX_NAME || 'docusaurus-2',
+
+      // Optional: Enable contextual search (search within current section)
+      contextualSearch: true,
+
+      // Optional: path for search page that enabled by default (`false` to disable it)
+      searchPagePath: 'search',
+
+      // Optional: whether the insights feature is enabled or not on Docsearch
+      insights: false,
     },
   } satisfies Preset.ThemeConfig,
 };

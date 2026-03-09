@@ -12,11 +12,11 @@ The Input component provides accessible form input primitives with zero styling 
 
 **Compound Structure:**
 
-- `Input.Root` - State provider with validation context
-- `Input.Field` - Core input element (polymorphic: input/textarea)
-- `Input.Label` - Associated label element
-- `Input.Description` - Helper text element
-- `Input.ErrorMessage` - Error announcement element
+- `InputRoot` - State provider with validation context
+- `InputField` - Core input element (polymorphic: input/textarea)
+- `InputLabel` - Associated label element
+- `InputDescription` - Helper text element
+- `InputErrorMessage` - Error announcement element
 
 **Unique Value:**
 
@@ -26,35 +26,47 @@ The Input component provides accessible form input primitives with zero styling 
 
 ## 2. API
 
-### Input.Root Props
+### InputRoot Props
 
 | Name       | Type        | Required | Default | Description             |
 | ---------- | ----------- | -------- | ------- | ----------------------- |
-| `invalid`  | `boolean`   | No       | `false` | Input validation state  |
+| `id`       | `string`    | No       | `undefined` | Custom base ID for compound ARIA relationships |
+| `isInvalid`  | `boolean`   | No       | `false` | Input validation state  |
 | `disabled` | `boolean`   | No       | `false` | Input disabled state    |
 | `required` | `boolean`   | No       | `false` | Input required state    |
-| `children` | `ReactNode` | Yes      | -       | Compound input elements |
+| `readOnly` | `boolean`   | No       | `false` | Input read-only state   |
+| `children` | `ReactNode` | No       | -       | Compound input elements |
 
-### Input.Field Props
+### InputField Props
 
 | Name   | Type          | Required | Default   | Description                   |
 | ------ | ------------- | -------- | --------- | ----------------------------- |
 | `as`   | `ElementType` | No       | `"input"` | Element type (input/textarea) |
 | `type` | `string`      | No       | `"text"`  | HTML input type               |
+| `autoFocus` | `boolean` | No       | `false` | Whether to focus field on mount |
 
-### Input.Label Props
+### InputLabel Props
 
 | Name       | Type        | Required | Default | Description   |
 | ---------- | ----------- | -------- | ------- | ------------- |
 | `children` | `ReactNode` | Yes      | -       | Label content |
 
-### Input.Description Props
+**Auto-forwarded from context**: When used inside `InputRoot`, the following props are automatically forwarded from the Input context to the underlying `Label` component — no manual prop passing needed:
+
+- `disabled` — mirrors `InputRoot`'s `disabled` prop
+- `required` — mirrors `InputRoot`'s `required` prop
+- `readOnly` — mirrors `InputRoot`'s `readOnly` prop
+- `isInvalid` — mirrors `InputRoot`'s `isInvalid` prop
+
+These produce corresponding `data-disabled`, `data-required`, `data-readonly`, and `data-invalid` attributes on the rendered label element for styling hooks.
+
+### InputDescription Props
 
 | Name       | Type        | Required | Default | Description         |
 | ---------- | ----------- | -------- | ------- | ------------------- |
 | `children` | `ReactNode` | Yes      | -       | Description content |
 
-### Input.ErrorMessage Props
+### InputErrorMessage Props
 
 | Name       | Type        | Required | Default | Description   |
 | ---------- | ----------- | -------- | ------- | ------------- |
@@ -64,26 +76,28 @@ The Input component provides accessible form input primitives with zero styling 
 
 | State        | ARIA/DOM Result                                             |
 | ------------ | ----------------------------------------------------------- |
-| **Initial**  | `aria-invalid="false"`, proper label association            |
+| **Initial**  | Proper label association; `aria-invalid` reflects `isInvalid` |
 | **Focus**    | Focus visible, label association announced                  |
 | **Invalid**  | `aria-invalid="true"`, `aria-describedby` includes error ID |
 | **Disabled** | `disabled` attribute, non-interactive                       |
 | **Required** | `aria-required="true"` and `required` attribute             |
+| **ReadOnly** | `readOnly` attribute, non-editable but focusable            |
 
 ## 4. Accessibility
 
 ### ARIA Implementation
 
 ```tsx
-// Input.Field
+// InputField
 aria-labelledby={labelId}
-aria-describedby={invalid ? errorId : descriptionId}
+aria-describedby={isInvalid ? errorId : descriptionId}
 aria-required={required}
-aria-invalid={invalid}
+aria-invalid={isInvalid}
 disabled={disabled}
 
-// Input.ErrorMessage
+// InputErrorMessage
 role="alert"
+aria-live="assertive"
 id={errorId}
 ```
 
@@ -100,63 +114,61 @@ id={errorId}
 ```tsx
 const useInputContext = () => {
   const id = useId();
-  const [invalid, setInvalid] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-  const [required, setRequired] = useState(false);
+  const isInvalid = false;
+  const disabled = false;
+  const required = false;
+  const readOnly = false;
 
   return {
     fieldId: `${id}-field`,
     labelId: `${id}-label`,
     descriptionId: `${id}-description`,
     errorId: `${id}-error`,
-    invalid,
+    isInvalid,
     disabled,
     required,
-    setInvalid,
-    setDisabled,
-    setRequired,
+    readOnly,
   };
 };
 ```
 
 ### Component Structure
 
-- **Input.Root**: Context provider with state management
-- **Input.Field**: Ref forwarding to native input element
-- **Input.Label/Description/ErrorMessage**: ID-based ARIA associations
+- **InputRoot**: Context provider with state management
+- **InputField**: Ref forwarding to native input element
+- **InputLabel/Description/ErrorMessage**: ID-based ARIA associations
 
 ### Events
 
-- All native input events forwarded through Input.Field
-- Context state updates trigger ARIA attribute changes
+- All native input events forwarded through InputField
+- Focus/blur updates local `data-focused` state
+- `InputField` supports standalone usage without `InputRoot` context
 
 ## 6. Styling & Data Attributes
 
 ### Data Hooks for Styling
 
-**Input.Root**:
+**InputRoot**:
 
-- `data-spar-input` - Base identifier
 - `data-invalid` - When validation fails
 - `data-disabled` - When input disabled
 - `data-required` - When input required
+- `data-readonly` - When input read-only
 
-**Input.Field**:
+**InputField**:
 
-- `data-spar-input-field` - Field identifier
 - `data-focused` - When input focused
+- `data-autofocus` - When autoFocus is enabled
+- `data-disabled` - Disabled state (context or standalone)
+- `data-required` - Required state (context or standalone)
+- `data-readonly` - Read-only state (context or standalone)
 
-**Input.Label**:
+**InputLabel** (auto-forwarded from context):
 
-- `data-spar-input-label` - Label identifier
-
-**Input.Description**:
-
-- `data-spar-input-description` - Description identifier
-
-**Input.ErrorMessage**:
-
-- `data-spar-input-error` - Error identifier
+- `data-disabled` - When input disabled
+- `data-required` - When input required
+- `data-readonly` - When input read-only
+- `data-invalid` - When validation fails
 
 ## 7. Test Coverage Plan
 
@@ -164,7 +176,7 @@ const useInputContext = () => {
 
 - Context state management and ID generation
 - ARIA attribute presence and values
-- Event forwarding through Input.Field
+- Event forwarding through InputField
 
 ### Accessibility Tests
 

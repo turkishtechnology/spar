@@ -1,54 +1,106 @@
-import { useEffect, useCallback, useRef } from 'react';
-import { useMergedRef, useInteractOutside } from '@/hooks';
-import { useDialogContext } from './DialogRoot';
+import { useEffect, useCallback, useRef, useState, ElementType } from 'react';
+import { createPortal } from 'react-dom';
+import { useMergedRef, useInteractOutside, useFocusTrap } from '@/hooks';
+import { useDialogContext } from './hooks';
 import type { DialogContentProps } from './types';
 
 /**
  * Main dialog content container with focus management and keyboard handling.
  * Implements modal focus trapping and ARIA attributes for accessibility.
  */
-export const DialogContent = ({
-  as: Component = 'div',
+export const DialogContent = <T extends ElementType = 'div'>({
+  as,
   role = 'dialog',
-  forceMount = false,
   trapFocus = true,
   restoreFocus = true,
   initialFocus,
   finalFocus,
+  container,
   onOpenAutoFocus,
   onCloseAutoFocus,
   onEscapeKeyDown,
   onPointerDownOutside,
   onInteractOutside,
+  onKeyDown,
   ref,
   children,
   ...props
-}: DialogContentProps) => {
-  const context = useDialogContext();
-  const { isOpen, setIsOpen, modal, contentRef, titleId, descriptionId } = context;
+}: DialogContentProps<T>) => {
+  const Component = as || 'div';
+  const {
+    isOpen,
+    setIsOpen,
+    modal,
+    forceMount,
+    contentRef,
+    titleId,
+    descriptionId,
+    contentId,
+    restoreFocusRef,
+    onCloseAutoFocusRef,
+    restoreFocusPropRef,
+    finalFocusPropRef,
+  } = useDialogContext();
 
   // Merge external ref with internal ref
   const mergedRef = useMergedRef(contentRef, ref as React.RefObject<HTMLElement | null>);
 
-  // Store previous focus element for restoration
-  const restoreFocusRef = useRef<HTMLElement | null>(null);
+  // Store callbacks in refs to avoid re-running effects when they change
+  const onOpenAutoFocusRef = useRef(onOpenAutoFocus);
+  const initialFocusRef = useRef(initialFocus);
 
-  // Focus management on open
+  // Track whether open focus has already been handled to prevent StrictMode double-fire
+  const hasOpenFocusedRef = useRef(false);
+
+  // SSR safety - only render portal after mount
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    if (!isOpen) return;
+    setMounted(true);
+  }, []);
+
+  // Keep refs updated with latest values
+  onOpenAutoFocusRef.current = onOpenAutoFocus;
+  initialFocusRef.current = initialFocus;
+
+  // Sync close-focus props to context refs so Dialog can handle close focus
+  onCloseAutoFocusRef.current = onCloseAutoFocus;
+  restoreFocusPropRef.current = restoreFocus;
+  finalFocusPropRef.current = finalFocus;
+
+  // Store active element before dialog opens for focus restoration
+  useEffect(() => {
+    if (isOpen) {
+      if (restoreFocus || finalFocus) {
+        // Only capture if not already captured (prevent StrictMode overwrite)
+        if (!restoreFocusRef.current) {
+          restoreFocusRef.current = document.activeElement as HTMLElement;
+        }
+      }
+    } else {
+      restoreFocusRef.current = null;
+    }
+  }, [isOpen, restoreFocus, finalFocus, restoreFocusRef]);
+
+  // Handle open auto-focus
+  useEffect(() => {
+    if (!isOpen || !mounted) {
+      hasOpenFocusedRef.current = false;
+      return;
+    }
+
+    // Prevent StrictMode double-fire
+    if (hasOpenFocusedRef.current) return;
 
     const contentElement = contentRef.current;
     if (!contentElement) return;
 
-    // Store current focus for restoration
-    if (restoreFocus) {
-      restoreFocusRef.current = document.activeElement as HTMLElement;
-    }
+    hasOpenFocusedRef.current = true;
 
     // Focus initial element
     const focusElement = (() => {
-      if (initialFocus) {
-        return typeof initialFocus === 'function' ? initialFocus() : initialFocus;
+      const initFocus = initialFocusRef.current;
+      if (initFocus) {
+        return typeof initFocus === 'function' ? initFocus() : initFocus;
       }
 
       // Focus strategies based on role
@@ -70,71 +122,27 @@ export const DialogContent = ({
     })();
 
     if (focusElement) {
-      onOpenAutoFocus?.(new Event('focus'));
-      focusElement.focus();
-    }
-  }, [isOpen, initialFocus, role, onOpenAutoFocus, restoreFocus]);
+      const event = new Event('focus', { cancelable: true });
+      onOpenAutoFocusRef.current?.(event);
 
-  // Focus restoration on close
-  useEffect(() => {
-    if (isOpen) return;
-
-    if (restoreFocus && restoreFocusRef.current) {
-      const elementToFocus = finalFocus
-        ? typeof finalFocus === 'function'
-          ? finalFocus()
-          : finalFocus
-        : restoreFocusRef.current;
-
-      if (elementToFocus) {
-        onCloseAutoFocus?.(new Event('focus'));
-        elementToFocus.focus();
+      if (!event.defaultPrevented) {
+        focusElement.focus();
       }
     }
-  }, [isOpen, finalFocus, restoreFocus, onCloseAutoFocus]);
+  }, [isOpen, mounted, role, contentRef]);
 
   // Focus trap for modal dialogs
-  useEffect(() => {
-    if (!isOpen || !modal || !trapFocus) return;
-
-    const contentElement = contentRef.current;
-    if (!contentElement) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Tab') return;
-
-      const focusableElements = contentElement.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-      const focusableArray = Array.from(focusableElements) as HTMLElement[];
-
-      if (focusableArray.length === 0) return;
-
-      const firstElement = focusableArray[0];
-      const lastElement = focusableArray[focusableArray.length - 1];
-
-      if (event.shiftKey) {
-        // Shift + Tab
-        if (document.activeElement === firstElement) {
-          event.preventDefault();
-          lastElement?.focus();
-        }
-      } else {
-        // Tab
-        if (document.activeElement === lastElement) {
-          event.preventDefault();
-          firstElement?.focus();
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, modal, trapFocus]);
+  useFocusTrap(contentRef, !!(isOpen && mounted && modal && trapFocus));
 
   // Escape key handler
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
+      onKeyDown?.(event);
+
+      if (event.defaultPrevented) {
+        return;
+      }
+
       if (event.key === 'Escape') {
         onEscapeKeyDown?.(event.nativeEvent);
         if (!event.defaultPrevented) {
@@ -142,7 +150,7 @@ export const DialogContent = ({
         }
       }
     },
-    [onEscapeKeyDown, setIsOpen],
+    [onEscapeKeyDown, onKeyDown, setIsOpen],
   );
 
   // Outside interaction handler
@@ -163,11 +171,20 @@ export const DialogContent = ({
     return null;
   }
 
+  // Don't render on server
+  if (!mounted) {
+    return null;
+  }
+
   const dataState = isOpen ? 'open' : 'closed';
 
-  return (
+  const portalContainer = container || document.body;
+
+  const contentElement = (
     <Component
       ref={mergedRef}
+      {...props}
+      id={contentId}
       role={role}
       aria-modal={modal}
       aria-labelledby={titleId}
@@ -176,11 +193,12 @@ export const DialogContent = ({
       data-modal={modal ? 'true' : 'false'}
       data-role={role}
       onKeyDown={handleKeyDown}
-      {...props}
     >
       {children}
     </Component>
   );
+
+  return createPortal(contentElement, portalContainer);
 };
 
 DialogContent.displayName = 'DialogContent';

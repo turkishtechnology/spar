@@ -27,25 +27,38 @@ The Switch follows a simple single-component pattern rather than compound struct
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `React.ElementType` | No | `"button"` | The element or component to render as |
-| `checked` | `boolean` | No | `undefined` | Controlled checked state |
+| `as` | `ElementType` | No | `"button"` | The element or component to render as |
+| `checked` | `boolean` | No | `undefined` | Controlled checked state. When provided, component operates in controlled mode |
 | `defaultChecked` | `boolean` | No | `false` | Default checked state for uncontrolled usage |
 | `onChange` | `(checked: boolean) => void` | No | `undefined` | Callback fired when the checked state changes |
-| `disabled` | `boolean` | No | `false` | Whether the switch is disabled |
-| `name` | `string` | No | `undefined` | Form input name for form integration |
-| `value` | `string` | No | `"on"` | Form input value when checked |
-| `form` | `string` | No | `undefined` | Form ID to associate with |
-| `required` | `boolean` | No | `false` | Whether the switch is required in forms |
-| `readOnly` | `boolean` | No | `false` | Whether the switch is read-only |
-| `autoFocus` | `boolean` | No | `false` | Whether to auto-focus on mount |
-| `id` | `string` | No | `undefined` | HTML id attribute |
-| `aria-label` | `string` | No | `undefined` | Accessible name for the switch |
+| `disabled` | `boolean` | No | `false` | Disabled state - prevents interaction and is properly announced to screen readers |
+| `name` | `string` | No | `undefined` | Name attribute for form submission |
+| `value` | `string` | No | `"on"` | Value sent in form data when checked |
+| `form` | `string` | No | `undefined` | ID of the form this switch belongs to |
+| `required` | `boolean` | No | `false` | Required state for form validation |
+| `readOnly` | `boolean` | No | `false` | Read-only state - prevents interaction |
+| `autoFocus` | `boolean` | No | `false` | Auto-focus on mount |
+| `id` | `string` | No | auto-generated (`useId`) | HTML id attribute |
+| `aria-label` | `string` | No | `undefined` | Accessible name for the switch. Required when switch has no visible label |
 | `aria-labelledby` | `string` | No | `undefined` | ID of element that labels the switch |
 | `aria-describedby` | `string` | No | `undefined` | ID of element that describes the switch |
+| `children` | `ReactNode \| ((state: SwitchRenderProps) => ReactNode)` | No | `undefined` | Content to display inside the switch, or render props function |
+
+### SwitchRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `checked` | `boolean` | Whether the switch is currently checked |
+| `setChecked` | `(checked: boolean) => void` | Function to programmatically set the checked state |
+| `disabled` | `boolean` | Whether the switch is disabled |
+| `readOnly` | `boolean` | Whether the switch is read-only |
+| `isFocused` | `boolean` | Whether the switch currently has focus |
+| `isHovered` | `boolean` | Whether the switch is being hovered |
+| `isPressed` | `boolean` | Whether the switch is being pressed |
 
 ### Polymorphic Support
 - Supports `as` prop for rendering as different elements
-- Proper ref forwarding with `React.forwardRef`
+- Supports React ref forwarding via polymorphic props
 - Type-safe polymorphic props with generic constraints
 
 ### Controlled/Uncontrolled
@@ -60,18 +73,18 @@ The Switch follows a simple single-component pattern rather than compound struct
 | Checked | Click/Space/Enter | Becomes unchecked | `aria-checked="false"`, `data-checked` removed |
 | Focused | Tab | Receives focus | `data-focus` added, focus styles applied |
 | Blurred | Tab away/click elsewhere | Loses focus | `data-focus` removed |
-| Disabled | Any interaction | No state change | `aria-disabled="true"`, `data-disabled` added |
+| Disabled | Any interaction | No state change | Native `disabled` attribute applied, `data-disabled` added |
 | Read-only | Click/Space/Enter | No state change | `aria-readonly="true"`, `data-readonly` added |
 | Hovered | Mouse enter | Visual feedback | `data-hover` added |
 | Active/Pressed | Mouse down/Space down | Visual feedback | `data-active` added |
-| Form submit | Submit event | Value included if checked | Hidden input participates in form data |
+| Form submit (`name` provided) | Submit event | Value included if checked | Hidden input participates in form data |
 
 ## 4. Accessibility
 
 ### Roles
 - Primary role: `role="switch"` 
 - Semantic HTML: Uses `<button>` element by default for built-in keyboard support
-- Hidden input: `<input type="checkbox">` for form integration and screen reader compatibility
+- Hidden input: `<input type="checkbox">` for form integration (rendered only when `name` is provided)
 
 ### Keyboard Navigation
 - **Space**: Toggle switch state
@@ -89,14 +102,13 @@ The Switch follows a simple single-component pattern rather than compound struct
 - Switch state announced as "on" or "off" via `aria-checked`
 - Label association via `aria-labelledby` or `aria-label`
 - Description association via `aria-describedby`
-- Form errors announced via `aria-invalid` and `aria-errormessage`
 - State changes announced automatically due to `role="switch"`
 
 ### Name/Role/Value Exposure
 - **Name**: From `aria-label`, `aria-labelledby`, or associated label element
 - **Role**: `switch` explicitly set
 - **Value**: Current state via `aria-checked="true|false"`
-- **State**: Additional states via `aria-disabled`, `aria-readonly`, `aria-invalid`
+- **State**: Additional states via native `disabled`, `aria-readonly`, and data attributes
 
 ### ARIA Authoring Practices Guide Compliance
 Based on [ARIA APG Switch Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/switch/):
@@ -131,9 +143,8 @@ function useSwitch(props: UseSwitchProps) {
 - Optional integration with form field contexts for label/description association
 
 ### Ref Forwarding Strategy
-- `React.forwardRef` for proper ref forwarding to DOM element
+- Ref forwarding to the rendered element via polymorphic props
 - Support for both element refs and component refs via polymorphic `as` prop
-- Internal ref management for hidden input element
 
 ### Event System
 - Synthetic event handling for click, keydown, focus, blur
@@ -145,7 +156,6 @@ function useSwitch(props: UseSwitchProps) {
 - `useId` hook for generating unique IDs when needed
 - No client-side only state that breaks hydration
 - Deterministic rendering for server and client
-- Proper `suppressHydrationWarning` when necessary
 
 ## 6. Styling & Data Attributes
 
@@ -155,11 +165,10 @@ function useSwitch(props: UseSwitchProps) {
 - `data-checked`: Present when switch is checked
 - `data-disabled`: Present when switch is disabled  
 - `data-readonly`: Present when switch is read-only
+- `data-required`: Present when switch is required
 - `data-focus`: Present when switch has keyboard focus
 - `data-hover`: Present when switch is hovered
 - `data-active`: Present when switch is being pressed/activated
-- `data-invalid`: Present when switch has validation errors
-- `data-required`: Present when switch is required
 
 #### Values
 All data attributes are boolean (present/absent) except:
@@ -206,7 +215,6 @@ All data attributes are boolean (present/absent) except:
 - Form submission data inclusion
 - Label association functionality
 - Description association via `aria-describedby`
-- Error state handling and announcements
 - Context integration (if applicable)
 
 ## 8. Constraints
@@ -218,7 +226,7 @@ All data attributes are boolean (present/absent) except:
 
 ### Data Attributes for Styling
 - Visual state communicated via `data-*` attributes
-- No inline styles or CSS classes applied by component
+- Component forwards `className` and `style` props; all styling decisions remain external
 - Consistent attribute naming following Spar conventions
 
 ### Tree-shakeable Exports
@@ -242,7 +250,6 @@ All data attributes are boolean (present/absent) except:
 ### Controlled/Uncontrolled Support
 - Both patterns fully supported
 - Automatic detection of controlled vs uncontrolled
-- Proper warnings for pattern violations
 - Consistent behavior across patterns
 
 ## 9. Migration & Implementation Checklist
@@ -281,7 +288,6 @@ For teams migrating from other switch implementations:
 - [ ] Focus management and visible indicators
 - [ ] Screen reader announcements
 - [ ] Label association support
-- [ ] Error state handling
 
 #### Data Attributes
 - [ ] `data-checked` for checked state
@@ -289,7 +295,7 @@ For teams migrating from other switch implementations:
 - [ ] `data-focus` for focus state
 - [ ] `data-hover` for hover state
 - [ ] `data-active` for active/pressed state
-- [ ] Additional state attributes as needed
+- [ ] `data-required` for required state
 
 #### TypeScript & API
 - [ ] Proper type definitions

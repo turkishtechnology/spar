@@ -1,5 +1,5 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
+import * as React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from '../Button';
 
@@ -8,399 +8,122 @@ describe('Button', () => {
     jest.clearAllMocks();
   });
 
-  describe('Rendering', () => {
-    it('renders as button element by default', () => {
-      render(<Button>Click me</Button>);
-      const button = screen.getByRole('button');
-      expect(button.tagName).toBe('BUTTON');
-      expect(button).toHaveTextContent('Click me');
-    });
+  it('renders a native button by default and uses type="button"', () => {
+    render(<Button>Click me</Button>);
+    const button = screen.getByRole('button', { name: 'Click me' });
 
-    it('renders with custom element when as prop is provided', () => {
-      render(<Button as='div'>Click me</Button>);
-      const button = screen.getByRole('button');
-      expect(button.tagName).toBe('DIV');
-      expect(button).toHaveTextContent('Click me');
-    });
-
-    it('applies custom className and style', () => {
-      const style = { backgroundColor: 'red' };
-      render(
-        <Button className='custom-class' style={style}>
-          Click me
-        </Button>,
-      );
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('custom-class');
-      expect(button.style.backgroundColor).toBe('red');
-    });
-
-    it('passes through additional HTML props', () => {
-      render(
-        <Button data-testid='custom-button' title='Custom title'>
-          Click me
-        </Button>,
-      );
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-testid', 'custom-button');
-      expect(button).toHaveAttribute('title', 'Custom title');
-    });
+    expect(button.tagName).toBe('BUTTON');
+    expect(button).toHaveAttribute('type', 'button');
+    expect(button).toHaveAttribute('tabIndex', '0');
   });
 
-  describe('Button Type', () => {
-    it('defaults to type="button"', () => {
-      render(<Button>Click me</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('type', 'button');
-    });
+  it('supports polymorphic rendering with accessible button semantics', () => {
+    render(
+      <Button as='div' id='custom-action' title='Custom action'>
+        Custom action
+      </Button>,
+    );
+    const button = screen.getByRole('button', { name: 'Custom action' });
 
-    it('accepts custom type prop', () => {
-      render(<Button type='submit'>Submit</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('type', 'submit');
-    });
-
-    it('does not apply type attribute when not rendered as button', () => {
-      render(<Button as='div'>Click me</Button>);
-      const button = screen.getByRole('button');
-      expect(button).not.toHaveAttribute('type');
-    });
+    expect(button.tagName).toBe('DIV');
+    expect(button).toHaveAttribute('id', 'custom-action');
+    expect(button).toHaveAttribute('role', 'button');
+    expect(button).not.toHaveAttribute('type');
   });
 
-  describe('Disabled State', () => {
-    it('handles disabled state correctly', () => {
-      render(<Button isDisabled>Disabled</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('disabled');
-      expect(button).toHaveAttribute('aria-disabled', 'true');
-      expect(button).toHaveAttribute('data-disabled', 'true');
-      expect(button).toHaveAttribute('tabIndex', '-1');
-    });
+  it('prevents activation while disabled or loading', async () => {
+    const user = userEvent.setup();
+    const onClick = jest.fn();
+    const onPressedChange = jest.fn();
 
-    it('prevents click when disabled', async () => {
-      const user = userEvent.setup();
-      const handleClick = jest.fn();
-      render(
-        <Button isDisabled onClick={handleClick}>
+    render(
+      <>
+        <Button disabled onClick={onClick}>
           Disabled
-        </Button>,
-      );
-      const button = screen.getByRole('button');
-      await user.click(button);
-      expect(handleClick).not.toHaveBeenCalled();
-    });
+        </Button>
+        <Button isLoading isPressed={false} onPressedChange={onPressedChange} onClick={onClick}>
+          Loading toggle
+        </Button>
+      </>,
+    );
 
-    it('does not apply disabled attribute when not rendered as button', () => {
-      render(
-        <Button as='div' isDisabled>
-          Disabled
-        </Button>,
-      );
-      const button = screen.getByRole('button');
-      expect(button).not.toHaveAttribute('disabled');
-      expect(button).toHaveAttribute('aria-disabled', 'true');
-      expect(button).toHaveAttribute('data-disabled', 'true');
-    });
+    await user.click(screen.getByRole('button', { name: 'Disabled' }));
+    await user.click(screen.getByRole('button', { name: 'Loading toggle' }));
+
+    expect(onClick).not.toHaveBeenCalled();
+    expect(onPressedChange).not.toHaveBeenCalled();
   });
 
-  describe('Loading State', () => {
-    it('handles loading state correctly', () => {
-      render(<Button isLoading>Loading</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('aria-busy', 'true');
-      expect(button).toHaveAttribute('data-loading', 'true');
-      // Component is headless - no built-in loading text structure
-      expect(screen.getByText('Loading')).toBeInTheDocument();
-    });
+  it('activates on Enter and Space, but not on unrelated keys', async () => {
+    const user = userEvent.setup();
+    const onClick = jest.fn();
+    const onKeyDown = jest.fn();
 
-    it('allows developer to handle loading content', () => {
-      render(
-        <Button isLoading>
-          <span aria-live='polite'>Please wait</span>
-          Submit
-        </Button>,
-      );
-      // Developer controls loading text structure
-      expect(screen.getByText('Please wait')).toBeInTheDocument();
-      expect(screen.getByText('Submit')).toBeInTheDocument();
-    });
+    render(
+      <Button as='div' onClick={onClick} onKeyDown={onKeyDown}>
+        Keyboard trigger
+      </Button>,
+    );
+    const button = screen.getByRole('button', { name: 'Keyboard trigger' });
+    button.focus();
 
-    it('prevents click when loading', async () => {
-      const user = userEvent.setup();
-      const handleClick = jest.fn();
-      render(
-        <Button isLoading onClick={handleClick}>
-          Loading
-        </Button>,
-      );
-      const button = screen.getByRole('button');
-      await user.click(button);
-      expect(handleClick).not.toHaveBeenCalled();
-    });
+    await user.keyboard('{Enter}');
+    await user.keyboard('{ }');
+    await user.keyboard('{Escape}');
 
-    it('exposes loading state via data attributes', () => {
-      render(<Button isLoading>Submit Form</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-loading', 'true');
-      expect(button).toHaveAttribute('aria-busy', 'true');
-      expect(screen.getByText('Submit Form')).toBeInTheDocument();
-    });
+    expect(onClick).toHaveBeenCalledTimes(2);
+    expect(onKeyDown).toHaveBeenCalledWith(expect.objectContaining({ key: 'Enter' }));
+    expect(onKeyDown).toHaveBeenCalledWith(expect.objectContaining({ key: ' ' }));
+    expect(onKeyDown).toHaveBeenCalledWith(expect.objectContaining({ key: 'Escape' }));
   });
 
-  describe('Toggle Functionality', () => {
-    it('works as toggle button when isPressed is provided', async () => {
-      const user = userEvent.setup();
-      const handlePressedChange = jest.fn();
-      render(
-        <Button isPressed={false} onPressedChange={handlePressedChange}>
-          Toggle
-        </Button>,
+  it('supports controlled toggle contract with aria-pressed', async () => {
+    const user = userEvent.setup();
+
+    const ControlledToggle = () => {
+      const [pressed, setPressed] = React.useState(false);
+      return (
+        <Button isPressed={pressed} onPressedChange={setPressed}>
+          Toggle: {pressed ? 'On' : 'Off'}
+        </Button>
       );
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('aria-pressed', 'false');
-      expect(button).toHaveAttribute('data-pressed', 'false');
+    };
 
-      await user.click(button);
-      expect(handlePressedChange).toHaveBeenCalledWith(true);
-    });
+    render(<ControlledToggle />);
+    const button = screen.getByRole('button', { name: 'Toggle: Off' });
+    expect(button).toHaveAttribute('aria-pressed', 'false');
 
-    it('toggles pressed state when controlled', async () => {
-      const user = userEvent.setup();
-      const Component = () => {
-        const [pressed, setPressed] = React.useState(false);
-        return (
-          <Button isPressed={pressed} onPressedChange={setPressed}>
-            Toggle: {pressed ? 'On' : 'Off'}
-          </Button>
-        );
-      };
-      render(<Component />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('aria-pressed', 'false');
-      expect(button).toHaveTextContent('Toggle: Off');
+    await user.click(button);
 
-      await user.click(button);
-      expect(button).toHaveAttribute('aria-pressed', 'true');
-      expect(button).toHaveTextContent('Toggle: On');
-    });
-
-    it('manages internal state for uncontrolled toggle', async () => {
-      const user = userEvent.setup();
-      const Component = () => {
-        const [pressed, setPressed] = React.useState<boolean>(false);
-
-        return (
-          <Button isPressed={pressed} onPressedChange={setPressed}>
-            Toggle: {pressed ? 'On' : 'Off'}
-          </Button>
-        );
-      };
-      render(<Component />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveTextContent('Toggle: Off');
-
-      await user.click(button);
-      expect(button).toHaveTextContent('Toggle: On');
-    });
-
-    it('does not add aria-pressed when not a toggle button', () => {
-      render(<Button>Regular Button</Button>);
-      const button = screen.getByRole('button');
-      expect(button).not.toHaveAttribute('aria-pressed');
-      expect(button).not.toHaveAttribute('data-pressed');
-    });
+    expect(screen.getByRole('button', { name: 'Toggle: On' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
   });
 
-  describe('Event Handling', () => {
-    it('calls onClick when clicked', async () => {
-      const user = userEvent.setup();
-      const handleClick = jest.fn();
-      render(<Button onClick={handleClick}>Click me</Button>);
-      const button = screen.getByRole('button');
+  it('keeps pressed state prop-driven when no onPressedChange is provided', async () => {
+    const user = userEvent.setup();
+    render(<Button isPressed={false}>Static toggle</Button>);
 
-      await user.click(button);
-      expect(handleClick).toHaveBeenCalledTimes(1);
-      expect(handleClick).toHaveBeenCalledWith(expect.any(Object));
-    });
+    const button = screen.getByRole('button', { name: 'Static toggle' });
+    expect(button).toHaveAttribute('aria-pressed', 'false');
 
-    it('calls onKeyDown when key is pressed', async () => {
-      const user = userEvent.setup();
-      const handleKeyDown = jest.fn();
-      render(<Button onKeyDown={handleKeyDown}>Press me</Button>);
-      const button = screen.getByRole('button');
-      button.focus();
+    await user.click(button);
 
-      await user.keyboard('{Enter}');
-      expect(handleKeyDown).toHaveBeenCalledTimes(1);
-      expect(handleKeyDown).toHaveBeenCalledWith(
-        expect.objectContaining({
-          key: 'Enter',
-        }),
-      );
-    });
-
-    it('activates on Enter key press', async () => {
-      const user = userEvent.setup();
-      const handleClick = jest.fn();
-      const handleKeyDown = jest.fn();
-
-      render(
-        <Button onClick={handleClick} onKeyDown={handleKeyDown}>
-          Press me
-        </Button>,
-      );
-      const button = screen.getByRole('button');
-      button.focus();
-
-      await user.keyboard('{Enter}');
-
-      // The onKeyDown should be called
-      expect(handleKeyDown).toHaveBeenCalledTimes(1);
-      expect(handleKeyDown).toHaveBeenCalledWith(
-        expect.objectContaining({
-          key: 'Enter',
-        }),
-      );
-    });
-
-    it('activates on Space key press', async () => {
-      const user = userEvent.setup();
-      const handleClick = jest.fn();
-      const handleKeyDown = jest.fn();
-
-      render(
-        <Button onClick={handleClick} onKeyDown={handleKeyDown}>
-          Press me
-        </Button>,
-      );
-      const button = screen.getByRole('button');
-      button.focus();
-
-      await user.keyboard('{ }');
-
-      // The onKeyDown should be called
-      expect(handleKeyDown).toHaveBeenCalledTimes(1);
-      expect(handleKeyDown).toHaveBeenCalledWith(
-        expect.objectContaining({
-          key: ' ',
-        }),
-      );
-    });
-
-    it('does not activate on other key presses', async () => {
-      const user = userEvent.setup();
-      const handleClick = jest.fn();
-      render(<Button onClick={handleClick}>Press me</Button>);
-      const button = screen.getByRole('button');
-      button.focus();
-
-      await user.keyboard('{Escape}');
-      expect(handleClick).not.toHaveBeenCalled();
-    });
-
-    it('prevents event propagation for Enter and Space', async () => {
-      const user = userEvent.setup();
-      const handleKeyDown = jest.fn();
-      render(<Button onKeyDown={handleKeyDown}>Press me</Button>);
-      const button = screen.getByRole('button');
-      button.focus();
-
-      await user.keyboard('{Enter}');
-      expect(handleKeyDown).toHaveBeenCalledWith(
-        expect.objectContaining({
-          key: 'Enter',
-        }),
-      );
-    });
+    expect(button).toHaveAttribute('aria-pressed', 'false');
   });
 
-  describe('Focus Management', () => {
-    it('has correct tabIndex when interactive', () => {
-      render(<Button>Focus me</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('tabIndex', '0');
-    });
+  it('applies autofocus behavior and state data attribute', async () => {
+    render(<Button autoFocus>Auto focus</Button>);
+    const button = screen.getByRole('button', { name: 'Auto focus' });
 
-    it('has tabIndex -1 when disabled', () => {
-      render(<Button isDisabled>Disabled</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('tabIndex', '-1');
+    await waitFor(() => {
+      expect(button).toHaveFocus();
     });
-
-    it('auto-focuses when shouldAutoFocus is true', () => {
-      const ref = React.createRef<HTMLButtonElement>();
-      render(
-        <Button ref={ref} shouldAutoFocus>
-          Auto focus
-        </Button>,
-      );
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-autofocus', 'true');
-      // Note: Auto-focus is tested via useEffect which requires ref to be properly set
-    });
+    expect(button).toHaveAttribute('data-autofocus', '');
   });
 
-  describe('Data Attributes', () => {
-    it('sets correct data attributes for different states', () => {
-      const { rerender } = render(<Button>Normal</Button>);
-      let button = screen.getByRole('button');
-      expect(button).not.toHaveAttribute('data-disabled');
-      expect(button).not.toHaveAttribute('data-loading');
-      expect(button).not.toHaveAttribute('data-pressed');
-      expect(button).not.toHaveAttribute('data-autofocus');
-
-      rerender(
-        <Button isDisabled isLoading isPressed={true} shouldAutoFocus>
-          All states
-        </Button>,
-      );
-      button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-disabled', 'true');
-      expect(button).toHaveAttribute('data-loading', 'true');
-      expect(button).toHaveAttribute('data-pressed', 'true');
-      expect(button).toHaveAttribute('data-autofocus', 'true');
-    });
-  });
-
-  describe('Display Name', () => {
-    it('has correct displayName', () => {
-      expect(Button.displayName).toBe('Button');
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('handles undefined children gracefully', () => {
-      render(<Button>{undefined}</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toBeInTheDocument();
-    });
-
-    it('handles both loading and disabled states', async () => {
-      const user = userEvent.setup();
-      const handleClick = jest.fn();
-      render(
-        <Button isLoading isDisabled onClick={handleClick}>
-          Loading and Disabled
-        </Button>,
-      );
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('disabled');
-      expect(button).toHaveAttribute('aria-disabled', 'true');
-      expect(button).toHaveAttribute('aria-busy', 'true');
-
-      await user.click(button);
-      expect(handleClick).not.toHaveBeenCalled();
-    });
-
-    it('handles toggle and loading states together', () => {
-      render(
-        <Button isPressed={true} isLoading>
-          Toggle Loading
-        </Button>,
-      );
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('aria-pressed', 'true');
-      expect(button).toHaveAttribute('aria-busy', 'true');
-    });
+  it('exposes stable displayName', () => {
+    expect(Button.displayName).toBe('Button');
   });
 });

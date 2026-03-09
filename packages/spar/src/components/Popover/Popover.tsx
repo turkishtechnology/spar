@@ -1,42 +1,36 @@
-import React, { useMemo } from 'react';
-import type { PopoverRootProps, PopoverContextValue } from './types';
+import { useMemo } from 'react';
+import type { PopoverProps, PopoverContextValue } from './types';
 import { PopoverContext } from './hooks/usePopoverContext';
 import { usePopover } from './hooks/usePopover';
 
 /**
  * Root container component that provides context for popover state
  */
-export const PopoverRoot = ({ children, ...props }: PopoverRootProps) => {
+export const Popover = ({ children, ...props }: PopoverProps) => {
   const popoverState = usePopover(props);
 
   const contextValue: PopoverContextValue = useMemo(
     () => ({
-      state: popoverState.state,
+      isOpen: popoverState.isOpen,
+      contentId: popoverState.contentId,
       triggerRef: popoverState.triggerRef as React.RefObject<HTMLElement | null>,
       contentRef: popoverState.contentRef as React.RefObject<HTMLDivElement | null>,
-      anchorRef: popoverState.anchorRef,
       arrowRef: popoverState.arrowRef,
-      floatingStyles: popoverState.floatingStyles,
       modal: popoverState.modal,
-      side: popoverState.side,
-      align: popoverState.align,
-      sideOffset: popoverState.sideOffset,
+      disabled: popoverState.disabled,
       openPopover: popoverState.openPopover,
       closePopover: popoverState.closePopover,
       togglePopover: popoverState.togglePopover,
       ...(popoverState.onOpenChange && { onOpenChange: popoverState.onOpenChange }),
     }),
     [
-      popoverState.state,
+      popoverState.isOpen,
+      popoverState.contentId,
       popoverState.triggerRef,
       popoverState.contentRef,
-      popoverState.anchorRef,
       popoverState.arrowRef,
-      popoverState.floatingStyles,
       popoverState.modal,
-      popoverState.side,
-      popoverState.align,
-      popoverState.sideOffset,
+      popoverState.disabled,
       popoverState.openPopover,
       popoverState.closePopover,
       popoverState.togglePopover,
@@ -46,9 +40,9 @@ export const PopoverRoot = ({ children, ...props }: PopoverRootProps) => {
 
   return (
     <PopoverContext.Provider value={contextValue}>
-      <div data-state={popoverState.state.isOpen ? 'open' : 'closed'}>{children}</div>
+      <div data-state={popoverState.isOpen ? 'open' : 'closed'}>{children}</div>
     </PopoverContext.Provider>
   );
 };
 
-PopoverRoot.displayName = 'PopoverRoot';
+Popover.displayName = 'Popover';

@@ -1,13 +1,20 @@
-import type React from 'react';
-import type { Orientation } from '../../types';
+import type { ElementType } from 'react';
+import type { Orientation, PolymorphicProps } from '../../types';
+import type {
+  CollapsibleOwnProps,
+  CollapsibleTriggerRenderProps,
+  CollapsibleTriggerOwnProps,
+  CollapsibleTriggerProps,
+  CollapsibleContentOwnProps,
+  CollapsibleContentProps,
+} from '../Collapsible/types';
 
 export type AccordionType = 'single' | 'multiple';
 
 /**
- * Props for Accordion root component
- * @remarks Fully accessible, headless component
+ * Own props for Accordion root component
  */
-export interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface AccordionOwnProps {
   /**
    * Single panel or multiple panels can be expanded
    * @defaultValue 'single'
@@ -32,6 +39,7 @@ export interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
 
   /**
    * Callback when state changes
+   * @param value - The new accordion value (string for single, string[] for multiple)
    */
   onValueChange?: (value: string | string[]) => void;
 
@@ -39,139 +47,126 @@ export interface AccordionProps extends React.HTMLAttributes<HTMLDivElement> {
    * Disables all accordion items
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Orientation for keyboard navigation
    * @defaultValue 'vertical'
    */
   orientation?: Orientation;
+}
 
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: React.ElementType;
+/**
+ * Props for Accordion root component
+ * @remarks Fully accessible, headless component
+ */
+export type AccordionProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  AccordionOwnProps
+>;
 
+/**
+ * Own props for AccordionItem component
+ */
+export interface AccordionItemOwnProps extends CollapsibleOwnProps {
   /**
-   * AccordionItem components
+   * Unique identifier for the item
    */
-  children: React.ReactNode;
+  value: string;
 }
 
 /**
  * Props for AccordionItem component
  * @remarks Individual item within accordion
  */
-export interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Unique identifier for the item
-   */
-  value: string;
+export type AccordionItemProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  AccordionItemOwnProps
+>;
 
+/**
+ * Own props for AccordionHeader component
+ */
+export interface AccordionHeaderOwnProps {
   /**
-   * Disables this specific item
-   * @defaultValue false
+   * Heading level (1-6) for document hierarchy
+   * @defaultValue 3
    */
-  isDisabled?: boolean;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: React.ElementType;
-
-  /**
-   * AccordionHeader and AccordionContent components
-   */
-  children: React.ReactNode;
+  level?: number;
 }
 
 /**
  * Props for AccordionHeader component
  * @remarks Semantic heading wrapper for trigger
  */
-export interface AccordionHeaderProps extends React.HTMLAttributes<HTMLHeadingElement> {
-  /**
-   * Heading level (1-6) for document hierarchy
-   * @defaultValue 3
-   */
-  level?: number;
+export type AccordionHeaderProps<T extends ElementType = 'h3'> = PolymorphicProps<
+  'h3',
+  T,
+  AccordionHeaderOwnProps
+>;
 
-  /**
-   * Polymorphic component type (heading element)
-   * @defaultValue 'h3'
-   */
-  as?: React.ElementType;
+/**
+ * Render props provided to children function for AccordionTrigger
+ * @remarks Identical to CollapsibleTriggerRenderProps
+ */
+export type AccordionTriggerRenderProps = CollapsibleTriggerRenderProps;
 
-  /**
-   * AccordionTrigger component
-   */
-  children: React.ReactNode;
-}
+/**
+ * Own props for AccordionTrigger component
+ * @remarks Identical to CollapsibleTriggerOwnProps
+ */
+export type AccordionTriggerOwnProps = CollapsibleTriggerOwnProps;
 
 /**
  * Props for AccordionTrigger component
  * @remarks Button that toggles panel visibility
  */
-export interface AccordionTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'button'
-   */
-  as?: React.ElementType;
+export type AccordionTriggerProps<T extends ElementType = 'button'> = CollapsibleTriggerProps<T>;
 
-  /**
-   * Trigger content (heading text)
-   */
-  children: React.ReactNode;
-}
+/**
+ * Own props for AccordionContent component
+ * @remarks Identical to CollapsibleContentOwnProps
+ */
+export type AccordionContentOwnProps = CollapsibleContentOwnProps;
 
 /**
  * Props for AccordionContent component
  * @remarks Collapsible panel content
  */
-export interface AccordionContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Force content to remain mounted when collapsed
-   * @defaultValue false
-   */
-  forceMount?: boolean;
+export type AccordionContentProps<T extends ElementType = 'div'> = CollapsibleContentProps<T>;
 
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: React.ElementType;
-
-  /**
-   * Panel content
-   */
-  children: React.ReactNode;
-}
-
-// Internal context types
+/**
+ * @internal
+ */
 export interface AccordionContextValue {
   type: AccordionType;
   isCollapsible: boolean;
   value: string | string[];
   onItemToggle: (itemValue: string) => void;
-  isDisabled: boolean;
+  disabled: boolean;
   orientation: Orientation;
-  registerItem: (itemValue: string) => void;
+  registerItem: (itemValue: string, element: HTMLElement) => void;
   unregisterItem: (itemValue: string) => void;
   focusedIndex: number;
   setFocusedIndex: (index: number) => void;
   getItemIndex: (itemValue: string) => number;
   getItemAtIndex: (index: number) => string | undefined;
+  focusItemAtIndex: (index: number) => void;
   itemCount: number;
 }
 
+/**
+ * @internal
+ */
 export interface AccordionItemContextValue {
   value: string;
-  isExpanded: boolean;
-  isDisabled: boolean;
+  isOpen: boolean;
+  disabled: boolean;
   triggerId: string;
   contentId: string;
-  onToggle: () => void;
+  open: () => void;
+  close: () => void;
+  toggle: () => void;
 }

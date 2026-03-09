@@ -1,8 +1,8 @@
 import type { ElementType, ReactNode } from 'react';
-import type { CheckedState } from '../../types';
+import type { CheckedState, PolymorphicProps } from '../../types';
 
 /**
- * Render props provided to children function
+ * Render props provided to children function for Checkbox
  */
 export interface CheckboxRenderProps {
   /**
@@ -10,42 +10,38 @@ export interface CheckboxRenderProps {
    */
   checked: CheckedState;
   /**
+   * Function to programmatically set the checked state
+   */
+  setChecked: (checked: CheckedState) => void;
+  /**
    * Whether the checkbox is disabled
    */
-  isDisabled: boolean;
+  disabled: boolean;
   /**
-   * Whether the checkbox is focused
+   * Whether the checkbox is read-only
+   */
+  readOnly: boolean;
+  /**
+   * Whether the checkbox is currently focused
    */
   isFocused: boolean;
   /**
-   * Whether the checkbox is hovered
+   * Whether the checkbox is currently hovered
    */
   isHovered: boolean;
   /**
-   * Whether the checkbox is being pressed
+   * Whether the checkbox is currently being pressed
    */
   isPressed: boolean;
 }
 
 /**
- * Props for Checkbox component
- * @remarks Fully accessible, headless checkbox component
+ * Own props for Checkbox component
  */
-export interface CheckboxProps
-  extends Omit<React.HTMLAttributes<HTMLElement>, 'defaultChecked' | 'children' | 'onChange'> {
+export interface CheckboxOwnProps {
   /**
-   * The element or component to render as
-   * @defaultValue 'span'
-   */
-  as?: ElementType;
-
-  /**
-   * Ref to the underlying DOM element
-   */
-  ref?: React.Ref<HTMLElement>;
-
-  /**
-   * Controlled checked state. When provided, component becomes controlled
+   * Controlled checked state
+   * @remarks When provided, component operates in controlled mode
    */
   checked?: CheckedState;
 
@@ -56,27 +52,16 @@ export interface CheckboxProps
   defaultChecked?: CheckedState;
 
   /**
-   * Callback fired when checked state changes
+   * Callback fired when the checked state changes
+   * @param checked - The new checked state
    */
   onChange?: (checked: CheckedState) => void;
 
   /**
-   * Whether the checkbox is disabled
+   * Disabled state - prevents interaction and is properly announced to screen readers
    * @defaultValue false
    */
-  isDisabled?: boolean;
-
-  /**
-   * Whether the checkbox is read-only
-   * @defaultValue false
-   */
-  isReadOnly?: boolean;
-
-  /**
-   * Whether the checkbox is required in forms
-   * @defaultValue false
-   */
-  isRequired?: boolean;
+  disabled?: boolean;
 
   /**
    * Name attribute for form submission
@@ -95,13 +80,35 @@ export interface CheckboxProps
   form?: string;
 
   /**
-   * Whether to focus the checkbox on mount
+   * Required state for form validation
    * @defaultValue false
    */
-  shouldAutoFocus?: boolean;
+  required?: boolean;
+
+  /**
+   * Read-only state - prevents interaction
+   * @defaultValue false
+   */
+  readOnly?: boolean;
+
+  /**
+   * Auto-focus on mount
+   * @defaultValue false
+   */
+  autoFocus?: boolean;
 
   /**
    * Children content or render function
    */
   children?: ReactNode | ((state: CheckboxRenderProps) => ReactNode);
 }
+
+/**
+ * Props for Checkbox component
+ * @remarks Fully accessible, headless checkbox component providing dual-state and tri-state functionality
+ */
+export type CheckboxProps<T extends ElementType = 'span'> = PolymorphicProps<
+  'span',
+  T,
+  CheckboxOwnProps
+>;

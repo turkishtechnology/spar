@@ -1,7 +1,7 @@
 ---
-mode: agent
-model: Claude Opus 4.1
-description: Generate comprehensive documentation for Spar components
+agent: agent
+model: Claude Opus 4.5 (copilot)
+description: Generate comprehensive documentation for Glide components
 ---
 
 # Documentation Generator

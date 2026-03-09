@@ -1,24 +1,21 @@
-import { createElement } from 'react';
+import type { ElementType } from 'react';
 import type { BreadcrumbSeparatorProps } from './types';
 
 /**
  * Visual separator between breadcrumb items. Hidden from screen readers to avoid verbose announcements.
- * @remarks Fully accessible, headless component
  */
-export const BreadcrumbSeparator = ({
-  as = 'li',
+export const BreadcrumbSeparator = <T extends ElementType = 'li'>({
+  as,
   children,
   'aria-hidden': ariaHidden = true,
   ...props
-}: BreadcrumbSeparatorProps) => {
-  return createElement(
-    as,
-    {
-      ...props,
-      'aria-hidden': ariaHidden,
-      'data-spar-breadcrumb-separator': '',
-    },
-    children,
+}: BreadcrumbSeparatorProps<T>) => {
+  const Component = as || 'li';
+
+  return (
+    <Component {...props} aria-hidden={ariaHidden}>
+      {children}
+    </Component>
   );
 };
 

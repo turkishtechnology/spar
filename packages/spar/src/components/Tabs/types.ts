@@ -1,13 +1,20 @@
-import type React from 'react';
-import type { RefObject } from 'react';
-import type { Direction, Orientation } from '../../types';
+import type { ElementType, ReactNode } from 'react';
+import type { Orientation, PolymorphicProps } from '../../types';
+import type { ButtonOwnProps } from '../Button/types';
 
 export type TabsActivationMode = 'automatic' | 'manual';
 
 /**
- * Props for Tabs root component
+ * Own props for Tabs root component
  */
-export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface TabsOwnProps {
+  /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-trigger-${value}` and `${id}-panel-${value}`.
+   */
+  id?: string;
+
   /**
    * Controlled selected tab value
    */
@@ -21,6 +28,7 @@ export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
 
   /**
    * Callback when tab selection changes
+   * @param value - The new selected tab value
    */
   onValueChange?: (value: string) => void;
 
@@ -31,73 +39,79 @@ export interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   orientation?: Orientation;
 
   /**
-   * Text direction for arrow key navigation
-   * @defaultValue 'ltr'
-   */
-  dir?: Direction;
-
-  /**
    * Whether tabs activate on focus or require explicit activation
    * @defaultValue 'automatic'
    */
   activationMode?: TabsActivationMode;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: React.ElementType;
 }
+
+/**
+ * Props for Tabs root component
+ * @remarks Fully accessible, headless tabbed interface
+ */
+export type TabsProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T, TabsOwnProps>;
 
 /**
  * Props for TabsList component
+ * @remarks Container for tab trigger buttons with keyboard navigation
  */
-export interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Whether arrow key navigation wraps around
-   * @defaultValue true
-   */
-  loop?: boolean;
+export type TabsListProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
+/**
+ * Render props provided to children function for TabsTrigger
+ */
+export interface TabsTriggerRenderProps {
   /**
-   * Polymorphic component type
-   * @defaultValue 'div'
+   * Whether this tab is currently selected
    */
-  as?: React.ElementType;
+  isSelected: boolean;
+  /**
+   * Function to select this tab programmatically
+   */
+  select: () => void;
+  /**
+   * Whether this tab is disabled
+   */
+  disabled: boolean;
+  /**
+   * Whether this tab is currently focused
+   */
+  isFocused: boolean;
+  /**
+   * The tab's orientation
+   */
+  orientation: Orientation;
 }
 
 /**
- * Props for TabsTrigger component
+ * Own props for TabsTrigger component
  */
-export interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface TabsTriggerOwnProps extends ButtonOwnProps {
   /**
    * Unique identifier for the tab
    */
   value: string;
 
   /**
-   * Disables this specific tab
-   * @defaultValue false
+   * Children content or render function
    */
-  disabled?: boolean;
-
-  /**
-   * Render as child element instead of button (for advanced composition)
-   * @defaultValue false
-   */
-  asChild?: boolean;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'button'
-   */
-  as?: React.ElementType;
+  children?: ReactNode | ((state: TabsTriggerRenderProps) => ReactNode);
 }
 
 /**
- * Props for TabsContent component
+ * Props for TabsTrigger component
+ * @remarks Interactive tab button that selects a panel
  */
-export interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
+export type TabsTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  TabsTriggerOwnProps
+>;
+
+/**
+ * Own props for TabsContent component
+ */
+export interface TabsContentOwnProps {
   /**
    * Unique identifier matching a TabsTrigger value
    */
@@ -108,26 +122,29 @@ export interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
    * @defaultValue false
    */
   forceMount?: boolean;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: React.ElementType;
 }
 
 /**
+ * Props for TabsContent component
+ * @remarks Panel content displayed when its matching tab is selected
+ */
+export type TabsContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  TabsContentOwnProps
+>;
+
+/**
  * Context value provided by Tabs root component
+ * @internal
  */
 export interface TabsContextValue {
   selectedValue: string | undefined;
   onValueChange: (value: string) => void;
   orientation: Orientation;
-  dir: Direction;
   activationMode: TabsActivationMode;
-  loop: boolean;
-  tabsListId: string;
-  tabRefs: RefObject<Map<string, HTMLElement>>;
+  baseId: string;
+  tabItems: Map<string, HTMLElement>;
   registerTab: (value: string, element: HTMLElement) => void;
   unregisterTab: (value: string) => void;
   getTabIndex: (value: string) => number;

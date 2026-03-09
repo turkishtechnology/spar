@@ -1,17 +1,28 @@
-import type { ElementType, ReactNode, HTMLAttributes, ButtonHTMLAttributes } from 'react';
+import type { ElementType, ReactNode, AriaRole, RefObject } from 'react';
+import type { PolymorphicProps } from '../../types';
+import type { ButtonOwnProps } from '../Button/types';
+import type { CloseButtonRenderProps } from '../../hooks/useCloseButton';
 
 /**
- * Props for DialogRoot
+ * Props for Dialog
  * @remarks Fully accessible, headless component
  */
-export interface DialogRootProps {
+export interface DialogProps {
+  /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-title`, `${id}-description`, `${id}-content`.
+   */
+  id?: string;
+
   /**
    * Controlled open state
    */
-  isOpen?: boolean;
+  open?: boolean;
 
   /**
    * Callback when open state changes
+   * @param open - The new open state
    */
   onOpenChange?: (open: boolean) => void;
 
@@ -28,96 +39,111 @@ export interface DialogRootProps {
   modal?: boolean;
 
   /**
+   * Disables all dialog triggers (prevents opening)
+   * @defaultValue false
+   */
+  disabled?: boolean;
+
+  /**
+   * Always render portal/overlay/content (for animation libraries)
+   * @defaultValue false
+   */
+  forceMount?: boolean;
+
+  /**
    * Dialog trigger and portal components
    */
-  children: ReactNode;
+  children?: ReactNode;
+}
+
+/**
+ * Render props provided to children function for DialogTrigger
+ */
+export interface DialogTriggerRenderProps {
+  /**
+   * Whether the dialog is currently open
+   */
+  isOpen: boolean;
+  /**
+   * Whether the dialog trigger is disabled
+   */
+  disabled: boolean;
+  /**
+   * Function to open the dialog
+   */
+  open: () => void;
+  /**
+   * Function to close the dialog
+   */
+  close: () => void;
+  /**
+   * Function to toggle the dialog open/closed state
+   */
+  toggle: () => void;
+}
+
+/**
+ * Own props for DialogTrigger
+ */
+export interface DialogTriggerOwnProps extends ButtonOwnProps {
+  /**
+   * Children content or render function
+   */
+  children?: ReactNode | ((state: DialogTriggerRenderProps) => ReactNode);
 }
 
 /**
  * Props for DialogTrigger
  * @remarks Fully accessible, headless component
  */
-export interface DialogTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * Polymorphic element type
-   * @defaultValue 'button'
-   */
-  as?: ElementType;
-
-  /**
-   * Disables trigger interaction
-   * @defaultValue false
-   */
-  isDisabled?: boolean;
-
-  /**
-   * Ref forwarded to trigger element
-   */
-  ref?: React.Ref<HTMLElement>;
-}
+export type DialogTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  DialogTriggerOwnProps
+>;
 
 /**
- * Props for DialogPortal
- * @remarks Fully accessible, headless component
+ * Render props provided to children function for DialogClose
+ * @remarks Alias of {@link CloseButtonRenderProps} from useCloseButton
  */
-export interface DialogPortalProps {
+export type DialogCloseRenderProps = CloseButtonRenderProps;
+
+/**
+ * Own props for DialogOverlay
+ */
+export interface DialogOverlayOwnProps {
   /**
-   * Portal container element
+   * Portal container element. Content is portaled to document.body by default.
    * @defaultValue document.body
    */
   container?: HTMLElement | null;
-
-  /**
-   * Dialog overlay and content
-   */
-  children: ReactNode;
 }
 
 /**
  * Props for DialogOverlay
  * @remarks Fully accessible, headless component
  */
-export interface DialogOverlayProps extends HTMLAttributes<HTMLDivElement> {
-  /**
-   * Polymorphic element type
-   * @defaultValue 'div'
-   */
-  as?: ElementType;
-
-  /**
-   * Always render (for animation libraries)
-   * @defaultValue false
-   */
-  forceMount?: boolean;
-
-  /**
-   * Ref forwarded to overlay element
-   */
-  ref?: React.Ref<HTMLElement>;
-}
+export type DialogOverlayProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DialogOverlayOwnProps
+>;
 
 /**
- * Props for DialogContent
- * @remarks Fully accessible, headless component
+ * Own props for DialogContent
  */
-export interface DialogContentProps extends HTMLAttributes<HTMLDivElement> {
-  /**
-   * Polymorphic element type
-   * @defaultValue 'div'
-   */
-  as?: ElementType;
-
+export interface DialogContentOwnProps {
   /**
    * ARIA role for dialog type
    * @defaultValue 'dialog'
    */
-  role?: React.AriaRole;
+  role?: AriaRole;
 
   /**
-   * Always render (for animation libraries)
-   * @defaultValue false
+   * Portal container element. Content is portaled to document.body by default.
+   * @defaultValue document.body
    */
-  forceMount?: boolean;
+  container?: HTMLElement | null;
 
   /**
    * Enable focus trapping
@@ -143,102 +169,111 @@ export interface DialogContentProps extends HTMLAttributes<HTMLDivElement> {
 
   /**
    * Callback before auto-focus
+   * @param event - The focus event (call preventDefault to prevent auto-focus)
    */
   onOpenAutoFocus?: (event: Event) => void;
 
   /**
    * Callback before focus restore
+   * @param event - The focus event (call preventDefault to prevent focus restore)
    */
   onCloseAutoFocus?: (event: Event) => void;
 
   /**
    * Escape key handler
+   * @param event - The keyboard event (call preventDefault to prevent close)
    */
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
 
   /**
    * Outside click handler
+   * @param event - The pointer event (call preventDefault to prevent close)
    */
   onPointerDownOutside?: (event: PointerEvent) => void;
 
   /**
    * Outside interaction handler with preventDefault capability
+   * @param event - The pointer event (call preventDefault to prevent close)
    */
   onInteractOutside?: (event: PointerEvent) => void;
+}
 
+/**
+ * Props for DialogContent
+ * @remarks Fully accessible, headless component
+ */
+export type DialogContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  DialogContentOwnProps
+>;
+
+/**
+ * Own props for DialogTitle
+ */
+export interface DialogTitleOwnProps {
   /**
-   * Ref forwarded to content element
+   * Heading level (1-6)
+   * @defaultValue 2
    */
-  ref?: React.Ref<HTMLElement>;
+  level?: number;
 }
 
 /**
  * Props for DialogTitle
  * @remarks Fully accessible, headless component
  */
-export interface DialogTitleProps extends HTMLAttributes<HTMLHeadingElement> {
-  /**
-   * Polymorphic element type
-   * @defaultValue 'h2'
-   */
-  as?: ElementType;
-
-  /**
-   * Heading level (1-6)
-   * @defaultValue 2
-   */
-  level?: number;
-
-  /**
-   * Ref forwarded to title element
-   */
-  ref?: React.Ref<HTMLElement>;
-}
+export type DialogTitleProps<T extends ElementType = 'h2'> = PolymorphicProps<
+  'h2',
+  T,
+  DialogTitleOwnProps
+>;
 
 /**
  * Props for DialogDescription
  * @remarks Fully accessible, headless component
  */
-export interface DialogDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {
-  /**
-   * Polymorphic element type
-   * @defaultValue 'p'
-   */
-  as?: ElementType;
+export type DialogDescriptionProps<T extends ElementType = 'p'> = PolymorphicProps<'p', T>;
 
+/**
+ * Own props for DialogClose
+ */
+export interface DialogCloseOwnProps extends ButtonOwnProps {
   /**
-   * Ref forwarded to description element
+   * Children content or render function
    */
-  ref?: React.Ref<HTMLElement>;
+  children?: ReactNode | ((state: DialogCloseRenderProps) => ReactNode);
 }
 
 /**
  * Props for DialogClose
  * @remarks Fully accessible, headless component
  */
-export interface DialogCloseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * Polymorphic element type
-   * @defaultValue 'button'
-   */
-  as?: ElementType;
-
-  /**
-   * Ref forwarded to close button element
-   */
-  ref?: React.Ref<HTMLElement>;
-}
+export type DialogCloseProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  DialogCloseOwnProps
+>;
 
 /**
  * Context value for Dialog components
+ * @internal
  */
 export interface DialogContextValue {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  closeDialog: () => void;
   modal: boolean;
-  role: React.AriaRole;
-  triggerRef: React.RefObject<HTMLElement | null>;
-  contentRef: React.RefObject<HTMLElement | null>;
+  disabled: boolean;
+  forceMount: boolean;
+  role: AriaRole;
+  triggerRef: RefObject<HTMLElement | null>;
+  contentRef: RefObject<HTMLElement | null>;
   titleId: string;
   descriptionId: string;
+  contentId: string;
+  restoreFocusRef: RefObject<HTMLElement | null>;
+  onCloseAutoFocusRef: RefObject<((event: Event) => void) | undefined>;
+  restoreFocusPropRef: RefObject<boolean>;
+  finalFocusPropRef: RefObject<HTMLElement | (() => HTMLElement) | undefined>;
 }

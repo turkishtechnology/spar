@@ -9,32 +9,50 @@ applyTo: '**/components/**/*.tsx'
 ### Component Props Pattern
 
 ```typescript
-// ALWAYS: Extend appropriate HTML element props
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+// ALWAYS: Use ComponentProps<'element'> to extend HTML element props
+// This includes all HTML attributes, event handlers, ref, className, style, children, etc.
+interface ButtonProps extends ComponentProps<'button'> {
   orientation?: Orientation;
 }
 
-// ALWAYS: children is inherited from HTMLAttributes/ButtonHTMLAttributes
-interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
+// ALWAYS: children, ref, className, style, disabled, etc. are inherited from ComponentProps
+interface TabsProps extends ComponentProps<'div'> {
   value?: string;
   orientation?: 'horizontal' | 'vertical';
-  // children is already available - no need to declare
+  // children, ref, className, disabled, etc. are already available - no need to declare
 }
 
-// NEVER: Redundant children declaration
-interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
+// NEVER: Redundant prop declarations
+interface TabsProps extends ComponentProps<'div'> {
   value?: string;
-  children: React.ReactNode; // Unnecessary - already in HTMLAttributes
+  children: React.ReactNode; // Unnecessary - already in ComponentProps
+  disabled?: boolean; // Unnecessary - already in ComponentProps
+  className?: string; // Unnecessary - already in ComponentProps
+  ref?: React.Ref<HTMLDivElement>; // Unnecessary - already in ComponentProps
 }
 ```
 
-**Rule:** Never explicitly declare `children: React.ReactNode` when extending:
-- `React.HTMLAttributes<T>`
-- `React.ButtonHTMLAttributes<T>`
-- `React.LabelHTMLAttributes<T>`
-- Any other React HTML element attributes
+**Rule:** Never explicitly declare props that are already included in `ComponentProps<'element'>`:
+- `children?: ReactNode`
+- `ref?: Ref<HTMLElement>`
+- `className?: string`
+- `style?: CSSProperties`
+- `disabled?: boolean` (for form elements)
+- Event handlers like `onClick`, `onKeyDown`, etc.
+- All HTML attributes for the specific element
 
-These interfaces already include `children?: ReactNode`.
+**Available ComponentProps patterns:**
+- `ComponentProps<'button'>` - button elements
+- `ComponentProps<'div'>` - div elements
+- `ComponentProps<'span'>` - span elements
+- `ComponentProps<'input'>` - input elements
+- `ComponentProps<'label'>` - label elements
+- `ComponentProps<'a'>` - anchor elements
+- `ComponentProps<'nav'>` - nav elements
+- `ComponentProps<'li'>` - list item elements
+- `ComponentProps<'ol'>` - ordered list elements
+- `ComponentProps<'h1'>` through `ComponentProps<'h6'>` - heading elements
+- `ComponentProps<'p'>` - paragraph elements
 
 ## React Patterns
 
@@ -42,9 +60,8 @@ These interfaces already include `children?: ReactNode`.
 
 ```typescript
 // MODERN: React 19+ pattern (no forwardRef needed)
-interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
-  ref?: React.Ref<HTMLLabelElement>;
-}
+// ref is already included in ComponentProps
+interface LabelProps extends ComponentProps<'label'> {}
 
 export const Label = ({ ref, ...props }: LabelProps) => {
   return <label ref={ref} {...props} />;
@@ -104,6 +121,87 @@ interface BadProps {
 1. **First Priority**: Use `React.AriaAttributes['aria-*']` if available
 2. **Fallback**: Use `string` only for truly custom attributes
 
+## ID Generation Convention
+
+### Single `useId()` + Suffix Pattern
+
+**ALWAYS**: Generate a single base ID per component instance using `useId()`, then derive sub-element IDs with descriptive suffixes.
+
+```typescript
+// ALWAYS: Single useId() call, suffix-based derivation
+const generatedId = useId();
+const baseId = providedId ?? generatedId;
+const triggerId = `${baseId}-trigger`;
+const contentId = `${baseId}-content`;
+
+// NEVER: Multiple useId() calls per component
+const triggerId = useId();  // Wasteful, unrelated IDs
+const contentId = useId();  // No shared base
+
+// NEVER: Prefix pattern
+const contentId = `content-${baseId}`;  // Use suffix, not prefix
+```
+
+### External ID Override
+
+**ALWAYS**: Accept an optional `id` prop that overrides the generated base ID. Use nullish coalescing (`??`), not logical OR (`||`).
+
+```typescript
+// ALWAYS: Accept id prop, use ?? operator
+interface MyComponentOwnProps {
+  /** Custom base ID for ARIA relationships. */
+  id?: string;
+}
+
+export const MyComponent = ({ id: providedId, ...props }: MyComponentProps) => {
+  const generatedId = useId();
+  const baseId = providedId ?? generatedId;
+  // ...
+};
+
+// NEVER: Use || operator (treats "" as falsy)
+const baseId = providedId || generatedId;
+```
+
+### Context ID Sharing
+
+**ALWAYS**: Pass pre-computed string IDs through context. Children consume raw strings directly.
+
+```typescript
+// ALWAYS: Raw strings in context
+interface MyContextValue {
+  triggerId: string;
+  contentId: string;
+}
+
+// In root: compute IDs and pass as strings
+const contextValue = useMemo(() => ({
+  triggerId: `${baseId}-trigger`,
+  contentId: `${baseId}-content`,
+}), [baseId]);
+
+// In children: use directly
+const { triggerId, contentId } = useMyContext();
+<button id={triggerId} aria-controls={contentId} />
+
+// NEVER: Getter functions in context
+interface BadContextValue {
+  getTriggerId: (value: string) => string;  // Unnecessary abstraction
+}
+```
+
+### `aria-controls` Usage
+
+**ALWAYS**: Set `aria-controls` unconditionally. The referenced element may not be in the DOM yet, but the attribute should still be present.
+
+```typescript
+// ALWAYS: Unconditional
+<button aria-controls={contentId} />
+
+// NEVER: Conditional on open state
+<button aria-controls={isOpen ? contentId : undefined} />
+```
+
 ## File Organization Standards
 
 ### File Separation Rule
@@ -150,12 +248,15 @@ Component.displayName = 'Component';
 ### Props Interface Template
 
 ```typescript
+import type { ComponentProps } from 'react';
+
 export type Orientation = 'vertical' | 'horizontal';
+
 /**
  * Props for Component
  * @remarks Fully accessible, headless component
  */
-export interface ComponentProps extends React.HTMLAttributes<HTMLElement> {
+export interface MyComponentProps extends ComponentProps<'div'> {
   /**
    * Visual variant affecting behavior
    * @defaultValue 'horizontal'
@@ -163,26 +264,13 @@ export interface ComponentProps extends React.HTMLAttributes<HTMLElement> {
   orientation?: Orientation;
 
   /**
-   * Disabled state - properly announced to screen readers
-   * @defaultValue false
-   */
-  isDisabled?: boolean;
-
-  /**
    * Loading state with screen reader support
    * @defaultValue false
    */
   isLoading?: boolean;
 
-  /**
-   * Required for icon-only variants
-   */
-  'aria-label'?: React.AriaAttributes['aria-label'];
-
-  /**
-   * Component content
-   */
-  children?: React.ReactNode;
+  // Note: disabled, children, ref, className, style, aria-label, etc.
+  // are already included via ComponentProps<'div'>
 }
 ```
 
@@ -216,31 +304,56 @@ const [requestState, setRequestState] = useState<RequestState>({
 **When NOT to use:**
 - Static navigation structures
 - Components without keyboard navigation
-- Components where DOM order is sufficient
+- Components where DOM order alone isn't sufficient (e.g. DropdownMenu uses `compareDocumentPosition` sort)
 
-### Usage Pattern
+### Usage Patterns
 
 ```typescript
 // Root component
 import { useItemRegistry } from '@/hooks';
 
-// For ID-only tracking
-const { registerItem, unregisterItem, getItemIds } = useItemRegistry<void>();
-const items = getItemIds(); // Returns string[]
+// For DOM focus management (Tabs, Accordion, RadioGroup)
+// Store the HTMLElement so the root can call .focus() imperatively
+const { items, registerItem, unregisterItem, getItemIndex, getItemAtIndex, count } =
+  useItemRegistry<HTMLElement>();
 
-// For data tracking
-const { registerItem, unregisterItem, getItemAtIndex } = useItemRegistry<ItemData>();
+// Expose a focusItemAtIndex helper via context instead of exposing items directly
+const focusItemAtIndex = useCallback(
+  (index: number): void => {
+    const key = getItemAtIndex(index);
+    if (key !== undefined) {
+      items.get(key)?.focus();
+    }
+  },
+  [items, getItemAtIndex],
+);
+
+// For rich data tracking (Select)
+// When type-ahead, disabled filtering, or extra metadata is needed alongside the ref
+const { items, registerItem, unregisterItem } = useItemRegistry<ItemData>();
 ```
 
 ### Child Component Registration
 
 ```typescript
-// Child component
+// Child component — register with the DOM element
+const itemRef = useRef<HTMLElement>(null);
+
 useEffect(() => {
-  registerItem(id, data); // data optional for ID-only tracking
+  if (itemRef.current) {
+    registerItem(id, itemRef.current);
+  }
   return () => unregisterItem(id);
 }, [id, registerItem, unregisterItem]);
 ```
+
+### Pattern Selection Guide
+
+| Need | `useItemRegistry<T>` generic |
+|---|---|
+| Imperative focus (Tabs, Accordion, Radio) | `HTMLElement` |
+| Rich metadata + ref (Select) | Custom `ItemData` interface |
+| DropdownMenu (DOM-order sort) | Custom `useState` — do NOT use `useItemRegistry` |
 
 **Critical:** Use `items.size` in dependency arrays, NOT `items` Map directly (prevents infinite loops).
 
@@ -311,7 +424,7 @@ export type {
 // Usage examples:
 // 1. Dot notation (compound): 
 //    import { Accordion } from '@spar/components';
-//    <Accordion.Root><Accordion.Trigger /></Accordion.Root>
+//    <AccordionRoot><AccordionTrigger /></AccordionRoot>
 // 
 // 2. Named imports (tree-shakeable): 
 //    import { AccordionRoot, AccordionTrigger } from '@spar/components';
@@ -372,14 +485,53 @@ const click = () => {}; // Unclear
 ### Boolean Props
 
 ```typescript
-// ALWAYS: is/has/should/can prefix
-(isDisabled, hasError, shouldAutoFocus, canSubmit);
+// ALWAYS: is/has/can prefix
+(hasError, canSubmit);
 
 // NEVER: Ambiguous names
-(disabled, error, focus, submit);
+(error, submit);
 ```
 
 ## Performance Guidelines
+
+### Context Value Memoization
+
+**ALWAYS**: Wrap context provider values with `useMemo` to prevent unnecessary re-renders of all consumers on every parent render.
+
+```typescript
+// ALWAYS: Memoize context value objects
+const contextValue = useMemo<MyContextValue>(
+  () => ({
+    value,
+    onChange: handleChange,
+    disabled,
+  }),
+  [value, handleChange, disabled],
+);
+
+return (
+  <MyContext.Provider value={contextValue}>
+    {children}
+  </MyContext.Provider>
+);
+
+// NEVER: Inline object literals as context value
+// This creates a new object reference on every render,
+// causing ALL consumers to re-render unnecessarily
+const contextValue: MyContextValue = {
+  value,
+  onChange: handleChange,
+  disabled,
+};
+
+return (
+  <MyContext.Provider value={contextValue}>
+    {children}
+  </MyContext.Provider>
+);
+```
+
+**Rule:** Every `Context.Provider` value must be wrapped in `useMemo` with appropriate dependencies. Without memoization, a new object reference is created on every render, triggering re-renders in all consuming components even when the actual values haven't changed.
 
 ### Conditional Rendering
 
@@ -405,7 +557,7 @@ return isLoading ? <Spinner /> : error ? <Error /> : <Content />; // Hard to rea
 
 ```typescript
 // ALWAYS: Extract known props
-const { variant, isDisabled, children, ...safeProps } = props;
+const { variant, disabled, children, ...safeProps } = props;
 return <button {...safeProps}>{children}</button>;
 
 // NEVER: Blind prop spreading with sensitive props

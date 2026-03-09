@@ -1,17 +1,21 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ElementType } from 'react';
+import { useMergedRef } from '@/hooks';
 import type { SelectItemTextProps } from './types';
-import { useSelectItemContext } from './SelectItem';
+import { useSelectItemContext } from './hooks';
 
 /**
  * Text content of a select item. Automatically registers text value for type-ahead search.
  */
-export const SelectItemText = ({
-  as: Component = 'span',
+export const SelectItemText = <T extends ElementType = 'span'>({
+  as,
+  ref,
   children,
   ...props
-}: SelectItemTextProps) => {
+}: SelectItemTextProps<T>) => {
+  const Component = as || 'span';
   const itemContext = useSelectItemContext();
   const textRef = useRef<HTMLSpanElement>(null);
+  const mergedRef = useMergedRef(textRef, ref);
 
   // Register text value for type-ahead
   useEffect(() => {
@@ -22,7 +26,7 @@ export const SelectItemText = ({
   }, [children, itemContext]);
 
   return (
-    <Component ref={textRef} {...props}>
+    <Component ref={mergedRef} {...props}>
       {children}
     </Component>
   );

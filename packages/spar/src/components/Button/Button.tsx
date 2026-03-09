@@ -1,14 +1,15 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useRef, ElementType } from 'react';
+import { useMergedRef, useAutoFocus } from '@/hooks';
 import type { ButtonProps } from './types';
 
 /**
  * A headless, accessible button component that provides complete keyboard support and toggle functionality.
  */
-export const Button = ({
-  as: Element = 'button',
+export const Button = <T extends ElementType = 'button'>({
+  as,
   type = 'button',
-  isDisabled = false,
-  shouldAutoFocus = false,
+  disabled = false,
+  autoFocus = false,
   isLoading = false,
   isPressed,
   onPressedChange,
@@ -19,7 +20,8 @@ export const Button = ({
   style,
   ref,
   ...htmlProps
-}: ButtonProps) => {
+}: ButtonProps<T>) => {
+  const Component = as || 'button';
   // Internal state for uncontrolled toggle
   const [internalPressed, setInternalPressed] = useState<boolean>(false);
 
@@ -28,20 +30,14 @@ export const Button = ({
   const currentPressed = isToggle ? isPressed : internalPressed;
 
   // Interactive state
-  const isInteractive = !isDisabled && !isLoading;
+  const isInteractive = !disabled && !isLoading;
 
-  // Auto focus handling - SSR safe with stable dependency array
-  useEffect(() => {
-    // Only run on client-side after mount
-    if (typeof window === 'undefined') return;
+  // Refs
+  const internalRef = useRef<HTMLElement>(null);
+  const mergedRef = useMergedRef(internalRef, ref);
 
-    if (shouldAutoFocus && ref && typeof ref === 'object' && ref.current) {
-      // Use requestAnimationFrame to ensure DOM is ready
-      requestAnimationFrame(() => {
-        ref.current?.focus();
-      });
-    }
-  }, [shouldAutoFocus]);
+  // Auto focus handling
+  useAutoFocus(internalRef, autoFocus);
 
   // Unified activation handler for click and keyboard
   const handleActivation = useCallback(
@@ -58,8 +54,8 @@ export const Button = ({
         }
       }
 
-      // Fire click handler - only for mouse events
-      if (onClick && event.type === 'click') {
+      // Fire click handler for both mouse and keyboard activation
+      if (onClick) {
         onClick(event as React.MouseEvent<HTMLButtonElement>);
       }
     },
@@ -92,12 +88,12 @@ export const Button = ({
   // Memoize data attributes to prevent object recreation
   const dataAttributes = useMemo(
     () => ({
-      'data-disabled': isDisabled ? 'true' : undefined,
-      'data-loading': isLoading ? 'true' : undefined,
-      'data-pressed': isToggle ? String(currentPressed) : undefined,
-      'data-autofocus': shouldAutoFocus ? 'true' : undefined,
+      'data-disabled': disabled ? '' : undefined,
+      'data-loading': isLoading ? '' : undefined,
+      'data-pressed': isToggle && currentPressed ? '' : undefined,
+      'data-autofocus': autoFocus ? '' : undefined,
     }),
-    [isDisabled, isLoading, isToggle, currentPressed, shouldAutoFocus],
+    [disabled, isLoading, isToggle, currentPressed, autoFocus],
   );
 
   // Determine ARIA attributes
@@ -112,41 +108,60 @@ export const Button = ({
     // Loading state
     if (isLoading) {
       attrs['aria-busy'] = true;
+      attrs['aria-live'] = 'polite';
     }
 
-    // Disabled state
-    if (isDisabled) {
+    // Disabled state - only add aria-disabled for non-native button elements
+    // Native buttons already communicate disabled state via the disabled attribute
+    if (disabled && Component !== 'button') {
       attrs['aria-disabled'] = true;
     }
 
     return attrs;
-  }, [isToggle, currentPressed, isLoading, isDisabled]);
+  }, [isToggle, currentPressed, isLoading, disabled, Component]);
 
   // Build props for the element
+  const isNativeButton = Component === 'button';
   const elementProps: Record<string, unknown> = {
-    ref,
+    ref: mergedRef,
     className,
     style,
     onClick: handleClick,
     onKeyDown: handleKeyDown,
-    tabIndex: isDisabled ? -1 : 0,
     ...dataAttributes,
     ...ariaAttributes,
     ...htmlProps,
   };
 
+  // Set tabIndex if not already provided
+  if (!('tabIndex' in htmlProps)) {
+    elementProps.tabIndex = disabled ? -1 : 0;
+  }
+
   // Add button-specific props when rendering as button
-  if (Element === 'button') {
+  if (isNativeButton) {
     (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).type = type;
-    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = isDisabled;
+    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = disabled;
   }
 
-  // Add role when not rendering as button
-  if (Element !== 'button') {
-    elementProps.role = 'button';
+  // Add role and aria-disabled when not rendering as button (only if not already set)
+  if (!isNativeButton) {
+    if (!('role' in htmlProps)) {
+      elementProps.role = 'button';
+    }
+    if (disabled && !('aria-disabled' in htmlProps)) {
+      elementProps['aria-disabled'] = true;
+    }
+    // Remove native disabled and type if present, using Record<string, unknown>
+    if ('disabled' in elementProps) {
+      delete elementProps['disabled'];
+    }
+    if ('type' in elementProps) {
+      delete elementProps['type'];
+    }
   }
 
-  return <Element {...elementProps}>{children}</Element>;
+  return <Component {...elementProps}>{children}</Component>;
 };
 
 Button.displayName = 'Button';

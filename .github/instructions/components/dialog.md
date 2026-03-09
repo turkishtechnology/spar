@@ -8,23 +8,20 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 - **Modal dialogs**: Forms, confirmations, detailed content requiring user interaction
 - **Alert dialogs**: Error messages, critical confirmations, destructive action warnings  
 - **Non-modal dialogs**: Contextual information, help tooltips, additional details
-- **Nested dialogs**: Multiple dialog layers with proper focus management
 - **Responsive layouts**: Adaptable positioning and sizing across devices
 
 ### Compound Component Structure
 ```tsx
-<Dialog.Root>
-  <Dialog.Trigger />
-  <Dialog.Portal>
-    <Dialog.Overlay />
-    <Dialog.Content>
-      <Dialog.Title />
-      <Dialog.Description />
-      <Dialog.Close />
-      {/* Custom content */}
-    </Dialog.Content>
-  </Dialog.Portal>
-</Dialog.Root>
+<DialogRoot>
+  <DialogTrigger />
+  <DialogOverlay />
+  <DialogContent>
+    <DialogTitle />
+    <DialogDescription />
+    <DialogClose />
+    {/* Custom content */}
+  </DialogContent>
+</DialogRoot>
 ```
 
 ### Key Differentiators
@@ -32,8 +29,7 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 - **Accessibility-first**: WCAG 2.2 AA compliant with full screen reader support
 - **Focus management**: Automatic focus trapping and restoration
 - **Flexible composition**: Granular parts for maximum customization
-- **Portal support**: Render outside DOM hierarchy to avoid z-index issues
-- **Nested dialogs**: Multiple dialog layers with proper stacking
+- **Portal support**: Content and Overlay automatically portal to `document.body` (configurable via `container` prop)
 - **Alert dialog variant**: Special handling for urgent/critical messages
 
 ## 2. API
@@ -41,31 +37,44 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 ### DialogRoot Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `isOpen` | `boolean` | No | - | Controlled open state |
+| `id` | `string` | No | Auto-generated | Base ID used to derive content/title/description IDs |
+| `open` | `boolean` | No | - | Controlled open state |
 | `onOpenChange` | `(open: boolean) => void` | No | - | Callback when open state changes |
 | `defaultOpen` | `boolean` | No | `false` | Initial open state (uncontrolled) |
 | `modal` | `boolean` | No | `true` | Whether dialog is modal (blocks interaction outside) |
-| `children` | `ReactNode` | Yes | - | Dialog trigger and portal components |
+| `disabled` | `boolean` | No | `false` | Disables all dialog triggers (prevents opening) |
+| `forceMount` | `boolean` | No | `false` | Always render portal/overlay/content (for animation libraries) |
+| `children` | `ReactNode` | No | - | Dialog trigger and portal components |
 
 ### DialogTrigger Props
+
+Extends all `ButtonProps` from the Button component.
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'button'` | Polymorphic element type |
-| `isDisabled` | `boolean` | No | `false` | Disables trigger interaction |
-| `children` | `ReactNode` | Yes | - | Trigger content |
-| `...props` | `HTMLAttributes` | No | - | Additional HTML props |
+| `disabled` | `boolean` | No | `false` | Disables trigger interaction |
+| `autoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
+| `isLoading` | `boolean` | No | `false` | Loading state with screen reader support |
+| `isPressed` | `boolean` | No | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange` | `(pressed: boolean) => void` | No | `undefined` | Callback fired when toggle state changes |
+| `children` | `ReactNode \| ((state: DialogTriggerRenderProps) => ReactNode)` | No | - | Trigger content or render function for render props pattern |
+| `...props` | `ButtonProps` | No | - | All standard Button component attributes |
 
-### DialogPortal Props
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `container` | `HTMLElement` | No | `document.body` | Portal container element |
-| `children` | `ReactNode` | Yes | - | Dialog overlay and content |
+### DialogTriggerRenderProps
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the dialog is currently visible |
+| `disabled` | `boolean` | Whether the trigger is disabled |
+| `open` | `() => void` | Function to programmatically open the dialog |
+| `close` | `() => void` | Function to programmatically close the dialog |
+| `toggle` | `() => void` | Function to programmatically toggle the dialog |
 
 ### DialogOverlay Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic element type |
-| `forceMount` | `boolean` | No | `false` | Always render (for animation libraries) |
+| `container` | `HTMLElement \| null` | No | `document.body` | Portal container element for overlay |
 | `children` | `ReactNode` | No | - | Optional overlay content |
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
 
@@ -73,12 +82,12 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic element type |
-| `role` | `'dialog' \| 'alertdialog'` | No | `'dialog'` | ARIA role for dialog type |
-| `forceMount` | `boolean` | No | `false` | Always render (for animation libraries) |
+| `role` | `AriaRole` | No | `'dialog'` | ARIA role for dialog type |
 | `trapFocus` | `boolean` | No | `true` | Enable focus trapping |
 | `restoreFocus` | `boolean` | No | `true` | Restore focus on close |
 | `initialFocus` | `HTMLElement \| (() => HTMLElement)` | No | - | Element to focus on open |
 | `finalFocus` | `HTMLElement \| (() => HTMLElement)` | No | - | Element to focus on close |
+| `container` | `HTMLElement \| null` | No | `document.body` | Portal container element for content |
 | `onOpenAutoFocus` | `(event: Event) => void` | No | - | Callback before auto-focus |
 | `onCloseAutoFocus` | `(event: Event) => void` | No | - | Callback before focus restore |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | - | Escape key handler |
@@ -103,14 +112,28 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 | `...props` | `HTMLAttributes` | No | - | Additional HTML props |
 
 ### DialogClose Props
+
+Extends all `ButtonProps` from the Button component.
+
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'button'` | Polymorphic element type |
-| `children` | `ReactNode` | Yes | - | Close button content |
-| `...props` | `HTMLAttributes` | No | - | Additional HTML props |
+| `disabled` | `boolean` | No | `false` | Disables close button interaction |
+| `autoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
+| `isLoading` | `boolean` | No | `false` | Loading state with screen reader support |
+| `isPressed` | `boolean` | No | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange` | `(pressed: boolean) => void` | No | `undefined` | Callback fired when toggle state changes |
+| `children` | `ReactNode \| ((state: DialogCloseRenderProps) => ReactNode)` | No | - | Close button content or render function for render props pattern |
+| `...props` | `ButtonProps` | No | - | All standard Button component attributes |
+
+### DialogCloseRenderProps
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the dialog is currently visible |
+| `close` | `() => void` | Function to programmatically close the dialog |
 
 ### Controlled/Uncontrolled Support
-- **Controlled**: Use `isOpen` + `onOpenChange`
+- **Controlled**: Use `open` + `onOpenChange`
 - **Uncontrolled**: Use `defaultOpen` only
 - **Ref forwarding**: All components forward refs to DOM elements
 
@@ -130,10 +153,7 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 | Open | Close button click/Enter | Closes dialog | `aria-expanded="false"`, focus returns to trigger |
 | Open | Overlay click (modal) | Closes dialog | `aria-expanded="false"`, focus returns to trigger |
 | Disabled | Any interaction | No change | No state changes |
-| Nested | Open second dialog | Stacks dialogs | Previous dialog becomes inert |
-| Nested | Close top dialog | Returns to previous | Focus returns to previous dialog |
-| Alert Dialog Open | Default focus scenario | Focus on least destructive action | `role="alertdialog"`, system alert sound |
-| Large Content Dialog | Initial focus | Focus on dialog title or first paragraph | Improves content navigation for AT users |
+| Alert Dialog Open | Default focus scenario | Focus on least destructive action when detectable | `role="alertdialog"` |
 
 ## 4. Accessibility
 
@@ -158,31 +178,25 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 - **On open (non-modal)**: Focus moves to dialog but doesn't trap, allows outside interaction
 - **Initial focus strategies**:
   - **Default**: First focusable element
-  - **Large content**: Dialog title or first paragraph (`tabindex="-1"`)
   - **Destructive actions**: Least destructive action (e.g., "Cancel" not "Delete")
-  - **Simple confirmation**: Most likely used button (e.g., "OK", "Continue")
 - **Focus trap (modal only)**: Tab/Shift+Tab cycles only within dialog
 - **On close**: Focus returns to trigger or specified final focus
-- **Nested dialogs**: Each dialog layer maintains separate focus trap
 - **Focus restoration**: Automatic unless trigger no longer exists
 
 ### Screen Reader Announcements
 - **Dialog opening**: Announced via role change and initial focus
 - **Title and description**: Read when dialog opens (if `aria-describedby` used)
-- **Alert dialogs**: System alert sound + immediate attention via `alertdialog` role
-- **Large content dialogs**: Skip `aria-describedby` to allow structural navigation
+- **Alert dialogs**: Immediate attention via `alertdialog` role
 - **Close actions**: Announced when dialog closes
 - **State changes**: Communicated via `aria-expanded` on trigger
-- **Dynamic updates**: Use `aria-live` regions within dialog content
 
 ### Name/Role/Value Exposure
 - **Dialog labeling**: `aria-labelledby` references title, fallback to `aria-label`
-- **Dialog description**: `aria-describedby` references description (omit for complex content)
+- **Dialog description**: `aria-describedby` references description
 - **Modal state**: `aria-modal="true"` for modal dialogs, `aria-modal="false"` or omit for non-modal
 - **Alert dialogs**: `role="alertdialog"` for urgent/critical messages requiring immediate attention
 - **Trigger relationship**: `aria-haspopup="dialog"`, `aria-expanded` state
 - **Visible labels**: All interactive elements have accessible names
-- **Content outside dialog**: Made inert via `aria-modal` or `aria-hidden` (legacy approach)
 
 ### Implementation Rules (per accessibility-guidelines.instructions.md)
 - Complete keyboard navigation support
@@ -197,15 +211,15 @@ The Dialog component provides fully accessible modal and non-modal dialog functi
 ```tsx
 // Core dialog state management
 const useDialogState = (props: {
-  isOpen?: boolean;
+  open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) => {
-  const [isOpen, setIsOpen] = useControlledState({
-    prop: props.isOpen,
-    defaultProp: props.defaultOpen ?? false,
-    onChange: props.onOpenChange,
-  });
+  const [isOpen, setIsOpen] = useControlledState(
+    props.open,
+    props.defaultOpen ?? false,
+    props.onOpenChange,
+  );
   
   return { isOpen, setIsOpen };
 };
@@ -226,12 +240,6 @@ const useDialogFocus = (props: {
   // Non-modal focus handling (no trap)
 };
 
-// Dialog stack management for nesting
-const useDialogStack = () => {
-  // Track multiple dialog layers
-  // Manage inert states
-  // Handle proper stacking order
-};
 ```
 
 ### Context Requirements
@@ -239,12 +247,20 @@ const useDialogStack = () => {
 interface DialogContextValue {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  closeDialog: () => void;
   modal: boolean;
-  role: 'dialog' | 'alertdialog';
-  triggerRef: RefObject<HTMLElement>;
-  contentRef: RefObject<HTMLElement>;
+  disabled: boolean;
+  forceMount: boolean;
+  role: AriaRole;
+  triggerRef: RefObject<HTMLElement | null>;
+  contentRef: RefObject<HTMLElement | null>;
   titleId: string;
   descriptionId: string;
+  contentId: string;
+  restoreFocusRef: RefObject<HTMLElement | null>;
+  onCloseAutoFocusRef: RefObject<((event: Event) => void) | undefined>;
+  restoreFocusPropRef: RefObject<boolean>;
+  finalFocusPropRef: RefObject<HTMLElement | (() => HTMLElement) | undefined>;
 }
 
 const DialogContext = createContext<DialogContextValue | null>(null);
@@ -273,7 +289,7 @@ const useDialogEvents = () => {
 
 ### SSR/CSR Safety and Deterministic IDs
 - Use `useId()` for generating accessible IDs
-- Portal rendering handled safely across environments
+- Portal rendering handled safely across environments via built-in `createPortal` in Content and Overlay
 - No hydration mismatches
 - Deterministic ID generation for title/description relationships
 
@@ -281,9 +297,6 @@ const useDialogEvents = () => {
 
 ### Required Data Attributes
 All components expose `data-*` attributes for styling without className coupling:
-
-#### DialogRoot
-- `data-state`: `"open" | "closed"`
 
 #### DialogTrigger  
 - `data-state`: `"open" | "closed"`
@@ -301,12 +314,12 @@ All components expose `data-*` attributes for styling without className coupling
 - `data-level`: Heading level (`"1"` to `"6"`)
 
 #### DialogClose
-- No specific data attributes (standard button styling)
+- `data-dialog-close`: Present on close button
 
 ### Animation Support
-- `forceMount` prop on Overlay and Content for animation libraries
+- `forceMount` prop on DialogRoot for animation libraries (applies to Overlay and Content via context)
 - Consistent `data-state` attributes for CSS transitions
-- Portal rendering prevents CSS containment issues
+- Built-in portal rendering prevents CSS containment issues
 
 ## 7. Test Coverage Plan
 
@@ -314,7 +327,7 @@ All components expose `data-*` attributes for styling without className coupling
 ```tsx
 describe('Dialog Component', () => {
   // State management
-  test('controlled mode with isOpen prop');
+  test('controlled mode with open prop');
   test('uncontrolled mode with defaultOpen');
   test('onOpenChange callback execution');
   
@@ -329,7 +342,7 @@ describe('Dialog Component', () => {
   test('focus traps within modal dialog');
   test('focus does not trap in non-modal dialog');
   test('focus returns to trigger on close');
-  test('initial focus strategies (default, large content, destructive actions)');
+  test('initial focus strategies (default and destructive action preference for alert dialogs)');
   
   // Modal vs Non-modal behavior
   test('modal dialog blocks outside interaction');
@@ -337,11 +350,6 @@ describe('Dialog Component', () => {
   
   // Alert dialog specifics
   test('alert dialog focuses least destructive action');
-  test('alert dialog announces with system sound');
-  
-  // Nested dialogs
-  test('multiple dialogs stack properly');
-  test('closing top dialog returns to previous');
 });
 ```
 
@@ -352,13 +360,10 @@ describe('Dialog Accessibility', () => {
   test('dialog vs alertdialog role applied correctly');
   test('aria-modal set correctly for modal/non-modal');
   test('title and description properly associated');
-  test('aria-describedby omitted for complex content');
   test('keyboard navigation works correctly');
   test('screen reader announcements');
   test('focus management for all scenarios (modal/non-modal)');
   test('alert dialog initial focus on least destructive action');
-  test('large content dialog focus on title/paragraph');
-  test('nested dialog accessibility');
   test('passes jest-axe with 0 violations');
 });
 ```
@@ -418,17 +423,17 @@ describe('Dialog Integration', () => {
 For teams migrating from other dialog libraries:
 
 **From React Modal/similar:**
-- Keep `isOpen` prop pattern (consistent with Spar standards)
+- Keep `open` prop pattern (consistent with Spar standards)
 - Update focus management to use built-in trapping
 - Migrate overlay click handling to `onPointerDownOutside` or `onInteractOutside`
-- Replace custom portal logic with `Dialog.Portal`
+- Use the `container` prop on DialogContent/DialogOverlay for custom portal targets
 - Add `modal` prop to specify modal vs non-modal behavior
 
 **From Headless UI Dialog:**
 - Similar compound component structure
-- Replace `Dialog.Panel` with `Dialog.Content`
+- Replace `Dialog.Panel` with `DialogContent`
 - Update focus management props if customized
-- Migrate `static` prop usage to `forceMount`
+- Migrate `static` prop usage to `forceMount` on DialogRoot
 
 **From Reach UI Dialog:**
 - Replace single component with compound structure
@@ -439,13 +444,12 @@ For teams migrating from other dialog libraries:
 ### Implementation Checklist
 
 #### Core Functionality
-- [ ] DialogRoot with controlled/uncontrolled state (`isOpen` prop)
+- [ ] DialogRoot with controlled/uncontrolled state (`open` prop)
 - [ ] DialogTrigger with proper event handling
-- [ ] DialogPortal with configurable container
-- [ ] DialogOverlay with modal/non-modal background behavior
-- [ ] DialogContent with modal/non-modal focus management
+- [ ] DialogOverlay with modal/non-modal background behavior and built-in portal (`container` prop)
+- [ ] DialogContent with modal/non-modal focus management and built-in portal (`container` prop)
 - [ ] DialogTitle with heading semantics
-- [ ] DialogDescription with proper association (conditional based on content complexity)
+- [ ] DialogDescription with proper association
 - [ ] DialogClose with close functionality
 
 #### Accessibility Requirements  
@@ -453,15 +457,13 @@ For teams migrating from other dialog libraries:
 - [ ] Complete keyboard navigation support
 - [ ] Modal focus trapping and non-modal focus flow
 - [ ] Focus restoration with role-specific initial focus strategies
-- [ ] Screen reader announcements (including alert dialog system sounds)
-- [ ] Accessible name and description association (conditional for complex content)
+- [ ] Screen reader announcements
+- [ ] Accessible name and description association
 - [ ] Alert dialog variant with least destructive action focus
 - [ ] Non-modal dialog support with outside interaction
-- [ ] Nested dialog focus management
 
 #### Advanced Features
-- [ ] Portal rendering with SSR safety
-- [ ] Nested dialog support and stacking
+- [ ] Built-in portal rendering with SSR safety (Content and Overlay portal to `document.body` by default)
 - [ ] Custom focus management options
 - [ ] Outside click and escape handling
 - [ ] Animation library compatibility

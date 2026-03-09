@@ -1,17 +1,17 @@
-import { Radio, RadioGroup, RadioItem } from './Radio';
+import { RadioGroup as RadioRoot } from './RadioGroup';
+import { RadioItem } from './RadioItem';
+export { useRadioGroupContext } from './hooks';
 
-// Export both patterns
-export {
-  // Compound component (with dot notation)
-  Radio,
-
-  // Named exports (tree-shakeable)
-  RadioGroup,
-  RadioItem,
-
-  // Root alias for explicit usage
-  RadioGroup as RadioRoot,
+const Radio = RadioRoot as typeof RadioRoot & {
+  Root: typeof RadioRoot;
+  Group: typeof RadioRoot;
+  Item: typeof RadioItem;
 };
 
-// Export types
-export type { RadioGroupProps, RadioItemProps } from './types';
+Radio.Root = RadioRoot;
+Radio.Group = RadioRoot;
+Radio.Item = RadioItem;
+
+export { Radio, RadioRoot, RadioRoot as RadioGroup, RadioItem };
+
+export type { RadioGroupProps, RadioItemProps, RadioItemRenderProps } from './types';
