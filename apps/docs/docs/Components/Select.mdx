@@ -55,91 +55,91 @@ A headless, fully accessible dropdown component that allows users to choose a si
 }
 
 [data-theme='dark'] .select-demo-container .select-trigger {
-  border-color: #2b303b;
-  background: rgba(255, 255, 255, 0.12);
+border-color: #2b303b;
+background: rgba(255, 255, 255, 0.12);
 }
 
 .select-demo-container .select-value,
 .select-demo-container .select-trigger-addon {
-  color: #222530;
-  font-size: 14px;
-  line-height: 20px;
+color: #222530;
+font-size: 14px;
+line-height: 20px;
 }
 
 [data-theme='dark'] .select-demo-container .select-value,
 [data-theme='dark'] .select-demo-container .select-trigger-addon {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .select-demo-container .select-trigger[data-state='open'] .select-trigger-addon {
-  transform: rotate(180deg);
+transform: rotate(180deg);
 }
 
 .select-content {
-  --select-surface: #f7f8fa;
-  padding: 8px;
-  border-radius: 12px;
-  border: 1px solid #e1e4ea;
-  background: var(--select-surface);
-  box-shadow:
-    0 12px 32px rgba(34, 37, 48, 0.08),
-    0 4px 12px rgba(34, 37, 48, 0.06);
+--select-surface: #f7f8fa;
+padding: 8px;
+border-radius: 12px;
+border: 1px solid #e1e4ea;
+background: var(--select-surface);
+box-shadow:
+0 12px 32px rgba(34, 37, 48, 0.08),
+0 4px 12px rgba(34, 37, 48, 0.06);
 }
 
 [data-theme='dark'] .select-content {
-  --select-surface: #1f232b;
-  border-color: #2b303b;
-  background: #1f232b;
+--select-surface: #1f232b;
+border-color: #2b303b;
+background: #1f232b;
 }
 
 .select-demo-container .select-item {
-  min-height: 36px;
-  padding: 0 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  color: #222530;
-  font-size: 14px;
-  line-height: 18px;
+min-height: 36px;
+padding: 0 10px;
+border-radius: 8px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+color: #222530;
+font-size: 14px;
+line-height: 18px;
 }
 
 [data-theme='dark'] .select-demo-container .select-item {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .select-demo-container .select-item[data-highlighted] {
-  background: rgba(0, 0, 0, 0.08);
-  outline: none;
+background: rgba(0, 0, 0, 0.08);
+outline: none;
 }
 
 [data-theme='dark'] .select-demo-container .select-item[data-highlighted] {
-  background: rgba(255, 255, 255, 0.12);
+background: rgba(255, 255, 255, 0.12);
 }
 
 .select-demo-container .select-item[data-disabled] {
-  opacity: 0.5;
-  cursor: not-allowed;
+opacity: 0.5;
+cursor: not-allowed;
 }
 
 .select-demo-container .select-item-check {
-  opacity: 0;
-  color: #222530;
-  transition: opacity 0.2s ease;
+opacity: 0;
+color: #222530;
+transition: opacity 0.2s ease;
 }
 
 [data-theme='dark'] .select-demo-container .select-item-check {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .select-demo-container .select-item[data-state='checked'] .select-item-check {
-  opacity: 1;
+opacity: 1;
 }
 
 .select-arrow {
-  color: var(--select-surface);
+color: var(--select-surface);
 }`}
 />
 
@@ -161,6 +161,12 @@ A headless, fully accessible dropdown component that allows users to choose a si
 
 ```tsx
 import { Select } from '@turkish-technology/spar';
+```
+
+**Next.js (App Router):** Use the sub-path import for Server Component support:
+
+```ts
+import * as Select from '@turkish-technology/spar/select';
 ```
 
 ## Anatomy
@@ -437,6 +443,7 @@ Root state ve context sağlayıcısıdır.
 | `disabled?`      | `boolean`                 | `false`     | Tüm Select'i devre dışı bırakır                         |
 | `required?`      | `boolean`                 | `false`     | Form için zorunlu alan yapar                            |
 | `name?`          | `string`                  | `undefined` | Form alan adı; `value` tanımlıysa hidden input üretilir |
+| `dir?`           | `'ltr' \| 'rtl'`          | `'ltr'`     | Yazım yönü                                              |
 | `autoFocus?`     | `boolean`                 | `false`     | Trigger'a mount sırasında odak verir                    |
 | `as?`            | `React.ElementType`       | `'div'`     | Root için polymorphic element                           |
 | `children?`      | `React.ReactNode`         | `undefined` | Root içeriği                                            |

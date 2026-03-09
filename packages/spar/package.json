@@ -13,10 +13,130 @@
       "require": "./dist/index.cjs",
       "default": "./dist/index.esm.js"
     },
+    "./accordion": {
+      "types": "./dist/accordion.d.ts",
+      "import": "./dist/accordion.mjs",
+      "require": "./dist/accordion.cjs"
+    },
+    "./breadcrumb": {
+      "types": "./dist/breadcrumb.d.ts",
+      "import": "./dist/breadcrumb.mjs",
+      "require": "./dist/breadcrumb.cjs"
+    },
+    "./button": {
+      "types": "./dist/button.d.ts",
+      "import": "./dist/button.mjs",
+      "require": "./dist/button.cjs"
+    },
+    "./checkbox": {
+      "types": "./dist/checkbox.d.ts",
+      "import": "./dist/checkbox.mjs",
+      "require": "./dist/checkbox.cjs"
+    },
+    "./collapsible": {
+      "types": "./dist/collapsible.d.ts",
+      "import": "./dist/collapsible.mjs",
+      "require": "./dist/collapsible.cjs"
+    },
+    "./dialog": {
+      "types": "./dist/dialog.d.ts",
+      "import": "./dist/dialog.mjs",
+      "require": "./dist/dialog.cjs"
+    },
+    "./dropdown-menu": {
+      "types": "./dist/dropdown-menu.d.ts",
+      "import": "./dist/dropdown-menu.mjs",
+      "require": "./dist/dropdown-menu.cjs"
+    },
+    "./input": {
+      "types": "./dist/input.d.ts",
+      "import": "./dist/input.mjs",
+      "require": "./dist/input.cjs"
+    },
+    "./label": {
+      "types": "./dist/label.d.ts",
+      "import": "./dist/label.mjs",
+      "require": "./dist/label.cjs"
+    },
+    "./popover": {
+      "types": "./dist/popover.d.ts",
+      "import": "./dist/popover.mjs",
+      "require": "./dist/popover.cjs"
+    },
+    "./radio": {
+      "types": "./dist/radio.d.ts",
+      "import": "./dist/radio.mjs",
+      "require": "./dist/radio.cjs"
+    },
+    "./select": {
+      "types": "./dist/select.d.ts",
+      "import": "./dist/select.mjs",
+      "require": "./dist/select.cjs"
+    },
+    "./switch": {
+      "types": "./dist/switch.d.ts",
+      "import": "./dist/switch.mjs",
+      "require": "./dist/switch.cjs"
+    },
+    "./tabs": {
+      "types": "./dist/tabs.d.ts",
+      "import": "./dist/tabs.mjs",
+      "require": "./dist/tabs.cjs"
+    },
+    "./tooltip": {
+      "types": "./dist/tooltip.d.ts",
+      "import": "./dist/tooltip.mjs",
+      "require": "./dist/tooltip.cjs"
+    },
     "./package.json": "./package.json"
   },
   "typesVersions": {
     "*": {
+      "accordion": [
+        "./dist/accordion.d.ts"
+      ],
+      "breadcrumb": [
+        "./dist/breadcrumb.d.ts"
+      ],
+      "button": [
+        "./dist/button.d.ts"
+      ],
+      "checkbox": [
+        "./dist/checkbox.d.ts"
+      ],
+      "collapsible": [
+        "./dist/collapsible.d.ts"
+      ],
+      "dialog": [
+        "./dist/dialog.d.ts"
+      ],
+      "dropdown-menu": [
+        "./dist/dropdown-menu.d.ts"
+      ],
+      "input": [
+        "./dist/input.d.ts"
+      ],
+      "label": [
+        "./dist/label.d.ts"
+      ],
+      "popover": [
+        "./dist/popover.d.ts"
+      ],
+      "radio": [
+        "./dist/radio.d.ts"
+      ],
+      "select": [
+        "./dist/select.d.ts"
+      ],
+      "switch": [
+        "./dist/switch.d.ts"
+      ],
+      "tabs": [
+        "./dist/tabs.d.ts"
+      ],
+      "tooltip": [
+        "./dist/tooltip.d.ts"
+      ],
       "*": [
         "./dist/index.d.ts"
       ]
@@ -25,6 +145,7 @@
   "sideEffects": false,
   "files": [
     "dist/**/*.js",
+    "dist/**/*.mjs",
     "dist/**/*.cjs",
     "dist/**/*.d.ts",
     "README.md",
@@ -32,7 +153,7 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "pnpm run clean && rspack build && tsc --emitDeclarationOnly",
+    "build": "pnpm run clean && rspack build && tsc --emitDeclarationOnly && node scripts/postbuild.mjs",
     "dev": "rspack build --watch",
     "prepublishOnly": "pnpm run build && pnpm run check-types && pnpm run lint",
     "prepack": "pnpm run build",

@@ -43,50 +43,50 @@ A headless collapsible component that manages the visibility of content sections
 }
 
 .collapsible-demo-container .collapsible-trigger {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: 1px solid #e1e4ea;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.08);
-  cursor: pointer;
+display: flex;
+justify-content: center;
+align-items: center;
+width: 40px;
+height: 40px;
+padding: 0;
+border: 1px solid #e1e4ea;
+border-radius: 10px;
+background: rgba(0, 0, 0, 0.08);
+cursor: pointer;
 }
 
 [data-theme='dark'] .collapsible-demo-container .collapsible-trigger {
-  border-color: #2b303b;
-  background-color: rgba(255, 255, 255, 0.12);
+border-color: #2b303b;
+background-color: rgba(255, 255, 255, 0.12);
 }
 
 .collapsible-demo-container .collapsible-trigger-icon {
-  width: 16px;
-  height: 16px;
-  fill: #222530;
+width: 16px;
+height: 16px;
+fill: #222530;
 }
 
 [data-theme='dark'] .collapsible-demo-container .collapsible-trigger-icon {
-  fill: #f2f5f8;
+fill: #f2f5f8;
 }
 
 .collapsible-demo-container .collapsible-content {
-  display: flex;
-  flex-direction: column;
-  width: 320px;
-  gap: 8px;
+display: flex;
+flex-direction: column;
+width: 320px;
+gap: 8px;
 }
 
 .collapsible-demo-container .collapsible-item {
-  height: 40px;
-  border-radius: 10px;
-  border: 1px solid #e1e4ea;
-  background: rgba(0, 0, 0, 0.08);
+height: 40px;
+border-radius: 10px;
+border: 1px solid #e1e4ea;
+background: rgba(0, 0, 0, 0.08);
 }
 
 [data-theme='dark'] .collapsible-demo-container .collapsible-item {
-  border-color: #2b303b;
-  background-color: rgba(255, 255, 255, 0.12);
+border-color: #2b303b;
+background-color: rgba(255, 255, 255, 0.12);
 }
 `}
 />
@@ -107,6 +107,12 @@ pnpm install @turkish-technology/spar
 
 ```tsx
 import { Collapsible } from '@turkish-technology/spar';
+```
+
+**Next.js (App Router):** Use the sub-path import for Server Component support:
+
+```ts
+import * as Collapsible from '@turkish-technology/spar/collapsible';
 ```
 
 ## Anatomy

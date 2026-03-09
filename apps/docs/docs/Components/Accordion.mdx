@@ -76,95 +76,95 @@ cssCode={`.accordion-demo-container .accordion {
 }
 
 .accordion-demo-container .accordion-header {
-  margin-bottom: 0;
-  border-radius: 10px;
+margin-bottom: 0;
+border-radius: 10px;
 }
 
 [data-theme='dark'] .accordion-demo-container .accordion-header {
 }
 
 .accordion-demo-container .accordion-trigger {
-  width: 100%;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 12px;
-  border: 1px solid #e1e4ea;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.08);
-  color: #222530;
-  font-size: 14px;
-  line-height: 20px;
-  box-sizing: border-box;
+width: 100%;
+height: 40px;
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 0 12px;
+border: 1px solid #e1e4ea;
+border-radius: 10px;
+background: rgba(0, 0, 0, 0.08);
+color: #222530;
+font-size: 14px;
+line-height: 20px;
+box-sizing: border-box;
 }
 
 [data-theme='dark'] .accordion-demo-container .accordion-trigger {
-  border-color: #2b303b;
-  background: rgba(255, 255, 255, 0.12);
-  color: #f2f5f8;
+border-color: #2b303b;
+background: rgba(255, 255, 255, 0.12);
+color: #f2f5f8;
 }
 
 .accordion-demo-container .accordion-icon {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  border: 1px solid #cacfd8;
-  background: rgba(0, 0, 0, 0.72);
+width: 16px;
+height: 16px;
+border-radius: 4px;
+border: 1px solid #cacfd8;
+background: rgba(0, 0, 0, 0.72);
 }
 
 [data-theme='dark'] .accordion-demo-container .accordion-icon {
-  border-color: #525866;
-  background-color: rgba(255, 255, 255, 0.72);
+border-color: #525866;
+background-color: rgba(255, 255, 255, 0.72);
 }
 
 .accordion-demo-container .accordion-title {
-  color: #222530;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
+color: #222530;
+font-size: 14px;
+line-height: 20px;
+font-weight: 500;
 }
 
 [data-theme='dark'] .accordion-demo-container .accordion-title {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .accordion-demo-container .accordion-expand {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  transition: transform 0.2s ease-in-out;
+margin-left: auto;
+display: flex;
+align-items: center;
+transition: transform 0.2s ease-in-out;
 }
 
 .accordion-demo-container .accordion-item[data-state='open'] .accordion-expand {
-  transform: rotate(180deg);
+transform: rotate(180deg);
 }
 
 .accordion-demo-container .accordion-expand-icon {
-  width: 16px;
-  height: 16px;
-  fill: #222530;
+width: 16px;
+height: 16px;
+fill: #222530;
 }
 
 [data-theme='dark'] .accordion-demo-container .accordion-expand-icon {
-  fill: #f2f5f8;
+fill: #f2f5f8;
 }
 
 .accordion-demo-container .accordion-content {
-  margin-top: 6px;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #e1e4ea;
-  background: rgba(0, 0, 0, 0.04);
-  color: #717784;
-  font-size: 13px;
-  line-height: 18px;
+margin-top: 6px;
+padding: 12px;
+border-radius: 10px;
+border: 1px solid #e1e4ea;
+background: rgba(0, 0, 0, 0.04);
+color: #717784;
+font-size: 13px;
+line-height: 18px;
 }
 
 [data-theme='dark'] .accordion-demo-container .accordion-content {
-  border-color: #2b303b;
-  background: rgba(255, 255, 255, 0.08);
-  color: #99a0ae;
+border-color: #2b303b;
+background: rgba(255, 255, 255, 0.08);
+color: #99a0ae;
 }`}
 />
 
@@ -189,6 +189,12 @@ pnpm install @turkish-technology/spar
 
 ```ts
 import { Accordion } from '@turkish-technology/spar';
+```
+
+**Next.js (App Router):** Use the sub-path import for Server Component support:
+
+```ts
+import * as Accordion from '@turkish-technology/spar/accordion';
 ```
 
 ---

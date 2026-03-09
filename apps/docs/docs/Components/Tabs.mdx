@@ -41,54 +41,54 @@ cssCode={`.tabs-demo-container .tabs {
 }
 
 [data-theme='dark'] .tabs-demo-container .tabs {
-  border-color: #2b303b;
-  background: rgba(255, 255, 255, 0.12);
+border-color: #2b303b;
+background: rgba(255, 255, 255, 0.12);
 }
 
 .tabs-demo-container .tabs-list {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  height: 100%;
+display: flex;
+align-items: center;
+gap: 10px;
+height: 100%;
 }
 
 .tabs-demo-container .tab {
-  height: 100%;
-  padding: 0 2px;
-  border: none;
-  background: transparent;
-  color: #717784;
-  font-size: 14px;
-  line-height: 20px;
+height: 100%;
+padding: 0 2px;
+border: none;
+background: transparent;
+color: #717784;
+font-size: 14px;
+line-height: 20px;
 }
 
 [data-theme='dark'] .tabs-demo-container .tab {
-  color: #99a0ae;
+color: #99a0ae;
 }
 
 .tabs-demo-container .tab[data-state='active'] {
-  color: #222530;
+color: #222530;
 }
 
 [data-theme='dark'] .tabs-demo-container .tab[data-state='active'] {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .tabs-demo-container .tab-label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding-top: 2px;
-  border-bottom: 2px solid transparent;
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100%;
+padding-top: 2px;
+border-bottom: 2px solid transparent;
 }
 
 .tabs-demo-container .tab[data-state='active'] .tab-label {
-  border-bottom-color: rgba(0, 0, 0, 0.72);
+border-bottom-color: rgba(0, 0, 0, 0.72);
 }
 
 [data-theme='dark'] .tabs-demo-container .tab[data-state='active'] .tab-label {
-  border-color: rgba(255, 255, 255, 0.72);
+border-color: rgba(255, 255, 255, 0.72);
 }
 `}
 />
@@ -109,6 +109,12 @@ cssCode={`.tabs-demo-container .tabs {
 
 ```tsx
 import { Tabs } from '@turkish-technology/spar';
+```
+
+**Next.js (App Router):** Use the sub-path import for Server Component support:
+
+```ts
+import * as Tabs from '@turkish-technology/spar/tabs';
 ```
 
 ## Anatomy
@@ -293,6 +299,7 @@ function ForceMountTabs() {
 | `defaultValue?`   | `string`                                            | `undefined`    | Initial selected tab value for uncontrolled usage                      |
 | `onValueChange?`  | `(value: string) => void`                           | `undefined`    | Called when selected value changes                                     |
 | `orientation?`    | `'horizontal' \| 'vertical'`                        | `'horizontal'` | Orientation used by list/panels and keyboard rules                     |
+| `dir?`            | `'ltr' \| 'rtl'`                                    | `'ltr'`        | Direction used by horizontal arrow navigation                          |
 | `activationMode?` | `'automatic' \| 'manual'`                           | `'automatic'`  | `automatic`: focus activates, `manual`: Enter/Space activates          |
 | `as?`             | `React.ElementType`                                 | `'div'`        | Element type to render                                                 |
 | `...props`        | `ComponentPropsWithRef<'div'>` + `as` element props | —              | Forwards supported HTML attributes/events to the rendered root element |
@@ -305,9 +312,10 @@ function ForceMountTabs() {
 
 #### HTML Attributes
 
-| Attribute          | Value                    | Purpose                        |
-| ------------------ | ------------------------ | ------------------------------ |
-| `data-orientation` | `horizontal \| vertical` | Exposes configured orientation |
+| Attribute          | Value                    | Purpose                           |
+| ------------------ | ------------------------ | --------------------------------- |
+| `data-orientation` | `horizontal \| vertical` | Exposes configured orientation    |
+| `data-dir`         | `ltr \| rtl`             | Exposes configured text direction |
 
 ### Tabs.List
 
@@ -419,8 +427,8 @@ No component-specific events are defined. Standard forwarded DOM events can be p
 | Key                | Action                            | Context         | Notes                                                        |
 | ------------------ | --------------------------------- | --------------- | ------------------------------------------------------------ |
 | `Tab`              | Moves focus in document tab order | Global          | Browser-native behavior; not intercepted by `Tabs`           |
-| `ArrowRight`       | Focuses next enabled tab          | Horizontal list | Wraps when end is reached; skips disabled tabs               |
-| `ArrowLeft`        | Focuses previous enabled tab      | Horizontal list | Wraps when start is reached; skips disabled tabs             |
+| `ArrowRight`       | Focuses next enabled tab          | Horizontal list | Uses `dir`; wraps when end is reached; skips disabled tabs   |
+| `ArrowLeft`        | Focuses previous enabled tab      | Horizontal list | Uses `dir`; wraps when start is reached; skips disabled tabs |
 | `ArrowDown`        | Focuses next enabled tab          | Vertical list   | Wraps when end is reached; skips disabled tabs               |
 | `ArrowUp`          | Focuses previous enabled tab      | Vertical list   | Wraps when start is reached; skips disabled tabs             |
 | `Home`             | Focuses first enabled tab         | List focused    | Selects it in `automatic` mode                               |
