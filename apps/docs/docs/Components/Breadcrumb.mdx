@@ -40,52 +40,52 @@ A fully accessible headless breadcrumb component for displaying hierarchical nav
 
 .breadcrumb-demo-container .breadcrumb-link,
 .breadcrumb-demo-container .breadcrumb-page {
-  display: inline-flex;
-  align-items: center;
-  min-height: 36px;
-  padding: 0 12px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.04);
-  font-size: 13px;
-  line-height: 18px;
+display: inline-flex;
+align-items: center;
+min-height: 36px;
+padding: 0 12px;
+border-radius: 999px;
+background: rgba(0, 0, 0, 0.04);
+font-size: 13px;
+line-height: 18px;
 }
 
 .breadcrumb-demo-container .breadcrumb-link {
-  border: 1px solid #e1e4ea;
-  color: #717784;
+border: 1px solid #e1e4ea;
+color: #717784;
 }
 
 [data-theme='dark'] .breadcrumb-demo-container .breadcrumb-link {
-  border-color: #2b303b;
-  color: #99a0ae;
-  background-color: rgba(255, 255, 255, 0.04);
+border-color: #2b303b;
+color: #99a0ae;
+background-color: rgba(255, 255, 255, 0.04);
 }
 
 .breadcrumb-demo-container .breadcrumb-separator {
-  text-align: center;
-  color: #99a0ae;
+text-align: center;
+color: #99a0ae;
 }
 
 .breadcrumb-demo-container .breadcrumb-page {
-  border: 1px solid #cacfd8;
-  background: rgba(0, 0, 0, 0.08);
-  color: #222530;
+border: 1px solid #cacfd8;
+background: rgba(0, 0, 0, 0.08);
+color: #222530;
 }
 
 [data-theme='dark'] .breadcrumb-demo-container .breadcrumb-page {
-  border-color: #525866;
-  background-color: rgba(255, 255, 255, 0.12);
-  color: #f2f5f8;
+border-color: #525866;
+background-color: rgba(255, 255, 255, 0.12);
+color: #f2f5f8;
 }
 
 .breadcrumb-demo-container .breadcrumb-item,
 .breadcrumb-demo-container .breadcrumb-separator {
-  margin-top: 0;
-  font-size: 13px;
+margin-top: 0;
+font-size: 13px;
 }
 
 [data-theme='dark'] .breadcrumb-demo-container .breadcrumb-separator {
-  color: #717784;
+color: #717784;
 }`}
 />
 
@@ -109,6 +109,12 @@ pnpm add @turkish-technology/spar
 
 ```tsx
 import { Breadcrumb } from '@turkish-technology/spar';
+```
+
+**Next.js (App Router):** Use the sub-path import for Server Component support:
+
+```ts
+import * as Breadcrumb from '@turkish-technology/spar/breadcrumb';
 ```
 
 ## Anatomy

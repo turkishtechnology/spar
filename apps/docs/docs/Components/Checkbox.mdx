@@ -46,21 +46,21 @@ Headless checkbox component providing accessibility and behavior without styling
 }
 
 [data-theme='dark'] .checkbox-demo-container .checkbox {
-  border-color: #525866;
+border-color: #525866;
 }
 
 .checkbox-demo-container .checkbox-icon {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.72);
-  fill: #fff;
+width: 14px;
+height: 14px;
+flex-shrink: 0;
+border-radius: 4px;
+background: rgba(0, 0, 0, 0.72);
+fill: #fff;
 }
 
 [data-theme='dark'] .checkbox-demo-container .checkbox-icon {
-  background: rgba(255, 255, 255, 0.72);
-  fill: #111827;
+background: rgba(255, 255, 255, 0.72);
+fill: #111827;
 }
 `}
 />
@@ -81,6 +81,12 @@ Headless checkbox component providing accessibility and behavior without styling
 
 ```tsx
 import { Checkbox } from '@turkish-technology/spar';
+```
+
+**Next.js (App Router):** Use the sub-path import for Server Component support:
+
+```ts
+import { Checkbox } from '@turkish-technology/spar/checkbox';
 ```
 
 ## Anatomy

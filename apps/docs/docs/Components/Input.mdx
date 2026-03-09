@@ -36,58 +36,58 @@ cssCode={`.input-demo-container {
 }
 
 .input-demo-container .input {
-  width: 240px;
-  min-height: 40px;
-  padding: 0 14px;
-  border-radius: 10px;
-  border: 1px solid #e1e4ea;
-  background: rgba(0, 0, 0, 0.08);
-  color: #222530;
-  font-size: 14px;
-  line-height: 20px;
+width: 240px;
+min-height: 40px;
+padding: 0 14px;
+border-radius: 10px;
+border: 1px solid #e1e4ea;
+background: rgba(0, 0, 0, 0.08);
+color: #222530;
+font-size: 14px;
+line-height: 20px;
 }
 
 [data-theme='dark'] .input-demo-container .input {
-  border-color: #2b303b;
-  background: rgba(255, 255, 255, 0.12);
-  color: #f2f5f8;
+border-color: #2b303b;
+background: rgba(255, 255, 255, 0.12);
+color: #f2f5f8;
 }
 
 .input-demo-container .label {
-  color: #222530;
-  display: block;
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 500;
-  margin: 0;
+color: #222530;
+display: block;
+font-size: 12px;
+line-height: 16px;
+font-weight: 500;
+margin: 0;
 }
 
 [data-theme='dark'] .input-demo-container .label {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .input-demo-container .description {
-  color: #717784;
-  display: block;
-  font-size: 12px;
-  line-height: 16px;
-  margin: 0;
+color: #717784;
+display: block;
+font-size: 12px;
+line-height: 16px;
+margin: 0;
 }
 
 [data-theme='dark'] .input-demo-container .description {
-  color: #99a0ae;
+color: #99a0ae;
 }
 
 .input-demo-container .error {
-  color: #d14343;
-  display: block;
-  font-size: 12px;
-  line-height: 16px;
-  margin: 0;
+color: #d14343;
+display: block;
+font-size: 12px;
+line-height: 16px;
+margin: 0;
 }
 
 [data-theme='dark'] .input-demo-container .error {
-  color: #ff8a8a;
+color: #ff8a8a;
 }`}
 />
 
@@ -104,6 +104,12 @@ cssCode={`.input-demo-container {
 
 ```tsx
 import { Input } from '@turkish-technology/spar';
+```
+
+**Next.js (App Router):** Use the sub-path import for Server Component support:
+
+```ts
+import * as Input from '@turkish-technology/spar/input';
 ```
 
 `Input` and `Input.Root` refer to the same component — the difference is only notation style:

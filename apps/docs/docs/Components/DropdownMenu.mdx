@@ -66,84 +66,84 @@ Accessible dropdown menu component for creating interactive command menus with k
 }
 
 [data-theme='dark'] .dropdown-demo-container .dropdown-trigger {
-  border-color: #2b303b;
-  background: rgba(255, 255, 255, 0.12);
+border-color: #2b303b;
+background: rgba(255, 255, 255, 0.12);
 }
 
 .dropdown-demo-container .dropdown-svg {
-  width: 16px;
-  height: 16px;
-  fill: #222530;
+width: 16px;
+height: 16px;
+fill: #222530;
 }
 
 [data-theme='dark'] .dropdown-demo-container .dropdown-svg {
-  fill: #f2f5f8;
+fill: #f2f5f8;
 }
 
 .dropdown-content {
-  --dropdown-surface: #f7f8fa;
-  padding: 8px;
-  border-radius: 12px;
-  border: 1px solid #e1e4ea;
-  background: var(--dropdown-surface);
-  box-shadow:
-    0 12px 32px rgba(34, 37, 48, 0.08),
-    0 4px 12px rgba(34, 37, 48, 0.06);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+--dropdown-surface: #f7f8fa;
+padding: 8px;
+border-radius: 12px;
+border: 1px solid #e1e4ea;
+background: var(--dropdown-surface);
+box-shadow:
+0 12px 32px rgba(34, 37, 48, 0.08),
+0 4px 12px rgba(34, 37, 48, 0.06);
+display: flex;
+flex-direction: column;
+gap: 4px;
 }
 
 [data-theme='dark'] .dropdown-content {
-  --dropdown-surface: #1f232b;
-  border-color: #2b303b;
-  background: #1f232b;
+--dropdown-surface: #1f232b;
+border-color: #2b303b;
+background: #1f232b;
 }
 
 .dropdown-demo-container .dropdown-item {
-  min-height: 36px;
-  width: 100%;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border-radius: 8px;
-  color: #222530;
-  cursor: pointer;
-  outline: none;
+min-height: 36px;
+width: 100%;
+padding: 0 10px;
+display: flex;
+align-items: center;
+gap: 10px;
+border-radius: 8px;
+color: #222530;
+cursor: pointer;
+outline: none;
 }
 
 [data-theme='dark'] .dropdown-demo-container .dropdown-item {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .dropdown-demo-container .dropdown-item[data-highlighted] {
-  background: rgba(0, 0, 0, 0.08);
+background: rgba(0, 0, 0, 0.08);
 }
 
 [data-theme='dark'] .dropdown-demo-container .dropdown-item[data-highlighted] {
-  background: rgba(255, 255, 255, 0.12);
+background: rgba(255, 255, 255, 0.12);
 }
 
 .dropdown-demo-container .dropdown-item[data-disabled] {
-  opacity: 0.5;
-  cursor: not-allowed;
+opacity: 0.5;
+cursor: not-allowed;
 }
 
 .dropdown-demo-container .dropdown-item-avatar {
-  border-radius: 50%;
-  display: block;
-  width: 16px;
-  height: 16px;
-  background-color: rgba(0, 0, 0, 0.72);
+border-radius: 50%;
+display: block;
+width: 16px;
+height: 16px;
+background-color: rgba(0, 0, 0, 0.72);
 }
 
 [data-theme='dark'] .dropdown-demo-container .dropdown-item-avatar {
-  background-color: rgba(255, 255, 255, 0.72);
+background-color: rgba(255, 255, 255, 0.72);
 }
 
 .dropdown-arrow {
-  color: var(--dropdown-surface);
+color: var(--dropdown-surface);
 }`}
 />
 
@@ -162,8 +162,13 @@ Accessible dropdown menu component for creating interactive command menus with k
 ## Installation
 
 ```tsx
-// Compound component (recommended)
 import { DropdownMenu } from '@turkish-technology/spar';
+```
+
+**Next.js (App Router):** Use the sub-path import for Server Component support:
+
+```ts
+import * as DropdownMenu from '@turkish-technology/spar/dropdown-menu';
 ```
 
 ## Anatomy
@@ -451,6 +456,7 @@ The root container that manages the dropdown menu state and provides context to 
 | `onOpenChange?`  | `(open: boolean) => void` | `undefined` | Callback when open state changes                                                                                                           |
 | `modal?`         | `boolean`                 | `true`      | Whether menu traps focus (modal) or allows focus to leave                                                                                  |
 | `disabled?`      | `boolean`                 | `false`     | Disables all dropdown menu triggers (prevents opening)                                                                                     |
+| `dir?`           | `'ltr' \| 'rtl'`          | `'ltr'`     | Reading direction for menu positioning                                                                                                     |
 | `closeOnSelect?` | `boolean`                 | `true`      | Whether to close menu on item selection                                                                                                    |
 | `children?`      | `React.ReactNode`         | `undefined` | Menu trigger and content                                                                                                                   |
 

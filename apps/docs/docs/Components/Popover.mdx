@@ -52,91 +52,91 @@ A floating panel component anchored to a trigger element with smart positioning,
 }
 
 [data-theme='dark'] .popover-demo-container .popover-trigger {
-  border-color: #2b303b;
-  background-color: rgba(255, 255, 255, 0.12);
-  color: #f2f5f8;
+border-color: #2b303b;
+background-color: rgba(255, 255, 255, 0.12);
+color: #f2f5f8;
 }
 
 .popover-content {
-  --popover-surface: #f7f8fa;
-  width: 320px;
-  border-radius: 12px;
-  border: 1px solid #e1e4ea;
-  background-color: var(--popover-surface);
-  box-shadow:
-    0 12px 32px rgba(34, 37, 48, 0.08),
-    0 4px 12px rgba(34, 37, 48, 0.06);
+--popover-surface: #f7f8fa;
+width: 320px;
+border-radius: 12px;
+border: 1px solid #e1e4ea;
+background-color: var(--popover-surface);
+box-shadow:
+0 12px 32px rgba(34, 37, 48, 0.08),
+0 4px 12px rgba(34, 37, 48, 0.06);
 }
 
 [data-theme='dark'] .popover-content {
-  --popover-surface: #1f232b;
-  border-color: #2b303b;
-  background-color: #1f232b;
+--popover-surface: #1f232b;
+border-color: #2b303b;
+background-color: #1f232b;
 }
 
 .popover-demo-container .popover-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 12px 8px;
+display: flex;
+align-items: center;
+gap: 8px;
+padding: 12px 12px 8px;
 }
 
 .popover-demo-container .popover-icon {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  border: 1px solid #cacfd8;
-  background: rgba(0, 0, 0, 0.72);
+width: 16px;
+height: 16px;
+border-radius: 4px;
+border: 1px solid #cacfd8;
+background: rgba(0, 0, 0, 0.72);
 }
 
 [data-theme='dark'] .popover-demo-container .popover-icon {
-  border-color: #525866;
-  background-color: rgba(255, 255, 255, 0.72);
+border-color: #525866;
+background-color: rgba(255, 255, 255, 0.72);
 }
 
 .popover-demo-container .popover-title {
-  color: #222530;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
+color: #222530;
+font-size: 14px;
+line-height: 20px;
+font-weight: 500;
 }
 
 [data-theme='dark'] .popover-demo-container .popover-title {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .popover-demo-container .popover-close {
-  margin-left: auto;
-  width: 24px;
-  height: 24px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background-color: transparent;
+margin-left: auto;
+width: 24px;
+height: 24px;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+background-color: transparent;
 }
 
 .popover-demo-container .popover-close path {
-  fill: #222530;
+fill: #222530;
 }
 
 [data-theme='dark'] .popover-demo-container .popover-close path {
-  fill: #f2f5f8;
+fill: #f2f5f8;
 }
 
 .popover-demo-container .popover-paragraph {
-  color: #717784;
-  font-size: 13px;
-  line-height: 18px;
-  padding: 0 12px 12px;
-  margin-bottom: 0;
+color: #717784;
+font-size: 13px;
+line-height: 18px;
+padding: 0 12px 12px;
+margin-bottom: 0;
 }
 
 [data-theme='dark'] .popover-demo-container .popover-paragraph {
-  color: #99a0ae;
+color: #99a0ae;
 }
 
 .popover-arrow {
-  color: var(--popover-surface);
+color: var(--popover-surface);
 }`}
 />
 
@@ -160,6 +160,12 @@ pnpm install @turkish-technology/spar
 
 ```ts
 import { Popover } from '@turkish-technology/spar';
+```
+
+**Next.js (App Router):** Use the sub-path import for Server Component support:
+
+```ts
+import * as Popover from '@turkish-technology/spar/popover';
 ```
 
 ---

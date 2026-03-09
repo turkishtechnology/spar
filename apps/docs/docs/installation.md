@@ -71,42 +71,91 @@ function App() {
 
 Spar is fully compatible with Next.js 14+ (App Router & Server Components supported).
 
+Spar provides **per-component sub-path imports** for seamless Server Component support. Use `import * as ComponentName` to get the familiar compound pattern (`Accordion.Root`, `Accordion.Item`, etc.) working in both Server and Client Components:
+
+```ts
+import * as Accordion from '@turkish-technology/spar/accordion';
+import * as Breadcrumb from '@turkish-technology/spar/breadcrumb';
+import * as Dialog from '@turkish-technology/spar/dialog';
+import { Button } from '@turkish-technology/spar/button';
+```
+
 #### Server Component Example
 
 ```tsx title="app/page.tsx"
-import { BreadcrumbRoot, BreadcrumbItem, BreadcrumbSeparator } from '@turkish-technology/spar';
+import * as Breadcrumb from '@turkish-technology/spar/breadcrumb';
+import { Button } from '@turkish-technology/spar/button';
 
 export default function Home() {
   return (
     <main>
-      <BreadcrumbRoot>
-        <BreadcrumbItem href='/'>Home</BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>Dashboard</BreadcrumbItem>
-      </BreadcrumbRoot>
+      <Breadcrumb.Root>
+        <Breadcrumb.List>
+          <Breadcrumb.Item>
+            <Breadcrumb.Link href='/'>Home</Breadcrumb.Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Separator />
+          <Breadcrumb.Item>
+            <Breadcrumb.Page>Dashboard</Breadcrumb.Page>
+          </Breadcrumb.Item>
+        </Breadcrumb.List>
+      </Breadcrumb.Root>
       <h1>Welcome to Spar + Next.js</h1>
+      <Button>Click me</Button>
     </main>
   );
 }
 ```
 
-#### Client Component with Dynamic Import
+#### Client Component Example
 
-For client-side only components, use dynamic imports to prevent SSR.
+For components that require state (controlled mode), wrap them in a Client Component:
 
-```tsx title="app/components/DynamicButton.tsx"
+```tsx title="app/components/AccordionSection.tsx"
 'use client';
 
-import dynamic from 'next/dynamic';
+import { useState } from 'react';
+import * as Accordion from '@turkish-technology/spar/accordion';
 
-const Button = dynamic(() => import('@turkish-technology/spar').then((mod) => mod.Button), {
-  ssr: false,
-});
+export function AccordionSection() {
+  const [value, setValue] = useState<string | string[]>('');
 
-export default function DynamicButton() {
-  return <Button onClick={() => alert('Clicked!')}>Click me</Button>;
+  return (
+    <Accordion.Root type='single' isCollapsible value={value} onValueChange={setValue}>
+      <Accordion.Item value='faq-1'>
+        <Accordion.Header>
+          <Accordion.Trigger>What is Spar?</Accordion.Trigger>
+        </Accordion.Header>
+        <Accordion.Content>Spar is a headless React component library.</Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  );
 }
 ```
+
+:::tip Why sub-path imports?
+The standard barrel import (`import { Accordion } from '@turkish-technology/spar'`) uses a compound pattern where sub-components are attached as static properties (`Accordion.Root`). React Server Components cannot serialize these static properties across the server-client boundary. Sub-path imports solve this by exposing each sub-component as a proper named export.
+:::
+
+#### Available Sub-path Imports
+
+| Import Path                              | Components                                                                    |
+| ---------------------------------------- | ----------------------------------------------------------------------------- |
+| `@turkish-technology/spar/accordion`     | Root, Item, Header, Trigger, Content                                          |
+| `@turkish-technology/spar/breadcrumb`    | Root, List, Item, Link, Page, Separator                                       |
+| `@turkish-technology/spar/button`        | Button                                                                        |
+| `@turkish-technology/spar/checkbox`      | Checkbox                                                                      |
+| `@turkish-technology/spar/collapsible`   | Root, Trigger, Content                                                        |
+| `@turkish-technology/spar/dialog`        | Root, Trigger, Overlay, Content, Title, Description, Close                    |
+| `@turkish-technology/spar/dropdown-menu` | Root, Trigger, Content, Item, Separator, Label, Group, Arrow                  |
+| `@turkish-technology/spar/input`         | Root, Field, Label, Description, ErrorMessage                                 |
+| `@turkish-technology/spar/label`         | Label                                                                         |
+| `@turkish-technology/spar/popover`       | Root, Trigger, Content, Arrow, Close                                          |
+| `@turkish-technology/spar/radio`         | Root, Group, Item                                                             |
+| `@turkish-technology/spar/select`        | Root, Trigger, Value, Content, Item, Group, Label, ItemText, Separator, Arrow |
+| `@turkish-technology/spar/switch`        | Switch, useSwitch                                                             |
+| `@turkish-technology/spar/tabs`          | Root, List, Trigger, Content                                                  |
+| `@turkish-technology/spar/tooltip`       | Provider, Root, Trigger, Content, Arrow                                       |
 
 ## Next Steps
 
