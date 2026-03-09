@@ -148,6 +148,8 @@ color: var(--select-surface);
 
 </div>
 
+The live demo shows a custom chevron in the trigger and a checkmark inside each item to illustrate how visual indicators are composed manually.
+
 ## Features
 
 - ✅ Single-value selection (`value: string`)
@@ -165,7 +167,6 @@ color: var(--select-surface);
 ```tsx
 import { Select } from '@turkish-technology/spar';
 ```
-
 
 ## Anatomy
 
@@ -337,7 +338,7 @@ function ControlledSelect() {
 
 You can section options with `Group` + `Label` + `Separator`:
 
-```tsx
+```tsx {2,5-7,10-12,24,26-27}
 function GroupedSelect() {
   const [value, setValue] = React.useState('');
 
@@ -385,7 +386,7 @@ function GroupedSelect() {
 
 When `name` is provided, Root generates a hidden input for the selected value.
 
-```tsx
+```tsx {2,4-7,13-15,18-26,30}
 function SelectInForm() {
   const [category, setCategory] = React.useState('');
 
@@ -423,9 +424,9 @@ function SelectInForm() {
 
 ## API Reference
 
-### Select.Root
+### Select / Select.Root
 
-Provides the root state and context.
+Provides the root state and context. `Select` and `Select.Root` are the same component - the difference is only import/notation style.
 
 **Props**
 

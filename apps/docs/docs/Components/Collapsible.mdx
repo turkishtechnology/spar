@@ -14,6 +14,8 @@ A headless collapsible component that manages the visibility of content sections
 
 ## Live Demo
 
+This demo uses an icon trigger to reveal a simple stack of content rows.
+
 <LiveCode
   code={`<Collapsible.Root className="collapsible-demo-container">
         <Collapsible.Trigger className="collapsible-trigger">
@@ -105,7 +107,6 @@ background-color: rgba(255, 255, 255, 0.12);
 import { Collapsible } from '@turkish-technology/spar';
 ```
 
-
 ## Anatomy
 
 The Collapsible component consists of three main parts:
@@ -157,6 +158,8 @@ The Collapsible component consists of three main parts:
 
 ### Basic Usage
 
+Start with a trigger and one content region when you only need to show or hide a small section.
+
 ```tsx
 import { Collapsible } from '@turkish-technology/spar';
 
@@ -174,7 +177,9 @@ function BasicCollapsible() {
 
 ### Controlled State
 
-```tsx
+Use controlled state when another part of the interface needs to open or close the collapsible programmatically.
+
+```tsx {5,8-9}
 import { Collapsible } from '@turkish-technology/spar';
 import { useState } from 'react';
 
@@ -197,7 +202,9 @@ function ControlledCollapsible() {
 
 ### Default Open State
 
-```tsx
+`defaultOpen` is useful for sections that should begin expanded without managing state yourself.
+
+```tsx {5-7}
 import { Collapsible } from '@turkish-technology/spar';
 
 function DefaultOpenCollapsible() {
@@ -214,7 +221,9 @@ function DefaultOpenCollapsible() {
 
 ### Custom Trigger Element
 
-```tsx
+Render the trigger as another element when the toggle needs to match an existing heading or layout pattern.
+
+```tsx {6-7}
 import { Collapsible } from '@turkish-technology/spar';
 
 function CustomTriggerCollapsible() {
@@ -233,7 +242,9 @@ function CustomTriggerCollapsible() {
 
 ### Force Mount Content
 
-```tsx
+Keep content mounted when collapsed if you need to preserve nested state or make hidden text discoverable.
+
+```tsx {7-9}
 import { Collapsible } from '@turkish-technology/spar';
 
 function ForceMountCollapsible() {
@@ -251,7 +262,9 @@ function ForceMountCollapsible() {
 
 ### Disabled State
 
-```tsx
+Disable the root when the section should stay visible or hidden without allowing user interaction.
+
+```tsx {5}
 import { Collapsible } from '@turkish-technology/spar';
 
 function DisabledCollapsible() {
@@ -268,9 +281,9 @@ function DisabledCollapsible() {
 
 ## API Reference
 
-### Collapsible.Root
+### Collapsible / Collapsible.Root
 
-The root component that provides context and state management for the collapsible.
+The root component that provides context and state management for the collapsible. `Collapsible` and `Collapsible.Root` are the same component - the difference is only import/notation style.
 
 **Props**
 

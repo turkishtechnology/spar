@@ -149,6 +149,8 @@ color: var(--dropdown-surface);
 
 </div>
 
+This example uses a compact trigger and a short menu list to demonstrate item highlighting, selection affordances, and the optional arrow.
+
 ## Features
 
 - ✅ Typeahead search for quick item selection
@@ -164,7 +166,6 @@ color: var(--dropdown-surface);
 ```tsx
 import { DropdownMenu } from '@turkish-technology/spar';
 ```
-
 
 ## Anatomy
 
@@ -288,7 +289,7 @@ function BasicMenu() {
 
 Control the menu's open state externally.
 
-```tsx
+```tsx {2,6-8}
 function ControlledMenu() {
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -311,7 +312,7 @@ function ControlledMenu() {
 
 Control menu positioning.
 
-```tsx
+```tsx {5}
 function CustomPositionMenu() {
   return (
     <DropdownMenu.Root>
@@ -330,7 +331,7 @@ function CustomPositionMenu() {
 
 Group related items together.
 
-```tsx
+```tsx {6-7,12-14}
 function GroupedMenu() {
   return (
     <DropdownMenu.Root>
@@ -358,7 +359,7 @@ function GroupedMenu() {
 
 Disable specific menu items.
 
-```tsx
+```tsx {2,8-9}
 function MenuWithDisabledItems() {
   const hasSelection = false;
 
@@ -379,7 +380,7 @@ function MenuWithDisabledItems() {
 
 Allow focus to leave the menu without closing.
 
-```tsx
+```tsx {3}
 function NonModalMenu() {
   return (
     <DropdownMenu.Root modal={false}>
@@ -398,7 +399,7 @@ function NonModalMenu() {
 
 Add a decorative arrow pointing to the trigger.
 
-```tsx
+```tsx {10}
 function MenuWithArrow() {
   return (
     <DropdownMenu.Root>
@@ -419,7 +420,7 @@ function MenuWithArrow() {
 
 Control when the menu closes on selection.
 
-```tsx
+```tsx {3,9}
 function CustomCloseBehavior() {
   return (
     <DropdownMenu.Root closeOnSelect={false}>
@@ -437,9 +438,9 @@ function CustomCloseBehavior() {
 
 ## API Reference
 
-### DropdownMenu.Root
+### DropdownMenu / DropdownMenu.Root
 
-The root container that manages the dropdown menu state and provides context to all child components.
+The root container that manages the dropdown menu state and provides context to all child components. `DropdownMenu` and `DropdownMenu.Root` are the same component - the difference is only import/notation style.
 
 **Props**
 

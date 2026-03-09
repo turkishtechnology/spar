@@ -215,7 +215,7 @@ function BasicTextInput() {
 
 Demonstrates validation state management with conditional error message display.
 
-```tsx
+```tsx {2-3,5-7,12,20-21,23}
 function ValidatedInput() {
   const [email, setEmail] = React.useState('');
   const [isInvalid, setIsInvalid] = React.useState(false);
@@ -250,7 +250,7 @@ function ValidatedInput() {
 
 Shows polymorphic rendering capability for multi-line text input with proper accessibility.
 
-```tsx
+```tsx {2,7-12,14}
 function TextareaInput() {
   const [message, setMessage] = React.useState('');
 
@@ -274,7 +274,7 @@ function TextareaInput() {
 
 Demonstrates disabled state propagation across all compound parts.
 
-```tsx
+```tsx {3,5-6}
 function DisabledInput() {
   return (
     <Input.Root disabled>
@@ -290,7 +290,7 @@ function DisabledInput() {
 
 Complete form example with validation, submission, and error handling.
 
-```tsx
+```tsx {2-3,5-14,17-22,25-33,36-43,47-56,59}
 function ContactForm() {
   const [formData, setFormData] = React.useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = React.useState<Record<string, string>>({});
