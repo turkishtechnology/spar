@@ -403,7 +403,7 @@ The root container that provides context and manages the state for all accordion
 | Attribute          | Value                        | Purpose                          |
 | ------------------ | ---------------------------- | -------------------------------- |
 | `data-orientation` | `"vertical" \| "horizontal"` | Indicates navigation orientation |
-| `data-type`        | `"single" \| "multiple"`      | Indicates the expansion mode     |
+| `data-type`        | `"single" \| "multiple"`     | Indicates the expansion mode     |
 
 ### Accordion.Item
 
@@ -452,11 +452,11 @@ Semantic heading wrapper for the accordion trigger button.
 
 **HTML Attributes**
 
-| Attribute       | Value                | Purpose                                       |
-| --------------- | -------------------- | --------------------------------------------- |
-| `data-state`    | `"open" \| "closed"` | Reflects the expansion state of the item      |
-| `data-level`    | `number`             | Reflects the rendered heading level           |
-| `data-disabled` | `""`                 | Present when the item is disabled             |
+| Attribute       | Value                | Purpose                                  |
+| --------------- | -------------------- | ---------------------------------------- |
+| `data-state`    | `"open" \| "closed"` | Reflects the expansion state of the item |
+| `data-level`    | `number`             | Reflects the rendered heading level      |
+| `data-disabled` | `""`                 | Present when the item is disabled        |
 
 ### Accordion.Trigger
 
@@ -490,15 +490,15 @@ Button that toggles the visibility of the associated content panel.
 
 **HTML Attributes**
 
-| Attribute                | Value                | Purpose                                                          |
-| ------------------------ | -------------------- | ---------------------------------------------------------------- |
-| `id`                     | `string`             | Unique identifier matching the trigger element ARIA ID           |
-| `aria-expanded`          | `boolean`            | Indicates whether the associated panel is expanded               |
-| `aria-controls`          | `string`             | References the content panel element ID                          |
-| `data-state`             | `"open" \| "closed"` | Reflects the expansion state of the item                         |
-| `data-disabled`          | `""`                 | Present when the trigger is disabled                             |
-| `data-accordion-trigger` | `""`                 | Always present; identifies the element as an accordion trigger   |
-| `data-value`             | `string`             | The value of the accordion item this trigger belongs to          |
+| Attribute                | Value                | Purpose                                                        |
+| ------------------------ | -------------------- | -------------------------------------------------------------- |
+| `id`                     | `string`             | Unique identifier matching the trigger element ARIA ID         |
+| `aria-expanded`          | `boolean`            | Indicates whether the associated panel is expanded             |
+| `aria-controls`          | `string`             | References the content panel element ID                        |
+| `data-state`             | `"open" \| "closed"` | Reflects the expansion state of the item                       |
+| `data-disabled`          | `""`                 | Present when the trigger is disabled                           |
+| `data-accordion-trigger` | `""`                 | Always present; identifies the element as an accordion trigger |
+| `data-value`             | `string`             | The value of the accordion item this trigger belongs to        |
 
 ### Accordion.Content
 
@@ -506,29 +506,29 @@ Collapsible panel containing the accordion item content.
 
 **Props**
 
-| Name             | Type                       | Default     | Description                                                           |
-| ---------------- | -------------------------- | ----------- | --------------------------------------------------------------------- |
-| `forceMount?`    | `boolean`                  | `false`     | Force content to remain mounted when collapsed                        |
-| `onBeforeMatch?` | `(event: Event) => void`   | `undefined` | Callback fired when content is found via browser Find command         |
-| `as?`            | `React.ElementType`        | `"div"`     | Polymorphic component type                                            |
-| `children`       | `React.ReactNode`          | -           | Panel content                                                         |
+| Name             | Type                     | Default     | Description                                                   |
+| ---------------- | ------------------------ | ----------- | ------------------------------------------------------------- |
+| `forceMount?`    | `boolean`                | `false`     | Force content to remain mounted when collapsed                |
+| `onBeforeMatch?` | `(event: Event) => void` | `undefined` | Callback fired when content is found via browser Find command |
+| `as?`            | `React.ElementType`      | `"div"`     | Polymorphic component type                                    |
+| `children`       | `React.ReactNode`        | -           | Panel content                                                 |
 
 **Events**
 
-| Name             | Parameters       | Description                                                    | When Triggered                                                                                  |
-| ---------------- | ---------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `onBeforeMatch`  | `(event: Event)` | Fired when hidden content is matched via browser Find command  | Browser Find (`Ctrl+F`/`Cmd+F`) matches content inside a closed, `forceMount`ed panel           |
+| Name            | Parameters       | Description                                                   | When Triggered                                                                        |
+| --------------- | ---------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `onBeforeMatch` | `(event: Event)` | Fired when hidden content is matched via browser Find command | Browser Find (`Ctrl+F`/`Cmd+F`) matches content inside a closed, `forceMount`ed panel |
 
 **HTML Attributes**
 
-| Attribute          | Value                     | Purpose                                                                                           |
-| ------------------ | ------------------------- | ------------------------------------------------------------------------------------------------- |
-| `id`               | `string`                  | Unique identifier matching the content element ARIA ID                                            |
-| `role`             | `"region"`                | Always present; marks the panel as a landmark region                                              |
-| `aria-labelledby`  | `string`                  | References the trigger element that labels this panel                                             |
-| `data-state`       | `"open" \| "closed"`      | Reflects the visibility state of the panel                                                        |
-| `data-disabled`    | `""`                      | Present when the item is disabled                                                                 |
-| `hidden`           | `true \| "until-found"`   | Present when closed and `forceMount` is `true`; `"until-found"` in modern browsers, `true` as fallback |
+| Attribute         | Value                   | Purpose                                                                                                |
+| ----------------- | ----------------------- | ------------------------------------------------------------------------------------------------------ |
+| `id`              | `string`                | Unique identifier matching the content element ARIA ID                                                 |
+| `role`            | `"region"`              | Always present; marks the panel as a landmark region                                                   |
+| `aria-labelledby` | `string`                | References the trigger element that labels this panel                                                  |
+| `data-state`      | `"open" \| "closed"`    | Reflects the visibility state of the panel                                                             |
+| `data-disabled`   | `""`                    | Present when the item is disabled                                                                      |
+| `hidden`          | `true \| "until-found"` | Present when closed and `forceMount` is `true`; `"until-found"` in modern browsers, `true` as fallback |
 
 ## Keyboard Interactions
 

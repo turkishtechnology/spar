@@ -1,5 +1,5 @@
 import type { ElementType, ReactNode } from 'react';
-import type { Direction, Orientation, PolymorphicProps } from '../../types';
+import type { Orientation, PolymorphicProps } from '../../types';
 import type { ButtonOwnProps } from '../Button/types';
 
 export type TabsActivationMode = 'automatic' | 'manual';
@@ -37,12 +37,6 @@ export interface TabsOwnProps {
    * @defaultValue 'horizontal'
    */
   orientation?: Orientation;
-
-  /**
-   * Text direction for arrow key navigation
-   * @defaultValue 'ltr'
-   */
-  dir?: Direction;
 
   /**
    * Whether tabs activate on focus or require explicit activation
@@ -148,7 +142,6 @@ export interface TabsContextValue {
   selectedValue: string | undefined;
   onValueChange: (value: string) => void;
   orientation: Orientation;
-  dir: Direction;
   activationMode: TabsActivationMode;
   baseId: string;
   tabItems: Map<string, HTMLElement>;

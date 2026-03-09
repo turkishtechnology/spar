@@ -41,7 +41,6 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 | `onOpenChange` | `(open: boolean) => void` | No | `undefined` | Callback when open state changes |
 | `modal` | `boolean` | No | `true` | Whether menu is modal (focus trapped) |
 | `disabled` | `boolean` | No | `false` | Disables all dropdown menu triggers (prevents opening) |
-| `dir` | `'ltr' | 'rtl'` | No | `'ltr'` | Reading direction for positioning |
 | `closeOnSelect` | `boolean` | No | `true` | Selection close policy: true=always close on item select, false=never close on item select |
 
 ### DropdownMenuTrigger Props
@@ -212,7 +211,6 @@ interface DropdownMenuContextValue {
   contentId: string;
   modal: boolean;
   disabled: boolean;
-  dir: Direction;
   closeOnSelect: boolean;
   focusStrategy: DropdownMenuFocusStrategy;
   setFocusStrategy: (strategy: DropdownMenuFocusStrategy) => void;
@@ -236,7 +234,6 @@ interface DropdownMenuCollectionContextValue {
   highlightedId: string | null;
   closeOnSelect: boolean;
   closeMenu: (options?: { focusTrigger?: boolean }) => void;
-  dir: Direction;
 }
 ```
 

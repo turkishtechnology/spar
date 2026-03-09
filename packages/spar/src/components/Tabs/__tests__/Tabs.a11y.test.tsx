@@ -254,24 +254,6 @@ describe('Tabs Accessibility', () => {
       expect(disabledTab).not.toHaveFocus();
     });
 
-    it('supports RTL navigation', async () => {
-      const user = userEvent.setup();
-      render(<BasicTabs dir='rtl' />);
-
-      const tab1 = screen.getByRole('tab', { name: 'Section 1: Introduction' });
-      const tab2 = screen.getByRole('tab', { name: 'Section 2: Details' });
-
-      await user.click(tab1);
-
-      // In RTL, right arrow should move to previous tab (wrapping)
-      await user.keyboard('{ArrowRight}');
-      expect(tab2).toHaveFocus();
-
-      // Left arrow should move to next tab
-      await user.keyboard('{ArrowLeft}');
-      expect(tab1).toHaveFocus();
-    });
-
     it('supports manual activation mode', async () => {
       const user = userEvent.setup();
       render(<BasicTabs activationMode='manual' />);

@@ -18,7 +18,6 @@ export const DropdownMenu = ({
   onOpenChange,
   modal = true,
   disabled = false,
-  dir = 'ltr',
   closeOnSelect = true,
   children,
 }: DropdownMenuProps) => {
@@ -61,7 +60,6 @@ export const DropdownMenu = ({
       contentId,
       modal,
       disabled,
-      dir,
       closeOnSelect,
       focusStrategy,
       setFocusStrategy,
@@ -76,7 +74,6 @@ export const DropdownMenu = ({
       contentId,
       modal,
       disabled,
-      dir,
       closeOnSelect,
       focusStrategy,
       setFocusStrategy,

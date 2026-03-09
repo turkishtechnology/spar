@@ -320,12 +320,12 @@ Optional provider for sharing configuration across multiple tooltip instances.
 
 **Props**
 
-| Name                       | Type              | Default | Description                                     |
-| -------------------------- | ----------------- | ------- | ----------------------------------------------- |
-| `children?`                | `React.ReactNode` | `undefined` | Tooltip components to share provider context |
-| `delayDuration?`           | `number`          | `700`   | Global delay duration for all tooltips (ms)     |
-| `skipDelayDuration?`       | `number`          | `300`   | Duration to skip delay when moving between (ms) |
-| `disableHoverableContent?` | `boolean`         | `false` | Disable hoverable content globally              |
+| Name                       | Type              | Default     | Description                                     |
+| -------------------------- | ----------------- | ----------- | ----------------------------------------------- |
+| `children?`                | `React.ReactNode` | `undefined` | Tooltip components to share provider context    |
+| `delayDuration?`           | `number`          | `700`       | Global delay duration for all tooltips (ms)     |
+| `skipDelayDuration?`       | `number`          | `300`       | Duration to skip delay when moving between (ms) |
+| `disableHoverableContent?` | `boolean`         | `false`     | Disable hoverable content globally              |
 
 **Events**
 
@@ -335,8 +335,8 @@ Optional provider for sharing configuration across multiple tooltip instances.
 
 **HTML Attributes**
 
-| Attribute | Value | Purpose |
-| --------- | ----- | ------- |
+| Attribute | Value | Purpose                                |
+| --------- | ----- | -------------------------------------- |
 | None      | -     | Provider does not render a DOM element |
 
 ### Tooltip.Root
@@ -345,16 +345,16 @@ Root component that manages tooltip state and provides context to child componen
 
 **Props**
 
-| Name            | Type                      | Default     | Description                                                      |
-| --------------- | ------------------------- | ----------- | ---------------------------------------------------------------- |
+| Name            | Type                      | Default     | Description                                                                   |
+| --------------- | ------------------------- | ----------- | ----------------------------------------------------------------------------- |
 | `id?`           | `string`                  | `useId()`   | Base id used to derive trigger/content ids (`${id}-trigger`, `${id}-content`) |
-| `children?`     | `React.ReactNode`         | `undefined` | Tooltip trigger/content tree                                     |
-| `open?`         | `boolean`                 | `undefined` | Controlled open state                                            |
-| `defaultOpen?`  | `boolean`                 | `false`     | Initial state in uncontrolled mode                               |
-| `onOpenChange?` | `(open: boolean) => void` | `undefined` | Called when open state changes                                   |
-| `delay?`        | `number`                  | `700`*      | Show delay for this tooltip (`*` uses provider `delayDuration` when present) |
-| `hideDelay?`    | `number`                  | `0`         | Hide delay for this tooltip                                      |
-| `disabled?`     | `boolean`                 | `false`     | Disables open/close state updates                                |
+| `children?`     | `React.ReactNode`         | `undefined` | Tooltip trigger/content tree                                                  |
+| `open?`         | `boolean`                 | `undefined` | Controlled open state                                                         |
+| `defaultOpen?`  | `boolean`                 | `false`     | Initial state in uncontrolled mode                                            |
+| `onOpenChange?` | `(open: boolean) => void` | `undefined` | Called when open state changes                                                |
+| `delay?`        | `number`                  | `700`\*     | Show delay for this tooltip (`*` uses provider `delayDuration` when present)  |
+| `hideDelay?`    | `number`                  | `0`         | Hide delay for this tooltip                                                   |
+| `disabled?`     | `boolean`                 | `false`     | Disables open/close state updates                                             |
 
 **Events**
 
@@ -364,8 +364,8 @@ Root component that manages tooltip state and provides context to child componen
 
 **HTML Attributes**
 
-| Attribute | Value | Purpose |
-| --------- | ----- | ------- |
+| Attribute | Value | Purpose                            |
+| --------- | ----- | ---------------------------------- |
 | None      | -     | Root does not render a DOM element |
 
 ### Tooltip.Trigger
@@ -374,20 +374,20 @@ The trigger element that shows/hides the tooltip on hover or focus. Extends all 
 
 **Props**
 
-| Name       | Type                                                                          | Default       | Description                                                                 |
-| ---------- | ----------------------------------------------------------------------------- | ------------- | --------------------------------------------------------------------------- |
-| `as?`      | `React.ElementType`                                                           | `"button"`    | Polymorphic trigger element                                                 |
-| `children?`| `React.ReactNode \| ((state: TooltipTriggerRenderProps) => React.ReactNode)` | `undefined`   | Static children or render-props function                                   |
-| `...props` | `TooltipTriggerOwnProps & React.ComponentPropsWithoutRef<T>`                 | `undefined`   | Inherited `ButtonOwnProps` and native element props                         |
+| Name        | Type                                                                         | Default     | Description                                         |
+| ----------- | ---------------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
+| `as?`       | `React.ElementType`                                                          | `"button"`  | Polymorphic trigger element                         |
+| `children?` | `React.ReactNode \| ((state: TooltipTriggerRenderProps) => React.ReactNode)` | `undefined` | Static children or render-props function            |
+| `...props`  | `TooltipTriggerOwnProps & React.ComponentPropsWithoutRef<T>`                 | `undefined` | Inherited `ButtonOwnProps` and native element props |
 
 **Render Props (TooltipTriggerRenderProps)**
 
-| Property   | Type         | Description                                   |
-| ---------- | ------------ | --------------------------------------------- |
-| `isOpen`   | `boolean`    | Whether the tooltip is currently visible      |
-| `disabled` | `boolean`    | Whether the tooltip is disabled               |
-| `show`     | `() => void` | Opens immediately                             |
-| `hide`     | `() => void` | Closes immediately                            |
+| Property   | Type         | Description                              |
+| ---------- | ------------ | ---------------------------------------- |
+| `isOpen`   | `boolean`    | Whether the tooltip is currently visible |
+| `disabled` | `boolean`    | Whether the tooltip is disabled          |
+| `show`     | `() => void` | Opens immediately                        |
+| `hide`     | `() => void` | Closes immediately                       |
 
 **Events**
 
@@ -401,12 +401,12 @@ The trigger element that shows/hides the tooltip on hover or focus. Extends all 
 
 **HTML Attributes**
 
-| Attribute       | Value                | Purpose                  |
-| --------------- | -------------------- | ------------------------ |
-| `id`            | `string`             | Unique identifier        |
-| `disabled`      | `boolean`            | Disabled state from `Tooltip.Root` |
+| Attribute          | Value                 | Purpose                                 |
+| ------------------ | --------------------- | --------------------------------------- |
+| `id`               | `string`              | Unique identifier                       |
+| `disabled`         | `boolean`             | Disabled state from `Tooltip.Root`      |
 | `aria-describedby` | `string \| undefined` | Set to content id when open and enabled |
-| `data-state`    | `"open" \| "closed"` | Current tooltip state    |
+| `data-state`       | `"open" \| "closed"`  | Current tooltip state                   |
 
 ### Tooltip.Content
 
@@ -414,34 +414,34 @@ The content that displays in the tooltip popup with smart positioning.
 
 **Props**
 
-| Name                    | Type                                     | Default         | Description                                                                 |
-| ----------------------- | ---------------------------------------- | --------------- | --------------------------------------------------------------------------- |
-| `as?`                   | `React.ElementType`                      | `"div"`         | Polymorphic content element                                                 |
-| `side?`                 | `"top" \| "bottom" \| "left" \| "right"` | `"top"`         | Preferred side                                                              |
-| `align?`                | `"start" \| "center" \| "end"`           | `"center"`      | Preferred alignment                                                         |
-| `container?`            | `HTMLElement \| null`                    | `document.body` | Portal container (`null` also falls back to `document.body`)               |
-| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`         | `undefined`     | Called on `Escape` before internal close                                   |
+| Name                    | Type                                     | Default         | Description                                                                     |
+| ----------------------- | ---------------------------------------- | --------------- | ------------------------------------------------------------------------------- |
+| `as?`                   | `React.ElementType`                      | `"div"`         | Polymorphic content element                                                     |
+| `side?`                 | `"top" \| "bottom" \| "left" \| "right"` | `"top"`         | Preferred side                                                                  |
+| `align?`                | `"start" \| "center" \| "end"`           | `"center"`      | Preferred alignment                                                             |
+| `container?`            | `HTMLElement \| null`                    | `document.body` | Portal container (`null` also falls back to `document.body`)                    |
+| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`         | `undefined`     | Called on `Escape` before internal close                                        |
 | `onPointerDownOutside?` | `(event: PointerEvent) => void`          | `undefined`     | Type-level prop; current implementation does not bind dedicated outside handler |
-| `onOpenAutoFocus?`      | `(event: Event) => void`                 | `undefined`     | Type-level prop; current implementation does not run open auto-focus logic |
-| `onCloseAutoFocus?`     | `(event: Event) => void`                 | `undefined`     | Type-level prop; current implementation does not run close auto-focus logic |
-| `...props`              | `React.ComponentPropsWithoutRef<T>`      | `undefined`     | Native props forwarded to rendered content element                          |
+| `onOpenAutoFocus?`      | `(event: Event) => void`                 | `undefined`     | Type-level prop; current implementation does not run open auto-focus logic      |
+| `onCloseAutoFocus?`     | `(event: Event) => void`                 | `undefined`     | Type-level prop; current implementation does not run close auto-focus logic     |
+| `...props`              | `React.ComponentPropsWithoutRef<T>`      | `undefined`     | Native props forwarded to rendered content element                              |
 
 **Events**
 
-| Name              | Parameters                     | Description            | When Triggered                  |
-| ----------------- | ------------------------------ | ---------------------- | ------------------------------- |
-| `onEscapeKeyDown` | `(event: KeyboardEvent)`       | Escape key pressed     | User presses Escape in content  |
-| `onKeyDown`       | `(event: React.KeyboardEvent)` | Key pressed in content | Keyboard interaction            |
+| Name              | Parameters                     | Description            | When Triggered                                       |
+| ----------------- | ------------------------------ | ---------------------- | ---------------------------------------------------- |
+| `onEscapeKeyDown` | `(event: KeyboardEvent)`       | Escape key pressed     | User presses Escape in content                       |
+| `onKeyDown`       | `(event: React.KeyboardEvent)` | Key pressed in content | Keyboard interaction                                 |
 | `onMouseEnter`    | `(event: React.MouseEvent)`    | Pointer enters content | Keeps content open when hoverable content is enabled |
-| `onMouseLeave`    | `(event: React.MouseEvent)`    | Pointer leaves content | Closes content when hoverable content is enabled |
+| `onMouseLeave`    | `(event: React.MouseEvent)`    | Pointer leaves content | Closes content when hoverable content is enabled     |
 
 **HTML Attributes**
 
-| Attribute        | Value                                       | Purpose                          |
-| ---------------- | ------------------------------------------- | -------------------------------- |
-| `id`             | `string`                                    | Unique identifier                |
-| `role`           | `"tooltip"`                                 | Tooltip semantic role            |
-| `data-state`     | `"open" \| "closed"`                        | Visibility state                 |
+| Attribute        | Value                                                                     | Purpose                                |
+| ---------------- | ------------------------------------------------------------------------- | -------------------------------------- |
+| `id`             | `string`                                                                  | Unique identifier                      |
+| `role`           | `"tooltip"`                                                               | Tooltip semantic role                  |
+| `data-state`     | `"open" \| "closed"`                                                      | Visibility state                       |
 | `data-placement` | `"top" \| "bottom" \| "left" \| "right"` + optional `-start/-center/-end` | Computed placement from floating logic |
 
 ### Tooltip.Arrow
@@ -452,11 +452,11 @@ Supports polymorphic rendering via the `as` prop. When rendered as the default `
 
 **Props**
 
-| Name       | Type                             | Default     | Description                                                                       |
-| ---------- | -------------------------------- | ----------- | --------------------------------------------------------------------------------- |
-| `as?`      | `React.ElementType`              | `"svg"`     | Polymorphic element type                                                          |
-| `children?`| `React.ReactNode`                | `undefined` | Custom arrow content; default SVG polygon when omitted                            |
-| `...props` | `React.ComponentPropsWithoutRef<T>` | `undefined` | Native props for rendered element                                                 |
+| Name        | Type                                | Default     | Description                                            |
+| ----------- | ----------------------------------- | ----------- | ------------------------------------------------------ |
+| `as?`       | `React.ElementType`                 | `"svg"`     | Polymorphic element type                               |
+| `children?` | `React.ReactNode`                   | `undefined` | Custom arrow content; default SVG polygon when omitted |
+| `...props`  | `React.ComponentPropsWithoutRef<T>` | `undefined` | Native props for rendered element                      |
 
 **Events**
 
@@ -466,13 +466,13 @@ Supports polymorphic rendering via the `as` prop. When rendered as the default `
 
 **HTML Attributes**
 
-| Attribute        | Value                                                          | Purpose                          |
-| ---------------- | -------------------------------------------------------------- | -------------------------------- |
-| `aria-hidden`    | `"true"`                                                       | Hidden from assistive technology |
+| Attribute        | Value                                                                     | Purpose                          |
+| ---------------- | ------------------------------------------------------------------------- | -------------------------------- |
+| `aria-hidden`    | `"true"`                                                                  | Hidden from assistive technology |
 | `data-placement` | `"top" \| "bottom" \| "left" \| "right"` + optional `-start/-center/-end` | Placement metadata               |
-| `width`          | `10` (only when `as="svg"`)                                   | Default SVG size                 |
-| `height`         | `5` (only when `as="svg"`)                                    | Default SVG size                 |
-| `viewBox`        | `"0 0 10 5"` (only when `as="svg"`)                           | Default SVG viewport             |
+| `width`          | `10` (only when `as="svg"`)                                               | Default SVG size                 |
+| `height`         | `5` (only when `as="svg"`)                                                | Default SVG size                 |
+| `viewBox`        | `"0 0 10 5"` (only when `as="svg"`)                                       | Default SVG viewport             |
 
 ---
 
@@ -480,10 +480,10 @@ Supports polymorphic rendering via the `as` prop. When rendered as the default `
 
 Implemented keyboard behavior:
 
-| Key             | Action        | Context         | Notes                                       |
-| --------------- | ------------- | --------------- | ------------------------------------------- |
-| `Tab`           | Focus trigger | Any context     | Shows tooltip immediately on focus          |
-| `Escape`        | Close tooltip | Focused trigger | Closes tooltip and keeps focus on trigger   |
-| `Escape`        | Close tooltip | Focused content | Closes tooltip and returns focus to trigger |
+| Key      | Action        | Context         | Notes                                       |
+| -------- | ------------- | --------------- | ------------------------------------------- |
+| `Tab`    | Focus trigger | Any context     | Shows tooltip immediately on focus          |
+| `Escape` | Close tooltip | Focused trigger | Closes tooltip and keeps focus on trigger   |
+| `Escape` | Close tooltip | Focused content | Closes tooltip and returns focus to trigger |
 
 ---

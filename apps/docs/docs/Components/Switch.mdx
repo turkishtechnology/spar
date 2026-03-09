@@ -234,28 +234,28 @@ A headless boolean toggle control. It extends `Button` props and renders a switc
 
 **Props**
 
-| Name                | Type                                                                 | Default             | Description                                                                   |
-| ------------------- | -------------------------------------------------------------------- | ------------------- | ----------------------------------------------------------------------------- |
-| `as?`               | `React.ElementType`                                                  | `"button"`          | Element or component to render as                                             |
-| `checked?`          | `boolean`                                                            | `undefined`         | Controlled checked state                                                      |
-| `defaultChecked?`   | `boolean`                                                            | `false`             | Initial checked state in uncontrolled mode                                    |
-| `onChange?`         | `(checked: boolean) => void`                                         | `undefined`         | Called when checked state changes                                             |
-| `disabled?`         | `boolean`                                                            | `false`             | Prevents interaction                                                          |
-| `name?`             | `string`                                                             | `undefined`         | Hidden input name for form submission                                         |
-| `value?`            | `string`                                                             | `"on"`              | Hidden input value when checked                                               |
-| `form?`             | `string`                                                             | `undefined`         | Form id used by hidden input                                                  |
-| `required?`         | `boolean`                                                            | `false`             | Marks hidden input as required                                                |
-| `readOnly?`         | `boolean`                                                            | `false`             | Prevents state changes while keeping focus behavior                           |
-| `autoFocus?`        | `boolean`                                                            | `false`             | Focuses the switch on mount                                                   |
-| `id?`               | `string`                                                             | `useId()` generated | Uses provided id or an auto-generated id                                      |
-| `isLoading?`        | `boolean`                                                            | `false`             | Inherited from `Button`; marks element as loading                             |
-| `isPressed?`        | `boolean`                                                            | `undefined`         | Inherited toggle state from `Button`                                          |
-| `onPressedChange?`  | `(pressed: boolean) => void`                                         | `undefined`         | Inherited callback for `isPressed` toggle state                               |
-| `aria-label?`       | `string`                                                             | `undefined`         | Accessible name override                                                      |
-| `aria-labelledby?`  | `string`                                                             | `undefined`         | Id of labeling element                                                        |
-| `aria-describedby?` | `string`                                                             | `undefined`         | Id of descriptive element                                                     |
-| `children?`         | `React.ReactNode \| ((state: SwitchRenderProps) => React.ReactNode)` | `undefined`         | Static content or render-prop function                                        |
-| `...props`          | `ComponentPropsWithRef<"button">`                                    | `-`                 | Other native button props (polymorphic target props when `as` is provided)   |
+| Name                | Type                                                                 | Default             | Description                                                                |
+| ------------------- | -------------------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------- |
+| `as?`               | `React.ElementType`                                                  | `"button"`          | Element or component to render as                                          |
+| `checked?`          | `boolean`                                                            | `undefined`         | Controlled checked state                                                   |
+| `defaultChecked?`   | `boolean`                                                            | `false`             | Initial checked state in uncontrolled mode                                 |
+| `onChange?`         | `(checked: boolean) => void`                                         | `undefined`         | Called when checked state changes                                          |
+| `disabled?`         | `boolean`                                                            | `false`             | Prevents interaction                                                       |
+| `name?`             | `string`                                                             | `undefined`         | Hidden input name for form submission                                      |
+| `value?`            | `string`                                                             | `"on"`              | Hidden input value when checked                                            |
+| `form?`             | `string`                                                             | `undefined`         | Form id used by hidden input                                               |
+| `required?`         | `boolean`                                                            | `false`             | Marks hidden input as required                                             |
+| `readOnly?`         | `boolean`                                                            | `false`             | Prevents state changes while keeping focus behavior                        |
+| `autoFocus?`        | `boolean`                                                            | `false`             | Focuses the switch on mount                                                |
+| `id?`               | `string`                                                             | `useId()` generated | Uses provided id or an auto-generated id                                   |
+| `isLoading?`        | `boolean`                                                            | `false`             | Inherited from `Button`; marks element as loading                          |
+| `isPressed?`        | `boolean`                                                            | `undefined`         | Inherited toggle state from `Button`                                       |
+| `onPressedChange?`  | `(pressed: boolean) => void`                                         | `undefined`         | Inherited callback for `isPressed` toggle state                            |
+| `aria-label?`       | `string`                                                             | `undefined`         | Accessible name override                                                   |
+| `aria-labelledby?`  | `string`                                                             | `undefined`         | Id of labeling element                                                     |
+| `aria-describedby?` | `string`                                                             | `undefined`         | Id of descriptive element                                                  |
+| `children?`         | `React.ReactNode \| ((state: SwitchRenderProps) => React.ReactNode)` | `undefined`         | Static content or render-prop function                                     |
+| `...props`          | `ComponentPropsWithRef<"button">`                                    | `-`                 | Other native button props (polymorphic target props when `as` is provided) |
 
 **Render Props (SwitchRenderProps)**
 
@@ -271,19 +271,19 @@ A headless boolean toggle control. It extends `Button` props and renders a switc
 
 **Events**
 
-| Name              | Parameters                                    | Description                                      | When Triggered                                                      |
-| ----------------- | --------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------- |
-| `onChange`        | `(checked: boolean)`                          | Reports checked state changes                    | Click, `Space`, `Enter`, or render-prop `setChecked` updates state |
-| `onPressedChange` | `(pressed: boolean)`                          | Inherited `Button` toggle callback               | Activation when `isPressed` is used                                 |
-| `onClick`         | `(event: React.MouseEvent<HTMLButtonElement>)` | Inherited click handler from underlying `Button` | On pointer click and keyboard activation                            |
-| `onKeyDown`       | `(event: React.KeyboardEvent<HTMLButtonElement>)` | Inherited keydown handler                        | On keydown events on the switch element                             |
-| `onFocus`         | `(event: React.FocusEvent<HTMLButtonElement>)` | Inherited focus handler                          | When switch receives focus                                           |
-| `onBlur`          | `(event: React.FocusEvent<HTMLButtonElement>)` | Inherited blur handler                           | When switch loses focus                                              |
-| `onPointerEnter`  | `(event: React.PointerEvent<HTMLButtonElement>)` | Inherited pointer enter handler                  | Pointer enters switch area                                           |
-| `onPointerLeave`  | `(event: React.PointerEvent<HTMLButtonElement>)` | Inherited pointer leave handler                  | Pointer leaves switch area                                           |
-| `onPointerDown`   | `(event: React.PointerEvent<HTMLButtonElement>)` | Inherited pointer down handler                   | Pointer press starts                                                 |
-| `onPointerUp`     | `(event: React.PointerEvent<HTMLButtonElement>)` | Inherited pointer up handler                     | Pointer press ends                                                   |
-| `onPointerCancel` | `(event: React.PointerEvent<HTMLButtonElement>)` | Inherited pointer cancel handler                 | Pointer interaction is canceled                                      |
+| Name              | Parameters                                        | Description                                      | When Triggered                                                     |
+| ----------------- | ------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------ |
+| `onChange`        | `(checked: boolean)`                              | Reports checked state changes                    | Click, `Space`, `Enter`, or render-prop `setChecked` updates state |
+| `onPressedChange` | `(pressed: boolean)`                              | Inherited `Button` toggle callback               | Activation when `isPressed` is used                                |
+| `onClick`         | `(event: React.MouseEvent<HTMLButtonElement>)`    | Inherited click handler from underlying `Button` | On pointer click and keyboard activation                           |
+| `onKeyDown`       | `(event: React.KeyboardEvent<HTMLButtonElement>)` | Inherited keydown handler                        | On keydown events on the switch element                            |
+| `onFocus`         | `(event: React.FocusEvent<HTMLButtonElement>)`    | Inherited focus handler                          | When switch receives focus                                         |
+| `onBlur`          | `(event: React.FocusEvent<HTMLButtonElement>)`    | Inherited blur handler                           | When switch loses focus                                            |
+| `onPointerEnter`  | `(event: React.PointerEvent<HTMLButtonElement>)`  | Inherited pointer enter handler                  | Pointer enters switch area                                         |
+| `onPointerLeave`  | `(event: React.PointerEvent<HTMLButtonElement>)`  | Inherited pointer leave handler                  | Pointer leaves switch area                                         |
+| `onPointerDown`   | `(event: React.PointerEvent<HTMLButtonElement>)`  | Inherited pointer down handler                   | Pointer press starts                                               |
+| `onPointerUp`     | `(event: React.PointerEvent<HTMLButtonElement>)`  | Inherited pointer up handler                     | Pointer press ends                                                 |
+| `onPointerCancel` | `(event: React.PointerEvent<HTMLButtonElement>)`  | Inherited pointer cancel handler                 | Pointer interaction is canceled                                    |
 
 **HTML Attributes**
 
@@ -311,22 +311,22 @@ A headless boolean toggle control. It extends `Button` props and renders a switc
 
 **Hidden Input (rendered only when `name` is provided)**
 
-| Attribute     | Value      | Purpose                                  |
-| ------------- | ---------- | ---------------------------------------- |
+| Attribute     | Value        | Purpose                                  |
+| ------------- | ------------ | ---------------------------------------- |
 | `type`        | `"checkbox"` | Enables native form submission semantics |
-| `name`        | `string`   | Form field name                          |
-| `value`       | `string`   | Submitted value when checked             |
-| `form`        | `string`   | Associates input to external form id     |
-| `required`    | `boolean`  | Participates in native form validation   |
-| `checked`     | `boolean`  | Mirrors switch checked state             |
-| `tabIndex`    | `-1`       | Keeps hidden input out of tab sequence   |
-| `aria-hidden` | `true`     | Hides input from assistive tech tree     |
+| `name`        | `string`     | Form field name                          |
+| `value`       | `string`     | Submitted value when checked             |
+| `form`        | `string`     | Associates input to external form id     |
+| `required`    | `boolean`    | Participates in native form validation   |
+| `checked`     | `boolean`    | Mirrors switch checked state             |
+| `tabIndex`    | `-1`         | Keeps hidden input out of tab sequence   |
+| `aria-hidden` | `true`       | Hides input from assistive tech tree     |
 
 ## Keyboard Interactions
 
-| Key           | Action                    | Context          | Notes                                                    |
-| ------------- | ------------------------- | ---------------- | -------------------------------------------------------- |
-| `Tab`         | Moves focus to switch     | Focus management | Available when switch is not disabled                    |
-| `Shift + Tab` | Moves focus backward      | Focus management | Standard reverse tab navigation                          |
-| `Space`       | Toggles checked state     | Switch focused   | No state change when `disabled` or `readOnly` is `true` |
-| `Enter`       | Toggles checked state     | Switch focused   | No state change when `disabled` or `readOnly` is `true` |
+| Key           | Action                | Context          | Notes                                                   |
+| ------------- | --------------------- | ---------------- | ------------------------------------------------------- |
+| `Tab`         | Moves focus to switch | Focus management | Available when switch is not disabled                   |
+| `Shift + Tab` | Moves focus backward  | Focus management | Standard reverse tab navigation                         |
+| `Space`       | Toggles checked state | Switch focused   | No state change when `disabled` or `readOnly` is `true` |
+| `Enter`       | Toggles checked state | Switch focused   | No state change when `disabled` or `readOnly` is `true` |

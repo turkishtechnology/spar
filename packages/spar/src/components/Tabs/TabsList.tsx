@@ -13,7 +13,7 @@ export const TabsList = <T extends ElementType = 'div'>({
 }: TabsListProps<T>) => {
   const Component = as || 'div';
   const context = useTabsContext();
-  const { orientation, dir, activationMode, tabItems, onValueChange, focusTab } = context;
+  const { orientation, activationMode, tabItems, onValueChange, focusTab } = context;
 
   const getEnabledTabs = useCallback(() => {
     const isDisabled = (el: HTMLElement) =>
@@ -55,14 +55,14 @@ export const TabsList = <T extends ElementType = 'div'>({
       switch (event.key) {
         case 'ArrowRight':
           if (orientation === 'horizontal') {
-            nextValue = getNextTab(currentValue, dir === 'ltr' ? 1 : -1);
+            nextValue = getNextTab(currentValue, 1);
             event.preventDefault();
           }
           break;
 
         case 'ArrowLeft':
           if (orientation === 'horizontal') {
-            nextValue = getNextTab(currentValue, dir === 'ltr' ? -1 : 1);
+            nextValue = getNextTab(currentValue, -1);
             event.preventDefault();
           }
           break;
@@ -113,16 +113,7 @@ export const TabsList = <T extends ElementType = 'div'>({
 
       onKeyDown?.(event);
     },
-    [
-      orientation,
-      dir,
-      activationMode,
-      getNextTab,
-      getEnabledTabs,
-      focusTab,
-      onValueChange,
-      onKeyDown,
-    ],
+    [orientation, activationMode, getNextTab, getEnabledTabs, focusTab, onValueChange, onKeyDown],
   );
 
   return (

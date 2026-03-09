@@ -9,7 +9,6 @@ const BasicTabs = ({
   defaultValue,
   onValueChange,
   orientation = 'horizontal',
-  dir = 'ltr',
   activationMode = 'automatic',
   children,
   ...rest
@@ -19,7 +18,6 @@ const BasicTabs = ({
     {...(defaultValue !== undefined && { defaultValue })}
     {...(onValueChange && { onValueChange })}
     orientation={orientation}
-    dir={dir}
     activationMode={activationMode}
     {...rest}
   >
@@ -412,36 +410,6 @@ describe('Tabs', () => {
 
       await user.keyboard('{ArrowRight}');
       expect(handleKeyDown).toHaveBeenCalled();
-    });
-  });
-
-  describe('Direction Support', () => {
-    it('reverses horizontal arrow navigation when direction is RTL', async () => {
-      const user = userEvent.setup();
-      render(
-        <BasicTabs dir='rtl'>
-          <TabsList>
-            <TabsTrigger value='tab1'>Tab 1</TabsTrigger>
-            <TabsTrigger value='tab2'>Tab 2</TabsTrigger>
-          </TabsList>
-          <TabsContent value='tab1'>Content 1</TabsContent>
-          <TabsContent value='tab2'>Content 2</TabsContent>
-        </BasicTabs>,
-      );
-
-      const tab1 = screen.getByRole('tab', { name: 'Tab 1' });
-      const tab2 = screen.getByRole('tab', { name: 'Tab 2' });
-
-      await user.click(tab1);
-      await user.keyboard('{ArrowRight}');
-
-      expect(tab2).toHaveFocus();
-      expect(tab2).toHaveAttribute('aria-selected', 'true');
-
-      await user.keyboard('{ArrowLeft}');
-
-      expect(tab1).toHaveFocus();
-      expect(tab1).toHaveAttribute('aria-selected', 'true');
     });
   });
 

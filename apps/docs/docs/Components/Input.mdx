@@ -115,17 +115,23 @@ import { Input } from '@turkish-technology/spar';
   <Input.Field />
   <Input.Description />
   <Input.ErrorMessage />
-</Input.Root>
+</Input.Root>;
 
 // Named import style (sub-parts imported separately)
-import { Input, InputLabel, InputField, InputDescription, InputErrorMessage } from '@turkish-technology/spar';
+import {
+  Input,
+  InputLabel,
+  InputField,
+  InputDescription,
+  InputErrorMessage,
+} from '@turkish-technology/spar';
 
 <Input>
   <InputLabel />
   <InputField />
   <InputDescription />
   <InputErrorMessage />
-</Input>
+</Input>;
 ```
 
 ## Anatomy
@@ -192,10 +198,10 @@ function BasicTextInput() {
     <Input.Root>
       <Input.Label>Email Address</Input.Label>
       <Input.Field
-        type="email"
+        type='email'
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Enter your email"
+        placeholder='Enter your email'
       />
       <Input.Description>We'll use this to send you important updates</Input.Description>
     </Input.Root>
@@ -222,17 +228,15 @@ function ValidatedInput() {
       <Input.Root isInvalid={isInvalid} required>
         <Input.Label>Email Address</Input.Label>
         <Input.Field
-          type="email"
+          type='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="user@example.com"
+          placeholder='user@example.com'
         />
-        <Input.Description>
-          Enter a valid email address for account verification
-        </Input.Description>
+        <Input.Description>Enter a valid email address for account verification</Input.Description>
         <Input.ErrorMessage>Please enter a valid email address</Input.ErrorMessage>
       </Input.Root>
-      <button type="button" onClick={handleSubmit}>
+      <button type='button' onClick={handleSubmit}>
         Validate Email
       </button>
     </div>
@@ -252,11 +256,11 @@ function TextareaInput() {
     <Input.Root>
       <Input.Label>Message</Input.Label>
       <Input.Field
-        as="textarea"
+        as='textarea'
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         rows={4}
-        placeholder="Enter your message here..."
+        placeholder='Enter your message here...'
       />
       <Input.Description>Maximum 500 characters ({message.length}/500)</Input.Description>
     </Input.Root>
@@ -273,7 +277,7 @@ function DisabledInput() {
   return (
     <Input.Root disabled>
       <Input.Label>Account Type</Input.Label>
-      <Input.Field value="Premium Account" readOnly />
+      <Input.Field value='Premium Account' readOnly />
       <Input.Description>Contact support to change your account type</Input.Description>
     </Input.Root>
   );
@@ -313,7 +317,7 @@ function ContactForm() {
       <Input.Root isInvalid={!!errors.name} required>
         <Input.Label>Full Name</Input.Label>
         <Input.Field
-          name="name"
+          name='name'
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         />
@@ -323,8 +327,8 @@ function ContactForm() {
       <Input.Root isInvalid={!!errors.email} required>
         <Input.Label>Email</Input.Label>
         <Input.Field
-          type="email"
-          name="email"
+          type='email'
+          name='email'
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         />
@@ -334,8 +338,8 @@ function ContactForm() {
       <Input.Root isInvalid={!!errors.message} required>
         <Input.Label>Message</Input.Label>
         <Input.Field
-          as="textarea"
-          name="message"
+          as='textarea'
+          name='message'
           rows={4}
           value={formData.message}
           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -343,7 +347,7 @@ function ContactForm() {
         <Input.ErrorMessage>{errors.message}</Input.ErrorMessage>
       </Input.Root>
 
-      <button type="submit">Send Message</button>
+      <button type='submit'>Send Message</button>
     </form>
   );
 }
@@ -381,17 +385,17 @@ The root context provider that wraps all compound input parts. `Input` and `Inpu
 
 **Props**
 
-| Name         | Type                | Default     | Description                                                              |
-| ------------ | ------------------- | ----------- | ------------------------------------------------------------------------ |
-| `id?`        | `string`            | `undefined` | Base ID used to derive sub-element IDs. Auto-generated when omitted.     |
-| `as?`        | `React.ElementType` | `'div'`     | Element type for the root wrapper                                        |
-| `ref?`       | `React.Ref<T>`      | `undefined` | Ref for the root wrapper element                                         |
-| `children`   | `React.ReactNode`   | -           | Compound input elements                                                  |
-| `isInvalid?` | `boolean`           | `false`     | Validation state propagated to all compound parts                        |
-| `disabled?`  | `boolean`           | `false`     | Disabled state propagated to all compound parts                          |
-| `required?`  | `boolean`           | `false`     | Required state propagated to all compound parts                          |
-| `readOnly?`  | `boolean`           | `false`     | Read-only state propagated to all compound parts                         |
-| `...props`   | `React.ComponentProps<T>` | -     | All standard HTML attributes for the root element                        |
+| Name         | Type                      | Default     | Description                                                          |
+| ------------ | ------------------------- | ----------- | -------------------------------------------------------------------- |
+| `id?`        | `string`                  | `undefined` | Base ID used to derive sub-element IDs. Auto-generated when omitted. |
+| `as?`        | `React.ElementType`       | `'div'`     | Element type for the root wrapper                                    |
+| `ref?`       | `React.Ref<T>`            | `undefined` | Ref for the root wrapper element                                     |
+| `children`   | `React.ReactNode`         | -           | Compound input elements                                              |
+| `isInvalid?` | `boolean`                 | `false`     | Validation state propagated to all compound parts                    |
+| `disabled?`  | `boolean`                 | `false`     | Disabled state propagated to all compound parts                      |
+| `required?`  | `boolean`                 | `false`     | Required state propagated to all compound parts                      |
+| `readOnly?`  | `boolean`                 | `false`     | Read-only state propagated to all compound parts                     |
+| `...props`   | `React.ComponentProps<T>` | -           | All standard HTML attributes for the root element                    |
 
 **HTML Attributes**
 
@@ -426,14 +430,14 @@ The core input element with polymorphic rendering support. Handles focus states,
 
 **HTML Attributes**
 
-| Attribute        | Value               | Purpose                                                                       |
-| ---------------- | ------------------- | ----------------------------------------------------------------------------- |
-| `id`             | `string`            | Unique field identifier; auto-assigned from context when inside `Input.Root`  |
-| `data-focused`   | `""` \| `undefined` | Indicates focus state                                                         |
-| `data-autofocus` | `""` \| `undefined` | Indicates auto-focus state                                                    |
-| `data-disabled`  | `""` \| `undefined` | Indicates disabled state                                                      |
-| `data-required`  | `""` \| `undefined` | Indicates required state                                                      |
-| `data-readonly`  | `""` \| `undefined` | Indicates read-only state                                                     |
+| Attribute        | Value               | Purpose                                                                      |
+| ---------------- | ------------------- | ---------------------------------------------------------------------------- |
+| `id`             | `string`            | Unique field identifier; auto-assigned from context when inside `Input.Root` |
+| `data-focused`   | `""` \| `undefined` | Indicates focus state                                                        |
+| `data-autofocus` | `""` \| `undefined` | Indicates auto-focus state                                                   |
+| `data-disabled`  | `""` \| `undefined` | Indicates disabled state                                                     |
+| `data-required`  | `""` \| `undefined` | Indicates required state                                                     |
+| `data-readonly`  | `""` \| `undefined` | Indicates read-only state                                                    |
 
 ### Input.Label
 
@@ -485,10 +489,10 @@ The error message element. Renders `null` when the parent `Input.Root` has `isIn
 
 **HTML Attributes**
 
-| Attribute   | Value         | Purpose                                                   |
-| ----------- | ------------- | --------------------------------------------------------- |
-| `role`      | `"alert"`     | Causes screen readers to announce the error immediately   |
-| `aria-live` | `"assertive"` | Ensures errors are announced as they appear               |
+| Attribute   | Value         | Purpose                                                 |
+| ----------- | ------------- | ------------------------------------------------------- |
+| `role`      | `"alert"`     | Causes screen readers to announce the error immediately |
+| `aria-live` | `"assertive"` | Ensures errors are announced as they appear             |
 
 ## Keyboard Interactions
 

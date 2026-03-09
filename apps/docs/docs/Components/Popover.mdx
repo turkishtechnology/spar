@@ -211,9 +211,7 @@ The Popover component is built as a compound component with multiple parts:
             </svg>
           </Popover.Close>
         </div>
-        <p className='popover-paragraph'>
-          {'Popover content rendered in a floating panel.'}
-        </p>
+        <p className='popover-paragraph'>{'Popover content rendered in a floating panel.'}</p>
       </Popover.Content>
     </Popover.Root>
   </div>
@@ -439,7 +437,7 @@ The root container that provides context and manages state for all popover compo
 
 | Name            | Type                      | Default     | Description                                                              |
 | --------------- | ------------------------- | ----------- | ------------------------------------------------------------------------ |
-| `id?`           | `string`                  | `undefined` | Custom base ID for ARIA relationships (`${id}-content`)                 |
+| `id?`           | `string`                  | `undefined` | Custom base ID for ARIA relationships (`${id}-content`)                  |
 | `open?`         | `boolean`                 | `undefined` | Controlled open state                                                    |
 | `onOpenChange?` | `(open: boolean) => void` | `undefined` | Called when open state changes                                           |
 | `defaultOpen?`  | `boolean`                 | `false`     | Initial open state in uncontrolled mode                                  |
@@ -465,15 +463,15 @@ Button element that toggles the popover visibility. Extends all `Button` compone
 
 **Props**
 
-| Name               | Type                                                                          | Default     | Description                                                                 |
-| ------------------ | ----------------------------------------------------------------------------- | ----------- | --------------------------------------------------------------------------- |
-| `as?`              | `React.ElementType`                                                           | `"button"`  | Polymorphic element type                                                    |
-| `children?`        | `React.ReactNode \| ((state: PopoverTriggerRenderProps) => React.ReactNode)` | `undefined` | Trigger content or render function                                          |
-| `disabled?`        | `boolean`                                                                     | `false`     | Disables trigger interaction (also respects `Popover.Root disabled`)        |
-| `isLoading?`       | `boolean`                                                                     | `false`     | Inherited from `Button`; blocks interactive activation                      |
-| `isPressed?`       | `boolean`                                                                     | `undefined` | Inherited toggle state from `Button`                                        |
-| `onPressedChange?` | `(pressed: boolean) => void`                                                  | `undefined` | Inherited toggle callback from `Button`                                     |
-| `...props`         | `PopoverTriggerProps<T>`                                                      | `undefined` | Inherits polymorphic button props (including native HTML and event handlers) |
+| Name               | Type                                                                         | Default     | Description                                                                  |
+| ------------------ | ---------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------------------- |
+| `as?`              | `React.ElementType`                                                          | `"button"`  | Polymorphic element type                                                     |
+| `children?`        | `React.ReactNode \| ((state: PopoverTriggerRenderProps) => React.ReactNode)` | `undefined` | Trigger content or render function                                           |
+| `disabled?`        | `boolean`                                                                    | `false`     | Disables trigger interaction (also respects `Popover.Root disabled`)         |
+| `isLoading?`       | `boolean`                                                                    | `false`     | Inherited from `Button`; blocks interactive activation                       |
+| `isPressed?`       | `boolean`                                                                    | `undefined` | Inherited toggle state from `Button`                                         |
+| `onPressedChange?` | `(pressed: boolean) => void`                                                 | `undefined` | Inherited toggle callback from `Button`                                      |
+| `...props`         | `PopoverTriggerProps<T>`                                                     | `undefined` | Inherits polymorphic button props (including native HTML and event handlers) |
 
 **Render Props (PopoverTriggerRenderProps)**
 
@@ -494,14 +492,14 @@ Button element that toggles the popover visibility. Extends all `Button` compone
 
 **HTML Attributes**
 
-| Attribute       | Value                | Purpose                                                                             |
-| --------------- | -------------------- | ----------------------------------------------------------------------------------- |
-| `aria-expanded` | `boolean`            | Reflects open state                                                                 |
-| `aria-controls` | `string`             | Points to content ID from root context                                              |
-| `aria-haspopup` | `"dialog"`           | Announces popup type                                                                |
-| `data-state`    | `"open" \| "closed"` | Styling/state hook                                                                  |
+| Attribute       | Value                | Purpose                                                                            |
+| --------------- | -------------------- | ---------------------------------------------------------------------------------- |
+| `aria-expanded` | `boolean`            | Reflects open state                                                                |
+| `aria-controls` | `string`             | Points to content ID from root context                                             |
+| `aria-haspopup` | `"dialog"`           | Announces popup type                                                               |
+| `data-state`    | `"open" \| "closed"` | Styling/state hook                                                                 |
 | `data-disabled` | `""`                 | Present when disabled (inherited from `Button`)                                    |
-| `disabled`      | `boolean`            | Native disabled attribute when rendered as a native `<button>`                      |
+| `disabled`      | `boolean`            | Native disabled attribute when rendered as a native `<button>`                     |
 | `aria-disabled` | `true`               | Applied when disabled and rendered as non-button element (inherited from `Button`) |
 
 ### Popover.Content
@@ -510,43 +508,43 @@ Floating panel container that holds the popover content.
 
 **Props**
 
-| Name                    | Type                                               | Default         | Description                                                                            |
-| ----------------------- | -------------------------------------------------- | --------------- | -------------------------------------------------------------------------------------- |
-| `as?`                   | `React.ElementType`                                | `"div"`         | Polymorphic element type                                                               |
-| `side?`                 | `"top" \| "bottom" \| "left" \| "right"`           | `"bottom"`      | Preferred side                                                                         |
-| `align?`                | `"start" \| "center" \| "end"`                     | `"center"`      | Preferred alignment                                                                    |
-| `container?`            | `HTMLElement \| null`                              | `document.body` | Portal container                                                                        |
-| `onOpenAutoFocus?`      | `(event: Event) => void`                           | `undefined`     | Called after open-time focus move into content                                         |
-| `onCloseAutoFocus?`     | `(event: Event) => void`                           | `undefined`     | Called during close; `event.preventDefault()` prevents restoring focus to trigger      |
-| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`                   | `undefined`     | Called on `Escape`; `event.preventDefault()` prevents close                            |
-| `onPointerDownOutside?` | `(event: PointerEvent) => void`                    | `undefined`     | Called on pointer-down outside; `event.preventDefault()` prevents close                |
-| `onFocusOutside?`       | `(event: FocusEvent) => void`                      | `undefined`     | Called on focus moving outside; `event.preventDefault()` prevents close                |
-| `onInteractOutside?`    | `(event: PointerEvent \| FocusEvent) => void`      | `undefined`     | Called for both outside pointer and outside focus interactions                         |
-| `trapFocus?`            | `boolean`                                          | `false`         | Enables focus trap while open (modal also enables focus trap)                          |
-| `children?`             | `React.ReactNode`                                  | `undefined`     | Popover panel content                                                                   |
-| `...props`              | `PopoverContentProps<T>`                           | `undefined`     | Inherits polymorphic element props (including `style`, `onKeyDown`, HTML attributes) |
+| Name                    | Type                                          | Default         | Description                                                                          |
+| ----------------------- | --------------------------------------------- | --------------- | ------------------------------------------------------------------------------------ |
+| `as?`                   | `React.ElementType`                           | `"div"`         | Polymorphic element type                                                             |
+| `side?`                 | `"top" \| "bottom" \| "left" \| "right"`      | `"bottom"`      | Preferred side                                                                       |
+| `align?`                | `"start" \| "center" \| "end"`                | `"center"`      | Preferred alignment                                                                  |
+| `container?`            | `HTMLElement \| null`                         | `document.body` | Portal container                                                                     |
+| `onOpenAutoFocus?`      | `(event: Event) => void`                      | `undefined`     | Called after open-time focus move into content                                       |
+| `onCloseAutoFocus?`     | `(event: Event) => void`                      | `undefined`     | Called during close; `event.preventDefault()` prevents restoring focus to trigger    |
+| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`              | `undefined`     | Called on `Escape`; `event.preventDefault()` prevents close                          |
+| `onPointerDownOutside?` | `(event: PointerEvent) => void`               | `undefined`     | Called on pointer-down outside; `event.preventDefault()` prevents close              |
+| `onFocusOutside?`       | `(event: FocusEvent) => void`                 | `undefined`     | Called on focus moving outside; `event.preventDefault()` prevents close              |
+| `onInteractOutside?`    | `(event: PointerEvent \| FocusEvent) => void` | `undefined`     | Called for both outside pointer and outside focus interactions                       |
+| `trapFocus?`            | `boolean`                                     | `false`         | Enables focus trap while open (modal also enables focus trap)                        |
+| `children?`             | `React.ReactNode`                             | `undefined`     | Popover panel content                                                                |
+| `...props`              | `PopoverContentProps<T>`                      | `undefined`     | Inherits polymorphic element props (including `style`, `onKeyDown`, HTML attributes) |
 
 **Events**
 
-| Name                   | Parameters                                   | Description                                | When Triggered                           |
-| ---------------------- | -------------------------------------------- | ------------------------------------------ | ---------------------------------------- |
-| `onOpenAutoFocus`      | `(event: Event)`                            | Open-time focus notification                | Content opens                             |
-| `onCloseAutoFocus`     | `(event: Event)`                            | Close-time focus restore hook               | Content closes                            |
-| `onEscapeKeyDown`      | `(event: KeyboardEvent)`                    | Escape key hook                             | `Escape` is pressed while open            |
-| `onPointerDownOutside` | `(event: PointerEvent)`                     | Pointer outside hook                        | Pointer down occurs outside content       |
-| `onFocusOutside`       | `(event: FocusEvent)`                       | Focus outside hook                          | Focus moves outside content               |
-| `onInteractOutside`    | `(event: PointerEvent \| FocusEvent)`       | Combined outside interaction hook           | Outside pointer/focus interactions        |
-| `onKeyDown`            | `(event: React.KeyboardEvent<HTMLDivElement>)` | Element keydown handler from HTML props | Keydown on the content element            |
+| Name                   | Parameters                                     | Description                             | When Triggered                      |
+| ---------------------- | ---------------------------------------------- | --------------------------------------- | ----------------------------------- |
+| `onOpenAutoFocus`      | `(event: Event)`                               | Open-time focus notification            | Content opens                       |
+| `onCloseAutoFocus`     | `(event: Event)`                               | Close-time focus restore hook           | Content closes                      |
+| `onEscapeKeyDown`      | `(event: KeyboardEvent)`                       | Escape key hook                         | `Escape` is pressed while open      |
+| `onPointerDownOutside` | `(event: PointerEvent)`                        | Pointer outside hook                    | Pointer down occurs outside content |
+| `onFocusOutside`       | `(event: FocusEvent)`                          | Focus outside hook                      | Focus moves outside content         |
+| `onInteractOutside`    | `(event: PointerEvent \| FocusEvent)`          | Combined outside interaction hook       | Outside pointer/focus interactions  |
+| `onKeyDown`            | `(event: React.KeyboardEvent<HTMLDivElement>)` | Element keydown handler from HTML props | Keydown on the content element      |
 
 **HTML Attributes**
 
-| Attribute    | Value                                    | Purpose                   |
-| ------------ | ---------------------------------------- | ------------------------- |
-| `id`         | `string`                                 | Unique identifier         |
-| `tabIndex`   | `-1`                                     | Allows programmatic focus |
-| `data-state` | `"open"`                                 | Always open when rendered |
-| `data-side`  | `"top" \| "bottom" \| "left" \| "right"` | Actual positioned side    |
-| `data-align` | `"start" \| "center" \| "end"`           | Actual alignment          |
+| Attribute    | Value                                    | Purpose                     |
+| ------------ | ---------------------------------------- | --------------------------- |
+| `id`         | `string`                                 | Unique identifier           |
+| `tabIndex`   | `-1`                                     | Allows programmatic focus   |
+| `data-state` | `"open"`                                 | Always open when rendered   |
+| `data-side`  | `"top" \| "bottom" \| "left" \| "right"` | Actual positioned side      |
+| `data-align` | `"start" \| "center" \| "end"`           | Actual alignment            |
 | `role`       | `"dialog"`                               | Applied when `modal={true}` |
 | `aria-modal` | `"true"`                                 | Applied when `modal={true}` |
 
@@ -558,10 +556,10 @@ Supports polymorphic rendering via the `as` prop. When rendered as the default `
 
 **Props**
 
-| Name        | Type                | Default     | Description                                                                        |
-| ----------- | ------------------- | ----------- | ---------------------------------------------------------------------------------- |
-| `as?`       | `React.ElementType` | `"svg"`     | Polymorphic element type                                                           |
-| `children?` | `React.ReactNode`   | `undefined` | Custom arrow content; when omitted and `as="svg"`, a default triangle is rendered |
+| Name        | Type                   | Default     | Description                                                                         |
+| ----------- | ---------------------- | ----------- | ----------------------------------------------------------------------------------- |
+| `as?`       | `React.ElementType`    | `"svg"`     | Polymorphic element type                                                            |
+| `children?` | `React.ReactNode`      | `undefined` | Custom arrow content; when omitted and `as="svg"`, a default triangle is rendered   |
 | `...props`  | `PopoverArrowProps<T>` | `undefined` | Inherits polymorphic element props (including `style`, `className`, SVG attributes) |
 
 **Events**
@@ -572,13 +570,13 @@ Supports polymorphic rendering via the `as` prop. When rendered as the default `
 
 **HTML Attributes**
 
-| Attribute        | Value                                                                 | Purpose                                  |
-| ---------------- | --------------------------------------------------------------------- | ---------------------------------------- |
-| `aria-hidden`    | `"true"`                                                              | Hidden from assistive technology         |
+| Attribute        | Value                                                                                                                                                                | Purpose                                |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| `aria-hidden`    | `"true"`                                                                                                                                                             | Hidden from assistive technology       |
 | `data-placement` | `"top" \| "top-start" \| "top-end" \| "right" \| "right-start" \| "right-end" \| "bottom" \| "bottom-start" \| "bottom-end" \| "left" \| "left-start" \| "left-end"` | Computed from content `side` + `align` |
-| `width`          | `10`                                                                  | Default SVG width (`as="svg"`)           |
-| `height`         | `5`                                                                   | Default SVG height (`as="svg"`)          |
-| `viewBox`        | `"0 0 10 5"`                                                          | Default SVG viewBox (`as="svg"`)         |
+| `width`          | `10`                                                                                                                                                                 | Default SVG width (`as="svg"`)         |
+| `height`         | `5`                                                                                                                                                                  | Default SVG height (`as="svg"`)        |
+| `viewBox`        | `"0 0 10 5"`                                                                                                                                                         | Default SVG viewBox (`as="svg"`)       |
 
 ### Popover.Close
 
@@ -586,15 +584,15 @@ Close button component that automatically closes the popover when clicked. Exten
 
 **Props**
 
-| Name               | Type                                                                        | Default     | Description                                                                 |
-| ------------------ | --------------------------------------------------------------------------- | ----------- | --------------------------------------------------------------------------- |
-| `as?`              | `React.ElementType`                                                         | `"button"`  | Polymorphic element type                                                    |
-| `children?`        | `React.ReactNode \| ((state: PopoverCloseRenderProps) => React.ReactNode)` | `undefined` | Close content or render function                                            |
-| `disabled?`        | `boolean`                                                                   | `false`     | Inherited from `Button`                                                     |
-| `isLoading?`       | `boolean`                                                                   | `false`     | Inherited from `Button`; blocks interactive activation                      |
-| `isPressed?`       | `boolean`                                                                   | `undefined` | Inherited toggle state from `Button`                                        |
-| `onPressedChange?` | `(pressed: boolean) => void`                                                | `undefined` | Inherited toggle callback from `Button`                                     |
-| `...props`         | `PopoverCloseProps<T>`                                                      | `undefined` | Inherits polymorphic button props (including native HTML and event handlers) |
+| Name               | Type                                                                       | Default     | Description                                                                  |
+| ------------------ | -------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------------------- |
+| `as?`              | `React.ElementType`                                                        | `"button"`  | Polymorphic element type                                                     |
+| `children?`        | `React.ReactNode \| ((state: PopoverCloseRenderProps) => React.ReactNode)` | `undefined` | Close content or render function                                             |
+| `disabled?`        | `boolean`                                                                  | `false`     | Inherited from `Button`                                                      |
+| `isLoading?`       | `boolean`                                                                  | `false`     | Inherited from `Button`; blocks interactive activation                       |
+| `isPressed?`       | `boolean`                                                                  | `undefined` | Inherited toggle state from `Button`                                         |
+| `onPressedChange?` | `(pressed: boolean) => void`                                               | `undefined` | Inherited toggle callback from `Button`                                      |
+| `...props`         | `PopoverCloseProps<T>`                                                     | `undefined` | Inherits polymorphic button props (including native HTML and event handlers) |
 
 **Render Props (PopoverCloseRenderProps)**
 
@@ -611,25 +609,25 @@ Close button component that automatically closes the popover when clicked. Exten
 
 **HTML Attributes**
 
-| Attribute            | Value      | Purpose                                                            |
-| -------------------- | ---------- | ------------------------------------------------------------------ |
-| `data-popover-close` | `""`       | Identifies close trigger                                           |
-| `data-disabled`      | `""`       | Present when disabled (inherited from `Button`)                   |
-| `type`               | `"button"` | Native button type when rendered as a native `<button>`           |
-| `disabled`           | `boolean`  | Native disabled attribute when rendered as a native `<button>`    |
-| `aria-disabled`      | `true`     | Applied when disabled and rendered as non-button element           |
+| Attribute            | Value      | Purpose                                                        |
+| -------------------- | ---------- | -------------------------------------------------------------- |
+| `data-popover-close` | `""`       | Identifies close trigger                                       |
+| `data-disabled`      | `""`       | Present when disabled (inherited from `Button`)                |
+| `type`               | `"button"` | Native button type when rendered as a native `<button>`        |
+| `disabled`           | `boolean`  | Native disabled attribute when rendered as a native `<button>` |
+| `aria-disabled`      | `true`     | Applied when disabled and rendered as non-button element       |
 
 ## Keyboard Interactions
 
 Complete keyboard behavior for the popover component:
 
-| Key           | Action                | Context                               | Notes                                                                 |
-| ------------- | --------------------- | ------------------------------------- | --------------------------------------------------------------------- |
-| `Enter`       | Toggle popover        | Focused `Popover.Trigger`             | Trigger inherits `Button` keyboard activation                         |
-| `Space`       | Toggle popover        | Focused `Popover.Trigger`             | Same activation path as `Enter`                                       |
-| `ArrowDown`   | Open popover          | Focused `Popover.Trigger`             | Opens only if currently closed (does not toggle closed)               |
-| `Escape`      | Close popover         | While popover is open                 | Can be prevented with `onEscapeKeyDown(event.preventDefault())`       |
-| `Home`        | Focus first item      | Focus is inside `Popover.Content`     | Moves focus to first focusable element in content                     |
-| `End`         | Focus last item       | Focus is inside `Popover.Content`     | Moves focus to last focusable element in content                      |
-| `Tab`         | Wrap to first element | Focus trap active (`modal` or `trapFocus`) | Wrap occurs only when focus is on the last focusable element      |
-| `Shift + Tab` | Wrap to last element  | Focus trap active (`modal` or `trapFocus`) | Wrap occurs only when focus is on the first focusable element     |
+| Key           | Action                | Context                                    | Notes                                                           |
+| ------------- | --------------------- | ------------------------------------------ | --------------------------------------------------------------- |
+| `Enter`       | Toggle popover        | Focused `Popover.Trigger`                  | Trigger inherits `Button` keyboard activation                   |
+| `Space`       | Toggle popover        | Focused `Popover.Trigger`                  | Same activation path as `Enter`                                 |
+| `ArrowDown`   | Open popover          | Focused `Popover.Trigger`                  | Opens only if currently closed (does not toggle closed)         |
+| `Escape`      | Close popover         | While popover is open                      | Can be prevented with `onEscapeKeyDown(event.preventDefault())` |
+| `Home`        | Focus first item      | Focus is inside `Popover.Content`          | Moves focus to first focusable element in content               |
+| `End`         | Focus last item       | Focus is inside `Popover.Content`          | Moves focus to last focusable element in content                |
+| `Tab`         | Wrap to first element | Focus trap active (`modal` or `trapFocus`) | Wrap occurs only when focus is on the last focusable element    |
+| `Shift + Tab` | Wrap to last element  | Focus trap active (`modal` or `trapFocus`) | Wrap occurs only when focus is on the first focusable element   |
