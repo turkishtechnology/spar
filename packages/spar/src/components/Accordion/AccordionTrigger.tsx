@@ -1,87 +1,71 @@
-import React, { useCallback } from 'react';
-import type { AccordionTriggerProps } from './types';
-import { useAccordionContext } from './Accordion';
-import { useAccordionItemContext } from './AccordionItem';
+import React, { useCallback, useEffect, useRef, ElementType } from 'react';
+import type { AccordionTriggerProps, AccordionTriggerRenderProps } from './types';
+import { useAccordionContext, useAccordionItemContext } from './hooks';
+import { CollapsibleTrigger } from '../Collapsible';
 
 /**
  * Accordion trigger button that toggles panel visibility. Provides keyboard navigation and screen reader support.
  */
-export const AccordionTrigger = ({
-  as: Component = 'button',
+export const AccordionTrigger = <T extends ElementType = 'button'>({
+  as,
   children,
   onClick,
   onKeyDown,
   ...props
-}: AccordionTriggerProps) => {
+}: AccordionTriggerProps<T>) => {
+  const Component = as || 'button';
   const accordionContext = useAccordionContext();
   const itemContext = useAccordionItemContext();
-  const { isExpanded, isDisabled, triggerId, contentId, onToggle } = itemContext;
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
-  const handleClick = useCallback(
-    (event: React.MouseEvent<HTMLElement>) => {
-      if (!isDisabled) {
-        onToggle();
-      }
-      onClick?.(event as React.MouseEvent<HTMLButtonElement>);
-    },
-    [isDisabled, onToggle, onClick],
-  );
+  useEffect(() => {
+    if (triggerRef.current) {
+      accordionContext.registerItem(itemContext.value, triggerRef.current);
+    }
+    return () => accordionContext.unregisterItem(itemContext.value);
+  }, [itemContext.value, accordionContext.registerItem, accordionContext.unregisterItem]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       const { key } = event;
       const currentIndex = accordionContext.getItemIndex(itemContext.value);
       const totalItems = accordionContext.itemCount;
+      const isHorizontal = accordionContext.orientation === 'horizontal';
 
       switch (key) {
-        case 'Enter':
-        case ' ': // Space
-          event.preventDefault();
-          if (!isDisabled) {
-            onToggle();
-          }
-          break;
-
         case 'ArrowDown':
         case 'ArrowUp': {
+          if (isHorizontal) break;
           event.preventDefault();
           const isDown = key === 'ArrowDown';
           const nextIndex = isDown
             ? (currentIndex + 1) % totalItems
             : (currentIndex - 1 + totalItems) % totalItems;
+          accordionContext.focusItemAtIndex(nextIndex);
+          break;
+        }
 
-          const nextItemValue = accordionContext.getItemAtIndex(nextIndex);
-          if (nextItemValue) {
-            // Focus the next trigger
-            const nextTrigger = document.querySelector(
-              `[data-accordion-trigger][data-value="${nextItemValue}"]`,
-            ) as HTMLElement;
-            nextTrigger?.focus();
-          }
+        case 'ArrowRight':
+        case 'ArrowLeft': {
+          if (!isHorizontal) break;
+          event.preventDefault();
+          const isRight = key === 'ArrowRight';
+          const nextIndex = isRight
+            ? (currentIndex + 1) % totalItems
+            : (currentIndex - 1 + totalItems) % totalItems;
+          accordionContext.focusItemAtIndex(nextIndex);
           break;
         }
 
         case 'Home': {
           event.preventDefault();
-          const firstItemValue = accordionContext.getItemAtIndex(0);
-          if (firstItemValue) {
-            const firstTrigger = document.querySelector(
-              `[data-accordion-trigger][data-value="${firstItemValue}"]`,
-            ) as HTMLElement;
-            firstTrigger?.focus();
-          }
+          accordionContext.focusItemAtIndex(0);
           break;
         }
 
         case 'End': {
           event.preventDefault();
-          const lastItemValue = accordionContext.getItemAtIndex(totalItems - 1);
-          if (lastItemValue) {
-            const lastTrigger = document.querySelector(
-              `[data-accordion-trigger][data-value="${lastItemValue}"]`,
-            ) as HTMLElement;
-            lastTrigger?.focus();
-          }
+          accordionContext.focusItemAtIndex(totalItems - 1);
           break;
         }
 
@@ -91,26 +75,30 @@ export const AccordionTrigger = ({
 
       onKeyDown?.(event as React.KeyboardEvent<HTMLButtonElement>);
     },
-    [accordionContext, itemContext, isDisabled, onToggle, onKeyDown],
+    [accordionContext, itemContext.value, onKeyDown],
   );
 
+  // Render props for children function
+  const renderProps: AccordionTriggerRenderProps = {
+    isOpen: itemContext.isOpen,
+    disabled: itemContext.disabled,
+    open: itemContext.open,
+    close: itemContext.close,
+    toggle: itemContext.toggle,
+  };
+
   return (
-    <Component
-      {...props}
-      id={triggerId}
-      type={Component === 'button' ? 'button' : undefined}
-      aria-expanded={isExpanded}
-      aria-controls={contentId}
-      disabled={isDisabled}
-      data-state={isExpanded ? 'open' : 'closed'}
+    <CollapsibleTrigger
+      as={Component}
+      ref={triggerRef}
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
       data-accordion-trigger=''
       data-value={itemContext.value}
-      {...(isDisabled && { 'data-disabled': '' })}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
+      {...props}
     >
-      {children}
-    </Component>
+      {typeof children === 'function' ? children(renderProps) : children}
+    </CollapsibleTrigger>
   );
 };
 

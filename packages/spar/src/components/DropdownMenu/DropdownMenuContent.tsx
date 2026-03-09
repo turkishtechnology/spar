@@ -1,140 +1,91 @@
 import {
   useCallback,
-  useContext,
   useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
+  type ElementType,
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
-import { useInteractOutside } from '@/hooks';
+import { createPortal } from 'react-dom';
 import {
+  useInteractOutside,
+  useMergedRef,
   useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  limitShift,
-  type Placement,
-  type Middleware,
-} from '@floating-ui/react-dom';
-import type { DropdownMenuContentProps } from './types';
-import type { Side, Align } from '../../types';
+  useTypeahead,
+  type UseFloatingOptions,
+  type UseFloatingReturn,
+} from '@/hooks';
+
+import type {
+  DropdownMenuContentProps,
+  DropdownMenuCollectionContextValue,
+  DropdownMenuCollectionItem,
+} from './types';
 import {
-  useMenuScope,
-  DropdownMenuSubContext,
+  useDropdownMenuContext,
   DropdownMenuCollectionContext,
-  type DropdownMenuCollectionContextValue,
-  type MenuCollectionItem,
-} from './contexts';
-import { composeRefs, isCharacterKey, getCloseKey, TYPEAHEAD_TIMEOUT } from './utils';
+  DropdownMenuContentContext,
+} from './hooks';
+import { Align, Side } from '@/types';
 
 /**
- * Convert side and align to Floating UI placement
+ * Floating content panel for the dropdown menu.
+ * Handles positioning, keyboard navigation, focus management, and outside interaction dismissal.
  */
-const getPlacement = (side: Side, align: Align): Placement => {
-  if (side === 'top' || side === 'bottom') {
-    if (align === 'start') return `${side}-start`;
-    if (align === 'end') return `${side}-end`;
-    return side;
-  }
-  if (side === 'left' || side === 'right') {
-    if (align === 'start') return `${side}-start`;
-    if (align === 'end') return `${side}-end`;
-    return side;
-  }
-  return 'bottom';
-};
-
-export const DropdownMenuContent = ({
-  as: Component = 'div',
-  side: sideProp,
-  align = 'start',
-  sideOffset = 0,
-  alignOffset = 0,
-  avoidCollisions = true,
-  collisionBoundary = null,
-  collisionPadding = 8,
-  loop = false,
+export const DropdownMenuContent = <T extends ElementType = 'div'>({
+  as,
+  side = 'bottom',
+  align = 'center',
+  container,
   onEscapeKeyDown,
   onPointerDownOutside,
   onFocusOutside,
   onKeyDown,
   ref,
   ...props
-}: DropdownMenuContentProps) => {
-  const menu = useMenuScope();
-  const parentSubContext = useContext(DropdownMenuSubContext);
-  const isSubmenu = parentSubContext === menu;
-  // Auto-determine side based on menu type
-  const side = sideProp ?? (isSubmenu ? 'right' : 'bottom');
+}: DropdownMenuContentProps<T>) => {
+  const Component = as || 'div';
+  const menu = useDropdownMenuContext();
   const contentRef = useRef<HTMLElement | null>(null);
 
-  // Configure Floating UI middleware
-  const middleware: Middleware[] = useMemo(() => {
-    const result: Middleware[] = [offset({ mainAxis: sideOffset, alignmentAxis: alignOffset })];
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-    if (avoidCollisions) {
-      const boundaryValue = collisionBoundary
-        ? Array.isArray(collisionBoundary)
-          ? collisionBoundary
-          : [collisionBoundary]
-        : undefined;
+  // Use custom Floating UI hook for positioning
+  const floatingOptions: UseFloatingOptions = {
+    side,
+    align,
+    arrowRef: menu.arrowRef?.current,
+  };
 
-      result.push(
-        flip({
-          ...(boundaryValue && { boundary: boundaryValue }),
-          padding: collisionPadding,
-        }),
-      );
-      result.push(
-        shift({
-          ...(boundaryValue && { boundary: boundaryValue }),
-          padding: collisionPadding,
-          limiter: limitShift(),
-        }),
-      );
-    }
+  const { floatingStyles, arrowStyles, placement, refs }: UseFloatingReturn =
+    useFloating(floatingOptions);
 
-    return result;
-  }, [sideOffset, alignOffset, avoidCollisions, collisionBoundary, collisionPadding]);
+  // Set reference element
+  useEffect(() => {
+    refs.setReference(menu.triggerRef.current);
+  }, [refs, menu.triggerRef]);
 
-  // Floating UI setup
-  const { x, y, strategy, refs, placement } = useFloating({
-    placement: getPlacement(side, align),
-    middleware,
-    whileElementsMounted: autoUpdate,
-  });
+  const mergedRef = useMergedRef(contentRef, ref);
 
-  // Set trigger ref from context
-  useLayoutEffect(() => {
-    if (menu.triggerRef.current) {
-      refs.setReference(menu.triggerRef.current);
-    }
-  }, [menu.triggerRef, refs]);
-
-  // Set floating ref
-  useLayoutEffect(() => {
-    if (contentRef.current) {
-      refs.setFloating(contentRef.current);
-    }
-  }, [refs]);
-
-  // Compose refs
-  const composedRefs = composeRefs<HTMLElement | null>(ref, (node: HTMLElement | null) => {
-    contentRef.current = node;
-    if (node) {
+  const floatingRef = useCallback(
+    (node: HTMLElement | null) => {
+      mergedRef(node);
       refs.setFloating(node);
-    }
-  });
+    },
+    [mergedRef, refs],
+  );
 
-  const [items, setItems] = useState<MenuCollectionItem[]>([]);
+  // --- Item collection ---
+  const [items, setItems] = useState<DropdownMenuCollectionItem[]>([]);
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
-  const typeaheadRef = useRef('');
-  const typeaheadTimeoutId = useRef<number | null>(null);
+  const hadHighlightRef = useRef(false);
 
-  const registerItem = useCallback((item: MenuCollectionItem) => {
+  const registerItem = useCallback((item: DropdownMenuCollectionItem) => {
     setItems((previous) => {
       const next = [...previous.filter((entry) => entry.id !== item.id), item];
       next.sort((a, b) => {
@@ -142,12 +93,8 @@ export const DropdownMenuContent = ({
         const bNode = b.ref.current;
         if (aNode && bNode) {
           const position = aNode.compareDocumentPosition(bNode);
-          if (position & Node.DOCUMENT_POSITION_FOLLOWING) {
-            return -1;
-          }
-          if (position & Node.DOCUMENT_POSITION_PRECEDING) {
-            return 1;
-          }
+          if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
+          if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1;
         }
         return 0;
       });
@@ -159,12 +106,9 @@ export const DropdownMenuContent = ({
     setItems((previous) => previous.filter((item) => item.id !== id));
   }, []);
 
-  const isItemHighlighted = useCallback(
-    (id: string) => {
-      return highlightedId === id;
-    },
-    [highlightedId],
-  );
+  // --- Highlight ---
+
+  const isItemHighlighted = useCallback((id: string) => highlightedId === id, [highlightedId]);
 
   const highlightItem = useCallback((id: string | null) => {
     setHighlightedId(id);
@@ -194,7 +138,6 @@ export const DropdownMenuContent = ({
     for (let step = 0; step < items.length; step += 1) {
       index = index === -1 ? 0 : index + 1;
       if (index >= items.length) {
-        if (!loop) return;
         index = 0;
       }
       const candidate = items[index];
@@ -202,11 +145,8 @@ export const DropdownMenuContent = ({
         setHighlightedId(candidate.id);
         return;
       }
-      if (!loop && index === items.length - 1) {
-        return;
-      }
     }
-  }, [items, highlightedId, loop]);
+  }, [items, highlightedId]);
 
   const highlightPrevious = useCallback(() => {
     if (!items.length) return;
@@ -218,7 +158,6 @@ export const DropdownMenuContent = ({
     for (let step = 0; step < items.length; step += 1) {
       index = index === items.length ? items.length - 1 : index - 1;
       if (index < 0) {
-        if (!loop) return;
         index = items.length - 1;
       }
       const candidate = items[index];
@@ -226,71 +165,33 @@ export const DropdownMenuContent = ({
         setHighlightedId(candidate.id);
         return;
       }
-      if (!loop && index === 0) {
-        return;
-      }
     }
-  }, [items, highlightedId, loop]);
+  }, [items, highlightedId]);
 
-  const resetTypeahead = useCallback(() => {
-    typeaheadRef.current = '';
-    if (typeaheadTimeoutId.current !== null) {
-      window.clearTimeout(typeaheadTimeoutId.current);
-      typeaheadTimeoutId.current = null;
-    }
-  }, []);
+  // --- Typeahead ---
 
-  const performTypeahead = useCallback(
-    (event: ReactKeyboardEvent<HTMLElement>) => {
-      if (!isCharacterKey(event)) {
-        return false;
-      }
+  const { performTypeahead, resetTypeahead } = useTypeahead({
+    items,
+    highlightedId,
+    onHighlight: highlightItem,
+  });
 
-      const search = (typeaheadRef.current + event.key.toLowerCase()).trim();
-      if (!search) {
-        return false;
-      }
+  // --- Activation ---
 
-      const enabledItems = items.filter((item) => !item.disabled);
-      if (!enabledItems.length) {
-        return false;
-      }
+  const handleItemActivation = useCallback(() => {
+    if (!highlightedId) return false;
 
-      const currentIndex = highlightedId
-        ? enabledItems.findIndex((item) => item.id === highlightedId)
-        : -1;
+    const currentItem = items.find((item) => item.id === highlightedId);
+    const element = currentItem?.ref.current;
+    if (!currentItem || currentItem.disabled || !element) return false;
 
-      const findMatch = (startIndex: number) => {
-        for (let offset = 1; offset <= enabledItems.length; offset += 1) {
-          const index = (startIndex + offset) % enabledItems.length;
-          const candidate = enabledItems[index];
-          if (!candidate) {
-            continue;
-          }
-          const value = candidate.textValue.toLowerCase();
-          if (value.startsWith(search)) {
-            return candidate;
-          }
-        }
-        return null;
-      };
+    element.click();
+    return true;
+  }, [highlightedId, items]);
 
-      const match = findMatch(currentIndex);
-      if (match) {
-        setHighlightedId(match.id);
-      }
-
-      typeaheadRef.current = search;
-      if (typeaheadTimeoutId.current !== null) {
-        window.clearTimeout(typeaheadTimeoutId.current);
-      }
-      typeaheadTimeoutId.current = window.setTimeout(resetTypeahead, TYPEAHEAD_TIMEOUT);
-
-      return true;
-    },
-    [items, highlightedId, resetTypeahead],
-  );
-
+  // --- Focus strategy ---
+  // highlightFirst/Last and setFocusStrategy('none') must stay in the same synchronous
+  // layout effect — splitting them causes re-trigger loops during item registration.
   useLayoutEffect(() => {
     if (!menu.open) {
       setHighlightedId(null);
@@ -304,35 +205,35 @@ export const DropdownMenuContent = ({
       highlightLast();
       menu.setFocusStrategy('none');
     }
-    // If already 'none' do nothing (prevents redundant state updates each render)
   }, [menu.open, menu.focusStrategy, highlightFirst, highlightLast, resetTypeahead]);
 
   useEffect(() => {
     setItems((previous) => previous.filter((item) => item.ref.current));
   }, [menu.open]);
 
+  // --- Focus sync ---
   useEffect(() => {
-    if (!menu.open || !highlightedId) {
+    if (!menu.open) {
+      hadHighlightRef.current = false;
       return;
     }
 
-    const currentItem = items.find((item) => item.id === highlightedId);
-    const element = currentItem?.ref.current;
-    if (element && element !== element.ownerDocument.activeElement) {
-      element.focus({ preventScroll: true });
+    if (highlightedId) {
+      hadHighlightRef.current = true;
+      const currentItem = items.find((item) => item.id === highlightedId);
+      const element = currentItem?.ref.current;
+      if (element && element !== element.ownerDocument.activeElement) {
+        element.focus({ preventScroll: true });
+      }
+    } else if (hadHighlightRef.current) {
+      const contentNode = contentRef.current;
+      if (contentNode && !contentNode.contains(contentNode.ownerDocument.activeElement)) {
+        contentNode.focus({ preventScroll: true });
+      }
     }
   }, [menu.open, highlightedId, items]);
 
-  useEffect(
-    () => () => {
-      if (typeaheadTimeoutId.current !== null) {
-        window.clearTimeout(typeaheadTimeoutId.current);
-      }
-    },
-    [],
-  );
-
-  // Handle outside interactions
+  // --- Outside interaction ---
   useInteractOutside([contentRef, menu.triggerRef], {
     enabled: menu.open,
     includeFocus: true,
@@ -351,12 +252,12 @@ export const DropdownMenuContent = ({
     },
   });
 
-  const handleKeyDownInternal = useCallback(
-    (event: ReactKeyboardEvent<HTMLElement>) => {
+  // --- Keyboard ---
+
+  const handleKeyDown = useCallback(
+    (event: ReactKeyboardEvent<HTMLDivElement>) => {
       onKeyDown?.(event);
-      if (event.defaultPrevented) {
-        return;
-      }
+      if (event.defaultPrevented) return;
 
       if (performTypeahead(event)) {
         event.preventDefault();
@@ -364,6 +265,13 @@ export const DropdownMenuContent = ({
       }
 
       switch (event.key) {
+        case 'Enter':
+        case ' ':
+          if (handleItemActivation()) {
+            event.preventDefault();
+            return;
+          }
+          break;
         case 'ArrowDown':
           event.preventDefault();
           highlightNext();
@@ -400,24 +308,18 @@ export const DropdownMenuContent = ({
         default:
           break;
       }
-
-      if (isSubmenu && event.key === getCloseKey(menu.dir)) {
-        event.preventDefault();
-        menu.closeMenu();
-      }
     },
     [
       onKeyDown,
       performTypeahead,
+      handleItemActivation,
       highlightNext,
       highlightPrevious,
       highlightFirst,
       highlightLast,
       onEscapeKeyDown,
-      menu.dir,
       menu.closeMenu,
       menu.modal,
-      isSubmenu,
     ],
   );
 
@@ -439,8 +341,6 @@ export const DropdownMenuContent = ({
       highlightedId,
       closeOnSelect: menu.closeOnSelect,
       closeMenu: menu.closeMenu,
-      loop,
-      dir: menu.dir,
     }),
     [
       registerItem,
@@ -454,12 +354,9 @@ export const DropdownMenuContent = ({
       highlightedId,
       menu.closeOnSelect,
       menu.closeMenu,
-      loop,
-      menu.dir,
     ],
   );
 
-  // Extract placement information for data attributes
   const [currentSide, currentAlign] = useMemo(() => {
     const parts = placement.split('-');
     const placementSide = parts[0] as Side;
@@ -467,32 +364,41 @@ export const DropdownMenuContent = ({
     return [placementSide, placementAlign];
   }, [placement]);
 
-  if (!menu.open) {
+  const contentContextValue = useMemo(
+    () => ({ arrowStyles, side: currentSide, align: currentAlign }),
+    [arrowStyles, currentSide, currentAlign],
+  );
+
+  if (!menu.open || !mounted) {
     return null;
   }
 
-  return (
-    <DropdownMenuCollectionContext.Provider value={collectionValue}>
-      <Component
-        {...props}
-        ref={composedRefs}
-        id={menu.contentId}
-        role='menu'
-        aria-labelledby={menu.triggerId}
-        data-state='open'
-        data-side={currentSide}
-        data-align={currentAlign}
-        tabIndex={-1}
-        onKeyDown={handleKeyDownInternal}
-        style={{
-          position: strategy,
-          top: y ?? 0,
-          left: x ?? 0,
-          ...props.style,
-        }}
-      />
-    </DropdownMenuCollectionContext.Provider>
+  const portalContainer = container || document.body;
+
+  const contentElement = (
+    <DropdownMenuContentContext.Provider value={contentContextValue}>
+      <DropdownMenuCollectionContext.Provider value={collectionValue}>
+        <Component
+          {...props}
+          ref={floatingRef}
+          id={menu.contentId}
+          role='menu'
+          aria-labelledby={menu.triggerId}
+          data-state='open'
+          data-side={currentSide}
+          data-align={currentAlign}
+          tabIndex={-1}
+          onKeyDown={handleKeyDown}
+          style={{
+            ...floatingStyles,
+            ...props.style,
+          }}
+        />
+      </DropdownMenuCollectionContext.Provider>
+    </DropdownMenuContentContext.Provider>
   );
+
+  return createPortal(contentElement, portalContainer);
 };
 
 DropdownMenuContent.displayName = 'DropdownMenuContent';

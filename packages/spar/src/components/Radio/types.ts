@@ -1,15 +1,16 @@
-import * as React from 'react';
-import type { Orientation } from '../../types';
+import type { ElementType, ReactNode } from 'react';
+import type { Orientation, PolymorphicProps } from '../../types';
 
 /**
- * Props for RadioGroup component
- * @remarks Fully accessible, headless radio group component
+ * Own props for RadioGroup component
  */
-export interface RadioGroupProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface RadioGroupOwnProps {
   /**
-   * Ref forwarded to the root element
+   * Custom base ID used for generating the form `name` attribute.
+   * If not provided, one will be generated automatically.
    */
-  ref?: React.Ref<HTMLDivElement>;
+  id?: string;
+
   /**
    * Controlled value of selected radio item
    */
@@ -22,6 +23,7 @@ export interface RadioGroupProps extends Omit<React.HTMLAttributes<HTMLDivElemen
 
   /**
    * Callback when selection changes
+   * @param value - The new selected value
    */
   onValueChange?: (value: string) => void;
 
@@ -49,51 +51,57 @@ export interface RadioGroupProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   orientation?: Orientation;
 
   /**
-   * Whether radio group is contained within a toolbar
+   * Whether arrow key navigation automatically selects the focused radio item
    * Changes keyboard behavior per WAI-ARIA guidelines:
-   * - false: Arrow keys move focus and select (standard behavior)
-   * - true: Arrow keys only move focus, Space/Enter selects (toolbar behavior)
+   * - true: Arrow keys move focus and select (standard radio group behavior)
+   * - false: Arrow keys only move focus, Space/Enter selects (toolbar behavior)
+   * @defaultValue true
+   */
+  selectOnFocus?: boolean;
+
+  /**
+   * Whether to focus the first focusable radio item on mount
    * @defaultValue false
    */
-  isInToolbar?: boolean;
-
-  /**
-   * Accessible name for the group
-   */
-  'aria-label'?: React.AriaAttributes['aria-label'];
-
-  /**
-   * References element that labels the group
-   */
-  'aria-labelledby'?: React.AriaAttributes['aria-labelledby'];
-
-  /**
-   * References element that describes the group
-   */
-  'aria-describedby'?: React.AriaAttributes['aria-describedby'];
-
-  /**
-   * Polymorphic root element
-   * @defaultValue 'div'
-   */
-  as?: React.ElementType;
-
-  /**
-   * Radio.Item components
-   */
-  children?: React.ReactNode;
+  autoFocus?: boolean;
 }
 
 /**
- * Props for RadioItem component
- * @remarks Individual radio option within a RadioGroup
+ * Props for RadioGroup component
+ * @remarks Fully accessible, headless radio group component
  */
-export interface RadioItemProps
-  extends Omit<React.LabelHTMLAttributes<HTMLLabelElement>, 'onChange'> {
+export type RadioGroupProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  RadioGroupOwnProps
+>;
+
+/**
+ * Render props provided to children function for RadioItem
+ */
+export interface RadioItemRenderProps {
   /**
-   * Ref forwarded to the root element
+   * Whether this radio item is currently checked
    */
-  ref?: React.Ref<HTMLLabelElement>;
+  isChecked: boolean;
+  /**
+   * Function to select this radio item
+   */
+  select: () => void;
+  /**
+   * Whether this radio item is disabled
+   */
+  disabled: boolean;
+  /**
+   * Whether this radio item is currently focused
+   */
+  isFocused: boolean;
+}
+
+/**
+ * Own props for RadioItem component
+ */
+export interface RadioItemOwnProps {
   /**
    * Unique value for this radio item
    */
@@ -106,29 +114,24 @@ export interface RadioItemProps
   disabled?: boolean;
 
   /**
-   * Accessible name when children insufficient
+   * Children content or render function
    */
-  'aria-label'?: React.AriaAttributes['aria-label'];
-
-  /**
-   * References element that describes this item
-   */
-  'aria-describedby'?: React.AriaAttributes['aria-describedby'];
-
-  /**
-   * Polymorphic root element
-   * @defaultValue 'label'
-   */
-  as?: React.ElementType;
-
-  /**
-   * Label content for the radio item
-   */
-  children?: React.ReactNode;
+  children?: ReactNode | ((state: RadioItemRenderProps) => ReactNode);
 }
 
 /**
+ * Props for RadioItem component
+ * @remarks Individual radio option within a RadioGroup
+ */
+export type RadioItemProps<T extends ElementType = 'label'> = PolymorphicProps<
+  'label',
+  T,
+  RadioItemOwnProps
+>;
+
+/**
  * Internal context interface for RadioGroup
+ * @internal
  */
 export interface RadioGroupContextValue {
   value: string | undefined;
@@ -138,7 +141,7 @@ export interface RadioGroupContextValue {
   focusedValue: string | null;
   setFocusedValue: (value: string | null) => void;
   orientation: Orientation;
-  isInToolbar: boolean;
-  registerItem: (value: string) => void;
+  selectOnFocus: boolean;
+  registerItem: (value: string, element: HTMLElement) => void;
   unregisterItem: (value: string) => void;
 }

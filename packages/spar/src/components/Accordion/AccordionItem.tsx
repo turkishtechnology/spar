@@ -1,39 +1,28 @@
-import React, { createContext, useContext, useId, useEffect, useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useId, ElementType } from 'react';
 import type { AccordionItemProps, AccordionItemContextValue } from './types';
-import { useAccordionContext } from './Accordion';
-
-const AccordionItemContext = createContext<AccordionItemContextValue | null>(null);
-
-export const useAccordionItemContext = () => {
-  const context = useContext(AccordionItemContext);
-  if (!context) {
-    throw new Error('AccordionItem components must be used within an AccordionItem');
-  }
-  return context;
-};
+import { useAccordionContext, AccordionItemContext } from './hooks';
+import { Collapsible } from '../Collapsible';
 
 /**
  * Individual accordion item providing context for trigger and content components. Manages item registration and expansion state.
  */
-export const AccordionItem = ({
+export const AccordionItem = <T extends ElementType = 'div'>({
   value,
-  isDisabled: itemIsDisabled = false,
-  as: Component = 'div',
+  disabled: itemDisabled = false,
+  id: providedId,
+  as,
   children,
   ...props
-}: AccordionItemProps) => {
+}: AccordionItemProps<T>) => {
+  const Component = as || 'div';
   const accordionContext = useAccordionContext();
-  const triggerId = useId();
-  const contentId = useId();
-
-  // Register/unregister item with accordion
-  useEffect(() => {
-    accordionContext.registerItem(value);
-    return () => accordionContext.unregisterItem(value);
-  }, [accordionContext, value]);
+  const generatedId = useId();
+  const baseId = providedId ?? generatedId;
+  const triggerId = `${baseId}-trigger`;
+  const contentId = `${baseId}-content`;
 
   // Determine if this item is expanded
-  const isExpanded = useMemo(() => {
+  const isOpen = useMemo(() => {
     if (accordionContext.type === 'single') {
       return accordionContext.value === value;
     } else {
@@ -43,35 +32,53 @@ export const AccordionItem = ({
   }, [accordionContext.type, accordionContext.value, value]);
 
   // Determine if this item is disabled
-  const isDisabled = accordionContext.isDisabled || itemIsDisabled;
+  const isItemDisabled = accordionContext.disabled || itemDisabled;
 
-  const handleToggle = useCallback(() => {
-    if (!isDisabled) {
+  const toggle = useCallback(() => {
+    if (!isItemDisabled) {
       accordionContext.onItemToggle(value);
     }
-  }, [isDisabled, value, accordionContext.onItemToggle]);
+  }, [isItemDisabled, value, accordionContext.onItemToggle]);
+
+  const open = useCallback(() => {
+    if (!isItemDisabled && !isOpen) {
+      accordionContext.onItemToggle(value);
+    }
+  }, [isItemDisabled, isOpen, value, accordionContext.onItemToggle]);
+
+  const close = useCallback(() => {
+    if (!isItemDisabled && isOpen) {
+      accordionContext.onItemToggle(value);
+    }
+  }, [isItemDisabled, isOpen, value, accordionContext.onItemToggle]);
 
   const itemContextValue = useMemo<AccordionItemContextValue>(
     () => ({
       value,
-      isExpanded,
-      isDisabled,
+      isOpen,
+      disabled: isItemDisabled,
       triggerId,
       contentId,
-      onToggle: handleToggle,
+      open,
+      close,
+      toggle,
     }),
-    [value, isExpanded, isDisabled, triggerId, contentId, handleToggle],
+    [value, isOpen, isItemDisabled, triggerId, contentId, open, close, toggle],
   );
 
   return (
     <AccordionItemContext.Provider value={itemContextValue}>
-      <Component
+      <Collapsible
+        open={isOpen}
+        onOpenChange={toggle}
+        disabled={isItemDisabled}
+        triggerId={triggerId}
+        contentId={contentId}
+        as={Component}
         {...props}
-        data-state={isExpanded ? 'open' : 'closed'}
-        {...(isDisabled && { 'data-disabled': '' })}
       >
         {children}
-      </Component>
+      </Collapsible>
     </AccordionItemContext.Provider>
   );
 };

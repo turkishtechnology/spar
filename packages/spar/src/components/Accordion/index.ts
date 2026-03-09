@@ -3,8 +3,8 @@ import { AccordionItem } from './AccordionItem';
 import { AccordionHeader } from './AccordionHeader';
 import { AccordionTrigger } from './AccordionTrigger';
 import { AccordionContent } from './AccordionContent';
+export { useAccordionContext, useAccordionItemContext } from './hooks';
 
-// Create compound component with dot notation support
 const Accordion = AccordionRoot as typeof AccordionRoot & {
   Root: typeof AccordionRoot;
   Item: typeof AccordionItem;
@@ -19,27 +19,21 @@ Accordion.Header = AccordionHeader;
 Accordion.Trigger = AccordionTrigger;
 Accordion.Content = AccordionContent;
 
-// Export both patterns
 export {
-  // Compound component (with dot notation)
   Accordion,
-
-  // Named exports (tree-shakeable)
+  AccordionRoot,
   AccordionItem,
   AccordionHeader,
   AccordionTrigger,
   AccordionContent,
-
-  // Root alias for explicit usage
-  AccordionRoot,
 };
 
-// Export types
 export type {
   AccordionProps,
   AccordionItemProps,
   AccordionHeaderProps,
   AccordionTriggerProps,
+  AccordionTriggerRenderProps,
   AccordionContentProps,
   AccordionType,
 } from './types';

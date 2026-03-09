@@ -1,16 +1,15 @@
-import { createElement, type MouseEvent, type KeyboardEvent } from 'react';
-import { useBreadcrumb } from './BreadcrumbContext';
+import type { MouseEvent, KeyboardEvent, ElementType } from 'react';
+import { useBreadcrumbContext } from './hooks';
 import type { BreadcrumbLinkProps } from './types';
 
 /**
  * Interactive link for breadcrumb navigation. Handles routing integration and accessibility states.
- * @remarks Fully accessible, headless component
  */
-export const BreadcrumbLink = ({
-  as = 'a',
+export const BreadcrumbLink = <T extends ElementType = 'a'>({
+  as,
   children,
   href,
-  isDisabled = false,
+  disabled = false,
   isExternal = false,
   target,
   rel,
@@ -18,9 +17,10 @@ export const BreadcrumbLink = ({
   onClick,
   onKeyDown,
   ...props
-}: BreadcrumbLinkProps) => {
-  const { isDisabled: rootIsDisabled, onNavigate } = useBreadcrumb();
-  const linkIsDisabled = isDisabled || rootIsDisabled;
+}: BreadcrumbLinkProps<T>) => {
+  const Component = as || 'a';
+  const { disabled: rootDisabled, onNavigate } = useBreadcrumbContext();
+  const linkIsDisabled = disabled || rootDisabled;
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (linkIsDisabled) {
@@ -73,12 +73,11 @@ export const BreadcrumbLink = ({
     tabIndex: linkIsDisabled ? -1 : undefined,
     onClick: handleClick,
     onKeyDown: handleKeyDown,
-    'data-spar-breadcrumb-link': '',
-    'data-disabled': linkIsDisabled || undefined,
-    'data-external': isExternal || undefined,
+    'data-disabled': linkIsDisabled ? '' : undefined,
+    'data-external': isExternal ? '' : undefined,
   };
 
-  return createElement(as, linkProps, children);
+  return <Component {...linkProps}>{children}</Component>;
 };
 
 BreadcrumbLink.displayName = 'BreadcrumbLink';

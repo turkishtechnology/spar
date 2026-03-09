@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { useCollapsibleContext } from './Collapsible';
+import { useEffect, useRef, ElementType } from 'react';
+import { useMergedRef } from '@/hooks';
+import { useCollapsibleContext } from './hooks';
 import type { CollapsibleContentProps } from './types';
 
 // Helper function to determine the hidden attribute value
@@ -17,53 +18,37 @@ const getHiddenAttribute = (isOpen: boolean, forceMount: boolean) => {
 /**
  * Collapsible content component containing the collapsible content.
  */
-export const CollapsibleContent = ({
-  as: Component = 'div',
+export const CollapsibleContent = <T extends ElementType = 'div'>({
+  as,
+  ref,
   forceMount = false,
   children,
-  style,
   onBeforeMatch,
   ...props
-}: CollapsibleContentProps) => {
-  const { isOpen, isDisabled, contentId, toggle } = useCollapsibleContext();
+}: CollapsibleContentProps<T>) => {
+  const Component = as || 'div';
+  const { isOpen, disabled, contentId, toggle } = useCollapsibleContext();
   const contentRef = useRef<HTMLElement>(null);
+  const mergedRef = useMergedRef(contentRef, ref);
 
-  // Update CSS custom properties for animations
+  // Handle beforematch event for hidden="until-found" support
+  // This must be attached via addEventListener since React doesn't support onBeforeMatch
   useEffect(() => {
     const element = contentRef.current;
-    if (!element) return undefined;
+    if (!element || !forceMount || isOpen) return undefined;
 
-    const updateCustomProperties = () => {
-      const { width, height } = element.getBoundingClientRect();
-      element.style.setProperty('--spar-collapsible-content-width', `${width}px`);
-      element.style.setProperty('--spar-collapsible-content-height', `${height}px`);
+    const handleBeforeMatch = (event: Event) => {
+      // When content is found via browser search, open the collapsible
+      toggle();
+      onBeforeMatch?.(event);
     };
 
-    // Update properties when content becomes visible
-    if (isOpen) {
-      updateCustomProperties();
-    }
+    element.addEventListener('beforematch', handleBeforeMatch);
 
-    // Set up ResizeObserver to update properties when content size changes
-    if (typeof ResizeObserver !== 'undefined') {
-      const resizeObserver = new ResizeObserver(updateCustomProperties);
-      resizeObserver.observe(element);
-
-      return () => {
-        resizeObserver.disconnect();
-      };
-    }
-
-    return undefined;
-  }, [isOpen]);
-
-  const handleBeforeMatch = (event: Event) => {
-    // When content is found via browser search, open the collapsible
-    if (forceMount && !isOpen) {
-      toggle();
-    }
-    onBeforeMatch?.(event);
-  };
+    return () => {
+      element.removeEventListener('beforematch', handleBeforeMatch);
+    };
+  }, [forceMount, isOpen, toggle, onBeforeMatch]);
 
   // Don't render content if closed and not force mounted
   if (!isOpen && !forceMount) {
@@ -74,20 +59,13 @@ export const CollapsibleContent = ({
   const dataState = isOpen ? 'open' : 'closed';
   const hiddenAttribute = getHiddenAttribute(isOpen, forceMount);
 
-  // Combine styles with CSS custom properties
-  const combinedStyle: React.CSSProperties = {
-    ...style,
-  };
-
   return (
     <Component
-      ref={contentRef}
+      ref={mergedRef}
       id={contentId}
       hidden={hiddenAttribute}
       data-state={dataState}
-      data-disabled={isDisabled ? '' : undefined}
-      style={combinedStyle}
-      onBeforeMatch={forceMount && !isOpen ? handleBeforeMatch : undefined}
+      data-disabled={disabled ? '' : undefined}
       {...props}
     >
       {children}

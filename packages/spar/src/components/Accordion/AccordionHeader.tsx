@@ -1,22 +1,27 @@
-import React from 'react';
+import { ElementType } from 'react';
 import type { AccordionHeaderProps } from './types';
-import { useAccordionItemContext } from './AccordionItem';
+import { useAccordionItemContext } from './hooks';
 
 /**
  * Accordion header providing semantic heading structure for triggers. Wraps the trigger in appropriate heading element for document hierarchy.
  */
-export const AccordionHeader = ({ level = 3, as, children, ...props }: AccordionHeaderProps) => {
-  const { isExpanded, isDisabled } = useAccordionItemContext();
+export const AccordionHeader = <T extends ElementType = 'h3'>({
+  level = 3,
+  as,
+  children,
+  ...props
+}: AccordionHeaderProps<T>) => {
+  const { isOpen, disabled } = useAccordionItemContext();
 
   // Determine the component to render
-  const Component = as || (`h${level}` as React.ElementType);
+  const Component = as || (`h${level}` as ElementType);
 
   return (
     <Component
       {...props}
-      data-state={isExpanded ? 'open' : 'closed'}
+      data-state={isOpen ? 'open' : 'closed'}
       data-level={level}
-      {...(isDisabled && { 'data-disabled': '' })}
+      {...(disabled && { 'data-disabled': '' })}
     >
       {children}
     </Component>

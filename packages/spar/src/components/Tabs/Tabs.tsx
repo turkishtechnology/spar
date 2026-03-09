@@ -1,58 +1,40 @@
-import React, { createContext, useContext, useMemo, useCallback, useRef, useId } from 'react';
-import { useControlledState } from '../../hooks/useControlledState';
+import { useMemo, useCallback, useRef, useId, type ElementType } from 'react';
+import { useControlledState, useItemRegistry } from '@/hooks';
+import { TabsContext } from './hooks';
 import type { TabsProps, TabsContextValue } from './types';
-
-// ============================================================================
-// Context
-// ============================================================================
-
-const TabsContext = createContext<TabsContextValue | null>(null);
-
-/**
- * Hook to access Tabs context. Must be used within a Tabs component.
- *
- * @returns TabsContextValue containing state and methods for tab management
- * @throws Error if used outside of Tabs context
- */
-export const useTabsContext = (): TabsContextValue => {
-  const context = useContext(TabsContext);
-  if (!context) {
-    throw new Error('Tabs components must be used within a Tabs');
-  }
-  return context;
-};
-
-// ============================================================================
-// Component
-// ============================================================================
 
 /**
  * Tabs root component providing context and state management for tab navigation.
  * Supports controlled/uncontrolled patterns with full keyboard navigation.
  */
-export const Tabs = ({
+export const Tabs = <T extends ElementType = 'div'>({
+  id: providedId,
   value: controlledValue,
   defaultValue,
   onValueChange,
   orientation = 'horizontal',
-  dir = 'ltr',
   activationMode = 'automatic',
-  as: Component = 'div',
+  as,
   children,
+  ref,
   ...props
-}: TabsProps) => {
-  // ============================================================================
-  // State Management
-  // ============================================================================
+}: TabsProps<T>) => {
+  const Component = as || 'div';
 
   // Check if component is in controlled mode
   const isControlled = controlledValue !== undefined;
 
   // Generate unique IDs for ARIA relationships
-  const tabsListId = useId();
+  const generatedId = useId();
+  const baseId = providedId ?? generatedId;
 
-  // Store references to tab elements for focus management
-  const tabRefs = useRef<Map<string, HTMLElement>>(new Map());
+  // Item registry for tab element references and ordered tracking
+  const {
+    items: tabItems,
+    registerItem,
+    unregisterItem,
+    getItemIndex,
+  } = useItemRegistry<HTMLElement>();
 
   // Track if auto-selection has occurred to prevent multiple selections
   const hasAutoSelectedRef = useRef(false);
@@ -64,13 +46,9 @@ export const Tabs = ({
     onValueChange,
   );
 
-  // ============================================================================
-  // Tab Registration Callbacks
-  // ============================================================================
-
   const registerTab = useCallback(
     (value: string, element: HTMLElement): void => {
-      tabRefs.current.set(value, element);
+      registerItem(value, element);
 
       // Only auto-select for uncontrolled mode
       const shouldAutoSelectFirstTab =
@@ -81,26 +59,29 @@ export const Tabs = ({
         setSelectedValue(value);
       }
     },
-    [isControlled, selectedValue, defaultValue, setSelectedValue],
+    [isControlled, selectedValue, defaultValue, setSelectedValue, registerItem],
   );
 
-  const unregisterTab = useCallback((value: string): void => {
-    tabRefs.current.delete(value);
-  }, []);
+  const unregisterTab = useCallback(
+    (value: string): void => {
+      unregisterItem(value);
+    },
+    [unregisterItem],
+  );
 
-  // ============================================================================
-  // Focus Management Callbacks
-  // ============================================================================
+  const getTabIndex = useCallback(
+    (value: string): number => {
+      return getItemIndex(value);
+    },
+    [getItemIndex],
+  );
 
-  const getTabIndex = useCallback((value: string): number => {
-    const registeredTabValues = Array.from(tabRefs.current.keys());
-    return registeredTabValues.indexOf(value);
-  }, []);
-
-  const focusTab = useCallback((value: string): void => {
-    const targetTabElement = tabRefs.current.get(value);
-    targetTabElement?.focus();
-  }, []);
+  const focusTab = useCallback(
+    (value: string): void => {
+      tabItems.get(value)?.focus();
+    },
+    [tabItems],
+  );
 
   const handleValueChange = useCallback(
     (value: string): void => {
@@ -108,10 +89,6 @@ export const Tabs = ({
     },
     [setSelectedValue],
   );
-
-  // ============================================================================
-  // Context Value
-  // ============================================================================
 
   // Memoize context value to prevent unnecessary re-renders
   const contextValue = useMemo<TabsContextValue>(
@@ -122,15 +99,13 @@ export const Tabs = ({
 
       // Configuration
       orientation,
-      dir,
       activationMode,
-      loop: true, // Default value, overridden by TabsList if needed
 
       // IDs for ARIA
-      tabsListId,
+      baseId,
 
       // Tab management
-      tabRefs,
+      tabItems,
       registerTab,
       unregisterTab,
       getTabIndex,
@@ -140,9 +115,9 @@ export const Tabs = ({
       selectedValue,
       handleValueChange,
       orientation,
-      dir,
       activationMode,
-      tabsListId,
+      baseId,
+      tabItems,
       registerTab,
       unregisterTab,
       getTabIndex,
@@ -150,13 +125,9 @@ export const Tabs = ({
     ],
   );
 
-  // ============================================================================
-  // Render
-  // ============================================================================
-
   return (
     <TabsContext.Provider value={contextValue}>
-      <Component data-orientation={orientation} data-dir={dir} {...props}>
+      <Component ref={ref} data-orientation={orientation} {...props}>
         {children}
       </Component>
     </TabsContext.Provider>

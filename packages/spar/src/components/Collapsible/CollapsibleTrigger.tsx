@@ -1,76 +1,69 @@
-import React from 'react';
-import { useCollapsibleContext } from './Collapsible';
-import type { CollapsibleTriggerProps } from './types';
+import React, { useCallback, ElementType } from 'react';
+import { useCollapsibleContext } from './hooks';
+import type { CollapsibleTriggerProps, CollapsibleTriggerRenderProps } from './types';
+import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
 /**
  * Collapsible trigger component that toggles the visibility of collapsible content.
  */
-export const CollapsibleTrigger = ({
-  as: Component = 'button',
+export const CollapsibleTrigger = <T extends ElementType = 'button'>({
+  as,
+  disabled: disabledProp,
   children,
   onClick,
-  onKeyDown,
   ...props
-}: CollapsibleTriggerProps) => {
-  const { isOpen, toggle, isDisabled, triggerId, contentId } = useCollapsibleContext();
+}: CollapsibleTriggerProps<T>) => {
+  const {
+    isOpen,
+    open,
+    close,
+    toggle,
+    disabled: contextDisabled,
+    triggerId,
+    contentId,
+  } = useCollapsibleContext();
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    if (isDisabled) return;
-    toggle();
-    onClick?.(event);
-  };
+  // Use prop if explicitly provided, otherwise use context
+  const disabled = disabledProp ?? contextDisabled;
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
-    if (isDisabled) {
-      onKeyDown?.(event);
-      return;
-    }
-
-    // Handle Enter and Space keys
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault(); // Prevent space from scrolling page
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (disabled) return;
       toggle();
-    }
+      onClick?.(event);
+    },
+    [disabled, toggle, onClick],
+  );
 
-    onKeyDown?.(event);
+  // Render props for children function
+  const renderProps: CollapsibleTriggerRenderProps = {
+    isOpen,
+    disabled,
+    open,
+    close,
+    toggle,
   };
 
   // Get data attributes for styling
   const dataState = isOpen ? 'open' : 'closed';
 
-  // Common props for all component types
-  const commonProps = {
+  const buttonProps = {
+    ...(as && { as }),
     id: triggerId,
+    disabled,
     'aria-expanded': isOpen,
     'aria-controls': contentId,
     'data-state': dataState,
-    'data-disabled': isDisabled ? '' : undefined,
     onClick: handleClick,
-    onKeyDown: handleKeyDown,
     ...props,
-  };
+  } as ButtonProps<T>;
 
-  // Handle disabled state based on component type
-  if (Component === 'button') {
-    // Use native disabled attribute for semantic button elements
-    return (
-      <Component type='button' disabled={isDisabled} {...commonProps}>
-        {children}
-      </Component>
-    );
-  } else {
-    // Use aria-disabled and tabIndex for non-semantic elements
-    return (
-      <Component
-        role='button'
-        aria-disabled={isDisabled}
-        tabIndex={isDisabled ? -1 : 0}
-        {...commonProps}
-      >
-        {children}
-      </Component>
-    );
-  }
+  return (
+    <Button {...buttonProps}>
+      {typeof children === 'function' ? children(renderProps) : children}
+    </Button>
+  );
 };
 
 CollapsibleTrigger.displayName = 'CollapsibleTrigger';

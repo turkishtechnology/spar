@@ -12,9 +12,9 @@ The Collapsible component implements the WAI-ARIA disclosure pattern, providing 
 - Content summaries with expandable details
 
 **Compound component structure:**
-- `Collapsible.Root` - Context provider and state management
-- `Collapsible.Trigger` - Button element that toggles visibility
-- `Collapsible.Content` - Panel containing the collapsible content
+- `CollapsibleRoot` - Context provider and state management
+- `CollapsibleTrigger` - Button element that toggles visibility
+- `CollapsibleContent` - Panel containing the collapsible content
 
 **Key differentiators:**
 - Zero styling opinions (behavior-only)
@@ -26,38 +26,57 @@ The Collapsible component implements the WAI-ARIA disclosure pattern, providing 
 
 ## 2. API
 
-### Collapsible.Root Props
+### CollapsibleRoot Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
+| `as` | `ElementType` | No | `'div'` | Element type for polymorphic rendering |
+| `id` | `string` | No | Auto-generated | Base ID used to derive trigger/content IDs |
+| `triggerId` | `string` | No | Auto-generated | Explicit ID for trigger element |
+| `contentId` | `string` | No | Auto-generated | Explicit ID for content element |
 | `open` | `boolean` | No | `undefined` | Controlled open state |
 | `defaultOpen` | `boolean` | No | `false` | Default open state for uncontrolled usage |
 | `onOpenChange` | `(open: boolean) => void` | No | `undefined` | Callback fired when open state changes |
 | `disabled` | `boolean` | No | `false` | Whether the collapsible is disabled |
 | `children` | `ReactNode` | Yes | - | Child components |
 
-### Collapsible.Trigger Props
+### CollapsibleTrigger Props
+
+Extends all `ButtonProps` from the Button component.
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'button'` | Element type for polymorphic rendering |
-| `children` | `ReactNode` | No | - | Trigger content |
+| `children` | `ReactNode \| ((state: CollapsibleTriggerRenderProps) => ReactNode)` | No | - | Trigger content or render function for render props pattern |
+| `autoFocus` | `boolean` | No | `false` | Whether the button should receive focus on mount |
+| `isLoading` | `boolean` | No | `false` | Loading state with screen reader support |
+| `isPressed` | `boolean` | No | `undefined` | Toggle state - creates a toggle button when defined |
+| `onPressedChange` | `(pressed: boolean) => void` | No | `undefined` | Callback fired when toggle state changes |
 | `aria-expanded` | `boolean` | No | Auto-managed | Current open/closed state (automatically set) |
 | `aria-controls` | `string` | No | Auto-generated | ID of controlled content (automatically set) |
-| `aria-disabled` | `boolean` | No | Auto-managed | Disabled state for non-semantic elements |
-| `disabled` | `boolean` | No | Auto-managed | Native disabled for semantic button elements |
-| `...rest` | `HTMLAttributes` | No | - | Additional HTML attributes |
+| `...rest` | `ButtonProps` | No | - | All standard Button component attributes |
+
+### CollapsibleTriggerRenderProps
+
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the collapsible content is currently visible |
+| `disabled` | `boolean` | Whether the trigger is disabled |
+| `open` | `() => void` | Function to programmatically open the collapsible |
+| `close` | `() => void` | Function to programmatically close the collapsible |
+| `toggle` | `() => void` | Function to programmatically toggle the collapsible |
 
 **Disabled Semantics:**
 - For semantic `<button>` elements: Uses native `disabled` attribute
 - For non-semantic elements (via `as` prop): Uses `aria-disabled` + `tabIndex={-1}`
 
-### Collapsible.Content Props
+### CollapsibleContent Props
 
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Element type for polymorphic rendering |
 | `forceMount` | `boolean` | No | `false` | Force content to remain mounted when closed |
+| `onBeforeMatch` | `(event: Event) => void` | No | `undefined` | Callback fired when content is revealed by browser find-in-page |
 | `id` | `string` | No | Auto-generated | Content element ID (automatically set for ARIA) |
 | `hidden` | `boolean \| 'until-found'` | No | Auto-managed | Visibility state (automatically managed) |
 | `children` | `ReactNode` | No | - | Content to be shown/hidden |
@@ -135,8 +154,8 @@ The Collapsible component implements the WAI-ARIA disclosure pattern, providing 
 // Content element  
 <div
   id={contentId}
-  hidden={!isOpen && !forceMount ? true : undefined}
-  // OR hidden="until-found" when closed and forceMount=true
+  hidden={getHiddenAttribute(isOpen, forceMount)}
+  // Content is unmounted when !isOpen && !forceMount
 >
 ```
 
@@ -156,16 +175,12 @@ const useCollapsibleState = (props: {
   onOpenChange?: (open: boolean) => void;
   disabled?: boolean;
 }) => {
-  const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false);
-  const isControlled = open !== undefined;
-  const isOpen = isControlled ? open : internalOpen;
+  const [isOpen = false, setIsOpen] = useControlledState(open, defaultOpen ?? false, onOpenChange);
   
   const toggle = useCallback(() => {
     if (disabled) return;
-    const nextOpen = !isOpen;
-    if (!isControlled) setInternalOpen(nextOpen);
-    onOpenChange?.(nextOpen);
-  }, [disabled, isOpen, isControlled, onOpenChange]);
+    setIsOpen(!isOpen);
+  }, [disabled, isOpen, setIsOpen]);
   
   return { isOpen, toggle, disabled };
 };
@@ -206,7 +221,7 @@ const CollapsibleProvider = ({ value, children }: {
 ```
 
 ### Ref Forwarding Strategy
-- All components use `forwardRef` to expose DOM references
+- All components expose refs to underlying DOM elements
 - Trigger ref for focus management and keyboard handling
 - Content ref for measuring and animations (external styling)
 
@@ -233,22 +248,12 @@ const getHiddenAttribute = (isOpen: boolean, forceMount: boolean) => {
 // Usage in Content component
 <div 
   hidden={getHiddenAttribute(isOpen, forceMount)}
-  onBeforeMatch={forceMount && !isOpen ? () => onOpenChange?.(true) : undefined}
+  // beforematch is wired via addEventListener('beforematch', ...)
 >
 ```
 
 ### SSR/CSR Safety and Deterministic IDs
 ```tsx
-// Use deterministic ID generation
-const useId = () => {
-  const [id] = useState(() => 
-    typeof window === 'undefined' 
-      ? `collapsible-${Math.random().toString(36).substr(2, 9)}`
-      : `collapsible-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-  );
-  return id;
-};
-
 // Generate stable IDs for ARIA relationships
 const baseId = useId();
 const triggerId = `${baseId}-trigger`;
@@ -267,41 +272,16 @@ All components automatically receive data attributes for styling:
 **Trigger Component:**
 - `data-state`: `"open" | "closed"`
 - `data-disabled`: Present when disabled
-- `data-focus`: Present when focused (via keyboard or programmatically)
-- `data-hover`: Present when hovered (mouse interaction)
-- `data-active`: Present when in pressed/active state
 
 **Content Component:**
 - `data-state`: `"open" | "closed"`
 - `data-disabled`: Present when disabled (inherited from root)
-
-### CSS Custom Properties
-The content component exposes CSS custom properties for smooth animations:
-
-- `--spar-collapsible-content-width`: Current content width in pixels
-- `--spar-collapsible-content-height`: Current content height in pixels
-
-These properties are automatically updated and can be used for height/width transitions.
 
 ### Usage Examples
 ```css
 /* Styling the trigger based on state */
 [data-state="open"] .trigger-icon {
   transform: rotate(90deg);
-}
-
-/* Interaction state styling */
-[data-focus] {
-  outline: 2px solid blue;
-  outline-offset: 2px;
-}
-
-[data-hover]:not([data-disabled]) {
-  background-color: var(--hover-bg);
-}
-
-[data-active]:not([data-disabled]) {
-  transform: scale(0.98);
 }
 
 /* Styling disabled state */
@@ -356,35 +336,35 @@ These properties are automatically updated and can be used for height/width tran
 ### React Usage Examples
 ```tsx
 // Basic usage
-<Collapsible.Root>
-  <Collapsible.Trigger>
+<CollapsibleRoot>
+  <CollapsibleTrigger>
     Toggle Content
-  </Collapsible.Trigger>
-  <Collapsible.Content>
+  </CollapsibleTrigger>
+  <CollapsibleContent>
     Content to show/hide
-  </Collapsible.Content>
-</Collapsible.Root>
+  </CollapsibleContent>
+</CollapsibleRoot>
 
 // Controlled usage
 const [isOpen, setIsOpen] = useState(false);
-<Collapsible.Root open={isOpen} onOpenChange={setIsOpen}>
-  <Collapsible.Trigger>
+<CollapsibleRoot open={isOpen} onOpenChange={setIsOpen}>
+  <CollapsibleTrigger>
     {isOpen ? 'Hide' : 'Show'} Details
-  </Collapsible.Trigger>
-  <Collapsible.Content>
+  </CollapsibleTrigger>
+  <CollapsibleContent>
     Controlled content
-  </Collapsible.Content>
-</Collapsible.Root>
+  </CollapsibleContent>
+</CollapsibleRoot>
 
 // Polymorphic usage with custom elements
-<Collapsible.Root>
-  <Collapsible.Trigger as="div" role="button" tabIndex={0}>
+<CollapsibleRoot>
+  <CollapsibleTrigger as="div" role="button" tabIndex={0}>
     Custom trigger element
-  </Collapsible.Trigger>
-  <Collapsible.Content as="section">
+  </CollapsibleTrigger>
+  <CollapsibleContent as="section">
     Semantic content section
-  </Collapsible.Content>
-</Collapsible.Root>
+  </CollapsibleContent>
+</CollapsibleRoot>
 ```
 
 ## 7. Test Coverage Plan
@@ -426,8 +406,7 @@ const [isOpen, setIsOpen] = useState(false);
 __tests__/
 ├── Collapsible.test.tsx              # Core functionality
 ├── Collapsible.a11y.test.tsx         # Accessibility compliance
-├── Collapsible.integration.test.tsx  # Component integration
-└── Collapsible.performance.test.tsx  # Performance and edge cases
+└── Collapsible.integration.test.tsx  # Component integration
 ```
 
 ## 8. Constraints
@@ -444,7 +423,7 @@ __tests__/
 - No className props needed (external styling responsibility)
 
 ### Tree-Shakeable Exports
-- Named exports only (`Collapsible.Root`, `Collapsible.Trigger`, `Collapsible.Content`)
+- Named exports only (`CollapsibleRoot`, `CollapsibleTrigger`, `CollapsibleContent`)
 - No default exports
 - Each component can be imported individually
 
@@ -464,7 +443,6 @@ __tests__/
 ### Controlled/Uncontrolled Support
 - Both patterns fully supported
 - Clear controlled vs uncontrolled detection
-- Warning for switching between modes (development)
 - Consistent API patterns with React ecosystem
 
 ## Troubleshooting
@@ -520,20 +498,20 @@ From existing disclosure/collapsible implementations:
 4. Migrate state management to controlled/uncontrolled pattern
 
 **From unstyled headless libraries:**
-1. Replace context provider with `Collapsible.Root`
-2. Update trigger component to `Collapsible.Trigger`
-3. Update content wrapper to `Collapsible.Content`
+1. Replace context provider with `CollapsibleRoot`
+2. Update trigger component to `CollapsibleTrigger`
+3. Update content wrapper to `CollapsibleContent`
 4. Verify ARIA attribute mapping
 5. Test keyboard navigation compatibility
 
 ### Implementation Checklist
 
 #### Core Functionality
-- [ ] `useCollapsibleState` hook with controlled/uncontrolled support
+- [ ] Controlled/uncontrolled state management via `useControlledState` hook
 - [ ] `CollapsibleContext` for state sharing
-- [ ] `Collapsible.Root` context provider component
-- [ ] `Collapsible.Trigger` button component with keyboard handling
-- [ ] `Collapsible.Content` content wrapper with visibility management
+- [ ] `CollapsibleRoot` context provider component
+- [ ] `CollapsibleTrigger` button component with keyboard handling
+- [ ] `CollapsibleContent` content wrapper with visibility management
 
 #### Accessibility Implementation
 - [ ] ARIA attributes (`aria-expanded`, `aria-controls`, `aria-disabled`)
@@ -554,10 +532,9 @@ From existing disclosure/collapsible implementations:
 - [ ] Controlled state support (`open` + `onOpenChange`)
 - [ ] Uncontrolled state support (`defaultOpen`)
 - [ ] Disabled state handling
-- [ ] Development warnings for state pattern misuse
 
 #### Styling Integration
-- [ ] Data attributes for all state variants (including interaction states)
+- [ ] Data attributes for state variants (`data-state`, `data-disabled`)
 - [ ] CSS custom properties for content dimensions
 - [ ] No CSS imports or styling opinions
 - [ ] CSS class targeting support
@@ -573,7 +550,6 @@ From existing disclosure/collapsible implementations:
 - [ ] Unit tests for state management and props
 - [ ] Accessibility tests with jest-axe
 - [ ] Integration tests for compound component behavior
-- [ ] Performance tests for context optimization and edge cases
 - [ ] Cross-browser keyboard navigation testing
 - [ ] Polymorphic component testing with different `as` props
 

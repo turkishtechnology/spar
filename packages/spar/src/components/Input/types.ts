@@ -1,7 +1,10 @@
-import type { ElementType, ReactNode } from 'react';
+import type { ElementType } from 'react';
+import type { PolymorphicProps } from '../../types';
+import type { LabelProps } from '../Label/types';
 
 /**
  * Input context state
+ * @internal
  */
 export interface InputContextValue {
   fieldId: string;
@@ -9,15 +12,22 @@ export interface InputContextValue {
   descriptionId: string;
   errorId: string;
   isInvalid: boolean;
-  isDisabled: boolean;
-  isRequired: boolean;
+  disabled: boolean;
+  required: boolean;
+  readOnly: boolean;
 }
 
 /**
- * Props for Input.Root
- * @remarks Provides state context for compound input elements
+ * Own props for Input
  */
-export interface InputRootProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface InputOwnProps {
+  /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-field`, `${id}-label`, etc.
+   */
+  id?: string;
+
   /**
    * Input validation state
    * @defaultValue false
@@ -28,87 +38,63 @@ export interface InputRootProps extends React.HTMLAttributes<HTMLDivElement> {
    * Input disabled state
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Input required state
    * @defaultValue false
    */
-  isRequired?: boolean;
+  required?: boolean;
 
   /**
-   * Compound input elements
+   * Input read-only state
+   * @defaultValue false
    */
-  children: ReactNode;
+  readOnly?: boolean;
 }
 
 /**
- * Base props for Input.Field
+ * Props for Input
+ * @remarks Provides state context for compound input elements
+ */
+export type InputProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T, InputOwnProps>;
+
+/**
+ * Own props for InputField
  * @remarks Core input element with polymorphic element support
  */
-export interface InputFieldProps<T extends ElementType = 'input'> {
+export interface InputFieldOwnProps {
   /**
-   * Element type for polymorphic rendering
-   * @defaultValue "input"
+   * Whether to focus the input on mount
+   * @defaultValue false
    */
-  as?: T;
-
-  /**
-   * Ref for the input element
-   */
-  ref?: React.ComponentPropsWithRef<T>['ref'];
+  autoFocus?: boolean;
 }
 
 /**
- * Complete props for Input.Field with polymorphic support
+ * Props for InputField
+ * @remarks Core input element with polymorphic element support
  */
-export type PolymorphicInputFieldProps<T extends ElementType = 'input'> = InputFieldProps<T> &
-  Omit<React.ComponentPropsWithRef<T>, keyof InputFieldProps<T>>;
+export type InputFieldProps<T extends ElementType = 'input'> = PolymorphicProps<
+  'input',
+  T,
+  InputFieldOwnProps
+>;
 
 /**
- * Props for Input.Label
+ * Props for InputLabel
  * @remarks Associated label element with automatic ID linking
  */
-export interface InputLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
-  /**
-   * Label content
-   */
-  children: ReactNode;
-
-  /**
-   * Ref for the label element
-   */
-  ref?: React.Ref<HTMLLabelElement>;
-}
+export type InputLabelProps<T extends ElementType = 'label'> = LabelProps<T>;
 
 /**
- * Props for Input.Description
+ * Props for InputDescription
  * @remarks Helper text element for additional input guidance
  */
-export interface InputDescriptionProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Description content
-   */
-  children: ReactNode;
-
-  /**
-   * Ref for the description element
-   */
-  ref?: React.Ref<HTMLDivElement>;
-}
+export type InputDescriptionProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
- * Props for Input.ErrorMessage
+ * Props for InputErrorMessage
  * @remarks Error announcement element with automatic ARIA handling
  */
-export interface InputErrorMessageProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Error content
-   */
-  children: ReactNode;
-
-  /**
-   * Ref for the error element
-   */
-  ref?: React.Ref<HTMLDivElement>;
-}
+export type InputErrorMessageProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;

@@ -1,41 +1,34 @@
-# Website
+# Spar
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+An open-source Headless React UI library delivering unstyled, behavior-first primitives.
+Zero styling opinions, full accessibility built-in.
+
+![Spar UI Hero](./static/img/design-example.png)
+
+[![npm version](https://img.shields.io/npm/v/@turkish-technology/spar.svg)](https://www.npmjs.com/package/@turkish-technology/spar)
+[![npm downloads](https://img.shields.io/npm/dm/@turkish-technology/spar.svg)](https://www.npmjs.com/package/@turkish-technology/spar)
+[![License](https://img.shields.io/npm/l/@turkish-technology/spar.svg)](https://github.com/turkishtechnology/spar/blob/develop/LICENSE)
 
 ## Installation
 
 ```bash
-yarn
+pnpm add @turkish-technology/spar
+# or
+yarn add @turkish-technology/spar
+# or
+npm install @turkish-technology/spar
+# or
+bun add @turkish-technology/spar
 ```
 
-## Local Development
+## Documentation
 
-```bash
-yarn start
-```
+For full documentation, visit [Documentation Guide](https://spar.app.turkishtechlab.com/).
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+## Contributing
 
-## Build
+Please see [CONTRIBUTING.md](../../CONTRIBUTING.md) for contribution guidelines.
 
-```bash
-yarn build
-```
+## License
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-## Deployment
-
-Using SSH:
-
-```bash
-USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```bash
-GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+See [LICENSE](../../LICENSE) for details.

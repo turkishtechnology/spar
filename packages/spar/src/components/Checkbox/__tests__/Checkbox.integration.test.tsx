@@ -121,6 +121,26 @@ describe('Checkbox Integration Tests', () => {
       expect(screen.queryByRole('alert')).not.toBeInTheDocument();
       expect(checkbox).toHaveAttribute('data-invalid', 'false');
     });
+
+    it('submits form with Enter key without toggling checkbox state', async () => {
+      const user = userEvent.setup();
+      const handleSubmit = jest.fn((event: React.FormEvent) => event.preventDefault());
+
+      render(
+        <form onSubmit={handleSubmit}>
+          <Checkbox name='terms'>I agree to the terms</Checkbox>
+          <button type='submit'>Submit</button>
+        </form>,
+      );
+
+      const checkbox = screen.getByRole('checkbox', { name: 'I agree to the terms' });
+      checkbox.focus();
+
+      await user.keyboard('{Enter}');
+
+      expect(handleSubmit).toHaveBeenCalledTimes(1);
+      expect(checkbox).toHaveAttribute('aria-checked', 'false');
+    });
   });
 
   describe('Multi-Checkbox Workflows', () => {
@@ -165,7 +185,7 @@ describe('Checkbox Integration Tests', () => {
 
         return (
           <div>
-            <Checkbox checked={allChecked} onChange={handleSelectAll} data-testid='select-all'>
+            <Checkbox checked={allChecked} onChange={handleSelectAll}>
               Select All
             </Checkbox>
             {items.map((item) => (
@@ -173,7 +193,6 @@ describe('Checkbox Integration Tests', () => {
                 key={item.id}
                 checked={item.checked}
                 onChange={(checked) => handleItemChange(item.id, checked)}
-                data-testid={`item-${item.id}`}
               >
                 {item.name}
               </Checkbox>
@@ -184,10 +203,10 @@ describe('Checkbox Integration Tests', () => {
 
       render(<MultiSelectComponent />);
 
-      const selectAll = screen.getByTestId('select-all');
-      const item1 = screen.getByTestId('item-1');
-      const item2 = screen.getByTestId('item-2');
-      const item3 = screen.getByTestId('item-3');
+      const selectAll = screen.getByRole('checkbox', { name: 'Select All' });
+      const item1 = screen.getByRole('checkbox', { name: 'Item 1' });
+      const item2 = screen.getByRole('checkbox', { name: 'Item 2' });
+      const item3 = screen.getByRole('checkbox', { name: 'Item 3' });
 
       // Initially nothing selected
       expect(selectAll).not.toBeChecked();
@@ -260,21 +279,18 @@ describe('Checkbox Integration Tests', () => {
             <Checkbox
               checked={selections.option1}
               onChange={(checked) => handleChange('option1', checked)}
-              data-testid='option1'
             >
               Option 1
             </Checkbox>
             <Checkbox
               checked={selections.option2}
               onChange={(checked) => handleChange('option2', checked)}
-              data-testid='option2'
             >
               Option 2
             </Checkbox>
             <Checkbox
               checked={selections.option3}
               onChange={(checked) => handleChange('option3', checked)}
-              data-testid='option3'
             >
               Option 3
             </Checkbox>
@@ -284,9 +300,9 @@ describe('Checkbox Integration Tests', () => {
 
       render(<KeyboardNavigationComponent />);
 
-      const option1 = screen.getByTestId('option1');
-      const option2 = screen.getByTestId('option2');
-      const option3 = screen.getByTestId('option3');
+      const option1 = screen.getByRole('checkbox', { name: 'Option 1' });
+      const option2 = screen.getByRole('checkbox', { name: 'Option 2' });
+      const option3 = screen.getByRole('checkbox', { name: 'Option 3' });
 
       // Navigate and select using keyboard only
       await user.tab(); // Focus first checkbox

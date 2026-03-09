@@ -1,7 +1,7 @@
 ---
-mode: agent
-model: Claude Sonnet 4 (copilot)
-description: Design comprehensive specifications for new Spar headless components
+agent: Plan
+model: Gemini 3 Pro (Preview) (copilot)
+description: Design comprehensive specifications for new Glide headless components
 ---
 
 # Spar Component Specification Designer

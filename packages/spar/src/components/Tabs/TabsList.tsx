@@ -1,29 +1,29 @@
-import React, { useCallback } from 'react';
-import { useTabsContext } from './Tabs';
+import React, { useCallback, type ElementType } from 'react';
+import { useTabsContext } from './hooks';
 import type { TabsListProps } from './types';
 
 /**
  * TabsList component that contains TabsTrigger elements and handles keyboard navigation
  */
-export const TabsList = ({
-  loop = true,
-  as: Component = 'div',
+export const TabsList = <T extends ElementType = 'div'>({
+  as,
   children,
   onKeyDown,
   ...props
-}: TabsListProps) => {
+}: TabsListProps<T>) => {
+  const Component = as || 'div';
   const context = useTabsContext();
-  const { orientation, dir, activationMode, tabRefs, onValueChange, focusTab } = context;
+  const { orientation, activationMode, tabItems, onValueChange, focusTab } = context;
 
   const getEnabledTabs = useCallback(() => {
     const isDisabled = (el: HTMLElement) =>
       el.hasAttribute('disabled') ||
       el.getAttribute('aria-disabled') === 'true' ||
       el.hasAttribute('data-disabled');
-    return Array.from(tabRefs.current.entries())
+    return Array.from(tabItems.entries())
       .filter(([, el]) => !isDisabled(el))
       .map(([value]) => value);
-  }, []);
+  }, [tabItems]);
 
   const getNextTab = useCallback(
     (currentValue: string, direction: 1 | -1) => {
@@ -34,16 +34,12 @@ export const TabsList = ({
 
       let nextIndex = currentIndex + direction;
 
-      if (loop) {
-        if (nextIndex >= enabledTabs.length) nextIndex = 0;
-        if (nextIndex < 0) nextIndex = enabledTabs.length - 1;
-      } else {
-        nextIndex = Math.max(0, Math.min(nextIndex, enabledTabs.length - 1));
-      }
+      if (nextIndex >= enabledTabs.length) nextIndex = 0;
+      if (nextIndex < 0) nextIndex = enabledTabs.length - 1;
 
       return enabledTabs[nextIndex];
     },
-    [getEnabledTabs, loop],
+    [getEnabledTabs],
   );
 
   const handleKeyDown = useCallback(
@@ -59,26 +55,30 @@ export const TabsList = ({
       switch (event.key) {
         case 'ArrowRight':
           if (orientation === 'horizontal') {
-            nextValue = getNextTab(currentValue, dir === 'ltr' ? 1 : -1);
+            nextValue = getNextTab(currentValue, 1);
             event.preventDefault();
           }
           break;
 
         case 'ArrowLeft':
           if (orientation === 'horizontal') {
-            nextValue = getNextTab(currentValue, dir === 'ltr' ? -1 : 1);
+            nextValue = getNextTab(currentValue, -1);
             event.preventDefault();
           }
           break;
 
         case 'ArrowDown':
-          nextValue = getNextTab(currentValue, 1);
-          event.preventDefault();
+          if (orientation === 'vertical') {
+            nextValue = getNextTab(currentValue, 1);
+            event.preventDefault();
+          }
           break;
 
         case 'ArrowUp':
-          nextValue = getNextTab(currentValue, -1);
-          event.preventDefault();
+          if (orientation === 'vertical') {
+            nextValue = getNextTab(currentValue, -1);
+            event.preventDefault();
+          }
           break;
 
         case 'Home': {
@@ -113,16 +113,7 @@ export const TabsList = ({
 
       onKeyDown?.(event);
     },
-    [
-      orientation,
-      dir,
-      activationMode,
-      getNextTab,
-      getEnabledTabs,
-      focusTab,
-      onValueChange,
-      onKeyDown,
-    ],
+    [orientation, activationMode, getNextTab, getEnabledTabs, focusTab, onValueChange, onKeyDown],
   );
 
   return (

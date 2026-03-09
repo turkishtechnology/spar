@@ -1,16 +1,16 @@
 import type { ElementType } from 'react';
+import type { PolymorphicProps } from '../../types';
 
 /**
- * Props for Label component
- * @remarks Fully accessible, headless label component for form controls
+ * Own props for Label component
  */
-export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+export interface LabelOwnProps {
   /**
    * Marks label for a required field (exposed via data attribute for styling)
    * @remarks Does NOT add required functionality - set `required` on the control itself
    * @defaultValue false
    */
-  isRequired?: boolean;
+  required?: boolean;
 
   /**
    * Marks label for an optional field (exposed via data attribute for styling)
@@ -23,12 +23,29 @@ export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> 
    * @remarks Does NOT disable the control - set `disabled` on the control itself
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
-   * Polymorphic element type to render as
-   * @remarks Using non-label elements breaks native association - use aria-labelledby on control
-   * @defaultValue 'label'
+   * Marks label for a read-only field (exposed via data attribute for styling)
+   * @remarks Does NOT make the control read-only - set `readOnly` on the control itself
+   * @defaultValue false
    */
-  as?: ElementType;
+  readOnly?: boolean;
+
+  /**
+   * Marks label for an invalid field (exposed via data attribute for styling)
+   * @remarks Does NOT invalidate the control - set `aria-invalid` on the control itself
+   * @defaultValue false
+   */
+  isInvalid?: boolean;
 }
+
+/**
+ * Props for Label component
+ * @remarks Fully accessible, headless label component for form controls
+ */
+export type LabelProps<T extends ElementType = 'label'> = PolymorphicProps<
+  'label',
+  T,
+  LabelOwnProps
+>;

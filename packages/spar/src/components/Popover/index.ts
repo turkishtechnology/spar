@@ -1,30 +1,34 @@
-// Export components from their separate files
-export { PopoverRoot } from './Popover';
-export { PopoverTrigger } from './PopoverTrigger';
-export { PopoverContent } from './PopoverContent';
-export { PopoverArrow } from './PopoverArrow';
-export { PopoverAnchor } from './PopoverAnchor';
-export { PopoverPortal } from './PopoverPortal';
-export { PopoverClose } from './PopoverClose';
+import { Popover as PopoverRoot } from './Popover';
+import { PopoverTrigger } from './PopoverTrigger';
+import { PopoverContent } from './PopoverContent';
+import { PopoverArrow } from './PopoverArrow';
+import { PopoverClose } from './PopoverClose';
+export { usePopoverContext } from './hooks';
 
-// Create aliases for grouped pattern
-export { PopoverRoot as Root } from './Popover';
-export { PopoverTrigger as Trigger } from './PopoverTrigger';
-export { PopoverContent as Content } from './PopoverContent';
-export { PopoverArrow as Arrow } from './PopoverArrow';
-export { PopoverAnchor as Anchor } from './PopoverAnchor';
-export { PopoverPortal as Portal } from './PopoverPortal';
-export { PopoverClose as Close } from './PopoverClose';
+const Popover = PopoverRoot as typeof PopoverRoot & {
+  Root: typeof PopoverRoot;
+  Trigger: typeof PopoverTrigger;
+  Content: typeof PopoverContent;
+  Arrow: typeof PopoverArrow;
+  Close: typeof PopoverClose;
+};
 
-// Export types
+Popover.Root = PopoverRoot;
+Popover.Trigger = PopoverTrigger;
+Popover.Content = PopoverContent;
+Popover.Arrow = PopoverArrow;
+Popover.Close = PopoverClose;
+
+export { Popover, PopoverRoot, PopoverTrigger, PopoverContent, PopoverArrow, PopoverClose };
+
 export type {
-  PopoverRootProps,
+  PopoverProps,
   PopoverTriggerProps,
+  PopoverTriggerRenderProps,
+  PopoverContentOwnProps,
   PopoverContentProps,
   PopoverArrowProps,
-  PopoverAnchorProps,
-  PopoverPortalProps,
   PopoverCloseProps,
-  PopoverSide,
-  PopoverAlign,
+  PopoverCloseRenderProps,
+  PopoverContextValue,
 } from './types';

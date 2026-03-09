@@ -7,158 +7,112 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 - Select from a predefined set of options (settings, preferences, actions)
 - Choose values that persist until changed (difficulty levels, themes, sorting methods)
 - Access contextual actions for specific content or interface elements
-- Navigate through categorized options with nested groupings
 
 ### Compound Component Structure
 ```tsx
-<DropdownMenu.Root>
-  <DropdownMenu.Trigger />
-  <DropdownMenu.Content>
-    <DropdownMenu.Item />
-    <DropdownMenu.CheckboxItem />
-    <DropdownMenu.RadioGroup>
-      <DropdownMenu.RadioItem />
-    </DropdownMenu.RadioGroup>
-    <DropdownMenu.Separator />
-    <DropdownMenu.Group>
-      <DropdownMenu.Label />
-      <DropdownMenu.Item />
-    </DropdownMenu.Group>
-    <DropdownMenu.Sub>
-      <DropdownMenu.SubTrigger />
-      <DropdownMenu.SubContent>
-        <DropdownMenu.Item />
-      </DropdownMenu.SubContent>
-    </DropdownMenu.Sub>
-  </DropdownMenu.Content>
-</DropdownMenu.Root>
+<DropdownMenuRoot>
+  <DropdownMenuTrigger />
+  <DropdownMenuContent>
+    <DropdownMenuArrow />
+    <DropdownMenuItem />
+    <DropdownMenuSeparator />
+    <DropdownMenuGroup>
+      <DropdownMenuLabel />
+      <DropdownMenuItem />
+    </DropdownMenuGroup>
+  </DropdownMenuContent>
+</DropdownMenuRoot>
 ```
 
 ### Key Differentiators
 - **Application-focused**: Built for app functionality, not navigation (use lists of links for navigation)
-- **Stateful**: Supports persistent selections with radio/checkbox patterns
 - **Keyboard-first**: Complete arrow key navigation with focus management
 - **Compositional**: Granular parts for flexible menu structures
 - **Accessible by design**: Full WCAG 2.2 AA compliance with screen reader optimization
 
 ## 2. API
 
-### DropdownMenu.Root Props
+### DropdownMenuRoot Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
+| `id` | `string` | No | `undefined` | Custom base ID for trigger/content ARIA relationships |
 | `open` | `boolean` | No | `undefined` | Controlled open state |
 | `defaultOpen` | `boolean` | No | `false` | Uncontrolled default open state |
 | `onOpenChange` | `(open: boolean) => void` | No | `undefined` | Callback when open state changes |
 | `modal` | `boolean` | No | `true` | Whether menu is modal (focus trapped) |
-| `dir` | `'ltr' | 'rtl'` | No | `'ltr'` | Reading direction for positioning |
-| `closeOnSelect` | `boolean | 'auto'` | No | `'auto'` | Selection close policy: true=always close, false=never close, 'auto'=close normal items; keep open for checkbox/radio |
+| `disabled` | `boolean` | No | `false` | Disables all dropdown menu triggers (prevents opening) |
+| `closeOnSelect` | `boolean` | No | `true` | Selection close policy: true=always close on item select, false=never close on item select |
 
-### DropdownMenu.Trigger Props
+### DropdownMenuTrigger Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'button'` | Polymorphic component type |
 | `disabled` | `boolean` | No | `false` | Whether trigger is disabled |
-| `asChild` | `boolean` | No | `false` | Render as child element |
+| `children` | `ReactNode \| ((state: DropdownMenuTriggerRenderProps) => ReactNode)` | No | - | Trigger content or render function for render props pattern |
 | Common button props | Various | No | - | Native button attributes |
 
-### DropdownMenu.Content Props
+### DropdownMenuTriggerRenderProps
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the dropdown menu is currently open |
+| `disabled` | `boolean` | Whether the trigger is disabled |
+| `open` | `() => void` | Function to open the dropdown menu |
+| `close` | `() => void` | Function to close the dropdown menu |
+| `toggle` | `() => void` | Function to toggle the dropdown menu open/closed state |
+
+### DropdownMenuContent Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
 | `side` | `'top' | 'right' | 'bottom' | 'left'` | No | `'bottom'` | Preferred placement side |
-| `align` | `'start' | 'center' | 'end'` | No | `'start'` | Alignment on placement side |
-| `sideOffset` | `number` | No | `0` | Offset from trigger |
-| `alignOffset` | `number` | No | `0` | Alignment offset |
-| `avoidCollisions` | `boolean` | No | `true` | Automatically adjust position |
-| `collisionBoundary` | `Element | null` | No | `null` | Boundary for collision detection |
-| `loop` | `boolean` | No | `false` | Allow focus to loop through items |
+| `align` | `'start' | 'center' | 'end'` | No | `'center'` | Alignment on placement side |
 | `onEscapeKeyDown` | `(event: KeyboardEvent) => void` | No | `undefined` | Escape key handler |
 | `onPointerDownOutside` | `(event: PointerEvent) => void` | No | `undefined` | Outside click handler |
 | `onFocusOutside` | `(event: FocusEvent) => void` | No | `undefined` | Outside focus handler |
+| `container` | `HTMLElement \| null` | No | `document.body` | Portal target container for the menu content |
 
-### DropdownMenu.Item Props
+### DropdownMenuItem Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
 | `disabled` | `boolean` | No | `false` | Whether item is disabled (disabled items are skipped in focus order) |
-| `onSelect` | `(event: Event) => void` | No | `undefined` | Selection handler |
+| `onSelect` | `(event: SyntheticEvent<HTMLElement>) => void` | No | `undefined` | Selection handler |
 | `textValue` | `string` | No | `undefined` | Value for typeahead search |
 
-### DropdownMenu.CheckboxItem Props
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `checked` | `boolean | 'indeterminate'` | No | `false` | Controlled checked state |
-| `onCheckedChange` | `(checked: boolean) => void` | No | `undefined` | Checked state change handler |
-| All Item props | - | - | - | Inherits from Item |
-
-### DropdownMenu.RadioGroup Props
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `value` | `string` | No | `undefined` | Controlled selected value |
-| `onValueChange` | `(value: string) => void` | No | `undefined` | Value change handler |
-
-### DropdownMenu.RadioItem Props
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `value` | `string` | Yes | - | Unique value for this radio item |
-| All Item props | - | - | - | Inherits from Item |
-
-### DropdownMenu.Separator Props
+### DropdownMenuSeparator Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
 
-### DropdownMenu.Label Props
+### DropdownMenuLabel Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
 
-### DropdownMenu.Group Props
+### DropdownMenuGroup Props
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `as` | `ElementType` | No | `'div'` | Polymorphic component type |
-
-### DropdownMenu.Sub Props
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `open` | `boolean` | No | `undefined` | Controlled submenu open state |
-| `defaultOpen` | `boolean` | No | `false` | Default submenu open state |
-| `onOpenChange` | `(open: boolean) => void` | No | `undefined` | Submenu open change handler |
-
-### DropdownMenu.SubTrigger Props
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `disabled` | `boolean` | No | `false` | Whether subtrigger is disabled |
-| All Item props | - | - | - | Inherits from Item |
-
-### DropdownMenu.SubContent Props
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| All Content props | - | - | - | Inherits from Content |
 
 ## 3. Behavior Matrix
 
 | State | Trigger | Result | ARIA/DOM Update |
 |-------|---------|---------|-----------------|
-| Closed | Click trigger | Opens menu, focuses first item | `aria-expanded="true"`, removes `hidden` |
-| Closed | Enter/Space on trigger | Opens menu, focuses first item | `aria-expanded="true"`, removes `hidden` |
-| Closed | Down Arrow on trigger | Opens menu, focuses first item | `aria-expanded="true"`, removes `hidden` |
-| Closed | Up Arrow on trigger | Opens menu, focuses last item | `aria-expanded="true"`, removes `hidden` |
-| Open | Click item | Closes menu, returns focus to trigger, executes action | `aria-expanded="false"`, adds `hidden` |
-| Open | Enter/Space on item | Closes menu, returns focus to trigger, executes action | `aria-expanded="false"`, adds `hidden` |
-| Open | Down Arrow | Moves focus to next item (loops if loop=true) | Roving tabindex updates |
-| Open | Up Arrow | Moves focus to previous item (loops if loop=true) | Roving tabindex updates |
+| Closed | Click trigger | Opens menu, highlights/focuses first enabled item | `aria-expanded="true"`, content is mounted |
+| Closed | Enter/Space on trigger | Opens menu, highlights/focuses first enabled item | `aria-expanded="true"`, content is mounted |
+| Closed | Down Arrow on trigger | Opens menu, highlights/focuses first enabled item | `aria-expanded="true"`, content is mounted |
+| Closed | Up Arrow on trigger | Opens menu, highlights/focuses last enabled item | `aria-expanded="true"`, content is mounted |
+| Open | Click item | Executes selection; closes when `closeOnSelect=true` | `aria-expanded` updates via open state |
+| Open | Enter/Space on item | Executes selection; closes when `closeOnSelect=true` | `aria-expanded` updates via open state |
+| Open | Down Arrow | Moves focus to next item (loops through items) | Roving tabindex updates |
+| Open | Up Arrow | Moves focus to previous item (loops through items) | Roving tabindex updates |
 | Open | Home | Moves focus to first item | Roving tabindex updates |
 | Open | End | Moves focus to last item | Roving tabindex updates |
-| Open | Escape | Closes menu, returns focus to trigger | `aria-expanded="false"`, adds `hidden` |
-| Open | Tab | Closes menu, moves focus to next focusable element | `aria-expanded="false"`, adds `hidden` |
-| Open | Shift+Tab | Closes menu, moves focus to previous focusable element | `aria-expanded="false"`, adds `hidden` |
-| Open | Character key(s) | Typeahead buffer (~700ms) to next matching item (wrap) | Roving tabindex updates |
-| Open | Right Arrow on SubTrigger | Opens submenu, focuses first subitem | Sub: `aria-expanded="true"` |
-| Open | Left Arrow in submenu | Closes submenu, returns to parent item | Sub: `aria-expanded="false"` |
-| RadioItem | Select | Updates radio group value (close depends on closeOnSelect) | `aria-checked="true"` on selected, `false` on others |
-| CheckboxItem | Select | Toggles checkbox state (close depends on closeOnSelect) | `aria-checked="true|false|mixed"` |
-| Outside click | Click | Closes menu if open | `aria-expanded="false"`, adds `hidden` |
+| Open | Escape | Closes menu and focuses trigger | `aria-expanded="false"`, content unmounts |
+| Open | Tab | `modal=true`: keep focus in menu; `modal=false`: close and continue tab flow | Highlight/focus updates |
+| Open | Shift+Tab | `modal=true`: keep focus in menu; `modal=false`: close and continue reverse tab flow | Highlight/focus updates |
+| Open | Character key(s) | Typeahead to next matching item (wrap) | Roving tabindex updates |
+| Outside click | Click | Closes menu if open (without forcing focus trigger) | `aria-expanded="false"`, content unmounts |
 
 ## 4. Accessibility
 
@@ -166,12 +120,9 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 - **Trigger**: `role="button"` (implicit for button element)
 - **Content**: `role="menu"`
 - **Item**: `role="menuitem"`
-- **CheckboxItem**: `role="menuitemcheckbox"`
-- **RadioItem**: `role="menuitemradio"`
 - **Separator**: `role="separator"`
 - **Label**: No role (decorative)
 - **Group**: `role="group"`
-- **SubContent**: `role="menu"`
 
 ### Keyboard Navigation
 - **Tab/Shift+Tab**: Enter/exit menu system
@@ -180,12 +131,9 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 - **Up Arrow**: Previous item (trigger: opens menu to last item)
 - **Home**: First item in current menu
 - **End**: Last item in current menu
-- **Right Arrow**: Open submenu (if applicable) or no action
-- **Left Arrow**: Close submenu and return to parent
 - **Escape**: Close menu and return focus to trigger
 - **Character keys**: Jump to next item starting with that character
-  - Multiple quick keystrokes within ~700ms compose a search buffer
-  - In RTL, horizontal submenu open/close arrow expectations reverse
+  - Multiple quick keystrokes compose a search buffer
 
 ### Focus Management
 - **Initial focus**: First enabled (non-disabled) item when menu opens
@@ -197,73 +145,99 @@ The Dropdown Menu component provides a headless implementation of a menu button 
 
 ### Screen Reader Announcements
 - **Menu state**: "Menu expanded/collapsed" via `aria-expanded`
-- **Item selection**: "Selected" for radio items via `aria-checked`
-- **Checkbox state**: "Checked/unchecked/mixed" via `aria-checked`
-- **Item context**: Item position in menu via `aria-setsize`/`aria-posinset`
 - **Disabled state**: "Disabled" or "unavailable" for disabled items
-- **Submenu indication**: "Has submenu" for items with submenus
 
 ### Name/Role/Value Exposure
 - **Trigger**: Accessible name via `aria-label` or `aria-labelledby`
 - **Menu**: Labeled by trigger via `aria-labelledby`
 - **Items**: Text content provides accessible name
-- **State communication**: `aria-checked`, `aria-expanded`, `aria-disabled`
+- **State communication**: `aria-expanded`, `aria-disabled`
 - **Relationships**: `aria-controls` links trigger to menu
 
 ### Implementation Rules from accessibility-guidelines.instructions.md
 - **Keyboard Support**: Full Tab/Shift+Tab, Enter/Space, Arrows, Escape, Home/End navigation
 - **ARIA Usage**: Semantic HTML first, ARIA roles and properties as specified above
 - **Focus Management**: Visible indicators, proper trapping, restoration on close
-- **Screen Reader Support**: `aria-live` for dynamic content, proper announcements
-- **Color & Contrast**: WCAG 2.2 AA contrast ratios (4.5:1 text, 3:1 UI components)
+- **Screen Reader Support**: Proper announcements through semantic roles and ARIA state
 - **Testing**: jest-axe tests must pass with zero violations
 
-> Note: Roving tabindex model is authoritative; `aria-activedescendant` is intentionally not used. A multi-character typeahead buffer (~700ms timeout) is standard.
+> Note: Roving tabindex model is authoritative; `aria-activedescendant` is intentionally not used.
 
 ## 5. Implementation Architecture
 
 ### State Hooks Design
-```tsx
-interface DropdownMenuState {
-  open: boolean;
-  activeIndex: number;
-  selectedItems: Set<string>;
-  radioValues: Record<string, string>;
-  submenuStates: Map<string, boolean>;
-}
 
-const useDropdownMenuState = (props: DropdownMenuProps) => {
-  const [state, setState] = useState<DropdownMenuState>();
-  // Controlled/uncontrolled pattern handling
-  // Focus management
-  // Keyboard event handlers
-  // Selection state management
-};
+**Root (`DropdownMenu.tsx`)** owns open state and a `focusStrategy` signal:
+```tsx
+const [isOpen = false, setIsOpen] = useControlledState(open, defaultOpen, onOpenChange);
+const [focusStrategy, setFocusStrategy] = useState<DropdownMenuFocusStrategy>('none');
+const restoreFocusRef = useRef(true);
+
+const closeMenu = useCallback(
+  (options?: { focusTrigger?: boolean }) => {
+    restoreFocusRef.current = options?.focusTrigger !== false;
+    setIsOpen(false);
+  },
+  [setIsOpen],
+);
 ```
 
+**Content (`DropdownMenuContent.tsx`)** owns highlight & item collection state locally (two-layer context):
+```tsx
+const [items, setItems] = useState<DropdownMenuCollectionItem[]>([]);
+const [highlightedId, setHighlightedId] = useState<string | null>(null);
+
+// Consumed via useLayoutEffect to avoid re-trigger loops:
+useLayoutEffect(() => {
+  if (!menu.open) { setHighlightedId(null); resetTypeahead(); return; }
+  if (menu.focusStrategy === 'first') { highlightFirst(); }
+  else if (menu.focusStrategy === 'last') { highlightLast(); }
+  menu.setFocusStrategy('none');
+}, [menu.open, menu.focusStrategy, ...]);
+```
+
+**Type `DropdownMenuFocusStrategy`**: `'first' | 'last' | 'none'`
+
 ### Context Requirements
+
+Two-layer context architecture:
+
+**Root context** (`DropdownMenuContext`) — provided by `DropdownMenu.tsx`:
 ```tsx
 interface DropdownMenuContextValue {
-  // Root context
   open: boolean;
   onOpenChange: (open: boolean) => void;
   triggerId: string;
   contentId: string;
-  
-  // Selection context
-  onItemSelect: (value: string) => void;
-  selectedValues: Set<string>;
-  radioGroupValue: string;
-  onRadioValueChange: (value: string) => void;
-  
-  // Navigation context
-  focusedIndex: number;
-  onFocusIndexChange: (index: number) => void;
-  items: MenuItemRef[];
-  registerItem: (item: MenuItemRef) => void;
-  unregisterItem: (id: string) => void;
+  modal: boolean;
+  disabled: boolean;
+  closeOnSelect: boolean;
+  focusStrategy: DropdownMenuFocusStrategy;
+  setFocusStrategy: (strategy: DropdownMenuFocusStrategy) => void;
+  triggerRef: RefObject<HTMLElement | null>;
+  arrowRef: RefObject<Element | null>;
+  closeMenu: (options?: { focusTrigger?: boolean }) => void;
 }
 ```
+
+**Collection context** (`DropdownMenuCollectionContext`) — provided by `DropdownMenuContent.tsx`:
+```tsx
+interface DropdownMenuCollectionContextValue {
+  registerItem: (item: DropdownMenuCollectionItem) => void;
+  unregisterItem: (id: string) => void;
+  highlightItem: (id: string | null) => void;
+  highlightFirst: () => void;
+  highlightLast: () => void;
+  highlightNext: () => void;
+  highlightPrevious: () => void;
+  isItemHighlighted: (id: string) => boolean;
+  highlightedId: string | null;
+  closeOnSelect: boolean;
+  closeMenu: (options?: { focusTrigger?: boolean }) => void;
+}
+```
+
+This separation keeps highlight and item collection state out of root context, preventing unnecessary re-renders of the trigger when the highlighted item changes.
 
 ### Ref Forwarding Strategy
 - **ForwardRef**: All components support ref forwarding to DOM elements
@@ -275,51 +249,38 @@ interface DropdownMenuContextValue {
 - **Custom events**: Emit selection events with rich context
 - **Event delegation**: Handle keyboard navigation at menu level
 - **Event prevention**: Prevent default behaviors appropriately
-- **Bubbling control**: Stop propagation when needed for nested menus
+- **Bubbling control**: Stop propagation when needed
 
 ### SSR/CSR Safety and Deterministic IDs
 - **useId hook**: Generate deterministic IDs that work across SSR/CSR
-- **Portal strategy**: Render menu content in portal to avoid hydration issues
+- **Built-in portal**: Menu content is portaled via `createPortal` in DropdownMenuContent (defaults to `document.body`, customizable via `container` prop)
 - **Progressive enhancement**: Base markup works without JavaScript
 - **Hydration safety**: No differences between server and client renders
 
 ## 6. Styling & Data Attributes
 
 ### Required Data Attributes
-- **Root**:
-  - `data-state="open|closed"` - Menu open state
-  
 - **Trigger**:
   - `data-state="open|closed"` - Menu open state
   - `data-disabled` - When disabled
   
 - **Content**:
-  - `data-state="open|closed"` - Menu open state
+  - `data-state="open"` - Present while content is mounted/open
   - `data-side="top|right|bottom|left"` - Placement side
   - `data-align="start|center|end"` - Alignment
   
-- **Item/CheckboxItem/RadioItem**:
+- **Item**:
   - `data-highlighted` - When focused/hovered
   - `data-disabled` - When disabled
-  - `data-checked="true|false|indeterminate"` - Checked state (checkbox/radio)
   
 - **Separator**:
   - `data-orientation="horizontal|vertical"` - Visual orientation
-  
-- **SubTrigger**:
-  - `data-state="open|closed"` - Submenu state
-  - `data-highlighted` - When focused
-  - `data-disabled` - When disabled
-  
-- **SubContent**:
-  - `data-state="open|closed"` - Submenu state
-  - `data-side="top|right|bottom|left"` - Placement side
 
 ## 7. Test Coverage Plan
 
 ### Unit Tests
 - **State management**: Open/close state, controlled/uncontrolled patterns
-- **Selection logic**: Radio group values, checkbox states, item selection
+- **Selection logic**: Item selection
 - **Keyboard navigation**: Arrow keys, Home/End, character search
 - **Focus management**: Initial focus, focus restoration, roving tabindex
 - **Event handling**: Click, keyboard events, outside interactions
@@ -334,10 +295,9 @@ interface DropdownMenuContextValue {
 - **Color contrast**: Ensure all visual states meet WCAG requirements
 
 ### Integration Tests
-- **Nested menus**: Submenu navigation and state management
 - **Multiple menus**: Independent menu instances on same page
 - **Form integration**: Menu selections affecting form state
-- **Portal behavior**: Correct rendering in DOM portals
+- **Built-in portal behavior**: Correct rendering via `createPortal` in DropdownMenuContent
 - **Responsive behavior**: Menu positioning across viewport sizes
 - **Browser compatibility**: Core functionality across target browsers
 
@@ -350,14 +310,13 @@ interface DropdownMenuContextValue {
 - **Unstyled by design**: Consumers fully control visual appearance
 
 ### Styling via Data Attributes
-- **State-based styling**: Use `data-state`, `data-checked`, etc. for CSS selectors
+- **State-based styling**: Use `data-state`, `data-highlighted`, `data-disabled`, etc. for CSS selectors
 - **Positioning data**: `data-side`, `data-align` for placement-aware styling
 - **Interactive states**: `data-highlighted`, `data-disabled` for user feedback
 - **Component variants**: Additional data attributes for style variations
 
 ### Tree-Shakeable Exports
 - **Named exports**: Individual component exports for tree-shaking
-- **No barrel exports**: Direct imports to reduce bundle size
 - **Side-effect free**: No global state or initialization code
 - **Minimal dependencies**: Keep external dependencies to minimum
 
@@ -378,7 +337,6 @@ interface DropdownMenuContextValue {
 - **Dual mode**: Support both controlled and uncontrolled usage patterns
 - **State synchronization**: Proper handling of controlled value changes
 - **Default props**: Sensible defaults for uncontrolled mode
-- **Warning system**: Development warnings for incorrect usage patterns
 
 ## 9. Migration & Implementation Checklist
 

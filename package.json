@@ -5,7 +5,9 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "dev:react": "pnpm --filter @turkish-technology/spar build && pnpm --filter @turkish-technology/react-app dev",
     "dev:docs": "pnpm --filter @turkish-technology/spar build && pnpm --filter @turkish-technology/docs start",
+    "dev:next": "pnpm --filter @turkish-technology/spar build && pnpm --filter @turkish-technology/next-app dev",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,mdx,json,yml,yaml,css,scss}\"",
@@ -14,7 +16,8 @@
     "prepare": "husky",
     "version:spar": "pnpm --filter @turkish-technology/spar version",
     "publish:spar": "pnpm publish --filter @turkish-technology/spar --no-git-checks --provenance",
-    "publish:spar:dry": "pnpm --filter @turkish-technology/spar publish --dry-run --no-git-checks"
+    "publish:spar:dry": "pnpm --filter @turkish-technology/spar publish --dry-run --no-git-checks",
+    "test": "pnpm --filter @turkish-technology/spar test"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
@@ -44,9 +47,5 @@
     "*.{md,json,yaml,yml}": [
       "prettier --write"
     ]
-  },
-  "engines": {
-    "node": ">=22.18.0",
-    "pnpm": ">=9.15.0"
   }
 }

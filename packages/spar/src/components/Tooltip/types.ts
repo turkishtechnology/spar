@@ -1,6 +1,28 @@
-import { Side, Align } from '../../types';
+import type { ElementType, ReactNode, RefObject } from 'react';
+import type { Side, Align, PolymorphicProps } from '../../types';
+import type { ButtonOwnProps } from '../Button/types';
 
-export type Sticky = 'partial' | 'always';
+/**
+ * Render props provided to TooltipTrigger children function
+ */
+export interface TooltipTriggerRenderProps {
+  /**
+   * Whether the tooltip is currently visible
+   */
+  isOpen: boolean;
+  /**
+   * Whether the tooltip is disabled
+   */
+  disabled: boolean;
+  /**
+   * Function to show the tooltip
+   */
+  show: () => void;
+  /**
+   * Function to hide the tooltip
+   */
+  hide: () => void;
+}
 
 /**
  * Props for TooltipProvider
@@ -10,7 +32,7 @@ export interface TooltipProviderProps {
   /**
    * Tooltip components to share provider context
    */
-  children: React.ReactNode;
+  children?: ReactNode;
 
   /**
    * Global delay duration for all tooltips
@@ -32,19 +54,26 @@ export interface TooltipProviderProps {
 }
 
 /**
- * Props for TooltipRoot
+ * Props for Tooltip
  * @remarks Root component that manages tooltip state
  */
-export interface TooltipRootProps {
+export interface TooltipProps {
+  /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-trigger` and `${id}-content`.
+   */
+  id?: string;
+
   /**
    * Tooltip trigger and content components
    */
-  children: React.ReactNode;
+  children?: ReactNode;
 
   /**
    * Controlled state for tooltip visibility
    */
-  isOpen?: boolean;
+  open?: boolean;
 
   /**
    * Default open state for uncontrolled tooltip
@@ -54,6 +83,7 @@ export interface TooltipRootProps {
 
   /**
    * Callback when tooltip open state changes
+   * @param open - The new open state
    */
   onOpenChange?: (open: boolean) => void;
 
@@ -72,65 +102,38 @@ export interface TooltipRootProps {
    * Whether tooltip is disabled
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
+}
+
+/**
+ * Own props for TooltipTrigger
+ */
+export interface TooltipTriggerOwnProps extends ButtonOwnProps {
+  /**
+   * Children content or render function for render props pattern
+   */
+  children?: ReactNode | ((state: TooltipTriggerRenderProps) => ReactNode);
 }
 
 /**
  * Props for TooltipTrigger
  * @remarks The trigger element that shows/hides the tooltip
  */
-export interface TooltipTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * The trigger element (must be single focusable element)
-   */
-  children: React.ReactElement;
-
-  /**
-   * Compose with child element instead of rendering button
-   * @defaultValue false
-   */
-  asChild?: boolean;
-
-  /**
-   * Element type when not using asChild
-   * @defaultValue 'button'
-   */
-  as?: React.ElementType;
-}
+export type TooltipTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  TooltipTriggerOwnProps
+>;
 
 /**
- * Props for TooltipContent
- * @remarks The content that displays in the tooltip
+ * Own props for TooltipContent
  */
-export interface TooltipContentProps extends React.HTMLAttributes<HTMLElement> {
-  /**
-   * Content to display in tooltip
-   */
-  children: React.ReactNode;
-
-  /**
-   * Element type for tooltip content container
-   * @defaultValue 'div'
-   */
-  as?: React.ElementType;
-
-  /**
-   * Whether tooltip provides primary label or auxiliary description
-   * @defaultValue false
-   */
-  asLabel?: boolean;
-
+export interface TooltipContentOwnProps {
   /**
    * Preferred placement relative to trigger
    * @defaultValue 'top'
    */
   side?: Side;
-
-  /**
-   * Distance in pixels from the trigger
-   * @defaultValue 8
-   */
-  sideOffset?: number;
 
   /**
    * Alignment relative to trigger
@@ -139,139 +142,87 @@ export interface TooltipContentProps extends React.HTMLAttributes<HTMLElement> {
   align?: Align;
 
   /**
-   * Offset for alignment
-   * @defaultValue 0
+   * Portal container element. Content is portaled to document.body by default.
+   * @defaultValue document.body
    */
-  alignOffset?: number;
-
-  /**
-   * Whether to avoid viewport collisions
-   * @defaultValue true
-   */
-  avoidCollisions?: boolean;
-
-  /**
-   * Collision boundary elements
-   */
-  collisionBoundary?: Element | Element[];
-
-  /**
-   * Padding for collision detection
-   * @defaultValue 10
-   */
-  collisionPadding?: number | Partial<Record<Side, number>>;
-
-  /**
-   * Sticky behavior during scroll
-   * @defaultValue 'partial'
-   */
-  sticky?: Sticky;
-
-  /**
-   * Hide when trigger becomes detached
-   * @defaultValue false
-   */
-  hideWhenDetached?: boolean;
+  container?: HTMLElement | null;
 
   /**
    * Escape key handler
+   * @param event - The keyboard event (call preventDefault to prevent close)
    */
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
 
   /**
    * Outside pointer down handler
+   * @param event - The pointer event (call preventDefault to prevent close)
    */
   onPointerDownOutside?: (event: PointerEvent) => void;
 
   /**
    * Called when auto-focusing on open
+   * @param event - The focus event (call preventDefault to prevent auto-focus)
    */
   onOpenAutoFocus?: (event: Event) => void;
 
   /**
    * Called when auto-focusing on close
+   * @param event - The focus event (call preventDefault to prevent focus restore)
    */
   onCloseAutoFocus?: (event: Event) => void;
 }
 
 /**
- * Props for TooltipPortal
- * @remarks Portal component for rendering tooltip outside normal DOM tree
+ * Props for TooltipContent
+ * @remarks The content that displays in the tooltip
  */
-export interface TooltipPortalProps {
-  /**
-   * Content to render in portal
-   */
-  children: React.ReactNode;
-
-  /**
-   * Portal container element
-   * @defaultValue document.body
-   */
-  container?: HTMLElement;
-
-  /**
-   * Force mount regardless of open state
-   * @defaultValue false
-   */
-  forceMount?: boolean;
-}
+export type TooltipContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  TooltipContentOwnProps
+>;
 
 /**
  * Props for TooltipArrow
- * @remarks Optional arrow pointing to the trigger element
+ * @remarks Optional arrow pointing to the trigger element. Headless: user provides all visuals.
  */
-export interface TooltipArrowProps extends React.SVGProps<SVGSVGElement> {
-  /**
-   * Arrow width in pixels
-   * @defaultValue 10
-   */
-  width?: number;
+export type TooltipArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<'svg', T>;
 
-  /**
-   * Arrow height in pixels
-   * @defaultValue 5
-   */
-  height?: number;
-
-  /**
-   * Element type for arrow
-   * @defaultValue 'svg'
-   */
-  as?: React.ElementType;
-}
-
-// Internal context types
+/**
+ * @internal
+ */
 export interface TooltipContextValue {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   delay: number;
   hideDelay: number;
-  skipDelayDuration: number;
   disableHoverableContent: boolean;
   triggerId: string;
   contentId: string;
-  asLabel: boolean;
-  placement: Side;
-  setPlacement: (placement: Side) => void;
-  isDisabled: boolean;
+  disabled: boolean;
   // Floating UI refs
-  triggerRef: React.RefObject<HTMLElement | null>;
-  contentRef: React.RefObject<HTMLElement | null>;
-  arrowRef: React.RefObject<HTMLElement | SVGSVGElement | null>;
-  // Timeout control for hoverable content
-  hideTimeoutRef: React.RefObject<number | null>;
-  clearHideTimeout: () => void;
+  triggerRef: RefObject<HTMLElement | null>;
+  contentRef: RefObject<HTMLElement | null>;
+  arrowRef: RefObject<Element | null>;
+  // Hide timer control for hoverable content (WCAG 1.4.13)
+  startHideTimer: (delayMs: number, callback: () => void) => void;
+  cancelHideTimer: () => void;
 }
 
+/**
+ * @internal
+ */
 export interface TooltipProviderContextValue {
   delayDuration: number;
   skipDelayDuration: number;
   disableHoverableContent: boolean;
-  isOpenDelayed: boolean;
-  setIsOpenDelayed: (open: boolean) => void;
+  skipDelay: boolean;
+  setSkipDelay: (value: boolean) => void;
 }
 
+/**
+ * @internal
+ */
 export interface TooltipState {
   isOpen: boolean;
   hovering: boolean;

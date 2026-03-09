@@ -6,236 +6,180 @@ description: A headless, accessible tabs component with full keyboard navigation
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/spar';
+import { Tabs } from '@turkish-technology/spar';
 
 # Tabs
 
 A headless, accessible tabs component that provides complete keyboard navigation, orientation support, and ARIA compliance for tabbed interfaces.
 
-![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.2%20AA-green)
-![Tree-shakeable](https://img.shields.io/badge/Tree--shakeable-Yes-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
-
 ## Live Demo
 
 <LiveCode
-  code={`function BasicExample() {
-  return (
-    <div className='tabs-demo-container'>
-      <Tabs defaultValue='trend' className='tabs'>
-        <TabsList className='tabs-list'>
-          <TabsTrigger value='recent' className='tab'>
+  code={`<div className='tabs-demo-container'>
+<Tabs.Root defaultValue='trend' className='tabs'>
+        <Tabs.List className='tabs-list'>
+          <Tabs.Trigger value='recent' className='tab'>
             <span className='tab-label'>Recent</span>
-          </TabsTrigger>
-          <TabsTrigger value='popular' className='tab'>
+          </Tabs.Trigger>
+          <Tabs.Trigger value='popular' className='tab'>
             <span className='tab-label'>Popular</span>
-          </TabsTrigger>
-          <TabsTrigger value='trend' className='tab'>
+          </Tabs.Trigger>
+          <Tabs.Trigger value='trend' className='tab'>
             <span className='tab-label'>Trend</span>
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value='trend'>
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-}`}
-/>
-
-### tabs.tsx
-
-```tsx
-import { Tabs } from '@turkish-technology/spar';
-
-function TabsDemo() {
-  return (
-    <Tabs defaultValue='trend' className='tabs'>
-      <TabsList className='tabs-list'>
-        <TabsTrigger value='recent' className='tab'>
-          <span className='tab-label'>Recent</span>
-        </TabsTrigger>
-        <TabsTrigger value='popular' className='tab'>
-          <span className='tab-label'>Popular</span>
-        </TabsTrigger>
-        <TabsTrigger value='trend' className='tab'>
-          <span className='tab-label'>Trend</span>
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value='trend'></TabsContent>
-    </Tabs>
-  );
-}
-
-export default TabsDemo;
-```
-
-### tabs.css
-
-```css
-.tabs {
-  height: 29.288px;
-  padding: 0 11.715px;
-  border-radius: 5.858px;
-  border: 0.732px solid rgba(0, 0, 0, 0.16);
+          </Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value='trend'>
+        </Tabs.Content>
+</Tabs.Root>
+</div>`}
+cssCode={`.tabs-demo-container .tabs {
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid #e1e4ea;
   background: rgba(0, 0, 0, 0.08);
 }
 
-[data-theme='dark'] .tabs {
-  border: 0.732px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.12);
+[data-theme='dark'] .tabs-demo-container .tabs {
+border-color: #2b303b;
+background: rgba(255, 255, 255, 0.12);
 }
 
-.tabs-list {
-  display: flex;
-  align-items: center;
-  gap: 5.858px;
+.tabs-demo-container .tabs-list {
+display: flex;
+align-items: center;
+gap: 10px;
+height: 100%;
 }
 
-.tab {
-  border: none;
-  background: transparent;
-  color: #717784;
-  font-size: 10.251px;
-  height: 100%;
+.tabs-demo-container .tab {
+height: 100%;
+padding: 0 2px;
+border: none;
+background: transparent;
+color: #717784;
+font-size: 14px;
+line-height: 20px;
 }
 
-[data-theme='dark'] .tab {
-  color: #99a0ae;
+[data-theme='dark'] .tabs-demo-container .tab {
+color: #99a0ae;
 }
 
-.tab[data-state='active'] {
-  color: #222530;
+.tabs-demo-container .tab[data-state='active'] {
+color: #222530;
 }
 
-[data-theme='dark'] .tab[data-state='active'] {
-  color: #f2f5f8;
+[data-theme='dark'] .tabs-demo-container .tab[data-state='active'] {
+color: #f2f5f8;
 }
 
-.tab-label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+.tabs-demo-container .tab-label {
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100%;
+padding-top: 2px;
+border-bottom: 2px solid transparent;
 }
 
-.tab[data-state='active'] .tab-label {
-  border-bottom: 1.464px solid rgba(0, 0, 0, 0.72);
+.tabs-demo-container .tab[data-state='active'] .tab-label {
+border-bottom-color: rgba(0, 0, 0, 0.72);
 }
 
-[data-theme='dark'] .tab[data-state='active'] .tab-label {
-  border-color: rgba(255, 255, 255, 0.72);
+[data-theme='dark'] .tabs-demo-container .tab[data-state='active'] .tab-label {
+border-color: rgba(255, 255, 255, 0.72);
 }
-```
+`}
+/>
 
 ## Features
 
 - ✅ Controlled and uncontrolled state management
-- ✅ Horizontal and vertical orientation support
-- ✅ Automatic and manual activation modes
-- ✅ Loop navigation with arrow keys
+- ✅ Automatic first-tab selection in uncontrolled mode when no `value` / `defaultValue` is provided
+- ✅ Horizontal and vertical orientation configuration
+- ✅ Automatic and manual activation behavior
 - ✅ Lazy content rendering for performance
 - ✅ Force mount option for always-rendered content
 - ✅ Polymorphic rendering with `as` prop
-- ✅ `asChild` pattern for advanced composition
+- ✅ Render props pattern for Tabs.Trigger customization
 - ✅ Disabled tab support
-- ✅ RTL (right-to-left) text direction support
 
 ## Installation
 
 ```tsx
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@turkish-technology/spar';
+import { Tabs } from '@turkish-technology/spar';
+```
+
+**Next.js (App Router):** Use the sub-path import for Server Component support:
+
+```ts
+import * as Tabs from '@turkish-technology/spar/tabs';
 ```
 
 ## Anatomy
 
-The Tabs component consists of multiple compound parts that work together:
+The Tabs component consists of compound parts that work together:
 
 <AnatomyViewer
   parts={[
     {
       name: 'root',
-      label: 'Tabs (Root)',
+      label: 'Root',
       description: 'Root container that manages state and provides context',
     },
     {
       name: 'list',
-      label: 'TabsList',
+      label: 'List',
       description: 'Container for tab triggers with keyboard navigation',
     },
     {
       name: 'trigger',
-      label: 'TabsTrigger',
+      label: 'Trigger',
       description: 'Clickable tab button that activates content',
     },
     {
       name: 'content',
-      label: 'TabsContent',
+      label: 'Content',
       description: 'Content panel associated with each tab',
     },
   ]}
 >
-  <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '4px' }}>
-    <Tabs defaultValue='overview' data-spar-part='root'>
-      <TabsList
-        data-spar-part='list'
-        style={{ display: 'flex', borderBottom: '1px solid #ddd', marginBottom: '16px' }}
-      >
-        <TabsTrigger
-          value='overview'
-          data-spar-part='trigger'
-          style={{
-            padding: '8px 16px',
-            border: 'none',
-            background: 'none',
-            cursor: 'pointer',
-            borderBottom: '2px solid transparent',
-          }}
-        >
-          {' Overview '}
-        </TabsTrigger>
-        <TabsTrigger
-          value='details'
-          data-spar-part='trigger'
-          style={{
-            padding: '8px 16px',
-            border: 'none',
-            background: 'none',
-            cursor: 'pointer',
-            borderBottom: '2px solid transparent',
-          }}
-        >
-          {' Details '}
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value='overview' data-spar-part='content'>
-        <h4>{' Overview Panel '}</h4>
-        <p>{' This is the overview content panel. '}</p>
-      </TabsContent>
-      <TabsContent value='details' data-spar-part='content'>
-        <h4>{' Details Panel '}</h4>
-        <p>{' This is the details content panel. '}</p>
-      </TabsContent>
-    </Tabs>
+  <div className='tabs-demo-container'>
+    <Tabs.Root defaultValue='trend' className='tabs' data-spar-part='root'>
+      <Tabs.List className='tabs-list' data-spar-part='list'>
+        <Tabs.Trigger value='recent' className='tab' data-spar-part='trigger'>
+          <span className='tab-label'>{'Recent'}</span>
+        </Tabs.Trigger>
+        <Tabs.Trigger value='popular' className='tab' data-spar-part='trigger'>
+          <span className='tab-label'>{'Popular'}</span>
+        </Tabs.Trigger>
+        <Tabs.Trigger value='trend' className='tab' data-spar-part='trigger'>
+          <span className='tab-label'>{'Trend'}</span>
+        </Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value='trend' data-spar-part='content'></Tabs.Content>
+    </Tabs.Root>
   </div>
 </AnatomyViewer>
 
 ```tsx
-<Tabs>
-  <TabsList>
-    <TabsTrigger />
-    <TabsTrigger />
-  </TabsList>
-  <TabsContent />
-  <TabsContent />
-</Tabs>
+<Tabs.Root>
+  <Tabs.List>
+    <Tabs.Trigger />
+    <Tabs.Trigger />
+  </Tabs.List>
+  <Tabs.Content />
+  <Tabs.Content />
+</Tabs.Root>
 ```
 
 ### Data Flow
 
-1. **Tabs (Root)** manages the selected value state and provides context to all child components
-2. **TabsList** handles keyboard navigation between triggers and focus management
-3. **TabsTrigger** components register themselves with the root and handle activation
-4. **TabsContent** components automatically show/hide based on the selected value
+1. **Tabs.Root** manages selected value state and provides context to descendants
+2. **Tabs.List** handles roving focus and keyboard-driven tab traversal
+3. **Tabs.Trigger** registers itself in the tab registry and updates selection
+4. **Tabs.Content** renders the matching panel and reflects active/inactive state
 
 ## Code Examples
 
@@ -246,14 +190,14 @@ function ControlledTabs() {
   const [activeTab, setActiveTab] = useState('profile');
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab}>
-      <TabsList>
-        <TabsTrigger value='profile'>Profile</TabsTrigger>
-        <TabsTrigger value='settings'>Settings</TabsTrigger>
-      </TabsList>
-      <TabsContent value='profile'>Profile content here</TabsContent>
-      <TabsContent value='settings'>Settings content here</TabsContent>
-    </Tabs>
+    <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
+      <Tabs.List>
+        <Tabs.Trigger value='profile'>Profile</Tabs.Trigger>
+        <Tabs.Trigger value='settings'>Settings</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value='profile'>Profile content here</Tabs.Content>
+      <Tabs.Content value='settings'>Settings content here</Tabs.Content>
+    </Tabs.Root>
   );
 }
 ```
@@ -263,16 +207,16 @@ function ControlledTabs() {
 ```tsx
 function VerticalTabs() {
   return (
-    <Tabs orientation='vertical' defaultValue='tab1'>
-      <TabsList>
-        <TabsTrigger value='tab1'>First Tab</TabsTrigger>
-        <TabsTrigger value='tab2'>Second Tab</TabsTrigger>
-        <TabsTrigger value='tab3'>Third Tab</TabsTrigger>
-      </TabsList>
-      <TabsContent value='tab1'>First content</TabsContent>
-      <TabsContent value='tab2'>Second content</TabsContent>
-      <TabsContent value='tab3'>Third content</TabsContent>
-    </Tabs>
+    <Tabs.Root orientation='vertical' defaultValue='tab1'>
+      <Tabs.List>
+        <Tabs.Trigger value='tab1'>First Tab</Tabs.Trigger>
+        <Tabs.Trigger value='tab2'>Second Tab</Tabs.Trigger>
+        <Tabs.Trigger value='tab3'>Third Tab</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value='tab1'>First content</Tabs.Content>
+      <Tabs.Content value='tab2'>Second content</Tabs.Content>
+      <Tabs.Content value='tab3'>Third content</Tabs.Content>
+    </Tabs.Root>
   );
 }
 ```
@@ -282,42 +226,43 @@ function VerticalTabs() {
 ```tsx
 function ManualActivationTabs() {
   return (
-    <Tabs activationMode='manual' defaultValue='home'>
-      <TabsList>
-        <TabsTrigger value='home'>Home</TabsTrigger>
-        <TabsTrigger value='about'>About</TabsTrigger>
-        <TabsTrigger value='contact'>Contact</TabsTrigger>
-      </TabsList>
-      <TabsContent value='home'>Home page content</TabsContent>
-      <TabsContent value='about'>About page content</TabsContent>
-      <TabsContent value='contact'>Contact page content</TabsContent>
-    </Tabs>
+    <Tabs.Root activationMode='manual' defaultValue='home'>
+      <Tabs.List>
+        <Tabs.Trigger value='home'>Home</Tabs.Trigger>
+        <Tabs.Trigger value='about'>About</Tabs.Trigger>
+        <Tabs.Trigger value='contact'>Contact</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value='home'>Home page content</Tabs.Content>
+      <Tabs.Content value='about'>About page content</Tabs.Content>
+      <Tabs.Content value='contact'>Contact page content</Tabs.Content>
+    </Tabs.Root>
   );
 }
 ```
 
-### AsChild Pattern
+### Render Props Pattern
 
 ```tsx
-function AsChildTabs() {
+function RenderPropsTabs() {
   return (
-    <Tabs defaultValue='dashboard'>
-      <TabsList>
-        <TabsTrigger value='dashboard' asChild>
-          <button className='custom-tab-button'>
-            <DashboardIcon />
-            Dashboard
-          </button>
-        </TabsTrigger>
-        <TabsTrigger value='analytics' asChild>
-          <a href='#analytics' className='custom-tab-link'>
-            Analytics
-          </a>
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value='dashboard'>Dashboard content</TabsContent>
-      <TabsContent value='analytics'>Analytics content</TabsContent>
-    </Tabs>
+    <Tabs.Root defaultValue='dashboard'>
+      <Tabs.List>
+        <Tabs.Trigger value='dashboard'>
+          {({ isSelected, isFocused }) => (
+            <span className={isSelected ? 'selected' : ''}>
+              <DashboardIcon />
+              Dashboard
+              {isFocused && <span className='focus-indicator' />}
+            </span>
+          )}
+        </Tabs.Trigger>
+        <Tabs.Trigger value='analytics'>
+          {({ isSelected }) => <span className={isSelected ? 'selected' : ''}>Analytics</span>}
+        </Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value='dashboard'>Dashboard content</Tabs.Content>
+      <Tabs.Content value='analytics'>Analytics content</Tabs.Content>
+    </Tabs.Root>
   );
 }
 ```
@@ -327,16 +272,16 @@ function AsChildTabs() {
 ```tsx
 function ForceMountTabs() {
   return (
-    <Tabs defaultValue='lazy'>
-      <TabsList>
-        <TabsTrigger value='lazy'>Lazy Content</TabsTrigger>
-        <TabsTrigger value='eager'>Always Mounted</TabsTrigger>
-      </TabsList>
-      <TabsContent value='lazy'>This content is only rendered when active</TabsContent>
-      <TabsContent value='eager' forceMount>
+    <Tabs.Root defaultValue='lazy'>
+      <Tabs.List>
+        <Tabs.Trigger value='lazy'>Lazy Content</Tabs.Trigger>
+        <Tabs.Trigger value='eager'>Always Mounted</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value='lazy'>This content is only rendered when active</Tabs.Content>
+      <Tabs.Content value='eager' forceMount>
         This content is always in the DOM (useful for forms, videos, etc.)
-      </TabsContent>
-    </Tabs>
+      </Tabs.Content>
+    </Tabs.Root>
   );
 }
 ```
@@ -347,111 +292,147 @@ function ForceMountTabs() {
 
 #### Props
 
-| Name             | Type                                   | Default        | Description                                                   |
-| ---------------- | -------------------------------------- | -------------- | ------------------------------------------------------------- |
-| `value`          | `string \| undefined`                  | `undefined`    | Controlled selected tab value                                 |
-| `defaultValue`   | `string \| undefined`                  | `undefined`    | Uncontrolled initial tab selection                            |
-| `onValueChange`  | `(value: string) => void \| undefined` | `undefined`    | Callback when tab selection changes                           |
-| `orientation`    | `'horizontal' \| 'vertical'`           | `'horizontal'` | Tabs orientation affecting keyboard navigation                |
-| `dir`            | `'ltr' \| 'rtl'`                       | `'ltr'`        | Text direction for arrow key navigation                       |
-| `activationMode` | `'automatic' \| 'manual'`              | `'automatic'`  | Whether tabs activate on focus or require explicit activation |
-| `as`             | `React.ElementType`                    | `'div'`        | Polymorphic component type                                    |
+| Name              | Type                                                | Default        | Description                                                            |
+| ----------------- | --------------------------------------------------- | -------------- | ---------------------------------------------------------------------- |
+| `id?`             | `string`                                            | `undefined`    | Base id used to derive trigger/panel ids (`{id}-trigger-{value}` etc.) |
+| `value?`          | `string`                                            | `undefined`    | Controlled selected tab value                                          |
+| `defaultValue?`   | `string`                                            | `undefined`    | Initial selected tab value for uncontrolled usage                      |
+| `onValueChange?`  | `(value: string) => void`                           | `undefined`    | Called when selected value changes                                     |
+| `orientation?`    | `'horizontal' \| 'vertical'`                        | `'horizontal'` | Orientation used by list/panels and keyboard rules                     |
+| `dir?`            | `'ltr' \| 'rtl'`                                    | `'ltr'`        | Direction used by horizontal arrow navigation                          |
+| `activationMode?` | `'automatic' \| 'manual'`                           | `'automatic'`  | `automatic`: focus activates, `manual`: Enter/Space activates          |
+| `as?`             | `React.ElementType`                                 | `'div'`        | Element type to render                                                 |
+| `...props`        | `ComponentPropsWithRef<'div'>` + `as` element props | —              | Forwards supported HTML attributes/events to the rendered root element |
 
 #### Events
 
-| Name            | Parameters      | Description           | When Triggered                             |
-| --------------- | --------------- | --------------------- | ------------------------------------------ |
-| `onValueChange` | `value: string` | Tab selection changed | User clicks tab or navigates with keyboard |
+| Name             | Parameters      | Description                 | When Triggered                                                   |
+| ---------------- | --------------- | --------------------------- | ---------------------------------------------------------------- |
+| `onValueChange?` | `value: string` | Reports next selected value | Selection changes from click, keyboard activation, or `select()` |
 
-#### ARIA
+#### HTML Attributes
 
-| Attribute          | Value                    | Purpose                   | Applied To   |
-| ------------------ | ------------------------ | ------------------------- | ------------ |
-| `data-orientation` | `horizontal \| vertical` | Indicates tab orientation | Root element |
-| `data-dir`         | `ltr \| rtl`             | Indicates text direction  | Root element |
+| Attribute          | Value                    | Purpose                           |
+| ------------------ | ------------------------ | --------------------------------- |
+| `data-orientation` | `horizontal \| vertical` | Exposes configured orientation    |
+| `data-dir`         | `ltr \| rtl`             | Exposes configured text direction |
 
-### TabsList
-
-#### Props
-
-| Name   | Type                | Default | Description                               |
-| ------ | ------------------- | ------- | ----------------------------------------- |
-| `loop` | `boolean`           | `true`  | Whether arrow key navigation wraps around |
-| `as`   | `React.ElementType` | `'div'` | Polymorphic component type                |
-
-#### ARIA
-
-| Attribute          | Value                    | Purpose                              | Applied To       |
-| ------------------ | ------------------------ | ------------------------------------ | ---------------- |
-| `role`             | `tablist`                | Identifies the element as a tab list | TabsList element |
-| `aria-orientation` | `horizontal \| vertical` | Indicates tab list orientation       | TabsList element |
-| `data-orientation` | `horizontal \| vertical` | Indicates tab list orientation       | TabsList element |
-
-### TabsTrigger
+### Tabs.List
 
 #### Props
 
-| Name       | Type                | Default    | Description                               |
-| ---------- | ------------------- | ---------- | ----------------------------------------- |
-| `value`    | `string`            | —          | Unique identifier for the tab             |
-| `disabled` | `boolean`           | `false`    | Disables this specific tab                |
-| `asChild`  | `boolean`           | `false`    | Render as child element instead of button |
-| `as`       | `React.ElementType` | `'button'` | Polymorphic component type                |
+| Name       | Type                                                | Default | Description                                           |
+| ---------- | --------------------------------------------------- | ------- | ----------------------------------------------------- |
+| `as?`      | `React.ElementType`                                 | `'div'` | Element type to render                                |
+| `...props` | `ComponentPropsWithRef<'div'>` + `as` element props | —       | Forwards supported HTML attributes/events to the list |
 
 #### Events
 
-| Name      | Parameters          | Description | When Triggered                           |
-| --------- | ------------------- | ----------- | ---------------------------------------- |
-| `onClick` | `event: MouseEvent` | Tab clicked | User clicks the tab trigger              |
-| `onFocus` | `event: FocusEvent` | Tab focused | Tab receives focus via keyboard or mouse |
-| `onBlur`  | `event: FocusEvent` | Tab blurred | Tab loses focus                          |
+| Name         | Parameters                                   | Description                   | When Triggered                                  |
+| ------------ | -------------------------------------------- | ----------------------------- | ----------------------------------------------- |
+| `onKeyDown?` | `event: React.KeyboardEvent<HTMLDivElement>` | Custom key handler (composed) | Called after built-in keyboard navigation logic |
 
-#### ARIA
+#### HTML Attributes
 
-| Attribute          | Value                    | Purpose                         | Applied To          |
-| ------------------ | ------------------------ | ------------------------------- | ------------------- |
-| `role`             | `tab`                    | Identifies the element as a tab | TabsTrigger element |
-| `aria-selected`    | `true \| false`          | Indicates if tab is selected    | TabsTrigger element |
-| `aria-controls`    | `string`                 | References controlled tabpanel  | TabsTrigger element |
-| `aria-disabled`    | `true \| false`          | Indicates if tab is disabled    | TabsTrigger element |
-| `tabindex`         | `0 \| -1`                | Manages focus in tab list       | TabsTrigger element |
-| `data-state`       | `active \| inactive`     | Indicates tab state             | TabsTrigger element |
-| `data-disabled`    | `'' \| undefined`        | Indicates disabled state        | TabsTrigger element |
-| `data-orientation` | `horizontal \| vertical` | Indicates tab orientation       | TabsTrigger element |
-| `data-value`       | `string`                 | Tab's unique value              | TabsTrigger element |
+| Attribute          | Value                    | Purpose                              |
+| ------------------ | ------------------------ | ------------------------------------ |
+| `role`             | `tablist`                | Identifies the element as a tab list |
+| `aria-orientation` | `horizontal \| vertical` | Indicates tab list orientation       |
+| `data-orientation` | `horizontal \| vertical` | Indicates tab list orientation       |
 
-### TabsContent
+### Tabs.Trigger
+
+Extends all `Button` component props including polymorphic rendering via the `as` prop.
 
 #### Props
 
-| Name         | Type                | Default | Description                                     |
-| ------------ | ------------------- | ------- | ----------------------------------------------- |
-| `value`      | `string`            | —       | Unique identifier matching a TabsTrigger value  |
-| `forceMount` | `boolean`           | `false` | Force content to remain mounted when not active |
-| `as`         | `React.ElementType` | `'div'` | Polymorphic component type                      |
+| Name               | Type                                                                      | Default     | Description                                             |
+| ------------------ | ------------------------------------------------------------------------- | ----------- | ------------------------------------------------------- |
+| `value`            | `string`                                                                  | —           | Unique identifier for this tab                          |
+| `children?`        | `React.ReactNode \| ((state: TabsTriggerRenderProps) => React.ReactNode)` | `undefined` | Trigger content or render-prop function                 |
+| `as?`              | `React.ElementType`                                                       | `'button'`  | Element type to render                                  |
+| `disabled?`        | `boolean`                                                                 | `false`     | Disables trigger selection and interaction              |
+| `autoFocus?`       | `boolean`                                                                 | `false`     | Focuses trigger on mount                                |
+| `isLoading?`       | `boolean`                                                                 | `false`     | Inherited from `Button`; exposes loading semantics      |
+| `isPressed?`       | `boolean`                                                                 | `undefined` | Inherited from `Button`; enables toggle-button behavior |
+| `onPressedChange?` | `(pressed: boolean) => void`                                              | `undefined` | Inherited callback for toggle state changes             |
+| `...props`         | `Button` HTML/button props + `as` element props                           | —           | Forwards supported attributes/events to the trigger     |
 
-#### ARIA
+#### TabsTriggerRenderProps
 
-| Attribute          | Value                    | Purpose                               | Applied To          |
-| ------------------ | ------------------------ | ------------------------------------- | ------------------- |
-| `role`             | `tabpanel`               | Identifies the element as a tab panel | TabsContent element |
-| `aria-labelledby`  | `string`                 | References controlling tab            | TabsContent element |
-| `tabindex`         | `0`                      | Makes panel focusable                 | TabsContent element |
-| `hidden`           | `true \| false`          | Hides inactive panels                 | TabsContent element |
-| `data-state`       | `active \| inactive`     | Indicates panel state                 | TabsContent element |
-| `data-orientation` | `horizontal \| vertical` | Indicates tab orientation             | TabsContent element |
+| Property      | Type          | Description                                  |
+| ------------- | ------------- | -------------------------------------------- |
+| `isSelected`  | `boolean`     | Whether this tab is currently selected       |
+| `select`      | `() => void`  | Function to select this tab programmatically |
+| `disabled`    | `boolean`     | Whether this tab is disabled                 |
+| `isFocused`   | `boolean`     | Whether this tab is currently focused        |
+| `orientation` | `Orientation` | The tab's orientation                        |
+
+#### Events
+
+| Name       | Parameters                                   | Description | When Triggered                           |
+| ---------- | -------------------------------------------- | ----------- | ---------------------------------------- |
+| `onClick?` | `event: React.MouseEvent<HTMLButtonElement>` | Tab clicked | User clicks the tab trigger              |
+| `onFocus?` | `event: React.FocusEvent<HTMLButtonElement>` | Tab focused | Tab receives focus via keyboard or mouse |
+| `onBlur?`  | `event: React.FocusEvent<HTMLButtonElement>` | Tab blurred | Tab loses focus                          |
+
+#### HTML Attributes
+
+| Attribute          | Value                          | Purpose                                                        |
+| ------------------ | ------------------------------ | -------------------------------------------------------------- |
+| `id`               | `\${baseId}-trigger-\${value}` | Stable trigger id used by panel relationship                   |
+| `role`             | `tab`                          | Identifies the element as a tab                                |
+| `aria-selected`    | `true \| false`                | Indicates whether this tab is selected                         |
+| `aria-controls`    | `\${baseId}-panel-\${value}`   | References controlled tab panel                                |
+| `tabIndex`         | `0 \| -1`                      | Implements roving tabindex behavior                            |
+| `disabled`         | `boolean`                      | Native disabled attribute when rendered as `button`            |
+| `aria-disabled`    | `true` (conditional)           | Added by `Button` when disabled and rendered as non-`button`   |
+| `data-state`       | `active \| inactive`           | Exposes selected state                                         |
+| `data-orientation` | `horizontal \| vertical`       | Exposes current orientation                                    |
+| `data-value`       | `string`                       | Stores trigger value for keyboard navigation                   |
+| `data-disabled`    | `'' \| undefined`              | Inherited from `Button` when disabled                          |
+| `data-loading`     | `'' \| undefined`              | Inherited from `Button` when `isLoading` is true               |
+| `data-pressed`     | `'' \| undefined`              | Inherited from `Button` when toggle mode is active and pressed |
+| `data-autofocus`   | `'' \| undefined`              | Inherited from `Button` when `autoFocus` is true               |
+
+### Tabs.Content
+
+#### Props
+
+| Name          | Type                                                | Default | Description                                 |
+| ------------- | --------------------------------------------------- | ------- | ------------------------------------------- |
+| `value`       | `string`                                            | —       | Unique identifier matching a `Tabs.Trigger` |
+| `forceMount?` | `boolean`                                           | `false` | Keeps panel mounted even when inactive      |
+| `as?`         | `React.ElementType`                                 | `'div'` | Element type to render                      |
+| `...props`    | `ComponentPropsWithRef<'div'>` + `as` element props | —       | Forwards supported HTML attributes/events   |
+
+#### Events
+
+No component-specific events are defined. Standard forwarded DOM events can be passed via `...props`.
+
+#### HTML Attributes
+
+| Attribute          | Value                          | Purpose                                         |
+| ------------------ | ------------------------------ | ----------------------------------------------- |
+| `id`               | `\${baseId}-panel-\${value}`   | Stable panel id for trigger relationship        |
+| `role`             | `tabpanel`                     | Identifies the element as a tab panel           |
+| `aria-labelledby`  | `\${baseId}-trigger-\${value}` | References controlling trigger                  |
+| `tabIndex`         | `0`                            | Makes rendered panel programmatically focusable |
+| `hidden`           | `true \| false`                | Marks mounted but inactive panel as hidden      |
+| `data-state`       | `active \| inactive`           | Exposes panel active state                      |
+| `data-orientation` | `horizontal \| vertical`       | Exposes current orientation                     |
 
 ## Keyboard Interactions
 
-| Key                | Action                                        | Context                | Notes                            |
-| ------------------ | --------------------------------------------- | ---------------------- | -------------------------------- |
-| `Tab`              | Move focus to next/previous focusable element | Global                 | Standard browser behavior        |
-| `Enter` or `Space` | Activate focused tab                          | Tab trigger focused    | Changes active panel             |
-| `ArrowRight`       | Focus next tab                                | Horizontal orientation | Loops to first if `loop` is true |
-| `ArrowLeft`        | Focus previous tab                            | Horizontal orientation | Loops to last if `loop` is true  |
-| `ArrowDown`        | Focus next tab                                | Vertical orientation   | Loops to first if `loop` is true |
-| `ArrowUp`          | Focus previous tab                            | Vertical orientation   | Loops to last if `loop` is true  |
-| `Home`             | Focus first tab                               | Tab list focused       | Always moves to first tab        |
-| `End`              | Focus last tab                                | Tab list focused       | Always moves to last tab         |
+| Key                | Action                            | Context         | Notes                                                        |
+| ------------------ | --------------------------------- | --------------- | ------------------------------------------------------------ |
+| `Tab`              | Moves focus in document tab order | Global          | Browser-native behavior; not intercepted by `Tabs`           |
+| `ArrowRight`       | Focuses next enabled tab          | Horizontal list | Uses `dir`; wraps when end is reached; skips disabled tabs   |
+| `ArrowLeft`        | Focuses previous enabled tab      | Horizontal list | Uses `dir`; wraps when start is reached; skips disabled tabs |
+| `ArrowDown`        | Focuses next enabled tab          | Vertical list   | Wraps when end is reached; skips disabled tabs               |
+| `ArrowUp`          | Focuses previous enabled tab      | Vertical list   | Wraps when start is reached; skips disabled tabs             |
+| `Home`             | Focuses first enabled tab         | List focused    | Selects it in `automatic` mode                               |
+| `End`              | Focuses last enabled tab          | List focused    | Selects it in `automatic` mode                               |
+| `Enter` or `Space` | Activates focused trigger         | Trigger focused | In manual mode this is the primary way to commit focused tab |
 
-**Note**: In `automatic` activation mode, arrow keys both focus and activate tabs. In `manual` mode, arrow keys only move focus - you must press Enter or Space to activate.
+**Note:** In `automatic` mode, arrow/home/end navigation both focuses and selects. In `manual` mode, those keys only move focus; use `Enter` or `Space` to commit selection after moving focus.

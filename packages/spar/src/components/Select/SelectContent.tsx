@@ -1,129 +1,79 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import { useInteractOutside } from '@/hooks';
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useMemo,
+  useState,
+  type ElementType,
+} from 'react';
+import { createPortal } from 'react-dom';
 import {
+  useInteractOutside,
+  useMergedRef,
   useFloating,
-  offset as offsetMiddleware,
-  flip as flipMiddleware,
-  shift as shiftMiddleware,
-  size as sizeMiddleware,
-  hide as hideMiddleware,
-  arrow as arrowMiddleware,
-  autoUpdate,
-} from '@floating-ui/react-dom';
-import type { SelectContentProps } from './types';
-import { useSelectContext } from './SelectRoot';
+  useTypeahead,
+  type UseFloatingOptions,
+  type UseFloatingReturn,
+} from '@/hooks';
+import { useSelectContext, SelectContentContext, SelectCollectionContext } from './hooks';
+import type { SelectContentProps, SelectCollectionContextValue } from './types';
+import { Align, Side } from '@/types';
 
 /**
  * Dropdown container that appears when select is open. Handles keyboard navigation, focus management, and outside click detection. Positioned using Floating UI.
  */
-export const SelectContent = ({
+export const SelectContent = <T extends ElementType = 'div'>({
   ref,
-  placement = 'bottom-start',
-  strategy = 'absolute',
-  middleware: customMiddleware,
-  offset = 5,
-  shift = true,
-  shiftPadding = 5,
-  flip = true,
-  hide = false,
-  size = true,
-  arrowRef,
+  side = 'bottom',
+  align = 'center',
+  container,
   onEscapeKeyDown,
   onPointerDownOutside,
   onCloseAutoFocus: _onCloseAutoFocus,
-  as: Component = 'div',
+  as,
   onKeyDown,
   style,
   children,
   ...props
-}: SelectContentProps) => {
+}: SelectContentProps<T>) => {
+  const Component = as || 'div';
   const context = useSelectContext();
-  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Build middleware array
-  const middleware = React.useMemo(() => {
-    if (customMiddleware) {
-      return customMiddleware;
-    }
+  // SSR safety - only render portal after mount
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-    const middlewares = [];
+  // Use custom Floating UI hook for positioning
+  const floatingOptions: UseFloatingOptions = {
+    side,
+    align,
+    arrowRef: context.arrowRef?.current ?? null,
+  };
 
-    // Offset from trigger
-    middlewares.push(offsetMiddleware(offset));
-
-    // Flip to opposite side when no space
-    if (flip) {
-      middlewares.push(flipMiddleware());
-    }
-
-    // Shift to stay in view
-    if (shift) {
-      middlewares.push(shiftMiddleware({ padding: shiftPadding }));
-    }
-
-    // Size to fit available space
-    if (size) {
-      middlewares.push(
-        sizeMiddleware({
-          apply({ availableHeight, elements }) {
-            Object.assign(elements.floating.style, {
-              maxHeight: `${availableHeight}px`,
-            });
-          },
-          padding: 10,
-        }),
-      );
-    }
-
-    // Hide when reference is scrolled out of view
-    if (hide) {
-      middlewares.push(hideMiddleware());
-    }
-
-    // Arrow positioning
-    if (arrowRef?.current) {
-      middlewares.push(arrowMiddleware({ element: arrowRef.current }));
-    }
-
-    return middlewares;
-  }, [customMiddleware, offset, flip, shift, shiftPadding, size, hide, arrowRef]);
-
-  // Use Floating UI hook for positioning
   const {
-    x,
-    y,
-    strategy: floatingStrategy,
-    refs,
+    floatingStyles,
+    arrowStyles,
     placement: finalPlacement,
-  } = useFloating({
-    placement,
-    strategy,
-    middleware,
-    whileElementsMounted: autoUpdate,
-  });
+    refs,
+  }: UseFloatingReturn = useFloating(floatingOptions);
 
-  // Merge internal refs with Floating UI refs
+  // Merge internal refs with external ref
+  const mergedRef = useMergedRef(context.contentRef, ref);
+
+  const floatingRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      mergedRef(node);
+      refs.setFloating(node);
+    },
+    [mergedRef, refs],
+  );
+
+  // Set reference element
   useEffect(() => {
     refs.setReference(context.triggerRef.current);
   }, [refs, context.triggerRef]);
-
-  useEffect(() => {
-    if (context.contentRef.current) {
-      refs.setFloating(context.contentRef.current);
-    }
-  }, [refs, context.contentRef]);
-
-  // Merge external ref with internal ref
-  useEffect(() => {
-    if (ref) {
-      if (typeof ref === 'function') {
-        ref(context.contentRef.current);
-      } else if (ref) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (ref as any).current = context.contentRef.current;
-      }
-    }
-  }, [ref, context.contentRef]);
 
   // Focus management - focus content when opened
   useEffect(() => {
@@ -144,36 +94,100 @@ export const SelectContent = ({
     },
   });
 
-  // Get non-disabled items
-  const getNonDisabledItems = useCallback(() => {
-    return Array.from(context.items.values()).filter((item) => !item.disabled);
-  }, [context.items]);
+  // --- Highlight state (owned by Content, not Root) ---
+  const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
-  // Type-ahead search
-  const handleTypeAhead = useCallback(
-    (char: string) => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-
-      const newSearch = context.searchString + char.toLowerCase();
-      context.setSearchString(newSearch);
-
-      const items = getNonDisabledItems();
-      const matchIndex = items.findIndex((item) =>
-        item.textValue.toLowerCase().startsWith(newSearch),
-      );
-
-      if (matchIndex !== -1) {
-        context.setHighlightedIndex(matchIndex);
-      }
-
-      searchTimeoutRef.current = setTimeout(() => {
-        context.setSearchString('');
-      }, 1000);
-    },
-    [context, getNonDisabledItems],
+  // Enabled items for keyboard navigation
+  const enabledItems = useMemo(
+    () => Array.from(context.items.values()).filter((item) => !item.disabled),
+    [context.items],
   );
+
+  // Items mapped for typeahead (id = value string)
+  const typeaheadItems = useMemo(
+    () =>
+      Array.from(context.items.values()).map((item) => ({
+        id: item.value,
+        textValue: item.textValue,
+        disabled: item.disabled,
+      })),
+    [context.items],
+  );
+
+  // --- Highlight helpers ---
+  const highlightItem = useCallback((id: string | null) => {
+    setHighlightedId(id);
+  }, []);
+
+  const isItemHighlighted = useCallback((id: string) => highlightedId === id, [highlightedId]);
+
+  const highlightFirst = useCallback(() => {
+    const candidate = enabledItems[0];
+    setHighlightedId(candidate?.value ?? null);
+  }, [enabledItems]);
+
+  const highlightLast = useCallback(() => {
+    const candidate = enabledItems[enabledItems.length - 1];
+    setHighlightedId(candidate?.value ?? null);
+  }, [enabledItems]);
+
+  const highlightNext = useCallback(() => {
+    if (!enabledItems.length) return;
+    const currentIndex = highlightedId
+      ? enabledItems.findIndex((item) => item.value === highlightedId)
+      : -1;
+    const nextIndex = (currentIndex + 1) % enabledItems.length;
+    const candidate = enabledItems[nextIndex];
+    if (candidate) setHighlightedId(candidate.value);
+  }, [enabledItems, highlightedId]);
+
+  const highlightPrevious = useCallback(() => {
+    if (!enabledItems.length) return;
+    const currentIndex = highlightedId
+      ? enabledItems.findIndex((item) => item.value === highlightedId)
+      : enabledItems.length;
+    const prevIndex = currentIndex <= 0 ? enabledItems.length - 1 : currentIndex - 1;
+    const candidate = enabledItems[prevIndex];
+    if (candidate) setHighlightedId(candidate.value);
+  }, [enabledItems, highlightedId]);
+
+  // --- Typeahead ---
+  const { performTypeahead, resetTypeahead } = useTypeahead({
+    items: typeaheadItems,
+    highlightedId,
+    onHighlight: highlightItem,
+  });
+
+  // --- Focus strategy ---
+  // highlightFirst/Last/Selected and setFocusStrategy('none') must stay in the same
+  // synchronous layout effect to avoid re-trigger loops during item registration.
+  useLayoutEffect(() => {
+    if (!context.open) {
+      setHighlightedId(null);
+      resetTypeahead();
+      return;
+    }
+    if (context.focusStrategy === 'selected') {
+      const selectedItem = enabledItems.find((item) => item.value === context.value);
+      setHighlightedId(selectedItem?.value ?? enabledItems[0]?.value ?? null);
+      context.setFocusStrategy('none');
+    } else if (context.focusStrategy === 'first') {
+      highlightFirst();
+      context.setFocusStrategy('none');
+    } else if (context.focusStrategy === 'last') {
+      highlightLast();
+      context.setFocusStrategy('none');
+    }
+  }, [
+    context.open,
+    context.focusStrategy,
+    context.value,
+    enabledItems,
+    highlightFirst,
+    highlightLast,
+    resetTypeahead,
+    context.setFocusStrategy,
+  ]);
 
   // Keyboard navigation
   const handleKeyDown = useCallback(
@@ -181,14 +195,17 @@ export const SelectContent = ({
       onKeyDown?.(event);
       if (event.defaultPrevented) return;
 
-      const { key } = event;
-      const items = getNonDisabledItems();
+      // Typeahead first (consistent with DropdownMenu)
+      if (performTypeahead(event)) {
+        event.preventDefault();
+        return;
+      }
 
-      switch (key) {
+      switch (event.key) {
         case 'Escape':
-          event.preventDefault();
           onEscapeKeyDown?.(event.nativeEvent);
           if (!event.defaultPrevented) {
+            event.preventDefault();
             context.onOpenChange(false);
             context.triggerRef.current?.focus();
           }
@@ -197,8 +214,8 @@ export const SelectContent = ({
         case 'Enter':
         case ' ':
           event.preventDefault();
-          if (context.highlightedIndex >= 0 && context.highlightedIndex < items.length) {
-            const selectedItem = items[context.highlightedIndex];
+          if (highlightedId) {
+            const selectedItem = enabledItems.find((item) => item.value === highlightedId);
             if (selectedItem) {
               context.onValueChange(selectedItem.value);
               context.onOpenChange(false);
@@ -209,34 +226,24 @@ export const SelectContent = ({
 
         case 'ArrowDown':
           event.preventDefault();
-          if (context.highlightedIndex < items.length - 1) {
-            context.setHighlightedIndex(context.highlightedIndex + 1);
-          } else {
-            // Wrap to first
-            context.setHighlightedIndex(0);
-          }
+          highlightNext();
           break;
 
         case 'ArrowUp':
           event.preventDefault();
-          if (context.highlightedIndex > 0) {
-            context.setHighlightedIndex(context.highlightedIndex - 1);
-          } else {
-            // Wrap to last
-            context.setHighlightedIndex(items.length - 1);
-          }
+          highlightPrevious();
           break;
 
         case 'Home':
         case 'PageUp':
           event.preventDefault();
-          context.setHighlightedIndex(0);
+          highlightFirst();
           break;
 
         case 'End':
         case 'PageDown':
           event.preventDefault();
-          context.setHighlightedIndex(items.length - 1);
+          highlightLast();
           break;
 
         case 'Tab':
@@ -245,54 +252,94 @@ export const SelectContent = ({
           break;
 
         default:
-          // Type-ahead for single character keys
-          if (key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
-            event.preventDefault();
-            handleTypeAhead(key);
-          }
           break;
       }
     },
-    [context, getNonDisabledItems, handleTypeAhead, onKeyDown, onEscapeKeyDown],
+    [
+      context,
+      enabledItems,
+      highlightedId,
+      performTypeahead,
+      highlightNext,
+      highlightPrevious,
+      highlightFirst,
+      highlightLast,
+      onKeyDown,
+      onEscapeKeyDown,
+    ],
   );
 
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-    };
-  }, []);
+  // Extract placement information for data attributes
+  const [currentSide, currentAlign] = useMemo(() => {
+    const parts = finalPlacement.split('-');
+    const placementSide = parts[0] as Side;
+    const placementAlign = parts[1] ? (parts[1] as Align) : 'center';
+    return [placementSide, placementAlign];
+  }, [finalPlacement]);
 
-  if (!context.open) {
+  const contentContextValue = useMemo(
+    () => ({ arrowStyles, side: currentSide, align: currentAlign }),
+    [arrowStyles, currentSide, currentAlign],
+  );
+
+  // Collection context value — provided to SelectItem descendants
+  // Must be computed before the early return to keep hook call order stable.
+  const collectionValue = useMemo<SelectCollectionContextValue>(
+    () => ({
+      highlightItem,
+      highlightFirst,
+      highlightLast,
+      highlightNext,
+      highlightPrevious,
+      isItemHighlighted,
+      highlightedId,
+    }),
+    [
+      highlightItem,
+      highlightFirst,
+      highlightLast,
+      highlightNext,
+      highlightPrevious,
+      isItemHighlighted,
+      highlightedId,
+    ],
+  );
+
+  if (!context.open || !mounted) {
     return null;
   }
 
-  // Combine Floating UI styles with user styles
-  const floatingStyles: React.CSSProperties = {
-    position: floatingStrategy,
-    top: y ?? 0,
-    left: x ?? 0,
-    minWidth: context.triggerRef.current?.offsetWidth ?? undefined,
+  // Combine Floating UI styles with component-specific extras
+  const contentStyle: React.CSSProperties = {
+    ...floatingStyles,
     ...style,
   };
 
-  return (
-    <Component
-      ref={context.contentRef}
-      id={context.contentId}
-      role='listbox'
-      tabIndex={-1}
-      data-state={context.open ? 'open' : 'closed'}
-      data-placement={finalPlacement}
-      onKeyDown={handleKeyDown}
-      style={floatingStyles}
-      {...props}
-    >
-      {children}
-    </Component>
+  const portalContainer = container || document.body;
+
+  const contentElement = (
+    <SelectContentContext.Provider value={contentContextValue}>
+      <SelectCollectionContext.Provider value={collectionValue}>
+        <Component
+          ref={floatingRef}
+          id={context.contentId}
+          role='listbox'
+          aria-labelledby={context.triggerId}
+          tabIndex={-1}
+          data-state={context.open ? 'open' : 'closed'}
+          data-side={currentSide}
+          data-align={currentAlign}
+          onKeyDown={handleKeyDown}
+          style={contentStyle}
+          {...props}
+        >
+          {children}
+        </Component>
+      </SelectCollectionContext.Provider>
+    </SelectContentContext.Provider>
   );
+
+  return createPortal(contentElement, portalContainer);
 };
 
 SelectContent.displayName = 'SelectContent';

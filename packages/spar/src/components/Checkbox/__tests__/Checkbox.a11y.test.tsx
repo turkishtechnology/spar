@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import userEvent from '@testing-library/user-event';
 import { Checkbox } from '../Checkbox';
@@ -32,13 +32,13 @@ describe('Checkbox - Accessibility Tests', () => {
     });
 
     it('passes accessibility checks when disabled', async () => {
-      const { container } = render(<Checkbox isDisabled>Subscribe to newsletter</Checkbox>);
+      const { container } = render(<Checkbox disabled>Subscribe to newsletter</Checkbox>);
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
     it('passes accessibility checks when required', async () => {
-      const { container } = render(<Checkbox isRequired>Subscribe to newsletter</Checkbox>);
+      const { container } = render(<Checkbox required>Subscribe to newsletter</Checkbox>);
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
@@ -85,14 +85,14 @@ describe('Checkbox - Accessibility Tests', () => {
     });
 
     it('announces disabled state', () => {
-      render(<Checkbox isDisabled />);
+      render(<Checkbox disabled />);
       const checkbox = screen.getByRole('checkbox');
 
       expect(checkbox).toHaveAttribute('aria-disabled', 'true');
     });
 
     it('announces required state', () => {
-      render(<Checkbox isRequired />);
+      render(<Checkbox required />);
       const checkbox = screen.getByRole('checkbox');
 
       expect(checkbox).toHaveAttribute('aria-required', 'true');
@@ -155,7 +155,7 @@ describe('Checkbox - Accessibility Tests', () => {
       render(
         <div>
           <button type='button'>Before</button>
-          <Checkbox isDisabled>Subscribe to newsletter</Checkbox>
+          <Checkbox disabled>Subscribe to newsletter</Checkbox>
           <button type='button'>After</button>
         </div>,
       );
@@ -163,7 +163,9 @@ describe('Checkbox - Accessibility Tests', () => {
       const beforeButton = screen.getByRole('button', { name: 'Before' });
       const afterButton = screen.getByRole('button', { name: 'After' });
 
-      beforeButton.focus();
+      act(() => {
+        beforeButton.focus();
+      });
       await user.tab();
 
       expect(afterButton).toHaveFocus();
@@ -176,7 +178,9 @@ describe('Checkbox - Accessibility Tests', () => {
       render(<Checkbox onChange={handleChange}>Subscribe to newsletter</Checkbox>);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleChange).toHaveBeenCalledWith(true);
@@ -190,7 +194,9 @@ describe('Checkbox - Accessibility Tests', () => {
       render(<Checkbox onChange={handleChange}>Subscribe to newsletter</Checkbox>);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard('{Enter}');
 
       expect(handleChange).not.toHaveBeenCalled();
@@ -203,7 +209,9 @@ describe('Checkbox - Accessibility Tests', () => {
       render(<Checkbox onKeyDown={handleKeyDown}>Subscribe to newsletter</Checkbox>);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleKeyDown).toHaveBeenCalled();
@@ -214,7 +222,7 @@ describe('Checkbox - Accessibility Tests', () => {
     it('allows Tab navigation when read-only', async () => {
       const user = userEvent.setup();
 
-      render(<Checkbox isReadOnly>Subscribe to newsletter</Checkbox>);
+      render(<Checkbox readOnly>Subscribe to newsletter</Checkbox>);
       const checkbox = screen.getByRole('checkbox');
 
       await user.tab();
@@ -227,14 +235,16 @@ describe('Checkbox - Accessibility Tests', () => {
       const handleChange = jest.fn();
 
       render(
-        <Checkbox isDisabled onChange={handleChange}>
+        <Checkbox disabled onChange={handleChange}>
           Subscribe to newsletter
         </Checkbox>,
       );
       const checkbox = screen.getByRole('checkbox');
 
       // Focus programmatically since Tab skips disabled elements
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleChange).not.toHaveBeenCalled();
@@ -245,13 +255,15 @@ describe('Checkbox - Accessibility Tests', () => {
       const handleChange = jest.fn();
 
       render(
-        <Checkbox isReadOnly onChange={handleChange}>
+        <Checkbox readOnly onChange={handleChange}>
           Subscribe to newsletter
         </Checkbox>,
       );
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleChange).not.toHaveBeenCalled();
@@ -267,14 +279,14 @@ describe('Checkbox - Accessibility Tests', () => {
     });
 
     it('has tabindex -1 when disabled', () => {
-      render(<Checkbox isDisabled>Subscribe to newsletter</Checkbox>);
+      render(<Checkbox disabled>Subscribe to newsletter</Checkbox>);
       const checkbox = screen.getByRole('checkbox');
 
       expect(checkbox).toHaveAttribute('tabindex', '-1');
     });
 
     it('maintains tabindex 0 when read-only', () => {
-      render(<Checkbox isReadOnly>Subscribe to newsletter</Checkbox>);
+      render(<Checkbox readOnly>Subscribe to newsletter</Checkbox>);
       const checkbox = screen.getByRole('checkbox');
 
       expect(checkbox).toHaveAttribute('tabindex', '0');
@@ -298,7 +310,7 @@ describe('Checkbox - Accessibility Tests', () => {
 
       // Focus the checkbox
       await user.tab();
-      expect(checkbox).toHaveAttribute('data-focus', 'true');
+      expect(checkbox).toHaveAttribute('data-focus', '');
 
       // Blur the checkbox
       await user.tab();
@@ -341,14 +353,14 @@ describe('Checkbox - Accessibility Tests', () => {
     });
 
     it('announces required state to screen readers', () => {
-      render(<Checkbox isRequired>Subscribe to newsletter</Checkbox>);
+      render(<Checkbox required>Subscribe to newsletter</Checkbox>);
 
       const checkbox = screen.getByRole('checkbox', { name: 'Subscribe to newsletter' });
       expect(checkbox).toHaveAttribute('aria-required', 'true');
     });
 
     it('announces disabled state to screen readers', () => {
-      render(<Checkbox isDisabled>Subscribe to newsletter</Checkbox>);
+      render(<Checkbox disabled>Subscribe to newsletter</Checkbox>);
 
       const checkbox = screen.getByRole('checkbox', { name: 'Subscribe to newsletter' });
       expect(checkbox).toHaveAttribute('aria-disabled', 'true');
@@ -415,7 +427,7 @@ describe('Checkbox - Accessibility Tests', () => {
         <form>
           <fieldset>
             <legend>Newsletter Preferences</legend>
-            <Checkbox name='weekly' isRequired>
+            <Checkbox name='weekly' required>
               Weekly newsletter
             </Checkbox>
             <Checkbox name='monthly'>Monthly newsletter</Checkbox>
@@ -436,10 +448,10 @@ describe('Checkbox - Accessibility Tests', () => {
     it('maintains accessibility with render props', async () => {
       const { container } = render(
         <Checkbox>
-          {({ checked, isDisabled }) => (
+          {({ checked, disabled }) => (
             <span>
               {checked ? '✓' : '○'} Subscribe to newsletter
-              {isDisabled && ' (disabled)'}
+              {disabled && ' (disabled)'}
             </span>
           )}
         </Checkbox>,

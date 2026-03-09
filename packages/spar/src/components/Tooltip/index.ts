@@ -1,47 +1,32 @@
 import { TooltipProvider } from './TooltipProvider';
-import { TooltipRoot } from './TooltipRoot';
+import { Tooltip as TooltipRoot } from './Tooltip';
 import { TooltipTrigger } from './TooltipTrigger';
 import { TooltipContent } from './TooltipContent';
-import { TooltipPortal } from './TooltipPortal';
 import { TooltipArrow } from './TooltipArrow';
+export { useTooltipContext } from './hooks';
 
-// Create compound component with dot notation support
-const TooltipCompound = TooltipRoot as typeof TooltipRoot & {
+const Tooltip = TooltipRoot as typeof TooltipRoot & {
   Root: typeof TooltipRoot;
+  Provider: typeof TooltipProvider;
   Trigger: typeof TooltipTrigger;
   Content: typeof TooltipContent;
-  Portal: typeof TooltipPortal;
   Arrow: typeof TooltipArrow;
-  Provider: typeof TooltipProvider;
 };
 
-TooltipCompound.Root = TooltipRoot;
-TooltipCompound.Trigger = TooltipTrigger;
-TooltipCompound.Content = TooltipContent;
-TooltipCompound.Portal = TooltipPortal;
-TooltipCompound.Arrow = TooltipArrow;
-TooltipCompound.Provider = TooltipProvider;
+Tooltip.Root = TooltipRoot;
+Tooltip.Provider = TooltipProvider;
+Tooltip.Trigger = TooltipTrigger;
+Tooltip.Content = TooltipContent;
+Tooltip.Arrow = TooltipArrow;
 
-// Export both patterns
-export {
-  // Compound component (with dot notation)
-  TooltipCompound as Tooltip,
-  // Named exports (tree-shakeable)
-  TooltipProvider,
-  TooltipRoot,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipPortal,
-  TooltipArrow,
-};
+export { Tooltip, TooltipRoot, TooltipProvider, TooltipTrigger, TooltipContent, TooltipArrow };
 
-// Export types
 export type {
   TooltipProviderProps,
-  TooltipRootProps,
+  TooltipProps,
   TooltipTriggerProps,
+  TooltipTriggerRenderProps,
   TooltipContentProps,
-  TooltipPortalProps,
   TooltipArrowProps,
-  Sticky,
+  TooltipContextValue,
 } from './types';

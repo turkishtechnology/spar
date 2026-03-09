@@ -1,17 +1,17 @@
 import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  TooltipProvider,
-  TooltipRoot,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipPortal,
-  TooltipArrow,
-} from '../index';
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '../index';
 
 // Mock timer functions
 jest.useFakeTimers();
+
+// Cleanup after each test to prevent act() warnings from pending timers
+afterEach(() => {
+  act(() => {
+    jest.runOnlyPendingTimers();
+  });
+});
 
 // Mock window.matchMedia for JSDOM environment
 Object.defineProperty(window, 'matchMedia', {
@@ -30,26 +30,24 @@ Object.defineProperty(window, 'matchMedia', {
 
 interface BasicTooltipProps {
   children?: React.ReactNode;
-  asLabel?: boolean;
   defaultOpen?: boolean;
+  id?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  disabled?: boolean;
   [key: string]: unknown;
 }
 
 const BasicTooltip = ({
   children = 'Tooltip content',
-  asLabel = false,
   defaultOpen = false,
   ...props
 }: BasicTooltipProps) => (
   <TooltipProvider>
-    <TooltipRoot defaultOpen={defaultOpen} {...props}>
-      <TooltipTrigger asChild>
-        <button>Trigger</button>
-      </TooltipTrigger>
-      <TooltipPortal>
-        <TooltipContent asLabel={asLabel}>{children}</TooltipContent>
-      </TooltipPortal>
-    </TooltipRoot>
+    <Tooltip defaultOpen={defaultOpen} {...props}>
+      <TooltipTrigger>Trigger</TooltipTrigger>
+      <TooltipContent>{children}</TooltipContent>
+    </Tooltip>
   </TooltipProvider>
 );
 
@@ -65,15 +63,14 @@ describe('TooltipProvider', () => {
   });
 
   it('sets default props correctly', () => {
-    const { container } = render(
+    render(
       <TooltipProvider>
         <div>Content</div>
       </TooltipProvider>,
     );
 
-    const provider = container.querySelector('[data-tooltip-provider]');
-    expect(provider).toBeInTheDocument();
-    expect(provider).toHaveAttribute('data-skip-delay', 'false');
+    // Provider renders children without wrapper elements
+    expect(screen.getByText('Content')).toBeInTheDocument();
   });
 
   it('accepts custom delay duration props', () => {
@@ -88,475 +85,240 @@ describe('TooltipProvider', () => {
   });
 });
 
-describe('TooltipRoot', () => {
-  it('provides context to child components', () => {
-    render(<BasicTooltip />);
-    expect(screen.getByRole('button', { name: 'Trigger' })).toBeInTheDocument();
-  });
-
-  it('handles controlled state', () => {
-    const onOpenChange = jest.fn();
-    render(<BasicTooltip isOpen={false} onOpenChange={onOpenChange} />);
+describe('Tooltip', () => {
+  it('keeps id suffix contract and ARIA relationship with custom id', () => {
+    render(<BasicTooltip defaultOpen id='help' />);
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
-    expect(trigger).not.toHaveAttribute('aria-describedby');
+    const tooltip = screen.getByRole('tooltip');
+
+    expect(trigger).toHaveAttribute('id', 'help-trigger');
+    expect(tooltip).toHaveAttribute('id', 'help-content');
+    expect(trigger).toHaveAttribute('aria-describedby', 'help-content');
   });
 
-  it('handles uncontrolled state with defaultOpen', () => {
-    render(<BasicTooltip defaultOpen />);
-
-    const trigger = screen.getByRole('button', { name: 'Trigger' });
-    expect(trigger).toHaveAttribute('aria-describedby');
-  });
-
-  it('handles disabled state', () => {
-    const onOpenChange = jest.fn();
-    render(<BasicTooltip isDisabled onOpenChange={onOpenChange} />);
-
-    const trigger = screen.getByRole('button', { name: 'Trigger' });
-    // Disabled tooltips should not respond to interactions
-    expect(trigger).toBeInTheDocument();
-  });
-
-  it('overrides provider delay settings', () => {
-    render(
-      <TooltipProvider delayDuration={1000}>
-        <TooltipRoot delay={100} hideDelay={50}>
-          <TooltipTrigger asChild>
-            <button>Custom delay trigger</button>
-          </TooltipTrigger>
-        </TooltipRoot>
-      </TooltipProvider>,
-    );
-
-    expect(screen.getByRole('button', { name: 'Custom delay trigger' })).toBeInTheDocument();
-  });
-});
-
-describe('TooltipTrigger', () => {
-  afterEach(() => {
-    jest.clearAllTimers();
-  });
-
-  it('renders button by default', () => {
-    render(
-      <TooltipProvider>
-        <TooltipRoot>
-          <TooltipTrigger asChild>
-            <button>Trigger content</button>
-          </TooltipTrigger>
-        </TooltipRoot>
-      </TooltipProvider>,
-    );
-
-    expect(screen.getByRole('button', { name: 'Trigger content' })).toBeInTheDocument();
-  });
-
-  it('supports polymorphic as prop', () => {
-    render(
-      <TooltipProvider>
-        <TooltipRoot>
-          <TooltipTrigger as='span'>
-            <span>Span trigger</span>
-          </TooltipTrigger>
-        </TooltipRoot>
-      </TooltipProvider>,
-    );
-
-    expect(screen.getByText('Span trigger')).toBeInTheDocument();
-  });
-
-  it('supports asChild composition', () => {
-    render(
-      <TooltipProvider>
-        <TooltipRoot>
-          <TooltipTrigger asChild>
-            <input type='text' placeholder='Custom input' />
-          </TooltipTrigger>
-        </TooltipRoot>
-      </TooltipProvider>,
-    );
-
-    expect(screen.getByPlaceholderText('Custom input')).toBeInTheDocument();
-  });
-
-  it('shows tooltip on mouse enter with delay', async () => {
+  it('opens on hover after delay', async () => {
     const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
     render(<BasicTooltip />);
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
     await user.hover(trigger);
 
-    // Fast-forward past the delay
-    jest.advanceTimersByTime(700);
-
-    await waitFor(() => {
-      expect(trigger).toHaveAttribute('aria-describedby');
+    act(() => {
+      jest.advanceTimersByTime(700);
     });
+
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
+    expect(trigger).toHaveAttribute('aria-describedby');
   });
 
-  it('shows tooltip immediately on focus', async () => {
+  it('uses provider delay when local delay is not provided', async () => {
     const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-    render(<BasicTooltip />);
+
+    render(
+      <TooltipProvider delayDuration={200}>
+        <Tooltip>
+          <TooltipTrigger>Trigger</TooltipTrigger>
+          <TooltipContent>Tooltip content</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>,
+    );
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
-    await user.tab(); // Focus the trigger
-    jest.advanceTimersByTime(100);
+    await user.hover(trigger);
 
-    await waitFor(() => {
-      expect(trigger).toHaveAttribute('aria-describedby');
+    act(() => {
+      jest.advanceTimersByTime(199);
     });
-  }, 10000);
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 
-  it('attempts to hide tooltip on mouse leave', async () => {
-    render(<BasicTooltip defaultOpen />);
-
-    const trigger = screen.getByRole('button', { name: 'Trigger' });
-    expect(trigger).toHaveAttribute('aria-describedby');
-
-    // Try to trigger hiding behavior (this may not fully work due to defaultOpen state management)
-    trigger.blur();
-
-    await act(async () => {
-      jest.advanceTimersByTime(1000);
+    act(() => {
+      jest.advanceTimersByTime(1);
     });
-
-    // For now, just verify the tooltip is still accessible
-    // This test documents current behavior - hiding from defaultOpen state is complex
     expect(screen.getByRole('tooltip')).toBeInTheDocument();
   });
 
-  it('hides tooltip on blur', async () => {
+  it('overrides provider delay with local delay prop', async () => {
     const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
-    render(<BasicTooltip defaultOpen />);
+
+    render(
+      <TooltipProvider delayDuration={500}>
+        <Tooltip delay={50}>
+          <TooltipTrigger>Trigger</TooltipTrigger>
+          <TooltipContent>Tooltip content</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>,
+    );
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
-    expect(trigger).toHaveAttribute('aria-describedby');
+    await user.hover(trigger);
 
-    await user.tab(); // Focus out
-    await user.tab(); // Move focus away
+    act(() => {
+      jest.advanceTimersByTime(49);
+    });
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 
-    // Advance timers to trigger the hide delay
-    await act(async () => {
-      jest.advanceTimersByTime(1000);
+    act(() => {
+      jest.advanceTimersByTime(1);
+    });
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
+  });
+
+  it('opens immediately on focus and closes on blur', async () => {
+    render(<BasicTooltip />);
+
+    const trigger = screen.getByRole('button', { name: 'Trigger' });
+
+    act(() => {
+      trigger.focus();
+    });
+    act(() => {
+      jest.advanceTimersByTime(0);
     });
 
-    await waitFor(
-      () => {
-        expect(trigger).not.toHaveAttribute('aria-describedby');
-        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-      },
-      { timeout: 3000 },
-    );
-  }, 10000);
+    expect(trigger).toHaveFocus();
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
-  it('hides tooltip on Escape key', async () => {
+    act(() => {
+      trigger.blur();
+      jest.advanceTimersByTime(0);
+    });
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+  });
+
+  it('closes with Escape and keeps focus on trigger', async () => {
     const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
     render(<BasicTooltip defaultOpen />);
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
-    trigger.focus();
+    act(() => {
+      trigger.focus();
+    });
     expect(trigger).toHaveAttribute('aria-describedby');
 
     await user.keyboard('{Escape}');
-
-    // Advance timers to handle any hide delay
-    await act(async () => {
-      jest.advanceTimersByTime(1000);
+    act(() => {
+      jest.advanceTimersByTime(0);
     });
 
-    await waitFor(
-      () => {
-        expect(trigger).not.toHaveAttribute('aria-describedby');
-        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-      },
-      { timeout: 3000 },
-    );
-  }, 10000);
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
 
-  it('sets correct data attributes', () => {
-    render(<BasicTooltip defaultOpen />);
+  it('cancels pending hide timer when trigger is hovered again', async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+
+    render(
+      <TooltipProvider>
+        <Tooltip hideDelay={100}>
+          <TooltipTrigger>Trigger</TooltipTrigger>
+          <TooltipContent>Tooltip content</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>,
+    );
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
-    expect(trigger).toHaveAttribute('data-state', 'open');
-    expect(trigger).toHaveAttribute('data-placement', 'top');
-    expect(trigger).toHaveAttribute('data-disabled', 'false');
-  });
-});
 
-describe('TooltipContent', () => {
-  it('renders with correct role', () => {
-    render(<BasicTooltip defaultOpen />);
+    await user.hover(trigger);
+    act(() => {
+      jest.advanceTimersByTime(700);
+    });
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
+
+    await user.unhover(trigger);
+    act(() => {
+      jest.advanceTimersByTime(50);
+    });
+
+    await user.hover(trigger);
+    act(() => {
+      jest.advanceTimersByTime(100);
+    });
+
     expect(screen.getByRole('tooltip')).toBeInTheDocument();
   });
 
-  it('supports polymorphic as prop', () => {
-    render(
-      <TooltipProvider>
-        <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent as='section'>Section content</TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
-      </TooltipProvider>,
+  it('supports controlled mode and waits for parent rerender to open visually', async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+    const onOpenChange = jest.fn();
+
+    const Controlled = ({ open }: { open: boolean }) => (
+      <BasicTooltip open={open} onOpenChange={onOpenChange} />
     );
 
-    const content = screen.getByRole('tooltip');
-    expect(content.tagName).toBe('SECTION');
-  });
-
-  it('sets aria-describedby by default', () => {
-    render(<BasicTooltip defaultOpen />);
+    const { rerender } = render(<Controlled open={false} />);
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
-    const tooltip = screen.getByRole('tooltip');
+    await user.hover(trigger);
+    act(() => {
+      jest.advanceTimersByTime(700);
+    });
 
-    expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
-    expect(tooltip).toHaveAttribute('data-as-label', 'false');
-  });
-
-  it('sets aria-labelledby when asLabel is true', async () => {
-    render(<BasicTooltip defaultOpen asLabel />);
-
-    const trigger = screen.getByRole('button', { name: 'Trigger' });
-    const tooltip = screen.getByRole('tooltip');
-
-    // The component currently uses aria-describedby even when asLabel is true
-    // This is because the asLabel update happens in useEffect and may not be synchronous
-    expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
-    expect(tooltip).toHaveAttribute('data-as-label', 'true');
-  });
-
-  it('sets correct data attributes', () => {
-    render(<BasicTooltip defaultOpen />);
-
-    const tooltip = screen.getByRole('tooltip');
-    expect(tooltip).toHaveAttribute('data-state', 'open');
-    expect(tooltip).toHaveAttribute('data-placement', 'top');
-  });
-
-  it('accepts positioning props', () => {
-    render(
-      <TooltipProvider>
-        <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent side='bottom' sideOffset={16} align='start'>
-              Positioned content
-            </TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
-      </TooltipProvider>,
-    );
-
-    const tooltip = screen.getByRole('tooltip');
-    // Floating UI includes alignment in placement (e.g., 'bottom-start')
-    expect(tooltip).toHaveAttribute('data-placement', 'bottom-start');
-  });
-
-  it('forwards className and style props', () => {
-    const customStyle = { backgroundColor: 'red' };
-    render(
-      <TooltipProvider>
-        <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent className='custom-class' style={customStyle}>
-              Styled content
-            </TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
-      </TooltipProvider>,
-    );
-
-    const tooltip = screen.getByRole('tooltip');
-    expect(tooltip).toHaveClass('custom-class');
-    expect(tooltip).toHaveStyle('background-color: rgb(255, 0, 0)');
-  });
-
-  it('handles onEscapeKeyDown callback', async () => {
-    const handleEscape = jest.fn();
-
-    render(
-      <TooltipProvider>
-        <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent onEscapeKeyDown={handleEscape}>Content</TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
-      </TooltipProvider>,
-    );
-
-    const content = screen.getByRole('tooltip');
-
-    // Fire a keydown event directly on the tooltip content
-    content.dispatchEvent(
-      new KeyboardEvent('keydown', {
-        key: 'Escape',
-        bubbles: true,
-        cancelable: true,
-      }),
-    );
-
-    // The callback should be called
-    expect(handleEscape).toHaveBeenCalled();
-  });
-
-  it('does not render when tooltip is closed', () => {
-    render(<BasicTooltip />);
+    expect(onOpenChange).toHaveBeenCalledWith(true);
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-  });
-});
 
-describe('TooltipPortal', () => {
-  it('renders content in portal when open', () => {
-    render(<BasicTooltip defaultOpen />);
+    rerender(<Controlled open={true} />);
     expect(screen.getByRole('tooltip')).toBeInTheDocument();
   });
 
-  it('does not render when closed', () => {
-    render(<BasicTooltip />);
+  it('does not open and does not emit changes when disabled', async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+    const onOpenChange = jest.fn();
+
+    render(<BasicTooltip disabled onOpenChange={onOpenChange} />);
+
+    const trigger = screen.getByRole('button', { name: 'Trigger' });
+    expect(trigger).toBeDisabled();
+
+    await user.hover(trigger);
+    act(() => {
+      jest.advanceTimersByTime(700);
+    });
+
+    expect(onOpenChange).not.toHaveBeenCalled();
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
-  it('supports forceMount prop', () => {
+  it('does not change state when render-props show is invoked while disabled', () => {
+    const onOpenChange = jest.fn();
+    let showTooltip: (() => void) | null = null;
+
     render(
       <TooltipProvider>
-        <TooltipRoot>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
+        <Tooltip disabled onOpenChange={onOpenChange}>
+          <TooltipTrigger>
+            {({ show }) => {
+              showTooltip = show;
+              return <span>Trigger</span>;
+            }}
           </TooltipTrigger>
-          <TooltipPortal forceMount>
-            <TooltipContent>Always mounted</TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
+          <TooltipContent>Tooltip content</TooltipContent>
+        </Tooltip>
       </TooltipProvider>,
     );
 
-    // NOTE: Currently forceMount doesn't work correctly because TooltipContent
-    // has its own check for context.isOpen and returns null when closed
-    // This test is currently expected to fail until the component is fixed
-    expect(screen.queryByText('Always mounted')).not.toBeInTheDocument();
+    act(() => {
+      showTooltip?.();
+      jest.advanceTimersByTime(0);
+    });
+
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
-  it('renders in custom container when provided', () => {
-    const customContainer = document.createElement('div');
-    customContainer.id = 'custom-portal';
-    document.body.appendChild(customContainer);
-
+  it('supports render props and exposes open state', () => {
     render(
       <TooltipProvider>
-        <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
+        <Tooltip defaultOpen>
+          <TooltipTrigger>
+            {({ isOpen }) => <span>{isOpen ? 'Open' : 'Closed'}</span>}
           </TooltipTrigger>
-          <TooltipPortal container={customContainer}>
-            <TooltipContent>Portal content</TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
+          <TooltipContent>Content</TooltipContent>
+        </Tooltip>
       </TooltipProvider>,
     );
 
-    expect(customContainer).toContainElement(screen.getByRole('tooltip'));
-    document.body.removeChild(customContainer);
-  });
-});
-
-describe('TooltipArrow', () => {
-  it('renders svg arrow by default', () => {
-    render(
-      <TooltipProvider>
-        <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent>
-              Content
-              <TooltipArrow />
-            </TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
-      </TooltipProvider>,
-    );
-
-    const arrow = screen.getByRole('tooltip').querySelector('svg');
-    expect(arrow).toBeInTheDocument();
-    expect(arrow).toHaveAttribute('data-placement', 'top');
-  });
-
-  it('supports custom dimensions', () => {
-    render(
-      <TooltipProvider>
-        <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent>
-              Content
-              <TooltipArrow width={20} height={10} />
-            </TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
-      </TooltipProvider>,
-    );
-
-    const arrow = screen.getByRole('tooltip').querySelector('svg');
-    expect(arrow).toHaveAttribute('width', '20');
-    expect(arrow).toHaveAttribute('height', '10');
-  });
-
-  it('supports polymorphic as prop', () => {
-    render(
-      <TooltipProvider>
-        <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent>
-              Content
-              <TooltipArrow as='div' />
-            </TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
-      </TooltipProvider>,
-    );
-
-    const arrow = screen.getByRole('tooltip').querySelector('div[data-placement]');
-    expect(arrow).toBeInTheDocument();
-  });
-
-  it('forwards style and className props', () => {
-    render(
-      <TooltipProvider>
-        <TooltipRoot defaultOpen>
-          <TooltipTrigger asChild>
-            <button>Trigger</button>
-          </TooltipTrigger>
-          <TooltipPortal>
-            <TooltipContent>
-              Content
-              <TooltipArrow className='custom-arrow' style={{ color: 'blue' }} />
-            </TooltipContent>
-          </TooltipPortal>
-        </TooltipRoot>
-      </TooltipProvider>,
-    );
-
-    const arrow = screen.getByRole('tooltip').querySelector('svg');
-    expect(arrow).toHaveClass('custom-arrow');
-    expect(arrow).toHaveStyle('color: rgb(0, 0, 255)');
+    expect(screen.getByText('Open')).toBeInTheDocument();
   });
 });

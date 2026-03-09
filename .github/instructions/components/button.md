@@ -11,8 +11,8 @@ Single component pattern - Button is a self-contained primitive that doesn't req
 ### Key Differentiators
 - **Headless by Design**: Zero visual styling - behavior and accessibility only
 - **Polymorphic**: Can render as `button`, `div`, `span`, or any valid HTML element while maintaining button semantics
-- **Toggle Support**: Built-in toggle functionality with `aria-pressed` state management
-- **Loading States**: Integrated loading state with proper screen reader announcements
+- **Toggle Support**: Built-in toggle functionality with `isPressed` prop and `aria-pressed` state management
+- **Loading States**: Integrated loading state via `isLoading` prop with `aria-busy` and `aria-live` announcements
 - **Complete Accessibility**: Full WCAG 2.2 AA compliance with keyboard navigation and screen reader support
 
 ## 2. API
@@ -25,10 +25,9 @@ Single component pattern - Button is a self-contained primitive that doesn't req
 | `type` | `"button" \| "submit" \| "reset"` | No | `"button"` | Button type (only applies when `as="button"`) |
 | `disabled` | `boolean` | No | `false` | Disables the button and makes it non-interactive |
 | `autoFocus` | `boolean` | No | `false` | Whether the button should receive focus when first rendered |
-| `loading` | `boolean` | No | `false` | Shows loading state with proper announcements |
-| `pressed` | `boolean` | No | `undefined` | Toggle state - when defined, creates a toggle button |
+| `isLoading` | `boolean` | No | `false` | Shows loading state with proper announcements |
+| `isPressed` | `boolean` | No | `undefined` | Toggle state - when defined, creates a toggle button |
 | `onPressedChange` | `(pressed: boolean) => void` | No | `undefined` | Callback fired when toggle state changes |
-| `loadingText` | `string` | No | `"Loading"` | Screen reader text announced during loading (should be localized) |
 | `children` | `ReactNode` | No | `undefined` | Button content |
 | `onClick` | `MouseEventHandler` | No | `undefined` | Click event handler |
 | `onKeyDown` | `KeyboardEventHandler` | No | `undefined` | Keyboard event handler |
@@ -42,9 +41,9 @@ Single component pattern - Button is a self-contained primitive that doesn't req
 - **Type safety**: TypeScript support for element-specific props based on `as` value
 
 ### Controlled/Uncontrolled Toggle
-- **Controlled**: When `pressed` and `onPressedChange` are provided
-- **Uncontrolled**: When only `pressed` is provided (static toggle state)
-- **Regular Button**: When `pressed` is `undefined` (not a toggle button)
+- **Controlled**: When `isPressed` and `onPressedChange` are provided
+- **Uncontrolled**: When only `isPressed` is provided (static toggle state)
+- **Regular Button**: When `isPressed` is `undefined` (not a toggle button)
 
 ## 3. Behavior Matrix
 
@@ -54,9 +53,9 @@ Single component pattern - Button is a self-contained primitive that doesn't req
 | `default` | Tab | Focuses button | `tabindex="0"` (focusable) |
 | `autoFocus=true` | Component mount | Automatically receives focus | `tabindex="0"`, focus applied on mount |
 | `disabled=true` | Any interaction | No action | `aria-disabled="true"`, `tabindex="-1"` |
-| `loading=true` | Any interaction | No action | `aria-busy="true"`, announces loading text |
-| `pressed=false` (toggle) | Click/Enter/Space | Sets `pressed=true`, fires `onPressedChange` | `aria-pressed="true"` |
-| `pressed=true` (toggle) | Click/Enter/Space | Sets `pressed=false`, fires `onPressedChange` | `aria-pressed="false"` |
+| `isLoading=true` | Any interaction | No action | `aria-busy="true"`, `aria-live="polite"` |
+| `isPressed=false` (toggle) | Click/Enter/Space | Sets `isPressed=true`, fires `onPressedChange` | `aria-pressed="true"` |
+| `isPressed=true` (toggle) | Click/Enter/Space | Sets `isPressed=false`, fires `onPressedChange` | `aria-pressed="false"` |
 | Focused | Escape | Blurs button (if in modal/dialog) | Focus management context-dependent |
 | Any state | Mouse hover | Visual focus indicator | CSS `:hover` via data attributes |
 | Any state | Focus | Shows focus indicator | CSS `:focus-visible` via data attributes |
@@ -66,7 +65,7 @@ Single component pattern - Button is a self-contained primitive that doesn't req
 ### Roles
 - **Primary Role**: `button` (implicit when `as="button"`, explicit `role="button"` for other elements)
 - **Toggle Button**: Uses `aria-pressed` attribute to indicate toggle state
-- **Loading Button**: Uses `aria-busy` to indicate loading state
+- **Loading Button**: Uses `aria-busy="true"` and `aria-live="polite"` to indicate loading state
 
 ### Keyboard Navigation
 - **Enter**: Activates the button
@@ -88,7 +87,7 @@ Single component pattern - Button is a self-contained primitive that doesn't req
 ### Screen Reader Announcements
 - **Button Name**: Content text, `aria-label`, or `aria-labelledby` reference
 - **State Changes**: 
-  - Loading: "Loading" or custom `loadingText` announced
+  - Loading: `aria-busy="true"` and `aria-live="polite"` signals to screen readers
   - Toggle: "pressed" or "not pressed" state announced
   - Disabled: "disabled" or "unavailable" announced
 - **Live Regions**: Loading state changes announced via implicit `aria-busy`
@@ -116,18 +115,14 @@ Single component pattern - Button is a self-contained primitive that doesn't req
 const [internalPressed, setInternalPressed] = useState<boolean>(false);
 
 // Controlled vs uncontrolled toggle logic
-const isToggle = pressed !== undefined;
-const isPressed = isToggle ? pressed : internalPressed;
+const isToggle = isPressed !== undefined;
+const currentPressed = isToggle ? isPressed : internalPressed;
 
 // Loading state management
-const isInteractive = !disabled && !loading;
+const isInteractive = !disabled && !isLoading;
 
-// Auto focus handling
-useEffect(() => {
-  if (autoFocus && ref.current) {
-    ref.current.focus();
-  }
-}, [autoFocus]);
+// Auto focus handling (via useAutoFocus hook)
+useAutoFocus(internalRef, autoFocus);
 ```
 
 ### Event System
@@ -138,7 +133,7 @@ const handleActivation = useCallback((event) => {
   
   // Toggle logic
   if (isToggle) {
-    const newPressed = !isPressed;
+    const newPressed = !currentPressed;
     if (onPressedChange) {
       onPressedChange(newPressed);
     } else {
@@ -148,7 +143,7 @@ const handleActivation = useCallback((event) => {
   
   // Fire click handler
   onClick?.(event);
-}, [isInteractive, isToggle, isPressed, onPressedChange, onClick]);
+}, [isInteractive, isToggle, currentPressed, onPressedChange, onClick]);
 
 // Keyboard handler
 const handleKeyDown = useCallback((event) => {
@@ -175,7 +170,7 @@ const handleActivation = useCallback((event) => {
   
   // Toggle logic
   if (isToggle) {
-    const newPressed = !isPressed;
+    const newPressed = !currentPressed;
     if (onPressedChange) {
       onPressedChange(newPressed);
     } else {
@@ -185,15 +180,15 @@ const handleActivation = useCallback((event) => {
   
   // Fire click handler
   onClick?.(event);
-}, [isInteractive, isToggle, isPressed, onPressedChange, onClick]);
+}, [isInteractive, isToggle, currentPressed, onPressedChange, onClick]);
 
 // Memoize data attributes to prevent object recreation
 const dataAttributes = useMemo(() => ({
-  'data-disabled': disabled ? 'true' : undefined,
-  'data-loading': loading ? 'true' : undefined,
-  'data-pressed': isToggle ? String(isPressed) : undefined,
-  'data-autofocus': autoFocus ? 'true' : undefined,
-}), [disabled, loading, isToggle, isPressed, autoFocus]);
+  'data-disabled': disabled ? '' : undefined,
+  'data-loading': isLoading ? '' : undefined,
+  'data-pressed': isToggle && currentPressed ? '' : undefined,
+  'data-autofocus': autoFocus ? '' : undefined,
+}), [disabled, isLoading, isToggle, currentPressed, autoFocus]);
 ```
 
 ### SSR/CSR Safety
@@ -206,11 +201,10 @@ const dataAttributes = useMemo(() => ({
 
 ### State Data Attributes
 ```typescript
-'data-disabled': disabled ? 'true' : undefined
-'data-loading': loading ? 'true' : undefined  
-'data-pressed': isToggle ? String(isPressed) : undefined
-'data-autofocus': autoFocus ? 'true' : undefined
-'data-focus-visible': // Handled by focus-visible polyfill
+'data-disabled': disabled ? '' : undefined
+'data-loading': isLoading ? '' : undefined  
+'data-pressed': isToggle && currentPressed ? '' : undefined
+'data-autofocus': autoFocus ? '' : undefined
 ```
 
 ### Variant Data Attributes
@@ -220,11 +214,10 @@ const dataAttributes = useMemo(() => ({
 ```
 
 ### Styling Hooks
-- **`[data-disabled="true"]`**: Disabled state styling
-- **`[data-loading="true"]`**: Loading state styling  
-- **`[data-pressed="true"]`**: Toggle button pressed state
-- **`[data-pressed="false"]`**: Toggle button unpressed state
-- **`[data-autofocus="true"]`**: Auto-focused button styling
+- **`[data-disabled]`**: Disabled state styling
+- **`[data-loading]`**: Loading state styling  
+- **`[data-pressed]`**: Toggle button pressed state
+- **`[data-autofocus]`**: Auto-focused button styling
 - **`:hover`**: Hover state styling
 - **`:focus-visible`**: Keyboard focus styling
 - **`:active`**: Active/pressed styling
@@ -238,15 +231,15 @@ All data attributes designed to work with CSS-in-JS libraries, CSS modules, and 
 - **Props Handling**: All props are correctly applied and forwarded
 - **Auto Focus**: `autoFocus` prop correctly focuses button on mount
 - **Event Handling**: Click and keyboard events trigger correct callbacks
-- **Toggle Logic**: Controlled and uncontrolled toggle states work correctly  
-- **State Management**: Loading, disabled, and pressed states behave correctly
+- **Toggle Logic**: Controlled and uncontrolled toggle states work correctly (`isPressed`)
+- **State Management**: `isLoading`, `disabled`, and `isPressed` states behave correctly
 - **Polymorphic Rendering**: `as` prop changes element type correctly
 - **Ref Forwarding**: Refs are correctly forwarded to underlying element
 - **Performance**: No unnecessary re-renders when props haven't changed
 - **Localization**: Loading text accepts localized strings correctly
 
 ### Accessibility Tests  
-- **ARIA Attributes**: Correct `role`, `aria-pressed`, `aria-busy`, `aria-disabled`
+- **ARIA Attributes**: Correct `role`, `aria-pressed`, `aria-busy`, `aria-live`, `aria-disabled`
 - **Keyboard Navigation**: Enter and Space keys activate button
 - **Focus Management**: Tab order and focus indicators work correctly
 - **Screen Reader**: Accessible names and state announcements
@@ -310,8 +303,8 @@ All data attributes designed to work with CSS-in-JS libraries, CSS modules, and 
 ### Implementation Checklist
 - [ ] Core button component with polymorphic `as` prop
 - [ ] Auto focus functionality with `autoFocus` prop
-- [ ] Toggle button functionality with `pressed` prop
-- [ ] Loading state with `loading` prop and proper announcements
+- [ ] Toggle button functionality with `isPressed` prop
+- [ ] Loading state with `isLoading` prop and proper announcements
 - [ ] Disabled state with proper ARIA attributes
 - [ ] Complete keyboard event handling (Enter, Space)
 - [ ] Ref forwarding to underlying element
@@ -319,7 +312,6 @@ All data attributes designed to work with CSS-in-JS libraries, CSS modules, and 
 - [ ] Performance optimization with memoized callbacks and attributes
 - [ ] TypeScript interfaces with proper generic constraints
 - [ ] JSDoc documentation for all props
-- [ ] Localization support for loading text
 
 ### Post-Implementation Checklist  
 - [ ] Unit tests cover all props and behavior combinations
@@ -330,7 +322,6 @@ All data attributes designed to work with CSS-in-JS libraries, CSS modules, and 
 - [ ] Integration tests verify form submission and event handling
 - [ ] Performance testing confirms no unnecessary re-renders
 - [ ] Bundle size analysis confirms tree-shaking works correctly
-- [ ] Localization testing with different loading text values
 
 ### Quality Gates
 - [ ] TypeScript compilation with zero errors

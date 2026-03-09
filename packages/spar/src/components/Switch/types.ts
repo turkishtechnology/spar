@@ -1,26 +1,54 @@
 import type {
+  CSSProperties,
   ElementType,
-  ButtonHTMLAttributes,
-  AriaAttributes,
   KeyboardEvent,
   MouseEvent,
-  PointerEvent,
   FocusEvent,
-  CSSProperties,
+  PointerEvent,
+  ReactNode,
 } from 'react';
+import type { PolymorphicProps } from '../../types';
+import type { ButtonOwnProps } from '../Button/types';
 
 /**
- * Props for Switch component
- * @remarks Fully accessible, headless switch component providing binary toggle functionality
+ * Render props provided to children function for Switch
  */
-export interface SwitchProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChange' | 'checked' | 'defaultChecked'> {
+export interface SwitchRenderProps {
   /**
-   * The element or component to render as
-   * @defaultValue 'button'
+   * Current checked state
    */
-  as?: ElementType;
+  checked: boolean;
+  /**
+   * Function to programmatically set the checked state
+   */
+  setChecked: (checked: boolean) => void;
+  /**
+   * Whether the switch is disabled
+   */
+  disabled: boolean;
+  /**
+   * Whether the switch is read-only
+   */
+  readOnly: boolean;
+  /**
+   * Whether the switch is currently focused
+   */
+  isFocused: boolean;
+  /**
+   * Whether the switch is currently hovered
+   */
+  isHovered: boolean;
+  /**
+   * Whether the switch is currently being pressed
+   */
+  isPressed: boolean;
+}
 
+/**
+ * Own props for Switch component
+ * @remarks Extends ButtonOwnProps for shared button behavior
+ */
+export interface SwitchOwnProps extends ButtonOwnProps {
   /**
    * Controlled checked state
    * @remarks When provided, component operates in controlled mode
@@ -40,61 +68,32 @@ export interface SwitchProps
   onChange?: (checked: boolean) => void;
 
   /**
-   * Disabled state - properly announced to screen readers
-   * @defaultValue false
-   */
-  isDisabled?: boolean;
-
-  /**
-   * Form input name for form integration
-   */
-  name?: string;
-
-  /**
-   * Form input value when checked
-   * @defaultValue 'on'
-   */
-  value?: string;
-
-  /**
-   * Form ID to associate with
-   */
-  form?: string;
-
-  /**
    * Required state for form validation
    * @defaultValue false
    */
-  isRequired?: boolean;
+  required?: boolean;
 
   /**
    * Read-only state - prevents interaction
    * @defaultValue false
    */
-  isReadOnly?: boolean;
+  readOnly?: boolean;
 
   /**
-   * Auto-focus on mount
-   * @defaultValue false
+   * Children content or render function
    */
-  shouldAutoFocus?: boolean;
-
-  /**
-   * Accessible name for the switch
-   * @remarks Required when switch has no visible label
-   */
-  'aria-label'?: AriaAttributes['aria-label'];
-
-  /**
-   * ID of element that labels the switch
-   */
-  'aria-labelledby'?: AriaAttributes['aria-labelledby'];
-
-  /**
-   * ID of element that describes the switch
-   */
-  'aria-describedby'?: AriaAttributes['aria-describedby'];
+  children?: ReactNode | ((state: SwitchRenderProps) => ReactNode);
 }
+
+/**
+ * Props for Switch component
+ * @remarks Fully accessible, headless switch component providing binary toggle functionality
+ */
+export type SwitchProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  SwitchOwnProps
+>;
 
 /**
  * Props for useSwitch hook
@@ -103,8 +102,8 @@ export interface UseSwitchProps {
   checked?: boolean;
   defaultChecked?: boolean;
   onChange?: (checked: boolean) => void;
-  isDisabled?: boolean;
-  isReadOnly?: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
 }
 
 /**
@@ -112,8 +111,12 @@ export interface UseSwitchProps {
  */
 export interface UseSwitchReturn {
   checked: boolean;
-  isDisabled: boolean;
-  isReadOnly: boolean;
+  disabled: boolean;
+  readOnly: boolean;
+  isFocused: boolean;
+  isHovered: boolean;
+  isActive: boolean;
+  setChecked: (checked: boolean) => void;
   switchProps: {
     role: 'switch';
     'aria-checked': boolean;

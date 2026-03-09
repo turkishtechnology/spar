@@ -1,24 +1,35 @@
+import { type ElementType } from 'react';
 import type { InputLabelProps } from './types';
-import { useInputContext } from './InputRoot';
+import { useInputContext } from './hooks';
+import { Label } from '../Label/Label';
 
 /**
  * Input label component that provides accessible labeling for the input field.
  * Automatically associates with the input field via ARIA.
  */
-export const InputLabel = ({ children, ref, ...props }: InputLabelProps) => {
+export const InputLabel = <T extends ElementType = 'label'>({
+  as,
+  children,
+  ref,
+  ...props
+}: InputLabelProps<T>) => {
   const context = useInputContext();
 
   return (
-    <label
+    <Label
+      as={as || 'label'}
       {...props}
       ref={ref}
       id={context.labelId}
       htmlFor={context.fieldId}
-      data-spar-input-label
+      disabled={context.disabled}
+      required={context.required}
+      readOnly={context.readOnly}
+      isInvalid={context.isInvalid}
     >
       {children}
-    </label>
+    </Label>
   );
 };
 
-InputLabel.displayName = 'Input.Label';
+InputLabel.displayName = 'InputLabel';

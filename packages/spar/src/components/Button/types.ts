@@ -1,28 +1,10 @@
-import type { ElementType, ReactNode, MouseEventHandler, KeyboardEventHandler } from 'react';
+import type { ElementType } from 'react';
+import type { PolymorphicProps } from '../../types';
 
 /**
- * Props for Button component
- * @remarks Fully accessible, headless component
+ * Own props for Button component
  */
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * The element type to render as
-   * @defaultValue "button"
-   */
-  as?: ElementType;
-
-  /**
-   * Disabled state - properly announced to screen readers
-   * @defaultValue false
-   */
-  isDisabled?: boolean;
-
-  /**
-   * Whether the button should receive focus when first rendered
-   * @defaultValue false
-   */
-  shouldAutoFocus?: boolean;
-
+export interface ButtonOwnProps {
   /**
    * Loading state with screen reader support
    * @defaultValue false
@@ -37,36 +19,17 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
   /**
    * Callback fired when toggle state changes
+   * @param pressed - The new pressed state
    */
   onPressedChange?: (pressed: boolean) => void;
-
-  /**
-   * Component content
-   */
-  children?: ReactNode;
-
-  /**
-   * Click event handler
-   */
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-
-  /**
-   * Keyboard event handler
-   */
-  onKeyDown?: KeyboardEventHandler<HTMLButtonElement>;
-
-  /**
-   * CSS class names
-   */
-  className?: string;
-
-  /**
-   * Inline styles
-   */
-  style?: React.CSSProperties;
-
-  /**
-   * Ref to the underlying element
-   */
-  ref?: React.Ref<HTMLElement>;
 }
+
+/**
+ * Props for Button component
+ * @remarks Fully accessible, headless component
+ */
+export type ButtonProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  ButtonOwnProps
+>;

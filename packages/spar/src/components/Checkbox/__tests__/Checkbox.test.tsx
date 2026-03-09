@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Checkbox } from '../Checkbox';
+import type { CheckboxRenderProps } from '../types';
 
 describe('Checkbox - Unit Tests', () => {
   afterEach(() => {
@@ -33,9 +34,9 @@ describe('Checkbox - Unit Tests', () => {
     it('renders with render prop children', () => {
       render(
         <Checkbox>
-          {({ checked, isDisabled }) => (
+          {({ checked, disabled }) => (
             <span>
-              {checked ? 'Checked' : 'Unchecked'} - {isDisabled ? 'Disabled' : 'Enabled'}
+              {checked ? 'Checked' : 'Unchecked'} - {disabled ? 'Disabled' : 'Enabled'}
             </span>
           )}
         </Checkbox>,
@@ -52,16 +53,20 @@ describe('Checkbox - Unit Tests', () => {
       expect(checkbox).toHaveAttribute('style', expect.stringContaining('background-color: red'));
     });
 
-    it('generates stable ID when not provided', () => {
-      const { rerender } = render(<Checkbox />);
-      const firstId = screen.getByRole('checkbox').id;
+    it('generates unique non-empty IDs when not provided', () => {
+      render(
+        <>
+          <Checkbox aria-label='first checkbox' />
+          <Checkbox aria-label='second checkbox' />
+        </>,
+      );
 
-      rerender(<Checkbox />);
-      const secondId = screen.getByRole('checkbox').id;
+      const firstCheckbox = screen.getByRole('checkbox', { name: 'first checkbox' });
+      const secondCheckbox = screen.getByRole('checkbox', { name: 'second checkbox' });
 
-      expect(firstId).toBeTruthy();
-      expect(secondId).toBeTruthy();
-      expect(firstId).toBe(secondId);
+      expect(firstCheckbox.id).toBeTruthy();
+      expect(secondCheckbox.id).toBeTruthy();
+      expect(firstCheckbox.id).not.toBe(secondCheckbox.id);
     });
 
     it('uses provided ID', () => {
@@ -175,18 +180,27 @@ describe('Checkbox - Unit Tests', () => {
       render(<Checkbox checked='indeterminate' />);
       const checkbox = screen.getByRole('checkbox');
 
-      expect(checkbox).toHaveAttribute('data-indeterminate', 'true');
+      expect(checkbox).toHaveAttribute('data-indeterminate', '');
       expect(checkbox).not.toHaveAttribute('data-checked');
     });
   });
 
   describe('Disabled State', () => {
-    it('renders as disabled when isDisabled is true', () => {
-      render(<Checkbox isDisabled />);
+    it('renders as disabled when disabled is true (non-button)', () => {
+      render(<Checkbox as='span' disabled />);
       const checkbox = screen.getByRole('checkbox');
-
       expect(checkbox).toHaveAttribute('aria-disabled', 'true');
-      expect(checkbox).toHaveAttribute('data-disabled', 'true');
+      expect(checkbox).toHaveAttribute('data-disabled', '');
+      expect(checkbox).toHaveAttribute('tabIndex', '-1');
+      expect(checkbox).not.toHaveAttribute('disabled');
+    });
+
+    it('renders as disabled when disabled is true (button)', () => {
+      render(<Checkbox as='button' disabled />);
+      const checkbox = screen.getByRole('checkbox');
+      expect(checkbox).toHaveAttribute('disabled');
+      expect(checkbox).not.toHaveAttribute('aria-disabled');
+      expect(checkbox).toHaveAttribute('data-disabled', '');
       expect(checkbox).toHaveAttribute('tabIndex', '-1');
     });
 
@@ -194,7 +208,7 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox isDisabled onChange={handleChange} />);
+      render(<Checkbox disabled onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       await user.click(checkbox);
@@ -207,10 +221,12 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox isDisabled onChange={handleChange} />);
+      render(<Checkbox disabled onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleChange).not.toHaveBeenCalled();
@@ -222,7 +238,7 @@ describe('Checkbox - Unit Tests', () => {
       const user = userEvent.setup();
       const handleChange = jest.fn();
 
-      render(<Checkbox isReadOnly onChange={handleChange} />);
+      render(<Checkbox readOnly onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
       await user.click(checkbox);
@@ -231,7 +247,7 @@ describe('Checkbox - Unit Tests', () => {
     });
 
     it('remains focusable when read-only', () => {
-      render(<Checkbox isReadOnly />);
+      render(<Checkbox readOnly />);
       const checkbox = screen.getByRole('checkbox');
 
       expect(checkbox).toHaveAttribute('tabIndex', '0');
@@ -240,12 +256,12 @@ describe('Checkbox - Unit Tests', () => {
   });
 
   describe('Required State', () => {
-    it('sets aria-required when isRequired is true', () => {
-      render(<Checkbox isRequired />);
+    it('sets aria-required when required is true', () => {
+      render(<Checkbox required />);
       const checkbox = screen.getByRole('checkbox');
 
       expect(checkbox).toHaveAttribute('aria-required', 'true');
-      expect(checkbox).toHaveAttribute('data-required', 'true');
+      expect(checkbox).toHaveAttribute('data-required', '');
     });
   });
 
@@ -257,7 +273,9 @@ describe('Checkbox - Unit Tests', () => {
       render(<Checkbox onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleChange).toHaveBeenCalledWith(true);
@@ -270,7 +288,9 @@ describe('Checkbox - Unit Tests', () => {
       render(<Checkbox onChange={handleChange} />);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard('{Enter}');
 
       expect(handleChange).not.toHaveBeenCalled();
@@ -283,7 +303,9 @@ describe('Checkbox - Unit Tests', () => {
       render(<Checkbox onKeyDown={handleKeyDown} />);
       const checkbox = screen.getByRole('checkbox');
 
-      checkbox.focus();
+      act(() => {
+        checkbox.focus();
+      });
       await user.keyboard(' ');
 
       expect(handleKeyDown).toHaveBeenCalled();
@@ -298,7 +320,7 @@ describe('Checkbox - Unit Tests', () => {
       const checkbox = screen.getByRole('checkbox');
 
       await user.tab();
-      expect(checkbox).toHaveAttribute('data-focus', 'true');
+      expect(checkbox).toHaveAttribute('data-focus', '');
 
       await user.tab();
       expect(checkbox).not.toHaveAttribute('data-focus');
@@ -318,12 +340,12 @@ describe('Checkbox - Unit Tests', () => {
       expect(handleBlur).toHaveBeenCalled();
     });
 
-    it('sets shouldAutoFocus prop correctly', () => {
-      // Note: Auto-focus behavior is tested in integration tests with real DOM
-      const { container } = render(<Checkbox shouldAutoFocus />);
-      const checkbox = container.querySelector('[role="checkbox"]');
-
-      expect(checkbox).toBeInTheDocument();
+    it('should auto-focus when autoFocus is true', async () => {
+      render(<Checkbox autoFocus />);
+      const checkbox = screen.getByRole('checkbox');
+      await waitFor(() => {
+        expect(checkbox).toHaveFocus();
+      });
     });
   });
 
@@ -335,7 +357,7 @@ describe('Checkbox - Unit Tests', () => {
       const checkbox = screen.getByRole('checkbox');
 
       await user.hover(checkbox);
-      expect(checkbox).toHaveAttribute('data-hover', 'true');
+      expect(checkbox).toHaveAttribute('data-hover', '');
 
       await user.unhover(checkbox);
       expect(checkbox).not.toHaveAttribute('data-hover');
@@ -344,7 +366,7 @@ describe('Checkbox - Unit Tests', () => {
     it('does not set hover state when disabled', async () => {
       const user = userEvent.setup();
 
-      render(<Checkbox isDisabled />);
+      render(<Checkbox disabled />);
       const checkbox = screen.getByRole('checkbox');
 
       await user.hover(checkbox);
@@ -370,9 +392,15 @@ describe('Checkbox - Unit Tests', () => {
 
       const hiddenInput = document.querySelector('input[type="checkbox"][name="subscribe"]');
       expect(hiddenInput).toBeInTheDocument();
-      expect(hiddenInput).toHaveStyle({ position: 'absolute' });
       expect(hiddenInput).toHaveAttribute('aria-hidden', 'true');
       expect(hiddenInput).toHaveAttribute('tabIndex', '-1');
+    });
+
+    it('keeps hidden input out of the accessibility tree', () => {
+      render(<Checkbox name='subscribe' />);
+
+      const visibleCheckboxes = screen.getAllByRole('checkbox');
+      expect(visibleCheckboxes).toHaveLength(1);
     });
 
     it('syncs hidden input with checkbox state', async () => {
@@ -418,64 +446,98 @@ describe('Checkbox - Unit Tests', () => {
       render(<Checkbox checked={true} />);
       const checkbox = screen.getByRole('checkbox');
 
-      expect(checkbox).toHaveAttribute('data-checked', 'true');
+      expect(checkbox).toHaveAttribute('data-checked', '');
       expect(checkbox).not.toHaveAttribute('data-indeterminate');
     });
 
     it('sets correct data attributes for various states', () => {
-      render(<Checkbox isDisabled isRequired checked={true} />);
+      render(<Checkbox disabled required checked={true} />);
       const checkbox = screen.getByRole('checkbox');
 
-      expect(checkbox).toHaveAttribute('data-checked', 'true');
-      expect(checkbox).toHaveAttribute('data-disabled', 'true');
-      expect(checkbox).toHaveAttribute('data-required', 'true');
+      expect(checkbox).toHaveAttribute('data-checked', '');
+      expect(checkbox).toHaveAttribute('data-disabled', '');
+      expect(checkbox).toHaveAttribute('data-required', '');
     });
   });
 
   describe('Render Props', () => {
     it('provides correct state to render prop children', async () => {
       const user = userEvent.setup();
-      const renderFn = jest.fn(() => <span>Render prop content</span>);
+      const renderFn = jest.fn((_props: CheckboxRenderProps) => <span>Render prop content</span>);
 
-      render(<Checkbox isDisabled>{renderFn}</Checkbox>);
+      render(<Checkbox disabled>{renderFn}</Checkbox>);
 
-      expect(renderFn).toHaveBeenCalledWith({
-        checked: false,
-        isDisabled: true,
-        isFocused: false,
-        isHovered: false,
-        isPressed: false,
-      });
+      expect(renderFn).toHaveBeenCalledWith(
+        expect.objectContaining({
+          checked: false,
+          disabled: true,
+          isFocused: false,
+          isHovered: false,
+          isPressed: false,
+        }),
+      );
+      // Verify setChecked is a function
+      const firstCallProps = renderFn.mock.calls[0]?.[0];
+      expect(firstCallProps).toBeDefined();
+      expect(typeof firstCallProps?.setChecked).toBe('function');
 
       const checkbox = screen.getByRole('checkbox');
       await user.hover(checkbox);
 
       // Should not update hover state when disabled
-      expect(renderFn).toHaveBeenLastCalledWith({
-        checked: false,
-        isDisabled: true,
-        isFocused: false,
-        isHovered: false,
-        isPressed: false,
-      });
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          checked: false,
+          disabled: true,
+          isFocused: false,
+          isHovered: false,
+          isPressed: false,
+        }),
+      );
     });
 
     it('updates render props on interaction', async () => {
       const user = userEvent.setup();
-      const renderFn = jest.fn(() => <span>Render prop content</span>);
+      const renderFn = jest.fn((_props: CheckboxRenderProps) => <span>Render prop content</span>);
 
       render(<Checkbox>{renderFn}</Checkbox>);
       const checkbox = screen.getByRole('checkbox');
 
       await user.hover(checkbox);
 
-      expect(renderFn).toHaveBeenLastCalledWith({
-        checked: false,
-        isDisabled: false,
-        isFocused: false,
-        isHovered: true,
-        isPressed: false,
+      expect(renderFn).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          checked: false,
+          disabled: false,
+          isFocused: false,
+          isHovered: true,
+          isPressed: false,
+        }),
+      );
+    });
+
+    it('provides setChecked function that updates state', async () => {
+      const handleChange = jest.fn();
+      let setCheckedFn: ((checked: boolean | 'indeterminate') => void) | undefined;
+
+      render(
+        <Checkbox onChange={handleChange}>
+          {({ checked, setChecked }) => {
+            setCheckedFn = setChecked;
+            return <span>{checked ? 'Checked' : 'Unchecked'}</span>;
+          }}
+        </Checkbox>,
+      );
+
+      expect(screen.getByText('Unchecked')).toBeInTheDocument();
+
+      // Call setChecked programmatically
+      act(() => {
+        setCheckedFn?.(true);
       });
+
+      expect(screen.getByText('Checked')).toBeInTheDocument();
+      expect(handleChange).toHaveBeenCalledWith(true);
     });
   });
 

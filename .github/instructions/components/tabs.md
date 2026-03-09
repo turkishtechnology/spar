@@ -34,40 +34,48 @@ The Tabs component provides a set of layered sections of content, known as tab p
 ### Tabs (Root)
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
+| `id` | `string` | No | `undefined` | Custom base ID for trigger/panel ARIA relationships |
 | `value` | `string` | No | `undefined` | Controlled selected tab value |
-| `defaultValue` | `string` | No | First tab value | Uncontrolled initial tab selection |
+| `defaultValue` | `string` | No | `undefined` | Uncontrolled initial tab selection |
 | `onValueChange` | `(value: string) => void` | No | `undefined` | Callback when tab selection changes |
 | `orientation` | `"horizontal" \| "vertical"` | No | `"horizontal"` | Tabs orientation affecting keyboard navigation |
-| `dir` | `"ltr" \| "rtl"` | No | `"ltr"` | Text direction for arrow key navigation |
 | `activationMode` | `"automatic" \| "manual"` | No | `"automatic"` | Whether tabs activate on focus or require explicit activation |
-| `as` | `React.ElementType` | No | `"div"` | Polymorphic component type |
-| `children` | `React.ReactNode` | Yes | - | TabsList and TabsContent components |
+| `as` | `ElementType` | No | `"div"` | Polymorphic component type |
+| `children` | `React.ReactNode` | No | - | TabsList and TabsContent components |
 
 **Note**: All components also accept standard HTML attributes (className, style, data-*, aria-*, etc.) which are forwarded to the underlying element.
 
 ### TabsList
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `loop` | `boolean` | No | `true` | Whether arrow key navigation wraps around |
-| `as` | `React.ElementType` | No | `"div"` | Polymorphic component type |
-| `children` | `React.ReactNode` | Yes | - | TabsTrigger components |
+| `as` | `ElementType` | No | `"div"` | Polymorphic component type |
+| `children` | `React.ReactNode` | No | - | TabsTrigger components |
 
 ### TabsTrigger
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `value` | `string` | Yes | - | Unique identifier for the tab |
 | `disabled` | `boolean` | No | `false` | Disables this specific tab |
-| `asChild` | `boolean` | No | `false` | Render as child element instead of button (for advanced composition) |
-| `as` | `React.ElementType` | No | `"button"` | Polymorphic component type |
-| `children` | `React.ReactNode` | Yes | - | Tab trigger content (label text) |
+| `as` | `ElementType` | No | `"button"` | Polymorphic component type |
+| `autoFocus` | `boolean` | No | `false` | Whether this tab trigger receives focus on mount |
+| `children` | `ReactNode \| ((state: TabsTriggerRenderProps) => ReactNode)` | No | - | Tab trigger content or render function |
+
+### TabsTriggerRenderProps
+| Property | Type | Description |
+|----------|------|-------------|
+| `isSelected` | `boolean` | Whether this tab is currently selected |
+| `select` | `() => void` | Function to select this tab programmatically |
+| `disabled` | `boolean` | Whether this tab is disabled |
+| `isFocused` | `boolean` | Whether this tab is currently focused |
+| `orientation` | `Orientation` | The tab's orientation |
 
 ### TabsContent
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `value` | `string` | Yes | - | Unique identifier matching a TabsTrigger value |
 | `forceMount` | `boolean` | No | `false` | Force content to remain mounted when not active |
-| `as` | `React.ElementType` | No | `"div"` | Polymorphic component type |
-| `children` | `React.ReactNode` | Yes | - | Tab panel content |
+| `as` | `ElementType` | No | `"div"` | Polymorphic component type |
+| `children` | `React.ReactNode` | No | - | Tab panel content |
 
 ## 3. Behavior Matrix
 
@@ -85,7 +93,6 @@ The Tabs component provides a set of layered sections of content, known as tab p
 | Horizontal orientation | Up arrow | Focus previous tab (alternative) | Focus management, selection if automatic |
 | Vertical orientation | Down arrow | Focus next tab | Focus management, selection if automatic |
 | Vertical orientation | Up arrow | Focus previous tab | Focus management, selection if automatic |
-| RTL direction | Left arrow | Focus next tab (right-to-left) | Focus management, reversed navigation |
 | Focus on tab | Home | Focus first non-disabled tab | Focus management, selection if automatic |
 | Focus on tab | End | Focus last non-disabled tab | Focus management, selection if automatic |
 | Tab navigation | Tab key | Exit tablist, focus content or next focusable | Focus moves to tab panel or next element |
@@ -103,25 +110,21 @@ The Tabs component provides a set of layered sections of content, known as tab p
 - **Arrow Keys**: 
   - Horizontal orientation: Left/Right arrows navigate between tabs
   - Vertical orientation: Up/Down arrows navigate between tabs
-  - RTL support: Reverses Left/Right arrow behavior
 - **Home**: Moves focus to the first non-disabled tab
 - **End**: Moves focus to the last non-disabled tab
 - **Enter/Space**: In manual activation mode, activates the focused tab
-- **Page Down**: When focus is on a tab, moves focus to the next tab and activates it (optional enhancement)
-- **Page Up**: When focus is on a tab, moves focus to the previous tab and activates it (optional enhancement)
 
 ### Focus Management
 - Focus moves to the currently selected tab when entering the tablist via Tab key
 - When a tab is activated, focus typically remains on the tab trigger (not the content)
 - Tab panel content should be programmatically focusable (`tabindex="0"`) to allow screen readers to navigate to it
 - Disabled tabs are skipped during keyboard navigation
-- Focus wraps around when `loop` is true (default behavior)
+- Focus wraps around at the ends of the tab list (always enabled)
 
 ### Screen Reader Announcements
 - Tab selection changes announce the new tab name and "selected" state
 - Tab panels should be properly labeled via `aria-labelledby` pointing to their associated tab
 - Dynamic content changes within panels should use appropriate live regions
-- Tab count and position can be announced: "Tab 2 of 4" using `aria-setsize` and `aria-posinset`
 
 ### Name/Role/Value Exposure
 - Each tab has an accessible name (from its text content or `aria-label`)
@@ -153,9 +156,7 @@ const useTabsState = (props: {
 // Focus management for keyboard navigation
 const useTabsKeyboard = (props: {
   orientation: TabsOrientation;
-  dir: "ltr" | "rtl";
   activationMode: "automatic" | "manual";
-  loop: boolean;
 }) => {
   // Handle arrow key navigation
   // Handle Home/End keys
@@ -170,7 +171,6 @@ interface TabsContextValue {
   selectedValue: string;
   onValueChange: (value: string) => void;
   orientation: "horizontal" | "vertical";
-  dir: "ltr" | "rtl";
   activationMode: "automatic" | "manual";
   // Internal refs and focus management
 }
@@ -201,7 +201,6 @@ interface TabsContextValue {
 
 #### Tabs (Root)
 - `data-orientation`: `"horizontal" | "vertical"` - Current orientation
-- `data-dir`: `"ltr" | "rtl"` - Text direction
 
 #### TabsList
 - `data-orientation`: `"horizontal" | "vertical"` - Current orientation
@@ -210,7 +209,6 @@ interface TabsContextValue {
 - `data-state`: `"active" | "inactive"` - Selection state
 - `data-disabled`: Present when disabled
 - `data-orientation`: `"horizontal" | "vertical"` - Current orientation
-- `data-focus-visible`: Present when focused via keyboard (not mouse)
 
 #### TabsContent
 - `data-state`: `"active" | "inactive"` - Visibility state
@@ -221,7 +219,6 @@ These data attributes enable CSS selectors for styling different states:
 - Active/inactive tabs: `[data-state="active"]` / `[data-state="inactive"]`
 - Disabled tabs: `[data-disabled]`
 - Orientation-based layouts: `[data-orientation="vertical"]`
-- Direction-based positioning: `[data-dir="rtl"]`
 
 ## 7. Test Coverage Plan
 
@@ -231,7 +228,6 @@ These data attributes enable CSS selectors for styling different states:
 - **Keyboard Navigation**: Arrow keys, Home/End, Tab behavior
 - **Activation Modes**: Automatic vs manual activation
 - **Orientation**: Horizontal vs vertical navigation patterns
-- **Direction**: LTR vs RTL arrow key behavior
 - **Disabled States**: Skipping disabled tabs
 - **Edge Cases**: Empty tablist, single tab, all tabs disabled
 
@@ -308,7 +304,7 @@ These data attributes enable CSS selectors for styling different states:
 - [ ] Roving tabindex pattern for single tab stop
 - [ ] Proper focus management and visual indicators
 - [ ] Screen reader announcements for state changes
-- [ ] RTL and orientation support
+- [ ] Orientation support
 
 #### Testing
 - [ ] Unit tests for all component behaviors

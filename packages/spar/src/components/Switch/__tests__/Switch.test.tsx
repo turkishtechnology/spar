@@ -3,456 +3,188 @@ import userEvent from '@testing-library/user-event';
 import { Switch } from '../Switch';
 
 describe('Switch', () => {
-  it('should render correctly', () => {
-    render(<Switch>Toggle me</Switch>);
+  it('renders with switch semantics and accessible name', () => {
+    render(<Switch>Enable notifications</Switch>);
 
-    const switchElement = screen.getByRole('switch');
-    expect(switchElement).toBeInTheDocument();
-    expect(switchElement).toHaveTextContent('Toggle me');
+    expect(screen.getByRole('switch', { name: 'Enable notifications' })).toBeInTheDocument();
   });
 
-  it('should have correct default attributes', () => {
-    render(<Switch>Toggle me</Switch>);
+  it('toggles internal state in uncontrolled mode and fires onChange', async () => {
+    const user = userEvent.setup();
+    const handleChange = jest.fn();
+
+    render(<Switch onChange={handleChange}>Toggle me</Switch>);
 
     const switchElement = screen.getByRole('switch');
-    expect(switchElement).toHaveAttribute('role', 'switch');
     expect(switchElement).toHaveAttribute('aria-checked', 'false');
-    expect(switchElement).toHaveAttribute('data-switch', '');
-    expect(switchElement).toHaveAttribute('data-state', 'unchecked');
-    expect(switchElement).toHaveAttribute('tabindex', '0');
-    expect(switchElement).not.toHaveAttribute('data-checked');
-    expect(switchElement).not.toHaveAttribute('data-disabled');
-    expect(switchElement).not.toHaveAttribute('aria-disabled');
+
+    await user.click(switchElement);
+
+    expect(handleChange).toHaveBeenCalledWith(true);
+    expect(switchElement).toHaveAttribute('aria-checked', 'true');
+    expect(switchElement).toHaveAttribute('data-state', 'checked');
   });
 
-  it('should render as different elements when as prop is provided', () => {
-    render(<Switch as='div'>Toggle me</Switch>);
+  it('behaves as controlled when checked prop is provided', async () => {
+    const user = userEvent.setup();
+    const handleChange = jest.fn();
+
+    const { rerender } = render(
+      <Switch checked={false} onChange={handleChange}>
+        Toggle me
+      </Switch>,
+    );
 
     const switchElement = screen.getByRole('switch');
-    expect(switchElement.tagName).toBe('DIV');
+    await user.click(switchElement);
+
+    expect(handleChange).toHaveBeenCalledWith(true);
+    expect(switchElement).toHaveAttribute('aria-checked', 'false');
+
+    rerender(
+      <Switch checked={true} onChange={handleChange}>
+        Toggle me
+      </Switch>,
+    );
+
+    expect(screen.getByRole('switch')).toHaveAttribute('aria-checked', 'true');
   });
 
-  describe('Controlled mode', () => {
-    it('should respect controlled checked state', () => {
-      const { rerender } = render(<Switch checked={false}>Toggle me</Switch>);
+  it('supports Space and Enter keyboard activation, but ignores other keys', async () => {
+    const user = userEvent.setup();
+    const handleChange = jest.fn();
 
-      let switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('aria-checked', 'false');
-      expect(switchElement).toHaveAttribute('data-state', 'unchecked');
+    render(<Switch onChange={handleChange}>Keyboard switch</Switch>);
 
-      rerender(<Switch checked={true}>Toggle me</Switch>);
+    const switchElement = screen.getByRole('switch');
+    switchElement.focus();
 
-      switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('aria-checked', 'true');
-      expect(switchElement).toHaveAttribute('data-state', 'checked');
-      expect(switchElement).toHaveAttribute('data-checked', '');
-    });
+    await user.keyboard(' ');
+    await user.keyboard('{Enter}');
+    await user.keyboard('{Escape}');
 
-    it('should call onChange when toggled in controlled mode', async () => {
-      const user = userEvent.setup();
-      const handleChange = jest.fn();
-
-      render(
-        <Switch checked={false} onChange={handleChange}>
-          Toggle me
-        </Switch>,
-      );
-
-      const switchElement = screen.getByRole('switch');
-      await user.click(switchElement);
-
-      expect(handleChange).toHaveBeenCalledWith(true);
-      expect(handleChange).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not change state internally in controlled mode', async () => {
-      const user = userEvent.setup();
-      const handleChange = jest.fn();
-
-      render(
-        <Switch checked={false} onChange={handleChange}>
-          Toggle me
-        </Switch>,
-      );
-
-      const switchElement = screen.getByRole('switch');
-      await user.click(switchElement);
-
-      // State should not change internally
-      expect(switchElement).toHaveAttribute('aria-checked', 'false');
-    });
+    expect(handleChange).toHaveBeenNthCalledWith(1, true);
+    expect(handleChange).toHaveBeenNthCalledWith(2, false);
+    expect(handleChange).toHaveBeenCalledTimes(2);
   });
 
-  describe('Uncontrolled mode', () => {
-    it('should use defaultChecked for initial state', () => {
-      render(<Switch defaultChecked={true}>Toggle me</Switch>);
+  it('prevents state changes when disabled or readOnly', async () => {
+    const user = userEvent.setup();
+    const disabledChange = jest.fn();
+    const readonlyChange = jest.fn();
 
-      const switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('aria-checked', 'true');
-      expect(switchElement).toHaveAttribute('data-state', 'checked');
-      expect(switchElement).toHaveAttribute('data-checked', '');
-    });
+    render(
+      <>
+        <Switch disabled onChange={disabledChange}>
+          Disabled switch
+        </Switch>
+        <Switch readOnly onChange={readonlyChange}>
+          Read only switch
+        </Switch>
+      </>,
+    );
 
-    it('should toggle state internally in uncontrolled mode', async () => {
-      const user = userEvent.setup();
+    const disabledSwitch = screen.getByRole('switch', { name: 'Disabled switch' });
+    const readonlySwitch = screen.getByRole('switch', { name: 'Read only switch' });
 
-      render(<Switch defaultChecked={false}>Toggle me</Switch>);
+    await user.click(disabledSwitch);
+    readonlySwitch.focus();
+    await user.keyboard(' ');
 
-      const switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('aria-checked', 'false');
-
-      await user.click(switchElement);
-
-      expect(switchElement).toHaveAttribute('aria-checked', 'true');
-      expect(switchElement).toHaveAttribute('data-state', 'checked');
-    });
-
-    it('should call onChange when toggled in uncontrolled mode', async () => {
-      const user = userEvent.setup();
-      const handleChange = jest.fn();
-
-      render(
-        <Switch defaultChecked={false} onChange={handleChange}>
-          Toggle me
-        </Switch>,
-      );
-
-      const switchElement = screen.getByRole('switch');
-      await user.click(switchElement);
-
-      expect(handleChange).toHaveBeenCalledWith(true);
-      expect(handleChange).toHaveBeenCalledTimes(1);
-    });
+    expect(disabledChange).not.toHaveBeenCalled();
+    expect(readonlyChange).not.toHaveBeenCalled();
+    expect(disabledSwitch).toHaveAttribute('aria-checked', 'false');
+    expect(readonlySwitch).toHaveAttribute('aria-readonly', 'true');
   });
 
-  describe('Disabled state', () => {
-    it('should apply disabled attributes correctly', () => {
-      render(<Switch isDisabled>Toggle me</Switch>);
+  it('syncs form submission value when name is provided', async () => {
+    const user = userEvent.setup();
+    const handleSubmit = jest.fn();
 
-      const switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('aria-disabled', 'true');
-      expect(switchElement).toHaveAttribute('data-disabled', '');
-      expect(switchElement).toHaveAttribute('tabindex', '-1');
-      expect(switchElement).toHaveAttribute('disabled');
-    });
-
-    it('should not respond to clicks when disabled', async () => {
-      const user = userEvent.setup();
-      const handleChange = jest.fn();
-
-      render(
-        <Switch isDisabled onChange={handleChange}>
-          Toggle me
-        </Switch>,
-      );
-
-      const switchElement = screen.getByRole('switch');
-      await user.click(switchElement);
-
-      expect(handleChange).not.toHaveBeenCalled();
-      expect(switchElement).toHaveAttribute('aria-checked', 'false');
-    });
-
-    it('should not respond to keyboard events when disabled', async () => {
-      const user = userEvent.setup();
-      const handleChange = jest.fn();
-
-      render(
-        <Switch isDisabled onChange={handleChange}>
-          Toggle me
-        </Switch>,
-      );
-
-      const switchElement = screen.getByRole('switch');
-      switchElement.focus();
-      await user.keyboard(' ');
-      await user.keyboard('{Enter}');
-
-      expect(handleChange).not.toHaveBeenCalled();
-      expect(switchElement).toHaveAttribute('aria-checked', 'false');
-    });
-  });
-
-  describe('Read-only state', () => {
-    it('should apply read-only attributes correctly', () => {
-      render(<Switch isReadOnly>Toggle me</Switch>);
-
-      const switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('aria-readonly', 'true');
-      expect(switchElement).toHaveAttribute('data-readonly', '');
-      expect(switchElement).toHaveAttribute('tabindex', '0'); // Should still be focusable
-      expect(switchElement).not.toHaveAttribute('disabled');
-    });
-
-    it('should not respond to clicks when read-only', async () => {
-      const user = userEvent.setup();
-      const handleChange = jest.fn();
-
-      render(
-        <Switch isReadOnly onChange={handleChange}>
-          Toggle me
-        </Switch>,
-      );
-
-      const switchElement = screen.getByRole('switch');
-      await user.click(switchElement);
-
-      expect(handleChange).not.toHaveBeenCalled();
-      expect(switchElement).toHaveAttribute('aria-checked', 'false');
-    });
-
-    it('should not respond to keyboard events when read-only', async () => {
-      const user = userEvent.setup();
-      const handleChange = jest.fn();
-
-      render(
-        <Switch isReadOnly onChange={handleChange}>
-          Toggle me
-        </Switch>,
-      );
-
-      const switchElement = screen.getByRole('switch');
-      switchElement.focus();
-      await user.keyboard(' ');
-      await user.keyboard('{Enter}');
-
-      expect(handleChange).not.toHaveBeenCalled();
-      expect(switchElement).toHaveAttribute('aria-checked', 'false');
-    });
-  });
-
-  describe('Keyboard interactions', () => {
-    it('should toggle on Space key', async () => {
-      const user = userEvent.setup();
-      const handleChange = jest.fn();
-
-      render(<Switch onChange={handleChange}>Toggle me</Switch>);
-
-      const switchElement = screen.getByRole('switch');
-      switchElement.focus();
-      await user.keyboard(' ');
-
-      expect(handleChange).toHaveBeenCalledWith(true);
-    });
-
-    it('should toggle on Enter key', async () => {
-      const user = userEvent.setup();
-      const handleChange = jest.fn();
-
-      render(<Switch onChange={handleChange}>Toggle me</Switch>);
-
-      const switchElement = screen.getByRole('switch');
-      switchElement.focus();
-      await user.keyboard('{Enter}');
-
-      expect(handleChange).toHaveBeenCalledWith(true);
-    });
-
-    it('should not toggle on other keys', async () => {
-      const user = userEvent.setup();
-      const handleChange = jest.fn();
-
-      render(<Switch onChange={handleChange}>Toggle me</Switch>);
-
-      const switchElement = screen.getByRole('switch');
-      switchElement.focus();
-      await user.keyboard('{Escape}');
-      await user.keyboard('{Tab}');
-      await user.keyboard('a');
-
-      expect(handleChange).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Form integration', () => {
-    it('should render hidden input when name is provided', () => {
-      render(<Switch name='settings'>Toggle me</Switch>);
-
-      const hiddenInput = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(hiddenInput).toBeInTheDocument();
-      expect(hiddenInput).toHaveAttribute('name', 'settings');
-      expect(hiddenInput).toHaveAttribute('value', 'on');
-      expect(hiddenInput).toHaveAttribute('tabindex', '-1');
-      expect(hiddenInput).toHaveAttribute('aria-hidden', 'true');
-      expect(hiddenInput).toHaveStyle({ position: 'absolute', opacity: '0' });
-    });
-
-    it('should not render hidden input when name is not provided', () => {
-      render(<Switch>Toggle me</Switch>);
-
-      const hiddenInput = document.querySelector('input[type="checkbox"]');
-      expect(hiddenInput).not.toBeInTheDocument();
-    });
-
-    it('should sync hidden input checked state', async () => {
-      const user = userEvent.setup();
-
-      render(<Switch name='settings'>Toggle me</Switch>);
-
-      const switchElement = screen.getByRole('switch');
-      const hiddenInput = document.querySelector('input[type="checkbox"]') as HTMLInputElement;
-
-      expect(hiddenInput.checked).toBe(false);
-
-      await user.click(switchElement);
-
-      expect(hiddenInput.checked).toBe(true);
-    });
-
-    it('should use custom value', () => {
-      render(
+    render(
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          const formData = new FormData(event.currentTarget);
+          handleSubmit(formData.get('settings'));
+        }}
+      >
         <Switch name='settings' value='enabled'>
-          Toggle me
-        </Switch>,
-      );
+          Form switch
+        </Switch>
+        <button type='submit'>Save</button>
+      </form>,
+    );
 
-      const hiddenInput = document.querySelector('input[type="checkbox"]');
-      expect(hiddenInput).toHaveAttribute('value', 'enabled');
-    });
+    const switchElement = screen.getByRole('switch', { name: 'Form switch' });
+    const submitButton = screen.getByRole('button', { name: 'Save' });
 
-    it('should associate with form', () => {
-      render(
-        <Switch name='settings' form='my-form'>
-          Toggle me
-        </Switch>,
-      );
+    await user.click(submitButton);
+    expect(handleSubmit).toHaveBeenLastCalledWith(null);
 
-      const hiddenInput = document.querySelector('input[type="checkbox"]');
-      expect(hiddenInput).toHaveAttribute('form', 'my-form');
-    });
+    await user.click(switchElement);
+    await user.click(submitButton);
 
-    it('should apply required attribute', () => {
-      render(
-        <Switch name='settings' isRequired>
-          Toggle me
-        </Switch>,
-      );
-
-      const switchElement = screen.getByRole('switch');
-      const hiddenInput = document.querySelector('input[type="checkbox"]');
-
-      expect(switchElement).toHaveAttribute('data-required', '');
-      expect(hiddenInput).toHaveAttribute('required');
-    });
+    expect(handleSubmit).toHaveBeenLastCalledWith('enabled');
   });
 
-  describe('ARIA attributes', () => {
-    it('should support aria-label', () => {
-      render(<Switch aria-label='Enable notifications' />);
+  it('forwards aria labeling relationships', () => {
+    render(
+      <>
+        <span id='switch-label'>Notifications</span>
+        <span id='switch-description'>Controls push notifications</span>
+        <Switch aria-labelledby='switch-label' aria-describedby='switch-description' />
+      </>,
+    );
 
-      const switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('aria-label', 'Enable notifications');
-    });
-
-    it('should support aria-labelledby', () => {
-      render(
-        <div>
-          <label id='switch-label' htmlFor='switch-element'>
-            Enable notifications
-          </label>
-          <Switch id='switch-element' aria-labelledby='switch-label' />
-        </div>,
-      );
-
-      const switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('aria-labelledby', 'switch-label');
-    });
-
-    it('should support aria-describedby', () => {
-      render(
-        <div>
-          <Switch aria-describedby='switch-description'>Toggle me</Switch>
-          <div id='switch-description'>This setting controls notifications</div>
-        </div>,
-      );
-
-      const switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('aria-describedby', 'switch-description');
-    });
+    const switchElement = screen.getByRole('switch', { name: 'Notifications' });
+    expect(switchElement).toHaveAttribute('aria-labelledby', 'switch-label');
+    expect(switchElement).toHaveAttribute('aria-describedby', 'switch-description');
   });
 
-  describe('Custom props', () => {
-    it('should forward custom props to the element', () => {
-      render(
-        <Switch data-testid='custom-switch' className='custom-class' style={{ color: 'red' }}>
-          Toggle me
-        </Switch>,
-      );
+  it('uses provided id and generates unique ids when omitted', () => {
+    const { container } = render(
+      <>
+        <Switch id='custom-switch-id'>With custom id</Switch>
+        <Switch>Generated A</Switch>
+        <Switch>Generated B</Switch>
+      </>,
+    );
 
-      const switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('data-testid', 'custom-switch');
-      expect(switchElement).toHaveClass('custom-class');
-      expect(switchElement).toHaveStyle('color: rgb(255, 0, 0)');
-    });
+    const customSwitch = screen.getByRole('switch', { name: 'With custom id' });
+    const allSwitches = container.querySelectorAll('[role="switch"]');
+    const generatedIdA = allSwitches[1]?.getAttribute('id');
+    const generatedIdB = allSwitches[2]?.getAttribute('id');
 
-    it('should generate unique IDs when not provided', () => {
-      const { container } = render(
-        <div>
-          <Switch>Switch 1</Switch>
-          <Switch>Switch 2</Switch>
-        </div>,
-      );
-
-      const switches = container.querySelectorAll('[role="switch"]');
-      const id1 = switches[0]?.getAttribute('id');
-      const id2 = switches[1]?.getAttribute('id');
-
-      expect(id1).toBeTruthy();
-      expect(id2).toBeTruthy();
-      expect(id1).not.toBe(id2);
-    });
-
-    it('should use provided ID', () => {
-      render(<Switch id='custom-id'>Toggle me</Switch>);
-
-      const switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveAttribute('id', 'custom-id');
-    });
+    expect(customSwitch).toHaveAttribute('id', 'custom-switch-id');
+    expect(generatedIdA).toBeTruthy();
+    expect(generatedIdB).toBeTruthy();
+    expect(generatedIdA).not.toBe(generatedIdB);
   });
 
-  describe('Edge cases', () => {
-    it('should handle rapid toggling', async () => {
-      const user = userEvent.setup();
-      const handleChange = jest.fn();
+  it('supports render-prop children and setChecked API', async () => {
+    const user = userEvent.setup();
 
-      render(<Switch onChange={handleChange}>Toggle me</Switch>);
+    render(
+      <Switch>
+        {({ checked, setChecked }) => (
+          <span
+            onClick={(event) => {
+              event.stopPropagation();
+              setChecked(!checked);
+            }}
+          >
+            {checked ? 'On' : 'Off'}
+          </span>
+        )}
+      </Switch>,
+    );
 
-      const switchElement = screen.getByRole('switch');
+    const switchElement = screen.getByRole('switch');
+    const label = screen.getByText('Off');
+    await user.click(label);
 
-      // Rapid clicks
-      await user.click(switchElement);
-      await user.click(switchElement);
-      await user.click(switchElement);
-
-      expect(handleChange).toHaveBeenCalledTimes(3);
-      expect(handleChange).toHaveBeenNthCalledWith(1, true);
-      expect(handleChange).toHaveBeenNthCalledWith(2, false);
-      expect(handleChange).toHaveBeenNthCalledWith(3, true);
-    });
-
-    it('should handle missing onChange gracefully', async () => {
-      const user = userEvent.setup();
-
-      render(<Switch>Toggle me</Switch>);
-
-      const switchElement = screen.getByRole('switch');
-
-      // Should not throw error
-      expect(() => user.click(switchElement)).not.toThrow();
-    });
-
-    it('should prevent default on keyboard events', async () => {
-      const user = userEvent.setup();
-      const handleKeyDown = jest.fn();
-
-      render(<Switch onKeyDown={handleKeyDown}>Toggle me</Switch>);
-
-      const switchElement = screen.getByRole('switch');
-      switchElement.focus();
-      await user.keyboard(' ');
-
-      // The event should have been prevented (though we can't directly test preventDefault)
-      expect(handleKeyDown).toHaveBeenCalled();
-    });
+    expect(switchElement).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByText('On')).toBeInTheDocument();
   });
 });

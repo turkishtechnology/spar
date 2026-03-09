@@ -71,7 +71,7 @@ export default defineConfig([
     ...baseConfig,
     output: {
       path: __dirname + '/dist',
-      filename: 'index.js',
+      filename: 'index.cjs',
       library: {
         type: 'commonjs2',
       },

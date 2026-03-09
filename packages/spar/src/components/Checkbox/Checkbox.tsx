@@ -1,4 +1,6 @@
-import { useId, useState, useRef, useEffect } from 'react';
+import { useId, useState, useRef, useEffect, useMemo, ElementType } from 'react';
+import { useMergedRef, useAutoFocus, useControlledState } from '@/hooks';
+import { visuallyHidden } from '@/utils';
 import type { CheckboxProps, CheckboxRenderProps } from './types';
 import type { CheckedState } from '../../types';
 
@@ -6,19 +8,19 @@ import type { CheckedState } from '../../types';
  * Headless checkbox component providing accessibility and behavior without styling.
  * Supports dual-state and tri-state functionality with complete ARIA compliance.
  */
-export const Checkbox = ({
-  as: Component = 'span',
+export const Checkbox = <T extends ElementType = 'span'>({
+  as,
   ref,
   checked: controlledChecked,
   defaultChecked = false,
   onChange,
-  isDisabled = false,
-  isReadOnly = false,
-  isRequired = false,
+  disabled = false,
+  readOnly = false,
+  required = false,
   name,
   value = 'on',
   form,
-  shouldAutoFocus = false,
+  autoFocus = false,
   children,
   id: providedId,
   className,
@@ -29,15 +31,18 @@ export const Checkbox = ({
   onKeyDown,
   tabIndex = 0,
   ...restProps
-}: CheckboxProps) => {
+}: CheckboxProps<T>) => {
+  const Component = as || 'span';
   // Generate stable ID
   const generatedId = useId();
   const id = providedId ?? generatedId;
 
-  // State management - controlled vs uncontrolled
-  const isControlled = controlledChecked !== undefined;
-  const [internalChecked, setInternalChecked] = useState<CheckedState>(defaultChecked);
-  const checked = isControlled ? controlledChecked : internalChecked;
+  // State management - controlled/uncontrolled
+  const [checked = defaultChecked, updateChecked] = useControlledState<CheckedState>(
+    controlledChecked,
+    defaultChecked,
+    onChange,
+  );
 
   // Interaction state
   const [isFocused, setIsFocused] = useState(false);
@@ -47,13 +52,10 @@ export const Checkbox = ({
   // Refs
   const elementRef = useRef<HTMLElement>(null);
   const hiddenInputRef = useRef<HTMLInputElement>(null);
+  const mergedRef = useMergedRef(elementRef, ref);
 
   // Auto focus on mount
-  useEffect(() => {
-    if (shouldAutoFocus && elementRef.current) {
-      elementRef.current.focus();
-    }
-  }, [shouldAutoFocus]);
+  useAutoFocus(elementRef, autoFocus);
 
   // Sync hidden input with checkbox state
   useEffect(() => {
@@ -65,15 +67,10 @@ export const Checkbox = ({
 
   // Toggle checked state
   const handleToggleChecked = () => {
-    if (isDisabled || isReadOnly) return;
+    if (disabled || readOnly) return;
 
     const newChecked: CheckedState = checked === 'indeterminate' ? true : !checked;
-
-    if (!isControlled) {
-      setInternalChecked(newChecked);
-    }
-
-    onChange?.(newChecked);
+    updateChecked(newChecked);
   };
 
   // Event handlers
@@ -89,7 +86,15 @@ export const Checkbox = ({
       event.preventDefault();
       handleToggleChecked();
     }
+
     // Enter key submits form (if in form) - no state change
+    if (event.key === 'Enter') {
+      const form = elementRef.current?.closest('form');
+      if (form) {
+        event.preventDefault();
+        form.requestSubmit();
+      }
+    }
 
     onKeyDown?.(event);
   };
@@ -105,7 +110,7 @@ export const Checkbox = ({
   };
 
   const handleMouseEnter = () => {
-    if (!isDisabled) {
+    if (!disabled) {
       setIsHovered(true);
     }
   };
@@ -116,7 +121,7 @@ export const Checkbox = ({
   };
 
   const handleMouseDown = () => {
-    if (!isDisabled) {
+    if (!disabled) {
       setIsPressed(true);
     }
   };
@@ -127,55 +132,105 @@ export const Checkbox = ({
 
   // Data attributes for styling
   const dataAttributes: Record<string, string | undefined> = {
-    'data-checked': checked === true ? 'true' : undefined,
-    'data-indeterminate': checked === 'indeterminate' ? 'true' : undefined,
-    'data-disabled': isDisabled ? 'true' : undefined,
-    'data-focus': isFocused ? 'true' : undefined,
-    'data-hover': isHovered ? 'true' : undefined,
-    'data-active': isPressed ? 'true' : undefined,
+    'data-checked': checked === true ? '' : undefined,
+    'data-indeterminate': checked === 'indeterminate' ? '' : undefined,
+    'data-disabled': disabled ? '' : undefined,
+    'data-readonly': readOnly ? '' : undefined,
+    'data-focus': isFocused ? '' : undefined,
+    'data-hover': isHovered ? '' : undefined,
+    'data-active': isPressed ? '' : undefined,
     'data-invalid': undefined, // Will be set by validation logic
-    'data-required': isRequired ? 'true' : undefined,
+    'data-required': required ? '' : undefined,
   };
 
-  // ARIA attributes
-  const ariaAttributes = {
-    role: 'checkbox',
-    'aria-checked': checked === 'indeterminate' ? 'mixed' : checked,
-    'aria-disabled': isDisabled ? 'true' : undefined,
-    'aria-invalid': undefined, // Will be set by validation logic
-    'aria-required': isRequired ? 'true' : undefined,
-    tabIndex: isDisabled ? -1 : tabIndex,
+  // Function to programmatically set checked state
+  const setCheckedState = (newChecked: CheckedState) => {
+    if (disabled || readOnly) return;
+    updateChecked(newChecked);
   };
 
   // Render props for children function
   const renderProps: CheckboxRenderProps = {
     checked,
-    isDisabled,
+    setChecked: setCheckedState,
+    disabled,
+    readOnly,
     isFocused,
     isHovered,
     isPressed,
   };
 
-  // Extract known props to avoid spreading to DOM
+  // ARIA attributes - consistent with Button component pattern
+  const ariaAttributes = useMemo(() => {
+    const attrs: Record<string, boolean | string> = {
+      role: 'checkbox',
+      'aria-checked': checked === 'indeterminate' ? 'mixed' : checked,
+    };
+
+    // Disabled state - only add aria-disabled for non-native button elements
+    // Native buttons already communicate disabled state via the disabled attribute
+    if (disabled && Component !== 'button') {
+      attrs['aria-disabled'] = true;
+    }
+
+    // Read-only state
+    if (readOnly) {
+      attrs['aria-readonly'] = true;
+    }
+
+    // Required state
+    if (required) {
+      attrs['aria-required'] = true;
+    }
+
+    // Invalid state - placeholder for validation logic
+    // attrs['aria-invalid'] = false; // Uncomment when validation is implemented
+
+    return attrs;
+  }, [checked, disabled, readOnly, required, Component]);
+
+  // Build props for the element
+  const isNativeButton = Component === 'button';
+  const elementProps: Record<string, unknown> = {
+    ref: mergedRef,
+    id,
+    className,
+    style,
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    onFocus: handleFocus,
+    onBlur: handleBlur,
+    onMouseEnter: handleMouseEnter,
+    onMouseLeave: handleMouseLeave,
+    onMouseDown: handleMouseDown,
+    onMouseUp: handleMouseUp,
+    ...dataAttributes,
+    ...ariaAttributes,
+    ...restProps,
+    tabIndex: disabled ? -1 : tabIndex,
+  };
+
+  // Add button-specific props when rendering as button
+  if (isNativeButton) {
+    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).type = 'button';
+    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = disabled;
+    // Remove aria-disabled if present in restProps (native button uses disabled attribute)
+    if ('aria-disabled' in elementProps) {
+      delete elementProps['aria-disabled'];
+    }
+  } else {
+    // Remove native disabled and type attributes if present in restProps
+    if ('disabled' in elementProps) {
+      delete elementProps['disabled'];
+    }
+    if ('type' in elementProps) {
+      delete elementProps['type'];
+    }
+  }
+
   return (
     <>
-      <Component
-        ref={ref}
-        id={id}
-        className={className}
-        style={style}
-        onClick={handleClick}
-        onKeyDown={handleKeyDown}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        {...ariaAttributes}
-        {...dataAttributes}
-        {...restProps}
-      >
+      <Component {...elementProps}>
         {typeof children === 'function' ? children(renderProps) : children}
       </Component>
 
@@ -189,17 +244,7 @@ export const Checkbox = ({
           form={form}
           checked={checked === true}
           onChange={() => {}} // Controlled by main component
-          style={{
-            position: 'absolute',
-            width: 1,
-            height: 1,
-            padding: 0,
-            margin: -1,
-            overflow: 'hidden',
-            clip: 'rect(0, 0, 0, 0)',
-            whiteSpace: 'nowrap',
-            border: 0,
-          }}
+          style={visuallyHidden}
           tabIndex={-1}
           aria-hidden='true'
         />

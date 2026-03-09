@@ -16,7 +16,7 @@ const BasicAccordion = ({
   value,
   defaultValue,
   onValueChange,
-  isDisabled = false,
+  disabled = false,
   orientation = 'vertical',
   children,
   ...rest
@@ -27,7 +27,7 @@ const BasicAccordion = ({
     {...(value !== undefined && { value })}
     {...(defaultValue !== undefined && { defaultValue })}
     {...(onValueChange && { onValueChange })}
-    isDisabled={isDisabled}
+    disabled={disabled}
     orientation={orientation}
     {...rest}
   >
@@ -45,7 +45,7 @@ const BasicAccordion = ({
           </AccordionHeader>
           <AccordionContent>Content 2</AccordionContent>
         </AccordionItem>
-        <AccordionItem value='item-3' isDisabled>
+        <AccordionItem value='item-3' disabled>
           <AccordionHeader>
             <AccordionTrigger>Item 3 (Disabled)</AccordionTrigger>
           </AccordionHeader>
@@ -294,7 +294,7 @@ describe('Accordion', () => {
   describe('Disabled State', () => {
     it('should disable all items when accordion is disabled', async () => {
       const user = userEvent.setup();
-      render(<BasicAccordion isDisabled={true} />);
+      render(<BasicAccordion disabled={true} />);
 
       const triggers = screen.getAllByRole('button');
       for (const trigger of triggers) {
@@ -306,7 +306,7 @@ describe('Accordion', () => {
       expect(triggers[0]!).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('should disable individual items when item isDisabled is true', async () => {
+    it('should disable individual items when item disabled is true', async () => {
       const user = userEvent.setup();
       render(<BasicAccordion />);
 
@@ -354,7 +354,7 @@ describe('Accordion', () => {
       const user = userEvent.setup();
       const onValueChange = jest.fn();
 
-      render(<BasicAccordion isDisabled={true} onValueChange={onValueChange} />);
+      render(<BasicAccordion disabled={true} onValueChange={onValueChange} />);
 
       const trigger = screen.getByRole('button', { name: 'Item 1' });
       await user.click(trigger);
@@ -458,53 +458,13 @@ describe('Accordion', () => {
     });
   });
 
-  describe('coverage edge cases', () => {
-    it('should handle toggle edge cases in controlled single mode', async () => {
+  describe('Behavioral regressions', () => {
+    it('should derive trigger and content ids from provided item id', async () => {
       const user = userEvent.setup();
-      const onValueChange = jest.fn();
 
-      // Test collapsible single mode - clicking same item SHOULD deselect (line 87 - isExpanded ? '')
-      const { rerender } = render(
-        <Accordion type='single' value='item-1' isCollapsible onValueChange={onValueChange}>
-          <AccordionItem value='item-1'>
-            <AccordionHeader>
-              <AccordionTrigger>Item 1</AccordionTrigger>
-            </AccordionHeader>
-            <AccordionContent>Content 1</AccordionContent>
-          </AccordionItem>
-        </Accordion>,
-      );
-
-      let trigger = screen.getByRole('button');
-      await user.click(trigger);
-      expect(onValueChange).toHaveBeenCalledWith(''); // Tests line 87 - isExpanded case
-
-      // Now test expansion case (line 87 - : itemValue)
-      onValueChange.mockClear();
-      rerender(
-        <Accordion type='single' value='' isCollapsible onValueChange={onValueChange}>
-          <AccordionItem value='item-1'>
-            <AccordionHeader>
-              <AccordionTrigger>Item 1</AccordionTrigger>
-            </AccordionHeader>
-            <AccordionContent>Content 1</AccordionContent>
-          </AccordionItem>
-        </Accordion>,
-      );
-
-      trigger = screen.getByRole('button');
-      await user.click(trigger);
-      expect(onValueChange).toHaveBeenCalledWith('item-1'); // Tests line 87 - not expanded case
-    });
-
-    it('should handle collapsible single mode toggle', async () => {
-      const user = userEvent.setup();
-      const onValueChange = jest.fn();
-
-      // Test collapsible single mode - line 90 branch (same as above but ensuring we hit line 90)
       render(
-        <Accordion type='single' isCollapsible value='item-1' onValueChange={onValueChange}>
-          <AccordionItem value='item-1'>
+        <Accordion>
+          <AccordionItem value='item-1' id='faq-item'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
             </AccordionHeader>
@@ -513,210 +473,106 @@ describe('Accordion', () => {
         </Accordion>,
       );
 
-      const trigger = screen.getByRole('button');
+      const trigger = screen.getByRole('button', { name: 'Item 1' });
+      expect(trigger).toHaveAttribute('id', 'faq-item-trigger');
+      expect(trigger).toHaveAttribute('aria-controls', 'faq-item-content');
+
       await user.click(trigger);
-      expect(onValueChange).toHaveBeenCalledWith('');
+
+      const content = screen.getByRole('region');
+      expect(content).toHaveAttribute('id', 'faq-item-content');
+      expect(content).toHaveAttribute('aria-labelledby', 'faq-item-trigger');
     });
 
-    it('should handle non-collapsible single mode early return', async () => {
+    it('should support render-prop children in AccordionTrigger', async () => {
       const user = userEvent.setup();
-      const onValueChange = jest.fn();
 
-      // Test non-collapsible single mode - should NOT change when clicking expanded item (lines 84-85)
-      render(
-        <Accordion type='single' value='item-1' isCollapsible={false} onValueChange={onValueChange}>
-          <AccordionItem value='item-1'>
-            <AccordionHeader>
-              <AccordionTrigger>Item 1</AccordionTrigger>
-            </AccordionHeader>
-            <AccordionContent>Content 1</AccordionContent>
-          </AccordionItem>
-        </Accordion>,
-      );
-
-      const trigger = screen.getByRole('button');
-      await user.click(trigger);
-
-      // Should not call onValueChange - early return on lines 84-85
-      expect(onValueChange).not.toHaveBeenCalled();
-    });
-
-    it('should handle AccordionItem context value branching - line 40 & 49', () => {
-      // Test single type with matching value (line 40)
-      const { rerender } = render(
-        <Accordion type='single' value='item-1'>
-          <AccordionItem value='item-1'>
-            <AccordionHeader>
-              <AccordionTrigger>Item 1</AccordionTrigger>
-            </AccordionHeader>
-            <AccordionContent>Content 1</AccordionContent>
-          </AccordionItem>
-        </Accordion>,
-      );
-
-      expect(screen.getByText('Content 1')).toBeInTheDocument();
-
-      // Test multiple type with array value (line 49)
-      rerender(
-        <Accordion type='multiple' value={['item-1']}>
-          <AccordionItem value='item-1'>
-            <AccordionHeader>
-              <AccordionTrigger>Item 1</AccordionTrigger>
-            </AccordionHeader>
-            <AccordionContent>Content 1</AccordionContent>
-          </AccordionItem>
-        </Accordion>,
-      );
-
-      expect(screen.getByText('Content 1')).toBeInTheDocument();
-
-      // Test multiple type with non-array value - should use Array.isArray branch (line 49)
-      rerender(
-        <Accordion type='multiple' value={'item-1' as string}>
-          <AccordionItem value='item-1'>
-            <AccordionHeader>
-              <AccordionTrigger>Item 1</AccordionTrigger>
-            </AccordionHeader>
-            <AccordionContent>Content 1</AccordionContent>
-          </AccordionItem>
-        </Accordion>,
-      );
-
-      expect(screen.queryByText('Content 1')).not.toBeInTheDocument();
-    });
-
-    it('should handle disabled item toggle attempt', async () => {
-      const user = userEvent.setup();
-      const onValueChange = jest.fn();
-      render(
-        <Accordion type='single' onValueChange={onValueChange}>
-          <AccordionItem value='item-1' isDisabled>
-            <AccordionHeader>
-              <AccordionTrigger>Item 1</AccordionTrigger>
-            </AccordionHeader>
-            <AccordionContent>Content 1</AccordionContent>
-          </AccordionItem>
-        </Accordion>,
-      );
-
-      const trigger = screen.getByRole('button');
-      await user.click(trigger);
-
-      // Should not call onValueChange for disabled items
-      expect(onValueChange).not.toHaveBeenCalled();
-    });
-
-    it('should cover keyboard navigation paths for AccordionTrigger lines 68-76', () => {
-      // This test specifically targets the uncovered lines in AccordionTrigger
-      const onKeyDown = jest.fn();
       render(
         <Accordion type='single'>
           <AccordionItem value='item-1'>
             <AccordionHeader>
-              <AccordionTrigger onKeyDown={onKeyDown}>Item 1</AccordionTrigger>
+              <AccordionTrigger>
+                {(state) => (state.isOpen ? 'Close item' : 'Open item')}
+              </AccordionTrigger>
             </AccordionHeader>
             <AccordionContent>Content 1</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      const trigger = screen.getByRole('button', { name: 'Open item' });
+      await user.click(trigger);
+      expect(screen.getByRole('button', { name: 'Close item' })).toBeInTheDocument();
+    });
+
+    it('should move focus with Home and End keys', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <Accordion>
+          <AccordionItem value='item-1'>
+            <AccordionHeader>
+              <AccordionTrigger>First</AccordionTrigger>
+            </AccordionHeader>
+            <AccordionContent>First content</AccordionContent>
           </AccordionItem>
           <AccordionItem value='item-2'>
             <AccordionHeader>
-              <AccordionTrigger onKeyDown={onKeyDown}>Item 2</AccordionTrigger>
+              <AccordionTrigger>Second</AccordionTrigger>
             </AccordionHeader>
-            <AccordionContent>Content 2</AccordionContent>
+            <AccordionContent>Second content</AccordionContent>
           </AccordionItem>
           <AccordionItem value='item-3'>
             <AccordionHeader>
-              <AccordionTrigger onKeyDown={onKeyDown}>Item 3</AccordionTrigger>
+              <AccordionTrigger>Third</AccordionTrigger>
             </AccordionHeader>
-            <AccordionContent>Content 3</AccordionContent>
+            <AccordionContent>Third content</AccordionContent>
           </AccordionItem>
         </Accordion>,
       );
 
-      const triggers = screen.getAllByRole('button');
+      const first = screen.getByRole('button', { name: 'First' });
+      const second = screen.getByRole('button', { name: 'Second' });
+      const third = screen.getByRole('button', { name: 'Third' });
 
-      // Test Home key - should execute lines 68-71 and 92
-      if (triggers[2]) {
-        triggers[2].focus();
-        const homeEvent = new KeyboardEvent('keydown', { key: 'Home', bubbles: true });
-        triggers[2].dispatchEvent(homeEvent);
-        expect(onKeyDown).toHaveBeenCalled();
-      }
+      third.focus();
+      await user.keyboard('{Home}');
+      expect(first).toHaveFocus();
 
-      // Test End key - should execute lines 72-76 and 92
-      onKeyDown.mockClear();
-      if (triggers[0]) {
-        triggers[0].focus();
-        const endEvent = new KeyboardEvent('keydown', { key: 'End', bubbles: true });
-        triggers[0].dispatchEvent(endEvent);
-        expect(onKeyDown).toHaveBeenCalled();
-      }
-
-      // Test other keys that trigger onKeyDown but not navigation - line 92
-      onKeyDown.mockClear();
-      if (triggers[0]) {
-        const otherEvent = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true });
-        triggers[0].dispatchEvent(otherEvent);
-        expect(onKeyDown).toHaveBeenCalled();
-      }
+      second.focus();
+      await user.keyboard('{End}');
+      expect(third).toHaveFocus();
     });
 
-    it('should cover AccordionContent forceMount behavior', () => {
-      // Test forceMount when collapsed (covers lines 17-19 and 27-28)
-      const { container } = render(
-        <Accordion type='single' value=''>
-          <AccordionItem value='item-1'>
-            <AccordionHeader>
-              <AccordionTrigger>Item 1</AccordionTrigger>
-            </AccordionHeader>
-            <AccordionContent forceMount>Content 1</AccordionContent>
-          </AccordionItem>
-        </Accordion>,
-      );
-
-      // Should render content even when collapsed due to forceMount
-      expect(screen.getByText('Content 1')).toBeInTheDocument();
-
-      // Check the hidden attribute is applied (line 28)
-      const contentElement = container.querySelector('[role="region"]');
-      expect(contentElement).toHaveAttribute('hidden');
-    });
-
-    it('should cover multiple type toggle logic (lines 89-94)', async () => {
+    it('should move focus with Arrow keys in horizontal orientation', async () => {
       const user = userEvent.setup();
-      const onValueChange = jest.fn();
 
-      // Test multiple type expansion (line 93-94: [...currentArray, itemValue])
-      const { rerender } = render(
-        <Accordion type='multiple' value={[]} onValueChange={onValueChange}>
+      render(
+        <Accordion orientation='horizontal'>
           <AccordionItem value='item-1'>
             <AccordionHeader>
-              <AccordionTrigger>Item 1</AccordionTrigger>
+              <AccordionTrigger>First</AccordionTrigger>
             </AccordionHeader>
-            <AccordionContent>Content 1</AccordionContent>
+            <AccordionContent>First content</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value='item-2'>
+            <AccordionHeader>
+              <AccordionTrigger>Second</AccordionTrigger>
+            </AccordionHeader>
+            <AccordionContent>Second content</AccordionContent>
           </AccordionItem>
         </Accordion>,
       );
 
-      const trigger = screen.getByRole('button');
-      await user.click(trigger);
-      expect(onValueChange).toHaveBeenCalledWith(['item-1']);
+      const first = screen.getByRole('button', { name: 'First' });
+      const second = screen.getByRole('button', { name: 'Second' });
 
-      // Test multiple type collapse (line 92-93: currentArray.filter)
-      onValueChange.mockClear();
-      rerender(
-        <Accordion type='multiple' value={['item-1']} onValueChange={onValueChange}>
-          <AccordionItem value='item-1'>
-            <AccordionHeader>
-              <AccordionTrigger>Item 1</AccordionTrigger>
-            </AccordionHeader>
-            <AccordionContent>Content 1</AccordionContent>
-          </AccordionItem>
-        </Accordion>,
-      );
+      first.focus();
+      await user.keyboard('{ArrowRight}');
+      expect(second).toHaveFocus();
 
-      const trigger2 = screen.getByRole('button');
-      await user.click(trigger2);
-      expect(onValueChange).toHaveBeenCalledWith([]);
+      await user.keyboard('{ArrowLeft}');
+      expect(first).toHaveFocus();
     });
   });
 });

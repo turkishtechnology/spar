@@ -25,15 +25,6 @@ export function useItemRegistry<T = void>() {
     });
   }, []);
 
-  // Use items.size as dependency to avoid infinite loops while still updating when items change
-  const hasItem = useCallback((id: string) => items.has(id), [items.size]);
-
-  const getItem = useCallback((id: string) => items.get(id), [items.size]);
-
-  const clear = useCallback(() => {
-    setItems(new Map());
-  }, []);
-
   const getItemIds = useCallback(() => Array.from(items.keys()), [items.size]);
 
   // Get item at specific index (for indexed navigation)
@@ -60,9 +51,6 @@ export function useItemRegistry<T = void>() {
     items,
     registerItem,
     unregisterItem,
-    hasItem,
-    getItem,
-    clear,
     getItemIds,
     getItemAtIndex,
     getItemIndex,

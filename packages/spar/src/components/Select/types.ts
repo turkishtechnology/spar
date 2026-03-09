@@ -1,23 +1,21 @@
-import type React from 'react';
-import type { Placement, Strategy, Middleware, VirtualElement } from '@floating-ui/react-dom';
-import type { Direction } from '../../types';
+import type { ElementType, ReactNode, RefObject } from 'react';
+import type { Side, Align, PolymorphicProps } from '../../types';
+import type { LabelProps } from '../Label/types';
+import type { ButtonOwnProps } from '../Button/types';
 
-// Re-export Floating UI types for public API
-export type { Placement, Strategy, Middleware, VirtualElement };
-
-export interface Padding {
-  top?: number;
-  right?: number;
-  bottom?: number;
-  left?: number;
-}
+export type SelectFocusStrategy = 'first' | 'last' | 'selected' | 'none';
 
 /**
- * Props for Select root component
- * @remarks Fully accessible, headless select component
+ * Own props for Select root component
  */
-export interface SelectRootProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'> {
+export interface SelectOwnProps {
+  /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-trigger`, `${id}-content`, `${id}-value`.
+   */
+  id?: string;
+
   /**
    * Controlled selected value
    */
@@ -30,6 +28,7 @@ export interface SelectRootProps
 
   /**
    * Callback when selection changes
+   * @param value - The new selected value
    */
   onValueChange?: (value: string) => void;
 
@@ -46,6 +45,7 @@ export interface SelectRootProps
 
   /**
    * Callback when open state changes
+   * @param open - The new open state
    */
   onOpenChange?: (open: boolean) => void;
 
@@ -53,7 +53,7 @@ export interface SelectRootProps
    * Disables the entire select
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Makes the select required for forms
@@ -67,223 +67,165 @@ export interface SelectRootProps
   name?: string;
 
   /**
-   * Reading direction
-   * @defaultValue 'ltr'
+   * Whether to focus the trigger on mount
+   * @defaultValue false
    */
-  dir?: Direction;
+  autoFocus?: boolean;
+}
 
-  /**
-   * Polymorphic component type
-   */
-  as?: React.ElementType;
+/**
+ * Props for Select root component
+ * @remarks Fully accessible, headless select component
+ */
+export type SelectProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T, SelectOwnProps>;
 
+/**
+ * Render props provided to children function for SelectTrigger
+ */
+export interface SelectTriggerRenderProps {
   /**
-   * Select component children
+   * Whether the dropdown is currently open
    */
-  children: React.ReactNode;
+  isOpen: boolean;
+  /**
+   * The currently selected value
+   */
+  value: string | undefined;
+  /**
+   * Whether the select is disabled
+   */
+  disabled: boolean;
+  /**
+   * Function to open the dropdown
+   */
+  open: () => void;
+  /**
+   * Function to close the dropdown
+   */
+  close: () => void;
+  /**
+   * Function to toggle the dropdown open/closed state
+   */
+  toggle: () => void;
+}
+
+/**
+ * Own props for SelectTrigger component
+ */
+export interface SelectTriggerOwnProps extends ButtonOwnProps {
+  /**
+   * Children content or render function
+   */
+  children?: ReactNode | ((state: SelectTriggerRenderProps) => ReactNode);
 }
 
 /**
  * Props for SelectTrigger component
  * @remarks Button that toggles the dropdown
  */
-export interface SelectTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'button'
-   */
-  as?: React.ElementType;
+export type SelectTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  SelectTriggerOwnProps
+>;
 
+/**
+ * Own props for SelectValue component
+ */
+export interface SelectValueOwnProps {
   /**
-   * Forward ref support
+   * Text shown when no value selected
    */
-  ref?: React.Ref<HTMLButtonElement>;
-
-  /**
-   * Trigger content
-   */
-  children: React.ReactNode;
+  placeholder?: ReactNode;
 }
 
 /**
  * Props for SelectValue component
  * @remarks Displays the selected value or placeholder
  */
-export interface SelectValueProps extends React.HTMLAttributes<HTMLSpanElement> {
-  /**
-   * Text shown when no value selected
-   */
-  placeholder?: React.ReactNode;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'span'
-   */
-  as?: React.ElementType;
-
-  /**
-   * Optional children (usually not needed)
-   */
-  children?: React.ReactNode;
-}
+export type SelectValueProps<T extends ElementType = 'span'> = PolymorphicProps<
+  'span',
+  T,
+  SelectValueOwnProps
+>;
 
 /**
- * Props for SelectIcon component
- * @remarks Optional visual indicator (chevron, arrow)
+ * Own props for SelectContent component
  */
-export interface SelectIconProps extends React.HTMLAttributes<HTMLSpanElement> {
+export interface SelectContentOwnProps {
   /**
-   * Polymorphic component type
-   * @defaultValue 'span'
+   * Preferred side for positioning relative to trigger
+   * @defaultValue 'bottom'
    */
-  as?: React.ElementType;
+  side?: Side;
 
   /**
-   * Icon content
+   * Alignment relative to trigger
+   * @defaultValue 'start'
    */
-  children?: React.ReactNode;
-}
+  align?: Align;
 
-/**
- * Props for SelectPortal component
- * @remarks Portal container for dropdown rendering
- */
-export interface SelectPortalProps {
   /**
-   * Portal target element
+   * Portal container element. Content is portaled to document.body by default.
    * @defaultValue document.body
    */
   container?: HTMLElement | null;
 
   /**
-   * Force mount for animation control
-   * @defaultValue false
+   * Escape key handler
+   * @param event - The keyboard event (call preventDefault to prevent close)
    */
-  forceMount?: boolean;
+  onEscapeKeyDown?: (event: KeyboardEvent) => void;
 
   /**
-   * Portal content
+   * Outside click handler
+   * @param event - The pointer event (call preventDefault to prevent close)
    */
-  children: React.ReactNode;
+  onPointerDownOutside?: (event: PointerEvent) => void;
+
+  /**
+   * Focus handler on close
+   * @param event - The focus event (call preventDefault to prevent focus restore)
+   */
+  onCloseAutoFocus?: (event: FocusEvent) => void;
 }
 
 /**
  * Props for SelectContent component
  * @remarks The dropdown container that appears when open
  */
-export interface SelectContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Placement of the floating content relative to the trigger
-   * @defaultValue 'bottom-start'
-   */
-  placement?: Placement;
+export type SelectContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  SelectContentOwnProps
+>;
 
+/**
+ * Render props provided to children function for SelectItem
+ */
+export interface SelectItemRenderProps {
   /**
-   * Positioning strategy (absolute or fixed)
-   * @defaultValue 'absolute'
+   * Whether this item is currently selected
    */
-  strategy?: Strategy;
-
+  isSelected: boolean;
   /**
-   * Custom middleware array for advanced positioning control
+   * Whether this item is currently highlighted
    */
-  middleware?: Middleware[];
-
+  isHighlighted: boolean;
   /**
-   * Distance from trigger in pixels
-   * @defaultValue 5
+   * Function to select this item
    */
-  offset?: number;
-
+  select: () => void;
   /**
-   * Whether to shift the content to stay in view
-   * @defaultValue true
+   * Whether this item is disabled
    */
-  shift?: boolean;
-
-  /**
-   * Padding for shift calculations
-   * @defaultValue 5
-   */
-  shiftPadding?: number;
-
-  /**
-   * Whether to flip to opposite side when no space
-   * @defaultValue true
-   */
-  flip?: boolean;
-
-  /**
-   * Whether to hide when trigger is fully scrolled out of view
-   * @defaultValue false
-   */
-  hide?: boolean;
-
-  /**
-   * Whether to constrain size to available space
-   * @defaultValue true
-   */
-  size?: boolean;
-
-  /**
-   * Arrow element ref for arrow positioning
-   */
-  arrowRef?: React.RefObject<HTMLElement | SVGSVGElement>;
-
-  /**
-   * Escape key handler
-   */
-  onEscapeKeyDown?: (event: KeyboardEvent) => void;
-
-  /**
-   * Outside click handler
-   */
-  onPointerDownOutside?: (event: PointerEvent) => void;
-
-  /**
-   * Focus handler on close
-   */
-  onCloseAutoFocus?: (event: FocusEvent) => void;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: React.ElementType;
-
-  /**
-   * Forward ref support
-   */
-  ref?: React.Ref<HTMLDivElement>;
-
-  /**
-   * Content children
-   */
-  children: React.ReactNode;
+  disabled: boolean;
 }
 
 /**
- * Props for SelectViewport component
- * @remarks Scrollable container for select items
+ * Own props for SelectItem component
  */
-export interface SelectViewportProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: React.ElementType;
-
-  /**
-   * Viewport children
-   */
-  children: React.ReactNode;
-}
-
-/**
- * Props for SelectItem component
- * @remarks Individual selectable option
- */
-export interface SelectItemProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface SelectItemOwnProps {
   /**
    * Option value
    */
@@ -293,7 +235,7 @@ export interface SelectItemProps extends React.HTMLAttributes<HTMLDivElement> {
    * Disables the option
    * @defaultValue false
    */
-  isDisabled?: boolean;
+  disabled?: boolean;
 
   /**
    * Text for type-ahead (auto-detected if not provided)
@@ -301,172 +243,81 @@ export interface SelectItemProps extends React.HTMLAttributes<HTMLDivElement> {
   textValue?: string;
 
   /**
-   * Polymorphic component type
-   * @defaultValue 'div'
+   * Children content or render function
    */
-  as?: React.ElementType;
-
-  /**
-   * Forward ref support
-   */
-  ref?: React.Ref<HTMLDivElement>;
-
-  /**
-   * Item content
-   */
-  children: React.ReactNode;
+  children?: ReactNode | ((state: SelectItemRenderProps) => ReactNode);
 }
+
+/**
+ * Props for SelectItem component
+ * @remarks Individual selectable option
+ */
+export type SelectItemProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  SelectItemOwnProps
+>;
 
 /**
  * Props for SelectItemText component
  * @remarks The text content of an item
  */
-export interface SelectItemTextProps extends React.HTMLAttributes<HTMLSpanElement> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'span'
-   */
-  as?: React.ElementType;
-
-  /**
-   * Item text content
-   */
-  children: React.ReactNode;
-}
-
-/**
- * Props for SelectItemIndicator component
- * @remarks Visual indicator for selected state (checkmark, etc)
- */
-export interface SelectItemIndicatorProps extends React.HTMLAttributes<HTMLSpanElement> {
-  /**
-   * Force mount for animation
-   * @defaultValue false
-   */
-  forceMount?: boolean;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'span'
-   */
-  as?: React.ElementType;
-
-  /**
-   * Indicator content
-   */
-  children?: React.ReactNode;
-}
+export type SelectItemTextProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
 
 /**
  * Props for SelectGroup component
  * @remarks Groups related items together
  */
-export interface SelectGroupProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: React.ElementType;
-
-  /**
-   * Group children
-   */
-  children: React.ReactNode;
-}
+export type SelectGroupProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * Props for SelectLabel component
  * @remarks Label for a group of items
  */
-export interface SelectLabelProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: React.ElementType;
-
-  /**
-   * Label content
-   */
-  children: React.ReactNode;
-}
+export type SelectLabelProps<T extends ElementType = 'label'> = LabelProps<T>;
 
 /**
  * Props for SelectSeparator component
  * @remarks Visual separator between items or groups
  */
-export interface SelectSeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Polymorphic component type
-   * @defaultValue 'div'
-   */
-  as?: React.ElementType;
-
-  /**
-   * Optional children
-   */
-  children?: React.ReactNode;
-}
+export type SelectSeparatorProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * Props for SelectArrow component
- * @remarks Optional arrow pointing to trigger
+ * @remarks Optional arrow pointing to trigger. Headless: user provides all visuals.
  */
-export interface SelectArrowProps extends React.SVGAttributes<SVGSVGElement> {
-  /**
-   * Arrow width
-   * @defaultValue 10
-   */
-  width?: number;
+export type SelectArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<'svg', T>;
 
-  /**
-   * Arrow height
-   * @defaultValue 5
-   */
-  height?: number;
-
-  /**
-   * Polymorphic component type
-   * @defaultValue 'svg'
-   */
-  as?: React.ElementType;
-
-  /**
-   * Forward ref support
-   */
-  ref?: React.Ref<SVGSVGElement>;
-
-  /**
-   * Optional children (custom arrow shape)
-   */
-  children?: React.ReactNode;
-}
-
-// Internal context types
-
+/**
+ * @internal
+ */
 export interface SelectItemData {
   value: string;
   textValue: string;
   disabled: boolean;
-  ref: React.RefObject<HTMLElement | null>;
+  ref: RefObject<HTMLElement | null>;
 }
 
+/**
+ * @internal
+ */
 export interface SelectContextValue {
   // State
   open: boolean;
   value: string | undefined;
   disabled: boolean;
   required: boolean;
-  dir: Direction;
+  autoFocus: boolean;
 
   // Actions
   onValueChange: (value: string) => void;
   onOpenChange: (open: boolean) => void;
 
   // Refs
-  triggerRef: React.RefObject<HTMLButtonElement | null>;
-  contentRef: React.RefObject<HTMLDivElement | null>;
-  valueNodeRef: React.RefObject<HTMLElement | null>;
+  triggerRef: RefObject<HTMLButtonElement | null>;
+  contentRef: RefObject<HTMLDivElement | null>;
+  valueNodeRef: RefObject<HTMLElement | null>;
+  arrowRef: RefObject<Element | null>;
 
   // IDs
   triggerId: string;
@@ -478,25 +329,40 @@ export interface SelectContextValue {
   registerItem: (value: string, data: SelectItemData) => void;
   unregisterItem: (value: string) => void;
 
-  // Focus management
-  highlightedIndex: number;
-  setHighlightedIndex: (index: number) => void;
-
-  // Type-ahead
-  searchString: string;
-  setSearchString: (search: string) => void;
+  // Focus strategy (consumed by SelectContent)
+  focusStrategy: SelectFocusStrategy;
+  setFocusStrategy: (strategy: SelectFocusStrategy) => void;
 }
 
+/**
+ * @internal
+ */
+export interface SelectCollectionContextValue {
+  highlightItem: (id: string | null) => void;
+  highlightFirst: () => void;
+  highlightLast: () => void;
+  highlightNext: () => void;
+  highlightPrevious: () => void;
+  isItemHighlighted: (id: string) => boolean;
+  highlightedId: string | null;
+}
+
+/**
+ * @internal
+ */
 export interface SelectItemContextValue {
   value: string;
   isSelected: boolean;
-  isDisabled: boolean;
+  disabled: boolean;
   isHighlighted: boolean;
   textValue: string;
   onSelect: () => void;
   registerItemText: (textValue: string) => void;
 }
 
+/**
+ * @internal
+ */
 export interface SelectGroupContextValue {
   labelId: string;
 }

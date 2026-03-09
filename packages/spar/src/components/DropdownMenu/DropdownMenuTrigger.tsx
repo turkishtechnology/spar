@@ -1,33 +1,38 @@
 import {
-  Children,
-  cloneElement,
-  isValidElement,
   useCallback,
-  useMemo,
-  type Ref,
-  type ReactElement,
+  type ElementType,
   type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent,
 } from 'react';
-import type { DropdownMenuTriggerProps, DropdownMenuFocusStrategy } from './types';
-import { useDropdownMenuRootContext } from './contexts';
-import { composeRefs } from './utils';
+import type {
+  DropdownMenuTriggerProps,
+  DropdownMenuFocusStrategy,
+  DropdownMenuTriggerRenderProps,
+} from './types';
+import { useDropdownMenuContext } from './hooks';
+import { useMergedRef } from '@/hooks';
+import { Button } from '../Button';
+import type { ButtonProps } from '../Button/types';
 
-export const DropdownMenuTrigger = ({
-  as: Component = 'button',
-  asChild = false,
-  disabled = false,
+/**
+ * Trigger button that toggles the dropdown menu open/closed state.
+ * Supports keyboard navigation with ArrowDown/ArrowUp to open and focus first/last item.
+ */
+export const DropdownMenuTrigger = <T extends ElementType = 'button'>({
+  as,
+  disabled: disabledProp,
   onClick,
   onKeyDown,
   ref,
   children,
   ...props
-}: DropdownMenuTriggerProps) => {
-  const menu = useDropdownMenuRootContext();
-  const triggerRefCallback = useMemo(
-    () => composeRefs<HTMLElement | null>(menu.triggerRef, ref),
-    [menu.triggerRef, ref],
-  );
+}: DropdownMenuTriggerProps<T>) => {
+  const menu = useDropdownMenuContext();
+
+  // Use prop if explicitly provided, otherwise use context
+  const disabled = disabledProp ?? menu.disabled;
+
+  const mergedRef = useMergedRef(menu.triggerRef, ref);
 
   const handleOpen = useCallback(
     (strategy: DropdownMenuFocusStrategy) => {
@@ -39,9 +44,8 @@ export const DropdownMenuTrigger = ({
   );
 
   const handleClick = useCallback(
-    (event: ReactMouseEvent<HTMLElement>) => {
-      onClick?.(event);
-      if (event.defaultPrevented || disabled) {
+    (event: ReactMouseEvent<HTMLButtonElement>) => {
+      if (disabled) {
         return;
       }
 
@@ -50,16 +54,17 @@ export const DropdownMenuTrigger = ({
       } else {
         handleOpen('first');
       }
+      onClick?.(event);
     },
     [onClick, disabled, menu, handleOpen],
   );
 
   const handleKeyDown = useCallback(
-    (event: ReactKeyboardEvent<HTMLElement>) => {
+    (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+      if (disabled) return;
+
       onKeyDown?.(event);
-      if (event.defaultPrevented || disabled) {
-        return;
-      }
+      if (event.defaultPrevented) return;
 
       if (event.key === 'ArrowDown') {
         event.preventDefault();
@@ -72,59 +77,43 @@ export const DropdownMenuTrigger = ({
         handleOpen('last');
         return;
       }
-
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        if (menu.open) {
-          menu.closeMenu();
-        } else {
-          handleOpen('first');
-        }
-      }
     },
-    [onKeyDown, disabled, handleOpen, menu],
+    [onKeyDown, disabled, handleOpen],
   );
 
-  const commonProps = {
-    ...props,
-    id: menu.triggerId,
-    'aria-haspopup': 'menu' as const,
-    'aria-expanded': menu.open,
-    'aria-controls': menu.open ? menu.contentId : undefined,
-    'data-state': menu.open ? 'open' : 'closed',
-    ...(disabled ? { 'data-disabled': '', 'aria-disabled': true } : {}),
-    onClick: handleClick,
-    onKeyDown: handleKeyDown,
+  // Render props for children function
+  const renderProps: DropdownMenuTriggerRenderProps = {
+    isOpen: menu.open,
+    disabled,
+    open: useCallback(() => handleOpen('first'), [handleOpen]),
+    close: useCallback(() => menu.closeMenu(), [menu]),
+    toggle: useCallback(() => {
+      if (menu.open) {
+        menu.closeMenu();
+      } else {
+        handleOpen('first');
+      }
+    }, [menu, handleOpen]),
   };
 
-  if (asChild) {
-    const onlyChild = Children.only(children);
-    if (!isValidElement(onlyChild)) {
-      throw new Error('DropdownMenuTrigger with asChild expects a single React element child');
-    }
-    const childRef = (onlyChild as { ref?: Ref<HTMLElement | null> }).ref;
-
-    return cloneElement<Record<string, unknown> & { ref?: Ref<HTMLElement | null> }>(
-      onlyChild as ReactElement<Record<string, unknown> & { ref?: Ref<HTMLElement | null> }>,
-      {
-        ...commonProps,
-        ref: composeRefs<HTMLElement | null>(childRef, triggerRefCallback),
-      },
-    );
-  }
-
-  const isNativeButton = Component === 'button';
+  const buttonProps = {
+    ...(as && { as }),
+    ref: mergedRef,
+    id: menu.triggerId,
+    disabled,
+    'aria-haspopup': 'menu' as const,
+    'aria-expanded': menu.open,
+    'aria-controls': menu.contentId,
+    'data-state': menu.open ? 'open' : 'closed',
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    ...props,
+  } as ButtonProps<T>;
 
   return (
-    <Component
-      {...commonProps}
-      ref={triggerRefCallback}
-      role={isNativeButton ? undefined : 'button'}
-      tabIndex={isNativeButton ? commonProps.tabIndex : disabled ? -1 : (commonProps.tabIndex ?? 0)}
-      disabled={isNativeButton ? disabled : undefined}
-    >
-      {children}
-    </Component>
+    <Button {...buttonProps}>
+      {typeof children === 'function' ? children(renderProps) : children}
+    </Button>
   );
 };
 

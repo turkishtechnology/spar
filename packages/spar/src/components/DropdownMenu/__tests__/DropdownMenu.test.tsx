@@ -1,23 +1,17 @@
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuLabel,
   DropdownMenuGroup,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
 } from '../';
 
 describe('DropdownMenu', () => {
-  describe('DropdownMenu.Root', () => {
+  describe('DropdownMenu', () => {
     it('should render children without crashing', () => {
       render(
         <DropdownMenu>
@@ -41,7 +35,8 @@ describe('DropdownMenu', () => {
       expect(screen.getByRole('menu')).toBeInTheDocument();
     });
 
-    it('should respect controlled open state', () => {
+    it('should respect controlled open state', async () => {
+      const user = userEvent.setup();
       const onOpenChange = jest.fn();
       const { rerender } = render(
         <DropdownMenu open={false} onOpenChange={onOpenChange}>
@@ -54,6 +49,10 @@ describe('DropdownMenu', () => {
 
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
+      await user.click(screen.getByRole('button', { name: 'Open Menu' }));
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+
       rerender(
         <DropdownMenu open={true} onOpenChange={onOpenChange}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
@@ -64,6 +63,25 @@ describe('DropdownMenu', () => {
       );
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
+    });
+
+    it('should derive trigger and content ids from provided id', () => {
+      render(
+        <DropdownMenu id='file-menu' defaultOpen={true}>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button', { name: 'Open Menu' });
+      const menu = screen.getByRole('menu');
+
+      expect(trigger).toHaveAttribute('id', 'file-menu-trigger');
+      expect(trigger).toHaveAttribute('aria-controls', 'file-menu-content');
+      expect(menu).toHaveAttribute('id', 'file-menu-content');
+      expect(menu).toHaveAttribute('aria-labelledby', 'file-menu-trigger');
     });
 
     it('should call onOpenChange when state changes', async () => {
@@ -85,18 +103,70 @@ describe('DropdownMenu', () => {
       expect(onOpenChange).toHaveBeenCalledWith(true);
     });
 
-    it('should support custom dir prop', () => {
-      const { container } = render(
-        <DropdownMenu dir='rtl'>
+    it('should disable all triggers when root disabled is true', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = jest.fn();
+
+      render(
+        <DropdownMenu disabled onOpenChange={onOpenChange}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+          </DropdownMenuContent>
         </DropdownMenu>,
       );
 
-      expect(container).toBeInTheDocument();
+      const trigger = screen.getByRole('button');
+      expect(trigger).toBeDisabled();
+      expect(trigger).toHaveAttribute('data-disabled');
+
+      await user.click(trigger);
+      expect(onOpenChange).not.toHaveBeenCalled();
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    });
+
+    it('should allow trigger disabled to override root disabled', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = jest.fn();
+
+      render(
+        <DropdownMenu disabled={false} onOpenChange={onOpenChange}>
+          <DropdownMenuTrigger disabled>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button');
+      expect(trigger).toBeDisabled();
+
+      await user.click(trigger);
+      expect(onOpenChange).not.toHaveBeenCalled();
+    });
+
+    it('should allow trigger disabled=false to override root disabled=true', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = jest.fn();
+
+      render(
+        <DropdownMenu disabled onOpenChange={onOpenChange}>
+          <DropdownMenuTrigger disabled={false}>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button');
+      expect(trigger).not.toBeDisabled();
+
+      await user.click(trigger);
+      expect(onOpenChange).toHaveBeenCalledWith(true);
     });
   });
 
-  describe('DropdownMenu.Trigger', () => {
+  describe('DropdownMenuTrigger', () => {
     it('should render as button by default', () => {
       render(
         <DropdownMenu>
@@ -123,7 +193,7 @@ describe('DropdownMenu', () => {
       expect(trigger).toHaveAttribute('aria-expanded', 'false');
       expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
       expect(trigger).toHaveAttribute('data-state', 'closed');
-      expect(trigger).not.toHaveAttribute('aria-controls');
+      expect(trigger).toHaveAttribute('aria-controls');
     });
 
     it('should have proper ARIA attributes when open', () => {
@@ -157,14 +227,11 @@ describe('DropdownMenu', () => {
 
       const trigger = screen.getByRole('button');
 
-      // Initially closed
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
-      // Click to open
       await user.click(trigger);
       expect(screen.getByRole('menu')).toBeInTheDocument();
 
-      // Click to close
       await user.click(trigger);
       await waitFor(() => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument();
@@ -320,7 +387,7 @@ describe('DropdownMenu', () => {
     });
   });
 
-  describe('DropdownMenu.Content', () => {
+  describe('DropdownMenuContent', () => {
     it('should not render when menu is closed', () => {
       render(
         <DropdownMenu>
@@ -381,7 +448,8 @@ describe('DropdownMenu', () => {
       expect(content).toHaveAttribute('data-align', 'end');
     });
 
-    it('should close on Escape key', () => {
+    it('should close on Escape key', async () => {
+      const user = userEvent.setup();
       render(
         <DropdownMenu defaultOpen={true}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
@@ -393,9 +461,11 @@ describe('DropdownMenu', () => {
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
 
-      fireEvent.keyDown(document, { key: 'Escape' });
+      const content = screen.getByRole('menu');
+      content.focus();
+      await user.keyboard('{Escape}');
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument();
       });
     });
@@ -413,7 +483,6 @@ describe('DropdownMenu', () => {
         </DropdownMenu>,
       );
 
-      // Focus on content element first
       const content = screen.getByRole('menu');
       await act(async () => {
         content.focus();
@@ -426,9 +495,10 @@ describe('DropdownMenu', () => {
       expect(onEscapeKeyDown).toHaveBeenCalled();
     });
 
-    it('should close on Tab key', () => {
+    it('should close on Tab key in non-modal mode', async () => {
+      const user = userEvent.setup();
       render(
-        <DropdownMenu defaultOpen={true}>
+        <DropdownMenu defaultOpen={true} modal={false}>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Item 1</DropdownMenuItem>
@@ -438,15 +508,17 @@ describe('DropdownMenu', () => {
 
       expect(screen.getByRole('menu')).toBeInTheDocument();
 
-      fireEvent.keyDown(document, { key: 'Tab' });
+      const content = screen.getByRole('menu');
+      content.focus();
+      await user.keyboard('{Tab}');
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument();
       });
     });
   });
 
-  describe('DropdownMenu.Item', () => {
+  describe('DropdownMenuItem', () => {
     it('should render as div by default', () => {
       render(
         <DropdownMenu defaultOpen={true}>
@@ -462,7 +534,7 @@ describe('DropdownMenu', () => {
       expect(item.tagName).toBe('DIV');
     });
 
-    it('should have proper ARIA attributes', async () => {
+    it('should keep disabled item non-focusable and announced', async () => {
       const user = userEvent.setup();
       render(
         <DropdownMenu>
@@ -474,65 +546,24 @@ describe('DropdownMenu', () => {
         </DropdownMenu>,
       );
 
-      // Open the menu with multiple approaches to ensure focus strategy is set
       const trigger = screen.getByRole('button');
+      await user.click(trigger);
 
-      // Try multiple ways to trigger focus strategy
-      await user.click(trigger); // First open
-      await user.keyboard('[Escape]'); // Close
-
-      trigger.focus();
-      await user.keyboard('[ArrowDown]'); // Open with arrow down
-
-      // Wait for menu to be fully rendered and items registered
-      await waitFor(() => {
-        expect(screen.getByRole('menu')).toBeInTheDocument();
-        expect(screen.getAllByRole('menuitem')).toHaveLength(2);
-      });
-
-      // Force additional rendering cycles to ensure highlight logic runs
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 200));
-      });
-
-      // Check if highlighting happened - try multiple times with increasing delays
-      let highlightedItems: Element[] = [];
-      let attempts = 0;
-      const maxAttempts = 10;
-
-      while (highlightedItems.length === 0 && attempts < maxAttempts) {
-        await act(async () => {
-          await new Promise((resolve) => setTimeout(resolve, 50 * (attempts + 1)));
-        });
-
-        const items = screen.getAllByRole('menuitem');
-        highlightedItems = items.filter((item) => item.getAttribute('tabIndex') === '0');
-        attempts++;
-      }
-
-      // At this point, check the results
       const items = screen.getAllByRole('menuitem');
+      const enabledItem = items[0];
+      const disabledItem = items[1];
 
-      if (highlightedItems.length === 1) {
-        // If highlighting worked, verify it's correct
-        expect(highlightedItems[0]).toBe(items[0]);
-        expect(items[0]).toHaveAttribute('tabIndex', '0');
-        expect(items[0]).not.toHaveAttribute('aria-disabled');
-        expect(items[1]).toHaveAttribute('tabIndex', '-1');
-        expect(items[1]).toHaveAttribute('aria-disabled', 'true');
-        expect(items[1]).toHaveAttribute('data-disabled');
-      } else {
-        // If highlighting didn't work in test environment, just verify basic structure
-        expect(items[0]).toHaveAttribute('role', 'menuitem');
-        expect(items[1]).toHaveAttribute('role', 'menuitem');
-        expect(items[1]).toHaveAttribute('aria-disabled', 'true');
-        expect(items[1]).toHaveAttribute('data-disabled');
+      expect(enabledItem).toHaveAttribute('role', 'menuitem');
+      expect(disabledItem).toHaveAttribute('aria-disabled', 'true');
+      expect(disabledItem).toHaveAttribute('data-disabled');
 
-        // At minimum, all items should have tabIndex -1 when not highlighted
-        expect(items[0]).toHaveAttribute('tabIndex', '-1');
-        expect(items[1]).toHaveAttribute('tabIndex', '-1');
-      }
-    }, 10000);
+      await user.keyboard('{ArrowDown}');
+
+      await waitFor(() => {
+        expect(enabledItem).toHaveAttribute('tabIndex', '0');
+      });
+      expect(disabledItem).toHaveAttribute('tabIndex', '-1');
+    });
 
     it('should call onSelect on click', async () => {
       const onSelect = jest.fn();
@@ -636,28 +667,6 @@ describe('DropdownMenu', () => {
       });
     });
 
-    it('should close menu after selection with closeOnSelect=auto', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu closeOnSelect='auto' defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Item 1</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      expect(screen.getByRole('menu')).toBeInTheDocument();
-
-      const item = screen.getByRole('menuitem');
-      await user.click(item);
-
-      await waitFor(() => {
-        expect(screen.queryByRole('menu')).not.toBeInTheDocument();
-      });
-    });
-
     it('should not close menu after selection with closeOnSelect=false', async () => {
       const user = userEvent.setup();
 
@@ -679,187 +688,7 @@ describe('DropdownMenu', () => {
     });
   });
 
-  describe('DropdownMenu.CheckboxItem', () => {
-    it('should render with proper role and attributes', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem checked={true}>Checkbox Item</DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const item = screen.getByRole('menuitemcheckbox');
-      expect(item).toHaveAttribute('aria-checked', 'true');
-      expect(item).toHaveAttribute('data-checked', 'true');
-    });
-
-    it('should handle indeterminate state', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem checked='indeterminate'>
-              Checkbox Item
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const item = screen.getByRole('menuitemcheckbox');
-      expect(item).toHaveAttribute('aria-checked', 'mixed');
-      expect(item).toHaveAttribute('data-checked', 'indeterminate');
-    });
-
-    it('should toggle checked state on selection', async () => {
-      const onCheckedChange = jest.fn();
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem checked={false} onCheckedChange={onCheckedChange}>
-              Checkbox Item
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const item = screen.getByRole('menuitemcheckbox');
-      await user.click(item);
-
-      expect(onCheckedChange).toHaveBeenCalledWith(true);
-    });
-
-    it('should handle indeterminate to checked transition', async () => {
-      const onCheckedChange = jest.fn();
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem checked='indeterminate' onCheckedChange={onCheckedChange}>
-              Checkbox Item
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const item = screen.getByRole('menuitemcheckbox');
-      await user.click(item);
-
-      expect(onCheckedChange).toHaveBeenCalledWith(true);
-    });
-
-    it('should not close menu with closeOnSelect=auto', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu closeOnSelect='auto' defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuCheckboxItem>Checkbox Item</DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      expect(screen.getByRole('menu')).toBeInTheDocument();
-
-      const item = screen.getByRole('menuitemcheckbox');
-      await user.click(item);
-
-      expect(screen.getByRole('menu')).toBeInTheDocument();
-    });
-  });
-
-  describe('DropdownMenu.RadioGroup & RadioItem', () => {
-    it('should render radio group with proper role', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup value='option1'>
-              <DropdownMenuRadioItem value='option1'>Option 1</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      expect(screen.getByRole('group')).toBeInTheDocument();
-      const radioItems = screen.getAllByRole('menuitemradio');
-      expect(radioItems).toHaveLength(2);
-    });
-
-    it('should reflect selected value in radio items', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup value='option2'>
-              <DropdownMenuRadioItem value='option1'>Option 1</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const radioItems = screen.getAllByRole('menuitemradio');
-      expect(radioItems[0]).toHaveAttribute('aria-checked', 'false');
-      expect(radioItems[1]).toHaveAttribute('aria-checked', 'true');
-      expect(radioItems[1]).toHaveAttribute('data-checked', 'true');
-    });
-
-    it('should change value on radio item selection', async () => {
-      const onValueChange = jest.fn();
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup value='option1' onValueChange={onValueChange}>
-              <DropdownMenuRadioItem value='option1'>Option 1</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const radioItems = screen.getAllByRole('menuitemradio');
-      await user.click(radioItems[1]!);
-
-      expect(onValueChange).toHaveBeenCalledWith('option2');
-    });
-
-    it('should not close menu with closeOnSelect=auto for radio items', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu closeOnSelect='auto' defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup value='option1'>
-              <DropdownMenuRadioItem value='option1'>Option 1</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value='option2'>Option 2</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      expect(screen.getByRole('menu')).toBeInTheDocument();
-
-      const radioItems = screen.getAllByRole('menuitemradio');
-      await user.click(radioItems[1]!);
-
-      expect(screen.getByRole('menu')).toBeInTheDocument();
-    });
-  });
-
-  describe('DropdownMenu.Separator', () => {
+  describe('DropdownMenuSeparator', () => {
     it('should render with proper role and attributes', () => {
       render(
         <DropdownMenu defaultOpen={true}>
@@ -878,7 +707,7 @@ describe('DropdownMenu', () => {
     });
   });
 
-  describe('DropdownMenu.Label', () => {
+  describe('DropdownMenuLabel', () => {
     it('should render as div by default', () => {
       render(
         <DropdownMenu defaultOpen={true}>
@@ -896,7 +725,7 @@ describe('DropdownMenu', () => {
     });
   });
 
-  describe('DropdownMenu.Group', () => {
+  describe('DropdownMenuGroup', () => {
     it('should render with proper role', () => {
       render(
         <DropdownMenu defaultOpen={true}>
@@ -911,100 +740,37 @@ describe('DropdownMenu', () => {
       );
 
       const groups = screen.getAllByRole('group');
-      expect(groups).toHaveLength(1); // The radio group test above might create additional groups
-    });
-  });
-
-  describe('DropdownMenu.Sub', () => {
-    it('should manage submenu open state', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuSub defaultOpen={true}>
-              <DropdownMenuSubTrigger>Submenu Trigger</DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Sub Item 1</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      expect(screen.getByText('Sub Item 1')).toBeInTheDocument();
-    });
-
-    it('should call onOpenChange for submenu', async () => {
-      const onOpenChange = jest.fn();
-      const user = userEvent.setup();
-
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuSub onOpenChange={onOpenChange}>
-              <DropdownMenuSubTrigger>Submenu Trigger</DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Sub Item 1</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const subTrigger = screen.getByText('Submenu Trigger');
-      await user.click(subTrigger);
-
-      expect(onOpenChange).toHaveBeenCalledWith(true);
-    });
-
-    it('should show submenu state in trigger', () => {
-      render(
-        <DropdownMenu defaultOpen={true}>
-          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuSub defaultOpen={true}>
-              <DropdownMenuSubTrigger>Submenu Trigger</DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Sub Item 1</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-          </DropdownMenuContent>
-        </DropdownMenu>,
-      );
-
-      const subTrigger = screen.getByText('Submenu Trigger');
-      expect(subTrigger).toHaveAttribute('data-state', 'open');
+      expect(groups).toHaveLength(1);
     });
   });
 
   describe('Context errors', () => {
-    it('should throw error when DropdownMenuTrigger is used outside Root', () => {
+    it('should throw error when DropdownMenuTrigger is used outside DropdownMenu', () => {
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
 
       expect(() => {
         render(<DropdownMenuTrigger>Trigger</DropdownMenuTrigger>);
-      }).toThrow('DropdownMenu components must be used within DropdownMenu.Root');
+      }).toThrow('DropdownMenu components must be used within DropdownMenu');
 
       consoleSpy.mockRestore();
     });
 
-    it('should throw error when DropdownMenuContent is used outside Root', () => {
+    it('should throw error when DropdownMenuContent is used outside DropdownMenu', () => {
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
 
       expect(() => {
         render(<DropdownMenuContent>Content</DropdownMenuContent>);
-      }).toThrow('DropdownMenu components must be used within DropdownMenu.Root');
+      }).toThrow('DropdownMenu components must be used within DropdownMenu');
 
       consoleSpy.mockRestore();
     });
 
-    it('should throw error when DropdownMenuItem is used outside Root', () => {
+    it('should throw error when DropdownMenuItem is used outside DropdownMenu', () => {
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
 
       expect(() => {
         render(<DropdownMenuItem>Item</DropdownMenuItem>);
-      }).toThrow('DropdownMenu items must be rendered within DropdownMenu.Content');
+      }).toThrow('DropdownMenu items must be rendered within DropdownMenuContent');
 
       consoleSpy.mockRestore();
     });

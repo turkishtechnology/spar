@@ -1,7 +1,7 @@
 ---
-mode: agent
-model: Claude Sonnet 4 (copilot)
-description: Comprehensive review of Spar component instruction files against accessibility and headless standards
+agent: Plan
+model: Gemini 3 Pro (Preview) (copilot)
+description: Comprehensive review of Glide component instruction files against accessibility and headless standards
 ---
 
 # Component Instructions Review & Validation

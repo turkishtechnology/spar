@@ -1,20 +1,60 @@
-import type { ReactNode } from 'react';
-
-export type PopoverSide = 'top' | 'bottom' | 'left' | 'right';
-export type PopoverAlign = 'start' | 'center' | 'end';
+import type { ElementType, ReactNode, RefObject } from 'react';
+import type { Side, Align, PolymorphicProps } from '../../types';
+import type { ButtonOwnProps } from '../Button/types';
+import type { CloseButtonRenderProps } from '../../hooks/useCloseButton';
 
 /**
- * Props for PopoverRoot component
+ * Render props provided to PopoverTrigger children function
+ */
+export interface PopoverTriggerRenderProps {
+  /**
+   * Whether the popover is currently open
+   */
+  isOpen: boolean;
+  /**
+   * Whether the trigger is disabled
+   */
+  disabled: boolean;
+  /**
+   * Function to open the popover
+   */
+  open: () => void;
+  /**
+   * Function to close the popover
+   */
+  close: () => void;
+  /**
+   * Function to toggle the popover open/closed state
+   */
+  toggle: () => void;
+}
+
+/**
+ * Render props provided to PopoverClose children function
+ * @remarks Alias of {@link CloseButtonRenderProps} from useCloseButton
+ */
+export type PopoverCloseRenderProps = CloseButtonRenderProps;
+
+/**
+ * Props for Popover component
  * @remarks Fully accessible, headless popover root container
  */
-export interface PopoverRootProps {
+export interface PopoverProps {
+  /**
+   * Custom base ID for ARIA relationships.
+   * If not provided, one will be generated automatically.
+   * Sub-element IDs are derived as `${id}-trigger` and `${id}-content`.
+   */
+  id?: string;
+
   /**
    * Controlled state for popover visibility
    */
-  isOpen?: boolean;
+  open?: boolean;
 
   /**
    * Callback when popover open state changes
+   * @param open - The new open state
    */
   onOpenChange?: (open: boolean) => void;
 
@@ -31,125 +71,92 @@ export interface PopoverRootProps {
   modal?: boolean;
 
   /**
-   * Preferred side for popover positioning
-   * @defaultValue 'bottom'
+   * Disables all popover triggers (prevents opening)
+   * @defaultValue false
    */
-  side?: PopoverSide;
-
-  /**
-   * Preferred alignment relative to trigger
-   * @defaultValue 'center'
-   */
-  align?: PopoverAlign;
-
-  /**
-   * Distance in pixels between trigger and popover
-   * @defaultValue 8
-   */
-  sideOffset?: number;
+  disabled?: boolean;
 
   /**
    * PopoverTrigger and PopoverContent components
    */
-  children: ReactNode;
+  children?: ReactNode;
+}
+
+/**
+ * Own props for PopoverTrigger component
+ */
+export interface PopoverTriggerOwnProps extends ButtonOwnProps {
+  /**
+   * Children content or render function for render props pattern
+   */
+  children?: ReactNode | ((state: PopoverTriggerRenderProps) => ReactNode);
 }
 
 /**
  * Props for PopoverTrigger component
  * @remarks Fully accessible, headless popover trigger
  */
-export interface PopoverTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * Whether to render as child element instead of button
-   * @defaultValue false
-   */
-  asChild?: boolean;
-
-  /**
-   * Whether trigger is disabled
-   * @defaultValue false
-   */
-  isDisabled?: boolean;
-
-  /**
-   * Ref to the trigger element
-   */
-  ref?: React.Ref<HTMLButtonElement>;
-}
+export type PopoverTriggerProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  PopoverTriggerOwnProps
+>;
 
 /**
- * Props for PopoverContent component
- * @remarks Fully accessible, headless popover content container
+ * Own props for PopoverContent component
  */
-export interface PopoverContentProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface PopoverContentOwnProps {
   /**
    * Side of trigger to position against
    * @defaultValue 'bottom'
    */
-  side?: PopoverSide;
+  side?: Side;
 
   /**
    * Alignment relative to trigger
    * @defaultValue 'center'
    */
-  align?: PopoverAlign;
+  align?: Align;
 
   /**
-   * Distance from trigger
-   * @defaultValue 8
+   * Portal container element. Content is portaled to document.body by default.
+   * @defaultValue document.body
    */
-  sideOffset?: number;
-
-  /**
-   * Offset along alignment axis
-   * @defaultValue 0
-   */
-  alignOffset?: number;
-
-  /**
-   * Whether to adjust position to avoid viewport collisions
-   * @defaultValue true
-   */
-  avoidCollisions?: boolean;
-
-  /**
-   * Boundary elements for collision detection
-   */
-  collisionBoundary?: Element | Element[];
-
-  /**
-   * Whether to hide when trigger is occluded
-   * @defaultValue false
-   */
-  hideWhenDetached?: boolean;
+  container?: HTMLElement | null;
 
   /**
    * Called when popover opens and focus moves inside
+   * @param event - The focus event (call preventDefault to prevent auto-focus)
    */
   onOpenAutoFocus?: (event: Event) => void;
 
   /**
    * Called when popover closes and focus returns to trigger
+   * @param event - The focus event (call preventDefault to prevent focus restore)
    */
   onCloseAutoFocus?: (event: Event) => void;
 
   /**
    * Called when escape is pressed
+   * @param event - The keyboard event (call preventDefault to prevent close)
    */
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
 
   /**
    * Called when pointer down occurs outside the content
+   * @param event - The pointer event (call preventDefault to prevent close)
    */
   onPointerDownOutside?: (event: PointerEvent) => void;
 
   /**
    * Called when focus moves outside the content
+   * @param event - The focus event (call preventDefault to prevent close)
    */
   onFocusOutside?: (event: FocusEvent) => void;
 
   /**
    * Called when interaction occurs outside the content
+   * @param event - The pointer or focus event (call preventDefault to prevent close)
    */
   onInteractOutside?: (event: PointerEvent | FocusEvent) => void;
 
@@ -158,125 +165,56 @@ export interface PopoverContentProps extends React.HTMLAttributes<HTMLDivElement
    * @defaultValue false
    */
   trapFocus?: boolean;
-
-  /**
-   * Ref to the content element
-   */
-  ref?: React.Ref<HTMLDivElement>;
 }
+
+/**
+ * Props for PopoverContent component
+ * @remarks Fully accessible, headless popover content container
+ */
+export type PopoverContentProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  PopoverContentOwnProps
+>;
 
 /**
  * Props for PopoverArrow component
- * @remarks Purely decorative arrow element
+ * @remarks Purely decorative arrow element. Headless: user provides all visuals.
  */
-export interface PopoverArrowProps extends React.HTMLAttributes<HTMLDivElement> {
-  /**
-   * Arrow width in pixels
-   * @defaultValue 10
-   */
-  width?: number;
-
-  /**
-   * Arrow height in pixels
-   * @defaultValue 5
-   */
-  height?: number;
-
-  /**
-   * Offset along the edge
-   * @defaultValue 0
-   */
-  offset?: number;
-
-  /**
-   * Ref to the arrow element
-   */
-  ref?: React.Ref<HTMLDivElement>;
-}
+export type PopoverArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<'svg', T>;
 
 /**
- * Props for PopoverAnchor component
- * @remarks Element used as positioning reference instead of trigger
+ * Own props for PopoverClose component
  */
-export interface PopoverAnchorProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface PopoverCloseOwnProps extends ButtonOwnProps {
   /**
-   * Whether to render as child element instead of div
-   * @defaultValue false
+   * Children content or render function for render props pattern
    */
-  asChild?: boolean;
-
-  /**
-   * Ref to the anchor element
-   */
-  ref?: React.Ref<HTMLDivElement>;
-}
-
-/**
- * Props for PopoverPortal component
- * @remarks Portal container for popover content
- */
-export interface PopoverPortalProps {
-  /**
-   * Container element to portal content into
-   * @defaultValue document.body
-   */
-  container?: Element | null;
-
-  /**
-   * Content to be portaled (typically PopoverContent)
-   */
-  children: ReactNode;
+  children?: ReactNode | ((state: PopoverCloseRenderProps) => ReactNode);
 }
 
 /**
  * Props for PopoverClose component
  * @remarks Close trigger that automatically closes the popover
  */
-export interface PopoverCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * Whether to render as child element instead of button
-   * @defaultValue false
-   */
-  asChild?: boolean;
-
-  /**
-   * Ref to the close element
-   */
-  ref?: React.Ref<HTMLButtonElement>;
-}
-
-/**
- * Internal state for popover management
- */
-export interface PopoverState {
-  isOpen: boolean;
-  triggerRect: DOMRect | null;
-  contentRect: DOMRect | null;
-  side: PopoverSide;
-  align: PopoverAlign;
-  actualSide: PopoverSide;
-  actualAlign: PopoverAlign;
-  isPositioned: boolean;
-  triggerElement: HTMLElement | null;
-  contentElement: HTMLElement | null;
-  anchorElement: HTMLElement | null;
-  contentId: string;
-}
+export type PopoverCloseProps<T extends ElementType = 'button'> = PolymorphicProps<
+  'button',
+  T,
+  PopoverCloseOwnProps
+>;
 
 /**
  * Context value for sharing popover state between components
+ * @internal
  */
 export interface PopoverContextValue {
-  state: PopoverState;
-  triggerRef: React.RefObject<HTMLElement | null>;
-  contentRef: React.RefObject<HTMLDivElement | null>;
-  anchorRef: React.RefObject<HTMLElement | null>;
-  arrowRef: React.RefObject<HTMLDivElement | null>;
-  floatingStyles: React.CSSProperties;
+  isOpen: boolean;
+  contentId: string;
+  triggerRef: RefObject<HTMLElement | null>;
+  contentRef: RefObject<HTMLDivElement | null>;
+  arrowRef: RefObject<Element | null>;
   modal: boolean;
-  side: PopoverSide;
-  align: PopoverAlign;
-  sideOffset: number;
+  disabled: boolean;
   openPopover: () => void;
   closePopover: () => void;
   togglePopover: () => void;

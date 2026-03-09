@@ -38,13 +38,13 @@ The Accordion component provides a vertically stacked set of interactive heading
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `type` | `"single" \| "multiple"` | No | `"single"` | Single panel or multiple panels can be expanded |
-| `collapsible` | `boolean` | No | `false` | Whether panels can be collapsed (only for single type) |
+| `isCollapsible` | `boolean` | No | `false` | Whether panels can be collapsed (only for single type) |
 | `value` | `string \| string[]` | No | `undefined` | Controlled state - single value or array for multiple |
 | `defaultValue` | `string \| string[]` | No | `undefined` | Uncontrolled initial state |
 | `onValueChange` | `(value: string \| string[]) => void` | No | `undefined` | Callback when state changes |
 | `disabled` | `boolean` | No | `false` | Disables all accordion items |
 | `orientation` | `"vertical" \| "horizontal"` | No | `"vertical"` | Orientation for keyboard navigation |
-| `as` | `React.ElementType` | No | `"div"` | Polymorphic component type |
+| `as` | `ElementType` | No | `"div"` | Polymorphic component type |
 | `children` | `React.ReactNode` | Yes | - | AccordionItem components |
 
 ### AccordionItem
@@ -52,27 +52,36 @@ The Accordion component provides a vertically stacked set of interactive heading
 |------|------|----------|---------|-------------|
 | `value` | `string` | Yes | - | Unique identifier for the item |
 | `disabled` | `boolean` | No | `false` | Disables this specific item |
-| `as` | `React.ElementType` | No | `"div"` | Polymorphic component type |
+| `as` | `ElementType` | No | `"div"` | Polymorphic component type |
 | `children` | `React.ReactNode` | Yes | - | AccordionHeader and AccordionContent components |
 
 ### AccordionHeader
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `level` | `number` | No | `3` | Heading level (1-6) for document hierarchy |
-| `as` | `React.ElementType` | No | `"h3"` | Polymorphic component type (heading element) |
+| `as` | `ElementType` | No | `"h3"` | Polymorphic component type (heading element) |
 | `children` | `React.ReactNode` | Yes | - | AccordionTrigger component |
 
 ### AccordionTrigger
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `as` | `React.ElementType` | No | `"button"` | Polymorphic component type |
-| `children` | `React.ReactNode` | Yes | - | Trigger content (heading text) |
+| `as` | `ElementType` | No | `"button"` | Polymorphic component type |
+| `children` | `React.ReactNode \| ((state: AccordionTriggerRenderProps) => React.ReactNode)` | Yes | - | Trigger content or render function for render props pattern |
+
+### AccordionTriggerRenderProps
+| Name | Type | Description |
+|------|------|-------------|
+| `isOpen` | `boolean` | Whether the accordion item is currently expanded |
+| `disabled` | `boolean` | Whether the trigger is disabled |
+| `open` | `() => void` | Function to programmatically open the accordion item |
+| `close` | `() => void` | Function to programmatically close the accordion item |
+| `toggle` | `() => void` | Function to programmatically toggle the accordion item |
 
 ### AccordionContent
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `forceMount` | `boolean` | No | `false` | Force content to remain mounted when collapsed |
-| `as` | `React.ElementType` | No | `"div"` | Polymorphic component type |
+| `as` | `ElementType` | No | `"div"` | Polymorphic component type |
 | `children` | `React.ReactNode` | Yes | - | Panel content |
 
 ## 3. Behavior Matrix
@@ -275,7 +284,7 @@ For developers migrating from other accordion libraries:
 - [ ] Create compound component structure with proper TypeScript interfaces
 - [ ] Implement AccordionHeader component with heading semantics
 - [ ] Implement context for state sharing between components
-- [ ] Set up controlled/uncontrolled state management with `useControllableState`
+- [ ] Set up controlled/uncontrolled state management with `useControlledState`
 
 #### Core Functionality
 - [ ] Single vs multiple expansion modes
