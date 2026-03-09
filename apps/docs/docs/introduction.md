@@ -3,6 +3,9 @@ title: Introduction
 description: Spar is a headless React component library built with TypeScript. Unstyled, accessible, and composable primitives for building your own design system.
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 **Spar is a headless UI component library. Zero styling opinions, maximum flexibility.**
 
 Traditional component libraries come with predefined styles and visual designs. While this works for quick prototyping, it becomes limiting when you need components that match your unique design system.
@@ -11,9 +14,34 @@ Spar takes a different approach: **we provide the behavior, you provide the styl
 
 ## Quick Start
 
-```bash
-pnpm add @turkish-technology/spar
-```
+Install Spar with your preferred package manager:
+
+<Tabs defaultValue="npm" groupId="package-manager">
+  <TabItem value="npm" label="npm">
+    ```bash
+    npm install @turkish-technology/spar
+    ```
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+    ```bash
+    yarn add @turkish-technology/spar
+    ```
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+    ```bash
+    pnpm add @turkish-technology/spar
+    ```
+  </TabItem>
+  <TabItem value="bun" label="bun">
+    ```bash
+    bun add @turkish-technology/spar
+    ```
+  </TabItem>
+</Tabs>
+
+See the [Installation Guide](/docs/installation) for requirements, framework setup, and more detailed instructions.
+
+After installation, import a component and start building:
 
 ```tsx
 import { Button } from '@turkish-technology/spar';
@@ -22,8 +50,6 @@ function App() {
   return <Button onClick={() => alert('Hello!')}>Click me</Button>;
 }
 ```
-
-See the [Installation Guide](/docs/installation) for detailed setup instructions.
 
 ## Core Principles
 
