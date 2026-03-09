@@ -91,6 +91,8 @@ color: #ff8a8a;
 }`}
 />
 
+The live demo shows the full compound pattern with label, field, helper text, and an error message tied to an invalid state.
+
 ## Features
 
 - ✅ Text input and textarea support via polymorphic rendering (`input` or `textarea`)
@@ -105,7 +107,6 @@ color: #ff8a8a;
 ```tsx
 import { Input } from '@turkish-technology/spar';
 ```
-
 
 `Input` and `Input.Root` refer to the same component — the difference is only notation style:
 
@@ -354,35 +355,11 @@ function ContactForm() {
 }
 ```
 
-### Tree-shakeable Import Example
-
-Using named imports for better bundle optimization:
-
-```tsx
-import { Input } from '@turkish-technology/spar';
-
-function TreeShakeableInput() {
-  const [value, setValue] = useState('');
-
-  return (
-    <Input.Root>
-      <Input.Label>Username</Input.Label>
-      <Input.Field
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder='Enter username'
-      />
-      <Input.Description>Choose a unique username</Input.Description>
-    </Input.Root>
-  );
-}
-```
-
 ## API Reference
 
 ### Input / Input.Root
 
-The root context provider that wraps all compound input parts. `Input` and `Input.Root` are the same component — the difference is only import/notation style. Renders a `<div>` by default and exposes an `InputContext` that all child components consume.
+The root context provider that wraps all compound input parts. `Input` and `Input.Root` are the same component - the difference is only import/notation style. Renders a `<div>` by default and exposes an `InputContext` that all child components consume.
 
 **Props**
 
