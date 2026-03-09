@@ -5,25 +5,25 @@ export default {
       2,
       'always',
       [
-        'feat', // Yeni özellik
-        'fix', // Bug düzeltmesi
-        'docs', // Dokümantasyon değişikliği
-        'style', // Kod formatı değişikliği (boşluk, virgül vs.)
-        'refactor', // Ne bug fix ne de feature eklemeyen kod değişikliği
-        'perf', // Performans iyileştirmesi
-        'test', // Test ekleme veya mevcut testleri düzeltme
-        'build', // Build sistemi veya external dependencies
-        'ci', // CI konfigürasyon dosyaları ve scriptleri
-        'chore', // Kaynak kodu etkilemeyen diğer değişiklikler
-        'revert', // Önceki commit'i geri alma
-        'wip', // Work in progress (geçici commit)
+        'feat', // New feature
+        'fix', // Bug fix
+        'docs', // Documentation change
+        'style', // Code style change (spacing, commas, etc.)
+        'refactor', // Code change that is neither a bug fix nor a feature
+        'perf', // Performance improvement
+        'test', // Add tests or fix existing tests
+        'build', // Build system or external dependencies
+        'ci', // CI config files and scripts
+        'chore', // Other changes that do not affect source code
+        'revert', // Revert a previous commit
+        'wip', // Work in progress (temporary commit)
         'conflict',
       ],
     ],
     'type-case': [2, 'always', 'lower-case'],
     'type-empty': [2, 'never'],
     'scope-case': [2, 'always', 'lower-case'],
-    'scope-empty': [0, 'never'], // Scope zorunlu değil
+    'scope-empty': [0, 'never'], // Scope is optional
     'subject-case': [2, 'never', ['sentence-case', 'start-case', 'pascal-case', 'upper-case']],
     'subject-empty': [2, 'never'],
     'subject-full-stop': [2, 'never', '.'],

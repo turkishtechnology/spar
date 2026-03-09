@@ -3,7 +3,7 @@ import * as Input from '@turkish-technology/spar/input';
 export default function InputPage() {
   return (
     <section>
-      <h1>Input — SSR Test</h1>
+      <h1>Input - App Router Test</h1>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '1rem' }}>
         <Input.Root>
           <Input.Label>Email</Input.Label>
