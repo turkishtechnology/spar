@@ -78,6 +78,9 @@ transform: rotate(180deg);
 .select-content {
 --select-surface: #f7f8fa;
 padding: 8px;
+display: flex;
+flex-direction: column;
+gap: 4px;
 border-radius: 12px;
 border: 1px solid #e1e4ea;
 background: var(--select-surface);
@@ -92,7 +95,7 @@ border-color: #2b303b;
 background: #1f232b;
 }
 
-.select-demo-container .select-item {
+.select-content .select-item {
 min-height: 36px;
 padding: 0 10px;
 border-radius: 8px;
@@ -106,35 +109,35 @@ font-size: 14px;
 line-height: 18px;
 }
 
-[data-theme='dark'] .select-demo-container .select-item {
+[data-theme='dark'] .select-content .select-item {
 color: #f2f5f8;
 }
 
-.select-demo-container .select-item[data-highlighted] {
+.select-content .select-item[data-highlighted] {
 background: rgba(0, 0, 0, 0.08);
 outline: none;
 }
 
-[data-theme='dark'] .select-demo-container .select-item[data-highlighted] {
+[data-theme='dark'] .select-content .select-item[data-highlighted] {
 background: rgba(255, 255, 255, 0.12);
 }
 
-.select-demo-container .select-item[data-disabled] {
+.select-content .select-item[data-disabled] {
 opacity: 0.5;
 cursor: not-allowed;
 }
 
-.select-demo-container .select-item-check {
+.select-content .select-item-check {
 opacity: 0;
 color: #222530;
 transition: opacity 0.2s ease;
 }
 
-[data-theme='dark'] .select-demo-container .select-item-check {
+[data-theme='dark'] .select-content .select-item-check {
 color: #f2f5f8;
 }
 
-.select-demo-container .select-item[data-state='checked'] .select-item-check {
+.select-content .select-item[data-state='checked'] .select-item-check {
 opacity: 1;
 }
 
