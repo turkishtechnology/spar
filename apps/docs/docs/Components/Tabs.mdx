@@ -1,6 +1,6 @@
 ---
 title: Tabs
-description: A headless, accessible tabs component with full keyboard navigation and ARIA compliance
+description: Headless tabs primitives for organizing related content into labeled panels with accessible keyboard navigation and controlled or uncontrolled selection.
 ---
 
 import React from 'react';
@@ -13,6 +13,8 @@ import { Tabs } from '@turkish-technology/spar';
 A headless, accessible tabs component that provides complete keyboard navigation, orientation support, and ARIA compliance for tabbed interfaces.
 
 ## Live Demo
+
+This demo starts with the `Trend` tab selected and highlights the active trigger with an underline treatment.
 
 <LiveCode
   code={`<div className='tabs-demo-container'>
@@ -111,7 +113,6 @@ border-color: rgba(255, 255, 255, 0.72);
 import { Tabs } from '@turkish-technology/spar';
 ```
 
-
 ## Anatomy
 
 The Tabs component consists of compound parts that work together:
@@ -180,7 +181,9 @@ The Tabs component consists of compound parts that work together:
 
 ### Controlled Tabs
 
-```tsx
+Use controlled tabs when the active panel needs to stay synced with routing, saved preferences, or external UI state.
+
+```tsx {2,5}
 function ControlledTabs() {
   const [activeTab, setActiveTab] = useState('profile');
 
@@ -199,7 +202,9 @@ function ControlledTabs() {
 
 ### Vertical Orientation
 
-```tsx
+Vertical tabs work well for settings pages and other layouts where labels need more room.
+
+```tsx {3}
 function VerticalTabs() {
   return (
     <Tabs.Root orientation='vertical' defaultValue='tab1'>
@@ -218,7 +223,9 @@ function VerticalTabs() {
 
 ### Manual Activation Mode
 
-```tsx
+Manual activation separates focus from selection so users can explore tab labels with the keyboard before committing.
+
+```tsx {3}
 function ManualActivationTabs() {
   return (
     <Tabs.Root activationMode='manual' defaultValue='home'>
@@ -237,7 +244,9 @@ function ManualActivationTabs() {
 
 ### Render Props Pattern
 
-```tsx
+Render props let you build richer trigger content while still reading tab selection and focus state from the component.
+
+```tsx {6-12,15}
 function RenderPropsTabs() {
   return (
     <Tabs.Root defaultValue='dashboard'>
@@ -264,7 +273,9 @@ function RenderPropsTabs() {
 
 ### Force Mount Content
 
-```tsx
+Use `forceMount` for panels that should stay in the DOM, such as forms, media players, or stateful widgets.
+
+```tsx {9}
 function ForceMountTabs() {
   return (
     <Tabs.Root defaultValue='lazy'>
@@ -283,7 +294,9 @@ function ForceMountTabs() {
 
 ## API Reference
 
-### Tabs (Root)
+### Tabs / Tabs.Root
+
+The root state container for the tabs system. `Tabs` and `Tabs.Root` are the same component - the difference is only import/notation style.
 
 #### Props
 

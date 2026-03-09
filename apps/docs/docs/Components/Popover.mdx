@@ -1,6 +1,6 @@
 ---
 title: Popover
-description: A headless popover component with intelligent positioning, focus management, and full accessibility support for creating tooltips, dropdowns, and floating panels.
+description: Headless popover primitives for building anchored floating panels with smart positioning, dismiss behavior, and accessible focus management.
 ---
 
 import React from 'react';
@@ -32,7 +32,7 @@ A floating panel component anchored to a trigger element with smart positioning,
               </svg>
             </Popover.Close>
           </div>
-          <p className='popover-paragraph'>Lorem ipsum dolor sit amet consectetur. Duis cras laeet ultrices tellus. Vitae id interdum sagittis </p>
+          <p className='popover-paragraph'>Use popovers for contextual details, lightweight settings, or secondary actions without navigating away.</p>
         </Popover.Content>
       </Popover.Root>
     </div>`}
@@ -142,6 +142,8 @@ color: var(--popover-surface);
 
 </div>
 
+The live demo opens a small informational panel with a title, supporting copy, close action, and directional arrow.
+
 ## Features
 
 - ✅ Controlled and uncontrolled open state (`open`, `defaultOpen`, `onOpenChange`)
@@ -157,7 +159,6 @@ color: var(--popover-surface);
 ```ts
 import { Popover } from '@turkish-technology/spar';
 ```
-
 
 ---
 
@@ -260,7 +261,7 @@ export function BasicPopover() {
 
 Popover with external state control:
 
-```tsx
+```tsx {2,6,8}
 export function ControlledPopover() {
   const [open, setOpen] = React.useState(false);
 
@@ -283,7 +284,7 @@ export function ControlledPopover() {
 
 Modal popover. In modal mode, content is rendered with `role="dialog"` and focus is trapped while open:
 
-```tsx
+```tsx {3,8-10}
 export function ModalPopover() {
   return (
     <Popover.Root modal>
@@ -304,7 +305,7 @@ export function ModalPopover() {
 
 Popover with specific side and alignment preferences:
 
-```tsx
+```tsx {5}
 export function PositionedPopover() {
   return (
     <Popover.Root>
@@ -321,7 +322,7 @@ export function PositionedPopover() {
 
 Popover with a decorative arrow pointing to the trigger:
 
-```tsx
+```tsx {6}
 export function PopoverWithArrow() {
   return (
     <Popover.Root>
@@ -339,7 +340,7 @@ export function PopoverWithArrow() {
 
 Popover with custom focus management logic:
 
-```tsx
+```tsx {2-5,7-11,17-18}
 export function PopoverWithFocusCallbacks() {
   const handleOpenAutoFocus = (event: Event) => {
     console.log('Popover opened, focus moved inside');
@@ -371,7 +372,7 @@ export function PopoverWithFocusCallbacks() {
 
 Popover with custom outside interaction logic:
 
-```tsx
+```tsx {2-5,8-11,18-19}
 export function PopoverWithOutsideHandlers() {
   const handlePointerDownOutside = (event: PointerEvent) => {
     console.log('Clicked outside popover');
@@ -403,7 +404,7 @@ export function PopoverWithOutsideHandlers() {
 
 Popover rendered in a specific container element:
 
-```tsx
+```tsx {2,6,10}
 export function PopoverWithCustomPortal() {
   const [container, setContainer] = React.useState<HTMLElement | null>(null);
 
@@ -426,9 +427,9 @@ export function PopoverWithCustomPortal() {
 
 ## API Reference
 
-### Popover.Root
+### Popover / Popover.Root
 
-The root container that provides context and manages state for all popover components within it.
+The root container that provides context and manages state for all popover components within it. `Popover` and `Popover.Root` are the same component - the difference is only import/notation style.
 
 **Props**
 

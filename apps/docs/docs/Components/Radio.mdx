@@ -1,6 +1,6 @@
 ---
 title: Radio
-description: Headless Radio component for mutually exclusive selections with controlled and uncontrolled state support.
+description: Headless radio-group primitives for mutually exclusive selections with accessible keyboard navigation, form support, and controlled or uncontrolled state.
 ---
 
 import React from 'react';
@@ -13,6 +13,8 @@ import { Radio } from '@turkish-technology/spar';
 Headless radio component for creating mutually exclusive selections in forms and interactive UIs.
 
 ## Live Demo
+
+This demo renders a simple three-option radio group styled as custom circular controls.
 
 <div className="radio-demo-container">
 <LiveCode
@@ -79,7 +81,6 @@ background-color: rgba(255, 255, 255, 0.72);
 import { Radio } from '@turkish-technology/spar';
 ```
 
-
 ## Anatomy
 
 The Radio component is built as a compound component with two main parts:
@@ -132,6 +133,8 @@ import { Radio } from '@turkish-technology/spar';
 
 ### Basic Controlled Radio Group
 
+Control the selected value from parent state when the chosen option affects other parts of the UI.
+
 ```tsx
 function ControlledRadio() {
   const [selectedValue, setSelectedValue] = React.useState('medium');
@@ -148,7 +151,9 @@ function ControlledRadio() {
 
 ### Uncontrolled Radio Group with Default Value
 
-```tsx
+Use `defaultValue` when the group should start with a selection but does not need ongoing external state management.
+
+```tsx {2-4,7-10}
 function UncontrolledRadio() {
   const handleValueChange = (value: string) => {
     console.log('Selected:', value);
@@ -170,7 +175,9 @@ function UncontrolledRadio() {
 
 ### Horizontal Orientation
 
-```tsx
+Switch to horizontal orientation for toolbars, segmented controls, or compact inline choices.
+
+```tsx {2,5-9}
 function HorizontalRadio() {
   const [alignment, setAlignment] = React.useState('left');
 
@@ -191,7 +198,9 @@ function HorizontalRadio() {
 
 ### Disabled Items and Groups
 
-```tsx
+Disable individual options when they are temporarily unavailable while keeping the rest of the group interactive.
+
+```tsx {2,5,8-10}
 function DisabledRadio() {
   const [plan, setPlan] = React.useState('basic');
 
@@ -209,7 +218,9 @@ function DisabledRadio() {
 
 ### Toolbar Radio Group
 
-```tsx
+Set `selectOnFocus={false}` in toolbar patterns so arrow keys move focus without immediately changing the current selection.
+
+```tsx {2,5-11}
 function ToolbarRadio() {
   const [alignment, setAlignment] = React.useState('left');
 
@@ -235,7 +246,9 @@ function ToolbarRadio() {
 
 ### Form Integration
 
-```tsx
+Add `name` when the selected value should be submitted through a native HTML form.
+
+```tsx {2,4-8,11-17}
 function FormRadio() {
   const [paymentMethod, setPaymentMethod] = React.useState('credit');
 
@@ -267,7 +280,9 @@ function FormRadio() {
 
 ### Custom Elements with Polymorphic API
 
-```tsx
+Use the polymorphic API when the group or items need to match an existing semantic wrapper or layout structure.
+
+```tsx {2,5-13}
 function CustomRadio() {
   const [theme, setTheme] = React.useState('light');
 
@@ -290,9 +305,9 @@ function CustomRadio() {
 
 ## API Reference
 
-### Radio.Root
+### Radio / Radio.Root
 
-Root container that manages selection state, registration, and keyboard behavior.
+Root container that manages selection state, registration, and keyboard behavior. `Radio` and `Radio.Root` are the same component - the difference is only import/notation style.
 
 **Props**
 
