@@ -13,7 +13,6 @@ export const Tabs = <T extends ElementType = 'div'>({
   defaultValue,
   onValueChange,
   orientation = 'horizontal',
-  dir = 'ltr',
   activationMode = 'automatic',
   as,
   children,
@@ -100,7 +99,6 @@ export const Tabs = <T extends ElementType = 'div'>({
 
       // Configuration
       orientation,
-      dir,
       activationMode,
 
       // IDs for ARIA
@@ -117,7 +115,6 @@ export const Tabs = <T extends ElementType = 'div'>({
       selectedValue,
       handleValueChange,
       orientation,
-      dir,
       activationMode,
       baseId,
       tabItems,
@@ -130,7 +127,7 @@ export const Tabs = <T extends ElementType = 'div'>({
 
   return (
     <TabsContext.Provider value={contextValue}>
-      <Component ref={ref} data-orientation={orientation} data-dir={dir} {...props}>
+      <Component ref={ref} data-orientation={orientation} {...props}>
         {children}
       </Component>
     </TabsContext.Provider>

@@ -395,41 +395,41 @@ The Label component creates accessible labels for form controls with support for
 
 **Props**
 
-| Name          | Type                | Default     | Description                                                                                                                                            |
-| ------------- | ------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `required?`   | `boolean`           | `false`     | Adds the `data-required` attribute. Does not make the control required; set `required` on the control itself                                          |
-| `isOptional?` | `boolean`           | `false`     | Adds the `data-optional` attribute                                                                                                                     |
-| `disabled?`   | `boolean`           | `false`     | Adds the `data-disabled` attribute. Does not disable the control; set `disabled` on the control itself                                                |
-| `readOnly?`   | `boolean`           | `false`     | Adds the `data-readonly` attribute. Does not make the control read-only; set `readOnly` on the control itself                                         |
-| `isInvalid?`  | `boolean`           | `false`     | Adds the `data-invalid` attribute. Does not set control validity; set `aria-invalid` on the control itself                                            |
-| `as?`         | `React.ElementType` | `'label'`   | Element type to render                                                                                                                                  |
-| `children?`   | `React.ReactNode`   | `undefined` | Label content                                                                                                                                           |
-| `htmlFor?`    | `string`            | `undefined` | ID of the associated form control for explicit association                                                                                             |
+| Name          | Type                | Default     | Description                                                                                                   |
+| ------------- | ------------------- | ----------- | ------------------------------------------------------------------------------------------------------------- |
+| `required?`   | `boolean`           | `false`     | Adds the `data-required` attribute. Does not make the control required; set `required` on the control itself  |
+| `isOptional?` | `boolean`           | `false`     | Adds the `data-optional` attribute                                                                            |
+| `disabled?`   | `boolean`           | `false`     | Adds the `data-disabled` attribute. Does not disable the control; set `disabled` on the control itself        |
+| `readOnly?`   | `boolean`           | `false`     | Adds the `data-readonly` attribute. Does not make the control read-only; set `readOnly` on the control itself |
+| `isInvalid?`  | `boolean`           | `false`     | Adds the `data-invalid` attribute. Does not set control validity; set `aria-invalid` on the control itself    |
+| `as?`         | `React.ElementType` | `'label'`   | Element type to render                                                                                        |
+| `children?`   | `React.ReactNode`   | `undefined` | Label content                                                                                                 |
+| `htmlFor?`    | `string`            | `undefined` | ID of the associated form control for explicit association                                                    |
 
 **Note**: `LabelProps<T>` is derived from `PolymorphicProps<'label', T, LabelOwnProps>`, so native props and `ref` support come from the rendered element type.
 
 **Events**
 
-| Name                           | Parameters                        | Description                                          | When Triggered                                            |
-| ------------------------------ | --------------------------------- | ---------------------------------------------------- | --------------------------------------------------------- |
-| _(No component-specific event)_ | Depends on rendered element        | The component defines no custom event API; native handlers are passed through | Triggered by native behavior of the rendered element |
+| Name                            | Parameters                  | Description                                                                   | When Triggered                                       |
+| ------------------------------- | --------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------- |
+| _(No component-specific event)_ | Depends on rendered element | The component defines no custom event API; native handlers are passed through | Triggered by native behavior of the rendered element |
 
 **Data Attributes**
 
-| Attribute       | Value                     | Purpose                                      |
-| --------------- | ------------------------- | -------------------------------------------- |
-| `data-required` | `""` (when `required`)    | Required state styling hook                  |
-| `data-optional` | `""` (when `isOptional`)  | Optional state styling hook                  |
-| `data-disabled` | `""` (when `disabled`)    | Disabled state styling hook                  |
-| `data-readonly` | `""` (when `readOnly`)    | Read-only state styling hook                 |
-| `data-invalid`  | `""` (when `isInvalid`)   | Invalid state styling hook                   |
+| Attribute       | Value                    | Purpose                      |
+| --------------- | ------------------------ | ---------------------------- |
+| `data-required` | `""` (when `required`)   | Required state styling hook  |
+| `data-optional` | `""` (when `isOptional`) | Optional state styling hook  |
+| `data-disabled` | `""` (when `disabled`)   | Disabled state styling hook  |
+| `data-readonly` | `""` (when `readOnly`)   | Read-only state styling hook |
+| `data-invalid`  | `""` (when `isInvalid`)  | Invalid state styling hook   |
 
 **HTML Attributes**
 
-| Attribute | Value                      | Purpose                                                      |
-| --------- | -------------------------- | ------------------------------------------------------------ |
-| `for`     | Value from `htmlFor` prop  | Provides explicit association when rendering a native `<label>` |
-| `id`      | `string`                   | Enables relationships such as `aria-labelledby`                 |
+| Attribute | Value                     | Purpose                                                         |
+| --------- | ------------------------- | --------------------------------------------------------------- |
+| `for`     | Value from `htmlFor` prop | Provides explicit association when rendering a native `<label>` |
+| `id`      | `string`                  | Enables relationships such as `aria-labelledby`                 |
 
 **Accessibility Attributes**
 
@@ -449,11 +449,11 @@ By default, the component renders a native `<label>`, so native label semantics 
 
 The Label component does not implement component-specific keyboard handlers.
 
-| Key           | Action                            | Context         | Notes                                                                 |
-| ------------- | --------------------------------- | --------------- | --------------------------------------------------------------------- |
-| `Tab`         | Moves focus to next focusable element | Form navigation | The label itself is not in the tab order by default                 |
-| `Shift + Tab` | Moves focus to previous focusable element | Form navigation | Keyboard navigation proceeds through form controls                |
-| `Space`       | Activates the focused control         | Focused control | Behavior is controlled by the focused input/control                  |
-| `Enter`       | Triggers focused control behavior     | Focused control | Behavior depends on the focused control type                         |
+| Key           | Action                                    | Context         | Notes                                               |
+| ------------- | ----------------------------------------- | --------------- | --------------------------------------------------- |
+| `Tab`         | Moves focus to next focusable element     | Form navigation | The label itself is not in the tab order by default |
+| `Shift + Tab` | Moves focus to previous focusable element | Form navigation | Keyboard navigation proceeds through form controls  |
+| `Space`       | Activates the focused control             | Focused control | Behavior is controlled by the focused input/control |
+| `Enter`       | Triggers focused control behavior         | Focused control | Behavior depends on the focused control type        |
 
 **Important**: Label does not define keyboard behavior itself; keyboard interaction is handled by the associated form control.

@@ -39,7 +39,6 @@ The Tabs component provides a set of layered sections of content, known as tab p
 | `defaultValue` | `string` | No | `undefined` | Uncontrolled initial tab selection |
 | `onValueChange` | `(value: string) => void` | No | `undefined` | Callback when tab selection changes |
 | `orientation` | `"horizontal" \| "vertical"` | No | `"horizontal"` | Tabs orientation affecting keyboard navigation |
-| `dir` | `"ltr" \| "rtl"` | No | `"ltr"` | Text direction for arrow key navigation |
 | `activationMode` | `"automatic" \| "manual"` | No | `"automatic"` | Whether tabs activate on focus or require explicit activation |
 | `as` | `ElementType` | No | `"div"` | Polymorphic component type |
 | `children` | `React.ReactNode` | No | - | TabsList and TabsContent components |
@@ -94,7 +93,6 @@ The Tabs component provides a set of layered sections of content, known as tab p
 | Horizontal orientation | Up arrow | Focus previous tab (alternative) | Focus management, selection if automatic |
 | Vertical orientation | Down arrow | Focus next tab | Focus management, selection if automatic |
 | Vertical orientation | Up arrow | Focus previous tab | Focus management, selection if automatic |
-| RTL direction | Left arrow | Focus next tab (right-to-left) | Focus management, reversed navigation |
 | Focus on tab | Home | Focus first non-disabled tab | Focus management, selection if automatic |
 | Focus on tab | End | Focus last non-disabled tab | Focus management, selection if automatic |
 | Tab navigation | Tab key | Exit tablist, focus content or next focusable | Focus moves to tab panel or next element |
@@ -112,7 +110,6 @@ The Tabs component provides a set of layered sections of content, known as tab p
 - **Arrow Keys**: 
   - Horizontal orientation: Left/Right arrows navigate between tabs
   - Vertical orientation: Up/Down arrows navigate between tabs
-  - RTL support: Reverses Left/Right arrow behavior
 - **Home**: Moves focus to the first non-disabled tab
 - **End**: Moves focus to the last non-disabled tab
 - **Enter/Space**: In manual activation mode, activates the focused tab
@@ -159,7 +156,6 @@ const useTabsState = (props: {
 // Focus management for keyboard navigation
 const useTabsKeyboard = (props: {
   orientation: TabsOrientation;
-  dir: "ltr" | "rtl";
   activationMode: "automatic" | "manual";
 }) => {
   // Handle arrow key navigation
@@ -175,7 +171,6 @@ interface TabsContextValue {
   selectedValue: string;
   onValueChange: (value: string) => void;
   orientation: "horizontal" | "vertical";
-  dir: "ltr" | "rtl";
   activationMode: "automatic" | "manual";
   // Internal refs and focus management
 }
@@ -206,7 +201,6 @@ interface TabsContextValue {
 
 #### Tabs (Root)
 - `data-orientation`: `"horizontal" | "vertical"` - Current orientation
-- `data-dir`: `"ltr" | "rtl"` - Text direction
 
 #### TabsList
 - `data-orientation`: `"horizontal" | "vertical"` - Current orientation
@@ -225,7 +219,6 @@ These data attributes enable CSS selectors for styling different states:
 - Active/inactive tabs: `[data-state="active"]` / `[data-state="inactive"]`
 - Disabled tabs: `[data-disabled]`
 - Orientation-based layouts: `[data-orientation="vertical"]`
-- Direction-based positioning: `[data-dir="rtl"]`
 
 ## 7. Test Coverage Plan
 
@@ -235,7 +228,6 @@ These data attributes enable CSS selectors for styling different states:
 - **Keyboard Navigation**: Arrow keys, Home/End, Tab behavior
 - **Activation Modes**: Automatic vs manual activation
 - **Orientation**: Horizontal vs vertical navigation patterns
-- **Direction**: LTR vs RTL arrow key behavior
 - **Disabled States**: Skipping disabled tabs
 - **Edge Cases**: Empty tablist, single tab, all tabs disabled
 
@@ -312,7 +304,7 @@ These data attributes enable CSS selectors for styling different states:
 - [ ] Roving tabindex pattern for single tab stop
 - [ ] Proper focus management and visual indicators
 - [ ] Screen reader announcements for state changes
-- [ ] RTL and orientation support
+- [ ] Orientation support
 
 #### Testing
 - [ ] Unit tests for all component behaviors

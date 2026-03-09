@@ -1,5 +1,5 @@
 import type { ElementType, ReactNode, SyntheticEvent, RefObject } from 'react';
-import type { Side, Align, Direction, PolymorphicProps } from '../../types';
+import type { Side, Align, PolymorphicProps } from '../../types';
 import type { ButtonOwnProps } from '../Button/types';
 
 export type DropdownMenuFocusStrategy = 'first' | 'last' | 'none';
@@ -70,12 +70,6 @@ export interface DropdownMenuProps {
    * @defaultValue false
    */
   disabled?: boolean;
-
-  /**
-   * Reading direction for positioning
-   * @defaultValue 'ltr'
-   */
-  dir?: Direction;
 
   /**
    * Whether to close the menu after an item is selected
@@ -227,7 +221,6 @@ export interface DropdownMenuContextValue {
   contentId: string;
   modal: boolean;
   disabled: boolean;
-  dir: Direction;
   closeOnSelect: boolean;
   focusStrategy: DropdownMenuFocusStrategy;
   setFocusStrategy: (strategy: DropdownMenuFocusStrategy) => void;
@@ -262,5 +255,4 @@ export interface DropdownMenuCollectionContextValue {
   highlightedId: string | null;
   closeOnSelect: boolean;
   closeMenu: (options?: { focusTrigger?: boolean }) => void;
-  dir: Direction;
 }
