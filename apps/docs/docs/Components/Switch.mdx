@@ -1,6 +1,6 @@
 ---
 title: Switch
-description: A headless boolean toggle control for on/off states with comprehensive accessibility support and form integration.
+description: Headless switch control for on/off settings with accessible ARIA semantics, form integration, and controlled or uncontrolled state.
 ---
 
 import React from 'react';
@@ -56,6 +56,8 @@ background: rgba(255, 255, 255, 0.72);
 
 </div>
 
+The live demo shows a minimal switch track and thumb that moves when the control becomes checked.
+
 ## Features
 
 - ✅ Supports both controlled (`checked`) and uncontrolled (`defaultChecked`) state
@@ -65,16 +67,10 @@ background: rgba(255, 255, 255, 0.72);
 - ✅ Supports polymorphic rendering via the `as` prop
 - ✅ Supports optional auto focus on mount
 
-## Installation
+## Import
 
 ```tsx
 import { Switch } from '@turkish-technology/spar';
-```
-
-**Next.js (App Router):** Use the sub-path import for Server Component support:
-
-```ts
-import { Switch } from '@turkish-technology/spar/switch';
 ```
 
 ## Anatomy
@@ -111,6 +107,8 @@ The Switch component is a single-part component. Its root element handles intera
 
 ### Basic Usage
 
+Use a controlled switch when the setting state also needs to update labels, previews, or saved preferences.
+
 ```tsx
 function BasicSwitch() {
   const [enabled, setEnabled] = React.useState(false);
@@ -125,7 +123,9 @@ function BasicSwitch() {
 
 ### Uncontrolled Switch
 
-```tsx
+Use `defaultChecked` for simple cases where the switch can manage its own state internally.
+
+```tsx {3}
 function UncontrolledSwitch() {
   return (
     <Switch defaultChecked={false} onChange={(checked) => console.log('Changed to:', checked)}>
@@ -137,7 +137,9 @@ function UncontrolledSwitch() {
 
 ### Form Integration
 
-```tsx
+Provide `name` and optional `value` when the switch should submit as part of a native form.
+
+```tsx {2-3,7-10,13,17,21}
 function FormExample() {
   const [notifications, setNotifications] = React.useState(false);
   const [darkMode, setDarkMode] = React.useState(true);
@@ -166,7 +168,9 @@ function FormExample() {
 
 ### Accessibility with Labels
 
-```tsx
+Pair the switch with visible labels and descriptions when the meaning of the toggle is not obvious from the control alone.
+
+```tsx {6-12}
 function AccessibleSwitch() {
   const [isOn, setIsOn] = React.useState(false);
 
@@ -192,7 +196,9 @@ function AccessibleSwitch() {
 
 ### Disabled and Read-only States
 
-```tsx
+Use `disabled` to block interaction entirely, or `readOnly` when users may inspect the value but should not change it.
+
+```tsx {2,6,10,14,18}
 function StateVariations() {
   const [enabled, setEnabled] = React.useState(true);
 
@@ -220,7 +226,9 @@ function StateVariations() {
 
 ### Custom Element Rendering
 
-```tsx
+The `as` prop lets you reuse the switch behavior inside a custom layout wrapper while preserving the same interaction model.
+
+```tsx {2,5}
 function CustomElement() {
   const [active, setActive] = React.useState(false);
 

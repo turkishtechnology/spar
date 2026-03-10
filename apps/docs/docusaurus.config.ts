@@ -36,7 +36,7 @@ const config: Config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en' /* , 'tr' */],
+    locales: ['en'],
     path: 'i18n',
     localeConfigs: {
       en: {
@@ -46,15 +46,6 @@ const config: Config = {
         calendar: 'gregory',
         path: 'en',
       },
-      /*
-      tr: {
-        label: 'Türkçe',
-        direction: 'ltr',
-        htmlLang: 'tr-TR',
-        calendar: 'gregory',
-        path: 'tr',
-      },
-      */
     },
   },
   plugins: ['docusaurus-plugin-sass'],
