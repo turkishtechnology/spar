@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "🔍 Pre-commit kontrollerine başlanıyor..."
+echo "🔍 Starting pre-commit checks..."
 
 TMPDIR=$(mktemp -d)
 
@@ -22,4 +22,4 @@ cat "$TMPDIR/types.log"
 
 rm -rf "$TMPDIR"
 
-[ $FAIL -eq 0 ] && echo "✅ Pre-commit kontrolleri tamamlandı!" || exit 1
+[ $FAIL -eq 0 ] && echo "✅ Pre-commit checks completed!" || exit 1

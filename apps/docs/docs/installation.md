@@ -1,15 +1,15 @@
 ---
 title: Installation
-description: Get started with Spar in your React project. Learn how to install and configure the library with your preferred package manager and styling solution.
+description: Get started with Spar in a React project. Learn how to install and configure the library with a package manager and styling solution.
 ---
 
 # Installation
 
-Get started with Spar in minutes. This guide covers installation, setup, and basic configuration for your React project.
+Get started with Spar in minutes. This guide covers installation, setup, and basic configuration for a React project.
 
 ## Requirements
 
-Before installing Spar, ensure your project meets these requirements:
+Before installing Spar, ensure the project meets these requirements:
 
 - **Node.js:** >=22.18.0
 - **React:** >=19.0.0
@@ -52,7 +52,7 @@ Spar works seamlessly with modern React frameworks.
 
 ### React
 
-Import components in your React files, and start developing:
+Import components into React files and start developing:
 
 ```tsx title="src/App.tsx"
 import { Button } from '@turkish-technology/spar';
@@ -69,9 +69,9 @@ function App() {
 
 ### Next.js
 
-Spar is fully compatible with Next.js 14+ (App Router & Server Components supported).
+Spar is compatible with Next.js 14+ and the App Router.
 
-Spar provides **per-component sub-path imports** for seamless Server Component support. Use `import * as ComponentName` to get the familiar compound pattern (`Accordion.Root`, `Accordion.Item`, etc.) working in both Server and Client Components:
+All published Spar entrypoints are client-marked modules, so importing a Spar component from an App Router page or layout creates a client boundary automatically:
 
 ```ts
 import * as Accordion from '@turkish-technology/spar/accordion';
@@ -80,7 +80,7 @@ import * as Dialog from '@turkish-technology/spar/dialog';
 import { Button } from '@turkish-technology/spar/button';
 ```
 
-#### Server Component Example
+#### App Router Page Example
 
 ```tsx title="app/page.tsx"
 import * as Breadcrumb from '@turkish-technology/spar/breadcrumb';
@@ -133,10 +133,6 @@ export function AccordionSection() {
 }
 ```
 
-:::tip Why sub-path imports?
-The standard barrel import (`import { Accordion } from '@turkish-technology/spar'`) uses a compound pattern where sub-components are attached as static properties (`Accordion.Root`). React Server Components cannot serialize these static properties across the server-client boundary. Sub-path imports solve this by exposing each sub-component as a proper named export.
-:::
-
 #### Available Sub-path Imports
 
 | Import Path                              | Components                                                                    |
@@ -159,11 +155,11 @@ The standard barrel import (`import { Accordion } from '@turkish-technology/spar
 
 ## Next Steps
 
-Now that you have Spar installed:
+After installing Spar:
 
 1. **Explore Components:** Check out the [Components](/docs/overview) page to see all available components
 2. **Learn Patterns:** Read component documentation for usage examples
-3. **Style Your Components:** Choose your preferred styling solution and customize
+3. **Style Components:** Choose a preferred styling solution and customize
 4. **Build Accessible UIs:** All components come with built-in accessibility
 
 ## Getting Help

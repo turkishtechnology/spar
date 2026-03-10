@@ -35,30 +35,30 @@ export default [
       prettier: prettier,
     },
     rules: {
-      'no-unused-vars': 'off', // TypeScript ile çakışmaması için kapalı
-      // TypeScript kuralları (sadece mevcut olanlar)
+      'no-unused-vars': 'off', // Disabled to avoid conflicting with TypeScript
+      // TypeScript rules (only the ones currently available)
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-var-requires': 'error',
 
-      // Genel JavaScript kuralları
+      // General JavaScript rules
       'no-console': 'warn',
       'no-debugger': 'error',
       'no-duplicate-imports': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
 
-      // Prettier entegrasyonu
+      // Prettier integration
       'prettier/prettier': 'error',
     },
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
     rules: {
-      // TypeScript dosyaları için özel kurallar
+      // Rules specific to TypeScript files
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      // TypeScript dosyalarında no-undef kapalı
+      // Disable no-undef in TypeScript files
       'no-undef': 'off',
     },
   },
@@ -77,11 +77,11 @@ export default [
       },
     },
     rules: {
-      // Test dosyalarında jest global'leri için no-undef kapalı
+      // Disable no-undef for Jest globals in test files
       'no-undef': 'off',
     },
   },
-  // Docusaurus özel konfigürasyonu (sadece docs app için)
+  // Docusaurus-specific configuration (docs app only)
   {
     files: ['apps/docs/**/*.{js,jsx,ts,tsx,md,mdx}'],
     plugins: {
@@ -89,7 +89,7 @@ export default [
     },
     languageOptions: {
       globals: {
-        // Docusaurus için browser global'leri
+        // Browser globals used by Docusaurus
         window: 'readonly',
         document: 'readonly',
         navigator: 'readonly',
@@ -100,7 +100,7 @@ export default [
       },
     },
     rules: {
-      // Docusaurus önerilen kuralları
+      // Recommended Docusaurus rules
       '@docusaurus/string-literal-i18n-messages': 'error',
       '@docusaurus/no-untranslated-text': [
         'warn',
@@ -111,9 +111,9 @@ export default [
       '@docusaurus/no-html-links': 'error',
       '@docusaurus/prefer-docusaurus-heading': 'warn',
 
-      // Docs'ta console izinli
+      // Allow console in docs
       'no-console': 'off',
-      // Config dosyaları için daha esnek
+      // Be more flexible in config files
       '@typescript-eslint/no-var-requires': 'off',
     },
   },
@@ -128,7 +128,7 @@ export default [
       'coverage/**',
       '*.config.js',
       '*.config.ts',
-      // Docusaurus generate edilmiş dosyalar
+      // Generated Docusaurus files
       'apps/docs/.docusaurus/**',
       'apps/docs/build/**',
     ],

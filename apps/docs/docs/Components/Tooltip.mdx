@@ -78,6 +78,8 @@ color: var(--tooltip-surface);
 
 </div>
 
+The live demo shows a standard tooltip pattern: focus or hover the trigger to reveal a short supporting message above it.
+
 ## Features
 
 - ✅ Controlled and uncontrolled open state (`open`, `defaultOpen`, `onOpenChange`)
@@ -88,20 +90,10 @@ color: var(--tooltip-surface);
 - ✅ Floating-based positioning with `side` and `align`
 - ✅ Optional arrow part (`Tooltip.Arrow`)
 
-## Installation
-
-```sh
-pnpm install @turkish-technology/spar
-```
+## Import
 
 ```ts
 import { Tooltip } from '@turkish-technology/spar';
-```
-
-**Next.js (App Router):** Use the sub-path import for Server Component support:
-
-```ts
-import * as Tooltip from '@turkish-technology/spar/tooltip';
 ```
 
 ---
@@ -168,7 +160,7 @@ The Tooltip component is built as a compound component with multiple parts:
 
 Simplest tooltip with default configuration:
 
-```tsx {3-11}
+```tsx
 export function BasicTooltip() {
   return (
     <Tooltip.Provider>
@@ -185,7 +177,7 @@ export function BasicTooltip() {
 
 Control tooltip placement and alignment:
 
-```tsx {6-9}
+```tsx {3}
 <Tooltip.Root>
   <Tooltip.Trigger>{'Right aligned tooltip'}</Tooltip.Trigger>
   <Tooltip.Content side='right' align='start'>
@@ -198,7 +190,7 @@ Control tooltip placement and alignment:
 
 Add an arrow pointing to the trigger element:
 
-```tsx {8}
+```tsx {3,5}
 <Tooltip.Root>
   <Tooltip.Trigger>{'Tooltip with arrow'}</Tooltip.Trigger>
   <Tooltip.Content>
@@ -229,7 +221,7 @@ function ControlledTooltip() {
 
 Share configuration across multiple tooltips:
 
-```tsx {1}
+```tsx {1-2,7}
 <Tooltip.Provider delayDuration={500} skipDelayDuration={200}>
   <Tooltip.Root>
     <Tooltip.Trigger>{'First tooltip'}</Tooltip.Trigger>
@@ -258,7 +250,7 @@ Override default delay timing for specific tooltip:
 
 Conditionally disable tooltip:
 
-```tsx {2,5}
+```tsx {2,5-6}
 function DisabledExample() {
   const [disabled, setDisabled] = React.useState(false);
 
@@ -275,7 +267,7 @@ function DisabledExample() {
 
 Render tooltip in custom portal container:
 
-```tsx {2,12}
+```tsx {2,6,10}
 function CustomContainerTooltip() {
   const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -345,9 +337,9 @@ Optional provider for sharing configuration across multiple tooltip instances.
 | --------- | ----- | -------------------------------------- |
 | None      | -     | Provider does not render a DOM element |
 
-### Tooltip.Root
+### Tooltip / Tooltip.Root
 
-Root component that manages tooltip state and provides context to child components.
+Root component that manages tooltip state and provides context to child components. `Tooltip` and `Tooltip.Root` are the same component - the difference is only import/notation style.
 
 **Props**
 

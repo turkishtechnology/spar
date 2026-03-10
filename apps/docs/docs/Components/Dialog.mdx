@@ -145,6 +145,8 @@ color: #99a0ae;
 
 </div>
 
+The live demo presents a common confirmation dialog pattern with title, description, dismiss action, and primary action.
+
 ## Features
 
 - ✅ Modal and non-modal dialog support
@@ -156,16 +158,10 @@ color: #99a0ae;
 - ✅ Custom focus management with initial and final focus
 - ✅ Force mount for animation libraries
 
-## Installation
+## Import
 
 ```tsx
 import { Dialog } from '@turkish-technology/spar';
-```
-
-**Next.js (App Router):** Use the sub-path import for Server Component support:
-
-```ts
-import * as Dialog from '@turkish-technology/spar/dialog';
 ```
 
 ## Anatomy
@@ -246,7 +242,7 @@ The Dialog component is built as a compound component with multiple parts:
 
 Control the dialog's open state externally for integration with other components or form validation.
 
-```tsx {2,4,11}
+```tsx {2,4-7,11,19-20}
 function ControlledDialog() {
   const [open, setOpen] = React.useState(false);
 
@@ -325,7 +321,7 @@ function NonModalDialog() {
 
 Control initial focus and focus restoration for optimal user experience.
 
-```tsx {3,11-19}
+```tsx {3,10-19,26}
 function CustomFocusDialog() {
   const [open, setOpen] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -369,7 +365,7 @@ function CustomFocusDialog() {
 
 Use the `as` prop to render dialog parts as different HTML elements or custom components.
 
-```tsx {4,8,10,13,14}
+```tsx {4,7,9,12-13}
 function PolymorphicDialog() {
   return (
     <Dialog.Root>
@@ -395,7 +391,7 @@ function PolymorphicDialog() {
 
 Use `forceMount` on the root for animation libraries that need to control mounting and unmounting.
 
-```tsx {5,9-12,15-19}
+```tsx {5,7-12,13-19}
 function AnimatedDialog() {
   const [open, setOpen] = React.useState(false);
 
@@ -426,9 +422,9 @@ function AnimatedDialog() {
 
 ## API Reference
 
-### Dialog.Root
+### Dialog / Dialog.Root
 
-The root container that manages dialog state and provides context to all child components.
+The root container that manages dialog state and provides context to all child components. `Dialog` and `Dialog.Root` are the same component - the difference is only import/notation style.
 
 **Props**
 
