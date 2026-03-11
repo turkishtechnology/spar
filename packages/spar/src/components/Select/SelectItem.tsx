@@ -108,20 +108,30 @@ export const SelectItem = <T extends ElementType = 'div'>({
     disabled,
   };
 
+  const ariaAttributes = {
+    role: 'option',
+    'aria-selected': isSelected,
+    'aria-disabled': disabled || undefined,
+  };
+
+  const dataAttributes = {
+    'data-state': isSelected ? 'checked' : 'unchecked',
+    'data-disabled': disabled ? '' : undefined,
+    'data-highlighted': isHighlighted ? '' : undefined,
+  };
+
+  const itemProps = {
+    ref: mergedRef,
+    ...ariaAttributes,
+    ...dataAttributes,
+    onPointerMove: handlePointerMove,
+    onClick: handleClick,
+    ...props,
+  };
+
   return (
     <SelectItemContext.Provider value={itemContextValue}>
-      <Component
-        ref={mergedRef}
-        role='option'
-        aria-selected={isSelected}
-        aria-disabled={disabled || undefined}
-        data-state={isSelected ? 'checked' : 'unchecked'}
-        data-disabled={disabled ? '' : undefined}
-        data-highlighted={isHighlighted ? '' : undefined}
-        onPointerMove={handlePointerMove}
-        onClick={handleClick}
-        {...props}
-      >
+      <Component {...itemProps}>
         {typeof children === 'function' ? children(renderProps) : children}
       </Component>
     </SelectItemContext.Provider>
