@@ -1,5 +1,8 @@
 # Nixpacks configuration for MCP server deployment
-# Used when NIXPACKS_TURBO_APP_NAME=@turkish-technology/mcp-server is set
+# Start command is explicit because root package.json has no "start" script
 
 [variables]
 NODE_ENV = "production"
+
+[start]
+cmd = "node apps/mcp-server/dist/index.js"
