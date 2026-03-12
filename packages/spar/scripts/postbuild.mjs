@@ -25,8 +25,8 @@ for (const file of bundleFiles) {
 }
 
 // ---------------------------------------------------------------------------
-// 2) Generate per-component sub-path exports for RSC compatibility
-//    Reads src/components/*/index.ts automatically — no static mapping needed.
+// 2) Generate per-component sub-path entrypoints with their own "use client"
+//    directives. Reads src/components/*/index.ts automatically.
 // ---------------------------------------------------------------------------
 
 function toKebabCase(str) {

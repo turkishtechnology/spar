@@ -1,6 +1,6 @@
 ---
 title: Label
-description: A headless, accessible label component for form controls that establishes programmatic relationships and improves usability.
+description: Headless label primitive for associating text with form controls while exposing simple styling hooks for form states.
 ---
 
 import React from 'react';
@@ -35,6 +35,8 @@ color: #f2f5f8;
 
 </div>
 
+This demo is intentionally simple because `Label` is most useful when paired with an input, checkbox, radio, or other form control.
+
 ## Features
 
 - ✅ **Explicit Association**: Supports form-control association via `htmlFor` and matching `id`
@@ -43,16 +45,10 @@ color: #f2f5f8;
 - ✅ **Native Props Pass-Through**: Forwards native HTML props and `ref` to the rendered element
 - ✅ **State Flag Props**: Supports `required`, `isOptional`, `disabled`, `readOnly`, and `isInvalid`
 
-## Installation
+## Import
 
 ```tsx
 import { Label } from '@turkish-technology/spar';
-```
-
-**Next.js (App Router):** Use the sub-path import for Server Component support:
-
-```ts
-import { Label } from '@turkish-technology/spar/label';
 ```
 
 ## Anatomy
@@ -109,7 +105,7 @@ function BasicExample() {
 
 Use `required` to mark fields as required. The label exposes a `data-required` attribute for styling hooks:
 
-```tsx
+```tsx {4,7}
 function RequiredFieldExample() {
   return (
     <div>
@@ -128,7 +124,7 @@ function RequiredFieldExample() {
 
 Mark fields as optional with `isOptional`:
 
-```tsx
+```tsx {4,7}
 function OptionalFieldExample() {
   return (
     <div>
@@ -145,7 +141,7 @@ function OptionalFieldExample() {
 
 Use `disabled` to visually indicate disabled controls:
 
-```tsx
+```tsx {4,7}
 function DisabledFieldExample() {
   return (
     <div>
@@ -164,7 +160,7 @@ function DisabledFieldExample() {
 
 Use `readOnly` to visually indicate read-only controls:
 
-```tsx
+```tsx {4,7}
 function ReadOnlyFieldExample() {
   return (
     <div>
@@ -183,7 +179,7 @@ function ReadOnlyFieldExample() {
 
 Use `isInvalid` to visually indicate validation errors:
 
-```tsx
+```tsx {4,7}
 function InvalidFieldExample() {
   return (
     <div>
@@ -202,7 +198,7 @@ function InvalidFieldExample() {
 
 Wrap the form control inside the label for implicit association:
 
-```tsx
+```tsx {3,5}
 function ImplicitAssociationExample() {
   return (
     <Label>
@@ -217,7 +213,7 @@ function ImplicitAssociationExample() {
 
 Render as different elements using the `as` prop:
 
-```tsx
+```tsx {4,7}
 function PolymorphicExample() {
   return (
     <div>
@@ -236,7 +232,7 @@ function PolymorphicExample() {
 
 Labels can contain rich content like icons, badges, or help text:
 
-```tsx
+```tsx {4-8,10}
 function ComplexLabelExample() {
   return (
     <div>
@@ -256,7 +252,7 @@ function ComplexLabelExample() {
 
 Combine multiple state indicators:
 
-```tsx
+```tsx {2,6,9-10}
 function MultipleStatesExample() {
   const [disabled, setDisabled] = React.useState(false);
 
@@ -276,7 +272,7 @@ function MultipleStatesExample() {
 
 Use data attributes for custom styling:
 
-```tsx
+```tsx {4}
 function StyledLabelExample() {
   return (
     <div>
@@ -320,7 +316,7 @@ function StyledLabelExample() {
 
 Complete form field pattern with label, input, and error message:
 
-```tsx
+```tsx {2-3,5-8,12,15-24,25-27}
 function FormGroupExample() {
   const [value, setValue] = React.useState('');
   const [error, setError] = React.useState('');
@@ -351,44 +347,6 @@ function FormGroupExample() {
         </span>
       )}
     </div>
-  );
-}
-```
-
-### Radio Group Labeling
-
-Use Label with radio button groups:
-
-```tsx
-function RadioGroupLabelExample() {
-  const [selected, setSelected] = React.useState('option1');
-
-  return (
-    <fieldset>
-      <legend>Choose an option</legend>
-
-      <Label>
-        <input
-          type='radio'
-          name='options'
-          value='option1'
-          checked={selected === 'option1'}
-          onChange={(e) => setSelected(e.target.value)}
-        />
-        Option 1
-      </Label>
-
-      <Label>
-        <input
-          type='radio'
-          name='options'
-          value='option2'
-          checked={selected === 'option2'}
-          onChange={(e) => setSelected(e.target.value)}
-        />
-        Option 2
-      </Label>
-    </fieldset>
   );
 }
 ```

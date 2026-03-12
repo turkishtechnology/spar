@@ -1,4 +1,4 @@
-import { useMemo, ElementType } from 'react';
+import { ElementType } from 'react';
 import type { LabelProps } from './types';
 
 /**
@@ -16,17 +16,13 @@ export const Label = <T extends ElementType = 'label'>({
   ...htmlProps
 }: LabelProps<T>) => {
   const Component = as || 'label';
-  // Memoize data attributes to prevent object recreation
-  const dataAttributes = useMemo(
-    () => ({
-      'data-required': required ? '' : undefined,
-      'data-optional': isOptional ? '' : undefined,
-      'data-disabled': disabled ? '' : undefined,
-      'data-readonly': readOnly ? '' : undefined,
-      'data-invalid': isInvalid ? '' : undefined,
-    }),
-    [required, isOptional, disabled, readOnly, isInvalid],
-  );
+  const dataAttributes = {
+    'data-required': required ? '' : undefined,
+    'data-optional': isOptional ? '' : undefined,
+    'data-disabled': disabled ? '' : undefined,
+    'data-readonly': readOnly ? '' : undefined,
+    'data-invalid': isInvalid ? '' : undefined,
+  };
 
   return (
     <Component ref={ref} {...htmlProps} {...dataAttributes}>

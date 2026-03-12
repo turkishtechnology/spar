@@ -91,6 +91,8 @@ color: #ff8a8a;
 }`}
 />
 
+The live demo shows the full compound pattern with label, field, helper text, and an error message tied to an invalid state.
+
 ## Features
 
 - ✅ Text input and textarea support via polymorphic rendering (`input` or `textarea`)
@@ -100,16 +102,10 @@ color: #ff8a8a;
 - ✅ Form integration with name, value, and change event support
 - ✅ Focus state tracking on the input element
 
-## Installation
+## Import
 
 ```tsx
 import { Input } from '@turkish-technology/spar';
-```
-
-**Next.js (App Router):** Use the sub-path import for Server Component support:
-
-```ts
-import * as Input from '@turkish-technology/spar/input';
 ```
 
 `Input` and `Input.Root` refer to the same component — the difference is only notation style:
@@ -219,7 +215,7 @@ function BasicTextInput() {
 
 Demonstrates validation state management with conditional error message display.
 
-```tsx
+```tsx {2-3,5-7,12,20-21,23}
 function ValidatedInput() {
   const [email, setEmail] = React.useState('');
   const [isInvalid, setIsInvalid] = React.useState(false);
@@ -254,7 +250,7 @@ function ValidatedInput() {
 
 Shows polymorphic rendering capability for multi-line text input with proper accessibility.
 
-```tsx
+```tsx {2,7-12,14}
 function TextareaInput() {
   const [message, setMessage] = React.useState('');
 
@@ -278,7 +274,7 @@ function TextareaInput() {
 
 Demonstrates disabled state propagation across all compound parts.
 
-```tsx
+```tsx {3,5-6}
 function DisabledInput() {
   return (
     <Input.Root disabled>
@@ -294,7 +290,7 @@ function DisabledInput() {
 
 Complete form example with validation, submission, and error handling.
 
-```tsx
+```tsx {2-3,5-14,17-22,25-33,36-43,47-56,59}
 function ContactForm() {
   const [formData, setFormData] = React.useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = React.useState<Record<string, string>>({});
@@ -359,35 +355,11 @@ function ContactForm() {
 }
 ```
 
-### Tree-shakeable Import Example
-
-Using named imports for better bundle optimization:
-
-```tsx
-import { Input } from '@turkish-technology/spar';
-
-function TreeShakeableInput() {
-  const [value, setValue] = useState('');
-
-  return (
-    <Input.Root>
-      <Input.Label>Username</Input.Label>
-      <Input.Field
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder='Enter username'
-      />
-      <Input.Description>Choose a unique username</Input.Description>
-    </Input.Root>
-  );
-}
-```
-
 ## API Reference
 
 ### Input / Input.Root
 
-The root context provider that wraps all compound input parts. `Input` and `Input.Root` are the same component — the difference is only import/notation style. Renders a `<div>` by default and exposes an `InputContext` that all child components consume.
+The root context provider that wraps all compound input parts. `Input` and `Input.Root` are the same component - the difference is only import/notation style. Renders a `<div>` by default and exposes an `InputContext` that all child components consume.
 
 **Props**
 

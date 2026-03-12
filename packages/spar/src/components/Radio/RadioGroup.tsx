@@ -204,20 +204,26 @@ export const RadioGroup = <T extends ElementType = 'div'>({
     'data-autofocus': autoFocus ? '' : undefined,
   };
 
+  const ariaAttributes = {
+    'aria-label': ariaLabel,
+    'aria-labelledby': ariaLabelledBy,
+    'aria-describedby': ariaDescribedBy,
+    'aria-required': required || undefined,
+  };
+
+  const groupProps = {
+    ref,
+    role: 'radiogroup',
+    ...ariaAttributes,
+    onKeyDown: handleKeyDown,
+    onFocus: handleFocus,
+    ...dataAttributes,
+    ...rest,
+  };
+
   return (
     <RadioGroupContext.Provider value={contextValue}>
-      <Component
-        ref={ref}
-        role='radiogroup'
-        aria-label={ariaLabel}
-        aria-labelledby={ariaLabelledBy}
-        aria-describedby={ariaDescribedBy}
-        aria-required={required || undefined}
-        onKeyDown={handleKeyDown}
-        onFocus={handleFocus}
-        {...dataAttributes}
-        {...rest}
-      >
+      <Component {...groupProps}>
         {children}
         {/* Hidden input for form submission */}
         {value && (

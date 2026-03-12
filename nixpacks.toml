@@ -1,0 +1,5 @@
+# Nixpacks configuration for MCP server deployment
+# Used when NIXPACKS_TURBO_APP_NAME=@turkish-technology/mcp-server is set
+
+[variables]
+NODE_ENV = "production"

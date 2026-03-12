@@ -110,23 +110,31 @@ export const DropdownMenuItem = <T extends ElementType = 'div'>({
     }
   };
 
-  return (
-    <Component
-      {...props}
-      id={itemId}
-      ref={mergedRef}
-      role={roleProp}
-      tabIndex={disabled ? -1 : isHighlighted ? 0 : -1}
-      aria-disabled={disabled || undefined}
-      data-highlighted={isHighlighted ? '' : undefined}
-      {...(disabled ? { 'data-disabled': '' } : {})}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
-      onFocus={handleFocus}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-    />
-  );
+  const ariaAttributes = {
+    'aria-disabled': disabled || undefined,
+  };
+
+  const dataAttributes = {
+    'data-highlighted': isHighlighted ? '' : undefined,
+    'data-disabled': disabled ? '' : undefined,
+  };
+
+  const itemProps = {
+    ...props,
+    id: itemId,
+    ref: mergedRef,
+    role: roleProp,
+    tabIndex: disabled ? -1 : isHighlighted ? 0 : -1,
+    ...ariaAttributes,
+    ...dataAttributes,
+    onPointerMove: handlePointerMove,
+    onPointerLeave: handlePointerLeave,
+    onFocus: handleFocus,
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+  };
+
+  return <Component {...itemProps} />;
 };
 
 DropdownMenuItem.displayName = 'DropdownMenuItem';

@@ -53,16 +53,10 @@ color: #f2f5f8;
 - ✅ Auto-focus support on mount
 - ✅ Disabled state management
 
-## Installation
+## Import
 
 ```tsx
 import { Button } from '@turkish-technology/spar';
-```
-
-**Next.js (App Router):** Use the sub-path import for Server Component support:
-
-```ts
-import { Button } from '@turkish-technology/spar/button';
 ```
 
 ## Anatomy
@@ -111,7 +105,7 @@ function BasicButton() {
 
 Create a toggle button with controlled state:
 
-```tsx
+```tsx {2,5-6}
 function ToggleButton() {
   const [isToggled, setIsToggled] = useState(false);
 
@@ -127,7 +121,7 @@ function ToggleButton() {
 
 Button with loading state:
 
-```tsx
+```tsx {2,4-9,14-15}
 function LoadingButton() {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -152,7 +146,7 @@ function LoadingButton() {
 
 Render as different HTML elements:
 
-```tsx
+```tsx {5,10,13}
 function PolymorphicButtons() {
   return (
     <>
@@ -175,7 +169,7 @@ function PolymorphicButtons() {
 
 Button with auto-focus and disabled state management:
 
-```tsx
+```tsx {2,6,10}
 function AccessibilityExample() {
   const [disabled, setDisabled] = useState(false);
 

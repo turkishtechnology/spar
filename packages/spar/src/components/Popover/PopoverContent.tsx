@@ -179,26 +179,34 @@ export const PopoverContent = <T extends ElementType = 'div'>({
 
   if (!isOpen || !mounted) return null;
 
+  const ariaAttributes = {
+    role: modal ? 'dialog' : undefined,
+    'aria-modal': modal ? 'true' : undefined,
+  };
+
+  const dataAttributes = {
+    'data-state': 'open',
+    'data-side': currentSide,
+    'data-align': currentAlign,
+  };
+
+  const contentProps = {
+    ref: floatingRef,
+    id: contentId,
+    tabIndex: -1,
+    ...ariaAttributes,
+    ...dataAttributes,
+    style: {
+      ...floatingStyles,
+      ...style,
+    },
+    onKeyDown: handleKeyDown,
+    ...props,
+  };
+
   const contentElement = (
     <PopoverContentContext.Provider value={contentContextValue}>
-      <Component
-        ref={floatingRef}
-        id={contentId}
-        role={modal ? 'dialog' : undefined}
-        aria-modal={modal ? 'true' : undefined}
-        tabIndex={-1}
-        data-state='open'
-        data-side={currentSide}
-        data-align={currentAlign}
-        style={{
-          ...floatingStyles,
-          ...style,
-        }}
-        onKeyDown={handleKeyDown}
-        {...props}
-      >
-        {children}
-      </Component>
+      <Component {...contentProps}>{children}</Component>
     </PopoverContentContext.Provider>
   );
 

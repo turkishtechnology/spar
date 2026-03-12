@@ -3,17 +3,45 @@ title: Introduction
 description: Spar is a headless React component library built with TypeScript. Unstyled, accessible, and composable primitives for building your own design system.
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 **Spar is a headless UI component library. Zero styling opinions, maximum flexibility.**
 
 Traditional component libraries come with predefined styles and visual designs. While this works for quick prototyping, it becomes limiting when you need components that match your unique design system.
 
-Spar takes a different approach: **we provide the behavior, you provide the style.** Each component is a fully accessible, keyboard-navigable primitive with zero styling to be modified exactly how you want.
+Spar takes a different approach: **behavior is built in, styling stays fully customizable.** Each component is a fully accessible, keyboard-navigable primitive with zero predefined styling.
 
 ## Quick Start
 
-```bash
-pnpm add @turkish-technology/spar
-```
+Install Spar with npm, yarn, pnpm, or bun:
+
+<Tabs defaultValue="npm" groupId="package-manager">
+  <TabItem value="npm" label="npm">
+    ```bash
+    npm install @turkish-technology/spar
+    ```
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+    ```bash
+    yarn add @turkish-technology/spar
+    ```
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+    ```bash
+    pnpm add @turkish-technology/spar
+    ```
+  </TabItem>
+  <TabItem value="bun" label="bun">
+    ```bash
+    bun add @turkish-technology/spar
+    ```
+  </TabItem>
+</Tabs>
+
+See the [Installation Guide](/docs/installation) for requirements, framework setup, and more detailed instructions.
+
+After installation, import a component and start building:
 
 ```tsx
 import { Button } from '@turkish-technology/spar';
@@ -22,8 +50,6 @@ function App() {
   return <Button onClick={() => alert('Hello!')}>Click me</Button>;
 }
 ```
-
-See the [Installation Guide](/docs/installation) for detailed setup instructions.
 
 ## Core Principles
 
@@ -75,7 +101,7 @@ All Spar components are built with accessibility as a core requirement:
 - **Focus Management:** Intelligent focus trapping and restoration.
 - **Automated Testing:** Every component tested with jest-axe for zero accessibility violations.
 
-You get accessible components out of the box—no extra work required.
+Accessible components work out of the box with no extra setup.
 
 ## TypeScript First
 
@@ -83,7 +109,7 @@ Spar is written in TypeScript with strict mode enabled:
 
 - **Full Type Safety:** Every prop, state, and callback is explicitly typed.
 - **No `any` Types:** Strict typing throughout the codebase.
-- **Generic Components:** Type-safe components that work with your data models.
+- **Generic Components:** Type-safe components that work with application data models.
 
 ```tsx
 import { Button, type ButtonProps } from '@turkish-technology/spar';
@@ -120,21 +146,21 @@ Plus utility hooks and TypeScript types. See all components in the [Components](
 
 ## Why Headless?
 
-Headless components separate behavior from presentation. This gives you:
+Headless components separate behavior from presentation. This provides:
 
 1. **Design Freedom:** Style components to match any design system.
 2. **Consistency:** Use the same components across different projects with different designs.
 3. **Maintainability:** Update behavior without touching styles, and vice versa.
 4. **Flexibility:** Works with any CSS framework or styling solution.
-5. **Performance:** Include only the JavaScript you need; styles are up to you.
+5. **Performance:** Include only the JavaScript needed; styling stays application-defined.
 
-_Spar handles the hard parts—state management, accessibility, keyboard navigation—so you can focus on making your UI look exactly how you want._
+_Spar handles the hard parts-state management, accessibility, keyboard navigation-so implementation effort stays focused on presentation and product-specific UI._
 
 ## Next Steps
 
 Ready to get started?
 
-1. **[Install Spar](/docs/installation)** - Set up the library in your project
+1. **[Install Spar](/docs/installation)** - Set up the library in a React app
 2. **[Browse Components](/docs/overview)** - Explore all 15 available components
 
 ## Community & Support

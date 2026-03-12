@@ -12,7 +12,9 @@ export function DialogDemo() {
       <Dialog.Overlay />
       <Dialog.Content>
         <Dialog.Title>Dialog Title</Dialog.Title>
-        <Dialog.Description>This is a dialog description for SSR testing.</Dialog.Description>
+        <Dialog.Description>
+          This is a dialog description for App Router testing.
+        </Dialog.Description>
         <Dialog.Close>Close</Dialog.Close>
       </Dialog.Content>
     </Dialog.Root>

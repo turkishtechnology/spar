@@ -34,49 +34,49 @@ export const InputField = <T extends ElementType = 'input'>({
     onBlur?.(event as React.FocusEvent<HTMLInputElement>);
   };
 
-  // If no context, render as standalone input (simple usage)
-  if (!context) {
-    return (
-      <Component
-        {...props}
-        ref={mergedRef}
-        type={
-          Component === 'input' ? ('type' in props ? (props.type as string) : 'text') : undefined
-        }
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        data-autofocus={autoFocus ? '' : undefined}
-        data-focused={focused ? '' : undefined}
-        data-disabled={props.disabled ? '' : undefined}
-        data-required={props.required ? '' : undefined}
-        data-readonly={props.readOnly ? '' : undefined}
-      />
-    );
-  }
+  const inputType =
+    Component === 'input' ? ('type' in props ? (props.type as string) : 'text') : undefined;
 
-  // With context, render as compound component part
-  const describedBy = context.isInvalid ? context.errorId : context.descriptionId;
+  const resolvedDisabled = context?.disabled ?? props.disabled;
+  const resolvedRequired = context?.required ?? props.required;
+  const resolvedReadOnly = context?.readOnly ?? props.readOnly;
+
+  const dataAttributes = {
+    'data-autofocus': autoFocus ? '' : undefined,
+    'data-focused': focused ? '' : undefined,
+    'data-disabled': resolvedDisabled ? '' : undefined,
+    'data-required': resolvedRequired ? '' : undefined,
+    'data-readonly': resolvedReadOnly ? '' : undefined,
+  };
+
+  const ariaAttributes = context
+    ? {
+        'aria-labelledby': context.labelId,
+        'aria-describedby': context.isInvalid ? context.errorId : context.descriptionId,
+        'aria-required': context.required,
+        'aria-invalid': context.isInvalid,
+      }
+    : {};
+
+  const contextProps = context
+    ? {
+        id: context.fieldId,
+        disabled: context.disabled,
+        required: context.required,
+        readOnly: context.readOnly,
+      }
+    : {};
 
   return (
     <Component
       {...props}
       ref={mergedRef}
-      id={context.fieldId}
-      type={Component === 'input' ? ('type' in props ? (props.type as string) : 'text') : undefined}
-      aria-labelledby={context.labelId}
-      aria-describedby={describedBy}
-      aria-required={context.required}
-      aria-invalid={context.isInvalid}
-      disabled={context.disabled}
-      required={context.required}
-      readOnly={context.readOnly}
+      type={inputType}
+      {...ariaAttributes}
+      {...contextProps}
       onFocus={handleFocus}
       onBlur={handleBlur}
-      data-autofocus={autoFocus ? '' : undefined}
-      data-focused={focused ? '' : undefined}
-      data-disabled={context.disabled ? '' : undefined}
-      data-required={context.required ? '' : undefined}
-      data-readonly={context.readOnly ? '' : undefined}
+      {...dataAttributes}
     />
   );
 };

@@ -3,7 +3,7 @@ import * as Breadcrumb from '@turkish-technology/spar/breadcrumb';
 export default function BreadcrumbPage() {
   return (
     <section>
-      <h1>Breadcrumb — SSR Test</h1>
+      <h1>Breadcrumb - App Router Test</h1>
       <Breadcrumb.Root>
         <Breadcrumb.List>
           <Breadcrumb.Item>

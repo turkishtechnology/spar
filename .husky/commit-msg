@@ -1,11 +1,11 @@
 #!/bin/sh
 
-# Hata durumunda script'i durdur
+# Stop the script on error
 set -e
 
-echo "🔍 Commit mesajı kontrol ediliyor..."
+echo "🔍 Checking commit message..."
 
-# Commitlint ile mesaj formatını kontrol et
+# Validate the message format with Commitlint
 pnpm commitlint --edit $1
 
-echo "✅ Commit mesajı formatı uygun!"
+echo "✅ Commit message format is valid!"

@@ -91,6 +91,8 @@ color: #717784;
 
 </div>
 
+This example shows a minimal breadcrumb trail with one navigable step and one current-page indicator.
+
 ## Features
 
 - ✅ Automatic position detection for styling hooks
@@ -101,20 +103,10 @@ color: #717784;
 - ✅ Render props support for conditional rendering based on item state
 - ✅ Full support for icons and custom content in links
 
-## Installation
-
-```bash
-pnpm add @turkish-technology/spar
-```
+## Import
 
 ```tsx
 import { Breadcrumb } from '@turkish-technology/spar';
-```
-
-**Next.js (App Router):** Use the sub-path import for Server Component support:
-
-```ts
-import * as Breadcrumb from '@turkish-technology/spar/breadcrumb';
 ```
 
 ## Anatomy
@@ -209,7 +201,7 @@ function SimpleBreadcrumb() {
 
 ### Router Integration
 
-```tsx
+```tsx {4,6-8,12}
 import { useRouter } from 'next/router';
 
 function RouterBreadcrumb() {
@@ -242,7 +234,7 @@ function RouterBreadcrumb() {
 
 ### External Links with Security
 
-```tsx
+```tsx {10-12}
 function ExternalLinksBreadcrumb() {
   return (
     <Breadcrumb.Root>
@@ -268,7 +260,7 @@ function ExternalLinksBreadcrumb() {
 
 ### Disabled States
 
-```tsx
+```tsx {2,6,10,17-19}
 function DisabledBreadcrumb() {
   const [isNavigationDisabled, setIsNavigationDisabled] = React.useState(false);
 
@@ -354,7 +346,7 @@ function IconBreadcrumb() {
 
 ### Custom Event Handling
 
-```tsx
+```tsx {2-4,11}
 function CustomEventBreadcrumb() {
   const handleCustomPress = (event: PressEvent) => {
     console.log('Custom action triggered:', event.type);
@@ -383,7 +375,7 @@ function CustomEventBreadcrumb() {
 
 `Breadcrumb.Item` accepts a render function as children, providing access to `position`, `isCurrent`, and `isDisabled` state. This is useful for conditionally rendering custom components like Next.js `Link` or React Router `Link` based on item state.
 
-```tsx {8-18}
+```tsx {8-12,20-24}
 import NextLink from 'next/link';
 
 function RenderPropsBreadcrumb() {
@@ -427,7 +419,7 @@ The render function receives the following properties:
 
 ### Polymorphic Usage
 
-```tsx
+```tsx {5-8,12,14}
 import { Link } from 'react-router-dom';
 
 function PolymorphicBreadcrumb() {
@@ -451,9 +443,9 @@ function PolymorphicBreadcrumb() {
 
 ## API Reference
 
-### Breadcrumb.Root
+### Breadcrumb / Breadcrumb.Root
 
-Navigation landmark container that provides context and manages shared state for all breadcrumb components.
+Navigation landmark container that provides context and manages shared state for all breadcrumb components. `Breadcrumb` and `Breadcrumb.Root` are the same component - the difference is only import/notation style.
 
 **Props**
 
