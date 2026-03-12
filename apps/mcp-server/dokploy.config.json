@@ -1,0 +1,23 @@
+{
+  "name": "spar-mcp-server",
+  "type": "nixpacks",
+  "port": 3001,
+  "buildContext": ".",
+  "env": {
+    "NIXPACKS_TURBO_APP_NAME": "@turkish-technology/mcp-server",
+    "HOST": "0.0.0.0",
+    "PORT": "3001",
+    "NODE_ENV": "production"
+  },
+  "healthCheck": {
+    "enabled": true,
+    "path": "/health",
+    "interval": 30,
+    "timeout": 10,
+    "retries": 3
+  },
+  "resources": {
+    "cpus": "0.5",
+    "memory": "512M"
+  }
+}
