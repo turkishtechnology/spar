@@ -2,7 +2,7 @@ import { describe, it, expect, afterAll } from 'vitest';
 import request from 'supertest';
 import { app, transports } from './app.js';
 
-describe('HTTP API', () => {
+describe('HTTP API 1', () => {
   describe('GET /health', () => {
     it('returns 200 with status ok and transport', async () => {
       const res = await request(app).get('/health');
