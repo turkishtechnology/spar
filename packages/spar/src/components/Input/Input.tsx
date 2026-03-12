@@ -35,18 +35,22 @@ export const Input = <T extends ElementType = 'div'>({
     [id, isInvalid, disabled, required, readOnly],
   );
 
+  const dataAttributes = {
+    'data-invalid': isInvalid ? '' : undefined,
+    'data-disabled': disabled ? '' : undefined,
+    'data-required': required ? '' : undefined,
+    'data-readonly': readOnly ? '' : undefined,
+  };
+
+  const rootProps = {
+    ref,
+    ...props,
+    ...dataAttributes,
+  };
+
   return (
     <InputContext.Provider value={contextValue}>
-      <Component
-        ref={ref}
-        {...props}
-        data-invalid={isInvalid ? '' : undefined}
-        data-disabled={disabled ? '' : undefined}
-        data-required={required ? '' : undefined}
-        data-readonly={readOnly ? '' : undefined}
-      >
-        {children}
-      </Component>
+      <Component {...rootProps}>{children}</Component>
     </InputContext.Provider>
   );
 };

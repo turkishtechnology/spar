@@ -90,21 +90,27 @@ export const RadioItem = <T extends ElementType = 'label'>({
     'data-focused': isFocused ? '' : undefined,
   };
 
+  const ariaAttributes = {
+    role: 'radio',
+    'aria-checked': isChecked,
+    'aria-disabled': isDisabled || undefined,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
+  };
+
+  const itemProps = {
+    ref: mergedRef,
+    ...ariaAttributes,
+    tabIndex: isFocusable ? 0 : -1,
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    onFocus: handleFocus,
+    ...dataAttributes,
+    ...rest,
+  };
+
   return (
-    <Component
-      ref={mergedRef}
-      role='radio'
-      aria-checked={isChecked}
-      aria-disabled={isDisabled || undefined}
-      aria-label={ariaLabel}
-      aria-describedby={ariaDescribedBy}
-      tabIndex={isFocusable ? 0 : -1}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      onFocus={handleFocus}
-      {...dataAttributes}
-      {...rest}
-    >
+    <Component {...itemProps}>
       {typeof children === 'function' ? children(renderProps) : children}
       {/* Hidden radio input for form submission and accessibility */}
       <input

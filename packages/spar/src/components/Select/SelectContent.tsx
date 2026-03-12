@@ -315,26 +315,34 @@ export const SelectContent = <T extends ElementType = 'div'>({
     ...style,
   };
 
+  const ariaAttributes = {
+    role: 'listbox',
+    'aria-labelledby': context.triggerId,
+  };
+
+  const dataAttributes = {
+    'data-state': context.open ? 'open' : 'closed',
+    'data-side': currentSide,
+    'data-align': currentAlign,
+  };
+
+  const contentProps = {
+    ref: floatingRef,
+    id: context.contentId,
+    ...ariaAttributes,
+    tabIndex: -1,
+    ...dataAttributes,
+    onKeyDown: handleKeyDown,
+    style: contentStyle,
+    ...props,
+  };
+
   const portalContainer = container || document.body;
 
   const contentElement = (
     <SelectContentContext.Provider value={contentContextValue}>
       <SelectCollectionContext.Provider value={collectionValue}>
-        <Component
-          ref={floatingRef}
-          id={context.contentId}
-          role='listbox'
-          aria-labelledby={context.triggerId}
-          tabIndex={-1}
-          data-state={context.open ? 'open' : 'closed'}
-          data-side={currentSide}
-          data-align={currentAlign}
-          onKeyDown={handleKeyDown}
-          style={contentStyle}
-          {...props}
-        >
-          {children}
-        </Component>
+        <Component {...contentProps}>{children}</Component>
       </SelectCollectionContext.Provider>
     </SelectContentContext.Provider>
   );

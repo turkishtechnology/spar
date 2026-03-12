@@ -178,25 +178,31 @@ export const DialogContent = <T extends ElementType = 'div'>({
 
   const dataState = isOpen ? 'open' : 'closed';
 
+  const ariaAttributes = {
+    'aria-modal': modal,
+    'aria-labelledby': titleId,
+    'aria-describedby': descriptionId,
+  };
+
+  const dataAttributes = {
+    'data-state': dataState,
+    'data-modal': modal ? 'true' : 'false',
+    'data-role': role,
+  };
+
+  const contentProps = {
+    ref: mergedRef,
+    ...props,
+    id: contentId,
+    role,
+    ...ariaAttributes,
+    ...dataAttributes,
+    onKeyDown: handleKeyDown,
+  };
+
   const portalContainer = container || document.body;
 
-  const contentElement = (
-    <Component
-      ref={mergedRef}
-      {...props}
-      id={contentId}
-      role={role}
-      aria-modal={modal}
-      aria-labelledby={titleId}
-      aria-describedby={descriptionId}
-      data-state={dataState}
-      data-modal={modal ? 'true' : 'false'}
-      data-role={role}
-      onKeyDown={handleKeyDown}
-    >
-      {children}
-    </Component>
-  );
+  const contentElement = <Component {...contentProps}>{children}</Component>;
 
   return createPortal(contentElement, portalContainer);
 };
