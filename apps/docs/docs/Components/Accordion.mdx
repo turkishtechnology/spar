@@ -31,7 +31,7 @@ A collapsible content component that supports single or multiple panel expansion
             </Accordion.Trigger>
           </Accordion.Header>
           <Accordion.Content className='accordion-content'>
-            The accordion component is a customizable area. Users can add content as per their request.
+            Accordion content can be customized to fit the surrounding interface.
           </Accordion.Content>
         </Accordion.Item>
         <Accordion.Item className='accordion-item' value="2">
@@ -47,7 +47,7 @@ A collapsible content component that supports single or multiple panel expansion
             </Accordion.Trigger>
           </Accordion.Header>
           <Accordion.Content className='accordion-content'>
-            The accordion component is a customizable area. Users can add content as per their request.
+            Accordion content can be customized to fit the surrounding interface.
           </Accordion.Content>
         </Accordion.Item>
         <Accordion.Item className='accordion-item' value="3">
@@ -63,7 +63,7 @@ A collapsible content component that supports single or multiple panel expansion
             </Accordion.Trigger> 
           </Accordion.Header>
           <Accordion.Content className='accordion-content'>
-            The accordion component is a customizable area. Users can add content as per their request.
+            Accordion content can be customized to fit the surrounding interface.
           </Accordion.Content>
         </Accordion.Item>
       </Accordion.Root>
@@ -170,6 +170,8 @@ color: #99a0ae;
 
 </div>
 
+The live demo shows a single-expand accordion with custom trigger content, an inline icon, and rotating chevron feedback.
+
 ## Features
 
 - ✅ Single or multiple panel expansion modes
@@ -181,20 +183,10 @@ color: #99a0ae;
 - ✅ Polymorphic component support with `as` prop
 - ✅ Force mount option for content preservation
 
-## Installation
-
-```sh
-pnpm install @turkish-technology/spar
-```
+## Import
 
 ```ts
 import { Accordion } from '@turkish-technology/spar';
-```
-
-**Next.js (App Router):** Use the sub-path import for Server Component support:
-
-```ts
-import * as Accordion from '@turkish-technology/spar/accordion';
 ```
 
 ---
@@ -234,9 +226,7 @@ The Accordion component is built as a compound component with multiple parts:
           </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Content className='accordion-content' data-spar-part='content'>
-          {
-            'The accordion component is a customizable area. Users can add content as per their request.'
-          }
+          {'Accordion content can be customized to fit the surrounding interface.'}
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item className='accordion-item' value='2' data-spar-part='item'>
@@ -259,9 +249,7 @@ The Accordion component is built as a compound component with multiple parts:
           </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Content className='accordion-content' data-spar-part='content'>
-          {
-            'The accordion component is a customizable area. Users can add content as per their request.'
-          }
+          {'Accordion content can be customized to fit the surrounding interface.'}
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item className='accordion-item' value='3' data-spar-part='item'>
@@ -284,9 +272,7 @@ The Accordion component is built as a compound component with multiple parts:
           </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Content className='accordion-content' data-spar-part='content'>
-          {
-            'The accordion component is a customizable area. Users can add content as per their request.'
-          }
+          {'Accordion content can be customized to fit the surrounding interface.'}
         </Accordion.Content>
       </Accordion.Item>
     </Accordion.Root>
@@ -347,7 +333,7 @@ export function BasicAccordion() {
 
 Accordion that allows multiple panels to be expanded simultaneously:
 
-```tsx
+```tsx {1}
 <Accordion.Root type='multiple' defaultValue={['a']}>
   <Accordion.Item value='a'>
     <Accordion.Header>
@@ -368,7 +354,7 @@ Accordion that allows multiple panels to be expanded simultaneously:
 
 Accordion with external state control and change handling:
 
-```tsx
+```tsx {1,3}
 const [openItems, setOpenItems] = React.useState<string[]>(['a']);
 
 <Accordion.Root type='multiple' value={openItems} onValueChange={setOpenItems}>
@@ -380,9 +366,9 @@ const [openItems, setOpenItems] = React.useState<string[]>(['a']);
 
 ## API Reference
 
-### Accordion
+### Accordion / Accordion.Root
 
-The root container that provides context and manages the state for all accordion items within it.
+The root container that provides context and manages the state for all accordion items within it. `Accordion` and `Accordion.Root` are the same component - the difference is only import/notation style.
 
 **Props**
 

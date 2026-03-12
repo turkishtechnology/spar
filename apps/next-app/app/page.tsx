@@ -21,10 +21,10 @@ const components = [
 export default function Home() {
   return (
     <main style={{ maxWidth: 720, margin: '0 auto', padding: '2rem 1rem' }}>
-      <h1 style={{ marginBottom: '0.5rem' }}>Spar SSR Test App</h1>
+      <h1 style={{ marginBottom: '0.5rem' }}>Spar App Router Test App</h1>
       <p style={{ color: 'var(--color-muted)', marginBottom: '2rem' }}>
-        Her bir component sayfası sunucu tarafında render edilir. Sayfaları ziyaret ederek SSR
-        uyumluluğunu test edebilirsiniz.
+        Each component page is tested inside the Next.js App Router. Interactive examples use a
+        client boundary where needed.
       </p>
 
       <nav>

@@ -67,6 +67,8 @@ fill: #111827;
 
 </div>
 
+This example shows a controlled checkbox that swaps in a check icon when the value is `true`.
+
 ## Features
 
 - ✅ **Dual-state and tri-state support** - Boolean checked/unchecked and indeterminate states
@@ -77,16 +79,10 @@ fill: #111827;
 - ✅ **Interaction states** - Focus, hover, pressed, and disabled state tracking
 - ✅ **Auto-focus support** - Focus on mount capability
 
-## Installation
+## Import
 
 ```tsx
 import { Checkbox } from '@turkish-technology/spar';
-```
-
-**Next.js (App Router):** Use the sub-path import for Server Component support:
-
-```ts
-import { Checkbox } from '@turkish-technology/spar/checkbox';
 ```
 
 ## Anatomy
@@ -135,6 +131,8 @@ The Checkbox component is a single, self-contained element that manages its own 
 
 ### Basic Usage
 
+Use a render function when you want the visual checkmark to appear only in the checked state.
+
 ```tsx
 function BasicCheckbox() {
   return (
@@ -148,7 +146,9 @@ function BasicCheckbox() {
 
 ### Controlled State
 
-```tsx
+Manage the checked value in parent state when the checkbox needs to stay in sync with other UI.
+
+```tsx {2,6-7,9}
 function ControlledCheckbox() {
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
@@ -165,7 +165,9 @@ function ControlledCheckbox() {
 
 ### Indeterminate State
 
-```tsx
+Use the indeterminate state for mixed selections, such as a parent checkbox that represents partially selected children.
+
+```tsx {2,4-12,23-24}
 function IndeterminateCheckbox() {
   const [checked, setChecked] = useState<CheckedState>('indeterminate');
 
@@ -199,7 +201,9 @@ function IndeterminateCheckbox() {
 
 ### Form Integration
 
-```tsx
+Provide `name` and `value` when the checkbox should participate in native form submission.
+
+```tsx {6-7,13-14,19}
 function FormCheckbox() {
   return (
     <form>
@@ -227,7 +231,9 @@ function FormCheckbox() {
 
 ### Render Props Pattern
 
-```tsx
+The render-props API exposes interaction state so you can build custom visuals without reimplementing behavior.
+
+```tsx {5,8,13,16,19,22}
 function RenderPropsCheckbox() {
   return (
     <div>
@@ -262,7 +268,9 @@ function RenderPropsCheckbox() {
 
 ### Disabled State
 
-```tsx
+Disabled checkboxes remain readable but do not respond to pointer or keyboard input.
+
+```tsx {5,10,17}
 function DisabledCheckbox() {
   return (
     <div>
@@ -291,7 +299,9 @@ function DisabledCheckbox() {
 
 ### Custom Element with Polymorphic Rendering
 
-```tsx
+Render the checkbox as another element when your layout needs a custom wrapper while keeping checkbox semantics.
+
+```tsx {4-8}
 function CustomElementCheckbox() {
   return (
     <div>
@@ -310,7 +320,9 @@ function CustomElementCheckbox() {
 
 ### Accessibility Enhanced
 
-```tsx
+Combine ARIA attributes and supporting text when the checkbox needs to surface validation feedback.
+
+```tsx {2,7-15,20-22}
 function AccessibleCheckbox() {
   const [hasError, setHasError] = useState(false);
 

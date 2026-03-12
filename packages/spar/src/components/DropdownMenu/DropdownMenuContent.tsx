@@ -375,25 +375,35 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
 
   const portalContainer = container || document.body;
 
+  const ariaAttributes = {
+    role: 'menu',
+    'aria-labelledby': menu.triggerId,
+  };
+
+  const dataAttributes = {
+    'data-state': 'open',
+    'data-side': currentSide,
+    'data-align': currentAlign,
+  };
+
+  const contentProps = {
+    ...props,
+    ref: floatingRef,
+    id: menu.contentId,
+    ...ariaAttributes,
+    ...dataAttributes,
+    tabIndex: -1,
+    onKeyDown: handleKeyDown,
+    style: {
+      ...floatingStyles,
+      ...props.style,
+    },
+  };
+
   const contentElement = (
     <DropdownMenuContentContext.Provider value={contentContextValue}>
       <DropdownMenuCollectionContext.Provider value={collectionValue}>
-        <Component
-          {...props}
-          ref={floatingRef}
-          id={menu.contentId}
-          role='menu'
-          aria-labelledby={menu.triggerId}
-          data-state='open'
-          data-side={currentSide}
-          data-align={currentAlign}
-          tabIndex={-1}
-          onKeyDown={handleKeyDown}
-          style={{
-            ...floatingStyles,
-            ...props.style,
-          }}
-        />
+        <Component {...contentProps} />
       </DropdownMenuCollectionContext.Provider>
     </DropdownMenuContentContext.Provider>
   );

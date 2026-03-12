@@ -78,6 +78,9 @@ transform: rotate(180deg);
 .select-content {
 --select-surface: #f7f8fa;
 padding: 8px;
+display: flex;
+flex-direction: column;
+gap: 4px;
 border-radius: 12px;
 border: 1px solid #e1e4ea;
 background: var(--select-surface);
@@ -92,7 +95,7 @@ border-color: #2b303b;
 background: #1f232b;
 }
 
-.select-demo-container .select-item {
+.select-content .select-item {
 min-height: 36px;
 padding: 0 10px;
 border-radius: 8px;
@@ -106,35 +109,35 @@ font-size: 14px;
 line-height: 18px;
 }
 
-[data-theme='dark'] .select-demo-container .select-item {
+[data-theme='dark'] .select-content .select-item {
 color: #f2f5f8;
 }
 
-.select-demo-container .select-item[data-highlighted] {
+.select-content .select-item[data-highlighted] {
 background: rgba(0, 0, 0, 0.08);
 outline: none;
 }
 
-[data-theme='dark'] .select-demo-container .select-item[data-highlighted] {
+[data-theme='dark'] .select-content .select-item[data-highlighted] {
 background: rgba(255, 255, 255, 0.12);
 }
 
-.select-demo-container .select-item[data-disabled] {
+.select-content .select-item[data-disabled] {
 opacity: 0.5;
 cursor: not-allowed;
 }
 
-.select-demo-container .select-item-check {
+.select-content .select-item-check {
 opacity: 0;
 color: #222530;
 transition: opacity 0.2s ease;
 }
 
-[data-theme='dark'] .select-demo-container .select-item-check {
+[data-theme='dark'] .select-content .select-item-check {
 color: #f2f5f8;
 }
 
-.select-demo-container .select-item[data-state='checked'] .select-item-check {
+.select-content .select-item[data-state='checked'] .select-item-check {
 opacity: 1;
 }
 
@@ -145,33 +148,29 @@ color: var(--select-surface);
 
 </div>
 
+The live demo shows a custom chevron in the trigger and a checkmark inside each item to illustrate how visual indicators are composed manually.
+
 ## Features
 
-- ✅ Tekli değer seçimi (`value: string`)
-- ✅ Controlled ve uncontrolled kullanım (`value/defaultValue`, `open/defaultOpen`)
-- ✅ Dahili type-ahead arama (varsayılan 700ms buffer)
-- ✅ `useFloating` ile konumlandırma (offset, flip, shift, hide)
-- ✅ Form entegrasyonu (`name` verildiğinde hidden input üretimi)
-- ✅ Portal ile içerik render etme (`container` veya `document.body`)
-- ✅ Grup, etiket ve ayırıcı ile listeleri bölümleme
-- ✅ Root veya Item bazında devre dışı bırakma
-- ✅ Root/Trigger/Content/Item tabanlı compound yapı
+- ✅ Single-value selection (`value: string`)
+- ✅ Controlled and uncontrolled usage (`value/defaultValue`, `open/defaultOpen`)
+- ✅ Built-in typeahead search (default 700ms buffer)
+- ✅ Positioning with `useFloating` (offset, flip, shift, hide)
+- ✅ Form integration (generates a hidden input when `name` is provided)
+- ✅ Portal-based content rendering (`container` or `document.body`)
+- ✅ Grouping lists with groups, labels, and separators
+- ✅ Disabling at the Root or Item level
+- ✅ Compound structure built around Root/Trigger/Content/Item
 
-## Installation
+## Import
 
 ```tsx
 import { Select } from '@turkish-technology/spar';
 ```
 
-**Next.js (App Router):** Use the sub-path import for Server Component support:
-
-```ts
-import * as Select from '@turkish-technology/spar/select';
-```
-
 ## Anatomy
 
-`Select`, bir compound component yapısına sahiptir:
+`Select` is built as a compound component:
 
 <AnatomyViewer
   parts={[
@@ -254,15 +253,15 @@ import * as Select from '@turkish-technology/spar/select';
 
 **Data Flow:**
 
-- `Select.Root`, açık/kapalı ve seçili değer state'ini yönetir, context sağlar.
-- `Select.Trigger`, Root state'ini aç/kapatır; yön tuşlarında Content için odak stratejisi belirler.
-- `Select.Value`, seçili `Item` metnini (veya `placeholder`) gösterir.
-- `Select.Content`, açıkken portal içine render edilir; highlight ve klavye navigasyonunu yönetir.
-- `Select.Item`, seçimi günceller; tıklama veya klavye akışıyla Root değerini değiştirir.
-- `Select.ItemText`, type-ahead için metin değerini kaydeder.
-- `Select.Group` + `Select.Label`, semantik grup yapısını kurar.
-- `Select.Separator`, ayırıcı rolü sağlar.
-- `Select.Arrow`, Content yerleşimine göre konumlanan opsiyonel ok öğesidir.
+- `Select.Root` manages open/closed state and the selected value, and provides context.
+- `Select.Trigger` toggles the Root state and sets the focus strategy for Content on arrow-key input.
+- `Select.Value` displays the selected `Item` text (or the `placeholder`).
+- `Select.Content` renders into a portal when open and manages highlight state and keyboard navigation.
+- `Select.Item` updates the selection and changes the Root value through click or keyboard interaction.
+- `Select.ItemText` registers the text value used for typeahead.
+- `Select.Group` + `Select.Label` establish the semantic group structure.
+- `Select.Separator` provides a separator role.
+- `Select.Arrow` is an optional arrow positioned relative to the Content placement.
 
 **Alternative: Tree-shakeable named imports**
 
@@ -279,7 +278,7 @@ import { SelectRoot, SelectTrigger, SelectValue } from '@turkish-technology/spar
 
 ### Custom Visual Composition
 
-`Select` içinde ayrı bir "icon/indicator" primitive yoktur. Trigger oku veya selected işareti, mevcut parçalara normal React elemanı olarak eklenir.
+`Select` does not include a separate icon/indicator primitive. The trigger arrow or selected marker is added as a normal React element inside the existing parts.
 
 ```tsx
 <Select.Trigger className='select-trigger'>
@@ -301,7 +300,7 @@ import { SelectRoot, SelectTrigger, SelectValue } from '@turkish-technology/spar
 
 ### Basic Controlled Select
 
-Açık state ve seçili değeri parent component'te yönetilen temel örnek:
+Basic example where the open state and selected value are controlled by the parent component:
 
 ```tsx
 function ControlledSelect() {
@@ -337,9 +336,9 @@ function ControlledSelect() {
 
 ### Grouped Items with Labels
 
-`Group` + `Label` + `Separator` ile seçenekleri bölümleyebilirsiniz:
+You can section options with `Group` + `Label` + `Separator`:
 
-```tsx
+```tsx {2,5-7,10-12,24,26-27}
 function GroupedSelect() {
   const [value, setValue] = React.useState('');
 
@@ -385,9 +384,9 @@ function GroupedSelect() {
 
 ### Form Integration
 
-`name` verildiğinde Root, seçili değer için hidden input üretir.
+When `name` is provided, Root generates a hidden input for the selected value.
 
-```tsx
+```tsx {2,4-7,13-15,18-26,30}
 function SelectInForm() {
   const [category, setCategory] = React.useState('');
 
@@ -425,60 +424,60 @@ function SelectInForm() {
 
 ## API Reference
 
-### Select.Root
+### Select / Select.Root
 
-Root state ve context sağlayıcısıdır.
+Provides the root state and context. `Select` and `Select.Root` are the same component - the difference is only import/notation style.
 
 **Props**
 
-| Name             | Type                      | Default     | Description                                             |
-| ---------------- | ------------------------- | ----------- | ------------------------------------------------------- |
-| `id?`            | `string`                  | `undefined` | ARIA ilişki ID'leri için base id                        |
-| `value?`         | `string`                  | `undefined` | Controlled seçili değer                                 |
-| `defaultValue?`  | `string`                  | `undefined` | Uncontrolled başlangıç değeri                           |
-| `onValueChange?` | `(value: string) => void` | `undefined` | Değer değişim callback'i                                |
-| `open?`          | `boolean`                 | `undefined` | Controlled açık/kapalı state                            |
-| `defaultOpen?`   | `boolean`                 | `false`     | Uncontrolled başlangıç açık state                       |
-| `onOpenChange?`  | `(open: boolean) => void` | `undefined` | Açık/kapalı değişim callback'i                          |
-| `disabled?`      | `boolean`                 | `false`     | Tüm Select'i devre dışı bırakır                         |
-| `required?`      | `boolean`                 | `false`     | Form için zorunlu alan yapar                            |
-| `name?`          | `string`                  | `undefined` | Form alan adı; `value` tanımlıysa hidden input üretilir |
-| `dir?`           | `'ltr' \| 'rtl'`          | `'ltr'`     | Yazım yönü                                              |
-| `autoFocus?`     | `boolean`                 | `false`     | Trigger'a mount sırasında odak verir                    |
-| `as?`            | `React.ElementType`       | `'div'`     | Root için polymorphic element                           |
-| `children?`      | `React.ReactNode`         | `undefined` | Root içeriği                                            |
+| Name             | Type                      | Default     | Description                                                       |
+| ---------------- | ------------------------- | ----------- | ----------------------------------------------------------------- |
+| `id?`            | `string`                  | `undefined` | Base id for ARIA relationship ids                                 |
+| `value?`         | `string`                  | `undefined` | Controlled selected value                                         |
+| `defaultValue?`  | `string`                  | `undefined` | Initial uncontrolled value                                        |
+| `onValueChange?` | `(value: string) => void` | `undefined` | Value change callback                                             |
+| `open?`          | `boolean`                 | `undefined` | Controlled open/closed state                                      |
+| `defaultOpen?`   | `boolean`                 | `false`     | Initial uncontrolled open state                                   |
+| `onOpenChange?`  | `(open: boolean) => void` | `undefined` | Open/closed change callback                                       |
+| `disabled?`      | `boolean`                 | `false`     | Disables the entire Select                                        |
+| `required?`      | `boolean`                 | `false`     | Marks the field as required for forms                             |
+| `name?`          | `string`                  | `undefined` | Form field name; generates a hidden input when `value` is defined |
+| `dir?`           | `'ltr' \| 'rtl'`          | `'ltr'`     | Writing direction                                                 |
+| `autoFocus?`     | `boolean`                 | `false`     | Focuses the trigger on mount                                      |
+| `as?`            | `React.ElementType`       | `'div'`     | Polymorphic element for Root                                      |
+| `children?`      | `React.ReactNode`         | `undefined` | Root content                                                      |
 
 **Events**
 
-| Name            | Parameters        | Description               | When Triggered                                                  |
-| --------------- | ----------------- | ------------------------- | --------------------------------------------------------------- |
-| `onValueChange` | `(value: string)` | Seçili değer değişir      | Item seçildiğinde veya controlled akışta state güncellendiğinde |
-| `onOpenChange`  | `(open: boolean)` | Açık/kapalı state değişir | Trigger etkileşimi veya programatik aç/kapat çağrılarında       |
+| Name            | Parameters        | Description               | When Triggered                                          |
+| --------------- | ----------------- | ------------------------- | ------------------------------------------------------- |
+| `onValueChange` | `(value: string)` | Selected value changes    | When an item is selected or controlled state is updated |
+| `onOpenChange`  | `(open: boolean)` | Open/closed state changes | On trigger interaction or programmatic open/close calls |
 
 **HTML Attributes**
 
-| Attribute        | Value | Purpose                            |
-| ---------------- | ----- | ---------------------------------- |
-| `data-disabled`  | `""`  | Root disabled olduğunda eklenir    |
-| `data-autofocus` | `""`  | `autoFocus` true olduğunda eklenir |
+| Attribute        | Value | Purpose                        |
+| ---------------- | ----- | ------------------------------ |
+| `data-disabled`  | `""`  | Added when Root is disabled    |
+| `data-autofocus` | `""`  | Added when `autoFocus` is true |
 
 ### Select.Trigger
 
-Root state'ini açıp kapatan trigger parçasıdır.
+Trigger part that opens and closes the root state.
 
 **Props**
 
-| Name               | Type                                                                        | Default                 | Description                                         |
-| ------------------ | --------------------------------------------------------------------------- | ----------------------- | --------------------------------------------------- |
-| `children?`        | `React.ReactNode \| ((state: SelectTriggerRenderProps) => React.ReactNode)` | `undefined`             | Normal içerik veya render-props fonksiyonu          |
-| `as?`              | `React.ElementType`                                                         | `'button'`              | Trigger için polymorphic element                    |
-| `disabled?`        | `boolean`                                                                   | Root `disabled` değeri  | Trigger disabled değeri; verilmezse Root'tan alınır |
-| `autoFocus?`       | `boolean`                                                                   | Root `autoFocus` değeri | Button seviyesinde autofocus                        |
-| `isLoading?`       | `boolean`                                                                   | `false`                 | Button loading state (`ButtonOwnProps`)             |
-| `isPressed?`       | `boolean`                                                                   | `undefined`             | Button toggle state (`ButtonOwnProps`)              |
-| `onPressedChange?` | `(pressed: boolean) => void`                                                | `undefined`             | Button toggle değişim callback'i                    |
-| `ref?`             | `React.Ref<HTMLElement>`                                                    | `undefined`             | Forwarded ref                                       |
-| `...props`         | `ButtonProps`                                                               | -                       | Button'dan gelen diğer HTML/ARIA props              |
+| Name               | Type                                                                        | Default                | Description                                           |
+| ------------------ | --------------------------------------------------------------------------- | ---------------------- | ----------------------------------------------------- |
+| `children?`        | `React.ReactNode \| ((state: SelectTriggerRenderProps) => React.ReactNode)` | `undefined`            | Normal content or a render-props function             |
+| `as?`              | `React.ElementType`                                                         | `'button'`             | Polymorphic element for Trigger                       |
+| `disabled?`        | `boolean`                                                                   | Root `disabled` value  | Trigger disabled value; falls back to Root if omitted |
+| `autoFocus?`       | `boolean`                                                                   | Root `autoFocus` value | Autofocus at the button level                         |
+| `isLoading?`       | `boolean`                                                                   | `false`                | Button loading state (`ButtonOwnProps`)               |
+| `isPressed?`       | `boolean`                                                                   | `undefined`            | Button toggle state (`ButtonOwnProps`)                |
+| `onPressedChange?` | `(pressed: boolean) => void`                                                | `undefined`            | Button toggle change callback                         |
+| `ref?`             | `React.Ref<HTMLElement>`                                                    | `undefined`            | Forwarded ref                                         |
+| `...props`         | `ButtonProps`                                                               | -                      | Other HTML/ARIA props inherited from Button           |
 
 **Render Props (SelectTriggerRenderProps)**
 
@@ -493,113 +492,113 @@ Root state'ini açıp kapatan trigger parçasıdır.
 
 **Events**
 
-| Name        | Parameters                                  | Description                       | When Triggered                                     |
-| ----------- | ------------------------------------------- | --------------------------------- | -------------------------------------------------- |
-| `onClick`   | `(event: React.MouseEvent<HTMLElement>)`    | Trigger click/activation callback | Mouse click veya Button activation sonrası         |
-| `onKeyDown` | `(event: React.KeyboardEvent<HTMLElement>)` | Trigger keydown callback          | Tüm keydown olaylarında, dahili kontrollerden önce |
-| `onFocus`   | `(event: React.FocusEvent<HTMLElement>)`    | Button focus callback             | Trigger odak aldığında                             |
-| `onBlur`    | `(event: React.FocusEvent<HTMLElement>)`    | Button blur callback              | Trigger odak kaybettiğinde                         |
+| Name        | Parameters                                  | Description                       | When Triggered                                   |
+| ----------- | ------------------------------------------- | --------------------------------- | ------------------------------------------------ |
+| `onClick`   | `(event: React.MouseEvent<HTMLElement>)`    | Trigger click/activation callback | After mouse click or Button activation           |
+| `onKeyDown` | `(event: React.KeyboardEvent<HTMLElement>)` | Trigger keydown callback          | On every keydown event, before internal handling |
+| `onFocus`   | `(event: React.FocusEvent<HTMLElement>)`    | Button focus callback             | When the trigger receives focus                  |
+| `onBlur`    | `(event: React.FocusEvent<HTMLElement>)`    | Button blur callback              | When the trigger loses focus                     |
 
 **HTML Attributes**
 
-| Attribute          | Value                | Purpose                          |
-| ------------------ | -------------------- | -------------------------------- |
-| `role`             | `"combobox"`         | Trigger semantik rolü            |
-| `aria-haspopup`    | `"listbox"`          | Açılacak panel türü              |
-| `aria-expanded`    | `boolean`            | Açık/kapalı durum                |
-| `aria-controls`    | `string`             | İçerik elementinin id'si         |
-| `aria-labelledby`  | `string`             | Value node id referansı          |
-| `aria-required`    | `true`               | Root `required` true ise eklenir |
-| `data-state`       | `"open" \| "closed"` | Açık/kapalı durum                |
-| `data-required`    | `""`                 | Root `required` true ise eklenir |
-| `data-placeholder` | `""`                 | Seçili değer yoksa eklenir       |
-| `data-disabled`    | `""`                 | Button disabled state'i          |
-| `data-loading`     | `""`                 | Button loading state'i           |
-| `data-pressed`     | `""`                 | Button toggle pressed state'i    |
-| `data-autofocus`   | `""`                 | Button autofocus state'i         |
+| Attribute          | Value                | Purpose                               |
+| ------------------ | -------------------- | ------------------------------------- |
+| `role`             | `"combobox"`         | Trigger semantic role                 |
+| `aria-haspopup`    | `"listbox"`          | Type of panel that opens              |
+| `aria-expanded`    | `boolean`            | Open/closed state                     |
+| `aria-controls`    | `string`             | Id of the content element             |
+| `aria-labelledby`  | `string`             | Reference to the value node id        |
+| `aria-required`    | `true`               | Added when Root `required` is true    |
+| `data-state`       | `"open" \| "closed"` | Open/closed state                     |
+| `data-required`    | `""`                 | Added when Root `required` is true    |
+| `data-placeholder` | `""`                 | Added when there is no selected value |
+| `data-disabled`    | `""`                 | Button disabled state                 |
+| `data-loading`     | `""`                 | Button loading state                  |
+| `data-pressed`     | `""`                 | Button toggle pressed state           |
+| `data-autofocus`   | `""`                 | Button autofocus state                |
 
 ### Select.Value
 
-Seçili Item metnini veya placeholder'ı gösterir.
+Displays the selected Item text or the placeholder.
 
 **Props**
 
-| Name           | Type                | Default     | Description                                          |
-| -------------- | ------------------- | ----------- | ---------------------------------------------------- |
-| `placeholder?` | `React.ReactNode`   | `undefined` | Seçim yokken gösterilecek içerik                     |
-| `as?`          | `React.ElementType` | `'span'`    | Value için polymorphic element                       |
-| `children?`    | `React.ReactNode`   | `undefined` | Varsa placeholder/selected text yerine render edilir |
+| Name           | Type                | Default     | Description                                               |
+| -------------- | ------------------- | ----------- | --------------------------------------------------------- |
+| `placeholder?` | `React.ReactNode`   | `undefined` | Content shown when there is no selection                  |
+| `as?`          | `React.ElementType` | `'span'`    | Polymorphic element for Value                             |
+| `children?`    | `React.ReactNode`   | `undefined` | If provided, renders instead of placeholder/selected text |
 
 **Events**
 
-| Name | Parameters | Description                                      | When Triggered |
-| ---- | ---------- | ------------------------------------------------ | -------------- |
-| -    | -          | Value parçasında component-spesifik event yoktur | -              |
+| Name | Parameters | Description                                    | When Triggered |
+| ---- | ---------- | ---------------------------------------------- | -------------- |
+| -    | -          | No component-specific events on the Value part | -              |
 
 **HTML Attributes**
 
-| Attribute | Value    | Purpose                                                 |
-| --------- | -------- | ------------------------------------------------------- |
-| `id`      | `string` | Trigger `aria-labelledby` ilişkisi için otomatik atanır |
+| Attribute | Value    | Purpose                                                               |
+| --------- | -------- | --------------------------------------------------------------------- |
+| `id`      | `string` | Assigned automatically for the Trigger `aria-labelledby` relationship |
 
 ### Select.Content
 
-Açılır içerik katmanıdır. Açık değilse render edilmez.
+Popup content layer. It does not render when closed.
 
 **Props**
 
-| Name                    | Type                                     | Default         | Description                                                                 |
-| ----------------------- | ---------------------------------------- | --------------- | --------------------------------------------------------------------------- |
-| `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`      | Tercih edilen yerleşim yönü                                                 |
-| `align?`                | `'start' \| 'center' \| 'end'`           | `'center'`      | Trigger'a göre hizalama                                                     |
-| `container?`            | `HTMLElement \| null`                    | `document.body` | Portal hedefi                                                               |
-| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`         | `undefined`     | Escape tuşu callback'i (`preventDefault` ile kapanmayı engelleyebilirsiniz) |
-| `onPointerDownOutside?` | `(event: PointerEvent) => void`          | `undefined`     | Dış tıklama callback'i (`preventDefault` ile kapanmayı engelleyebilirsiniz) |
-| `onCloseAutoFocus?`     | `(event: FocusEvent) => void`            | `undefined`     | Prop tipi mevcut; mevcut implementasyonda callback çağrısı yapılmıyor       |
-| `as?`                   | `React.ElementType`                      | `'div'`         | Content için polymorphic element                                            |
-| `ref?`                  | `React.Ref<HTMLElement>`                 | `undefined`     | Forwarded ref                                                               |
-| `children?`             | `React.ReactNode`                        | `undefined`     | Content içeriği                                                             |
+| Name                    | Type                                     | Default         | Description                                                              |
+| ----------------------- | ---------------------------------------- | --------------- | ------------------------------------------------------------------------ |
+| `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`      | Preferred placement side                                                 |
+| `align?`                | `'start' \| 'center' \| 'end'`           | `'center'`      | Alignment relative to the Trigger                                        |
+| `container?`            | `HTMLElement \| null`                    | `document.body` | Portal target                                                            |
+| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`         | `undefined`     | Escape key callback (`preventDefault` can stop closing)                  |
+| `onPointerDownOutside?` | `(event: PointerEvent) => void`          | `undefined`     | Outside click callback (`preventDefault` can stop closing)               |
+| `onCloseAutoFocus?`     | `(event: FocusEvent) => void`            | `undefined`     | Prop type exists; the current implementation does not call this callback |
+| `as?`                   | `React.ElementType`                      | `'div'`         | Polymorphic element for Content                                          |
+| `ref?`                  | `React.Ref<HTMLElement>`                 | `undefined`     | Forwarded ref                                                            |
+| `children?`             | `React.ReactNode`                        | `undefined`     | Content children                                                         |
 
 **Events**
 
-| Name                   | Parameters                                     | Description              | When Triggered                                |
-| ---------------------- | ---------------------------------------------- | ------------------------ | --------------------------------------------- |
-| `onKeyDown`            | `(event: React.KeyboardEvent<HTMLDivElement>)` | Content keydown callback | Content odaktayken keydown oluştuğunda        |
-| `onEscapeKeyDown`      | `(event: KeyboardEvent)`                       | Escape callback          | Content odaktayken `Escape` basıldığında      |
-| `onPointerDownOutside` | `(event: PointerEvent)`                        | Dış tıklama callback     | Trigger/Content dışına pointer down olduğunda |
+| Name                   | Parameters                                     | Description              | When Triggered                                    |
+| ---------------------- | ---------------------------------------------- | ------------------------ | ------------------------------------------------- |
+| `onKeyDown`            | `(event: React.KeyboardEvent<HTMLDivElement>)` | Content keydown callback | When keydown occurs while Content is focused      |
+| `onEscapeKeyDown`      | `(event: KeyboardEvent)`                       | Escape callback          | When `Escape` is pressed while Content is focused |
+| `onPointerDownOutside` | `(event: PointerEvent)`                        | Outside click callback   | When pointer down happens outside Trigger/Content |
 
 **HTML Attributes**
 
 | Attribute         | Value                                    | Purpose                                |
 | ----------------- | ---------------------------------------- | -------------------------------------- |
-| `id`              | `string`                                 | Trigger ile ARIA bağlantısı            |
-| `role`            | `"listbox"`                              | Listbox semantiği                      |
-| `aria-labelledby` | `string`                                 | Trigger id referansı                   |
-| `tabIndex`        | `-1`                                     | Açılır panelin programatik odaklanması |
-| `data-state`      | `"open"`                                 | Content yalnızca açıkken render edilir |
-| `data-side`       | `"top" \| "right" \| "bottom" \| "left"` | Floating hesaplanan yön                |
-| `data-align`      | `"start" \| "center" \| "end"`           | Floating hesaplanan hizalama           |
+| `id`              | `string`                                 | ARIA connection to the Trigger         |
+| `role`            | `"listbox"`                              | Listbox semantics                      |
+| `aria-labelledby` | `string`                                 | Reference to the Trigger id            |
+| `tabIndex`        | `-1`                                     | Programmatic focus for the popup panel |
+| `data-state`      | `"open"`                                 | Content renders only while open        |
+| `data-side`       | `"top" \| "right" \| "bottom" \| "left"` | Computed floating side                 |
+| `data-align`      | `"start" \| "center" \| "end"`           | Computed floating alignment            |
 
 **Positioning Notes**
 
 - `useFloating` middleware: `offset(8)`, `flip()`, `shift({ padding: 8 })`, `hide()`
-- `minWidth`, trigger genişliğine eşitlenir
-- `Select.Arrow`, Content içinde render edilirse context üzerinden otomatik konumlandırılır
+- `minWidth` is matched to the trigger width
+- `Select.Arrow` is positioned automatically through context when rendered inside Content
 
 ### Select.Item
 
-Seçilebilir option parçasıdır.
+Selectable option part.
 
 **Props**
 
-| Name         | Type                                                                     | Default     | Description                                                                    |
-| ------------ | ------------------------------------------------------------------------ | ----------- | ------------------------------------------------------------------------------ |
-| `value`      | `string`                                                                 | -           | Item değeri (zorunlu)                                                          |
-| `disabled?`  | `boolean`                                                                | `false`     | Item'i devre dışı bırakır                                                      |
-| `textValue?` | `string`                                                                 | `undefined` | Type-ahead metni; verilmezse `Select.ItemText` ile kaydedilen metin kullanılır |
-| `children?`  | `React.ReactNode \| ((state: SelectItemRenderProps) => React.ReactNode)` | `undefined` | Normal içerik veya render-props                                                |
-| `as?`        | `React.ElementType`                                                      | `'div'`     | Item için polymorphic element                                                  |
-| `ref?`       | `React.Ref<HTMLElement>`                                                 | `undefined` | Forwarded ref                                                                  |
+| Name         | Type                                                                     | Default     | Description                                                        |
+| ------------ | ------------------------------------------------------------------------ | ----------- | ------------------------------------------------------------------ |
+| `value`      | `string`                                                                 | -           | Item value (required)                                              |
+| `disabled?`  | `boolean`                                                                | `false`     | Disables the item                                                  |
+| `textValue?` | `string`                                                                 | `undefined` | Typeahead text; falls back to text registered by `Select.ItemText` |
+| `children?`  | `React.ReactNode \| ((state: SelectItemRenderProps) => React.ReactNode)` | `undefined` | Normal content or render-props                                     |
+| `as?`        | `React.ElementType`                                                      | `'div'`     | Polymorphic element for Item                                       |
+| `ref?`       | `React.Ref<HTMLElement>`                                                 | `undefined` | Forwarded ref                                                      |
 
 **Render Props (SelectItemRenderProps)**
 
@@ -612,182 +611,182 @@ Seçilebilir option parçasıdır.
 
 **Events**
 
-| Name            | Parameters                                    | Description           | When Triggered                                                  |
-| --------------- | --------------------------------------------- | --------------------- | --------------------------------------------------------------- |
-| `onClick`       | `(event: React.MouseEvent<HTMLDivElement>)`   | Item click callback   | Item tıklandığında (`preventDefault` edilmemişse seçim yapılır) |
-| `onPointerMove` | `(event: React.PointerEvent<HTMLDivElement>)` | Pointer move callback | Item üstünde pointer hareket ettiğinde (highlight günceller)    |
+| Name            | Parameters                                    | Description           | When Triggered                                                              |
+| --------------- | --------------------------------------------- | --------------------- | --------------------------------------------------------------------------- |
+| `onClick`       | `(event: React.MouseEvent<HTMLDivElement>)`   | Item click callback   | When the item is clicked (selection occurs unless `preventDefault` is used) |
+| `onPointerMove` | `(event: React.PointerEvent<HTMLDivElement>)` | Pointer move callback | When the pointer moves over the item (updates highlight state)              |
 
 **HTML Attributes**
 
-| Attribute          | Value                      | Purpose                      |
-| ------------------ | -------------------------- | ---------------------------- |
-| `role`             | `"option"`                 | Option semantiği             |
-| `aria-selected`    | `boolean`                  | Seçili item durumu           |
-| `aria-disabled`    | `true`                     | Item disabled ise eklenir    |
-| `data-state`       | `"checked" \| "unchecked"` | Seçili/seçili değil durumu   |
-| `data-disabled`    | `""`                       | Item disabled ise eklenir    |
-| `data-highlighted` | `""`                       | Highlighted item ise eklenir |
+| Attribute          | Value                      | Purpose                            |
+| ------------------ | -------------------------- | ---------------------------------- |
+| `role`             | `"option"`                 | Option semantics                   |
+| `aria-selected`    | `boolean`                  | Selected item state                |
+| `aria-disabled`    | `true`                     | Added when the item is disabled    |
+| `data-state`       | `"checked" \| "unchecked"` | Selected/unselected state          |
+| `data-disabled`    | `""`                       | Added when the item is disabled    |
+| `data-highlighted` | `""`                       | Added when the item is highlighted |
 
 ### Select.ItemText
 
-Item metin içeriğini sağlar.
+Provides the item text content.
+
+**Props**
+
+| Name        | Type                | Default     | Description                      |
+| ----------- | ------------------- | ----------- | -------------------------------- |
+| `as?`       | `React.ElementType` | `'span'`    | Polymorphic element for ItemText |
+| `children?` | `React.ReactNode`   | `undefined` | Item text content                |
+
+**Events**
+
+| Name | Parameters | Description                                       | When Triggered |
+| ---- | ---------- | ------------------------------------------------- | -------------- |
+| -    | -          | No component-specific events on the ItemText part | -              |
+
+**HTML Attributes**
+
+| Attribute | Value | Purpose                                                               |
+| --------- | ----- | --------------------------------------------------------------------- |
+| -         | -     | No fixed HTML/data attributes are added by the component for ItemText |
+
+### Select.Group
+
+Item grouping part.
+
+**Props**
+
+| Name        | Type                | Default     | Description                   |
+| ----------- | ------------------- | ----------- | ----------------------------- |
+| `as?`       | `React.ElementType` | `'div'`     | Polymorphic element for Group |
+| `children?` | `React.ReactNode`   | `undefined` | Group content                 |
+
+**Events**
+
+| Name | Parameters | Description                                    | When Triggered |
+| ---- | ---------- | ---------------------------------------------- | -------------- |
+| -    | -          | No component-specific events on the Group part | -              |
+
+**HTML Attributes**
+
+| Attribute         | Value     | Purpose                         |
+| ----------------- | --------- | ------------------------------- |
+| `role`            | `"group"` | Group semantics                 |
+| `aria-labelledby` | `string`  | Reference to the group label id |
+
+### Select.Label
+
+Group label part.
+
+**Props**
+
+| Name        | Type                | Default     | Description                   |
+| ----------- | ------------------- | ----------- | ----------------------------- |
+| `as?`       | `React.ElementType` | `'label'`   | Polymorphic element for Label |
+| `children?` | `React.ReactNode`   | `undefined` | Label content                 |
+
+**Events**
+
+| Name | Parameters | Description                                    | When Triggered |
+| ---- | ---------- | ---------------------------------------------- | -------------- |
+| -    | -          | No component-specific events on the Label part | -              |
+
+**HTML Attributes**
+
+| Attribute | Value    | Purpose                                   |
+| --------- | -------- | ----------------------------------------- |
+| `id`      | `string` | Receives the `labelId` generated by Group |
+
+### Select.Separator
+
+Separator part between groups or items.
 
 **Props**
 
 | Name        | Type                | Default     | Description                       |
 | ----------- | ------------------- | ----------- | --------------------------------- |
-| `as?`       | `React.ElementType` | `'span'`    | ItemText için polymorphic element |
-| `children?` | `React.ReactNode`   | `undefined` | Item metin içeriği                |
+| `as?`       | `React.ElementType` | `'div'`     | Polymorphic element for Separator |
+| `children?` | `React.ReactNode`   | `undefined` | Optional content                  |
 
 **Events**
 
-| Name | Parameters | Description                                         | When Triggered |
-| ---- | ---------- | --------------------------------------------------- | -------------- |
-| -    | -          | ItemText parçasında component-spesifik event yoktur | -              |
+| Name | Parameters | Description                                        | When Triggered |
+| ---- | ---------- | -------------------------------------------------- | -------------- |
+| -    | -          | No component-specific events on the Separator part | -              |
 
 **HTML Attributes**
 
-| Attribute | Value | Purpose                                                                     |
-| --------- | ----- | --------------------------------------------------------------------------- |
-| -         | -     | ItemText için component tarafından eklenen sabit HTML/data attribute yoktur |
-
-### Select.Group
-
-Item gruplama parçasıdır.
-
-**Props**
-
-| Name        | Type                | Default     | Description                    |
-| ----------- | ------------------- | ----------- | ------------------------------ |
-| `as?`       | `React.ElementType` | `'div'`     | Group için polymorphic element |
-| `children?` | `React.ReactNode`   | `undefined` | Group içeriği                  |
-
-**Events**
-
-| Name | Parameters | Description                                      | When Triggered |
-| ---- | ---------- | ------------------------------------------------ | -------------- |
-| -    | -          | Group parçasında component-spesifik event yoktur | -              |
-
-**HTML Attributes**
-
-| Attribute         | Value     | Purpose                  |
-| ----------------- | --------- | ------------------------ |
-| `role`            | `"group"` | Grup semantiği           |
-| `aria-labelledby` | `string`  | Group label id referansı |
-
-### Select.Label
-
-Group etiketi parçasıdır.
-
-**Props**
-
-| Name        | Type                | Default     | Description                    |
-| ----------- | ------------------- | ----------- | ------------------------------ |
-| `as?`       | `React.ElementType` | `'label'`   | Label için polymorphic element |
-| `children?` | `React.ReactNode`   | `undefined` | Label içeriği                  |
-
-**Events**
-
-| Name | Parameters | Description                                      | When Triggered |
-| ---- | ---------- | ------------------------------------------------ | -------------- |
-| -    | -          | Label parçasında component-spesifik event yoktur | -              |
-
-**HTML Attributes**
-
-| Attribute | Value    | Purpose                                    |
-| --------- | -------- | ------------------------------------------ |
-| `id`      | `string` | Group tarafından üretilen `labelId` atanır |
-
-### Select.Separator
-
-Gruplar veya item'lar arasında ayırıcı parçasıdır.
-
-**Props**
-
-| Name        | Type                | Default     | Description                        |
-| ----------- | ------------------- | ----------- | ---------------------------------- |
-| `as?`       | `React.ElementType` | `'div'`     | Separator için polymorphic element |
-| `children?` | `React.ReactNode`   | `undefined` | Opsiyonel içerik                   |
-
-**Events**
-
-| Name | Parameters | Description                                          | When Triggered |
-| ---- | ---------- | ---------------------------------------------------- | -------------- |
-| -    | -          | Separator parçasında component-spesifik event yoktur | -              |
-
-**HTML Attributes**
-
-| Attribute          | Value          | Purpose                |
-| ------------------ | -------------- | ---------------------- |
-| `role`             | `"separator"`  | Ayırıcı semantiği      |
-| `aria-orientation` | `"horizontal"` | Yön bilgisini belirtir |
+| Attribute          | Value          | Purpose               |
+| ------------------ | -------------- | --------------------- |
+| `role`             | `"separator"`  | Separator semantics   |
+| `aria-orientation` | `"horizontal"` | Indicates orientation |
 
 ### Select.Arrow
 
-Content/Trigger yerleşimine göre konumlanan opsiyonel ok parçasıdır.
+Optional arrow part positioned according to the Content/Trigger placement.
 
 **Props**
 
-| Name         | Type                  | Default     | Description                                             |
-| ------------ | --------------------- | ----------- | ------------------------------------------------------- |
-| `as?`        | `React.ElementType`   | `'svg'`     | Arrow için polymorphic element                          |
-| `ref?`       | `React.Ref<Element>`  | `undefined` | Forwarded ref                                           |
-| `children?`  | `React.ReactNode`     | `undefined` | `svg` kullanılırsa default polygon yerine custom içerik |
-| `className?` | `string`              | `undefined` | Sınıf adı                                               |
-| `style?`     | `React.CSSProperties` | `undefined` | Stil override                                           |
+| Name         | Type                  | Default     | Description                                                    |
+| ------------ | --------------------- | ----------- | -------------------------------------------------------------- |
+| `as?`        | `React.ElementType`   | `'svg'`     | Polymorphic element for Arrow                                  |
+| `ref?`       | `React.Ref<Element>`  | `undefined` | Forwarded ref                                                  |
+| `children?`  | `React.ReactNode`     | `undefined` | Custom content instead of the default polygon when using `svg` |
+| `className?` | `string`              | `undefined` | Class name                                                     |
+| `style?`     | `React.CSSProperties` | `undefined` | Style override                                                 |
 
 **Events**
 
-| Name | Parameters | Description                                      | When Triggered |
-| ---- | ---------- | ------------------------------------------------ | -------------- |
-| -    | -          | Arrow parçasında component-spesifik event yoktur | -              |
+| Name | Parameters | Description                                    | When Triggered |
+| ---- | ---------- | ---------------------------------------------- | -------------- |
+| -    | -          | No component-specific events on the Arrow part | -              |
 
 **HTML Attributes**
 
-| Attribute        | Value                                       | Purpose                             |
-| ---------------- | ------------------------------------------- | ----------------------------------- |
-| `aria-hidden`    | `"true"`                                    | Yardımcı teknolojilerden gizler     |
-| `data-placement` | `"top" \| "top-start" \| ... \| "left-end"` | Hesaplanan yerleşim bilgisini verir |
-| `width`          | `10`                                        | Sadece varsayılan `svg` için        |
-| `height`         | `5`                                         | Sadece varsayılan `svg` için        |
-| `viewBox`        | `"0 0 10 5"`                                | Sadece varsayılan `svg` için        |
+| Attribute        | Value                                       | Purpose                                 |
+| ---------------- | ------------------------------------------- | --------------------------------------- |
+| `aria-hidden`    | `"true"`                                    | Hides it from assistive technologies    |
+| `data-placement` | `"top" \| "top-start" \| ... \| "left-end"` | Provides computed placement information |
+| `width`          | `10`                                        | Only for the default `svg`              |
+| `height`         | `5`                                         | Only for the default `svg`              |
+| `viewBox`        | `"0 0 10 5"`                                | Only for the default `svg`              |
 
-**Not:** Arrow konumlama için `Select.Arrow`, `Select.Content` içinde kullanılmalıdır.
+**Note:** For arrow positioning, `Select.Arrow` should be used inside `Select.Content`.
 
 ### SelectTriggerRenderProps
 
-| Name       | Type                  | Description            |
-| ---------- | --------------------- | ---------------------- |
-| `isOpen`   | `boolean`             | Root açık/kapalı state |
-| `value`    | `string \| undefined` | Seçili değer           |
-| `disabled` | `boolean`             | Trigger disabled state |
-| `open`     | `() => void`          | Programatik aç         |
-| `close`    | `() => void`          | Programatik kapat      |
-| `toggle`   | `() => void`          | Programatik toggle     |
+| Name       | Type                  | Description             |
+| ---------- | --------------------- | ----------------------- |
+| `isOpen`   | `boolean`             | Root open/closed state  |
+| `value`    | `string \| undefined` | Selected value          |
+| `disabled` | `boolean`             | Trigger disabled state  |
+| `open`     | `() => void`          | Open programmatically   |
+| `close`    | `() => void`          | Close programmatically  |
+| `toggle`   | `() => void`          | Toggle programmatically |
 
 ### SelectItemRenderProps
 
-| Name            | Type         | Description                  |
-| --------------- | ------------ | ---------------------------- |
-| `isSelected`    | `boolean`    | Item seçili mi               |
-| `isHighlighted` | `boolean`    | Item highlighted mı          |
-| `disabled`      | `boolean`    | Item disabled mı             |
-| `select`        | `() => void` | Programatik seçme fonksiyonu |
+| Name            | Type         | Description                         |
+| --------------- | ------------ | ----------------------------------- |
+| `isSelected`    | `boolean`    | Whether the item is selected        |
+| `isHighlighted` | `boolean`    | Whether the item is highlighted     |
+| `disabled`      | `boolean`    | Whether the item is disabled        |
+| `select`        | `() => void` | Function to select programmatically |
 
 ## Keyboard Interactions
 
-Gerçek implementasyondaki klavye davranışı:
+Keyboard behavior in the current implementation:
 
-| Key                | Action                                             | Context        | Notes                                               |
-| ------------------ | -------------------------------------------------- | -------------- | --------------------------------------------------- |
-| `Enter` / `Space`  | Toggle open/close                                  | Trigger odakta | `Button` activation akışı üzerinden çalışır         |
-| `ArrowDown`        | Aç ve selected/first item'e odak stratejisi ata    | Trigger odakta | Sadece kapalıysa açar                               |
-| `ArrowUp`          | Aç ve selected/first item'e odak stratejisi ata    | Trigger odakta | Sadece kapalıysa açar                               |
-| `Escape`           | Kapat ve Trigger'a odak geri ver                   | Content odakta | `onEscapeKeyDown` içinde `preventDefault` edilmezse |
-| `Enter` / `Space`  | Highlighted item'i seç, kapat, Trigger'a odak ver  | Content odakta | Highlighted item yoksa seçim yapılmaz               |
-| `ArrowDown`        | Sonraki enabled item'i highlight et                | Content odakta | Listenin sonundan başa sarar                        |
-| `ArrowUp`          | Önceki enabled item'i highlight et                 | Content odakta | Listenin başından sona sarar                        |
-| `Home` / `PageUp`  | İlk enabled item'i highlight et                    | Content odakta | -                                                   |
-| `End` / `PageDown` | Son enabled item'i highlight et                    | Content odakta | -                                                   |
-| `Tab`              | Content'i kapat                                    | Content odakta | `event.preventDefault()` çağrılır                   |
-| `A-Z` / `a-z`      | Type-ahead ile eşleşen enabled item'i highlight et | Content odakta | Varsayılan timeout `700ms`                          |
+| Key                | Action                                                 | Context         | Notes                                                |
+| ------------------ | ------------------------------------------------------ | --------------- | ---------------------------------------------------- |
+| `Enter` / `Space`  | Toggle open/close                                      | Trigger focused | Works through the `Button` activation flow           |
+| `ArrowDown`        | Open and set focus strategy to the selected/first item | Trigger focused | Only opens when currently closed                     |
+| `ArrowUp`          | Open and set focus strategy to the selected/first item | Trigger focused | Only opens when currently closed                     |
+| `Escape`           | Close and return focus to Trigger                      | Content focused | Unless `preventDefault` is used in `onEscapeKeyDown` |
+| `Enter` / `Space`  | Select the highlighted item, close, and focus Trigger  | Content focused | No selection happens if nothing is highlighted       |
+| `ArrowDown`        | Highlight the next enabled item                        | Content focused | Wraps from the end of the list to the start          |
+| `ArrowUp`          | Highlight the previous enabled item                    | Content focused | Wraps from the start of the list to the end          |
+| `Home` / `PageUp`  | Highlight the first enabled item                       | Content focused | -                                                    |
+| `End` / `PageDown` | Highlight the last enabled item                        | Content focused | -                                                    |
+| `Tab`              | Close the Content                                      | Content focused | Calls `event.preventDefault()`                       |
+| `A-Z` / `a-z`      | Highlight the matching enabled item via typeahead      | Content focused | Default timeout is `700ms`                           |
