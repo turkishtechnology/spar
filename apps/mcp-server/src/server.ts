@@ -101,7 +101,7 @@ export function createServer(): McpServer {
   );
 
   server.registerTool(
-    'get_getting_started',
+    'get_setup_guide',
     {
       description:
         'Get introduction and installation guide for Spar (complete getting started bundle)',
@@ -116,9 +116,9 @@ export function createServer(): McpServer {
       if (installation) parts.push(`# Installation\n\n${installation.content}`);
 
       if (parts.length === 0) {
-        logger.warn('get_getting_started: Getting started content not found.');
+        logger.warn('get_setup_guide: Setup guide not found.');
         return {
-          content: [{ type: 'text' as const, text: 'Getting started content not found.' }],
+          content: [{ type: 'text' as const, text: 'Setup guide not found.' }],
           isError: true,
         };
       }
