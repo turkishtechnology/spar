@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { loadDocs, isComponentDoc, extractCodeBlocks } from './utils/docs.js';
+import { loadDocs, isComponentDoc, extractSection, DOC_SECTIONS } from './utils/docs.js';
 import { logger } from './utils/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -49,12 +49,18 @@ export function createServer(): McpServer {
     'get_component_documentation',
     {
       description:
-        'Get complete documentation for a specific Spar component including props, examples, and keyboard interactions',
+        'Get documentation for a specific Spar component. Returns full documentation by default, or a specific section when the section parameter is provided.',
       inputSchema: {
         componentName: z.string().describe('Component name (e.g., "Button", "Dialog", "Tabs")'),
+        section: z
+          .enum(DOC_SECTIONS)
+          .optional()
+          .describe(
+            'Optional section to retrieve: "live-demo", "features", "import", "anatomy", "examples", "api", "keyboard". Omit for full documentation.',
+          ),
       },
     },
-    async ({ componentName }) => {
+    async ({ componentName, section }) => {
       const doc = docs.get(componentName.toLowerCase());
 
       if (!doc || !isComponentDoc(doc.name)) {
@@ -70,46 +76,26 @@ export function createServer(): McpServer {
         };
       }
 
-      return {
-        content: [{ type: 'text' as const, text: doc.content }],
-      };
-    },
-  );
-
-  server.registerTool(
-    'get_component_examples',
-    {
-      description: 'Get code examples for a specific Spar component',
-      inputSchema: {
-        componentName: z.string().describe('Component name (e.g., "Button", "Dialog", "Tabs")'),
-      },
-    },
-    async ({ componentName }) => {
-      const doc = docs.get(componentName.toLowerCase());
-
-      if (!doc || !isComponentDoc(doc.name)) {
-        const available = Array.from(docs.values())
-          .filter((d) => isComponentDoc(d.name))
-          .map((d) => d.name)
-          .join(', ');
-        const errorMsg = `Component "${componentName}" not found. Available components: ${available}`;
-        logger.warn(`get_component_examples: ${errorMsg}`);
+      if (section) {
+        const sectionContent = extractSection(doc.content, section);
+        if (!sectionContent) {
+          return {
+            content: [
+              {
+                type: 'text' as const,
+                text: `Section "${section}" not found in ${doc.name}. Available sections: ${DOC_SECTIONS.join(', ')}`,
+              },
+            ],
+            isError: true,
+          };
+        }
         return {
-          content: [{ type: 'text' as const, text: errorMsg }],
-          isError: true,
+          content: [{ type: 'text' as const, text: sectionContent }],
         };
       }
 
-      const examples = extractCodeBlocks(doc.content);
-      const text =
-        examples.length > 0
-          ? examples
-              .map((code, i) => `## Example ${i + 1}\n\n\`\`\`tsx\n${code}\n\`\`\``)
-              .join('\n\n')
-          : `No code examples found for ${doc.name}.`;
-
       return {
-        content: [{ type: 'text' as const, text }],
+        content: [{ type: 'text' as const, text: doc.content }],
       };
     },
   );
