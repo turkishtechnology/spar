@@ -2,7 +2,14 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { isComponentDoc, loadDocFromFile, extractCodeBlocks, loadDocs } from './docs.js';
+import {
+  isComponentDoc,
+  loadDocFromFile,
+  extractCodeBlocks,
+  loadDocs,
+  extractSection,
+  DOC_SECTIONS,
+} from './docs.js';
 
 describe('isComponentDoc', () => {
   it('returns true for names starting with uppercase', () => {
@@ -138,5 +145,97 @@ describe('loadDocs', () => {
     const docs = loadDocs(tmpDir);
     expect(docs.has('introduction')).toBe(true);
     expect(docs.get('introduction')!.name).toBe('introduction');
+  });
+});
+
+describe('DOC_SECTIONS', () => {
+  it('contains all expected section keys', () => {
+    expect(DOC_SECTIONS).toEqual([
+      'live-demo',
+      'features',
+      'import',
+      'anatomy',
+      'examples',
+      'api',
+      'keyboard',
+    ]);
+  });
+});
+
+describe('extractSection', () => {
+  const sampleDoc = [
+    '# Button',
+    '',
+    'Some intro text.',
+    '',
+    '## Live Demo',
+    '',
+    'Here is a live demo.',
+    '',
+    '## Features',
+    '',
+    '- Feature one',
+    '- Feature two',
+    '',
+    '## Import',
+    '',
+    '```tsx',
+    "import { Button } from '@spar/ui';",
+    '```',
+    '',
+    '## Keyboard Interactions',
+    '',
+    '| Key | Action |',
+    '| --- | ------ |',
+    '| Enter | Activate |',
+  ].join('\n');
+
+  it('extracts a section between two headings (happy path)', () => {
+    const result = extractSection(sampleDoc, 'features');
+    expect(result).not.toBeNull();
+    expect(result).toContain('## Features');
+    expect(result).toContain('- Feature one');
+    expect(result).toContain('- Feature two');
+    // Should not bleed into the next section
+    expect(result).not.toContain('## Import');
+  });
+
+  it('extracts the first section correctly', () => {
+    const result = extractSection(sampleDoc, 'live-demo');
+    expect(result).not.toBeNull();
+    expect(result).toContain('## Live Demo');
+    expect(result).toContain('Here is a live demo.');
+    expect(result).not.toContain('## Features');
+  });
+
+  it('extracts the last section at EOF', () => {
+    const result = extractSection(sampleDoc, 'keyboard');
+    expect(result).not.toBeNull();
+    expect(result).toContain('## Keyboard Interactions');
+    expect(result).toContain('| Enter | Activate |');
+  });
+
+  it('returns null for a section that does not exist', () => {
+    const result = extractSection(sampleDoc, 'anatomy');
+    expect(result).toBeNull();
+  });
+
+  it('returns null for a missing section in empty content', () => {
+    const result = extractSection('', 'features');
+    expect(result).toBeNull();
+  });
+
+  it('returns trimmed content without leading/trailing whitespace', () => {
+    const result = extractSection(sampleDoc, 'import');
+    expect(result).not.toBeNull();
+    expect(result).toBe(result!.trim());
+  });
+
+  it('handles a document with only one matching section', () => {
+    const minimal = '## Features\n\n- Only feature';
+    const result = extractSection(minimal, 'features');
+    expect(result).not.toBeNull();
+    expect(result).toContain('## Features');
+    expect(result).toContain('- Only feature');
   });
 });
