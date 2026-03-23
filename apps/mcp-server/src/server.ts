@@ -130,7 +130,7 @@ export function createServer(): McpServer {
   );
 
   server.registerTool(
-    'search_components',
+    'search_documentation',
     {
       description: 'Search across Spar component documentation for specific terms or concepts',
       inputSchema: {
