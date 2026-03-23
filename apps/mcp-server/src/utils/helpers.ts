@@ -7,6 +7,6 @@ export const logServerInfo = (endpoint?: string) => {
   logger.info('Transport: streamable-http');
   if (endpoint) logger.info(`Endpoint: ${endpoint}`);
   logger.info(
-    'Available tools: list_components, get_component_documentation, get_setup_guide, search_components',
+    'Available tools: list_components, get_component_documentation, get_setup_guide, search_documentation',
   );
 };
