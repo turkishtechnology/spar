@@ -1,10 +1,10 @@
 import { logger } from './logger.js';
 import { SERVER_INFO } from '../constants.js';
 
-export const logServerInfo = (endpoint?: string) => {
+export const logServerInfo = (endpoint?: string, transport: string = 'streamable-http') => {
   logger.info(`${SERVER_INFO.name} v${SERVER_INFO.version} starting...`);
   logger.info(`Description: ${SERVER_INFO.description}`);
-  logger.info('Transport: streamable-http');
+  logger.info(`Transport: ${transport}`);
   if (endpoint) logger.info(`Endpoint: ${endpoint}`);
   logger.info(
     'Available tools: list_components, get_component_documentation, get_setup_guide, search_documentation',
