@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadDocs, isComponentDoc, extractSection, DOC_SECTIONS } from './utils/docs.js';
 import { logger } from './utils/logger.js';
+import { SERVER_INFO } from './constants.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,8 +15,8 @@ const docs = loadDocs(DOCS_DIR);
 export function createServer(): McpServer {
   const server = new McpServer(
     {
-      name: 'spar-docs',
-      version: '0.1.0',
+      name: SERVER_INFO.name,
+      version: SERVER_INFO.version,
     },
     {
       capabilities: {
