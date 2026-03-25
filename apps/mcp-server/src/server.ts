@@ -47,7 +47,7 @@ export function createServer(): McpServer {
   );
 
   server.registerTool(
-    'get_component_documentation',
+    'get_component_docs',
     {
       description:
         'Get documentation for a specific Spar component. Returns full documentation by default, or a specific section when the section parameter is provided.',
@@ -70,7 +70,7 @@ export function createServer(): McpServer {
           .map((d) => d.name)
           .join(', ');
         const errorMsg = `Component "${componentName}" not found. Available components: ${available}`;
-        logger.warn(`get_component_documentation: ${errorMsg}`);
+        logger.warn(`get_component_docs: ${errorMsg}`);
         return {
           content: [{ type: 'text' as const, text: errorMsg }],
           isError: true,
@@ -131,7 +131,7 @@ export function createServer(): McpServer {
   );
 
   server.registerTool(
-    'search_documentation',
+    'search_docs',
     {
       description: 'Search across Spar component documentation for specific terms or concepts',
       inputSchema: {

@@ -6,7 +6,5 @@ export const logServerInfo = (endpoint?: string, transport: string = 'streamable
   logger.info(`Description: ${SERVER_INFO.description}`);
   logger.info(`Transport: ${transport}`);
   if (endpoint) logger.info(`Endpoint: ${endpoint}`);
-  logger.info(
-    'Available tools: list_components, get_component_documentation, get_setup_guide, search_documentation',
-  );
+  logger.info('Available tools: list_components, get_component_docs, get_setup_guide, search_docs');
 };
