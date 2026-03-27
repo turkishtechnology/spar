@@ -84,6 +84,11 @@ const config: Config = {
         },
         // { to: "/blog", label: "Blog", position: "left" },
         {
+          to: '/accessibility',
+          label: 'Accessibility Demos',
+          position: 'left',
+        },
+        {
           type: 'search',
           position: 'right',
         },
