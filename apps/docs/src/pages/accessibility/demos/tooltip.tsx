@@ -9,7 +9,7 @@ export default function TooltipDemo() {
   const [controlledOpen, setControlledOpen] = useState(false);
 
   return (
-    <Layout title='Tooltip – A11y Demo'>
+    <Layout title='Tooltip'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos

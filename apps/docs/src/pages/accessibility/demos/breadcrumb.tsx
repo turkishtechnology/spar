@@ -7,7 +7,7 @@ import '../../../styles/accessibility-demos.scss';
 
 export default function BreadcrumbDemo() {
   return (
-    <Layout title='Breadcrumb – A11y Demo'>
+    <Layout title='Breadcrumb'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos

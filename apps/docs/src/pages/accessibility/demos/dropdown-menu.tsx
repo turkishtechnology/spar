@@ -9,7 +9,7 @@ export default function DropdownMenuDemo() {
   const [controlledOpen, setControlledOpen] = useState(false);
 
   return (
-    <Layout title='DropdownMenu – A11y Demo'>
+    <Layout title='DropdownMenu'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos

@@ -10,7 +10,7 @@ export default function TabsDemo() {
   const [controlledTab, setControlledTab] = useState('tab-1');
 
   return (
-    <Layout title='Tabs – A11y Demo'>
+    <Layout title='Tabs'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos

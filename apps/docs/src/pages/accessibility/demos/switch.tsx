@@ -10,7 +10,7 @@ export default function SwitchDemo() {
   const [controlled, setControlled] = useState(false);
 
   return (
-    <Layout title='Switch – A11y Demo'>
+    <Layout title='Switch'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos

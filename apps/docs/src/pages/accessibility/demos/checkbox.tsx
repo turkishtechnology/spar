@@ -25,7 +25,7 @@ export default function CheckboxDemo() {
   const someChecked = Object.values(formValues).includes(true);
 
   return (
-    <Layout title='Checkbox – A11y Demo'>
+    <Layout title='Checkbox'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos

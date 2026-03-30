@@ -16,7 +16,7 @@ export default function InputDemo() {
   };
 
   return (
-    <Layout title='Input – A11y Demo'>
+    <Layout title='Input'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos

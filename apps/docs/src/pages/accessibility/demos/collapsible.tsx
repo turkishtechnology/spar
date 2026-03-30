@@ -9,7 +9,7 @@ export default function CollapsibleDemo() {
   const [controlledOpen, setControlledOpen] = useState(false);
 
   return (
-    <Layout title='Collapsible – A11y Demo'>
+    <Layout title='Collapsible'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos

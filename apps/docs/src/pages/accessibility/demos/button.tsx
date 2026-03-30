@@ -18,7 +18,7 @@ export default function ButtonDemo() {
   };
 
   return (
-    <Layout title='Button – A11y Demo'>
+    <Layout title='Button'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos
