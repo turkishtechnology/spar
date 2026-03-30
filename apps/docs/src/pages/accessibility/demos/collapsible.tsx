@@ -57,12 +57,11 @@ export default function CollapsibleDemo() {
           <div className='demo-area'>
             <Collapsible.Root className='demo-collapsible' defaultOpen>
               <Collapsible.Trigger className='demo-collapsible-trigger'>
-                FAQ: What is Spar? <span className='demo-chevron'>▾</span>
+                This is already expanded<span className='demo-chevron'>▾</span>
               </Collapsible.Trigger>
               <Collapsible.Content className='demo-collapsible-content'>
                 <p>
-                  Spar is a headless UI component library for React with full accessibility support
-                  and zero styling opinions.
+                  By setting <code>defaultOpen</code>, the collapsible starts in the expanded state.
                 </p>
               </Collapsible.Content>
             </Collapsible.Root>

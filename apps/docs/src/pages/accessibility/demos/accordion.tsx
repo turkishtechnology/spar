@@ -33,11 +33,11 @@ export default function AccordionDemo() {
             <div>
               <div className='demo-area'>
                 <Accordion.Root className='demo-accordion' defaultValue='s-1'>
-                  {['What is Spar?', 'How does it work?', 'Is it accessible?'].map((title, i) => (
+                  {['Tab 1', 'Tab 2', 'Tab 3'].map((title, i) => (
                     <Accordion.Item
-                      key={`s-${i + 1}`}
+                      key={`item-${i + 1}`}
                       className='demo-accordion-item'
-                      value={`s-${i + 1}`}
+                      value={`item-${i + 1}`}
                     >
                       <Accordion.Header className='demo-accordion-header'>
                         <Accordion.Trigger className='demo-accordion-trigger'>
@@ -46,8 +46,7 @@ export default function AccordionDemo() {
                         </Accordion.Trigger>
                       </Accordion.Header>
                       <Accordion.Content className='demo-accordion-content'>
-                        Content for &quot;{title}&quot;. This panel contains detailed information
-                        about the topic. Focus stays on the trigger after toggling.
+                        Only one panel can be open. Opening another closes the previous one.
                       </Accordion.Content>
                     </Accordion.Item>
                   ))}
@@ -75,11 +74,11 @@ export default function AccordionDemo() {
                   type='multiple'
                   defaultValue={['m-1', 'm-3']}
                 >
-                  {['Features', 'Installation', 'API Reference'].map((title, i) => (
+                  {['Tab 1', 'Tab 2', 'Tab 3'].map((title, i) => (
                     <Accordion.Item
-                      key={`m-${i + 1}`}
+                      key={`item-${i + 1}`}
                       className='demo-accordion-item'
-                      value={`m-${i + 1}`}
+                      value={`item-${i + 1}`}
                     >
                       <Accordion.Header className='demo-accordion-header'>
                         <Accordion.Trigger className='demo-accordion-trigger'>
@@ -88,7 +87,8 @@ export default function AccordionDemo() {
                         </Accordion.Trigger>
                       </Accordion.Header>
                       <Accordion.Content className='demo-accordion-content'>
-                        Content for &quot;{title}&quot;. Open other panels without closing this one.
+                        All panels can be open at the same time. Toggling one does not affect
+                        others.
                       </Accordion.Content>
                     </Accordion.Item>
                   ))}
