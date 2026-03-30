@@ -9,7 +9,7 @@ export default function PopoverDemo() {
   const [controlledOpen, setControlledOpen] = useState(false);
 
   return (
-    <Layout title='Popover – A11y Demo'>
+    <Layout title='Popover'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos

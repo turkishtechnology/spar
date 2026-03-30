@@ -10,7 +10,7 @@ export default function DialogDemo() {
   const [controlledOpen, setControlledOpen] = useState(false);
 
   return (
-    <Layout title='Dialog – A11y Demo'>
+    <Layout title='Dialog'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos

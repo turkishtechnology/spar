@@ -15,7 +15,7 @@ export default function AccordionDemo() {
   const [controlledValue, setControlledValue] = useState<string | string[]>('item-1');
 
   return (
-    <Layout title='Accordion – A11y Demo'>
+    <Layout title='Accordion'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos

@@ -9,7 +9,7 @@ export default function RadioDemo() {
   const [controlled, setControlled] = useState('');
 
   return (
-    <Layout title='Radio – A11y Demo'>
+    <Layout title='Radio'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos

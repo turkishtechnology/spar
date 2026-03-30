@@ -10,7 +10,7 @@ export default function SelectDemo() {
   const [controlled, setControlled] = useState('');
 
   return (
-    <Layout title='Select – A11y Demo'>
+    <Layout title='Select'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos

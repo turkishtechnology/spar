@@ -7,7 +7,7 @@ import '../../../styles/accessibility-demos.scss';
 
 export default function LabelDemo() {
   return (
-    <Layout title='Label – A11y Demo'>
+    <Layout title='Label'>
       <div className='demo-page'>
         <Link to='/accessibility' className='back-link'>
           ← All Demos
