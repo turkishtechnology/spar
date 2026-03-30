@@ -38,7 +38,9 @@ export default function ButtonDemo() {
           <div className='demo-section-layout'>
             <div>
               <div className='demo-area'>
-                <Button className='demo-btn'>Click me</Button>
+                <Button className='demo-btn' onClick={() => alert('Clicked')}>
+                  Click me
+                </Button>
               </div>
               <div className='keyboard-hint'>
                 <strong>Keyboard:</strong> Tab to focus → Enter or Space to activate
@@ -122,11 +124,18 @@ export default function ButtonDemo() {
             adds <code>role=&quot;button&quot;</code>, <code>tabIndex</code>, and keyboard handlers.
           </p>
           <div className='demo-area demo-row'>
-            <Button className='demo-btn'>Native &lt;button&gt;</Button>
-            <Button as='a' href='#polymorphic-link' className='demo-btn'>
+            <Button className='demo-btn' onClick={() => alert('Native Button is Clicked')}>
+              Native &lt;button&gt;
+            </Button>
+            <Button
+              as='a'
+              href='#polymorphic-link'
+              className='demo-btn'
+              onClick={() => alert('Anchor is Clicked')}
+            >
               Rendered as &lt;a&gt;
             </Button>
-            <Button as='span' className='demo-btn'>
+            <Button as='span' className='demo-btn' onClick={() => alert('Span is Clicked')}>
               Rendered as &lt;span&gt;
             </Button>
           </div>
