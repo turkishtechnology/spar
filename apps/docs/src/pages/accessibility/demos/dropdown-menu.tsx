@@ -34,10 +34,25 @@ export default function DropdownMenuDemo() {
                 <DropdownMenu.Root>
                   <DropdownMenu.Trigger className='demo-btn'>Actions ▾</DropdownMenu.Trigger>
                   <DropdownMenu.Content className='demo-dropdown-content'>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Edit</DropdownMenu.Item>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Duplicate</DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Edit is clicked')}
+                    >
+                      Edit
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Duplicate is clicked')}
+                    >
+                      Duplicate
+                    </DropdownMenu.Item>
                     <DropdownMenu.Separator className='demo-dropdown-separator' />
-                    <DropdownMenu.Item className='demo-dropdown-item'>Delete</DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Delete is clicked')}
+                    >
+                      Delete
+                    </DropdownMenu.Item>
                   </DropdownMenu.Content>
                 </DropdownMenu.Root>
               </div>
@@ -65,19 +80,40 @@ export default function DropdownMenuDemo() {
                       <DropdownMenu.Label className='demo-dropdown-label'>
                         Document
                       </DropdownMenu.Label>
-                      <DropdownMenu.Item className='demo-dropdown-item'>New</DropdownMenu.Item>
-                      <DropdownMenu.Item className='demo-dropdown-item'>Open</DropdownMenu.Item>
-                      <DropdownMenu.Item className='demo-dropdown-item'>Save</DropdownMenu.Item>
+                      <DropdownMenu.Item
+                        className='demo-dropdown-item'
+                        onClick={() => alert('New is clicked')}
+                      >
+                        New
+                      </DropdownMenu.Item>
+                      <DropdownMenu.Item
+                        className='demo-dropdown-item'
+                        onClick={() => alert('Open is clicked')}
+                      >
+                        Open
+                      </DropdownMenu.Item>
+                      <DropdownMenu.Item
+                        className='demo-dropdown-item'
+                        onClick={() => alert('Save is clicked')}
+                      >
+                        Save
+                      </DropdownMenu.Item>
                     </DropdownMenu.Group>
                     <DropdownMenu.Separator className='demo-dropdown-separator' />
                     <DropdownMenu.Group>
                       <DropdownMenu.Label className='demo-dropdown-label'>
                         Export
                       </DropdownMenu.Label>
-                      <DropdownMenu.Item className='demo-dropdown-item'>
+                      <DropdownMenu.Item
+                        className='demo-dropdown-item'
+                        onClick={() => alert('Export as PDF is clicked')}
+                      >
                         Export as PDF
                       </DropdownMenu.Item>
-                      <DropdownMenu.Item className='demo-dropdown-item'>
+                      <DropdownMenu.Item
+                        className='demo-dropdown-item'
+                        onClick={() => alert('Export as CSV is clicked')}
+                      >
                         Export as CSV
                       </DropdownMenu.Item>
                     </DropdownMenu.Group>
@@ -100,13 +136,28 @@ export default function DropdownMenuDemo() {
                 <DropdownMenu.Root>
                   <DropdownMenu.Trigger className='demo-btn'>Edit ▾</DropdownMenu.Trigger>
                   <DropdownMenu.Content className='demo-dropdown-content'>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Cut</DropdownMenu.Item>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Copy</DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Cut is clicked')}
+                    >
+                      Cut
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Copy is clicked')}
+                    >
+                      Copy
+                    </DropdownMenu.Item>
                     <DropdownMenu.Item className='demo-dropdown-item' disabled>
                       Paste (disabled)
                     </DropdownMenu.Item>
                     <DropdownMenu.Separator className='demo-dropdown-separator' />
-                    <DropdownMenu.Item className='demo-dropdown-item'>Select All</DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Select All is clicked')}
+                    >
+                      Select All
+                    </DropdownMenu.Item>
                   </DropdownMenu.Content>
                 </DropdownMenu.Root>
               </div>
@@ -129,16 +180,41 @@ export default function DropdownMenuDemo() {
                 <DropdownMenu.Root modal>
                   <DropdownMenu.Trigger className='demo-btn'>Modal Menu ▾</DropdownMenu.Trigger>
                   <DropdownMenu.Content className='demo-dropdown-content'>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Item 1</DropdownMenu.Item>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Item 2</DropdownMenu.Item>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Item 3</DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Item 1 is clicked')}
+                    >
+                      Item 1
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Item 2 is clicked')}
+                    >
+                      Item 2
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Item 3 is clicked')}
+                    >
+                      Item 3
+                    </DropdownMenu.Item>
                   </DropdownMenu.Content>
                 </DropdownMenu.Root>
                 <DropdownMenu.Root modal={false}>
                   <DropdownMenu.Trigger className='demo-btn'>Non-modal Menu ▾</DropdownMenu.Trigger>
                   <DropdownMenu.Content className='demo-dropdown-content'>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Item 1</DropdownMenu.Item>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Item 2</DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Item 1 is clicked')}
+                    >
+                      Item 1
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Item 2 is clicked')}
+                    >
+                      Item 2
+                    </DropdownMenu.Item>
                   </DropdownMenu.Content>
                 </DropdownMenu.Root>
               </div>
@@ -159,9 +235,24 @@ export default function DropdownMenuDemo() {
                 <DropdownMenu.Root closeOnSelect={false}>
                   <DropdownMenu.Trigger className='demo-btn'>Multi-action ▾</DropdownMenu.Trigger>
                   <DropdownMenu.Content className='demo-dropdown-content'>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Action A</DropdownMenu.Item>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Action B</DropdownMenu.Item>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Action C</DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Action A is clicked')}
+                    >
+                      Action A
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Action B is clicked')}
+                    >
+                      Action B
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Action C is clicked')}
+                    >
+                      Action C
+                    </DropdownMenu.Item>
                   </DropdownMenu.Content>
                 </DropdownMenu.Root>
               </div>
@@ -190,9 +281,24 @@ export default function DropdownMenuDemo() {
                 >
                   <DropdownMenu.Trigger className='demo-btn'>Controlled ▾</DropdownMenu.Trigger>
                   <DropdownMenu.Content className='demo-dropdown-content'>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Option A</DropdownMenu.Item>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Option B</DropdownMenu.Item>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Option C</DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Option A is clicked')}
+                    >
+                      Option A
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Option B is clicked')}
+                    >
+                      Option B
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Option C is clicked')}
+                    >
+                      Option C
+                    </DropdownMenu.Item>
                   </DropdownMenu.Content>
                 </DropdownMenu.Root>
                 <button className='demo-btn' onClick={() => setControlledOpen(true)}>
@@ -240,9 +346,24 @@ export default function DropdownMenuDemo() {
                     {({ isOpen }) => (isOpen ? '✕ Close' : '☰ Menu')}
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Content className='demo-dropdown-content'>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Home</DropdownMenu.Item>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Settings</DropdownMenu.Item>
-                    <DropdownMenu.Item className='demo-dropdown-item'>Logout</DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Home is clicked')}
+                    >
+                      Home
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Settings is clicked')}
+                    >
+                      Settings
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
+                      className='demo-dropdown-item'
+                      onClick={() => alert('Logout is clicked')}
+                    >
+                      Logout
+                    </DropdownMenu.Item>
                   </DropdownMenu.Content>
                 </DropdownMenu.Root>
               </div>
