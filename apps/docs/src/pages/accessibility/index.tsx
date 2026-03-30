@@ -25,6 +25,12 @@ export default function AccessibilityDemos() {
     <Layout>
       <div className='demos-index'>
         <div className='section-heading'>Accessibility Demos</div>
+        <p>
+          Explore interactive demos showcasing the accessibility features of our components. Each
+          demo highlights how to use the component with proper ARIA attributes, keyboard navigation,
+          and screen reader support. Click on a component to see detailed examples and test its
+          accessibility in action.
+        </p>
         <div className='component-grid'>
           {components.map((c) => (
             <Link
