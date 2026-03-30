@@ -279,11 +279,7 @@ export default function RadioDemo() {
                   <p className='demo-label' style={{ marginBottom: '0.5rem' }}>
                     Auto-select (default):
                   </p>
-                  <Radio.Root
-                    className='demo-radio-group'
-                    orientation='horizontal'
-                    aria-label='Auto select demo'
-                  >
+                  <Radio.Root className='demo-radio-group' aria-label='Auto select demo'>
                     {['A', 'B', 'C'].map((letter) => (
                       <div className='demo-radio-item-wrapper' key={letter}>
                         <Radio.Item
@@ -308,7 +304,6 @@ export default function RadioDemo() {
                   </p>
                   <Radio.Root
                     className='demo-radio-group'
-                    orientation='horizontal'
                     selectOnFocus={false}
                     aria-label='Manual select demo'
                   >

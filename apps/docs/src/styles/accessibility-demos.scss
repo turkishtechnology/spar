@@ -420,7 +420,7 @@
     flex-direction: column;
     gap: 0.5rem;
 
-    &[aria-orientation='horizontal'] {
+    &[data-orientation='horizontal'] {
       flex-direction: row;
       gap: 1rem;
     }
