@@ -31,6 +31,43 @@ export function extractCodeBlocks(content: string): string[] {
   return blocks;
 }
 
+export const DOC_SECTIONS = [
+  'live-demo',
+  'features',
+  'import',
+  'anatomy',
+  'examples',
+  'api',
+  'keyboard',
+] as const;
+
+export type DocSection = (typeof DOC_SECTIONS)[number];
+
+const SECTION_HEADING_MAP: Record<DocSection, string> = {
+  'live-demo': 'Live Demo',
+  features: 'Features',
+  import: 'Import',
+  anatomy: 'Anatomy',
+  examples: 'Code Examples',
+  api: 'API Reference',
+  keyboard: 'Keyboard Interactions',
+};
+
+export function extractSection(content: string, section: DocSection): string | null {
+  const heading = SECTION_HEADING_MAP[section];
+  const pattern = new RegExp(`^## ${heading}\\s*$`, 'm');
+  const match = pattern.exec(content);
+  if (!match) return null;
+
+  const start = match.index;
+  const rest = content.slice(start + match[0].length);
+  const nextH2 = rest.search(/^## /m);
+  const sectionContent =
+    nextH2 === -1 ? content.slice(start) : content.slice(start, start + match[0].length + nextH2);
+
+  return sectionContent.trim();
+}
+
 export function loadDocs(docsDir: string): Map<string, ComponentDoc> {
   const docs = new Map<string, ComponentDoc>();
 
