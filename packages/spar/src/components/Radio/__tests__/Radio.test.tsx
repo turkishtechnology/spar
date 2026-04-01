@@ -366,6 +366,30 @@ describe('Radio', () => {
         expect(option1).toHaveAttribute('aria-checked', 'false');
       });
 
+      it('does not navigate with left/right keys in vertical orientation', async () => {
+        const user = userEvent.setup();
+
+        render(
+          <RadioGroup defaultValue='option2'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+            <RadioItem value='option3'>Option 3</RadioItem>
+          </RadioGroup>,
+        );
+
+        const option2 = getRadioByText('Option 2');
+
+        option2.focus();
+
+        await user.keyboard('{ArrowRight}');
+        expect(option2).toHaveFocus();
+        expect(option2).toHaveAttribute('aria-checked', 'true');
+
+        await user.keyboard('{ArrowLeft}');
+        expect(option2).toHaveFocus();
+        expect(option2).toHaveAttribute('aria-checked', 'true');
+      });
+
       it('moves focus without changing selection when selectOnFocus is false', async () => {
         const user = userEvent.setup();
 
@@ -402,6 +426,7 @@ describe('Radio', () => {
           </RadioGroup>,
         );
 
+        const option1 = getRadioByText('Option 1');
         const option2 = getRadioByText('Option 2');
         const option3 = getRadioByText('Option 3');
 
@@ -440,8 +465,12 @@ describe('Radio', () => {
         expect(option2).toHaveAttribute('aria-checked', 'true');
 
         await user.keyboard('{ArrowDown}');
-        expect(option3).toHaveFocus();
-        expect(option3).toHaveAttribute('aria-checked', 'true');
+        expect(option2).toHaveFocus();
+        expect(option2).toHaveAttribute('aria-checked', 'true');
+
+        await user.keyboard('{ArrowUp}');
+        expect(option2).toHaveFocus();
+        expect(option2).toHaveAttribute('aria-checked', 'true');
       });
     });
   });
