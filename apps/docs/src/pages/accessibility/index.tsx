@@ -26,21 +26,33 @@ export default function AccessibilityDemos() {
       <div className='demos-index'>
         <div className='section-heading'>Accessibility Demos</div>
         <p>
-          Explore interactive demos showcasing the accessibility features of our components. Each
+          Explore interactive demos showcasing the accessibility features of Spar components. Each
           demo highlights how to use the component with proper ARIA attributes, keyboard navigation,
-          and screen reader support. Click on a component to see detailed examples and test its
-          accessibility in action.
+          and screen reader support. Click a component card to view detailed examples and test
+          accessibility behavior in action.
         </p>
         <div className='component-grid'>
           {components.map((c) => (
             <Link
               key={c.toLowerCase()}
-              to={`/accessibility/demos/${c.toLowerCase()}`}
+              to={`/accessibility/components/${c.toLowerCase()}`}
               className='component-card'
             >
               <span>{c}</span>
             </Link>
           ))}
+        </div>
+
+        <div style={{ marginTop: '1.5rem' }}>
+          <p>
+            This comprehensive form demo combines many Spar components in a single accessible
+            experience.
+          </p>
+          <div className='component-grid'>
+            <Link to='/accessibility/form' className='component-card'>
+              <span>Form Demo</span>
+            </Link>
+          </div>
         </div>
       </div>
     </Layout>
