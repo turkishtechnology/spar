@@ -105,8 +105,8 @@ export const DropdownMenuItem = <T extends ElementType = 'div'>({
     }
 
     if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
       runSelection(event);
+      event.preventDefault();
     }
   };
 

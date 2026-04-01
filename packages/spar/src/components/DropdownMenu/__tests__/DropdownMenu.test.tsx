@@ -667,6 +667,37 @@ describe('DropdownMenu', () => {
       });
     });
 
+    it('should close menu after keyboard selection with closeOnSelect=true', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <DropdownMenu closeOnSelect={true} defaultOpen={true}>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const item = screen.getByRole('menuitem');
+      item.focus();
+      await user.keyboard('[Enter]');
+
+      await waitFor(() => {
+        expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+      });
+
+      await user.click(screen.getByRole('button', { name: 'Open Menu' }));
+
+      const reopenedItem = screen.getByRole('menuitem');
+      reopenedItem.focus();
+      await user.keyboard(' ');
+
+      await waitFor(() => {
+        expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+      });
+    });
+
     it('should not close menu after selection with closeOnSelect=false', async () => {
       const user = userEvent.setup();
 
