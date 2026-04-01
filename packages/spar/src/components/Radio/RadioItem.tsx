@@ -24,6 +24,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
     onValueChange,
     disabled: groupDisabled,
     name,
+    firstFocusableValue,
     focusedValue,
     setFocusedValue,
     registerItem,
@@ -37,17 +38,17 @@ export const RadioItem = <T extends ElementType = 'label'>({
 
   // Determine if this item should be focusable (tabIndex={0})
   // Uses roving tabindex: exactly one item in the group should have tabIndex={0}
-  const isFirstItemFallback = groupValue === undefined;
-  const isFocusable =
-    !isDisabled && focusedValue === null && (isFocused || isChecked || isFirstItemFallback);
+  const isFirstItemFallback =
+    groupValue === undefined && focusedValue === null && firstFocusableValue === itemValue;
+  const isFocusable = !isDisabled && (isFocused || isChecked || isFirstItemFallback);
 
   // Register/unregister with group, providing the DOM element for imperative focus management
   useEffect(() => {
     if (itemRef.current) {
-      registerItem(itemValue, itemRef.current);
+      registerItem(itemValue, itemRef.current, isDisabled);
     }
     return () => unregisterItem(itemValue);
-  }, [itemValue, registerItem, unregisterItem]);
+  }, [itemValue, registerItem, unregisterItem, isDisabled]);
 
   // Handle selection
   const handleClick = useCallback(() => {
@@ -58,7 +59,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
-      if ((event.key === ' ' || event.key === 'Enter') && !isDisabled) {
+      if (event.key === ' ' && !isDisabled) {
         event.preventDefault();
         handleClick();
       }
