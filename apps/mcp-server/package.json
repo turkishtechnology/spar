@@ -7,9 +7,9 @@
   "scripts": {
     "convert-mdx": "tsx src/scripts/convert-mdx.ts",
     "build": "tsx src/scripts/convert-mdx.ts && tsc",
-    "dev": "tsx src/scripts/convert-mdx.ts && tsx watch src/index.ts http",
+    "dev": "tsx src/scripts/convert-mdx.ts && tsx watch src/index.ts",
     "lint": "eslint src",
-    "start": "node dist/index.js http",
+    "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest"
   },
