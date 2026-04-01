@@ -154,7 +154,7 @@ describe('Radio Accessibility', () => {
       expect(option2).toHaveAttribute('aria-checked', 'true');
     });
 
-    it('supports Space and Enter to select focused item', async () => {
+    it('supports Space to select focused item', async () => {
       const user = userEvent.setup();
 
       render(
@@ -172,7 +172,7 @@ describe('Radio Accessibility', () => {
       expect(option2).toHaveFocus();
       expect(option2).toHaveAttribute('aria-checked', 'false');
 
-      await user.keyboard('{Enter}');
+      await user.keyboard(' ');
       expect(option2).toHaveAttribute('aria-checked', 'true');
 
       await user.keyboard('{ArrowUp}');

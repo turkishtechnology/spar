@@ -325,6 +325,25 @@ describe('Radio', () => {
     });
 
     describe('Keyboard Navigation', () => {
+      it('keeps only first enabled item tabbable when no radio is checked', () => {
+        const { container } = render(
+          <RadioGroup>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+            <RadioItem value='option3'>Option 3</RadioItem>
+          </RadioGroup>,
+        );
+
+        const labels = container.querySelectorAll('label[role="radio"]');
+        const option1 = labels[0] as HTMLElement;
+        const option2 = labels[1] as HTMLElement;
+        const option3 = labels[2] as HTMLElement;
+
+        expect(option1).toHaveAttribute('tabindex', '0');
+        expect(option2).toHaveAttribute('tabindex', '-1');
+        expect(option3).toHaveAttribute('tabindex', '-1');
+      });
+
       it('moves focus and selection with arrow keys by default', async () => {
         const user = userEvent.setup();
 
@@ -345,6 +364,30 @@ describe('Radio', () => {
         expect(option2).toHaveFocus();
         expect(option2).toHaveAttribute('aria-checked', 'true');
         expect(option1).toHaveAttribute('aria-checked', 'false');
+      });
+
+      it('does not navigate with left/right keys in vertical orientation', async () => {
+        const user = userEvent.setup();
+
+        render(
+          <RadioGroup defaultValue='option2'>
+            <RadioItem value='option1'>Option 1</RadioItem>
+            <RadioItem value='option2'>Option 2</RadioItem>
+            <RadioItem value='option3'>Option 3</RadioItem>
+          </RadioGroup>,
+        );
+
+        const option2 = getRadioByText('Option 2');
+
+        option2.focus();
+
+        await user.keyboard('{ArrowRight}');
+        expect(option2).toHaveFocus();
+        expect(option2).toHaveAttribute('aria-checked', 'true');
+
+        await user.keyboard('{ArrowLeft}');
+        expect(option2).toHaveFocus();
+        expect(option2).toHaveAttribute('aria-checked', 'true');
       });
 
       it('moves focus without changing selection when selectOnFocus is false', async () => {
@@ -408,7 +451,6 @@ describe('Radio', () => {
           </RadioGroup>,
         );
 
-        const option1 = getRadioByText('Option 1');
         const option2 = getRadioByText('Option 2');
         const option3 = getRadioByText('Option 3');
 
@@ -424,7 +466,11 @@ describe('Radio', () => {
 
         await user.keyboard('{ArrowDown}');
         expect(option2).toHaveFocus();
-        expect(option1).toHaveAttribute('aria-checked', 'false');
+        expect(option2).toHaveAttribute('aria-checked', 'true');
+
+        await user.keyboard('{ArrowUp}');
+        expect(option2).toHaveFocus();
+        expect(option2).toHaveAttribute('aria-checked', 'true');
       });
     });
   });
