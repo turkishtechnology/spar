@@ -39,7 +39,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
   const [focusedValue, setFocusedValue] = useState<string | null>(null);
   const {
     items: radioItems,
-    registerItem,
+    registerItem: registerEnabledItem,
     unregisterItem,
     getItemIndex,
     getItemAtIndex,
@@ -49,6 +49,18 @@ export const RadioGroup = <T extends ElementType = 'div'>({
   const baseId = providedId ?? generatedId;
   const name = nameProp ?? `${baseId}-radio-group`;
   const hasAutoFocused = useRef(false);
+
+  const registerItem = useCallback(
+    (itemValue: string, element: HTMLElement, itemDisabled: boolean): void => {
+      if (itemDisabled) {
+        unregisterItem(itemValue);
+        return;
+      }
+
+      registerEnabledItem(itemValue, element);
+    },
+    [registerEnabledItem, unregisterItem],
+  );
 
   const focusItemAtIndex = useCallback(
     (index: number): void => {
@@ -174,6 +186,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
       onValueChange: handleValueChange,
       disabled,
       name,
+      firstFocusableValue: getItemAtIndex(0) ?? null,
       focusedValue,
       setFocusedValue,
       orientation,
@@ -186,6 +199,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
       handleValueChange,
       disabled,
       name,
+      getItemAtIndex,
       focusedValue,
       setFocusedValue,
       orientation,
