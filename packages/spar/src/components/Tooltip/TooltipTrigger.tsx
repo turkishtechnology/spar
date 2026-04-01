@@ -83,7 +83,7 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
 
   const handleFocus = useCallback(
     (event: React.FocusEvent<HTMLElement>) => {
-      showTooltip(true); // Immediate on focus
+      showTooltip();
       onFocus?.(event as React.FocusEvent<HTMLButtonElement>);
     },
     [showTooltip, onFocus],

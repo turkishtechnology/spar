@@ -164,19 +164,26 @@ describe('Tooltip', () => {
     expect(screen.getByRole('tooltip')).toBeInTheDocument();
   });
 
-  it('opens immediately on focus and closes on blur', async () => {
-    render(<BasicTooltip />);
+  it('opens on focus after configured delay and closes on blur', async () => {
+    render(<BasicTooltip delay={120} />);
 
     const trigger = screen.getByRole('button', { name: 'Trigger' });
 
     act(() => {
       trigger.focus();
     });
+
     act(() => {
-      jest.advanceTimersByTime(0);
+      jest.advanceTimersByTime(119);
     });
 
     expect(trigger).toHaveFocus();
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+
+    act(() => {
+      jest.advanceTimersByTime(1);
+    });
+
     expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
     act(() => {
