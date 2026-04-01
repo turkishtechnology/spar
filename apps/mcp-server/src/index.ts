@@ -1,29 +1,24 @@
+import { app, transports } from './app.js';
 import { logger } from './utils/logger.js';
+import { logServerInfo } from './utils/helpers.js';
+import { SERVER_HOST, SERVER_PORT } from './constants.js';
 
-const args = process.argv.slice(2);
-const transportName = args[0] || 'stdio';
+app.listen(SERVER_PORT, SERVER_HOST, () => {
+  logServerInfo(`http://${SERVER_HOST}:${SERVER_PORT}/mcp`);
+  logger.info(`Health: http://${SERVER_HOST}:${SERVER_PORT}/health`);
+});
 
-async function run() {
-  try {
-    switch (transportName) {
-      case 'stdio':
-        await import('./transports/stdio.js');
-        break;
-      case 'http':
-        await import('./transports/http.js');
-        break;
-      default:
-        logger.error(`Unknown transport: ${transportName}`);
-        logger.info('Available transports: stdio, http');
-        process.exit(1);
-    }
-  } catch (error) {
-    logger.error('Failed to start server:', error);
-    process.exit(1);
+async function shutdown(signal: string) {
+  logger.info(`Received ${signal}, shutting down...`);
+  for (const sid in transports) {
+    await transports[sid]!.close();
+    delete transports[sid];
   }
+  process.exit(0);
 }
 
-await run();
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
 
 process.on('uncaughtException', (error) => {
   logger.error('Uncaught exception:', error);
