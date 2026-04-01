@@ -23,12 +23,10 @@ export default function ButtonDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Button – Accessibility Demo</h1>
+        <h1>Button</h1>
         <p className='page-description'>
-          Comprehensive demo of the Button component covering all states and accessibility features.
-          Test with keyboard (Tab, Enter, Space) and screen readers.
+          Button triggers user actions such as submit, confirm, cancel, or state toggles.
         </p>
-
         {/* 1. Basic Button */}
         <section className='demo-section'>
           <h2>1. Basic Button</h2>
@@ -158,6 +156,10 @@ export default function ButtonDemo() {
             </Button>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );

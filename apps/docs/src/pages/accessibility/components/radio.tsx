@@ -14,10 +14,9 @@ export default function RadioDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Radio – Accessibility Demo</h1>
+        <h1>Radio</h1>
         <p className='page-description'>
-          Radio group with <code>role=&quot;radiogroup&quot;</code> and{' '}
-          <code>role=&quot;radio&quot;</code>. Arrow keys navigate and select within the group.
+          Radio lets users choose a single option from a predefined set.
         </p>
 
         {/* 1. Basic Radio Group */}
@@ -333,6 +332,10 @@ export default function RadioDemo() {
             </div>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );

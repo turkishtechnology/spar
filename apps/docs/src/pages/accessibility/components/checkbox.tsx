@@ -30,12 +30,11 @@ export default function CheckboxDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Checkbox – Accessibility Demo</h1>
+        <h1>Checkbox</h1>
         <p className='page-description'>
-          Comprehensive demo of the Checkbox component covering checked, unchecked, indeterminate,
-          disabled, read-only, required, and form integration states.
+          Checkbox allows users to select one or more options, including checked, unchecked, and
+          indeterminate states.
         </p>
-
         {/* 1. Basic Checkbox */}
         <section className='demo-section'>
           <h2>1. Basic Checkbox (Uncontrolled)</h2>
@@ -263,6 +262,10 @@ export default function CheckboxDemo() {
             </div>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );

@@ -21,10 +21,10 @@ export default function InputDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Input – Accessibility Demo</h1>
+        <h1>Input</h1>
         <p className='page-description'>
-          Compound input component with label, field, description, and error message. All parts are
-          linked via ARIA attributes automatically.
+          Input combines field, label, hint, and error parts for collecting and validating user text
+          input.
         </p>
 
         {/* 1. Basic Input */}
@@ -154,6 +154,10 @@ export default function InputDemo() {
             </Input>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );

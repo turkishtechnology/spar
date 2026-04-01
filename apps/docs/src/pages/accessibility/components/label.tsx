@@ -12,11 +12,10 @@ export default function LabelDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Label – Accessibility Demo</h1>
+        <h1>Label</h1>
         <p className='page-description'>
-          Accessible label component that associates with form controls via <code>htmlFor</code>.
-          Supports required, optional, disabled, read-only, and invalid visual states via data
-          attributes.
+          Label provides a text caption for form controls and connects to inputs using{' '}
+          <code>htmlFor</code>.
         </p>
 
         {/* 1. Basic Label */}
@@ -191,6 +190,10 @@ export default function LabelDemo() {
             </div>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );

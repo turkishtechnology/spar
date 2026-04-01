@@ -15,12 +15,11 @@ export default function DialogDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Dialog – Accessibility Demo</h1>
+        <h1>Dialog</h1>
         <p className='page-description'>
-          Modal and non-modal dialog with focus trap, <code>aria-modal</code>, title/description
-          linking, Escape to close, and focus restoration.
+          Dialog displays important content in a layer above the page for confirmations, edits, or
+          focused tasks.
         </p>
-
         {/* 1. Basic Modal Dialog */}
         <section className='demo-section'>
           <h2>1. Basic Modal Dialog</h2>
@@ -226,6 +225,10 @@ export default function DialogDemo() {
             </div>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );

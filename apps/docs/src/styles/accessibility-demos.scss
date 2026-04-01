@@ -49,6 +49,9 @@
     padding: 1.5rem;
     border: 1px solid #e1e4ea;
     border-radius: 10px;
+    &:last-of-type {
+      margin: 0;
+    }
 
     .keyboard-hint {
       display: inline-block;

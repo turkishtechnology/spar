@@ -14,10 +14,9 @@ export default function TooltipDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Tooltip – Accessibility Demo</h1>
+        <h1>Tooltip</h1>
         <p className='page-description'>
-          Tooltip component using <code>role=&quot;tooltip&quot;</code> and{' '}
-          <code>aria-describedby</code>. Shows on hover and focus. Dismisses on Escape.
+          Tooltip displays short helper text for an element on hover or focus.
         </p>
 
         {/* 1. Basic Tooltip */}
@@ -221,6 +220,10 @@ export default function TooltipDemo() {
             </Tooltip.Provider>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );

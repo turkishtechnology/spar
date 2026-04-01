@@ -14,12 +14,11 @@ export default function CollapsibleDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Collapsible – Accessibility Demo</h1>
+        <h1>Collapsible</h1>
         <p className='page-description'>
-          Disclosure widget with <code>aria-expanded</code> and <code>aria-controls</code>. Toggle
-          content visibility with trigger button.
+          Collapsible toggles the visibility of a content area, useful for optional details and
+          progressive disclosure patterns.
         </p>
-
         {/* 1. Basic Collapsible */}
         <section className='demo-section'>
           <h2>1. Basic Collapsible</h2>
@@ -232,6 +231,10 @@ export default function CollapsibleDemo() {
             ))}
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );

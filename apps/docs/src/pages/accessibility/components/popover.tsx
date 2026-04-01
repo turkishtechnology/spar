@@ -14,10 +14,10 @@ export default function PopoverDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Popover – Accessibility Demo</h1>
+        <h1>Popover</h1>
         <p className='page-description'>
-          Popover component with focus management, Escape to close, modal/non-modal modes, and ARIA
-          attributes.
+          Popover shows floating contextual content anchored to a trigger without leaving the
+          current page.
         </p>
 
         {/* 1. Basic Popover */}
@@ -159,6 +159,10 @@ export default function PopoverDemo() {
             </Popover.Root>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );
