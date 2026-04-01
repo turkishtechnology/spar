@@ -12,12 +12,11 @@ export default function BreadcrumbDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Breadcrumb – Accessibility Demo</h1>
+        <h1>Breadcrumb</h1>
         <p className='page-description'>
-          Navigation landmark with <code>aria-label=&quot;Breadcrumb&quot;</code>, ordered list
-          semantics, and <code>aria-current=&quot;page&quot;</code> on the current page item.
+          Breadcrumb shows the current location in a hierarchy and helps users navigate back through
+          parent levels.
         </p>
-
         {/* 1. Basic Breadcrumb */}
         <section className='demo-section'>
           <h2>1. Basic Breadcrumb</h2>
@@ -326,6 +325,10 @@ export default function BreadcrumbDemo() {
             </div>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );

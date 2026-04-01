@@ -15,10 +15,9 @@ export default function SelectDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Select – Accessibility Demo</h1>
+        <h1>Select</h1>
         <p className='page-description'>
-          Listbox-based select with keyboard navigation (Arrow keys, Home, End, type-ahead), groups,
-          disabled options, and ARIA support.
+          Select lets users choose one value from a list of available options.
         </p>
 
         {/* 1. Basic Select */}
@@ -231,6 +230,10 @@ export default function SelectDemo() {
             </div>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );

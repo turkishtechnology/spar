@@ -15,11 +15,9 @@ export default function TabsDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Tabs – Accessibility Demo</h1>
+        <h1>Tabs</h1>
         <p className='page-description'>
-          Tabbed interface with <code>role=&quot;tablist&quot;</code>,{' '}
-          <code>role=&quot;tab&quot;</code>, and <code>role=&quot;tabpanel&quot;</code>. Supports
-          automatic/manual activation and horizontal/vertical orientation.
+          Tabs organize related content into separate panels and let users switch sections quickly.
         </p>
 
         {/* 1. Automatic Activation */}
@@ -315,6 +313,10 @@ export default function TabsDemo() {
             </Tabs.Root>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );

@@ -20,7 +20,11 @@ export default function AccordionDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Accordion Demo</h1>
+        <h1>Accordion</h1>
+        <p className='page-description'>
+          Accordion organizes related content into expandable sections, helping keep long interfaces
+          structured and scannable.
+        </p>
 
         {/* 1. Single Expand (Default) */}
         <section className='demo-section'>
@@ -301,6 +305,10 @@ export default function AccordionDemo() {
             </Accordion.Root>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );

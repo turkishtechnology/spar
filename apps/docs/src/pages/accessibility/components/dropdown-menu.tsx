@@ -14,11 +14,9 @@ export default function DropdownMenuDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>DropdownMenu – Accessibility Demo</h1>
+        <h1>DropdownMenu</h1>
         <p className='page-description'>
-          Menu button pattern with <code>role=&quot;menu&quot;</code> and{' '}
-          <code>role=&quot;menuitem&quot;</code>. Full keyboard support including Arrow keys, Home,
-          End, and type-ahead.
+          DropdownMenu provides a compact list of contextual actions from a trigger button.
         </p>
 
         {/* 1. Basic Dropdown */}
@@ -370,6 +368,10 @@ export default function DropdownMenuDemo() {
             </div>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );

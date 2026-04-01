@@ -15,11 +15,8 @@ export default function SwitchDemo() {
         <Link to='/accessibility' className='back-link'>
           ← All Demos
         </Link>
-        <h1>Switch – Accessibility Demo</h1>
-        <p className='page-description'>
-          Toggle switch component with <code>role=&quot;switch&quot;</code> and{' '}
-          <code>aria-checked</code> for screen reader support.
-        </p>
+        <h1>Switch</h1>
+        <p className='page-description'>Switch toggles a setting between on and off states.</p>
 
         {/* 1. Basic Switch */}
         <section className='demo-section'>
@@ -164,6 +161,10 @@ export default function SwitchDemo() {
             </div>
           </div>
         </section>
+
+        <Link to='/accessibility' className='back-link'>
+          ← All Demos
+        </Link>
       </div>
     </Layout>
   );
