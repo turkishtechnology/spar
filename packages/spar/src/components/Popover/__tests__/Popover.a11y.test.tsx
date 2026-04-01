@@ -64,7 +64,7 @@ describe('Popover Accessibility', () => {
     expect(content).toHaveAttribute('id', 'a11y-popover-content');
   });
 
-  it('supports required keyboard behavior: ArrowDown open and Escape close', async () => {
+  it('supports required keyboard behavior: Enter open and Escape close', async () => {
     const user = userEvent.setup();
 
     render(
@@ -77,7 +77,7 @@ describe('Popover Accessibility', () => {
     const trigger = screen.getByRole('button', { name: 'Open' });
     trigger.focus();
 
-    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
     expect(await screen.findByText('Content')).toBeInTheDocument();
 
     await user.keyboard('{Escape}');
