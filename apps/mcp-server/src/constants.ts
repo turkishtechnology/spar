@@ -4,7 +4,7 @@ const defaultHost = process.env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0
 export const SERVER_HOST = process.env.HOST ?? defaultHost;
 export const SERVER_PORT = +(process.env.PORT || '3001');
 export const SERVER_INFO = {
-  name: 'spar-docs',
+  name: 'spar-mcp',
   version: '0.1.0',
   description: 'Spar UI component documentation MCP server',
 } satisfies Implementation;
