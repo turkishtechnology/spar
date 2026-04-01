@@ -28,6 +28,11 @@ const sidebars: SidebarsConfig = {
         },
       ],
     },
+    {
+      type: 'link',
+      label: 'Accessibility Tests',
+      href: '/accessibility',
+    },
   ],
 };
 
