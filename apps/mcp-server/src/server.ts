@@ -2,7 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { loadDocs, isComponentDoc, extractCodeBlocks } from './utils/docs.js';
+import { loadDocs, isComponentDoc, extractSection, DOC_SECTIONS } from './utils/docs.js';
 import { logger } from './utils/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -46,15 +46,21 @@ export function createServer(): McpServer {
   );
 
   server.registerTool(
-    'get_component_documentation',
+    'get_component_docs',
     {
       description:
-        'Get complete documentation for a specific Spar component including props, examples, and keyboard interactions',
+        'Get documentation for a specific Spar component. Returns full documentation by default, or a specific section when the section parameter is provided.',
       inputSchema: {
         componentName: z.string().describe('Component name (e.g., "Button", "Dialog", "Tabs")'),
+        section: z
+          .enum(DOC_SECTIONS)
+          .optional()
+          .describe(
+            'Optional section to retrieve: "live-demo", "features", "import", "anatomy", "examples", "api", "keyboard". Omit for full documentation.',
+          ),
       },
     },
-    async ({ componentName }) => {
+    async ({ componentName, section }) => {
       const doc = docs.get(componentName.toLowerCase());
 
       if (!doc || !isComponentDoc(doc.name)) {
@@ -63,10 +69,28 @@ export function createServer(): McpServer {
           .map((d) => d.name)
           .join(', ');
         const errorMsg = `Component "${componentName}" not found. Available components: ${available}`;
-        logger.warn(`get_component_documentation: ${errorMsg}`);
+        logger.warn(`get_component_docs: ${errorMsg}`);
         return {
           content: [{ type: 'text' as const, text: errorMsg }],
           isError: true,
+        };
+      }
+
+      if (section) {
+        const sectionContent = extractSection(doc.content, section);
+        if (!sectionContent) {
+          return {
+            content: [
+              {
+                type: 'text' as const,
+                text: `Section "${section}" not found in ${doc.name}. Available sections: ${DOC_SECTIONS.join(', ')}`,
+              },
+            ],
+            isError: true,
+          };
+        }
+        return {
+          content: [{ type: 'text' as const, text: sectionContent }],
         };
       }
 
@@ -77,45 +101,7 @@ export function createServer(): McpServer {
   );
 
   server.registerTool(
-    'get_component_examples',
-    {
-      description: 'Get code examples for a specific Spar component',
-      inputSchema: {
-        componentName: z.string().describe('Component name (e.g., "Button", "Dialog", "Tabs")'),
-      },
-    },
-    async ({ componentName }) => {
-      const doc = docs.get(componentName.toLowerCase());
-
-      if (!doc || !isComponentDoc(doc.name)) {
-        const available = Array.from(docs.values())
-          .filter((d) => isComponentDoc(d.name))
-          .map((d) => d.name)
-          .join(', ');
-        const errorMsg = `Component "${componentName}" not found. Available components: ${available}`;
-        logger.warn(`get_component_examples: ${errorMsg}`);
-        return {
-          content: [{ type: 'text' as const, text: errorMsg }],
-          isError: true,
-        };
-      }
-
-      const examples = extractCodeBlocks(doc.content);
-      const text =
-        examples.length > 0
-          ? examples
-              .map((code, i) => `## Example ${i + 1}\n\n\`\`\`tsx\n${code}\n\`\`\``)
-              .join('\n\n')
-          : `No code examples found for ${doc.name}.`;
-
-      return {
-        content: [{ type: 'text' as const, text }],
-      };
-    },
-  );
-
-  server.registerTool(
-    'get_getting_started',
+    'get_setup_guide',
     {
       description:
         'Get introduction and installation guide for Spar (complete getting started bundle)',
@@ -130,9 +116,9 @@ export function createServer(): McpServer {
       if (installation) parts.push(`# Installation\n\n${installation.content}`);
 
       if (parts.length === 0) {
-        logger.warn('get_getting_started: Getting started content not found.');
+        logger.warn('get_setup_guide: Setup guide not found.');
         return {
-          content: [{ type: 'text' as const, text: 'Getting started content not found.' }],
+          content: [{ type: 'text' as const, text: 'Setup guide not found.' }],
           isError: true,
         };
       }
@@ -144,7 +130,7 @@ export function createServer(): McpServer {
   );
 
   server.registerTool(
-    'search_components',
+    'search_docs',
     {
       description: 'Search across Spar component documentation for specific terms or concepts',
       inputSchema: {

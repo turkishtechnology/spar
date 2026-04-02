@@ -87,7 +87,7 @@ describe('Popover', () => {
     expect(content).toHaveAttribute('id', 'profile-content');
   });
 
-  it('opens with ArrowDown and does not toggle closed on repeated ArrowDown', async () => {
+  it('does not open with ArrowDown and opens with Enter', async () => {
     const user = userEvent.setup();
 
     render(
@@ -101,9 +101,9 @@ describe('Popover', () => {
     trigger.focus();
 
     await user.keyboard('{ArrowDown}');
-    expect(await screen.findByText('Content')).toBeInTheDocument();
+    expect(screen.queryByText('Content')).not.toBeInTheDocument();
 
-    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
     expect(screen.getByText('Content')).toBeInTheDocument();
   });
 
