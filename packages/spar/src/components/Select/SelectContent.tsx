@@ -247,7 +247,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
           break;
 
         case 'Tab':
-          event.preventDefault();
+          context.triggerRef.current?.focus();
           context.onOpenChange(false);
           break;
 
@@ -306,7 +306,15 @@ export const SelectContent = <T extends ElementType = 'div'>({
   );
 
   if (!context.open || !mounted) {
-    return null;
+    // Render children in a hidden container (no portal, no positioning)
+    // so items can register their data for SelectValue display.
+    return (
+      <SelectContentContext.Provider value={contentContextValue}>
+        <SelectCollectionContext.Provider value={collectionValue}>
+          <Component hidden>{children}</Component>
+        </SelectCollectionContext.Provider>
+      </SelectContentContext.Provider>
+    );
   }
 
   // Combine Floating UI styles with component-specific extras
