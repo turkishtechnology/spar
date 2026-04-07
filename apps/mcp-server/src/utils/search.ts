@@ -1,5 +1,3 @@
-const MAX_CONTEXTS_PER_DOC = 5;
-const MAX_RESULTS = 8;
 const SIMILARITY_THRESHOLD = 0.4;
 
 export interface SearchMatch {
@@ -154,7 +152,6 @@ export function searchDocs(
     let bestScore = 0;
 
     for (const hit of scored) {
-      if (matches.length >= MAX_CONTEXTS_PER_DOC) break;
       if (usedLines.has(hit.index)) continue;
 
       const { start, end } = resolveContext(lines, hit.index);
@@ -193,7 +190,7 @@ export function searchDocs(
     return b.totalMatches - a.totalMatches;
   });
 
-  return results.slice(0, MAX_RESULTS);
+  return results;
 }
 
 export function formatSearchResults(query: string, results: SearchResult[]): string {
