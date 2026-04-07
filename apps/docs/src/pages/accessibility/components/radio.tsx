@@ -6,7 +6,7 @@ import { Radio, Label } from '@turkish-technology/spar';
 import '../../../styles/accessibility-demos.scss';
 
 export default function RadioDemo() {
-  const [controlled, setControlled] = useState('');
+  const [controlled, setControlled] = useState<string | undefined>(undefined);
 
   return (
     <Layout title='Radio'>
@@ -62,8 +62,7 @@ export default function RadioDemo() {
         <section className='demo-section'>
           <h2>2. Horizontal Orientation</h2>
           <p className='demo-description'>
-            With <code>orientation=&quot;horizontal&quot;</code>, Arrow Left/Right navigate instead
-            of Up/Down.
+            With <code>orientation=&quot;horizontal&quot;</code>.
           </p>
           <div className='demo-section-layout'>
             <div>
@@ -89,9 +88,6 @@ export default function RadioDemo() {
                   ))}
                 </Radio.Root>
               </div>
-              <div className='keyboard-hint'>
-                <strong>Keyboard:</strong> ← → to navigate & select (not ↑ ↓)
-              </div>
             </div>
           </div>
         </section>
@@ -112,7 +108,7 @@ export default function RadioDemo() {
                   <button className='demo-btn' onClick={() => setControlled('yearly')}>
                     Set Yearly
                   </button>
-                  <button className='demo-btn' onClick={() => setControlled('')}>
+                  <button className='demo-btn' onClick={() => setControlled(undefined)}>
                     Clear
                   </button>
                 </div>
