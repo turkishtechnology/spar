@@ -136,6 +136,7 @@ export const SelectItem = <T extends ElementType = 'div'>({
   };
 
   const itemProps = {
+    id: `${context.contentId}-option-${encodeURIComponent(value)}`,
     ref: mergedRef,
     ...ariaAttributes,
     ...dataAttributes,
