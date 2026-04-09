@@ -150,7 +150,7 @@ describe('Select', () => {
     expect(screen.getByRole('option', { name: 'Option 1' })).toHaveAttribute('data-highlighted');
   });
 
-  it('closes with Tab and leaves no open listbox in the DOM', async () => {
+  it('keeps listbox open when Tab is pressed (default prevented)', async () => {
     const user = userEvent.setup();
 
     renderSelect();
@@ -161,8 +161,8 @@ describe('Select', () => {
     expect(screen.getByRole('listbox')).toBeInTheDocument();
     await user.keyboard('{Tab}');
 
-    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
-    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
   });
 
   it('throws when trigger is rendered outside Select root', () => {

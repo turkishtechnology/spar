@@ -327,6 +327,9 @@ export const SelectContent = <T extends ElementType = 'div'>({
   const ariaAttributes = {
     role: 'listbox',
     'aria-labelledby': context.triggerId,
+    'aria-activedescendant': highlightedId
+      ? `${context.contentId}-option-${encodeURIComponent(highlightedId)}`
+      : undefined,
   };
 
   const dataAttributes = {
