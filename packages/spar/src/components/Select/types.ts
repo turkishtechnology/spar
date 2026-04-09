@@ -296,6 +296,7 @@ export interface SelectItemData {
   textValue: string;
   disabled: boolean;
   ref: RefObject<HTMLElement | null>;
+  mounted: boolean;
 }
 
 /**

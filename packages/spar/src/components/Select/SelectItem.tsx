@@ -35,7 +35,18 @@ export const SelectItem = <T extends ElementType = 'div'>({
       textValue: textValue || context.items.get(value)?.textValue || '',
       disabled,
       ref: itemRef,
+      mounted: true,
     });
+    return () => {
+      // Keep cache (textValue) but mark unmounted so navigation/typeahead ignores it
+      context.registerItem(value, {
+        value,
+        textValue: context.items.get(value)?.textValue || textValue || '',
+        disabled,
+        ref: itemRef,
+        mounted: false,
+      });
+    };
 
     // Note: We intentionally do NOT unregister on unmount
     // This keeps the textValue cached so SelectValue can display it
