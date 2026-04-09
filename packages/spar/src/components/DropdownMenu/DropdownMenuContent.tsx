@@ -294,16 +294,7 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
           menu.closeMenu();
           return;
         case 'Tab':
-          if (menu.modal) {
-            event.preventDefault();
-            if (event.shiftKey) {
-              highlightPrevious();
-            } else {
-              highlightNext();
-            }
-            return;
-          }
-          menu.closeMenu({ focusTrigger: false });
+          event.preventDefault();
           return;
         default:
           break;
@@ -319,7 +310,6 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
       highlightLast,
       onEscapeKeyDown,
       menu.closeMenu,
-      menu.modal,
     ],
   );
 

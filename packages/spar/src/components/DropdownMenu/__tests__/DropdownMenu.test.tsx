@@ -495,7 +495,7 @@ describe('DropdownMenu', () => {
       expect(onEscapeKeyDown).toHaveBeenCalled();
     });
 
-    it('should close on Tab key in non-modal mode', async () => {
+    it('should not close on Tab key in non-modal mode', async () => {
       const user = userEvent.setup();
       render(
         <DropdownMenu defaultOpen={true} modal={false}>
@@ -512,9 +512,7 @@ describe('DropdownMenu', () => {
       content.focus();
       await user.keyboard('{Tab}');
 
-      await waitFor(() => {
-        expect(screen.queryByRole('menu')).not.toBeInTheDocument();
-      });
+      expect(screen.getByRole('menu')).toBeInTheDocument();
     });
   });
 
