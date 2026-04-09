@@ -99,18 +99,20 @@ export const SelectContent = <T extends ElementType = 'div'>({
 
   // Enabled items for keyboard navigation
   const enabledItems = useMemo(
-    () => Array.from(context.items.values()).filter((item) => !item.disabled),
+    () => Array.from(context.items.values()).filter((item) => item.mounted && !item.disabled),
     [context.items],
   );
 
   // Items mapped for typeahead (id = value string)
   const typeaheadItems = useMemo(
     () =>
-      Array.from(context.items.values()).map((item) => ({
-        id: item.value,
-        textValue: item.textValue,
-        disabled: item.disabled,
-      })),
+      Array.from(context.items.values())
+        .filter((item) => item.mounted)
+        .map((item) => ({
+          id: item.value,
+          textValue: item.textValue,
+          disabled: item.disabled,
+        })),
     [context.items],
   );
 
