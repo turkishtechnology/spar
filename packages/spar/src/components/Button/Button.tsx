@@ -73,7 +73,10 @@ export const Button = <T extends ElementType = 'button'>({
   // Keyboard handler
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
-      if (event.key === 'Enter' || event.key === ' ') {
+      // Native <button> elements already fire a click event on Enter/Space.
+      // Calling preventDefault here would block type='submit' form submission.
+      // Only intercept keyboard for non-native elements (div, a, span, etc.).
+      if (Component !== 'button' && (event.key === 'Enter' || event.key === ' ')) {
         event.preventDefault();
         handleActivation(event);
       }
@@ -82,7 +85,7 @@ export const Button = <T extends ElementType = 'button'>({
         onKeyDown(event as React.KeyboardEvent<HTMLButtonElement>);
       }
     },
-    [handleActivation, onKeyDown],
+    [Component, handleActivation, onKeyDown],
   );
 
   // Memoize data attributes to prevent object recreation
