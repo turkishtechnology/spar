@@ -16,8 +16,15 @@ import {
   Tooltip,
 } from '@turkish-technology/spar';
 
-import type { FlightOption, SearchResultRow } from './ticketing.types';
-import { airportOptions, airportCodeByValue, flights } from './ticketing.data';
+import type {
+  FlightOption,
+  SearchResultRow,
+} from '../../../components/accessibility/aviation/ticketing.types';
+import {
+  airportOptions,
+  airportCodeByValue,
+  flights,
+} from '../../../components/accessibility/aviation/ticketing.data';
 
 import './aviation.scss';
 
