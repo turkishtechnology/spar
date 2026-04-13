@@ -73,16 +73,32 @@
     }
   }
 
-  /* Per-section layout: content left, log right */
+  /* Per-section layout: live demo on top, code below */
   .demo-section-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .demo-section-split {
     display: grid;
-    grid-template-columns: 1fr 220px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 1rem;
     align-items: start;
   }
 
+  .demo-side-example {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .demo-code-aside {
+    width: 100%;
+  }
+
   @media (max-width: 768px) {
-    .demo-section-layout {
+    .demo-section-split {
       grid-template-columns: 1fr;
     }
   }
@@ -267,6 +283,43 @@
   .demo-input-error {
     font-size: 0.82rem;
     color: #e53e3e;
+  }
+
+  .demo-alert {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+
+    &--success {
+      background-color: #f0fff4;
+      border-color: #9ae6b4;
+      color: #276749;
+    }
+
+    &--error {
+      background-color: #fff5f5;
+      border-color: #feb2b2;
+      color: #9b2c2c;
+    }
+  }
+
+  .demo-code-block {
+    margin-block: 16px;
+    padding: 0.75rem;
+    border: 1px solid #e1e4ea;
+    border-radius: 8px;
+    background: #f5f6f7;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+
+    [data-theme='dark'] & {
+      background: #2b303b;
+      border-color: #3b4252;
+    }
   }
 
   /* Accordion */
