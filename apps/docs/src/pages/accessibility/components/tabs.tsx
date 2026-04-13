@@ -26,7 +26,7 @@ export default function TabsDemo() {
           <p className='demo-description'>
             Tabs activate on focus. Arrow keys move focus AND activate the tab simultaneously.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Tabs.Root className='demo-tabs' defaultValue='auto-1'>
@@ -60,6 +60,17 @@ export default function TabsDemo() {
                 panel content
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Tabs.Root defaultValue='auto-1'>
+  <Tabs.List>
+    <Tabs.Trigger value='auto-1'>Account</Tabs.Trigger>
+    <Tabs.Trigger value='auto-2'>Password</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value='auto-1'>Account settings</Tabs.Content>
+</Tabs.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -70,7 +81,7 @@ export default function TabsDemo() {
             Arrow keys move focus but do NOT activate. Press Enter or Space to activate the focused
             tab. Useful when tab content is expensive to load.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Tabs.Root className='demo-tabs' activationMode='manual' defaultValue='man-1'>
@@ -104,6 +115,17 @@ export default function TabsDemo() {
                 tab
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Tabs.Root activationMode='manual' defaultValue='man-1'>
+  <Tabs.List>
+    <Tabs.Trigger value='man-1'>Overview</Tabs.Trigger>
+    <Tabs.Trigger value='man-2'>Analytics</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value='man-1'>Overview panel</Tabs.Content>
+</Tabs.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -114,7 +136,7 @@ export default function TabsDemo() {
             With <code>orientation=&quot;vertical&quot;</code>, Arrow Up/Down navigate tabs instead
             of Left/Right.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Tabs.Root className='demo-tabs' orientation='vertical' defaultValue='vert-1'>
@@ -179,6 +201,17 @@ export default function TabsDemo() {
                 <strong>Keyboard:</strong> ↑ ↓ to navigate (not ← →)
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Tabs.Root orientation='vertical' defaultValue='vert-1'>
+  <Tabs.List>
+    <Tabs.Trigger value='vert-1'>General</Tabs.Trigger>
+    <Tabs.Trigger value='vert-2'>Privacy</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value='vert-1'>General settings</Tabs.Content>
+</Tabs.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -188,7 +221,7 @@ export default function TabsDemo() {
           <p className='demo-description'>
             Parent controls which tab is active. External buttons can switch tabs programmatically.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-col'>
                 <div className='demo-row'>
@@ -232,6 +265,19 @@ export default function TabsDemo() {
                 </Tabs.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`const [value, setValue] = useState('tab-1');
+
+<Tabs.Root value={value} onValueChange={(nextValue) => setValue(nextValue)}>
+  <Tabs.List>
+    <Tabs.Trigger value='tab-1'>Tab 1</Tabs.Trigger>
+    <Tabs.Trigger value='tab-2'>Tab 2</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value='tab-1'>First tab panel</Tabs.Content>
+</Tabs.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -241,7 +287,7 @@ export default function TabsDemo() {
           <p className='demo-description'>
             Individual tabs can be disabled. Arrow key navigation skips disabled tabs.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Tabs.Root className='demo-tabs' defaultValue='dis-1'>
@@ -272,6 +318,18 @@ export default function TabsDemo() {
                 disabled triggers.
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Tabs.Root defaultValue='dis-1'>
+  <Tabs.List>
+    <Tabs.Trigger value='dis-1'>Active</Tabs.Trigger>
+    <Tabs.Trigger value='dis-2' disabled>Disabled</Tabs.Trigger>
+    <Tabs.Trigger value='dis-3'>Active</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value='dis-1'>First tab.</Tabs.Content>
+</Tabs.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -282,35 +340,51 @@ export default function TabsDemo() {
             Use render props to access <code>isSelected</code>, <code>isFocused</code> and states
             for custom rendering.
           </p>
-          <div className='demo-area'>
-            <Tabs.Root className='demo-tabs' defaultValue='rp-1'>
-              <Tabs.List className='demo-tablist'>
-                {['Home', 'Profile', 'Settings'].map((label, i) => (
-                  <Tabs.Trigger
-                    key={`rp-${i + 1}`}
-                    className='demo-tab-trigger'
-                    value={`rp-${i + 1}`}
-                  >
-                    {({ isSelected, isFocused }) => (
-                      <span>
-                        {isSelected ? '● ' : '○ '}
-                        {label}
-                        {isFocused ? ' 👁' : ''}
-                      </span>
-                    )}
-                  </Tabs.Trigger>
-                ))}
-              </Tabs.List>
-              <Tabs.Content className='demo-tab-content' value='rp-1'>
-                <p>Home content. Trigger shows selected/focused indicators.</p>
-              </Tabs.Content>
-              <Tabs.Content className='demo-tab-content' value='rp-2'>
-                <p>Profile content.</p>
-              </Tabs.Content>
-              <Tabs.Content className='demo-tab-content' value='rp-3'>
-                <p>Settings content.</p>
-              </Tabs.Content>
-            </Tabs.Root>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <Tabs.Root className='demo-tabs' defaultValue='rp-1'>
+                  <Tabs.List className='demo-tablist'>
+                    {['Home', 'Profile', 'Settings'].map((label, i) => (
+                      <Tabs.Trigger
+                        key={`rp-${i + 1}`}
+                        className='demo-tab-trigger'
+                        value={`rp-${i + 1}`}
+                      >
+                        {({ isSelected, isFocused }) => (
+                          <span>
+                            {isSelected ? '● ' : '○ '}
+                            {label}
+                            {isFocused ? ' 👁' : ''}
+                          </span>
+                        )}
+                      </Tabs.Trigger>
+                    ))}
+                  </Tabs.List>
+                  <Tabs.Content className='demo-tab-content' value='rp-1'>
+                    <p>Home content. Trigger shows selected/focused indicators.</p>
+                  </Tabs.Content>
+                  <Tabs.Content className='demo-tab-content' value='rp-2'>
+                    <p>Profile content.</p>
+                  </Tabs.Content>
+                  <Tabs.Content className='demo-tab-content' value='rp-3'>
+                    <p>Settings content.</p>
+                  </Tabs.Content>
+                </Tabs.Root>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Tabs.Root defaultValue='rp-1'>
+  <Tabs.List>
+    <Tabs.Trigger value='rp-1'>
+      {({ isSelected }) => (isSelected ? '● Home' : '○ Home')}
+    </Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value='rp-1'>Home content</Tabs.Content>
+</Tabs.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
