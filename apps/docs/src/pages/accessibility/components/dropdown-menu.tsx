@@ -26,7 +26,7 @@ export default function DropdownMenuDemo() {
             Click or Enter/Space to open. Arrow keys navigate items. Enter activates an item. Escape
             closes the menu.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <DropdownMenu.Root>
@@ -59,6 +59,19 @@ export default function DropdownMenuDemo() {
                 Escape to close
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<DropdownMenu.Root>
+  <DropdownMenu.Trigger>Actions</DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item>Edit</DropdownMenu.Item>
+    <DropdownMenu.Item>Duplicate</DropdownMenu.Item>
+    <DropdownMenu.Separator />
+    <DropdownMenu.Item>Delete</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -68,7 +81,7 @@ export default function DropdownMenuDemo() {
           <p className='demo-description'>
             Items organized in groups with labels. Group labels provide context for screen readers.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <DropdownMenu.Root>
@@ -119,6 +132,20 @@ export default function DropdownMenuDemo() {
                 </DropdownMenu.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<DropdownMenu.Root>
+  <DropdownMenu.Trigger>File</DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Group>
+      <DropdownMenu.Label>Document</DropdownMenu.Label>
+      <DropdownMenu.Item>New</DropdownMenu.Item>
+      <DropdownMenu.Item>Open</DropdownMenu.Item>
+    </DropdownMenu.Group>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -128,7 +155,7 @@ export default function DropdownMenuDemo() {
           <p className='demo-description'>
             Disabled menu items are skipped by keyboard navigation.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <DropdownMenu.Root>
@@ -163,6 +190,18 @@ export default function DropdownMenuDemo() {
                 <strong>Expected:</strong> Arrow keys skip &quot;Paste (disabled)&quot;.
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<DropdownMenu.Root>
+  <DropdownMenu.Trigger>Edit</DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item>Cut</DropdownMenu.Item>
+    <DropdownMenu.Item>Copy</DropdownMenu.Item>
+    <DropdownMenu.Item disabled>Paste</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -172,7 +211,7 @@ export default function DropdownMenuDemo() {
           <p className='demo-description'>
             Modal menu traps focus inside. Tab does not leave the menu. Default behavior is modal.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-row'>
                 <DropdownMenu.Root modal>
@@ -217,6 +256,23 @@ export default function DropdownMenuDemo() {
                 </DropdownMenu.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<DropdownMenu.Root modal>
+  <DropdownMenu.Trigger>Modal Menu</DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item>Item 1</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>
+
+<DropdownMenu.Root modal={false}>
+  <DropdownMenu.Trigger>Non-modal Menu</DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item>Item 1</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -227,7 +283,7 @@ export default function DropdownMenuDemo() {
             With <code>closeOnSelect=&#123;false&#125;</code>, menu stays open after selecting an
             item. Useful for multi-action menus.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <DropdownMenu.Root closeOnSelect={false}>
@@ -258,6 +314,17 @@ export default function DropdownMenuDemo() {
                 <strong>Expected:</strong> Menu stays open after selecting. Press Escape to close.
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<DropdownMenu.Root closeOnSelect={false}>
+  <DropdownMenu.Trigger>Multi-action</DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item>Action A</DropdownMenu.Item>
+    <DropdownMenu.Item>Action B</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -268,7 +335,7 @@ export default function DropdownMenuDemo() {
             Parent fully controls the open state via <code>open</code> + <code>onOpenChange</code>.
             External buttons can programmatically open and close.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-row'>
                 <DropdownMenu.Root
@@ -311,6 +378,18 @@ export default function DropdownMenuDemo() {
                 also work.
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`const [open, setOpen] = useState(false);
+
+<DropdownMenu.Root open={open} onOpenChange={(o)=>setOpen(o)}>
+  <DropdownMenu.Trigger>Controlled</DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item>Option A</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -320,13 +399,29 @@ export default function DropdownMenuDemo() {
           <p className='demo-description'>
             Disabled dropdown trigger prevents the menu from opening.
           </p>
-          <div className='demo-area'>
-            <DropdownMenu.Root disabled>
-              <DropdownMenu.Trigger className='demo-btn'>Disabled ▾</DropdownMenu.Trigger>
-              <DropdownMenu.Content className='demo-dropdown-content'>
-                <DropdownMenu.Item className='demo-dropdown-item'>Unreachable</DropdownMenu.Item>
-              </DropdownMenu.Content>
-            </DropdownMenu.Root>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <DropdownMenu.Root disabled>
+                  <DropdownMenu.Trigger className='demo-btn'>Disabled ▾</DropdownMenu.Trigger>
+                  <DropdownMenu.Content className='demo-dropdown-content'>
+                    <DropdownMenu.Item className='demo-dropdown-item'>
+                      Unreachable
+                    </DropdownMenu.Item>
+                  </DropdownMenu.Content>
+                </DropdownMenu.Root>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<DropdownMenu.Root disabled>
+  <DropdownMenu.Trigger>Disabled</DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item>Unreachable</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -336,7 +431,7 @@ export default function DropdownMenuDemo() {
           <p className='demo-description'>
             Trigger exposes <code>isOpen</code> for custom rendering.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <DropdownMenu.Root>
@@ -365,6 +460,19 @@ export default function DropdownMenuDemo() {
                   </DropdownMenu.Content>
                 </DropdownMenu.Root>
               </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<DropdownMenu.Root>
+  <DropdownMenu.Trigger>
+    {({ isOpen }) => (isOpen ? 'Close' : 'Menu')}
+  </DropdownMenu.Trigger>
+  <DropdownMenu.Content>
+    <DropdownMenu.Item>Home</DropdownMenu.Item>
+    <DropdownMenu.Item>Settings</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>`}</code>
+              </pre>
             </div>
           </div>
         </section>

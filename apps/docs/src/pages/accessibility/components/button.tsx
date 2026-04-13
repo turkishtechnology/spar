@@ -33,7 +33,7 @@ export default function ButtonDemo() {
           <p className='demo-description'>
             A standard button that responds to click and keyboard activation (Enter/Space).
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Button className='demo-btn' onClick={() => alert('Clicked')}>
@@ -43,6 +43,13 @@ export default function ButtonDemo() {
               <div className='keyboard-hint'>
                 <strong>Keyboard:</strong> Tab to focus → Enter or Space to activate
               </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Button onClick={() => alert('Clicked')}>
+  Click me
+</Button>`}</code>
+              </pre>
             </div>
           </div>
         </section>
@@ -54,14 +61,25 @@ export default function ButtonDemo() {
             Disabled buttons cannot be activated. Screen readers announce the disabled state. Focus
             should skip the disabled button when tabbing.
           </p>
-          <div className='demo-area demo-row'>
-            <Button className='demo-btn' disabled>
-              Disabled button
-            </Button>
-          </div>
-          <div className='keyboard-hint'>
-            <strong>Expected:</strong> Tab should skip the disabled button and focus the enabled
-            one.
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area demo-row'>
+                <Button className='demo-btn' disabled>
+                  Disabled button
+                </Button>
+              </div>
+              <div className='keyboard-hint'>
+                <strong>Expected:</strong> Tab should skip the disabled button and focus the enabled
+                one.
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Button disabled>
+  Disabled button
+</Button>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -72,7 +90,7 @@ export default function ButtonDemo() {
             Loading button uses <code>aria-busy=&quot;true&quot;</code> and{' '}
             <code>aria-live=&quot;polite&quot;</code> to announce loading state to screen readers.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Button className='demo-btn' isLoading={loadingBtn} onClick={simulateLoading}>
@@ -83,6 +101,13 @@ export default function ButtonDemo() {
                 <strong>Screen reader:</strong> Should announce busy state when loading starts.
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Button isLoading={isLoading} onClick={simulateLoading}>
+  {isLoading ? 'Saving…' : 'Save changes'}
+</Button>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
         {/* 4. Toggle Button */}
@@ -91,13 +116,13 @@ export default function ButtonDemo() {
           <p className='demo-description'>
             Controlled toggle where parent manages the pressed state.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-row'>
                 <Button
                   className='demo-btn'
                   isPressed={controlledToggle}
-                  onPressedChange={setControlledToggle}
+                  onPressedChange={(pressed) => setControlledToggle(pressed)}
                 >
                   {controlledToggle ? '🔔 Notifications On' : '🔕 Notifications Off'}
                 </Button>
@@ -111,6 +136,15 @@ export default function ButtonDemo() {
                 </Button>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`const [isPressed, setIsPressed] = useState(false);
+
+<Button isPressed={isPressed} onPressedChange={(pressed) => setIsPressed(pressed)}>
+  {isPressed ? 'Notifications On' : 'Notifications Off'}
+</Button>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -121,25 +155,40 @@ export default function ButtonDemo() {
             Button can render as different HTML elements. When rendered as non-button elements, it
             adds <code>role=&quot;button&quot;</code>, <code>tabIndex</code>, and keyboard handlers.
           </p>
-          <div className='demo-area demo-row'>
-            <Button className='demo-btn' onClick={() => alert('Native Button is Clicked')}>
-              Native &lt;button&gt;
-            </Button>
-            <Button
-              as='a'
-              href='#polymorphic-link'
-              className='demo-btn'
-              onClick={() => alert('Anchor is Clicked')}
-            >
-              Rendered as &lt;a&gt;
-            </Button>
-            <Button as='span' className='demo-btn' onClick={() => alert('Span is Clicked')}>
-              Rendered as &lt;span&gt;
-            </Button>
-          </div>
-          <div className='keyboard-hint'>
-            <strong>Screen reader:</strong> All three should be announced as buttons regardless of
-            underlying element.
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area demo-row'>
+                <Button className='demo-btn' onClick={() => alert('Native Button is Clicked')}>
+                  Native &lt;button&gt;
+                </Button>
+                <Button
+                  as='a'
+                  href='#polymorphic-link'
+                  className='demo-btn'
+                  onClick={() => alert('Anchor is Clicked')}
+                >
+                  Rendered as &lt;a&gt;
+                </Button>
+                <Button as='span' className='demo-btn' onClick={() => alert('Span is Clicked')}>
+                  Rendered as &lt;span&gt;
+                </Button>
+              </div>
+              <div className='keyboard-hint'>
+                <strong>Screen reader:</strong> All three should be announced as buttons regardless
+                of underlying element.
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Button>Native button</Button>
+
+<Button as='a' href='#polymorphic-link'>
+  Rendered as a
+</Button>
+
+<Button as='span'>Rendered as span</Button>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -150,10 +199,21 @@ export default function ButtonDemo() {
             This button receives focus automatically on mount. Useful for modal dialogs or important
             CTAs.
           </p>
-          <div className='demo-area'>
-            <Button className='demo-btn' autoFocus>
-              I should be focused on page load
-            </Button>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <Button className='demo-btn' autoFocus>
+                  I should be focused on page load
+                </Button>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Button autoFocus>
+  I should be focused on page load
+</Button>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
