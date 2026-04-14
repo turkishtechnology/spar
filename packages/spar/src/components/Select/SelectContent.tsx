@@ -249,7 +249,8 @@ export const SelectContent = <T extends ElementType = 'div'>({
           break;
 
         case 'Tab':
-          event.preventDefault();
+          context.onOpenChange(false);
+          context.triggerRef.current?.focus();
           break;
 
         default:
