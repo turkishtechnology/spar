@@ -81,7 +81,7 @@ export default function FormDemo() {
           </div>
         )}
 
-        <div className='demo-section-layout'>
+        <div className='demo-section-split'>
           <form onSubmit={handleSubmit(onSubmit)} className='demo-col'>
             <div className='demo-col'>
               {/* Profile Fields */}

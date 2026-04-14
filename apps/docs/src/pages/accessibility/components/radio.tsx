@@ -6,7 +6,7 @@ import { Radio, Label } from '@turkish-technology/spar';
 import '../../../styles/accessibility-demos.scss';
 
 export default function RadioDemo() {
-  const [controlled, setControlled] = useState<string | undefined>(undefined);
+  const [controlled, setControlled] = useState(undefined);
 
   return (
     <Layout title='Radio'>
@@ -26,7 +26,7 @@ export default function RadioDemo() {
             Tab into the group, then use arrow keys to navigate and select. Only one item can be
             selected at a time.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Radio.Root
@@ -51,6 +51,16 @@ export default function RadioDemo() {
                 </Radio.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Radio.Root defaultValue='blue' aria-label='Favorite color'>
+  <Radio.Item value='red' id='red' />
+  <Label htmlFor='red'>Red</Label>
+  <Radio.Item value='blue' id='blue' />
+  <Label htmlFor='blue'>Blue</Label>
+</Radio.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -60,7 +70,7 @@ export default function RadioDemo() {
           <p className='demo-description'>
             Parent manages selected value. External buttons can change the selection.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-col'>
                 <div className='demo-row'>
@@ -99,6 +109,16 @@ export default function RadioDemo() {
                 </Radio.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`const [value, setValue] = useState(undefined);
+
+<Radio.Root value={value} onValueChange={(nextValue) => setValue(nextValue)} aria-label='Billing cycle'>
+  <Radio.Item value='monthly' id='monthly' />
+  <Label htmlFor='monthly'>Monthly</Label>
+</Radio.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -108,7 +128,7 @@ export default function RadioDemo() {
           <p className='demo-description'>
             Individual items can be disabled. Arrow key navigation skips disabled items.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Radio.Root className='demo-radio-group' aria-label='Plan selection'>
@@ -142,6 +162,16 @@ export default function RadioDemo() {
                 <strong>Expected:</strong> Arrow keys skip &quot;Pro (sold out)&quot;.
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Radio.Root aria-label='Plan selection'>
+  <Radio.Item value='free' id='plan-free' />
+  <Label htmlFor='plan-free'>Free</Label>
+  <Radio.Item value='pro' id='plan-pro' disabled />
+  <Label htmlFor='plan-pro' disabled>Pro (sold out)</Label>
+</Radio.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -151,32 +181,39 @@ export default function RadioDemo() {
           <p className='demo-description'>
             Entire group disabled via root <code>disabled</code> prop.
           </p>
-          <div className='demo-area'>
-            <Radio.Root
-              className='demo-radio-group'
-              disabled
-              defaultValue='opt-a'
-              aria-label='Disabled group'
-            >
-              {['Option A', 'Option B', 'Option C'].map((label) => (
-                <div className='demo-radio-item-wrapper' key={label}>
-                  <Radio.Item
-                    className='demo-radio-item'
-                    value={label.toLowerCase().replace(' ', '-')}
-                    id={`disabled-${label.toLowerCase().replace(' ', '-')}`}
-                  >
-                    {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
-                  </Radio.Item>
-                  <Label
-                    htmlFor={`disabled-${label.toLowerCase().replace(' ', '-')}`}
-                    className='demo-label'
-                    disabled
-                  >
-                    {label}
-                  </Label>
-                </div>
-              ))}
-            </Radio.Root>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <Radio.Root className='demo-radio-group' disabled aria-label='Disabled group'>
+                  {['Option A', 'Option B', 'Option C'].map((label) => (
+                    <div className='demo-radio-item-wrapper' key={label}>
+                      <Radio.Item
+                        className='demo-radio-item'
+                        value={label.toLowerCase().replace(' ', '-')}
+                        id={`disabled-${label.toLowerCase().replace(' ', '-')}`}
+                      >
+                        {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
+                      </Radio.Item>
+                      <Label
+                        htmlFor={`disabled-${label.toLowerCase().replace(' ', '-')}`}
+                        className='demo-label'
+                        disabled
+                      >
+                        {label}
+                      </Label>
+                    </div>
+                  ))}
+                </Radio.Root>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Radio.Root disabled aria-label='Disabled group'>
+  <Radio.Item value='opt-a' id='opt-a' />
+  <Label htmlFor='opt-a' disabled>Option A</Label>
+</Radio.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -186,7 +223,7 @@ export default function RadioDemo() {
           <p className='demo-description'>
             Radio group with <code>required</code> prop. Uses <code>aria-required</code>.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
@@ -218,6 +255,14 @@ export default function RadioDemo() {
                 </fieldset>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Radio.Root required aria-label='Preferred contact method'>
+  <Radio.Item value='email' id='req-email' />
+  <Label htmlFor='req-email'>Email</Label>
+</Radio.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -229,7 +274,7 @@ export default function RadioDemo() {
             <code>selectOnFocus=&#123;false&#125;</code>: Arrow keys only move focus, Space/Enter
             selects.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-col'>
                 <div>
@@ -287,6 +332,19 @@ export default function RadioDemo() {
                 <strong>Auto:</strong> Arrow keys move + select | <strong>Manual:</strong> Arrows
                 move focus only, Space selects
               </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Radio.Root aria-label='Auto select demo'>
+  <Radio.Item value='A' id='auto-A' />
+  <Label htmlFor='auto-A'>A</Label>
+</Radio.Root>
+
+<Radio.Root selectOnFocus={false} aria-label='Manual select demo'>
+  <Radio.Item value='X' id='manual-X' />
+  <Label htmlFor='manual-X'>X</Label>
+</Radio.Root>`}</code>
+              </pre>
             </div>
           </div>
         </section>

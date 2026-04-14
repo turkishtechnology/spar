@@ -25,7 +25,7 @@ export default function BreadcrumbDemo() {
             <code>nav</code> landmark and each link; the last item is marked with{' '}
             <code>aria-current=&quot;page&quot;</code>.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Breadcrumb.Root className='demo-breadcrumb'>
@@ -49,6 +49,21 @@ export default function BreadcrumbDemo() {
                 page is not focusable
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Breadcrumb.Root>
+  <Breadcrumb.List>
+    <Breadcrumb.Item>
+      <Breadcrumb.Link href='/home'>Home</Breadcrumb.Link>
+    </Breadcrumb.Item>
+    <Breadcrumb.Separator>/</Breadcrumb.Separator>
+    <Breadcrumb.Item>
+      <Breadcrumb.Page>Widget</Breadcrumb.Page>
+    </Breadcrumb.Item>
+  </Breadcrumb.List>
+</Breadcrumb.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -58,7 +73,7 @@ export default function BreadcrumbDemo() {
           <p className='demo-description'>
             Root <code>onNavigate</code> intercepts all link clicks for SPA routing integration.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Breadcrumb.Root
@@ -83,6 +98,25 @@ export default function BreadcrumbDemo() {
                 </Breadcrumb.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Breadcrumb.Root onNavigate={(href, e) => e.preventDefault()}>
+  <Breadcrumb.List>
+    <Breadcrumb.Item>
+      <Breadcrumb.Link href='/dashboard'>Dashboard</Breadcrumb.Link>
+    </Breadcrumb.Item>
+    <Breadcrumb.Separator>/</Breadcrumb.Separator>
+    <Breadcrumb.Item>
+      <Breadcrumb.Link href='/dashboard/settings'>Settings</Breadcrumb.Link>
+    </Breadcrumb.Item>
+    <Breadcrumb.Separator>/</Breadcrumb.Separator>
+    <Breadcrumb.Item>
+      <Breadcrumb.Page>Profile</Breadcrumb.Page>
+    </Breadcrumb.Item>
+  </Breadcrumb.List>
+</Breadcrumb.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -93,7 +127,7 @@ export default function BreadcrumbDemo() {
             Separators are decorative and hidden from screen readers via{' '}
             <code>aria-hidden=&quot;true&quot;</code>.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-col'>
                 <Breadcrumb.Root className='demo-breadcrumb'>
@@ -129,6 +163,25 @@ export default function BreadcrumbDemo() {
                 </Breadcrumb.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Breadcrumb.Root>
+  <Breadcrumb.List>
+    <Breadcrumb.Item>
+      <Breadcrumb.Link href='#'>Home</Breadcrumb.Link>
+    </Breadcrumb.Item>
+    <Breadcrumb.Separator>→</Breadcrumb.Separator>
+    <Breadcrumb.Item>
+      <Breadcrumb.Link href='#'>Docs</Breadcrumb.Link>
+    </Breadcrumb.Item>
+    <Breadcrumb.Separator>→</Breadcrumb.Separator>
+    <Breadcrumb.Item>
+      <Breadcrumb.Page>Components</Breadcrumb.Page>
+    </Breadcrumb.Item>
+  </Breadcrumb.List>
+</Breadcrumb.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -139,7 +192,7 @@ export default function BreadcrumbDemo() {
             Fully disabled breadcrumb prevents all navigation. Individual link disabling is also
             supported.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-col'>
                 <div>
@@ -186,6 +239,29 @@ export default function BreadcrumbDemo() {
                 </div>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Breadcrumb.Root disabled>
+  <Breadcrumb.List>
+    <Breadcrumb.Item>
+      <Breadcrumb.Link href='#'>Home</Breadcrumb.Link>
+    </Breadcrumb.Item>
+  </Breadcrumb.List>
+</Breadcrumb.Root>
+
+<Breadcrumb.Root>
+  <Breadcrumb.List>
+    <Breadcrumb.Item>
+      <Breadcrumb.Link href='#' disabled>Home</Breadcrumb.Link>
+    </Breadcrumb.Item>
+    <Breadcrumb.Separator>/</Breadcrumb.Separator>
+    <Breadcrumb.Item>
+      <Breadcrumb.Page>Widget</Breadcrumb.Page>
+    </Breadcrumb.Item>
+  </Breadcrumb.List>
+</Breadcrumb.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -196,7 +272,7 @@ export default function BreadcrumbDemo() {
             External links get <code>target=&quot;_blank&quot;</code> and{' '}
             <code>rel=&quot;noopener noreferrer&quot;</code> for security.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Breadcrumb.Root className='demo-breadcrumb'>
@@ -218,6 +294,21 @@ export default function BreadcrumbDemo() {
                 </Breadcrumb.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Breadcrumb.Root>
+  <Breadcrumb.List>
+    <Breadcrumb.Item>
+      <Breadcrumb.Link href='https://github.com' isExternal>GitHub</Breadcrumb.Link>
+    </Breadcrumb.Item>
+    <Breadcrumb.Separator>/</Breadcrumb.Separator>
+    <Breadcrumb.Item>
+      <Breadcrumb.Page>Issues</Breadcrumb.Page>
+    </Breadcrumb.Item>
+  </Breadcrumb.List>
+</Breadcrumb.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -228,7 +319,7 @@ export default function BreadcrumbDemo() {
             <code>BreadcrumbItem</code> provides <code>position</code>,<code>isCurrent</code>, and{' '}
             <code>isDisabled</code> via render props.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Breadcrumb.Root className='demo-breadcrumb'>
@@ -256,6 +347,23 @@ export default function BreadcrumbDemo() {
                 </Breadcrumb.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Breadcrumb.Root>
+  <Breadcrumb.List>
+    <Breadcrumb.Item>
+      {({ position }) => <Breadcrumb.Link href='#'>Home [{position}]</Breadcrumb.Link>}
+    </Breadcrumb.Item>
+    <Breadcrumb.Separator>/</Breadcrumb.Separator>
+    <Breadcrumb.Item>
+      {({ position, isCurrent }) =>
+        isCurrent ? <Breadcrumb.Page>Current [{position}]</Breadcrumb.Page> : null
+      }
+    </Breadcrumb.Item>
+  </Breadcrumb.List>
+</Breadcrumb.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -266,7 +374,7 @@ export default function BreadcrumbDemo() {
             Root element can be changed with <code>as</code> prop. When not using <code>nav</code>,
             ensure proper ARIA labeling.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Breadcrumb.Root
@@ -291,37 +399,20 @@ export default function BreadcrumbDemo() {
                 </Breadcrumb.Root>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* 8. Long Trail */}
-        <section className='demo-section'>
-          <h2>8. Long Breadcrumb Trail</h2>
-          <p className='demo-description'>
-            Deeply nested navigation path. All links remain tabbable in sequence.
-          </p>
-          <div className='demo-section-layout'>
-            <div>
-              <div className='demo-area'>
-                <Breadcrumb.Root className='demo-breadcrumb'>
-                  <Breadcrumb.List className='demo-breadcrumb-list'>
-                    {['Home', 'Electronics', 'Computers', 'Laptops', 'Gaming'].map(
-                      (label, i, arr) => (
-                        <React.Fragment key={label}>
-                          {i > 0 && <Breadcrumb.Separator>/</Breadcrumb.Separator>}
-                          <Breadcrumb.Item>
-                            {i === arr.length - 1 ? (
-                              <Breadcrumb.Page>{label}</Breadcrumb.Page>
-                            ) : (
-                              <Breadcrumb.Link href='#'>{label}</Breadcrumb.Link>
-                            )}
-                          </Breadcrumb.Item>
-                        </React.Fragment>
-                      ),
-                    )}
-                  </Breadcrumb.List>
-                </Breadcrumb.Root>
-              </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Breadcrumb.Root as='div' role='navigation' aria-label='File path'>
+  <Breadcrumb.List>
+    <Breadcrumb.Item>
+      <Breadcrumb.Link href='#'>src</Breadcrumb.Link>
+    </Breadcrumb.Item>
+    <Breadcrumb.Separator>/</Breadcrumb.Separator>
+    <Breadcrumb.Item>
+      <Breadcrumb.Page>Breadcrumb.tsx</Breadcrumb.Page>
+    </Breadcrumb.Item>
+  </Breadcrumb.List>
+</Breadcrumb.Root>`}</code>
+              </pre>
             </div>
           </div>
         </section>
