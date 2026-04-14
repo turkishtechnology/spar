@@ -27,7 +27,12 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
     (event: React.MouseEvent<HTMLButtonElement>) => {
       if (disabled) return;
 
-      context.onOpenChange(!context.open);
+      const willOpen = !context.open;
+      if (willOpen) {
+        // Signal content to highlight the selected item (or first if none selected)
+        context.setFocusStrategy(context.value ? 'selected' : 'first');
+      }
+      context.onOpenChange(willOpen);
       onClick?.(event);
     },
     [disabled, context, onClick],
