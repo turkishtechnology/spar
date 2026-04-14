@@ -27,6 +27,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
     firstFocusableValue,
     focusedValue,
     setFocusedValue,
+    orientation,
     registerItem,
     unregisterItem,
   } = context;
@@ -59,12 +60,14 @@ export const RadioItem = <T extends ElementType = 'label'>({
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
-      if (event.key === ' ' && !isDisabled) {
+      if (event.key === ' ') {
         event.preventDefault();
-        handleClick();
+        if (!isDisabled && !isChecked) {
+          handleClick();
+        }
       }
     },
-    [handleClick, isDisabled],
+    [handleClick, isDisabled, isChecked],
   );
 
   const handleFocus = useCallback(() => {
@@ -89,6 +92,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
     'data-state': isChecked ? 'checked' : 'unchecked',
     'data-disabled': isDisabled ? '' : undefined,
     'data-focused': isFocused ? '' : undefined,
+    'data-orientation': orientation,
   };
 
   const ariaAttributes = {
