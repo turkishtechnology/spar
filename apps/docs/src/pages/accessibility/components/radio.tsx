@@ -23,7 +23,7 @@ export default function RadioDemo() {
         <section className='demo-section'>
           <h2>1. Basic Radio Group (Vertical)</h2>
           <p className='demo-description'>
-            Tab into the group, then use Arrow Up/Down to navigate and select. Only one item can be
+            Tab into the group, then use arrow keys to navigate and select. Only one item can be
             selected at a time.
           </p>
           <div className='demo-section-layout'>
@@ -50,51 +50,13 @@ export default function RadioDemo() {
                   ))}
                 </Radio.Root>
               </div>
-              <div className='keyboard-hint'>
-                <strong>Keyboard:</strong> Tab to group → ↑↓ to navigate & select → Tab to leave
-                group
-              </div>
             </div>
           </div>
         </section>
 
-        {/* 2. Horizontal Orientation */}
+        {/* 2. Controlled */}
         <section className='demo-section'>
-          <h2>2. Horizontal Orientation</h2>
-          <p className='demo-description'>
-            With <code>orientation=&quot;horizontal&quot;</code>.
-          </p>
-          <div className='demo-section-layout'>
-            <div>
-              <div className='demo-area'>
-                <Radio.Root
-                  className='demo-radio-group'
-                  orientation='horizontal'
-                  aria-label='Size selection'
-                >
-                  {['Small', 'Medium', 'Large', 'XL'].map((size) => (
-                    <div className='demo-radio-item-wrapper' key={size}>
-                      <Radio.Item
-                        className='demo-radio-item'
-                        value={size.toLowerCase()}
-                        id={`horiz-${size.toLowerCase()}`}
-                      >
-                        {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
-                      </Radio.Item>
-                      <Label htmlFor={`horiz-${size.toLowerCase()}`} className='demo-label'>
-                        {size}
-                      </Label>
-                    </div>
-                  ))}
-                </Radio.Root>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 3. Controlled */}
-        <section className='demo-section'>
-          <h2>3. Controlled Radio Group</h2>
+          <h2>2. Controlled Radio Group</h2>
           <p className='demo-description'>
             Parent manages selected value. External buttons can change the selection.
           </p>
@@ -140,9 +102,9 @@ export default function RadioDemo() {
           </div>
         </section>
 
-        {/* 4. Disabled Items */}
+        {/* 3. Disabled Items */}
         <section className='demo-section'>
-          <h2>4. Disabled Radio Items</h2>
+          <h2>3. Disabled Radio Items</h2>
           <p className='demo-description'>
             Individual items can be disabled. Arrow key navigation skips disabled items.
           </p>
@@ -183,9 +145,9 @@ export default function RadioDemo() {
           </div>
         </section>
 
-        {/* 5. Fully Disabled Group */}
+        {/* 4. Fully Disabled Group */}
         <section className='demo-section'>
-          <h2>5. Fully Disabled Group</h2>
+          <h2>4. Fully Disabled Group</h2>
           <p className='demo-description'>
             Entire group disabled via root <code>disabled</code> prop.
           </p>
@@ -218,9 +180,9 @@ export default function RadioDemo() {
           </div>
         </section>
 
-        {/* 6. Required Group */}
+        {/* 5. Required Group */}
         <section className='demo-section'>
-          <h2>6. Required Radio Group</h2>
+          <h2>5. Required Radio Group</h2>
           <p className='demo-description'>
             Radio group with <code>required</code> prop. Uses <code>aria-required</code>.
           </p>
@@ -259,9 +221,9 @@ export default function RadioDemo() {
           </div>
         </section>
 
-        {/* 7. Select on Focus vs Manual */}
+        {/* 6. Select on Focus vs Manual */}
         <section className='demo-section'>
-          <h2>7. Select on Focus vs Manual Selection</h2>
+          <h2>6. Select on Focus vs Manual Selection</h2>
           <p className='demo-description'>
             <code>selectOnFocus=&#123;true&#125;</code> (default): Arrow keys move AND select.{' '}
             <code>selectOnFocus=&#123;false&#125;</code>: Arrow keys only move focus, Space/Enter
