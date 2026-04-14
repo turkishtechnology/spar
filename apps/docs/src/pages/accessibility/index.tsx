@@ -44,13 +44,13 @@ export default function AccessibilityDemos() {
         </div>
 
         <div style={{ marginTop: '1.5rem' }}>
-          <p>
-            This comprehensive form demo combines many Spar components in a single accessible
-            experience.
-          </p>
+          <p>These examples are designed for complex, real-world use cases.</p>
           <div className='component-grid'>
             <Link to='/accessibility/form' className='component-card'>
               <span>Form Demo</span>
+            </Link>
+            <Link to='/accessibility/aviation/ticketing' className='component-card'>
+              <span>Ticketing Demo</span>
             </Link>
           </div>
         </div>
