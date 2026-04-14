@@ -25,7 +25,7 @@ export default function SwitchDemo() {
             Click or press Space/Enter to toggle. Screen readers announce &quot;on&quot; or
             &quot;off&quot; via <code>role=&quot;switch&quot;</code>.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <div className='demo-field'>
@@ -41,6 +41,14 @@ export default function SwitchDemo() {
                 <strong>Keyboard:</strong> Tab to focus → Space or Enter to toggle
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Switch id='basic-switch'>
+  {() => <span />}
+</Switch>
+<Label htmlFor='basic-switch'>Enable feature</Label>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -50,7 +58,7 @@ export default function SwitchDemo() {
           <p className='demo-description'>
             Parent manages the checked state. External controls can change the value.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-col'>
                 <div className='demo-field'>
@@ -78,6 +86,16 @@ export default function SwitchDemo() {
                 </div>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`const [checked, setChecked] = useState(false);
+
+<Switch id='controlled-switch' checked={checked} onChange={(nextChecked) => setChecked(nextChecked)}>
+  {() => <span />}
+</Switch>
+<Label htmlFor='controlled-switch'>Dark mode</Label>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -85,14 +103,26 @@ export default function SwitchDemo() {
         <section className='demo-section'>
           <h2>3. Default Checked</h2>
           <p className='demo-description'>Switch that starts in the &quot;on&quot; state.</p>
-          <div className='demo-area'>
-            <div className='demo-field'>
-              <Switch id='default-checked-switch' className='demo-switch' defaultChecked>
-                {() => <span className='demo-switch-thumb' />}
-              </Switch>
-              <Label htmlFor='default-checked-switch' className='demo-label'>
-                Notifications (default on)
-              </Label>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <div className='demo-field'>
+                  <Switch id='default-checked-switch' className='demo-switch' defaultChecked>
+                    {() => <span className='demo-switch-thumb' />}
+                  </Switch>
+                  <Label htmlFor='default-checked-switch' className='demo-label'>
+                    Notifications (default on)
+                  </Label>
+                </div>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Switch id='default-checked-switch' defaultChecked>
+  {() => <span />}
+</Switch>
+<Label htmlFor='default-checked-switch'>Notifications</Label>`}</code>
+              </pre>
             </div>
           </div>
         </section>
@@ -103,26 +133,39 @@ export default function SwitchDemo() {
           <p className='demo-description'>
             Disabled switches cannot be toggled. Screen readers announce the disabled state.
           </p>
-          <div className='demo-area demo-col'>
-            <div className='demo-field'>
-              <Switch id='disabled-off' className='demo-switch' disabled>
-                {() => <span className='demo-switch-thumb' />}
-              </Switch>
-              <Label htmlFor='disabled-off' className='demo-label' disabled>
-                Disabled (off)
-              </Label>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area demo-col'>
+                <div className='demo-field'>
+                  <Switch id='disabled-off' className='demo-switch' disabled>
+                    {() => <span className='demo-switch-thumb' />}
+                  </Switch>
+                  <Label htmlFor='disabled-off' className='demo-label' disabled>
+                    Disabled (off)
+                  </Label>
+                </div>
+                <div className='demo-field'>
+                  <Switch id='disabled-on' className='demo-switch' disabled defaultChecked>
+                    {() => <span className='demo-switch-thumb' />}
+                  </Switch>
+                  <Label htmlFor='disabled-on' className='demo-label' disabled>
+                    Disabled (on)
+                  </Label>
+                </div>
+              </div>
+              <div className='keyboard-hint'>
+                <strong>Expected:</strong> Tab should skip disabled switches.
+              </div>
             </div>
-            <div className='demo-field'>
-              <Switch id='disabled-on' className='demo-switch' disabled defaultChecked>
-                {() => <span className='demo-switch-thumb' />}
-              </Switch>
-              <Label htmlFor='disabled-on' className='demo-label' disabled>
-                Disabled (on)
-              </Label>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Switch id='disabled-off' disabled>{() => <span />}</Switch>
+<Label htmlFor='disabled-off' disabled>Disabled (off)</Label>
+
+<Switch id='disabled-on' disabled defaultChecked>{() => <span />}</Switch>
+<Label htmlFor='disabled-on' disabled>Disabled (on)</Label>`}</code>
+              </pre>
             </div>
-          </div>
-          <div className='keyboard-hint'>
-            <strong>Expected:</strong> Tab should skip disabled switches.
           </div>
         </section>
 
@@ -132,14 +175,24 @@ export default function SwitchDemo() {
           <p className='demo-description'>
             Focusable but state cannot be changed. Uses <code>aria-readonly</code>.
           </p>
-          <div className='demo-area'>
-            <div className='demo-field'>
-              <Switch id='readonly-switch' className='demo-switch' readOnly defaultChecked>
-                {() => <span className='demo-switch-thumb' />}
-              </Switch>
-              <Label htmlFor='readonly-switch' className='demo-label' readOnly>
-                Read-only (on)
-              </Label>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <div className='demo-field'>
+                  <Switch id='readonly-switch' className='demo-switch' readOnly defaultChecked>
+                    {() => <span className='demo-switch-thumb' />}
+                  </Switch>
+                  <Label htmlFor='readonly-switch' className='demo-label' readOnly>
+                    Read-only (on)
+                  </Label>
+                </div>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Switch id='readonly-switch' readOnly defaultChecked>{() => <span />}</Switch>
+<Label htmlFor='readonly-switch' readOnly>Read-only (on)</Label>`}</code>
+              </pre>
             </div>
           </div>
         </section>
@@ -150,14 +203,24 @@ export default function SwitchDemo() {
           <p className='demo-description'>
             Switch marked as required for form validation. Uses <code>aria-required</code>.
           </p>
-          <div className='demo-area'>
-            <div className='demo-field'>
-              <Switch id='required-switch' className='demo-switch' required>
-                {() => <span className='demo-switch-thumb' />}
-              </Switch>
-              <Label htmlFor='required-switch' className='demo-label' required>
-                Agree to terms *
-              </Label>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <div className='demo-field'>
+                  <Switch id='required-switch' className='demo-switch' required>
+                    {() => <span className='demo-switch-thumb' />}
+                  </Switch>
+                  <Label htmlFor='required-switch' className='demo-label' required>
+                    Agree to terms *
+                  </Label>
+                </div>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Switch id='required-switch' required>{() => <span />}</Switch>
+<Label htmlFor='required-switch' required>Agree to terms *</Label>`}</code>
+              </pre>
             </div>
           </div>
         </section>

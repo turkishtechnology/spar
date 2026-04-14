@@ -34,18 +34,31 @@ export default function InputDemo() {
             Label is automatically linked to the field. Clicking the label focuses the input.{' '}
             <code>aria-labelledby</code> and <code>aria-describedby</code> are set automatically.
           </p>
-          <div className='demo-area'>
-            <Input>
-              <Input.Label className='demo-label'>Username</Input.Label>
-              <Input.Field className='demo-input' placeholder='Enter your username' />
-              <Input.Description className='demo-input-description'>
-                Your unique username for login
-              </Input.Description>
-            </Input>
-          </div>
-          <div className='keyboard-hint'>
-            <strong>Test:</strong> Click the label → input should focus. Screen reader should read
-            label + description.
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <Input>
+                  <Input.Label className='demo-label'>Username</Input.Label>
+                  <Input.Field className='demo-input' placeholder='Enter your username' />
+                  <Input.Description className='demo-input-description'>
+                    Your unique username for login
+                  </Input.Description>
+                </Input>
+              </div>
+              <div className='keyboard-hint'>
+                <strong>Test:</strong> Click the label → input should focus. Screen reader should
+                read label + description.
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Input>
+  <Input.Label>Username</Input.Label>
+  <Input.Field placeholder='Enter your username' />
+  <Input.Description>Your unique username for login</Input.Description>
+</Input>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -55,14 +68,26 @@ export default function InputDemo() {
           <p className='demo-description'>
             Uses <code>aria-required</code> on the field. Screen readers announce as required.
           </p>
-          <div className='demo-area'>
-            <Input required>
-              <Input.Label className='demo-label'>Email *</Input.Label>
-              <Input.Field className='demo-input' type='email' placeholder='Required field' />
-              <Input.Description className='demo-input-description'>
-                We&apos;ll never share your email
-              </Input.Description>
-            </Input>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <Input required>
+                  <Input.Label className='demo-label'>Email *</Input.Label>
+                  <Input.Field className='demo-input' type='email' placeholder='Required field' />
+                  <Input.Description className='demo-input-description'>
+                    We&apos;ll never share your email
+                  </Input.Description>
+                </Input>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Input required>
+  <Input.Label>Email *</Input.Label>
+  <Input.Field type='email' placeholder='Required field' />
+</Input>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -74,7 +99,7 @@ export default function InputDemo() {
             <code>aria-describedby</code>. The error uses <code>role=&quot;alert&quot;</code> for
             live announcement.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Input isInvalid={isInvalid} required>
@@ -104,6 +129,15 @@ export default function InputDemo() {
                 <strong>Screen reader:</strong> Error message should be announced when it appears.
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Input isInvalid={isInvalid} required>
+  <Input.Label>Email</Input.Label>
+  <Input.Field value={value} onChange={handleChange} />
+  {isInvalid && <Input.ErrorMessage>Please enter a valid email</Input.ErrorMessage>}
+</Input>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -111,17 +145,29 @@ export default function InputDemo() {
         <section className='demo-section'>
           <h2>4. Disabled Input</h2>
           <p className='demo-description'>Disabled inputs cannot be focused or edited.</p>
-          <div className='demo-area'>
-            <Input disabled>
-              <Input.Label className='demo-label'>Organization</Input.Label>
-              <Input.Field className='demo-input' value='Acme Corporation' />
-              <Input.Description className='demo-input-description'>
-                Contact support to change your organization
-              </Input.Description>
-            </Input>
-          </div>
-          <div className='keyboard-hint'>
-            <strong>Expected:</strong> Tab should skip the disabled input.
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <Input disabled>
+                  <Input.Label className='demo-label'>Organization</Input.Label>
+                  <Input.Field className='demo-input' value='Acme Corporation' />
+                  <Input.Description className='demo-input-description'>
+                    Contact support to change your organization
+                  </Input.Description>
+                </Input>
+              </div>
+              <div className='keyboard-hint'>
+                <strong>Expected:</strong> Tab should skip the disabled input.
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Input disabled>
+  <Input.Label>Organization</Input.Label>
+  <Input.Field value='Acme Corporation' />
+</Input>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -132,14 +178,26 @@ export default function InputDemo() {
             Read-only inputs are focusable and selectable but cannot be edited. Uses{' '}
             <code>aria-readonly</code>.
           </p>
-          <div className='demo-area'>
-            <Input readOnly>
-              <Input.Label className='demo-label'>Account ID</Input.Label>
-              <Input.Field className='demo-input' value='ACC-2025-XYZ' />
-              <Input.Description className='demo-input-description'>
-                This value cannot be changed
-              </Input.Description>
-            </Input>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <Input readOnly>
+                  <Input.Label className='demo-label'>Account ID</Input.Label>
+                  <Input.Field className='demo-input' value='ACC-2025-XYZ' />
+                  <Input.Description className='demo-input-description'>
+                    This value cannot be changed
+                  </Input.Description>
+                </Input>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Input readOnly>
+  <Input.Label>Account ID</Input.Label>
+  <Input.Field value='ACC-2025-XYZ' />
+</Input>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -147,11 +205,23 @@ export default function InputDemo() {
         <section className='demo-section'>
           <h2>6. Auto Focus Input</h2>
           <p className='demo-description'>Input that automatically receives focus on mount.</p>
-          <div className='demo-area'>
-            <Input>
-              <Input.Label className='demo-label'>Search</Input.Label>
-              <Input.Field className='demo-input' placeholder='I should be focused' autoFocus />
-            </Input>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <Input>
+                  <Input.Label className='demo-label'>Search</Input.Label>
+                  <Input.Field className='demo-input' placeholder='I should be focused' autoFocus />
+                </Input>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Input>
+  <Input.Label>Search</Input.Label>
+  <Input.Field placeholder='I should be focused' autoFocus />
+</Input>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 

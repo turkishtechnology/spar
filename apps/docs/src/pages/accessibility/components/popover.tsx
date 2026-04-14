@@ -26,7 +26,7 @@ export default function PopoverDemo() {
           <p className='demo-description'>
             Click trigger to open. Escape or click outside to close. Focus moves to popover content.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Popover.Root>
@@ -45,6 +45,17 @@ export default function PopoverDemo() {
                 → Focus returns to trigger
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Popover.Root>
+  <Popover.Trigger>Open Popover</Popover.Trigger>
+  <Popover.Content>
+    <p>This is a popover.</p>
+    <Popover.Close>Close</Popover.Close>
+  </Popover.Content>
+</Popover.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -54,7 +65,7 @@ export default function PopoverDemo() {
           <p className='demo-description'>
             Modal popover traps focus inside. Background is not interactive.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Popover.Root modal>
@@ -84,6 +95,17 @@ export default function PopoverDemo() {
                 content.
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Popover.Root modal>
+  <Popover.Trigger>Open Modal Popover</Popover.Trigger>
+  <Popover.Content>
+    <input type='text' placeholder='Type here…' />
+    <Popover.Close>Close</Popover.Close>
+  </Popover.Content>
+</Popover.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -93,7 +115,7 @@ export default function PopoverDemo() {
           <p className='demo-description'>
             Parent manages open state. Can be opened/closed programmatically.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-col'>
                 <div className='demo-row'>
@@ -120,6 +142,18 @@ export default function PopoverDemo() {
                 </Popover.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`const [open, setOpen] = useState(false);
+
+<Popover.Root open={open} onOpenChange={(open) => setOpen(open)}>
+  <Popover.Trigger>Controlled Popover</Popover.Trigger>
+  <Popover.Content>
+    <p>This popover is controlled by parent state.</p>
+  </Popover.Content>
+</Popover.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -129,13 +163,27 @@ export default function PopoverDemo() {
           <p className='demo-description'>
             Disabled popover trigger prevents the popover from opening.
           </p>
-          <div className='demo-area demo-row'>
-            <Popover.Root disabled>
-              <Popover.Trigger className='demo-btn'>Disabled Popover</Popover.Trigger>
-              <Popover.Content className='demo-popover-content'>
-                <p>Should not appear.</p>
-              </Popover.Content>
-            </Popover.Root>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area demo-row'>
+                <Popover.Root disabled>
+                  <Popover.Trigger className='demo-btn'>Disabled Popover</Popover.Trigger>
+                  <Popover.Content className='demo-popover-content'>
+                    <p>Should not appear.</p>
+                  </Popover.Content>
+                </Popover.Root>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Popover.Root disabled>
+  <Popover.Trigger>Disabled Popover</Popover.Trigger>
+  <Popover.Content>
+    <p>Should not appear.</p>
+  </Popover.Content>
+</Popover.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -146,17 +194,33 @@ export default function PopoverDemo() {
             Trigger exposes <code>isOpen</code>, <code>open</code>, <code>close</code>,{' '}
             <code>toggle</code> for custom rendering.
           </p>
-          <div className='demo-area'>
-            <Popover.Root>
-              <Popover.Trigger className='demo-btn'>
-                {({ isOpen }) => (isOpen ? '✕ Close Info' : 'ℹ Show Info')}
-              </Popover.Trigger>
-              <Popover.Content className='demo-popover-content'>
-                <p style={{ margin: 0, fontSize: '0.9rem' }}>
-                  Trigger text changes based on popover state.
-                </p>
-              </Popover.Content>
-            </Popover.Root>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <Popover.Root>
+                  <Popover.Trigger className='demo-btn'>
+                    {({ isOpen }) => (isOpen ? '✕ Close Info' : 'ℹ Show Info')}
+                  </Popover.Trigger>
+                  <Popover.Content className='demo-popover-content'>
+                    <p style={{ margin: 0, fontSize: '0.9rem' }}>
+                      Trigger text changes based on popover state.
+                    </p>
+                  </Popover.Content>
+                </Popover.Root>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Popover.Root>
+  <Popover.Trigger>
+    {({ isOpen }) => (isOpen ? 'Close Info' : 'Show Info')}
+  </Popover.Trigger>
+  <Popover.Content>
+    <p>Trigger text changes based on state.</p>
+  </Popover.Content>
+</Popover.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
