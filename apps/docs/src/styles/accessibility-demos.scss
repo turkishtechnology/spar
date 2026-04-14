@@ -73,14 +73,6 @@
     }
   }
 
-  /* Per-section layout: content left, log right */
-  .demo-section-layout {
-    display: grid;
-    grid-template-columns: 1fr 220px;
-    gap: 1rem;
-    align-items: start;
-  }
-
   .demo-section-split {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -111,11 +103,11 @@
     }
   }
 
-  @media (max-width: 768px) {
-    .demo-section-layout {
-      grid-template-columns: 1fr;
-    }
+  .demo-code-aside {
+    width: 100%;
+  }
 
+  @media (max-width: 768px) {
     .demo-section-split {
       grid-template-columns: 1fr;
     }
@@ -301,6 +293,26 @@
   .demo-input-error {
     font-size: 0.82rem;
     color: #e53e3e;
+  }
+
+  .demo-alert {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+
+    &--success {
+      background-color: #f0fff4;
+      border-color: #9ae6b4;
+      color: #276749;
+    }
+
+    &--error {
+      background-color: #fff5f5;
+      border-color: #feb2b2;
+      color: #9b2c2c;
+    }
   }
 
   /* Accordion */

@@ -99,7 +99,7 @@ export default function InputDemo() {
             <code>aria-describedby</code>. The error uses <code>role=&quot;alert&quot;</code> for
             live announcement.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Input isInvalid={isInvalid} required>
