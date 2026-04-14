@@ -39,11 +39,11 @@ export default function RadioDemo() {
                       <Radio.Item
                         className='demo-radio-item'
                         value={color.toLowerCase()}
-                        aria-labelledby={`basic-${color.toLowerCase()}`}
+                        id={`basic-${color.toLowerCase()}`}
                       >
                         {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
                       </Radio.Item>
-                      <Label id={`basic-${color.toLowerCase()}`} className='demo-label'>
+                      <Label htmlFor={`basic-${color.toLowerCase()}`} className='demo-label'>
                         {color}
                       </Label>
                     </div>
@@ -77,11 +77,11 @@ export default function RadioDemo() {
                       <Radio.Item
                         className='demo-radio-item'
                         value={size.toLowerCase()}
-                        aria-labelledby={`horiz-${size.toLowerCase()}`}
+                        id={`horiz-${size.toLowerCase()}`}
                       >
                         {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
                       </Radio.Item>
-                      <Label id={`horiz-${size.toLowerCase()}`} className='demo-label'>
+                      <Label htmlFor={`horiz-${size.toLowerCase()}`} className='demo-label'>
                         {size}
                       </Label>
                     </div>
@@ -125,11 +125,11 @@ export default function RadioDemo() {
                       <Radio.Item
                         className='demo-radio-item'
                         value={period.toLowerCase()}
-                        aria-labelledby={`ctrl-${period.toLowerCase()}`}
+                        id={`ctrl-${period.toLowerCase()}`}
                       >
                         {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
                       </Radio.Item>
-                      <Label id={`ctrl-${period.toLowerCase()}`} className='demo-label'>
+                      <Label htmlFor={`ctrl-${period.toLowerCase()}`} className='demo-label'>
                         {period}
                       </Label>
                     </div>
@@ -151,40 +151,26 @@ export default function RadioDemo() {
               <div className='demo-area'>
                 <Radio.Root className='demo-radio-group' aria-label='Plan selection'>
                   <div className='demo-radio-item-wrapper'>
-                    <Radio.Item
-                      className='demo-radio-item'
-                      value='free'
-                      aria-labelledby='label-plan-free'
-                    >
+                    <Radio.Item className='demo-radio-item' value='free' id='plan-free'>
                       {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
                     </Radio.Item>
-                    <Label id='label-plan-free' className='demo-label'>
+                    <Label htmlFor='plan-free' className='demo-label'>
                       Free
                     </Label>
                   </div>
                   <div className='demo-radio-item-wrapper'>
-                    <Radio.Item
-                      className='demo-radio-item'
-                      value='pro'
-                      id='plan-pro'
-                      disabled
-                      aria-labelledby='label-plan-pro'
-                    >
+                    <Radio.Item className='demo-radio-item' value='pro' id='plan-pro' disabled>
                       {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
                     </Radio.Item>
-                    <Label id='label-plan-pro' className='demo-label' disabled>
+                    <Label htmlFor='plan-pro' className='demo-label' disabled>
                       Pro (sold out)
                     </Label>
                   </div>
                   <div className='demo-radio-item-wrapper'>
-                    <Radio.Item
-                      className='demo-radio-item'
-                      value='enterprise'
-                      aria-labelledby='label-plan-enterprise'
-                    >
+                    <Radio.Item className='demo-radio-item' value='enterprise' id='plan-enterprise'>
                       {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
                     </Radio.Item>
-                    <Label id='label-plan-enterprise' className='demo-label'>
+                    <Label htmlFor='plan-enterprise' className='demo-label'>
                       Enterprise
                     </Label>
                   </div>
@@ -215,12 +201,12 @@ export default function RadioDemo() {
                   <Radio.Item
                     className='demo-radio-item'
                     value={label.toLowerCase().replace(' ', '-')}
-                    aria-labelledby={`disabled-${label.toLowerCase().replace(' ', '-')}`}
+                    id={`disabled-${label.toLowerCase().replace(' ', '-')}`}
                   >
                     {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
                   </Radio.Item>
                   <Label
-                    id={`disabled-${label.toLowerCase().replace(' ', '-')}`}
+                    htmlFor={`disabled-${label.toLowerCase().replace(' ', '-')}`}
                     className='demo-label'
                     disabled
                   >
@@ -255,13 +241,13 @@ export default function RadioDemo() {
                         <Radio.Item
                           className='demo-radio-item'
                           value={method.toLowerCase()}
-                          aria-labelledby={`req-${method.toLowerCase()}`}
+                          id={`req-${method.toLowerCase()}`}
                         >
                           {({ isChecked }) =>
                             isChecked && <span className='demo-radio-indicator' />
                           }
                         </Radio.Item>
-                        <Label id={`req-${method.toLowerCase()}`} className='demo-label'>
+                        <Label htmlFor={`req-${method.toLowerCase()}`} className='demo-label'>
                           {method}
                         </Label>
                       </div>
@@ -294,13 +280,13 @@ export default function RadioDemo() {
                         <Radio.Item
                           className='demo-radio-item'
                           value={letter}
-                          aria-labelledby={`auto-${letter}`}
+                          id={`auto-${letter}`}
                         >
                           {({ isChecked }) =>
                             isChecked && <span className='demo-radio-indicator' />
                           }
                         </Radio.Item>
-                        <Label id={`auto-${letter}`} className='demo-label'>
+                        <Label htmlFor={`auto-${letter}`} className='demo-label'>
                           {letter}
                         </Label>
                       </div>
@@ -321,13 +307,13 @@ export default function RadioDemo() {
                         <Radio.Item
                           className='demo-radio-item'
                           value={letter}
-                          aria-labelledby={`manual-${letter}`}
+                          id={`manual-${letter}`}
                         >
                           {({ isChecked }) =>
                             isChecked && <span className='demo-radio-indicator' />
                           }
                         </Radio.Item>
-                        <Label id={`manual-${letter}`} className='demo-label'>
+                        <Label htmlFor={`manual-${letter}`} className='demo-label'>
                           {letter}
                         </Label>
                       </div>

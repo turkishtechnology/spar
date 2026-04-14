@@ -226,13 +226,13 @@ export default function FormDemo() {
                         <Radio.Item
                           className='demo-radio-item'
                           value={option.value}
-                          aria-labelledby={`plan-${option.value}`}
+                          id={`plan-${option.value}`}
                         >
                           {({ isChecked }) =>
                             isChecked ? <span className='demo-radio-indicator' /> : null
                           }
                         </Radio.Item>
-                        <Label id={`plan-${option.value}`} className='demo-label'>
+                        <Label htmlFor={`plan-${option.value}`} className='demo-label'>
                           {option.label}
                         </Label>
                       </div>
