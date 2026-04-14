@@ -150,7 +150,7 @@ describe('Select', () => {
     expect(screen.getByRole('option', { name: 'Option 1' })).toHaveAttribute('data-highlighted');
   });
 
-  it('closes with Tab and leaves no open listbox in the DOM', async () => {
+  it('closes listbox and focuses trigger when Tab is pressed', async () => {
     const user = userEvent.setup();
 
     renderSelect();
