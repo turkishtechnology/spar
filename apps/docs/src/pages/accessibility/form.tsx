@@ -33,8 +33,15 @@ export default function FormDemo() {
   const [submittedMessage, setSubmittedMessage] = useState('');
   const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
 
-  const { register, watch, control, handleSubmit, reset, setFocus } = useForm<FormInputs>({
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormInputs>({
     mode: 'onChange',
+    shouldFocusError: true,
     defaultValues: {
       fullName: '',
       email: '',
@@ -48,34 +55,7 @@ export default function FormDemo() {
     },
   });
 
-  const fullName = watch('fullName');
-  const email = watch('email');
-  const role = watch('role');
-  const terms = watch('terms');
-
-  const isEmailInvalid = email.length > 0 && !email.includes('@');
-  const isRoleInvalid = role === '';
-  const isTermsInvalid = terms !== true;
-  const isFullNameInvalid = fullName.trim().length === 0;
-
   const onSubmit = (data: FormInputs) => {
-    if (isFullNameInvalid) {
-      setFocus('fullName');
-      return;
-    }
-    if (isEmailInvalid) {
-      setFocus('email');
-      return;
-    }
-    if (isRoleInvalid) {
-      document.getElementById('role-select-trigger')?.focus();
-      return;
-    }
-    if (isTermsInvalid) {
-      document.getElementById('terms-checkbox')?.focus();
-      return;
-    }
-
     const msg = `Form submitted successfully. Plan: ${data.plan}, role: ${data.role}, announcements: ${data.announcements ? 'enabled' : 'disabled'}.`;
     setSubmittedMessage(msg);
     setSubmitStatus('success');
@@ -105,27 +85,30 @@ export default function FormDemo() {
           <form onSubmit={handleSubmit(onSubmit)} className='demo-col'>
             <div className='demo-col'>
               {/* Profile Fields */}
-              <Input required isInvalid={fullName.trim().length === 0}>
+              <Input required isInvalid={!!errors.fullName}>
                 <Input.Label className='demo-label'>Full name *</Input.Label>
                 <Input.Field
                   className='demo-input'
                   placeholder='Ada Lovelace'
-                  {...register('fullName')}
+                  {...register('fullName', {
+                    required: true,
+                    validate: (v) => v.trim().length > 0,
+                  })}
                 />
                 <Input.Description className='demo-input-description'>
                   This will be shown on your public profile.
                 </Input.Description>
               </Input>
 
-              <Input isInvalid={isEmailInvalid} required>
-                <div className='demo-field'>
-                  <Input.Label className='demo-label'>Email *</Input.Label>
-                </div>
+              <Input isInvalid={!!errors.email} required>
+                <Input.Label className='demo-label'>Email *</Input.Label>
                 <Input.Field
                   className='demo-input'
                   type='email'
                   placeholder='ada@example.com'
-                  {...register('email')}
+                  {...register('email', {
+                    validate: (v) => v.length === 0 || v.includes('@'),
+                  })}
                 />
                 <Tooltip.Provider>
                   <Tooltip.Root>
@@ -142,7 +125,7 @@ export default function FormDemo() {
                     </Tooltip.Content>
                   </Tooltip.Root>
                 </Tooltip.Provider>
-                {isEmailInvalid && (
+                {errors.email && (
                   <Input.ErrorMessage className='demo-input-error'>
                     Please include @ in the email address.
                   </Input.ErrorMessage>
@@ -156,10 +139,22 @@ export default function FormDemo() {
                 <Controller
                   control={control}
                   name='role'
+                  rules={{ required: true }}
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   render={({ field }: any) => (
-                    <Select.Root required value={field.value} onValueChange={field.onChange}>
-                      <Select.Trigger id='role-select-trigger' className='demo-select-trigger'>
+                    <Select.Root
+                      required
+                      value={field.value}
+                      onValueChange={(v) => {
+                        field.onChange(v);
+                        field.onBlur();
+                      }}
+                    >
+                      <Select.Trigger
+                        ref={field.ref}
+                        id='role-select-trigger'
+                        className='demo-select-trigger'
+                      >
                         <Select.Value placeholder='Select a role…' />
                         <span>▾</span>
                       </Select.Trigger>
@@ -177,7 +172,7 @@ export default function FormDemo() {
                     </Select.Root>
                   )}
                 />
-                {isRoleInvalid && (
+                {errors.role && (
                   <div className='demo-input-error' role='alert'>
                     Role selection is required
                   </div>
@@ -320,8 +315,10 @@ export default function FormDemo() {
                 <Controller
                   control={control}
                   name='terms'
-                  render={({ field: { value, onChange } }) => (
+                  rules={{ validate: (v) => v === true }}
+                  render={({ field: { ref, value, onChange } }) => (
                     <Checkbox
+                      ref={ref}
                       id='terms-checkbox'
                       className='demo-checkbox'
                       checked={value}
@@ -335,7 +332,7 @@ export default function FormDemo() {
                 <Label htmlFor='terms-checkbox' className='demo-label' required>
                   I accept the Terms and Privacy Policy *
                 </Label>
-                {isTermsInvalid && (
+                {errors.terms && (
                   <div className='demo-input-error' role='alert'>
                     You must accept the terms to submit
                   </div>
@@ -364,56 +361,58 @@ export default function FormDemo() {
 
           <aside className='demo-side-example demo-code-aside'>
             <pre className='demo-code-block'>
-              <code>{`<Input required isInvalid={isFullNameInvalid}>
+              <code>{`// 1. shouldFocusError: true — RHF focuses the first
+//    invalid field automatically on submit.
+const { register, control, handleSubmit,
+  formState: { errors } } = useForm({
+  mode: 'onChange',
+  shouldFocusError: true,
+});
+
+// 2. register with rules — RHF handles native inputs.
+<Input required isInvalid={!!errors.fullName}>
   <Input.Label>Full name *</Input.Label>
-  <Input.Field {...register('fullName')} />
+  <Input.Field
+    {...register('fullName', {
+      required: true,
+      validate: (v) => v.trim().length > 0,
+    })}
+  />
 </Input>
 
-<Input isInvalid={isEmailInvalid} required>
-  <Input.Label>Email *</Input.Label>
-  <Input.Field type='email' {...register('email')} />
-  {isEmailInvalid && (
-    <Input.ErrorMessage>
-      Please include @ in the email address.
-    </Input.ErrorMessage>
-  )}
-</Input>
-
-<Controller name='role' control={control}
+// 3. Controller + field.ref — lets RHF focus custom
+//    components (Select, Checkbox) on validation error.
+<Controller name='role' rules={{ required: true }}
   render={({ field }) => (
     <Select.Root value={field.value}
-      onValueChange={field.onChange}>
-      <Select.Trigger>
+      onValueChange={(v) => {
+        field.onChange(v);
+        field.onBlur();
+      }}>
+      <Select.Trigger ref={field.ref}>
         <Select.Value placeholder='Select a role…' />
       </Select.Trigger>
-      <Select.Content>
-        <Select.Item value='frontend-engineer'>
-          <Select.ItemText>Frontend Engineer</Select.ItemText>
-        </Select.Item>
-      </Select.Content>
     </Select.Root>
   )}
 />
 
-<Controller name='terms' control={control}
-  render={({ field: { value, onChange } }) => (
-    <Checkbox checked={value} onChange={onChange}>
+<Controller name='terms'
+  rules={{ validate: (v) => v === true }}
+  render={({ field: { ref, value, onChange } }) => (
+    <Checkbox ref={ref} checked={value} onChange={onChange}>
       {({ checked }) => checked ? '✓' : ''}
     </Checkbox>
   )}
 />
 
-// On submit — focus first invalid field:
-if (isFullNameInvalid) { setFocus('fullName'); return; }
-if (isEmailInvalid)    { setFocus('email'); return; }
-if (isRoleInvalid) {
-  document.getElementById('role-select-trigger')?.focus();
-  return;
-}
-if (isTermsInvalid) {
-  document.getElementById('terms-checkbox')?.focus();
-  return;
-}`}</code>
+// 4. onSubmit only runs on success — no manual checks.
+const onSubmit = (data) => {
+  setSubmittedMessage(\`Submitted: \${data.plan}\`);
+};
+
+// Error display via formState.errors:
+{errors.role && <div role='alert'>Role is required</div>}
+{errors.terms && <div role='alert'>Accept terms to submit</div>}`}</code>
             </pre>
           </aside>
         </div>
