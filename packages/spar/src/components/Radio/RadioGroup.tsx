@@ -105,28 +105,15 @@ export const RadioGroup = <T extends ElementType = 'div'>({
 
       const currentIndex = focusedValue ? getItemIndex(focusedValue) : -1;
       let nextIndex: number | undefined;
-      const isVertical = orientation === 'vertical';
 
       switch (event.key) {
         case 'ArrowUp':
-          if (isVertical) {
-            nextIndex = currentIndex <= 0 ? count - 1 : currentIndex - 1;
-          }
+        case 'ArrowLeft':
+          nextIndex = currentIndex <= 0 ? count - 1 : currentIndex - 1;
           break;
         case 'ArrowDown':
-          if (isVertical) {
-            nextIndex = currentIndex >= count - 1 ? 0 : currentIndex + 1;
-          }
-          break;
-        case 'ArrowLeft':
-          if (!isVertical) {
-            nextIndex = currentIndex <= 0 ? count - 1 : currentIndex - 1;
-          }
-          break;
         case 'ArrowRight':
-          if (!isVertical) {
-            nextIndex = currentIndex >= count - 1 ? 0 : currentIndex + 1;
-          }
+          nextIndex = currentIndex >= count - 1 ? 0 : currentIndex + 1;
           break;
         case 'Home':
           nextIndex = 0;
@@ -158,7 +145,6 @@ export const RadioGroup = <T extends ElementType = 'div'>({
       focusedValue,
       getItemIndex,
       getItemAtIndex,
-      orientation,
       focusItemAtIndex,
       selectOnFocus,
       handleValueChange,

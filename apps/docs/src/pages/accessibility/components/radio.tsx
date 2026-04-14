@@ -23,7 +23,7 @@ export default function RadioDemo() {
         <section className='demo-section'>
           <h2>1. Basic Radio Group (Vertical)</h2>
           <p className='demo-description'>
-            Tab into the group, then use Arrow Up/Down to navigate and select. Only one item can be
+            Tab into the group, then use arrow keys to navigate and select. Only one item can be
             selected at a time.
           </p>
           <div className='demo-section-split'>
@@ -49,10 +49,6 @@ export default function RadioDemo() {
                     </div>
                   ))}
                 </Radio.Root>
-              </div>
-              <div className='keyboard-hint'>
-                <strong>Keyboard:</strong> Tab to group → ↑↓ to navigate & select → Tab to leave
-                group
               </div>
             </div>
             <div className='demo-side-example'>
@@ -84,7 +80,7 @@ export default function RadioDemo() {
                   <button className='demo-btn' onClick={() => setControlled('yearly')}>
                     Set Yearly
                   </button>
-                  <button className='demo-btn' onClick={() => setControlled('')}>
+                  <button className='demo-btn' onClick={() => setControlled(undefined)}>
                     Clear
                   </button>
                 </div>
