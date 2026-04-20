@@ -6,7 +6,7 @@ import { Radio, Label } from '@turkish-technology/spar';
 import '../../../styles/accessibility-demos.scss';
 
 export default function RadioDemo() {
-  const [controlled, setControlled] = useState(undefined);
+  const [controlled, setControlled] = useState<string | undefined>(undefined);
 
   return (
     <Layout title='Radio'>
@@ -40,6 +40,7 @@ export default function RadioDemo() {
                         className='demo-radio-item'
                         value={color.toLowerCase()}
                         id={`basic-${color.toLowerCase()}`}
+                        aria-label={color}
                       >
                         {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
                       </Radio.Item>
@@ -98,6 +99,7 @@ export default function RadioDemo() {
                         className='demo-radio-item'
                         value={period.toLowerCase()}
                         id={`ctrl-${period.toLowerCase()}`}
+                        aria-label={period}
                       >
                         {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
                       </Radio.Item>
@@ -133,7 +135,12 @@ export default function RadioDemo() {
               <div className='demo-area'>
                 <Radio.Root className='demo-radio-group' aria-label='Plan selection'>
                   <div className='demo-radio-item-wrapper'>
-                    <Radio.Item className='demo-radio-item' value='free' id='plan-free'>
+                    <Radio.Item
+                      className='demo-radio-item'
+                      value='free'
+                      id='plan-free'
+                      aria-label='Free'
+                    >
                       {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
                     </Radio.Item>
                     <Label htmlFor='plan-free' className='demo-label'>
@@ -141,7 +148,13 @@ export default function RadioDemo() {
                     </Label>
                   </div>
                   <div className='demo-radio-item-wrapper'>
-                    <Radio.Item className='demo-radio-item' value='pro' id='plan-pro' disabled>
+                    <Radio.Item
+                      className='demo-radio-item'
+                      value='pro'
+                      id='plan-pro'
+                      aria-label='Pro (sold out)'
+                      disabled
+                    >
                       {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
                     </Radio.Item>
                     <Label htmlFor='plan-pro' className='demo-label' disabled>
@@ -149,7 +162,12 @@ export default function RadioDemo() {
                     </Label>
                   </div>
                   <div className='demo-radio-item-wrapper'>
-                    <Radio.Item className='demo-radio-item' value='enterprise' id='plan-enterprise'>
+                    <Radio.Item
+                      className='demo-radio-item'
+                      value='enterprise'
+                      id='plan-enterprise'
+                      aria-label='Enterprise'
+                    >
                       {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
                     </Radio.Item>
                     <Label htmlFor='plan-enterprise' className='demo-label'>
@@ -191,6 +209,7 @@ export default function RadioDemo() {
                         className='demo-radio-item'
                         value={label.toLowerCase().replace(' ', '-')}
                         id={`disabled-${label.toLowerCase().replace(' ', '-')}`}
+                        aria-label={label}
                       >
                         {({ isChecked }) => isChecked && <span className='demo-radio-indicator' />}
                       </Radio.Item>
@@ -241,6 +260,7 @@ export default function RadioDemo() {
                           className='demo-radio-item'
                           value={method.toLowerCase()}
                           id={`req-${method.toLowerCase()}`}
+                          aria-label={method}
                         >
                           {({ isChecked }) =>
                             isChecked && <span className='demo-radio-indicator' />
@@ -288,6 +308,7 @@ export default function RadioDemo() {
                           className='demo-radio-item'
                           value={letter}
                           id={`auto-${letter}`}
+                          aria-label={letter}
                         >
                           {({ isChecked }) =>
                             isChecked && <span className='demo-radio-indicator' />
@@ -315,6 +336,7 @@ export default function RadioDemo() {
                           className='demo-radio-item'
                           value={letter}
                           id={`manual-${letter}`}
+                          aria-label={letter}
                         >
                           {({ isChecked }) =>
                             isChecked && <span className='demo-radio-indicator' />
