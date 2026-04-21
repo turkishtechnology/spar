@@ -35,5 +35,5 @@ export type {
   AccordionTriggerProps,
   AccordionTriggerRenderProps,
   AccordionContentProps,
-  AccordionType,
+  AccordionSelectionMode,
 } from './types';

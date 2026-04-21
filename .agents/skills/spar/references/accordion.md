@@ -14,7 +14,7 @@
 
 | Prop             | Type                                  | Default      | Description                                   |
 | ---------------- | ------------------------------------- | ------------ | --------------------------------------------- |
-| `type?`          | `'single' \| 'multiple'`              | `'single'`   | Whether one or multiple items can be open     |
+| `selectionMode?` | `'single' \| 'multiple'`              | `'single'`   | Whether one or multiple items can be open     |
 | `isCollapsible?` | `boolean`                             | `false`      | Whether all items can be closed (single mode) |
 | `value?`         | `string \| string[]`                  | —            | Controlled open item(s)                       |
 | `defaultValue?`  | `string \| string[]`                  | —            | Default open item(s)                          |

@@ -46,7 +46,7 @@ import { Breadcrumb } from '@turkish-technology/spar/breadcrumb';
 Most components use dot notation for composable parts:
 
 ```tsx
-<Accordion.Root type='single' defaultValue='item-1'>
+<Accordion.Root selectionMode='single' defaultValue='item-1'>
   <Accordion.Item value='item-1'>
     <Accordion.Header>
       <Accordion.Trigger>Section 1</Accordion.Trigger>
@@ -245,7 +245,7 @@ function FormField({ label, error, description, required, children }) {
 
 When you need full props, render props, events, and keyboard for a specific component, read the corresponding reference:
 
-- [Accordion](references/accordion.md) — type, isCollapsible, value/onValueChange, orientation
+- [Accordion](references/accordion.md) — selectionMode, isCollapsible, value/onValueChange, orientation
 - [Breadcrumb](references/breadcrumb.md) — onNavigate, Link, Page, Separator
 - [Button](references/button.md) — isLoading, toggle mode (isPressed/onPressedChange)
 - [Checkbox](references/checkbox.md) — CheckedState (true/false/'indeterminate'), render props
@@ -272,7 +272,7 @@ Only load the reference for the component the user is working with.
 - **Dialog needs Overlay**: For modal dialogs, include `Dialog.Overlay` for backdrop.
 - **Tooltip needs Provider**: Wrap your app once with `Tooltip.Provider` for delay config.
 - **Select.ItemText is required**: Each `Select.Item` must have a `Select.ItemText` child.
-- **Accordion `type`**: `"single"` = one panel open, `"multiple"` = many. Default is `"single"`.
+- **Accordion `selectionMode`**: `"single"` = one panel open, `"multiple"` = many. Default is `"single"`.
 - **Radio needs `name`**: Set on `Radio.Root` for form submission.
 - **Icon-only buttons need `aria-label`**: Spar can't infer meaning from icon children.
 - **Don't add redundant ARIA**: Spar already sets roles and aria-\* attributes. Adding extras may conflict.

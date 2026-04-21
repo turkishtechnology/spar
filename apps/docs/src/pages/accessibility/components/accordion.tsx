@@ -80,14 +80,15 @@ export default function AccordionDemo() {
         <section className='demo-section'>
           <h2>2. Multiple Expand Mode</h2>
           <p className='demo-description'>
-            Multiple panels can be open simultaneously with <code>type=&quot;multiple&quot;</code>.
+            Multiple panels can be open simultaneously with{' '}
+            <code>selectionMode=&quot;multiple&quot;</code>.
           </p>
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Accordion.Root
                   className='demo-accordion'
-                  type='multiple'
+                  selectionMode='multiple'
                   defaultValue={['m-1', 'm-3']}
                 >
                   {['Tab 1', 'Tab 2', 'Tab 3'].map((title, i) => (
@@ -113,7 +114,7 @@ export default function AccordionDemo() {
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Accordion.Root type='multiple' defaultValue='item-1'>
+                <code>{`<Accordion.Root selectionMode='multiple' defaultValue='item-1'>
   <Accordion.Item value='item-1'>
     <Accordion.Header>
       <Accordion.Trigger>Tab 1</Accordion.Trigger>

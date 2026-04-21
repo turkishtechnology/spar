@@ -23,13 +23,13 @@ export const AccordionItem = <T extends ElementType = 'div'>({
 
   // Determine if this item is expanded
   const isOpen = useMemo(() => {
-    if (accordionContext.type === 'single') {
+    if (accordionContext.selectionMode === 'single') {
       return accordionContext.value === value;
     } else {
       const valueArray = Array.isArray(accordionContext.value) ? accordionContext.value : [];
       return valueArray.includes(value);
     }
-  }, [accordionContext.type, accordionContext.value, value]);
+  }, [accordionContext.selectionMode, accordionContext.value, value]);
 
   // Determine if this item is disabled
   const isItemDisabled = accordionContext.disabled || itemDisabled;

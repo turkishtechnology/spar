@@ -9,7 +9,7 @@ import type {
   CollapsibleContentProps,
 } from '../Collapsible/types';
 
-export type AccordionType = 'single' | 'multiple';
+export type AccordionSelectionMode = 'single' | 'multiple';
 
 /**
  * Own props for Accordion root component
@@ -19,7 +19,7 @@ export interface AccordionOwnProps {
    * Single panel or multiple panels can be expanded
    * @defaultValue 'single'
    */
-  type?: AccordionType;
+  selectionMode?: AccordionSelectionMode;
 
   /**
    * Whether panels can be collapsed (only for single type)
@@ -141,7 +141,7 @@ export type AccordionContentProps<T extends ElementType = 'div'> = CollapsibleCo
  * @internal
  */
 export interface AccordionContextValue {
-  type: AccordionType;
+  selectionMode: AccordionSelectionMode;
   isCollapsible: boolean;
   value: string | string[];
   onItemToggle: (itemValue: string) => void;
