@@ -37,8 +37,8 @@ The Accordion component provides a vertically stacked set of interactive heading
 ### Accordion (Root)
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `type` | `"single" \| "multiple"` | No | `"single"` | Single panel or multiple panels can be expanded |
-| `isCollapsible` | `boolean` | No | `false` | Whether panels can be collapsed (only for single type) |
+| `selectionMode` | `"single" \| "multiple"` | No | `"single"` | Single panel or multiple panels can be expanded |
+| `isCollapsible` | `boolean` | No | `false` | Whether panels can be collapsed (only for single mode) |
 | `value` | `string \| string[]` | No | `undefined` | Controlled state - single value or array for multiple |
 | `defaultValue` | `string \| string[]` | No | `undefined` | Uncontrolled initial state |
 | `onValueChange` | `(value: string \| string[]) => void` | No | `undefined` | Callback when state changes |
@@ -91,8 +91,8 @@ The Accordion component provides a vertically stacked set of interactive heading
 | Collapsed Panel | Click/Enter/Space on trigger | Expands panel | `aria-expanded="true"`, content visible |
 | Expanded Panel (collapsible) | Click/Enter/Space on trigger | Collapses panel | `aria-expanded="false"`, content hidden |
 | Expanded Panel (non-collapsible) | Click/Enter/Space on trigger | No change | Trigger has `aria-disabled="true"` |
-| Single type, other panel open | Expand different panel | Previous collapses, new expands | Previous `aria-expanded="false"`, new `aria-expanded="true"` |
-| Multiple type | Expand/collapse panels | Independent panel states | Each panel's `aria-expanded` reflects state |
+| Single mode, other panel open | Expand different panel | Previous collapses, new expands | Previous `aria-expanded="false"`, new `aria-expanded="true"` |
+| Multiple mode | Expand/collapse panels | Independent panel states | Each panel's `aria-expanded` reflects state |
 | Disabled item | Any interaction | No change | `aria-disabled="true"` on trigger |
 | Focus on trigger | Down arrow | Focus moves to next trigger | Focus management |
 | Focus on trigger | Up arrow | Focus moves to previous trigger | Focus management |
@@ -185,7 +185,7 @@ const AccordionContext = createContext<AccordionContextValue>()
 
 #### Accordion Root
 - `data-orientation`: `"vertical"` | `"horizontal"`
-- `data-type`: `"single"` | `"multiple"`
+- `data-selection-mode`: `"single"` | `"multiple"`
 
 #### AccordionItem  
 - `data-state`: `"open"` | `"closed"`

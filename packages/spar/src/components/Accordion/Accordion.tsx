@@ -7,7 +7,7 @@ import { AccordionContext } from './hooks';
  * Accordion root component providing context and state management for accordion items. Supports single or multiple panel expansion with full keyboard navigation.
  */
 export const Accordion = <T extends ElementType = 'div'>({
-  type = 'single',
+  selectionMode = 'single',
   isCollapsible = false,
   value: controlledValue,
   defaultValue,
@@ -21,7 +21,8 @@ export const Accordion = <T extends ElementType = 'div'>({
 }: AccordionProps<T>) => {
   const Component = as || 'div';
   // State management - controlled/uncontrolled
-  const defaultVal = defaultValue !== undefined ? defaultValue : type === 'multiple' ? [] : '';
+  const defaultVal =
+    defaultValue !== undefined ? defaultValue : selectionMode === 'multiple' ? [] : '';
   const [currentValue = defaultVal, setValue] = useControlledState<string | string[]>(
     controlledValue,
     defaultVal,
@@ -53,15 +54,15 @@ export const Accordion = <T extends ElementType = 'div'>({
 
       let newValue: string | string[];
 
-      if (type === 'single') {
+      if (selectionMode === 'single') {
         const isExpanded = currentValue === itemValue;
-        // For single type, only allow collapse if collapsible is true
+        // For single mode, only allow collapse if collapsible is true
         if (isExpanded && !isCollapsible) {
           return; // Don't allow collapsing if not collapsible
         }
         newValue = isExpanded ? '' : itemValue;
       } else {
-        // Multiple type
+        // Multiple mode
         const currentArray = Array.isArray(currentValue) ? currentValue : [];
         const isExpanded = currentArray.includes(itemValue);
         newValue = isExpanded
@@ -71,12 +72,12 @@ export const Accordion = <T extends ElementType = 'div'>({
 
       setValue(newValue);
     },
-    [type, isCollapsible, currentValue, disabled, setValue],
+    [selectionMode, isCollapsible, currentValue, disabled, setValue],
   );
 
   const contextValue = useMemo<AccordionContextValue>(
     () => ({
-      type,
+      selectionMode,
       isCollapsible,
       value: currentValue,
       onItemToggle: handleItemToggle,
@@ -92,7 +93,7 @@ export const Accordion = <T extends ElementType = 'div'>({
       itemCount,
     }),
     [
-      type,
+      selectionMode,
       isCollapsible,
       currentValue,
       handleItemToggle,
@@ -111,7 +112,12 @@ export const Accordion = <T extends ElementType = 'div'>({
 
   return (
     <AccordionContext.Provider value={contextValue}>
-      <Component ref={ref} {...props} data-orientation={orientation} data-type={type}>
+      <Component
+        ref={ref}
+        {...props}
+        data-orientation={orientation}
+        data-selection-mode={selectionMode}
+      >
         {children}
       </Component>
     </AccordionContext.Provider>

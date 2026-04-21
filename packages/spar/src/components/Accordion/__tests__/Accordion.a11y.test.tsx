@@ -15,13 +15,18 @@ expect.extend(toHaveNoViolations);
 
 // Test setup helpers
 const BasicAccordion = ({
-  type = 'single',
+  selectionMode = 'single',
   isCollapsible = false,
   orientation = 'vertical',
   children,
   ...rest
 }: Partial<React.ComponentProps<typeof Accordion>> = {}) => (
-  <Accordion type={type} isCollapsible={isCollapsible} orientation={orientation} {...rest}>
+  <Accordion
+    selectionMode={selectionMode}
+    isCollapsible={isCollapsible}
+    orientation={orientation}
+    {...rest}
+  >
     {children || (
       <>
         <AccordionItem value='item-1'>
@@ -96,7 +101,7 @@ describe('Accordion Accessibility', () => {
 
     it('should have no accessibility violations with multiple items expanded', async () => {
       const user = userEvent.setup();
-      const { container } = render(<BasicAccordion type='multiple' />);
+      const { container } = render(<BasicAccordion selectionMode='multiple' />);
 
       // Expand multiple items
       const trigger1 = screen.getByRole('button', { name: 'Section 1: Introduction' });
@@ -125,7 +130,7 @@ describe('Accordion Accessibility', () => {
 
     it('should update aria-expanded when items are toggled', async () => {
       const user = userEvent.setup();
-      render(<BasicAccordion type='single' />);
+      render(<BasicAccordion selectionMode='single' />);
 
       const trigger1 = screen.getByRole('button', { name: 'Section 1: Introduction' });
       const trigger2 = screen.getByRole('button', { name: 'Section 2: Details' });
@@ -484,7 +489,7 @@ describe('Accordion Accessibility', () => {
   describe('Dynamic Content Accessibility', () => {
     it('should maintain accessibility when content is force mounted', async () => {
       const { container } = render(
-        <Accordion type='single'>
+        <Accordion selectionMode='single'>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Always Mounted Content</AccordionTrigger>

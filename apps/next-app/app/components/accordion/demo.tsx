@@ -4,7 +4,7 @@ import * as Accordion from '@turkish-technology/spar/accordion';
 
 export function AccordionDemo() {
   return (
-    <Accordion.Root type='single' isCollapsible>
+    <Accordion.Root selectionMode='single' isCollapsible>
       <Accordion.Item value='item-1'>
         <Accordion.Header>
           <Accordion.Trigger>Section 1</Accordion.Trigger>
