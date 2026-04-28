@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, ElementType } from 'react';
+import React, { useCallback, useEffect, useRef, useMemo, ElementType } from 'react';
 import type { AccordionTriggerProps, AccordionTriggerRenderProps } from './types';
 import { useAccordionContext, useAccordionItemContext } from './hooks';
 import { CollapsibleTrigger } from '../Collapsible';
@@ -18,17 +18,19 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
   const itemContext = useAccordionItemContext();
   const triggerRef = useRef<HTMLButtonElement>(null);
 
+  const itemId = useMemo(() => String(itemContext.itemKey), [itemContext.itemKey]);
+
   useEffect(() => {
     if (triggerRef.current) {
-      accordionContext.registerItem(itemContext.value, triggerRef.current);
+      accordionContext.registerItem(itemId, triggerRef.current);
     }
-    return () => accordionContext.unregisterItem(itemContext.value);
-  }, [itemContext.value, accordionContext.registerItem, accordionContext.unregisterItem]);
+    return () => accordionContext.unregisterItem(itemId);
+  }, [itemId, accordionContext.registerItem, accordionContext.unregisterItem]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       const { key } = event;
-      const currentIndex = accordionContext.getItemIndex(itemContext.value);
+      const currentIndex = accordionContext.getItemIndex(itemId);
       const totalItems = accordionContext.itemCount;
       const isHorizontal = accordionContext.orientation === 'horizontal';
 
@@ -75,7 +77,7 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
 
       onKeyDown?.(event as React.KeyboardEvent<HTMLButtonElement>);
     },
-    [accordionContext, itemContext.value, onKeyDown],
+    [accordionContext, itemId, onKeyDown],
   );
 
   // Render props for children function
@@ -94,7 +96,7 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
       onClick={onClick}
       onKeyDown={handleKeyDown}
       data-accordion-trigger=''
-      data-value={itemContext.value}
+      data-value={itemId}
       {...props}
     >
       {typeof children === 'function' ? children(renderProps) : children}

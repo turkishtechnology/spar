@@ -29,11 +29,13 @@ export {
 };
 
 export type {
-  AccordionProps,
-  AccordionItemProps,
+  AccordionActiveIndex,
+  AccordionContentProps,
   AccordionHeaderProps,
+  AccordionItemKey,
+  AccordionItemProps,
+  AccordionProps,
   AccordionTriggerProps,
   AccordionTriggerRenderProps,
-  AccordionContentProps,
-  AccordionSelectionMode,
+  AccordionType,
 } from './types';

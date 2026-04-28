@@ -1,17 +1,34 @@
 import { useMemo, useState, useCallback, ElementType } from 'react';
 import { useItemRegistry, useControlledState } from '@/hooks';
-import type { AccordionProps, AccordionContextValue } from './types';
+import type {
+  AccordionActiveIndex,
+  AccordionContextValue,
+  AccordionItemKey,
+  AccordionProps,
+} from './types';
 import { AccordionContext } from './hooks';
 
 /**
- * Accordion root component providing context and state management for accordion items. Supports single or multiple panel expansion with full keyboard navigation.
+ * Accordion root component providing context and state management for accordion items.
+ * Supports single or multiple panel expansion with full keyboard navigation.
+ *
+ * Primary API uses Takeoff vocabulary (`allowMultiple`, `activeIndex`,
+ * `defaultActiveIndex`, `onActiveIndexChange`, `preventCollapse`). The legacy
+ * `type`/`value`/`defaultValue`/`onValueChange`/`isCollapsible` props are kept
+ * as deprecated aliases for one major release and will be removed.
  */
 export const Accordion = <T extends ElementType = 'div'>({
-  selectionMode = 'single',
-  isCollapsible = false,
-  value: controlledValue,
-  defaultValue,
-  onValueChange,
+  allowMultiple,
+  activeIndex: controlledActiveIndex,
+  defaultActiveIndex,
+  onActiveIndexChange,
+  preventCollapse,
+  // Deprecated aliases — kept for one major release.
+  type,
+  value: legacyValue,
+  defaultValue: legacyDefaultValue,
+  onValueChange: legacyOnValueChange,
+  isCollapsible: legacyIsCollapsible,
   disabled = false,
   orientation = 'vertical',
   as,
@@ -20,14 +37,36 @@ export const Accordion = <T extends ElementType = 'div'>({
   ...props
 }: AccordionProps<T>) => {
   const Component = as || 'div';
-  // State management - controlled/uncontrolled
-  const defaultVal =
-    defaultValue !== undefined ? defaultValue : selectionMode === 'multiple' ? [] : '';
-  const [currentValue = defaultVal, setValue] = useControlledState<string | string[]>(
-    controlledValue,
-    defaultVal,
-    onValueChange,
+
+  const effectiveAllowMultiple = allowMultiple ?? type === 'multiple';
+  const effectivePreventCollapse =
+    preventCollapse ?? (legacyIsCollapsible !== undefined ? !legacyIsCollapsible : false);
+
+  const controlledValue: AccordionActiveIndex | undefined = controlledActiveIndex ?? legacyValue;
+  const initialValue: AccordionActiveIndex =
+    defaultActiveIndex ?? legacyDefaultValue ?? (effectiveAllowMultiple ? [] : '');
+
+  const handleChange = useCallback(
+    (next: AccordionActiveIndex) => {
+      onActiveIndexChange?.(next);
+      if (legacyOnValueChange) {
+        const stringified: string | string[] = Array.isArray(next)
+          ? next.map(String)
+          : next === ''
+            ? ''
+            : String(next);
+        legacyOnValueChange(stringified);
+      }
+    },
+    [onActiveIndexChange, legacyOnValueChange],
   );
+
+  const [currentValue = initialValue, setValue] = useControlledState<AccordionActiveIndex>(
+    controlledValue,
+    initialValue,
+    handleChange,
+  );
+
   const {
     items: accordionItems,
     registerItem,
@@ -49,37 +88,35 @@ export const Accordion = <T extends ElementType = 'div'>({
   );
 
   const handleItemToggle = useCallback(
-    (itemValue: string) => {
+    (itemKey: AccordionItemKey) => {
       if (disabled) return;
 
-      let newValue: string | string[];
+      let nextValue: AccordionActiveIndex;
 
-      if (selectionMode === 'single') {
-        const isExpanded = currentValue === itemValue;
-        // For single mode, only allow collapse if collapsible is true
-        if (isExpanded && !isCollapsible) {
-          return; // Don't allow collapsing if not collapsible
+      if (!effectiveAllowMultiple) {
+        const isExpanded = currentValue === itemKey;
+        if (isExpanded && effectivePreventCollapse) {
+          return;
         }
-        newValue = isExpanded ? '' : itemValue;
+        nextValue = isExpanded ? '' : itemKey;
       } else {
-        // Multiple mode
         const currentArray = Array.isArray(currentValue) ? currentValue : [];
-        const isExpanded = currentArray.includes(itemValue);
-        newValue = isExpanded
-          ? currentArray.filter((v) => v !== itemValue)
-          : [...currentArray, itemValue];
+        const isExpanded = currentArray.includes(itemKey);
+        nextValue = isExpanded
+          ? currentArray.filter((v) => v !== itemKey)
+          : [...currentArray, itemKey];
       }
 
-      setValue(newValue);
+      setValue(nextValue);
     },
-    [selectionMode, isCollapsible, currentValue, disabled, setValue],
+    [effectiveAllowMultiple, effectivePreventCollapse, currentValue, disabled, setValue],
   );
 
   const contextValue = useMemo<AccordionContextValue>(
     () => ({
-      selectionMode,
-      isCollapsible,
-      value: currentValue,
+      allowMultiple: effectiveAllowMultiple,
+      preventCollapse: effectivePreventCollapse,
+      activeIndex: currentValue,
       onItemToggle: handleItemToggle,
       disabled,
       orientation,
@@ -93,8 +130,8 @@ export const Accordion = <T extends ElementType = 'div'>({
       itemCount,
     }),
     [
-      selectionMode,
-      isCollapsible,
+      effectiveAllowMultiple,
+      effectivePreventCollapse,
       currentValue,
       handleItemToggle,
       disabled,
@@ -116,7 +153,7 @@ export const Accordion = <T extends ElementType = 'div'>({
         ref={ref}
         {...props}
         data-orientation={orientation}
-        data-selection-mode={selectionMode}
+        data-type={effectiveAllowMultiple ? 'multiple' : 'single'}
       >
         {children}
       </Component>

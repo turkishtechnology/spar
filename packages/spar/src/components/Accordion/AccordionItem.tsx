@@ -1,13 +1,18 @@
 import { useMemo, useCallback, useId, ElementType } from 'react';
-import type { AccordionItemProps, AccordionItemContextValue } from './types';
+import type { AccordionItemContextValue, AccordionItemKey, AccordionItemProps } from './types';
 import { useAccordionContext, AccordionItemContext } from './hooks';
 import { Collapsible } from '../Collapsible';
 
 /**
- * Individual accordion item providing context for trigger and content components. Manages item registration and expansion state.
+ * Individual accordion item providing context for trigger and content components.
+ *
+ * Identity is taken from `itemKey` (primary) or the deprecated `value` alias.
+ * Items declared without either receive an empty-string identity, which is
+ * almost certainly a developer error and will not match any `activeIndex`.
  */
 export const AccordionItem = <T extends ElementType = 'div'>({
-  value,
+  itemKey: itemKeyProp,
+  value: legacyValue,
   disabled: itemDisabled = false,
   id: providedId,
   as,
@@ -21,40 +26,41 @@ export const AccordionItem = <T extends ElementType = 'div'>({
   const triggerId = `${baseId}-trigger`;
   const contentId = `${baseId}-content`;
 
-  // Determine if this item is expanded
-  const isOpen = useMemo(() => {
-    if (accordionContext.selectionMode === 'single') {
-      return accordionContext.value === value;
-    } else {
-      const valueArray = Array.isArray(accordionContext.value) ? accordionContext.value : [];
-      return valueArray.includes(value);
-    }
-  }, [accordionContext.selectionMode, accordionContext.value, value]);
+  const itemKey: AccordionItemKey = itemKeyProp ?? legacyValue ?? '';
 
-  // Determine if this item is disabled
+  const isOpen = useMemo(() => {
+    if (!accordionContext.allowMultiple) {
+      return accordionContext.activeIndex === itemKey;
+    }
+    const valueArray = Array.isArray(accordionContext.activeIndex)
+      ? accordionContext.activeIndex
+      : [];
+    return valueArray.includes(itemKey);
+  }, [accordionContext.allowMultiple, accordionContext.activeIndex, itemKey]);
+
   const isItemDisabled = accordionContext.disabled || itemDisabled;
 
   const toggle = useCallback(() => {
     if (!isItemDisabled) {
-      accordionContext.onItemToggle(value);
+      accordionContext.onItemToggle(itemKey);
     }
-  }, [isItemDisabled, value, accordionContext.onItemToggle]);
+  }, [isItemDisabled, itemKey, accordionContext.onItemToggle]);
 
   const open = useCallback(() => {
     if (!isItemDisabled && !isOpen) {
-      accordionContext.onItemToggle(value);
+      accordionContext.onItemToggle(itemKey);
     }
-  }, [isItemDisabled, isOpen, value, accordionContext.onItemToggle]);
+  }, [isItemDisabled, isOpen, itemKey, accordionContext.onItemToggle]);
 
   const close = useCallback(() => {
     if (!isItemDisabled && isOpen) {
-      accordionContext.onItemToggle(value);
+      accordionContext.onItemToggle(itemKey);
     }
-  }, [isItemDisabled, isOpen, value, accordionContext.onItemToggle]);
+  }, [isItemDisabled, isOpen, itemKey, accordionContext.onItemToggle]);
 
   const itemContextValue = useMemo<AccordionItemContextValue>(
     () => ({
-      value,
+      itemKey,
       isOpen,
       disabled: isItemDisabled,
       triggerId,
@@ -63,7 +69,7 @@ export const AccordionItem = <T extends ElementType = 'div'>({
       close,
       toggle,
     }),
-    [value, isOpen, isItemDisabled, triggerId, contentId, open, close, toggle],
+    [itemKey, isOpen, isItemDisabled, triggerId, contentId, open, close, toggle],
   );
 
   return (
