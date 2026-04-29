@@ -356,6 +356,103 @@ describe('DropdownMenu Accessibility', () => {
       });
       expect(document.activeElement).toBe(items[1]);
     });
+
+    it('should focus first item when opened with Enter key', async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+            <DropdownMenuItem>Item 2</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button');
+      act(() => {
+        trigger.focus();
+      });
+      await user.keyboard('[Enter]');
+
+      await waitFor(() => {
+        const items = screen.getAllByRole('menuitem');
+        expect(document.activeElement).toBe(items[0]);
+      });
+    });
+
+    it('should focus first item when opened with ArrowDown key', async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+            <DropdownMenuItem>Item 2</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button');
+      act(() => {
+        trigger.focus();
+      });
+      await user.keyboard('[ArrowDown]');
+
+      await waitFor(() => {
+        const items = screen.getAllByRole('menuitem');
+        expect(document.activeElement).toBe(items[0]);
+      });
+    });
+
+    it('should focus last item when opened with ArrowUp key', async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+            <DropdownMenuItem>Item 2</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button');
+      act(() => {
+        trigger.focus();
+      });
+      await user.keyboard('[ArrowUp]');
+
+      await waitFor(() => {
+        const items = screen.getAllByRole('menuitem');
+        expect(document.activeElement).toBe(items[1]);
+      });
+    });
+
+    it('should not focus any item when opened with pointer click', async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+            <DropdownMenuItem>Item 2</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button');
+      await user.click(trigger);
+
+      await waitFor(() => {
+        expect(screen.getByRole('menu')).toBeInTheDocument();
+      });
+
+      const items = screen.getAllByRole('menuitem');
+      items.forEach((item) => {
+        expect(document.activeElement).not.toBe(item);
+      });
+    });
   });
 
   describe('Screen Reader Support', () => {

@@ -52,7 +52,9 @@ export const DropdownMenuTrigger = <T extends ElementType = 'button'>({
       if (menu.open) {
         menu.closeMenu();
       } else {
-        handleOpen('first');
+        // event.detail === 0 → keyboard-triggered click (Enter/Space)
+        // event.detail >= 1 → real pointer click
+        handleOpen(event.detail === 0 ? 'first' : 'none');
       }
       onClick?.(event);
     },
