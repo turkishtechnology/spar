@@ -9,6 +9,30 @@ import type {
 import { AccordionContext } from './hooks';
 
 /**
+ * Coerce any caller-supplied `activeIndex` into the canonical shape this
+ * component reasons about — array when `allowMultiple`, scalar otherwise.
+ *
+ * Mirrors Takeoff Core's behavior: a scalar passed in `allowMultiple` mode
+ * is wrapped, and an array passed in single mode collapses to its last
+ * element ("only the last value is used"). Callers stay free to pass either
+ * shape; the rest of the component never has to second-guess it.
+ */
+const normalizeActiveIndex = (
+  input: AccordionActiveIndex | undefined,
+  allowMultiple: boolean,
+): AccordionActiveIndex => {
+  if (allowMultiple) {
+    if (input === undefined) return [];
+    return Array.isArray(input) ? input : [input];
+  }
+  if (input === undefined) return '';
+  if (Array.isArray(input)) {
+    return input.length === 0 ? '' : input[input.length - 1]!;
+  }
+  return input;
+};
+
+/**
  * Accordion root component providing context and state management for accordion items.
  * Supports single or multiple panel expansion with full keyboard navigation.
  *
@@ -42,9 +66,15 @@ export const Accordion = <T extends ElementType = 'div'>({
   const effectivePreventCollapse =
     preventCollapse ?? (legacyIsCollapsible !== undefined ? !legacyIsCollapsible : false);
 
-  const controlledValue: AccordionActiveIndex | undefined = controlledActiveIndex ?? legacyValue;
-  const initialValue: AccordionActiveIndex =
+  const rawControlled: AccordionActiveIndex | undefined = controlledActiveIndex ?? legacyValue;
+  const rawInitial: AccordionActiveIndex =
     defaultActiveIndex ?? legacyDefaultValue ?? (effectiveAllowMultiple ? [] : '');
+
+  const normalizedControlled =
+    rawControlled !== undefined
+      ? normalizeActiveIndex(rawControlled, effectiveAllowMultiple)
+      : undefined;
+  const normalizedInitial = normalizeActiveIndex(rawInitial, effectiveAllowMultiple);
 
   const handleChange = useCallback(
     (next: AccordionActiveIndex) => {
@@ -61,9 +91,9 @@ export const Accordion = <T extends ElementType = 'div'>({
     [onActiveIndexChange, legacyOnValueChange],
   );
 
-  const [currentValue = initialValue, setValue] = useControlledState<AccordionActiveIndex>(
-    controlledValue,
-    initialValue,
+  const [currentValue = normalizedInitial, setValue] = useControlledState<AccordionActiveIndex>(
+    normalizedControlled,
+    normalizedInitial,
     handleChange,
   );
 

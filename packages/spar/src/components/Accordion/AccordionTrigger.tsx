@@ -3,6 +3,9 @@ import type { AccordionTriggerProps, AccordionTriggerRenderProps } from './types
 import { useAccordionContext, useAccordionItemContext } from './hooks';
 import { CollapsibleTrigger } from '../Collapsible';
 
+const getRegistryItemId = (itemKey: string | number): string =>
+  `${typeof itemKey}:${String(itemKey)}`;
+
 /**
  * Accordion trigger button that toggles panel visibility. Provides keyboard navigation and screen reader support.
  */
@@ -18,7 +21,8 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
   const itemContext = useAccordionItemContext();
   const triggerRef = useRef<HTMLButtonElement>(null);
 
-  const itemId = useMemo(() => String(itemContext.itemKey), [itemContext.itemKey]);
+  const itemId = useMemo(() => getRegistryItemId(itemContext.itemKey), [itemContext.itemKey]);
+  const dataValue = useMemo(() => String(itemContext.itemKey), [itemContext.itemKey]);
 
   useEffect(() => {
     if (triggerRef.current) {
@@ -96,7 +100,7 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
       onClick={onClick}
       onKeyDown={handleKeyDown}
       data-accordion-trigger=''
-      data-value={itemId}
+      data-value={dataValue}
       {...props}
     >
       {typeof children === 'function' ? children(renderProps) : children}

@@ -1,14 +1,19 @@
-import { useMemo, useCallback, useId, ElementType } from 'react';
+import { useMemo, useCallback, useId, useRef, ElementType } from 'react';
 import type { AccordionItemContextValue, AccordionItemKey, AccordionItemProps } from './types';
 import { useAccordionContext, AccordionItemContext } from './hooks';
 import { Collapsible } from '../Collapsible';
+
+const MISSING_ITEM_KEY_MESSAGE =
+  '[spar] Accordion.Item is missing `itemKey`. The component fell back to a generated unique id; the item cannot be matched against `activeIndex` or `defaultActiveIndex`. Pass an explicit `itemKey` (or the deprecated `value` alias).';
 
 /**
  * Individual accordion item providing context for trigger and content components.
  *
  * Identity is taken from `itemKey` (primary) or the deprecated `value` alias.
- * Items declared without either receive an empty-string identity, which is
- * almost certainly a developer error and will not match any `activeIndex`.
+ * When neither is supplied, the item falls back to a generated `useId` value
+ * so each item still has a distinct identity (the previous empty-string
+ * fallback caused every keyless item to share state). A one-shot dev warning
+ * surfaces the misuse without crashing in production.
  */
 export const AccordionItem = <T extends ElementType = 'div'>({
   itemKey: itemKeyProp,
@@ -26,7 +31,20 @@ export const AccordionItem = <T extends ElementType = 'div'>({
   const triggerId = `${baseId}-trigger`;
   const contentId = `${baseId}-content`;
 
-  const itemKey: AccordionItemKey = itemKeyProp ?? legacyValue ?? '';
+  const hasExplicitKey = itemKeyProp !== undefined || legacyValue !== undefined;
+  const itemKey: AccordionItemKey = itemKeyProp ?? legacyValue ?? generatedId;
+
+  const warnedRef = useRef(false);
+  if (
+    !hasExplicitKey &&
+    !warnedRef.current &&
+    typeof process !== 'undefined' &&
+    process.env.NODE_ENV !== 'production'
+  ) {
+    warnedRef.current = true;
+    // eslint-disable-next-line no-console
+    console.warn(MISSING_ITEM_KEY_MESSAGE);
+  }
 
   const isOpen = useMemo(() => {
     if (!accordionContext.allowMultiple) {
