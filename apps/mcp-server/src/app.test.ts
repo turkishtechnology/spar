@@ -9,7 +9,7 @@ describe('HTTP API 1', () => {
       expect(res.status).toBe(200);
       expect(res.body).toMatchObject({
         status: 'ok',
-        server: 'spar-docs',
+        server: 'spar-mcp',
         version: '0.1.0',
         transport: 'streamable-http',
       });
@@ -21,7 +21,7 @@ describe('HTTP API 1', () => {
       const res = await request(app).get('/info');
       expect(res.status).toBe(200);
       expect(res.body).toMatchObject({
-        name: 'spar-docs',
+        name: 'spar-mcp',
         version: '0.1.0',
         description: expect.any(String),
         transport: 'streamable-http',
