@@ -33,7 +33,7 @@ export default function AccordionDemo() {
             Only one panel open at a time. Arrow Up/Down navigate between triggers. Enter/Space
             toggles the focused panel.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Accordion.Root className='demo-accordion' defaultValue='s-1'>
@@ -61,6 +61,18 @@ export default function AccordionDemo() {
                 toggle → Home/End for first/last
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Accordion.Root defaultValue='item-1'>
+  <Accordion.Item value='item-1'>
+    <Accordion.Header>
+      <Accordion.Trigger>Tab 1</Accordion.Trigger>
+    </Accordion.Header>
+    <Accordion.Content>...</Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -68,14 +80,15 @@ export default function AccordionDemo() {
         <section className='demo-section'>
           <h2>2. Multiple Expand Mode</h2>
           <p className='demo-description'>
-            Multiple panels can be open simultaneously with <code>type=&quot;multiple&quot;</code>.
+            Multiple panels can be open simultaneously with{' '}
+            <code>selectionMode=&quot;multiple&quot;</code>.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Accordion.Root
                   className='demo-accordion'
-                  type='multiple'
+                  selectionMode='multiple'
                   defaultValue={['m-1', 'm-3']}
                 >
                   {['Tab 1', 'Tab 2', 'Tab 3'].map((title, i) => (
@@ -99,6 +112,18 @@ export default function AccordionDemo() {
                 </Accordion.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Accordion.Root selectionMode='multiple' defaultValue='item-1'>
+  <Accordion.Item value='item-1'>
+    <Accordion.Header>
+      <Accordion.Trigger>Tab 1</Accordion.Trigger>
+    </Accordion.Header>
+    <Accordion.Content>...</Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -109,7 +134,7 @@ export default function AccordionDemo() {
             With <code>isCollapsible</code>, all panels can be closed in single mode. Without it,
             one panel always stays open.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Accordion.Root className='demo-accordion' isCollapsible>
@@ -133,6 +158,18 @@ export default function AccordionDemo() {
                 </Accordion.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Accordion.Root isCollapsible>
+  <Accordion.Item value='panel-a'>
+    <Accordion.Header>
+      <Accordion.Trigger>Panel A</Accordion.Trigger>
+    </Accordion.Header>
+    <Accordion.Content>...</Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -142,7 +179,7 @@ export default function AccordionDemo() {
           <p className='demo-description'>
             Parent manages which panel is open. External buttons can open specific panels.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-col'>
                 <div className='demo-row'>
@@ -183,6 +220,20 @@ export default function AccordionDemo() {
                 </Accordion.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`const [value, setValue] = useState<string | string[]>('item-1');
+
+<Accordion.Root value={value} onValueChange={(v)=>setValue(v)}>
+  <Accordion.Item value='item-1'>
+    <Accordion.Header>
+      <Accordion.Trigger>First Panel</Accordion.Trigger>
+    </Accordion.Header>
+    <Accordion.Content>...</Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -192,45 +243,61 @@ export default function AccordionDemo() {
           <p className='demo-description'>
             Individual items can be disabled. Keyboard navigation skips disabled triggers.
           </p>
-          <div className='demo-area'>
-            <Accordion.Root className='demo-accordion' isCollapsible>
-              <Accordion.Item className='demo-accordion-item' value='d-1'>
-                <Accordion.Header className='demo-accordion-header'>
-                  <Accordion.Trigger className='demo-accordion-trigger'>
-                    Enabled item
-                    <ChevronIcon />
-                  </Accordion.Trigger>
-                </Accordion.Header>
-                <Accordion.Content className='demo-accordion-content'>
-                  This item is enabled and interactive.
-                </Accordion.Content>
-              </Accordion.Item>
-              <Accordion.Item className='demo-accordion-item' value='d-2' disabled>
-                <Accordion.Header className='demo-accordion-header'>
-                  <Accordion.Trigger className='demo-accordion-trigger'>
-                    Disabled item
-                    <ChevronIcon />
-                  </Accordion.Trigger>
-                </Accordion.Header>
-                <Accordion.Content className='demo-accordion-content'>
-                  This content should not be reachable.
-                </Accordion.Content>
-              </Accordion.Item>
-              <Accordion.Item className='demo-accordion-item' value='d-3'>
-                <Accordion.Header className='demo-accordion-header'>
-                  <Accordion.Trigger className='demo-accordion-trigger'>
-                    Another enabled item
-                    <ChevronIcon />
-                  </Accordion.Trigger>
-                </Accordion.Header>
-                <Accordion.Content className='demo-accordion-content'>
-                  Arrow Down from first item should skip disabled and land here.
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion.Root>
-          </div>
-          <div className='keyboard-hint'>
-            <strong>Expected:</strong> Arrow keys skip the disabled item.
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <Accordion.Root className='demo-accordion' isCollapsible>
+                  <Accordion.Item className='demo-accordion-item' value='d-1'>
+                    <Accordion.Header className='demo-accordion-header'>
+                      <Accordion.Trigger className='demo-accordion-trigger'>
+                        Enabled item
+                        <ChevronIcon />
+                      </Accordion.Trigger>
+                    </Accordion.Header>
+                    <Accordion.Content className='demo-accordion-content'>
+                      This item is enabled and interactive.
+                    </Accordion.Content>
+                  </Accordion.Item>
+                  <Accordion.Item className='demo-accordion-item' value='d-2' disabled>
+                    <Accordion.Header className='demo-accordion-header'>
+                      <Accordion.Trigger className='demo-accordion-trigger'>
+                        Disabled item
+                        <ChevronIcon />
+                      </Accordion.Trigger>
+                    </Accordion.Header>
+                    <Accordion.Content className='demo-accordion-content'>
+                      This content should not be reachable.
+                    </Accordion.Content>
+                  </Accordion.Item>
+                  <Accordion.Item className='demo-accordion-item' value='d-3'>
+                    <Accordion.Header className='demo-accordion-header'>
+                      <Accordion.Trigger className='demo-accordion-trigger'>
+                        Another enabled item
+                        <ChevronIcon />
+                      </Accordion.Trigger>
+                    </Accordion.Header>
+                    <Accordion.Content className='demo-accordion-content'>
+                      Arrow Down from first item should skip disabled and land here.
+                    </Accordion.Content>
+                  </Accordion.Item>
+                </Accordion.Root>
+              </div>
+              <div className='keyboard-hint'>
+                <strong>Expected:</strong> Arrow keys skip the disabled item.
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Accordion.Root>
+  <Accordion.Item value='d-2' disabled>
+    <Accordion.Header>
+      <Accordion.Trigger>Disabled item</Accordion.Trigger>
+    </Accordion.Header>
+    <Accordion.Content>...</Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -241,7 +308,7 @@ export default function AccordionDemo() {
             With <code>orientation=&quot;horizontal&quot;</code>, arrow Left/Right navigate instead
             of Up/Down.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Accordion.Root
@@ -274,6 +341,18 @@ export default function AccordionDemo() {
                 <strong>Keyboard:</strong> ← → to navigate (not ↑ ↓)
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Accordion.Root orientation='horizontal'>
+  <Accordion.Item value='h-1'>
+    <Accordion.Header>
+      <Accordion.Trigger>Tab 1</Accordion.Trigger>
+    </Accordion.Header>
+    <Accordion.Content>...</Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -283,26 +362,42 @@ export default function AccordionDemo() {
           <p className='demo-description'>
             All items disabled via root <code>disabled</code> prop.
           </p>
-          <div className='demo-area'>
-            <Accordion.Root className='demo-accordion' disabled>
-              {['Item A', 'Item B'].map((title, i) => (
-                <Accordion.Item
-                  key={`ad-${i + 1}`}
-                  className='demo-accordion-item'
-                  value={`ad-${i + 1}`}
-                >
-                  <Accordion.Header className='demo-accordion-header'>
-                    <Accordion.Trigger className='demo-accordion-trigger'>
-                      {title} (all disabled)
-                      <ChevronIcon />
-                    </Accordion.Trigger>
-                  </Accordion.Header>
-                  <Accordion.Content className='demo-accordion-content'>
-                    Should not be accessible.
-                  </Accordion.Content>
-                </Accordion.Item>
-              ))}
-            </Accordion.Root>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <Accordion.Root className='demo-accordion' disabled>
+                  {['Item A', 'Item B'].map((title, i) => (
+                    <Accordion.Item
+                      key={`ad-${i + 1}`}
+                      className='demo-accordion-item'
+                      value={`ad-${i + 1}`}
+                    >
+                      <Accordion.Header className='demo-accordion-header'>
+                        <Accordion.Trigger className='demo-accordion-trigger'>
+                          {title} (all disabled)
+                          <ChevronIcon />
+                        </Accordion.Trigger>
+                      </Accordion.Header>
+                      <Accordion.Content className='demo-accordion-content'>
+                        Should not be accessible.
+                      </Accordion.Content>
+                    </Accordion.Item>
+                  ))}
+                </Accordion.Root>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Accordion.Root disabled>
+  <Accordion.Item value='a'>
+    <Accordion.Header>
+      <Accordion.Trigger>Item A</Accordion.Trigger>
+    </Accordion.Header>
+    <Accordion.Content>...</Accordion.Content>
+  </Accordion.Item>
+</Accordion.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 

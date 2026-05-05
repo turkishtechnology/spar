@@ -28,7 +28,7 @@ export default function DialogDemo() {
             and description are linked via <code>aria-labelledby</code> and{' '}
             <code>aria-describedby</code>.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Dialog.Root>
@@ -51,6 +51,19 @@ export default function DialogDemo() {
                 to close → Focus returns to trigger
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Dialog.Root>
+  <Dialog.Trigger>Open Modal Dialog</Dialog.Trigger>
+  <Dialog.Overlay />
+  <Dialog.Content>
+    <Dialog.Title>Confirm Action</Dialog.Title>
+    <Dialog.Description>Are you sure you want to proceed?</Dialog.Description>
+    <Dialog.Close>Cancel</Dialog.Close>
+  </Dialog.Content>
+</Dialog.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -61,7 +74,7 @@ export default function DialogDemo() {
             Non-modal dialog does NOT trap focus. Background content remains interactive. Uses{' '}
             <code>modal=&#123;false&#125;</code>.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Dialog.Root modal={false}>
@@ -79,6 +92,18 @@ export default function DialogDemo() {
                 <strong>Expected:</strong> Tab can leave the dialog to page content.
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Dialog.Root modal={false}>
+  <Dialog.Trigger>Open Non-modal Dialog</Dialog.Trigger>
+  <Dialog.Content>
+    <Dialog.Title>Info Panel</Dialog.Title>
+    <Dialog.Description>Background stays interactive.</Dialog.Description>
+    <Dialog.Close>Close</Dialog.Close>
+  </Dialog.Content>
+</Dialog.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -88,7 +113,7 @@ export default function DialogDemo() {
           <p className='demo-description'>
             Parent manages open state. Can be opened/closed programmatically.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-col'>
                 <div className='demo-row'>
@@ -114,6 +139,20 @@ export default function DialogDemo() {
                 </Dialog.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`const [open, setOpen] = useState(false);
+
+<Dialog.Root open={open} onOpenChange={(o)=>setOpen(o)}>
+  <Dialog.Trigger>Open Controlled Dialog</Dialog.Trigger>
+  <Dialog.Overlay />
+  <Dialog.Content>
+    <Dialog.Title>Controlled Dialog</Dialog.Title>
+    <Dialog.Close>Close</Dialog.Close>
+  </Dialog.Content>
+</Dialog.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -124,7 +163,7 @@ export default function DialogDemo() {
             Dialog containing form elements. Focus should move to the first focusable element. Tab
             order stays within the dialog.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Dialog.Root>
@@ -182,6 +221,20 @@ export default function DialogDemo() {
                 Save → back to Name
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Dialog.Root>
+  <Dialog.Trigger>Edit Profile</Dialog.Trigger>
+  <Dialog.Overlay />
+  <Dialog.Content>
+    <Dialog.Title>Edit Profile</Dialog.Title>
+    <input type='text' placeholder='Your name' />
+    <input type='email' placeholder='your@email.com' />
+    <Dialog.Close>Save</Dialog.Close>
+  </Dialog.Content>
+</Dialog.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -189,15 +242,30 @@ export default function DialogDemo() {
         <section className='demo-section'>
           <h2>5. Disabled Trigger</h2>
           <p className='demo-description'>Dialog trigger can be disabled to prevent opening.</p>
-          <div className='demo-area demo-row'>
-            <Dialog.Root disabled>
-              <Dialog.Trigger className='demo-btn'>Disabled Trigger</Dialog.Trigger>
-              <Dialog.Overlay className='demo-overlay' />
-              <Dialog.Content className='demo-dialog'>
-                <Dialog.Title className='demo-dialog-title'>Should not open</Dialog.Title>
-                <Dialog.Close className='demo-btn'>Close</Dialog.Close>
-              </Dialog.Content>
-            </Dialog.Root>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area demo-row'>
+                <Dialog.Root disabled>
+                  <Dialog.Trigger className='demo-btn'>Disabled Trigger</Dialog.Trigger>
+                  <Dialog.Overlay className='demo-overlay' />
+                  <Dialog.Content className='demo-dialog'>
+                    <Dialog.Title className='demo-dialog-title'>Should not open</Dialog.Title>
+                    <Dialog.Close className='demo-btn'>Close</Dialog.Close>
+                  </Dialog.Content>
+                </Dialog.Root>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Dialog.Root disabled>
+  <Dialog.Trigger>Disabled Trigger</Dialog.Trigger>
+  <Dialog.Overlay />
+  <Dialog.Content>
+    <Dialog.Title>Should not open</Dialog.Title>
+  </Dialog.Content>
+</Dialog.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -205,7 +273,7 @@ export default function DialogDemo() {
         <section className='demo-section'>
           <h2>6. Render Props Pattern</h2>
           <p className='demo-description'>Trigger exposes render props to show open/close state.</p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Dialog.Root>
@@ -222,6 +290,20 @@ export default function DialogDemo() {
                   </Dialog.Content>
                 </Dialog.Root>
               </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Dialog.Root>
+  <Dialog.Trigger>
+    {({ isOpen }) => (isOpen ? 'Close dialog' : 'Open dialog')}
+  </Dialog.Trigger>
+  <Dialog.Overlay />
+  <Dialog.Content>
+    <Dialog.Title>Render Props Demo</Dialog.Title>
+    <Dialog.Close>Close</Dialog.Close>
+  </Dialog.Content>
+</Dialog.Root>`}</code>
+              </pre>
             </div>
           </div>
         </section>

@@ -26,7 +26,7 @@ export default function CollapsibleDemo() {
             Click or press Enter/Space to toggle. Screen readers announce expanded/collapsed state
             via <code>aria-expanded</code>.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Collapsible.Root className='demo-collapsible'>
@@ -46,6 +46,16 @@ export default function CollapsibleDemo() {
                 when expanded
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Collapsible.Root>
+  <Collapsible.Trigger>Show more info</Collapsible.Trigger>
+  <Collapsible.Content>
+    <p>Collapsible content</p>
+  </Collapsible.Content>
+</Collapsible.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -53,17 +63,32 @@ export default function CollapsibleDemo() {
         <section className='demo-section'>
           <h2>2. Default Open</h2>
           <p className='demo-description'>Collapsible that starts expanded.</p>
-          <div className='demo-area'>
-            <Collapsible.Root className='demo-collapsible' defaultOpen>
-              <Collapsible.Trigger className='demo-collapsible-trigger'>
-                This is already expanded<span className='demo-chevron'>▾</span>
-              </Collapsible.Trigger>
-              <Collapsible.Content className='demo-collapsible-content'>
-                <p>
-                  By setting <code>defaultOpen</code>, the collapsible starts in the expanded state.
-                </p>
-              </Collapsible.Content>
-            </Collapsible.Root>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <Collapsible.Root className='demo-collapsible' defaultOpen>
+                  <Collapsible.Trigger className='demo-collapsible-trigger'>
+                    This is already expanded<span className='demo-chevron'>▾</span>
+                  </Collapsible.Trigger>
+                  <Collapsible.Content className='demo-collapsible-content'>
+                    <p>
+                      By setting <code>defaultOpen</code>, the collapsible starts in the expanded
+                      state.
+                    </p>
+                  </Collapsible.Content>
+                </Collapsible.Root>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Collapsible.Root defaultOpen>
+  <Collapsible.Trigger>This is already expanded</Collapsible.Trigger>
+  <Collapsible.Content>
+    <p>Starts open</p>
+  </Collapsible.Content>
+</Collapsible.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -73,7 +98,7 @@ export default function CollapsibleDemo() {
           <p className='demo-description'>
             Parent manages open state. External buttons can toggle programmatically.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-col'>
                 <div className='demo-row'>
@@ -103,6 +128,18 @@ export default function CollapsibleDemo() {
                 </Collapsible.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`const [open, setOpen] = useState(false);
+
+<Collapsible.Root open={open} onOpenChange={(o)=>setOpen(o)}>
+  <Collapsible.Trigger>Controlled section</Collapsible.Trigger>
+  <Collapsible.Content>
+    <p>This content is controlled by parent state.</p>
+  </Collapsible.Content>
+</Collapsible.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -110,23 +147,44 @@ export default function CollapsibleDemo() {
         <section className='demo-section'>
           <h2>4. Disabled Collapsible</h2>
           <p className='demo-description'>Disabled collapsible trigger cannot be activated.</p>
-          <div className='demo-area demo-col'>
-            <Collapsible.Root className='demo-collapsible' disabled>
-              <Collapsible.Trigger className='demo-collapsible-trigger'>
-                Disabled (collapsed) <span className='demo-chevron'>▾</span>
-              </Collapsible.Trigger>
-              <Collapsible.Content className='demo-collapsible-content'>
-                <p>Should not be reachable.</p>
-              </Collapsible.Content>
-            </Collapsible.Root>
-            <Collapsible.Root className='demo-collapsible' disabled defaultOpen>
-              <Collapsible.Trigger className='demo-collapsible-trigger'>
-                Disabled (expanded) <span className='demo-chevron'>▾</span>
-              </Collapsible.Trigger>
-              <Collapsible.Content className='demo-collapsible-content'>
-                <p>Content is visible but trigger cannot be toggled.</p>
-              </Collapsible.Content>
-            </Collapsible.Root>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area demo-col'>
+                <Collapsible.Root className='demo-collapsible' disabled>
+                  <Collapsible.Trigger className='demo-collapsible-trigger'>
+                    Disabled (collapsed) <span className='demo-chevron'>▾</span>
+                  </Collapsible.Trigger>
+                  <Collapsible.Content className='demo-collapsible-content'>
+                    <p>Should not be reachable.</p>
+                  </Collapsible.Content>
+                </Collapsible.Root>
+                <Collapsible.Root className='demo-collapsible' disabled defaultOpen>
+                  <Collapsible.Trigger className='demo-collapsible-trigger'>
+                    Disabled (expanded) <span className='demo-chevron'>▾</span>
+                  </Collapsible.Trigger>
+                  <Collapsible.Content className='demo-collapsible-content'>
+                    <p>Content is visible but trigger cannot be toggled.</p>
+                  </Collapsible.Content>
+                </Collapsible.Root>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Collapsible.Root disabled>
+  <Collapsible.Trigger>Disabled (collapsed)</Collapsible.Trigger>
+  <Collapsible.Content>
+    <p>Should not be reachable.</p>
+  </Collapsible.Content>
+</Collapsible.Root>
+
+<Collapsible.Root disabled defaultOpen>
+  <Collapsible.Trigger>Disabled (expanded)</Collapsible.Trigger>
+  <Collapsible.Content>
+    <p>Content is visible but cannot be toggled.</p>
+  </Collapsible.Content>
+</Collapsible.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -137,20 +195,36 @@ export default function CollapsibleDemo() {
             Trigger exposes <code>isOpen</code>, <code>open</code>, <code>close</code>,{' '}
             <code>toggle</code> for custom rendering.
           </p>
-          <div className='demo-area'>
-            <Collapsible.Root className='demo-collapsible'>
-              <Collapsible.Trigger className='demo-collapsible-trigger'>
-                {({ isOpen }) => (
-                  <>
-                    {isOpen ? '📂 Collapse details' : '📁 Expand details'}
-                    <span className='demo-chevron'>{isOpen ? '▴' : '▾'}</span>
-                  </>
-                )}
-              </Collapsible.Trigger>
-              <Collapsible.Content className='demo-collapsible-content'>
-                <p>The trigger text and icon change based on open state.</p>
-              </Collapsible.Content>
-            </Collapsible.Root>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area'>
+                <Collapsible.Root className='demo-collapsible'>
+                  <Collapsible.Trigger className='demo-collapsible-trigger'>
+                    {({ isOpen }) => (
+                      <>
+                        {isOpen ? '📂 Collapse details' : '📁 Expand details'}
+                        <span className='demo-chevron'>{isOpen ? '▴' : '▾'}</span>
+                      </>
+                    )}
+                  </Collapsible.Trigger>
+                  <Collapsible.Content className='demo-collapsible-content'>
+                    <p>The trigger text and icon change based on open state.</p>
+                  </Collapsible.Content>
+                </Collapsible.Root>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Collapsible.Root>
+  <Collapsible.Trigger>
+    {({ isOpen }) => (isOpen ? 'Collapse details' : 'Expand details')}
+  </Collapsible.Trigger>
+  <Collapsible.Content>
+    <p>Content</p>
+  </Collapsible.Content>
+</Collapsible.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -161,7 +235,7 @@ export default function CollapsibleDemo() {
             Collapsible content containing focusable elements. Tab order should include content
             elements when expanded.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Collapsible.Root className='demo-collapsible'>
@@ -194,6 +268,18 @@ export default function CollapsibleDemo() {
                 element
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Collapsible.Root>
+  <Collapsible.Trigger>Advanced settings</Collapsible.Trigger>
+  <Collapsible.Content>
+    <input type='text' placeholder='Enter API key' />
+    <button>Save</button>
+    <button>Reset</button>
+  </Collapsible.Content>
+</Collapsible.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -204,31 +290,52 @@ export default function CollapsibleDemo() {
             Multiple independent collapsible sections. Each manages its own state. Unlike Accordion,
             multiple can be open simultaneously.
           </p>
-          <div className='demo-area demo-col'>
-            {[
-              {
-                q: 'What browsers are supported?',
-                a: 'All modern browsers including Chrome, Firefox, Safari, and Edge.',
-              },
-              {
-                q: 'Is it free to use?',
-                a: 'Yes, Spar is open source and free for both personal and commercial use.',
-              },
-              {
-                q: 'Does it work with Next.js?',
-                a: 'Yes, Spar is fully compatible with Next.js, Remix, and other React frameworks.',
-              },
-            ].map((faq) => (
-              <Collapsible.Root key={`faq-${faq.q.slice(0, 20)}`} className='demo-collapsible'>
-                <Collapsible.Trigger className='demo-collapsible-trigger'>
-                  {faq.q}
-                  <span className='demo-chevron'>▾</span>
-                </Collapsible.Trigger>
-                <Collapsible.Content className='demo-collapsible-content'>
-                  <p>{faq.a}</p>
-                </Collapsible.Content>
-              </Collapsible.Root>
-            ))}
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area demo-col'>
+                {[
+                  {
+                    q: 'What browsers are supported?',
+                    a: 'All modern browsers including Chrome, Firefox, Safari, and Edge.',
+                  },
+                  {
+                    q: 'Is it free to use?',
+                    a: 'Yes, Spar is open source and free for both personal and commercial use.',
+                  },
+                  {
+                    q: 'Does it work with Next.js?',
+                    a: 'Yes, Spar is fully compatible with Next.js, Remix, and other React frameworks.',
+                  },
+                ].map((faq) => (
+                  <Collapsible.Root key={`faq-${faq.q.slice(0, 20)}`} className='demo-collapsible'>
+                    <Collapsible.Trigger className='demo-collapsible-trigger'>
+                      {faq.q}
+                      <span className='demo-chevron'>▾</span>
+                    </Collapsible.Trigger>
+                    <Collapsible.Content className='demo-collapsible-content'>
+                      <p>{faq.a}</p>
+                    </Collapsible.Content>
+                  </Collapsible.Root>
+                ))}
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Collapsible.Root>
+  <Collapsible.Trigger>What browsers are supported?</Collapsible.Trigger>
+  <Collapsible.Content>
+    <p>All modern browsers.</p>
+  </Collapsible.Content>
+</Collapsible.Root>
+
+<Collapsible.Root>
+  <Collapsible.Trigger>Is it free to use?</Collapsible.Trigger>
+  <Collapsible.Content>
+    <p>Yes, it is open source.</p>
+  </Collapsible.Content>
+</Collapsible.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 

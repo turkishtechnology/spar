@@ -21,7 +21,9 @@ export const SelectItem = <T extends ElementType = 'div'>({
   const context = useSelectContext();
   const collection = useSelectCollectionContext();
   const itemRef = useRef<HTMLDivElement>(null);
-  const [textValue, setTextValue] = useState(providedTextValue || '');
+  const [textValue, setTextValue] = useState(
+    providedTextValue || context.items.get(value)?.textValue || '',
+  );
 
   // Merge external ref with internal ref
   const mergedRef = useMergedRef(itemRef, ref);
@@ -30,10 +32,21 @@ export const SelectItem = <T extends ElementType = 'div'>({
   useEffect(() => {
     context.registerItem(value, {
       value,
-      textValue,
+      textValue: textValue || context.items.get(value)?.textValue || '',
       disabled,
       ref: itemRef,
+      mounted: true,
     });
+    return () => {
+      // Keep cache (textValue) but mark unmounted so navigation/typeahead ignores it
+      context.registerItem(value, {
+        value,
+        textValue: context.items.get(value)?.textValue || textValue || '',
+        disabled,
+        ref: itemRef,
+        mounted: false,
+      });
+    };
 
     // Note: We intentionally do NOT unregister on unmount
     // This keeps the textValue cached so SelectValue can display it
@@ -84,7 +97,9 @@ export const SelectItem = <T extends ElementType = 'div'>({
   );
 
   const registerItemText = useCallback((text: string) => {
-    setTextValue(text);
+    if (text) {
+      setTextValue(text);
+    }
   }, []);
 
   const itemContextValue = useMemo<SelectItemContextValue>(
@@ -121,6 +136,7 @@ export const SelectItem = <T extends ElementType = 'div'>({
   };
 
   const itemProps = {
+    id: `${context.contentId}-option-${encodeURIComponent(value)}`,
     ref: mergedRef,
     ...ariaAttributes,
     ...dataAttributes,

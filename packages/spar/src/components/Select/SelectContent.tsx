@@ -99,18 +99,20 @@ export const SelectContent = <T extends ElementType = 'div'>({
 
   // Enabled items for keyboard navigation
   const enabledItems = useMemo(
-    () => Array.from(context.items.values()).filter((item) => !item.disabled),
+    () => Array.from(context.items.values()).filter((item) => item.mounted && !item.disabled),
     [context.items],
   );
 
   // Items mapped for typeahead (id = value string)
   const typeaheadItems = useMemo(
     () =>
-      Array.from(context.items.values()).map((item) => ({
-        id: item.value,
-        textValue: item.textValue,
-        disabled: item.disabled,
-      })),
+      Array.from(context.items.values())
+        .filter((item) => item.mounted)
+        .map((item) => ({
+          id: item.value,
+          textValue: item.textValue,
+          disabled: item.disabled,
+        })),
     [context.items],
   );
 
@@ -247,8 +249,8 @@ export const SelectContent = <T extends ElementType = 'div'>({
           break;
 
         case 'Tab':
-          event.preventDefault();
           context.onOpenChange(false);
+          context.triggerRef.current?.focus();
           break;
 
         default:
@@ -306,7 +308,15 @@ export const SelectContent = <T extends ElementType = 'div'>({
   );
 
   if (!context.open || !mounted) {
-    return null;
+    // Render children in a hidden container (no portal, no positioning)
+    // so items can register their data for SelectValue display.
+    return (
+      <SelectContentContext.Provider value={contentContextValue}>
+        <SelectCollectionContext.Provider value={collectionValue}>
+          <Component hidden>{children}</Component>
+        </SelectCollectionContext.Provider>
+      </SelectContentContext.Provider>
+    );
   }
 
   // Combine Floating UI styles with component-specific extras
@@ -318,6 +328,9 @@ export const SelectContent = <T extends ElementType = 'div'>({
   const ariaAttributes = {
     role: 'listbox',
     'aria-labelledby': context.triggerId,
+    'aria-activedescendant': highlightedId
+      ? `${context.contentId}-option-${encodeURIComponent(highlightedId)}`
+      : undefined,
   };
 
   const dataAttributes = {

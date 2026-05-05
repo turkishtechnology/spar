@@ -11,7 +11,7 @@ import {
 
 // Test setup helper
 const BasicAccordion = ({
-  type = 'single',
+  selectionMode = 'single',
   isCollapsible = false,
   value,
   defaultValue,
@@ -22,7 +22,7 @@ const BasicAccordion = ({
   ...rest
 }: Partial<React.ComponentProps<typeof Accordion>> = {}) => (
   <Accordion
-    type={type}
+    selectionMode={selectionMode}
     isCollapsible={isCollapsible}
     {...(value !== undefined && { value })}
     {...(defaultValue !== undefined && { defaultValue })}
@@ -71,11 +71,13 @@ describe('Accordion', () => {
     });
 
     it('should apply correct data attributes', () => {
-      const { container } = render(<BasicAccordion orientation='horizontal' type='multiple' />);
+      const { container } = render(
+        <BasicAccordion orientation='horizontal' selectionMode='multiple' />,
+      );
       const accordion = container.firstChild as HTMLElement;
 
       expect(accordion).toHaveAttribute('data-orientation', 'horizontal');
-      expect(accordion).toHaveAttribute('data-type', 'multiple');
+      expect(accordion).toHaveAttribute('data-selection-mode', 'multiple');
     });
 
     it('should render with custom as prop', () => {
@@ -94,10 +96,10 @@ describe('Accordion', () => {
     });
   });
 
-  describe('Single Type Behavior', () => {
+  describe('Single Mode Behavior', () => {
     it('should expand one item at a time in single mode', async () => {
       const user = userEvent.setup();
-      render(<BasicAccordion type='single' />);
+      render(<BasicAccordion selectionMode='single' />);
 
       const trigger1 = screen.getByRole('button', { name: 'Item 1' });
       const trigger2 = screen.getByRole('button', { name: 'Item 2' });
@@ -117,7 +119,7 @@ describe('Accordion', () => {
 
     it('should not collapse expanded item when isCollapsible is false', async () => {
       const user = userEvent.setup();
-      render(<BasicAccordion type='single' isCollapsible={false} />);
+      render(<BasicAccordion selectionMode='single' isCollapsible={false} />);
 
       const trigger = screen.getByRole('button', { name: 'Item 1' });
 
@@ -133,7 +135,7 @@ describe('Accordion', () => {
 
     it('should collapse expanded item when isCollapsible is true', async () => {
       const user = userEvent.setup();
-      render(<BasicAccordion type='single' isCollapsible={true} />);
+      render(<BasicAccordion selectionMode='single' isCollapsible={true} />);
 
       const trigger = screen.getByRole('button', { name: 'Item 1' });
 
@@ -148,10 +150,10 @@ describe('Accordion', () => {
     });
   });
 
-  describe('Multiple Type Behavior', () => {
+  describe('Multiple Mode Behavior', () => {
     it('should allow multiple items to be expanded simultaneously', async () => {
       const user = userEvent.setup();
-      render(<BasicAccordion type='multiple' />);
+      render(<BasicAccordion selectionMode='multiple' />);
 
       const trigger1 = screen.getByRole('button', { name: 'Item 1' });
       const trigger2 = screen.getByRole('button', { name: 'Item 2' });
@@ -167,7 +169,7 @@ describe('Accordion', () => {
 
     it('should toggle individual items in multiple mode', async () => {
       const user = userEvent.setup();
-      render(<BasicAccordion type='multiple' />);
+      render(<BasicAccordion selectionMode='multiple' />);
 
       const trigger1 = screen.getByRole('button', { name: 'Item 1' });
 
@@ -189,7 +191,7 @@ describe('Accordion', () => {
       const onValueChange = jest.fn();
 
       const { rerender } = render(
-        <BasicAccordion type='single' value='item-1' onValueChange={onValueChange} />,
+        <BasicAccordion selectionMode='single' value='item-1' onValueChange={onValueChange} />,
       );
 
       expect(screen.getByRole('button', { name: 'Item 1' })).toHaveAttribute(
@@ -210,7 +212,9 @@ describe('Accordion', () => {
       );
 
       // Simulate parent updating value
-      rerender(<BasicAccordion type='single' value='item-2' onValueChange={onValueChange} />);
+      rerender(
+        <BasicAccordion selectionMode='single' value='item-2' onValueChange={onValueChange} />,
+      );
 
       expect(screen.getByRole('button', { name: 'Item 1' })).toHaveAttribute(
         'aria-expanded',
@@ -227,7 +231,11 @@ describe('Accordion', () => {
       const onValueChange = jest.fn();
 
       const { rerender } = render(
-        <BasicAccordion type='multiple' value={['item-1']} onValueChange={onValueChange} />,
+        <BasicAccordion
+          selectionMode='multiple'
+          value={['item-1']}
+          onValueChange={onValueChange}
+        />,
       );
 
       expect(screen.getByRole('button', { name: 'Item 1' })).toHaveAttribute(
@@ -243,7 +251,7 @@ describe('Accordion', () => {
       // Simulate adding second item
       rerender(
         <BasicAccordion
-          type='multiple'
+          selectionMode='multiple'
           value={['item-1', 'item-2']}
           onValueChange={onValueChange}
         />,
@@ -262,7 +270,7 @@ describe('Accordion', () => {
 
   describe('Default Value', () => {
     it('should initialize with defaultValue in single mode', () => {
-      render(<BasicAccordion type='single' defaultValue='item-2' />);
+      render(<BasicAccordion selectionMode='single' defaultValue='item-2' />);
 
       expect(screen.getByRole('button', { name: 'Item 1' })).toHaveAttribute(
         'aria-expanded',
@@ -276,7 +284,7 @@ describe('Accordion', () => {
     });
 
     it('should initialize with defaultValue in multiple mode', () => {
-      render(<BasicAccordion type='multiple' defaultValue={['item-1', 'item-2']} />);
+      render(<BasicAccordion selectionMode='multiple' defaultValue={['item-1', 'item-2']} />);
 
       expect(screen.getByRole('button', { name: 'Item 1' })).toHaveAttribute(
         'aria-expanded',
@@ -333,7 +341,7 @@ describe('Accordion', () => {
       const onClick = jest.fn();
 
       render(
-        <Accordion type='single' onValueChange={onValueChange}>
+        <Accordion selectionMode='single' onValueChange={onValueChange}>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger onClick={onClick}>Item 1</AccordionTrigger>
@@ -400,7 +408,7 @@ describe('Accordion', () => {
     it('should handle single item accordion', async () => {
       const user = userEvent.setup();
       render(
-        <Accordion type='single'>
+        <Accordion selectionMode='single'>
           <AccordionItem value='only-item'>
             <AccordionHeader>
               <AccordionTrigger>Only Item</AccordionTrigger>
@@ -419,7 +427,7 @@ describe('Accordion', () => {
 
     it('should handle no controlled value gracefully', () => {
       render(
-        <Accordion type='single'>
+        <Accordion selectionMode='single'>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>Item 1</AccordionTrigger>
@@ -439,7 +447,12 @@ describe('Accordion', () => {
   describe('Polymorphic Component', () => {
     it('should support different element types through as prop', () => {
       const { container } = render(
-        <Accordion as='section' data-testid='accordion' type='single' defaultValue='item-1'>
+        <Accordion
+          as='section'
+          data-testid='accordion'
+          selectionMode='single'
+          defaultValue='item-1'
+        >
           <AccordionItem value='item-1' as='article'>
             <AccordionHeader as='h2'>
               <AccordionTrigger as='div' role='button' tabIndex={0}>
@@ -488,7 +501,7 @@ describe('Accordion', () => {
       const user = userEvent.setup();
 
       render(
-        <Accordion type='single'>
+        <Accordion selectionMode='single'>
           <AccordionItem value='item-1'>
             <AccordionHeader>
               <AccordionTrigger>

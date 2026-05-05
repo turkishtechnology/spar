@@ -6,6 +6,8 @@ export interface ComponentDoc {
   name: string;
   description: string;
   content: string;
+  /** Pre-parsed sections, populated by `buildSectionIndex`. */
+  sections?: import('./search.js').DocSection[];
 }
 
 export function isComponentDoc(name: string): boolean {

@@ -27,7 +27,7 @@ export default function SelectDemo() {
             Click trigger or press Enter/Space to open. Arrow keys navigate options. Enter selects.
             Escape closes.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Select.Root>
@@ -56,6 +56,18 @@ export default function SelectDemo() {
                 Enter to select → Escape to close
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Select.Root>
+  <Select.Trigger>
+    <Select.Value placeholder='Choose a fruit…' />
+  </Select.Trigger>
+  <Select.Content>
+    <Select.Item value='apple'><Select.ItemText>Apple</Select.ItemText></Select.Item>
+  </Select.Content>
+</Select.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -65,7 +77,7 @@ export default function SelectDemo() {
           <p className='demo-description'>
             Options organized in groups with labels. Group labels are announced by screen readers.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Select.Root>
@@ -97,6 +109,19 @@ export default function SelectDemo() {
                 </Select.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Select.Root>
+  <Select.Trigger><Select.Value placeholder='Select a food…' /></Select.Trigger>
+  <Select.Content>
+    <Select.Group>
+      <Select.Label>Fruits</Select.Label>
+      <Select.Item value='apple'><Select.ItemText>Apple</Select.ItemText></Select.Item>
+    </Select.Group>
+  </Select.Content>
+</Select.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -106,7 +131,7 @@ export default function SelectDemo() {
           <p className='demo-description'>
             Individual options can be disabled. Arrow keys skip disabled options.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Select.Root>
@@ -131,6 +156,17 @@ export default function SelectDemo() {
                 <strong>Expected:</strong> Arrow keys skip &quot;Pro (sold out)&quot;.
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Select.Root>
+  <Select.Trigger><Select.Value placeholder='Choose a plan…' /></Select.Trigger>
+  <Select.Content>
+    <Select.Item value='free'><Select.ItemText>Free</Select.ItemText></Select.Item>
+    <Select.Item value='pro' disabled><Select.ItemText>Pro (sold out)</Select.ItemText></Select.Item>
+  </Select.Content>
+</Select.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -140,7 +176,7 @@ export default function SelectDemo() {
           <p className='demo-description'>
             Parent manages the selected value. External buttons can change the selection.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-col'>
                 <div className='demo-row'>
@@ -178,6 +214,18 @@ export default function SelectDemo() {
                 </Select.Root>
               </div>
             </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`const [value, setValue] = useState('');
+
+<Select.Root value={value} onValueChange={(nextValue) => setValue(nextValue)}>
+  <Select.Trigger><Select.Value placeholder='Select size…' /></Select.Trigger>
+  <Select.Content>
+    <Select.Item value='small'><Select.ItemText>Small</Select.ItemText></Select.Item>
+  </Select.Content>
+</Select.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -187,18 +235,32 @@ export default function SelectDemo() {
           <p className='demo-description'>
             Entire select can be disabled. Trigger cannot be activated.
           </p>
-          <div className='demo-area demo-row'>
-            <Select.Root disabled>
-              <Select.Trigger className='demo-select-trigger'>
-                <Select.Value placeholder='Disabled select' />
-                <span>▾</span>
-              </Select.Trigger>
-              <Select.Content className='demo-select-content'>
-                <Select.Item className='demo-select-item' value='a'>
-                  <Select.ItemText>Option A</Select.ItemText>
-                </Select.Item>
-              </Select.Content>
-            </Select.Root>
+          <div className='demo-section-split'>
+            <div>
+              <div className='demo-area demo-row'>
+                <Select.Root disabled>
+                  <Select.Trigger className='demo-select-trigger'>
+                    <Select.Value placeholder='Disabled select' />
+                    <span>▾</span>
+                  </Select.Trigger>
+                  <Select.Content className='demo-select-content'>
+                    <Select.Item className='demo-select-item' value='a'>
+                      <Select.ItemText>Option A</Select.ItemText>
+                    </Select.Item>
+                  </Select.Content>
+                </Select.Root>
+              </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Select.Root disabled>
+  <Select.Trigger><Select.Value placeholder='Disabled select' /></Select.Trigger>
+  <Select.Content>
+    <Select.Item value='a'><Select.ItemText>Option A</Select.ItemText></Select.Item>
+  </Select.Content>
+</Select.Root>`}</code>
+              </pre>
+            </div>
           </div>
         </section>
 
@@ -209,7 +271,7 @@ export default function SelectDemo() {
             Select with <code>required</code> prop for form validation. Uses{' '}
             <code>aria-required</code>.
           </p>
-          <div className='demo-section-layout'>
+          <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <Select.Root required>
@@ -227,6 +289,16 @@ export default function SelectDemo() {
                   </Select.Content>
                 </Select.Root>
               </div>
+            </div>
+            <div className='demo-side-example'>
+              <pre className='demo-code-block'>
+                <code>{`<Select.Root required>
+  <Select.Trigger><Select.Value placeholder='Required field *' /></Select.Trigger>
+  <Select.Content>
+    <Select.Item value='opt1'><Select.ItemText>Option 1</Select.ItemText></Select.Item>
+  </Select.Content>
+</Select.Root>`}</code>
+              </pre>
             </div>
           </div>
         </section>
