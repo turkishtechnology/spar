@@ -198,14 +198,14 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
       resetTypeahead();
       return;
     }
-    if (menu.focusStrategy === 'first') {
+    if (menu.focusStrategy === 'first' && items.length > 0) {
       highlightFirst();
       menu.setFocusStrategy('none');
-    } else if (menu.focusStrategy === 'last') {
+    } else if (menu.focusStrategy === 'last' && items.length > 0) {
       highlightLast();
       menu.setFocusStrategy('none');
     }
-  }, [menu.open, menu.focusStrategy, highlightFirst, highlightLast, resetTypeahead]);
+  }, [menu.open, menu.focusStrategy, items.length, highlightFirst, highlightLast, resetTypeahead]);
 
   useEffect(() => {
     setItems((previous) => previous.filter((item) => item.ref.current));
@@ -296,14 +296,9 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
         case 'Tab':
           if (menu.modal) {
             event.preventDefault();
-            if (event.shiftKey) {
-              highlightPrevious();
-            } else {
-              highlightNext();
-            }
             return;
           }
-          menu.closeMenu({ focusTrigger: false });
+          menu.closeMenu({ focusTrigger: true });
           return;
         default:
           break;

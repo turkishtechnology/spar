@@ -375,6 +375,99 @@ describe('DropdownMenu', () => {
       expect(onKeyDown).toHaveBeenCalled();
     });
 
+    it('should highlight first item when opened with Enter key', async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+            <DropdownMenuItem>Item 2</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button');
+      trigger.focus();
+      await user.keyboard('[Enter]');
+
+      await waitFor(() => {
+        const items = screen.getAllByRole('menuitem');
+        expect(items[0]).toHaveAttribute('tabIndex', '0');
+        expect(items[0]).toHaveAttribute('data-highlighted');
+      });
+    });
+
+    it('should highlight first item when opened with ArrowDown key', async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+            <DropdownMenuItem>Item 2</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button');
+      trigger.focus();
+      await user.keyboard('[ArrowDown]');
+
+      await waitFor(() => {
+        const items = screen.getAllByRole('menuitem');
+        expect(items[0]).toHaveAttribute('tabIndex', '0');
+        expect(items[0]).toHaveAttribute('data-highlighted');
+      });
+    });
+
+    it('should highlight last item when opened with ArrowUp key', async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+            <DropdownMenuItem>Item 2</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button');
+      trigger.focus();
+      await user.keyboard('[ArrowUp]');
+
+      await waitFor(() => {
+        const items = screen.getAllByRole('menuitem');
+        expect(items[1]).toHaveAttribute('tabIndex', '0');
+        expect(items[1]).toHaveAttribute('data-highlighted');
+      });
+    });
+
+    it('should not highlight any item when opened with pointer click', async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+            <DropdownMenuItem>Item 2</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const trigger = screen.getByRole('button');
+      await user.click(trigger);
+
+      expect(screen.getByRole('menu')).toBeInTheDocument();
+
+      const items = screen.getAllByRole('menuitem');
+      items.forEach((item) => {
+        expect(item).not.toHaveAttribute('data-highlighted');
+        expect(item).toHaveAttribute('tabIndex', '-1');
+      });
+    });
+
     it('should support custom component via as prop', () => {
       render(
         <DropdownMenu>
@@ -493,6 +586,46 @@ describe('DropdownMenu', () => {
       });
 
       expect(onEscapeKeyDown).toHaveBeenCalled();
+    });
+
+    it('should prevent Tab in modal mode (default)', async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu defaultOpen={true}>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const content = screen.getByRole('menu');
+      await act(async () => {
+        content.focus();
+      });
+      await user.keyboard('{Tab}');
+
+      expect(screen.getByRole('menu')).toBeInTheDocument();
+    });
+
+    it('should prevent Shift+Tab in modal mode', async () => {
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu defaultOpen={true}>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const content = screen.getByRole('menu');
+      await act(async () => {
+        content.focus();
+      });
+      await user.keyboard('{Shift>}{Tab}{/Shift}');
+
+      expect(screen.getByRole('menu')).toBeInTheDocument();
     });
 
     it('should close on Tab key in non-modal mode', async () => {
