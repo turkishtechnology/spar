@@ -4,12 +4,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadDocs, isComponentDoc, extractSection, DOC_SECTIONS } from './utils/docs.js';
 import { logger } from './utils/logger.js';
+import { searchDocs, formatSearchResult, buildSectionIndex } from './utils/search.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const DOCS_DIR = path.resolve(__dirname, '..', 'docs');
 const docs = loadDocs(DOCS_DIR);
+buildSectionIndex(docs);
 
 export function createServer(): McpServer {
   const server = new McpServer(
@@ -142,40 +144,8 @@ export function createServer(): McpServer {
       },
     },
     async ({ query }) => {
-      const results: Array<{ component: string; matches: string[] }> = [];
-      const queryLower = query.toLowerCase();
-
-      for (const [, doc] of docs) {
-        const lines = doc.content.split('\n');
-        const matchingContexts: string[] = [];
-        const seen = new Set<number>();
-
-        for (let i = 0; i < lines.length; i++) {
-          if (lines[i]!.toLowerCase().includes(queryLower) && !seen.has(i)) {
-            const start = Math.max(0, i - 2);
-            const end = Math.min(lines.length, i + 3);
-
-            for (let j = start; j < end; j++) seen.add(j);
-
-            const context = lines.slice(start, end).join('\n');
-            matchingContexts.push(context);
-          }
-        }
-
-        if (matchingContexts.length > 0) {
-          results.push({ component: doc.name, matches: matchingContexts });
-        }
-      }
-
-      if (results.length === 0) {
-        return {
-          content: [{ type: 'text' as const, text: `No results found for "${query}"` }],
-        };
-      }
-
-      const text = results
-        .map((r) => `## ${r.component}\n\n${r.matches.join('\n\n---\n\n')}`)
-        .join('\n\n');
+      const result = searchDocs(docs, query);
+      const text = formatSearchResult(result);
 
       return {
         content: [{ type: 'text' as const, text }],
