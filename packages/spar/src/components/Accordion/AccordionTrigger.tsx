@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useMemo, ElementType } from 'react';
+import { useMergedRef } from '@/hooks';
 import type { AccordionTriggerProps, AccordionTriggerRenderProps } from './types';
 import { useAccordionContext, useAccordionItemContext } from './hooks';
 import { CollapsibleTrigger } from '../Collapsible';
@@ -14,12 +15,14 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
   children,
   onClick,
   onKeyDown,
+  ref: forwardedRef,
   ...props
 }: AccordionTriggerProps<T>) => {
   const Component = as || 'button';
   const accordionContext = useAccordionContext();
   const itemContext = useAccordionItemContext();
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const composedRef = useMergedRef(triggerRef, forwardedRef);
 
   const itemId = useMemo(() => getRegistryItemId(itemContext.itemKey), [itemContext.itemKey]);
   const dataValue = useMemo(() => String(itemContext.itemKey), [itemContext.itemKey]);
@@ -96,7 +99,7 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
   return (
     <CollapsibleTrigger
       as={Component}
-      ref={triggerRef}
+      ref={composedRef}
       onClick={onClick}
       onKeyDown={handleKeyDown}
       data-accordion-trigger=''

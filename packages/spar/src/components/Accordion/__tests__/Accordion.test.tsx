@@ -588,4 +588,61 @@ describe('Accordion', () => {
       expect(first).toHaveFocus();
     });
   });
+
+  describe('Ref forwarding', () => {
+    it('forwards refs to AccordionItem, AccordionHeader, and AccordionTrigger', async () => {
+      const itemRef = React.createRef<HTMLDivElement>();
+      const headerRef = React.createRef<HTMLHeadingElement>();
+      const triggerRef = React.createRef<HTMLButtonElement>();
+
+      render(
+        <Accordion>
+          <AccordionItem value='item-1' ref={itemRef}>
+            <AccordionHeader ref={headerRef} level={2}>
+              <AccordionTrigger ref={triggerRef}>Title</AccordionTrigger>
+            </AccordionHeader>
+            <AccordionContent>Body</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      expect(itemRef.current).toBeInstanceOf(HTMLDivElement);
+      expect(headerRef.current).toBeInstanceOf(HTMLHeadingElement);
+      expect(headerRef.current?.tagName).toBe('H2');
+      expect(triggerRef.current).toBeInstanceOf(HTMLButtonElement);
+    });
+
+    it('keeps the trigger registry working when a consumer passes its own trigger ref', async () => {
+      const user = userEvent.setup();
+      const triggerARef = React.createRef<HTMLButtonElement>();
+
+      render(
+        <Accordion>
+          <AccordionItem value='item-1'>
+            <AccordionHeader>
+              <AccordionTrigger ref={triggerARef}>First</AccordionTrigger>
+            </AccordionHeader>
+            <AccordionContent>First content</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value='item-2'>
+            <AccordionHeader>
+              <AccordionTrigger>Second</AccordionTrigger>
+            </AccordionHeader>
+            <AccordionContent>Second content</AccordionContent>
+          </AccordionItem>
+        </Accordion>,
+      );
+
+      const first = screen.getByRole('button', { name: 'First' });
+      const second = screen.getByRole('button', { name: 'Second' });
+
+      // Consumer ref still resolves to the trigger element.
+      expect(triggerARef.current).toBe(first);
+
+      // And the internal registry that powers ArrowDown still works.
+      first.focus();
+      await user.keyboard('{ArrowDown}');
+      expect(second).toHaveFocus();
+    });
+  });
 });

@@ -22,6 +22,7 @@ export const AccordionItem = <T extends ElementType = 'div'>({
   id: providedId,
   as,
   children,
+  ref,
   ...props
 }: AccordionItemProps<T>) => {
   const Component = as || 'div';
@@ -99,6 +100,7 @@ export const AccordionItem = <T extends ElementType = 'div'>({
         triggerId={triggerId}
         contentId={contentId}
         as={Component}
+        ref={ref}
         {...props}
       >
         {children}
