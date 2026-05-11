@@ -4,8 +4,7 @@ import type { AccordionTriggerProps, AccordionTriggerRenderProps } from './types
 import { useAccordionContext, useAccordionItemContext } from './hooks';
 import { CollapsibleTrigger } from '../Collapsible';
 
-const getRegistryItemId = (itemKey: string | number): string =>
-  `${typeof itemKey}:${String(itemKey)}`;
+const getRegistryItemId = (value: string | number): string => `${typeof value}:${String(value)}`;
 
 /**
  * Accordion trigger button that toggles panel visibility. Provides keyboard navigation and screen reader support.
@@ -24,8 +23,8 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const composedRef = useMergedRef(triggerRef, forwardedRef);
 
-  const itemId = useMemo(() => getRegistryItemId(itemContext.itemKey), [itemContext.itemKey]);
-  const dataValue = useMemo(() => String(itemContext.itemKey), [itemContext.itemKey]);
+  const itemId = useMemo(() => getRegistryItemId(itemContext.value), [itemContext.value]);
+  const dataValue = useMemo(() => String(itemContext.value), [itemContext.value]);
 
   useEffect(() => {
     if (triggerRef.current) {
@@ -105,6 +104,8 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
       data-accordion-trigger=''
       data-value={dataValue}
       {...props}
+      data-open={itemContext.isOpen ? '' : undefined}
+      data-closed={itemContext.isOpen ? undefined : ''}
     >
       {typeof children === 'function' ? children(renderProps) : children}
     </CollapsibleTrigger>

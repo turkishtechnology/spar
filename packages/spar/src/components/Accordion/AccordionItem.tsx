@@ -1,23 +1,13 @@
-import { useMemo, useCallback, useId, useRef, ElementType } from 'react';
-import type { AccordionItemContextValue, AccordionItemKey, AccordionItemProps } from './types';
+import { useMemo, useCallback, useId, ElementType } from 'react';
+import type { AccordionItemContextValue, AccordionItemProps } from './types';
 import { useAccordionContext, AccordionItemContext } from './hooks';
 import { Collapsible } from '../Collapsible';
 
-const MISSING_ITEM_KEY_MESSAGE =
-  '[spar] Accordion.Item is missing `itemKey`. The component fell back to a generated unique id; the item cannot be matched against `activeIndex` or `defaultActiveIndex`. Pass an explicit `itemKey` (or the deprecated `value` alias).';
-
 /**
  * Individual accordion item providing context for trigger and content components.
- *
- * Identity is taken from `itemKey` (primary) or the deprecated `value` alias.
- * When neither is supplied, the item falls back to a generated `useId` value
- * so each item still has a distinct identity (the previous empty-string
- * fallback caused every keyless item to share state). A one-shot dev warning
- * surfaces the misuse without crashing in production.
  */
 export const AccordionItem = <T extends ElementType = 'div'>({
-  itemKey: itemKeyProp,
-  value: legacyValue,
+  value,
   disabled: itemDisabled = false,
   id: providedId,
   as,
@@ -32,54 +22,37 @@ export const AccordionItem = <T extends ElementType = 'div'>({
   const triggerId = `${baseId}-trigger`;
   const contentId = `${baseId}-content`;
 
-  const hasExplicitKey = itemKeyProp !== undefined || legacyValue !== undefined;
-  const itemKey: AccordionItemKey = itemKeyProp ?? legacyValue ?? generatedId;
-
-  const warnedRef = useRef(false);
-  if (
-    !hasExplicitKey &&
-    !warnedRef.current &&
-    typeof process !== 'undefined' &&
-    process.env.NODE_ENV !== 'production'
-  ) {
-    warnedRef.current = true;
-    // eslint-disable-next-line no-console
-    console.warn(MISSING_ITEM_KEY_MESSAGE);
-  }
-
   const isOpen = useMemo(() => {
     if (!accordionContext.allowMultiple) {
-      return accordionContext.activeIndex === itemKey;
+      return accordionContext.value === value;
     }
-    const valueArray = Array.isArray(accordionContext.activeIndex)
-      ? accordionContext.activeIndex
-      : [];
-    return valueArray.includes(itemKey);
-  }, [accordionContext.allowMultiple, accordionContext.activeIndex, itemKey]);
+    const valueArray = Array.isArray(accordionContext.value) ? accordionContext.value : [];
+    return valueArray.includes(value);
+  }, [accordionContext.allowMultiple, accordionContext.value, value]);
 
   const isItemDisabled = accordionContext.disabled || itemDisabled;
 
   const toggle = useCallback(() => {
     if (!isItemDisabled) {
-      accordionContext.onItemToggle(itemKey);
+      accordionContext.onItemToggle(value);
     }
-  }, [isItemDisabled, itemKey, accordionContext.onItemToggle]);
+  }, [isItemDisabled, value, accordionContext.onItemToggle]);
 
   const open = useCallback(() => {
     if (!isItemDisabled && !isOpen) {
-      accordionContext.onItemToggle(itemKey);
+      accordionContext.onItemToggle(value);
     }
-  }, [isItemDisabled, isOpen, itemKey, accordionContext.onItemToggle]);
+  }, [isItemDisabled, isOpen, value, accordionContext.onItemToggle]);
 
   const close = useCallback(() => {
     if (!isItemDisabled && isOpen) {
-      accordionContext.onItemToggle(itemKey);
+      accordionContext.onItemToggle(value);
     }
-  }, [isItemDisabled, isOpen, itemKey, accordionContext.onItemToggle]);
+  }, [isItemDisabled, isOpen, value, accordionContext.onItemToggle]);
 
   const itemContextValue = useMemo<AccordionItemContextValue>(
     () => ({
-      itemKey,
+      value,
       isOpen,
       disabled: isItemDisabled,
       triggerId,
@@ -88,7 +61,7 @@ export const AccordionItem = <T extends ElementType = 'div'>({
       close,
       toggle,
     }),
-    [itemKey, isOpen, isItemDisabled, triggerId, contentId, open, close, toggle],
+    [value, isOpen, isItemDisabled, triggerId, contentId, open, close, toggle],
   );
 
   return (
@@ -102,6 +75,8 @@ export const AccordionItem = <T extends ElementType = 'div'>({
         as={Component}
         ref={ref}
         {...props}
+        data-open={isOpen ? '' : undefined}
+        data-closed={isOpen ? undefined : ''}
       >
         {children}
       </Collapsible>

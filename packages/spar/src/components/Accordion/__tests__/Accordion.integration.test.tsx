@@ -13,7 +13,7 @@ import {
 const FAQAccordion = () => (
   <div>
     <h1>Frequently Asked Questions</h1>
-    <Accordion selectionMode='single' isCollapsible={true}>
+    <Accordion>
       <AccordionItem value='faq-1'>
         <AccordionHeader>
           <AccordionTrigger>How do I get started?</AccordionTrigger>
@@ -91,13 +91,13 @@ const FAQAccordion = () => (
 const SettingsAccordion = () => (
   <div>
     <h1>Settings</h1>
-    <Accordion selectionMode='multiple'>
+    <Accordion allowMultiple>
       <AccordionItem value='account'>
         <AccordionHeader>
           <AccordionTrigger>Account Settings</AccordionTrigger>
         </AccordionHeader>
         <AccordionContent>
-          <Accordion selectionMode='single'>
+          <Accordion>
             <AccordionItem value='profile'>
               <AccordionHeader level={4}>
                 <AccordionTrigger>Profile Information</AccordionTrigger>
@@ -327,7 +327,7 @@ describe('Accordion Integration Tests', () => {
             <button type='button' onClick={() => setItems([...items, `item-${items.length + 1}`])}>
               Add Item
             </button>
-            <Accordion selectionMode='multiple'>
+            <Accordion allowMultiple>
               {items.map((itemId, index) => (
                 <AccordionItem key={itemId} value={itemId}>
                   <AccordionHeader>
@@ -374,7 +374,7 @@ describe('Accordion Integration Tests', () => {
             <button type='button' onClick={() => setCount(count + 1)}>
               Re-render ({count})
             </button>
-            <Accordion selectionMode='multiple' defaultValue={['item-1']}>
+            <Accordion allowMultiple defaultValue={['item-1']}>
               <AccordionItem value='item-1'>
                 <AccordionHeader>
                   <AccordionTrigger>Persistent Item 1</AccordionTrigger>
@@ -455,7 +455,7 @@ describe('Accordion Integration Tests', () => {
             <button type='button' onClick={() => setShowSecondItem(!showSecondItem)}>
               Toggle Second Item
             </button>
-            <Accordion selectionMode='single'>
+            <Accordion>
               <AccordionItem value='item-1'>
                 <AccordionHeader>
                   <AccordionTrigger>Always Visible</AccordionTrigger>
@@ -507,7 +507,7 @@ describe('Accordion Integration Tests', () => {
       const user = userEvent.setup();
 
       const LargeAccordion = () => (
-        <Accordion selectionMode='single'>
+        <Accordion>
           {Array.from({ length: 50 }, (_, i) => (
             <AccordionItem key={i} value={`item-${i}`}>
               <AccordionHeader>
@@ -537,13 +537,13 @@ describe('Accordion Integration Tests', () => {
       const ComplexAccordion = () => (
         <div>
           <nav aria-label='Table of contents'>
-            <Accordion selectionMode='multiple'>
+            <Accordion allowMultiple>
               <AccordionItem value='chapter-1'>
                 <AccordionHeader level={2}>
                   <AccordionTrigger>Chapter 1: Introduction</AccordionTrigger>
                 </AccordionHeader>
                 <AccordionContent>
-                  <Accordion selectionMode='single'>
+                  <Accordion>
                     <AccordionItem value='section-1-1'>
                       <AccordionHeader level={3}>
                         <AccordionTrigger>1.1 Overview</AccordionTrigger>

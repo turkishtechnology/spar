@@ -1,26 +1,17 @@
 import { useMemo, useState, useCallback, ElementType } from 'react';
 import { useItemRegistry, useControlledState } from '@/hooks';
 import type {
-  AccordionActiveIndex,
   AccordionContextValue,
-  AccordionItemKey,
+  AccordionCurrentValue,
   AccordionProps,
+  AccordionValue,
 } from './types';
 import { AccordionContext } from './hooks';
 
-/**
- * Coerce any caller-supplied `activeIndex` into the canonical shape this
- * component reasons about — array when `allowMultiple`, scalar otherwise.
- *
- * Mirrors Takeoff Core's behavior: a scalar passed in `allowMultiple` mode
- * is wrapped, and an array passed in single mode collapses to its last
- * element ("only the last value is used"). Callers stay free to pass either
- * shape; the rest of the component never has to second-guess it.
- */
-const normalizeActiveIndex = (
-  input: AccordionActiveIndex | undefined,
+const normalizeValue = (
+  input: AccordionCurrentValue | undefined,
   allowMultiple: boolean,
-): AccordionActiveIndex => {
+): AccordionCurrentValue => {
   if (allowMultiple) {
     if (input === undefined) return [];
     return Array.isArray(input) ? input : [input];
@@ -35,24 +26,13 @@ const normalizeActiveIndex = (
 /**
  * Accordion root component providing context and state management for accordion items.
  * Supports single or multiple panel expansion with full keyboard navigation.
- *
- * Primary API uses Takeoff vocabulary (`allowMultiple`, `activeIndex`,
- * `defaultActiveIndex`, `onActiveIndexChange`, `preventCollapse`). The legacy
- * `type`/`value`/`defaultValue`/`onValueChange`/`isCollapsible` props are kept
- * as deprecated aliases for one major release and will be removed.
  */
 export const Accordion = <T extends ElementType = 'div'>({
   allowMultiple,
-  activeIndex: controlledActiveIndex,
-  defaultActiveIndex,
-  onActiveIndexChange,
+  value: controlledValue,
+  defaultValue,
+  onValueChange,
   preventCollapse,
-  // Deprecated aliases — kept for one major release.
-  type,
-  value: legacyValue,
-  defaultValue: legacyDefaultValue,
-  onValueChange: legacyOnValueChange,
-  isCollapsible: legacyIsCollapsible,
   disabled = false,
   orientation = 'vertical',
   as,
@@ -62,36 +42,23 @@ export const Accordion = <T extends ElementType = 'div'>({
 }: AccordionProps<T>) => {
   const Component = as || 'div';
 
-  const effectiveAllowMultiple = allowMultiple ?? type === 'multiple';
-  const effectivePreventCollapse =
-    preventCollapse ?? (legacyIsCollapsible !== undefined ? !legacyIsCollapsible : false);
-
-  const rawControlled: AccordionActiveIndex | undefined = controlledActiveIndex ?? legacyValue;
-  const rawInitial: AccordionActiveIndex =
-    defaultActiveIndex ?? legacyDefaultValue ?? (effectiveAllowMultiple ? [] : '');
+  const effectiveAllowMultiple = allowMultiple ?? false;
+  const effectivePreventCollapse = preventCollapse ?? false;
 
   const normalizedControlled =
-    rawControlled !== undefined
-      ? normalizeActiveIndex(rawControlled, effectiveAllowMultiple)
+    controlledValue !== undefined
+      ? normalizeValue(controlledValue, effectiveAllowMultiple)
       : undefined;
-  const normalizedInitial = normalizeActiveIndex(rawInitial, effectiveAllowMultiple);
+  const normalizedInitial = normalizeValue(defaultValue, effectiveAllowMultiple);
 
   const handleChange = useCallback(
-    (next: AccordionActiveIndex) => {
-      onActiveIndexChange?.(next);
-      if (legacyOnValueChange) {
-        const stringified: string | string[] = Array.isArray(next)
-          ? next.map(String)
-          : next === ''
-            ? ''
-            : String(next);
-        legacyOnValueChange(stringified);
-      }
+    (next: AccordionCurrentValue) => {
+      onValueChange?.(next);
     },
-    [onActiveIndexChange, legacyOnValueChange],
+    [onValueChange],
   );
 
-  const [currentValue = normalizedInitial, setValue] = useControlledState<AccordionActiveIndex>(
+  const [currentValue = normalizedInitial, setValue] = useControlledState<AccordionCurrentValue>(
     normalizedControlled,
     normalizedInitial,
     handleChange,
@@ -118,23 +85,23 @@ export const Accordion = <T extends ElementType = 'div'>({
   );
 
   const handleItemToggle = useCallback(
-    (itemKey: AccordionItemKey) => {
+    (itemValue: AccordionValue) => {
       if (disabled) return;
 
-      let nextValue: AccordionActiveIndex;
+      let nextValue: AccordionCurrentValue;
 
       if (!effectiveAllowMultiple) {
-        const isExpanded = currentValue === itemKey;
+        const isExpanded = currentValue === itemValue;
         if (isExpanded && effectivePreventCollapse) {
           return;
         }
-        nextValue = isExpanded ? '' : itemKey;
+        nextValue = isExpanded ? '' : itemValue;
       } else {
         const currentArray = Array.isArray(currentValue) ? currentValue : [];
-        const isExpanded = currentArray.includes(itemKey);
+        const isExpanded = currentArray.includes(itemValue);
         nextValue = isExpanded
-          ? currentArray.filter((v) => v !== itemKey)
-          : [...currentArray, itemKey];
+          ? currentArray.filter((value) => value !== itemValue)
+          : [...currentArray, itemValue];
       }
 
       setValue(nextValue);
@@ -146,7 +113,7 @@ export const Accordion = <T extends ElementType = 'div'>({
     () => ({
       allowMultiple: effectiveAllowMultiple,
       preventCollapse: effectivePreventCollapse,
-      activeIndex: currentValue,
+      value: currentValue,
       onItemToggle: handleItemToggle,
       disabled,
       orientation,

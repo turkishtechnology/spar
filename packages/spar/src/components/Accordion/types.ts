@@ -1,7 +1,6 @@
 import type { ElementType } from 'react';
 import type { Orientation, PolymorphicProps } from '../../types';
 import type {
-  CollapsibleOwnProps,
   CollapsibleTriggerRenderProps,
   CollapsibleTriggerOwnProps,
   CollapsibleTriggerProps,
@@ -9,21 +8,13 @@ import type {
   CollapsibleContentProps,
 } from '../Collapsible/types';
 
-/**
- * @deprecated Use `allowMultiple` instead. Will be removed in the next major release.
- */
-export type AccordionType = 'single' | 'multiple';
+export type AccordionValue = string | number;
 
 /**
- * Identity of a single Accordion item. Mirrors Takeoff Core's `tk-accordion-item.itemKey`.
- */
-export type AccordionItemKey = string | number;
-
-/**
- * Currently active item identifier(s). A scalar in single mode, an array when
+ * Current item identifier(s). A scalar in single mode, an array when
  * `allowMultiple` is set.
  */
-export type AccordionActiveIndex = AccordionItemKey | AccordionItemKey[];
+export type AccordionCurrentValue = AccordionValue | AccordionValue[];
 
 /**
  * Own props for Accordion root component.
@@ -36,21 +27,21 @@ export interface AccordionOwnProps {
   allowMultiple?: boolean;
 
   /**
-   * Controlled active item identifier(s). Match the `itemKey` of the items
-   * that should be expanded.
+   * Controlled item identifier(s). Match the `value` of the items that should
+   * be expanded.
    */
-  activeIndex?: AccordionActiveIndex;
+  value?: AccordionCurrentValue;
 
   /**
-   * Uncontrolled initial active item identifier(s). Used only on mount.
+   * Uncontrolled initial item identifier(s). Used only on mount.
    */
-  defaultActiveIndex?: AccordionActiveIndex;
+  defaultValue?: AccordionCurrentValue;
 
   /**
-   * Fired when the active set changes. The payload preserves the canonical
-   * shape: scalar in single mode, array in multi mode.
+   * Fired when the open value changes. The payload preserves the canonical
+   * shape: scalar in single mode, array in multiple mode.
    */
-  onActiveIndexChange?: (next: AccordionActiveIndex) => void;
+  onValueChange?: (next: AccordionCurrentValue) => void;
 
   /**
    * In single mode, when `true`, an active item cannot be collapsed by
@@ -71,36 +62,6 @@ export interface AccordionOwnProps {
    * @defaultValue 'vertical'
    */
   orientation?: Orientation;
-
-  /**
-   * @deprecated Use `allowMultiple` instead. Pass `type='multiple'` to opt
-   * into multi-expand. Will be removed in the next major release.
-   */
-  type?: AccordionType;
-
-  /**
-   * @deprecated Use `activeIndex` instead. Will be removed in the next
-   * major release.
-   */
-  value?: string | string[];
-
-  /**
-   * @deprecated Use `defaultActiveIndex` instead. Will be removed in the
-   * next major release.
-   */
-  defaultValue?: string | string[];
-
-  /**
-   * @deprecated Use `onActiveIndexChange` instead. Will be removed in the
-   * next major release.
-   */
-  onValueChange?: (value: string | string[]) => void;
-
-  /**
-   * @deprecated Single-mode items now collapse by default. Use
-   * `preventCollapse` to opt out. Will be removed in the next major release.
-   */
-  isCollapsible?: boolean;
 }
 
 /**
@@ -116,18 +77,17 @@ export type AccordionProps<T extends ElementType = 'div'> = PolymorphicProps<
 /**
  * Own props for AccordionItem component
  */
-export interface AccordionItemOwnProps extends CollapsibleOwnProps {
+export interface AccordionItemOwnProps {
   /**
-   * Stable identity for this item. Required (either `itemKey` or the
-   * deprecated `value`).
+   * Stable identity for this item.
    */
-  itemKey?: AccordionItemKey;
+  value: AccordionValue;
 
   /**
-   * @deprecated Use `itemKey` instead. Will be removed in the next major
-   * release.
+   * Disables this item.
+   * @defaultValue false
    */
-  value?: string;
+  disabled?: boolean;
 }
 
 /**
@@ -197,8 +157,8 @@ export type AccordionContentProps<T extends ElementType = 'div'> = CollapsibleCo
 export interface AccordionContextValue {
   allowMultiple: boolean;
   preventCollapse: boolean;
-  activeIndex: AccordionActiveIndex;
-  onItemToggle: (itemKey: AccordionItemKey) => void;
+  value: AccordionCurrentValue;
+  onItemToggle: (value: AccordionValue) => void;
   disabled: boolean;
   orientation: Orientation;
   registerItem: (itemId: string, element: HTMLElement) => void;
@@ -215,7 +175,7 @@ export interface AccordionContextValue {
  * @internal
  */
 export interface AccordionItemContextValue {
-  itemKey: AccordionItemKey;
+  value: AccordionValue;
   isOpen: boolean;
   disabled: boolean;
   triggerId: string;
