@@ -121,7 +121,7 @@ export function AccordionSection() {
   const [value, setValue] = useState<string | string[]>('');
 
   return (
-    <Accordion.Root selectionMode='single' isCollapsible value={value} onValueChange={setValue}>
+    <Accordion.Root value={value} onValueChange={setValue}>
       <Accordion.Item value='faq-1'>
         <Accordion.Header>
           <Accordion.Trigger>What is Spar?</Accordion.Trigger>

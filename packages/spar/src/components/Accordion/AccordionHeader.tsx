@@ -9,6 +9,7 @@ export const AccordionHeader = <T extends ElementType = 'h3'>({
   level = 3,
   as,
   children,
+  ref,
   ...props
 }: AccordionHeaderProps<T>) => {
   const { isOpen, disabled } = useAccordionItemContext();
@@ -19,8 +20,9 @@ export const AccordionHeader = <T extends ElementType = 'h3'>({
   return (
     <Component
       {...props}
-      data-state={isOpen ? 'open' : 'closed'}
+      ref={ref}
       data-level={level}
+      data-state={isOpen ? 'open' : 'closed'}
       {...(disabled && { 'data-disabled': '' })}
     >
       {children}

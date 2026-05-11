@@ -1,7 +1,6 @@
 import type { ElementType } from 'react';
 import type { Orientation, PolymorphicProps } from '../../types';
 import type {
-  CollapsibleOwnProps,
   CollapsibleTriggerRenderProps,
   CollapsibleTriggerOwnProps,
   CollapsibleTriggerProps,
@@ -9,48 +8,57 @@ import type {
   CollapsibleContentProps,
 } from '../Collapsible/types';
 
-export type AccordionSelectionMode = 'single' | 'multiple';
+export type AccordionValue = string | number;
 
 /**
- * Own props for Accordion root component
+ * Current item identifier(s). A scalar in single mode, an array when
+ * `multiple` is set.
+ */
+export type AccordionCurrentValue = AccordionValue | AccordionValue[];
+
+/**
+ * Own props for Accordion root component.
  */
 export interface AccordionOwnProps {
   /**
-   * Single panel or multiple panels can be expanded
-   * @defaultValue 'single'
-   */
-  selectionMode?: AccordionSelectionMode;
-
-  /**
-   * Whether panels can be collapsed (only for single type)
+   * When `true`, multiple items can be expanded at once.
    * @defaultValue false
    */
-  isCollapsible?: boolean;
+  multiple?: boolean;
 
   /**
-   * Controlled state - single value or array for multiple
+   * Controlled item identifier(s). Match the `value` of the items that should
+   * be expanded.
    */
-  value?: string | string[];
+  value?: AccordionCurrentValue;
 
   /**
-   * Uncontrolled initial state
+   * Uncontrolled initial item identifier(s). Used only on mount.
    */
-  defaultValue?: string | string[];
+  defaultValue?: AccordionCurrentValue;
 
   /**
-   * Callback when state changes
-   * @param value - The new accordion value (string for single, string[] for multiple)
+   * Fired when the open value changes. The payload preserves the canonical
+   * shape: scalar in single mode, array in multiple mode.
    */
-  onValueChange?: (value: string | string[]) => void;
+  onValueChange?: (next: AccordionCurrentValue) => void;
 
   /**
-   * Disables all accordion items
+   * In single mode, when `true`, an active item can be collapsed by clicking
+   * it again. When `false`, one item is always expanded. Has no effect in
+   * multi mode.
+   * @defaultValue true
+   */
+  collapsible?: boolean;
+
+  /**
+   * Disables every item in the accordion.
    * @defaultValue false
    */
   disabled?: boolean;
 
   /**
-   * Orientation for keyboard navigation
+   * Orientation for keyboard navigation.
    * @defaultValue 'vertical'
    */
   orientation?: Orientation;
@@ -69,11 +77,17 @@ export type AccordionProps<T extends ElementType = 'div'> = PolymorphicProps<
 /**
  * Own props for AccordionItem component
  */
-export interface AccordionItemOwnProps extends CollapsibleOwnProps {
+export interface AccordionItemOwnProps {
   /**
-   * Unique identifier for the item
+   * Stable identity for this item.
    */
-  value: string;
+  value: AccordionValue;
+
+  /**
+   * Disables this item.
+   * @defaultValue false
+   */
+  disabled?: boolean;
 }
 
 /**
@@ -141,17 +155,17 @@ export type AccordionContentProps<T extends ElementType = 'div'> = CollapsibleCo
  * @internal
  */
 export interface AccordionContextValue {
-  selectionMode: AccordionSelectionMode;
-  isCollapsible: boolean;
-  value: string | string[];
-  onItemToggle: (itemValue: string) => void;
+  multiple: boolean;
+  collapsible: boolean;
+  value: AccordionCurrentValue;
+  onItemToggle: (value: AccordionValue) => void;
   disabled: boolean;
   orientation: Orientation;
-  registerItem: (itemValue: string, element: HTMLElement) => void;
-  unregisterItem: (itemValue: string) => void;
+  registerItem: (itemId: string, element: HTMLElement) => void;
+  unregisterItem: (itemId: string) => void;
   focusedIndex: number;
   setFocusedIndex: (index: number) => void;
-  getItemIndex: (itemValue: string) => number;
+  getItemIndex: (itemId: string) => number;
   getItemAtIndex: (index: number) => string | undefined;
   focusItemAtIndex: (index: number) => void;
   itemCount: number;
@@ -161,7 +175,7 @@ export interface AccordionContextValue {
  * @internal
  */
 export interface AccordionItemContextValue {
-  value: string;
+  value: AccordionValue;
   isOpen: boolean;
   disabled: boolean;
   triggerId: string;

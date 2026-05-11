@@ -334,7 +334,7 @@ export function BasicAccordion() {
 Accordion that allows multiple panels to be expanded simultaneously:
 
 ```tsx {1}
-<Accordion.Root selectionMode='multiple' defaultValue={['a']}>
+<Accordion.Root multiple defaultValue={['a']}>
   <Accordion.Item value='a'>
     <Accordion.Header>
       <Accordion.Trigger>Section A</Accordion.Trigger>
@@ -357,7 +357,7 @@ Accordion with external state control and change handling:
 ```tsx {1,3}
 const [openItems, setOpenItems] = React.useState<string[]>(['a']);
 
-<Accordion.Root selectionMode='multiple' value={openItems} onValueChange={setOpenItems}>
+<Accordion.Root multiple value={openItems} onValueChange={setOpenItems}>
   {/* ...items */}
 </Accordion.Root>;
 ```
@@ -374,11 +374,11 @@ The root container that provides context and manages the state for all accordion
 
 | Name             | Type                                  | Default      | Description                                              |
 | ---------------- | ------------------------------------- | ------------ | -------------------------------------------------------- |
-| `selectionMode?` | `"single" \| "multiple"`              | `"single"`   | Whether single or multiple panels can be expanded        |
-| `isCollapsible?` | `boolean`                             | `false`      | Whether panels can be collapsed (only for `single` mode) |
-| `value?`         | `string \| string[]`                  | `undefined`  | Controlled state - single value or array for multiple    |
-| `defaultValue?`  | `string \| string[]`                  | `undefined`  | Uncontrolled initial state                               |
-| `onValueChange?` | `(value: string \| string[]) => void` | `undefined`  | Callback when state changes                              |
+| `multiple?`      | `boolean`                             | `false`      | Whether multiple panels can be expanded simultaneously   |
+| `collapsible?`   | `boolean`                             | `true`       | Whether panels can be collapsed (only for `single` mode) |
+| `value?`         | `string \| number \| (string \| number)[]` | `undefined` | Controlled state - single value or array for multiple |
+| `defaultValue?`  | `string \| number \| (string \| number)[]` | `undefined` | Uncontrolled initial state                          |
+| `onValueChange?` | `(value: string \| number \| (string \| number)[]) => void` | `undefined` | Callback when state changes      |
 | `disabled?`      | `boolean`                             | `false`      | Disables all accordion items                             |
 | `orientation?`   | `"vertical" \| "horizontal"`          | `"vertical"` | Orientation for keyboard navigation                      |
 | `as?`            | `React.ElementType`                   | `"div"`      | Polymorphic component type                               |
