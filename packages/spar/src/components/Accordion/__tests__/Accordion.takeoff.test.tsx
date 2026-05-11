@@ -135,12 +135,12 @@ describe('Accordion value API', () => {
     expect(itemB).toHaveAttribute('aria-expanded', 'true');
   });
 
-  it('emits an array in allowMultiple mode', async () => {
+  it('emits an array in multiple mode', async () => {
     const user = userEvent.setup();
     const onValueChange = jest.fn();
 
     render(
-      <Accordion allowMultiple defaultValue={['a']} onValueChange={onValueChange}>
+      <Accordion multiple defaultValue={['a']} onValueChange={onValueChange}>
         {item('a')}
         {item('b')}
       </Accordion>,
@@ -206,20 +206,20 @@ describe('Accordion value API', () => {
     const contentA = screen.getByText('Item a body');
     const contentB = screen.getByText('Item b body');
 
-    expect(itemA).toHaveAttribute('data-open');
-    expect(triggerA).toHaveAttribute('data-open');
-    expect(contentA).toHaveAttribute('data-open');
-    expect(itemB).toHaveAttribute('data-closed');
-    expect(triggerB).toHaveAttribute('data-closed');
-    expect(contentB).toHaveAttribute('data-closed');
+    expect(itemA).toHaveAttribute('data-state', 'open');
+    expect(triggerA).toHaveAttribute('data-state', 'open');
+    expect(contentA).toHaveAttribute('data-state', 'open');
+    expect(itemB).toHaveAttribute('data-state', 'closed');
+    expect(triggerB).toHaveAttribute('data-state', 'closed');
+    expect(contentB).toHaveAttribute('data-state', 'closed');
 
     await user.click(triggerB);
 
-    expect(itemA).toHaveAttribute('data-closed');
-    expect(triggerA).toHaveAttribute('data-closed');
-    expect(contentA).toHaveAttribute('data-closed');
-    expect(itemB).toHaveAttribute('data-open');
-    expect(triggerB).toHaveAttribute('data-open');
-    expect(contentB).toHaveAttribute('data-open');
+    expect(itemA).toHaveAttribute('data-state', 'closed');
+    expect(triggerA).toHaveAttribute('data-state', 'closed');
+    expect(contentA).toHaveAttribute('data-state', 'closed');
+    expect(itemB).toHaveAttribute('data-state', 'open');
+    expect(triggerB).toHaveAttribute('data-state', 'open');
+    expect(contentB).toHaveAttribute('data-state', 'open');
   });
 });

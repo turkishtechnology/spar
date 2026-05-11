@@ -23,12 +23,12 @@ export const AccordionItem = <T extends ElementType = 'div'>({
   const contentId = `${baseId}-content`;
 
   const isOpen = useMemo(() => {
-    if (!accordionContext.allowMultiple) {
+    if (!accordionContext.multiple) {
       return accordionContext.value === value;
     }
     const valueArray = Array.isArray(accordionContext.value) ? accordionContext.value : [];
     return valueArray.includes(value);
-  }, [accordionContext.allowMultiple, accordionContext.value, value]);
+  }, [accordionContext.multiple, accordionContext.value, value]);
 
   const isItemDisabled = accordionContext.disabled || itemDisabled;
 
@@ -75,8 +75,6 @@ export const AccordionItem = <T extends ElementType = 'div'>({
         as={Component}
         ref={ref}
         {...props}
-        data-open={isOpen ? '' : undefined}
-        data-closed={isOpen ? undefined : ''}
       >
         {children}
       </Collapsible>

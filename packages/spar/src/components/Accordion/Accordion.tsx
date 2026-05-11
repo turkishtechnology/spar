@@ -10,9 +10,9 @@ import { AccordionContext } from './hooks';
 
 const normalizeValue = (
   input: AccordionCurrentValue | undefined,
-  allowMultiple: boolean,
+  multiple: boolean,
 ): AccordionCurrentValue => {
-  if (allowMultiple) {
+  if (multiple) {
     if (input === undefined) return [];
     return Array.isArray(input) ? input : [input];
   }
@@ -28,11 +28,11 @@ const normalizeValue = (
  * Supports single or multiple panel expansion with full keyboard navigation.
  */
 export const Accordion = <T extends ElementType = 'div'>({
-  allowMultiple,
+  multiple,
   value: controlledValue,
   defaultValue,
   onValueChange,
-  preventCollapse,
+  collapsible,
   disabled = false,
   orientation = 'vertical',
   as,
@@ -42,14 +42,12 @@ export const Accordion = <T extends ElementType = 'div'>({
 }: AccordionProps<T>) => {
   const Component = as || 'div';
 
-  const effectiveAllowMultiple = allowMultiple ?? false;
-  const effectivePreventCollapse = preventCollapse ?? false;
+  const effectiveMultiple = multiple ?? false;
+  const effectiveCollapsible = collapsible ?? true;
 
   const normalizedControlled =
-    controlledValue !== undefined
-      ? normalizeValue(controlledValue, effectiveAllowMultiple)
-      : undefined;
-  const normalizedInitial = normalizeValue(defaultValue, effectiveAllowMultiple);
+    controlledValue !== undefined ? normalizeValue(controlledValue, effectiveMultiple) : undefined;
+  const normalizedInitial = normalizeValue(defaultValue, effectiveMultiple);
 
   const handleChange = useCallback(
     (next: AccordionCurrentValue) => {
@@ -90,9 +88,9 @@ export const Accordion = <T extends ElementType = 'div'>({
 
       let nextValue: AccordionCurrentValue;
 
-      if (!effectiveAllowMultiple) {
+      if (!effectiveMultiple) {
         const isExpanded = currentValue === itemValue;
-        if (isExpanded && effectivePreventCollapse) {
+        if (isExpanded && !effectiveCollapsible) {
           return;
         }
         nextValue = isExpanded ? '' : itemValue;
@@ -106,13 +104,13 @@ export const Accordion = <T extends ElementType = 'div'>({
 
       setValue(nextValue);
     },
-    [effectiveAllowMultiple, effectivePreventCollapse, currentValue, disabled, setValue],
+    [effectiveMultiple, effectiveCollapsible, currentValue, disabled, setValue],
   );
 
   const contextValue = useMemo<AccordionContextValue>(
     () => ({
-      allowMultiple: effectiveAllowMultiple,
-      preventCollapse: effectivePreventCollapse,
+      multiple: effectiveMultiple,
+      collapsible: effectiveCollapsible,
       value: currentValue,
       onItemToggle: handleItemToggle,
       disabled,
@@ -127,8 +125,8 @@ export const Accordion = <T extends ElementType = 'div'>({
       itemCount,
     }),
     [
-      effectiveAllowMultiple,
-      effectivePreventCollapse,
+      effectiveMultiple,
+      effectiveCollapsible,
       currentValue,
       handleItemToggle,
       disabled,
@@ -150,7 +148,7 @@ export const Accordion = <T extends ElementType = 'div'>({
         ref={ref}
         {...props}
         data-orientation={orientation}
-        data-type={effectiveAllowMultiple ? 'multiple' : 'single'}
+        data-type={effectiveMultiple ? 'multiple' : 'single'}
       >
         {children}
       </Component>

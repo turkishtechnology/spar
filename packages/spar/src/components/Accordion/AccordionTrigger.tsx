@@ -104,8 +104,6 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
       data-accordion-trigger=''
       data-value={dataValue}
       {...props}
-      data-open={itemContext.isOpen ? '' : undefined}
-      data-closed={itemContext.isOpen ? undefined : ''}
     >
       {typeof children === 'function' ? children(renderProps) : children}
     </CollapsibleTrigger>

@@ -91,7 +91,7 @@ const FAQAccordion = () => (
 const SettingsAccordion = () => (
   <div>
     <h1>Settings</h1>
-    <Accordion allowMultiple>
+    <Accordion multiple>
       <AccordionItem value='account'>
         <AccordionHeader>
           <AccordionTrigger>Account Settings</AccordionTrigger>
@@ -327,7 +327,7 @@ describe('Accordion Integration Tests', () => {
             <button type='button' onClick={() => setItems([...items, `item-${items.length + 1}`])}>
               Add Item
             </button>
-            <Accordion allowMultiple>
+            <Accordion multiple>
               {items.map((itemId, index) => (
                 <AccordionItem key={itemId} value={itemId}>
                   <AccordionHeader>
@@ -374,7 +374,7 @@ describe('Accordion Integration Tests', () => {
             <button type='button' onClick={() => setCount(count + 1)}>
               Re-render ({count})
             </button>
-            <Accordion allowMultiple defaultValue={['item-1']}>
+            <Accordion multiple defaultValue={['item-1']}>
               <AccordionItem value='item-1'>
                 <AccordionHeader>
                   <AccordionTrigger>Persistent Item 1</AccordionTrigger>
@@ -537,7 +537,7 @@ describe('Accordion Integration Tests', () => {
       const ComplexAccordion = () => (
         <div>
           <nav aria-label='Table of contents'>
-            <Accordion allowMultiple>
+            <Accordion multiple>
               <AccordionItem value='chapter-1'>
                 <AccordionHeader level={2}>
                   <AccordionTrigger>Chapter 1: Introduction</AccordionTrigger>

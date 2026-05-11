@@ -22,8 +22,7 @@ export const AccordionHeader = <T extends ElementType = 'h3'>({
       {...props}
       ref={ref}
       data-level={level}
-      data-open={isOpen ? '' : undefined}
-      data-closed={isOpen ? undefined : ''}
+      data-state={isOpen ? 'open' : 'closed'}
       {...(disabled && { 'data-disabled': '' })}
     >
       {children}

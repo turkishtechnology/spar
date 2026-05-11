@@ -80,17 +80,12 @@ export default function AccordionDemo() {
         <section className='demo-section'>
           <h2>2. Multiple Expand Mode</h2>
           <p className='demo-description'>
-            Multiple panels can be open simultaneously with{' '}
-            <code>selectionMode=&quot;multiple&quot;</code>.
+            Multiple panels can be open simultaneously with <code>multiple</code>.
           </p>
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <Accordion.Root
-                  className='demo-accordion'
-                  selectionMode='multiple'
-                  defaultValue={['m-1', 'm-3']}
-                >
+                <Accordion.Root className='demo-accordion' multiple defaultValue={['m-1', 'm-3']}>
                   {['Tab 1', 'Tab 2', 'Tab 3'].map((title, i) => (
                     <Accordion.Item
                       key={`item-${i + 1}`}
@@ -114,7 +109,7 @@ export default function AccordionDemo() {
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Accordion.Root selectionMode='multiple' defaultValue='item-1'>
+                <code>{`<Accordion.Root multiple defaultValue='item-1'>
   <Accordion.Item value='item-1'>
     <Accordion.Header>
       <Accordion.Trigger>Tab 1</Accordion.Trigger>
@@ -131,13 +126,14 @@ export default function AccordionDemo() {
         <section className='demo-section'>
           <h2>3. Collapsible Single Mode</h2>
           <p className='demo-description'>
-            With <code>isCollapsible</code>, all panels can be closed in single mode. Without it,
-            one panel always stays open.
+            With <code>collapsible</code> (default <code>true</code>), all panels can be closed in
+            single mode. Set <code>collapsible=&#123;false&#125;</code> to keep one panel always
+            open.
           </p>
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <Accordion.Root className='demo-accordion' isCollapsible>
+                <Accordion.Root className='demo-accordion' collapsible>
                   {['Panel A', 'Panel B', 'Panel C'].map((title, i) => (
                     <Accordion.Item
                       key={`c-${i + 1}`}
@@ -160,7 +156,7 @@ export default function AccordionDemo() {
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Accordion.Root isCollapsible>
+                <code>{`<Accordion.Root collapsible>
   <Accordion.Item value='panel-a'>
     <Accordion.Header>
       <Accordion.Trigger>Panel A</Accordion.Trigger>
@@ -246,7 +242,7 @@ export default function AccordionDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <Accordion.Root className='demo-accordion' isCollapsible>
+                <Accordion.Root className='demo-accordion' collapsible>
                   <Accordion.Item className='demo-accordion-item' value='d-1'>
                     <Accordion.Header className='demo-accordion-header'>
                       <Accordion.Trigger className='demo-accordion-trigger'>
@@ -314,7 +310,7 @@ export default function AccordionDemo() {
                 <Accordion.Root
                   className='demo-accordion'
                   orientation='horizontal'
-                  isCollapsible
+                  collapsible
                   style={{ flexDirection: 'row', gap: 8 }}
                 >
                   {['Tab 1', 'Tab 2', 'Tab 3'].map((title, i) => (

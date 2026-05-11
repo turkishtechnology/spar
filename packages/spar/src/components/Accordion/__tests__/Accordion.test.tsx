@@ -11,7 +11,7 @@ import {
 
 // Test setup helper
 const BasicAccordion = ({
-  allowMultiple = false,
+  multiple = false,
   value,
   defaultValue,
   onValueChange,
@@ -21,7 +21,7 @@ const BasicAccordion = ({
   ...rest
 }: Partial<React.ComponentProps<typeof Accordion>> = {}) => (
   <Accordion
-    allowMultiple={allowMultiple}
+    multiple={multiple}
     {...(value !== undefined && { value })}
     {...(defaultValue !== undefined && { defaultValue })}
     {...(onValueChange && { onValueChange })}
@@ -69,7 +69,7 @@ describe('Accordion', () => {
     });
 
     it('should apply correct data attributes', () => {
-      const { container } = render(<BasicAccordion orientation='horizontal' allowMultiple />);
+      const { container } = render(<BasicAccordion orientation='horizontal' multiple />);
       const accordion = container.firstChild as HTMLElement;
 
       expect(accordion).toHaveAttribute('data-orientation', 'horizontal');
@@ -128,9 +128,9 @@ describe('Accordion', () => {
       expect(screen.queryByText('Content 1')).not.toBeInTheDocument();
     });
 
-    it('should not collapse expanded item when preventCollapse is true', async () => {
+    it('should not collapse expanded item when collapsible is false', async () => {
       const user = userEvent.setup();
-      render(<BasicAccordion preventCollapse />);
+      render(<BasicAccordion collapsible={false} />);
 
       const trigger = screen.getByRole('button', { name: 'Item 1' });
 
@@ -147,7 +147,7 @@ describe('Accordion', () => {
   describe('Multiple Mode Behavior', () => {
     it('should allow multiple items to be expanded simultaneously', async () => {
       const user = userEvent.setup();
-      render(<BasicAccordion allowMultiple />);
+      render(<BasicAccordion multiple />);
 
       const trigger1 = screen.getByRole('button', { name: 'Item 1' });
       const trigger2 = screen.getByRole('button', { name: 'Item 2' });
@@ -163,7 +163,7 @@ describe('Accordion', () => {
 
     it('should toggle individual items in multiple mode', async () => {
       const user = userEvent.setup();
-      render(<BasicAccordion allowMultiple />);
+      render(<BasicAccordion multiple />);
 
       const trigger1 = screen.getByRole('button', { name: 'Item 1' });
 
@@ -221,7 +221,7 @@ describe('Accordion', () => {
       const onValueChange = jest.fn();
 
       const { rerender } = render(
-        <BasicAccordion allowMultiple value={['item-1']} onValueChange={onValueChange} />,
+        <BasicAccordion multiple value={['item-1']} onValueChange={onValueChange} />,
       );
 
       expect(screen.getByRole('button', { name: 'Item 1' })).toHaveAttribute(
@@ -236,7 +236,7 @@ describe('Accordion', () => {
 
       // Simulate adding second item
       rerender(
-        <BasicAccordion value={['item-1', 'item-2']} onValueChange={onValueChange} allowMultiple />,
+        <BasicAccordion value={['item-1', 'item-2']} onValueChange={onValueChange} multiple />,
       );
 
       expect(screen.getByRole('button', { name: 'Item 1' })).toHaveAttribute(
@@ -266,7 +266,7 @@ describe('Accordion', () => {
     });
 
     it('should initialize with defaultValue in multiple mode', () => {
-      render(<BasicAccordion allowMultiple defaultValue={['item-1', 'item-2']} />);
+      render(<BasicAccordion multiple defaultValue={['item-1', 'item-2']} />);
 
       expect(screen.getByRole('button', { name: 'Item 1' })).toHaveAttribute(
         'aria-expanded',

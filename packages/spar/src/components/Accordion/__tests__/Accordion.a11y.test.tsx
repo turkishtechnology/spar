@@ -15,12 +15,12 @@ expect.extend(toHaveNoViolations);
 
 // Test setup helpers
 const BasicAccordion = ({
-  allowMultiple = false,
+  multiple = false,
   orientation = 'vertical',
   children,
   ...rest
 }: Partial<React.ComponentProps<typeof Accordion>> = {}) => (
-  <Accordion allowMultiple={allowMultiple} orientation={orientation} {...rest}>
+  <Accordion multiple={multiple} orientation={orientation} {...rest}>
     {children || (
       <>
         <AccordionItem value='item-1'>
@@ -95,7 +95,7 @@ describe('Accordion Accessibility', () => {
 
     it('should have no accessibility violations with multiple items expanded', async () => {
       const user = userEvent.setup();
-      const { container } = render(<BasicAccordion allowMultiple />);
+      const { container } = render(<BasicAccordion multiple />);
 
       // Expand multiple items
       const trigger1 = screen.getByRole('button', { name: 'Section 1: Introduction' });

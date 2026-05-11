@@ -12,7 +12,7 @@ export type AccordionValue = string | number;
 
 /**
  * Current item identifier(s). A scalar in single mode, an array when
- * `allowMultiple` is set.
+ * `multiple` is set.
  */
 export type AccordionCurrentValue = AccordionValue | AccordionValue[];
 
@@ -24,7 +24,7 @@ export interface AccordionOwnProps {
    * When `true`, multiple items can be expanded at once.
    * @defaultValue false
    */
-  allowMultiple?: boolean;
+  multiple?: boolean;
 
   /**
    * Controlled item identifier(s). Match the `value` of the items that should
@@ -44,12 +44,12 @@ export interface AccordionOwnProps {
   onValueChange?: (next: AccordionCurrentValue) => void;
 
   /**
-   * In single mode, when `true`, an active item cannot be collapsed by
-   * clicking it again. Default is `false`, which matches Takeoff Core
-   * (active items can always be collapsed). Has no effect in multi mode.
-   * @defaultValue false
+   * In single mode, when `true`, an active item can be collapsed by clicking
+   * it again. When `false`, one item is always expanded. Has no effect in
+   * multi mode.
+   * @defaultValue true
    */
-  preventCollapse?: boolean;
+  collapsible?: boolean;
 
   /**
    * Disables every item in the accordion.
@@ -155,8 +155,8 @@ export type AccordionContentProps<T extends ElementType = 'div'> = CollapsibleCo
  * @internal
  */
 export interface AccordionContextValue {
-  allowMultiple: boolean;
-  preventCollapse: boolean;
+  multiple: boolean;
+  collapsible: boolean;
   value: AccordionCurrentValue;
   onItemToggle: (value: AccordionValue) => void;
   disabled: boolean;
