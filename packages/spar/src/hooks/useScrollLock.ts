@@ -2,29 +2,55 @@ import { useEffect } from 'react';
 
 /**
  * Global lock count per document, enabling nested dialogs.
- * First lock applies overflow:hidden, last unlock restores original styles.
+ * First lock applies scroll prevention, last unlock restores original styles.
+ * Uses the body-fixed pattern to preserve scroll position on all platforms (including iOS).
  */
-const lockMap = new Map<Document, { count: number; overflow: string; paddingRight: string }>();
+const lockMap = new Map<
+  Document,
+  {
+    count: number;
+    scrollY: number;
+    overflow: string;
+    position: string;
+    top: string;
+    left: string;
+    right: string;
+    paddingRight: string;
+  }
+>();
 
 function lock(doc: Document) {
   let entry = lockMap.get(doc);
 
   if (!entry) {
-    const { documentElement } = doc;
+    const { body } = doc;
     const ownerWindow = doc.defaultView ?? window;
+    const scrollY = ownerWindow.scrollY;
 
-    // Capture original styles before any mutation
+    // Scrollbar width compensation (measure before hiding overflow)
+    const scrollbarWidth = Math.max(0, ownerWindow.innerWidth - doc.documentElement.clientWidth);
+
+    // Capture original body styles before mutation
     entry = {
       count: 0,
-      overflow: documentElement.style.overflow,
-      paddingRight: documentElement.style.paddingRight,
+      scrollY,
+      overflow: body.style.overflow,
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      paddingRight: body.style.paddingRight,
     };
     lockMap.set(doc, entry);
 
-    // Scrollbar width compensation (measure before hiding overflow)
-    const scrollbarWidth = Math.max(0, ownerWindow.innerWidth - documentElement.clientWidth);
-    documentElement.style.paddingRight = `${scrollbarWidth}px`;
-    documentElement.style.overflow = 'hidden';
+    // Apply fixed positioning to body — preserves visual scroll position.
+    // Using left/right: 0 instead of width: 100% to handle body margin edge cases.
+    body.style.overflow = 'hidden';
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.paddingRight = `${scrollbarWidth}px`;
   }
 
   entry.count++;
@@ -37,9 +63,19 @@ function unlock(doc: Document) {
   entry.count--;
 
   if (entry.count <= 0) {
-    const { documentElement } = doc;
-    documentElement.style.overflow = entry.overflow;
-    documentElement.style.paddingRight = entry.paddingRight;
+    const { body } = doc;
+    const ownerWindow = doc.defaultView ?? window;
+
+    // Restore original body styles
+    body.style.overflow = entry.overflow;
+    body.style.position = entry.position;
+    body.style.top = entry.top;
+    body.style.left = entry.left;
+    body.style.right = entry.right;
+    body.style.paddingRight = entry.paddingRight;
+
+    // Restore scroll position
+    ownerWindow.scrollTo(0, entry.scrollY);
     lockMap.delete(doc);
   }
 }
