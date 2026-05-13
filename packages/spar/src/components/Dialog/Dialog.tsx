@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useId } from 'react';
-import { useControlledState } from '@/hooks';
+import { useControlledState, useScrollLock } from '@/hooks';
 import { DialogContext } from './hooks';
 import type { DialogProps, DialogContextValue } from './types';
 
@@ -41,6 +41,9 @@ export const Dialog = ({
 
   // Track previous open state for close transition detection
   const wasOpenRef = useRef(isOpen ?? false);
+
+  // Lock body scroll when modal dialog is open (reference-counted for nested dialogs)
+  useScrollLock(!!(modal && isOpen));
 
   // Handle close focus restoration when isOpen transitions from true to false
   useEffect(() => {

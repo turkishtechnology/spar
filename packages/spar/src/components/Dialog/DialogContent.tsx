@@ -153,9 +153,9 @@ export const DialogContent = <T extends ElementType = 'div'>({
     [onEscapeKeyDown, onKeyDown, setIsOpen],
   );
 
-  // Outside interaction handler
+  // Outside interaction handler — works for both modal and non-modal dialogs.
   useInteractOutside([contentRef], {
-    enabled: isOpen && modal,
+    enabled: isOpen,
     onPointerDownOutside: (event) => {
       onPointerDownOutside?.(event);
       onInteractOutside?.(event);
