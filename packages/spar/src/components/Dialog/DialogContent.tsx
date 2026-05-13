@@ -32,6 +32,7 @@ export const DialogContent = <T extends ElementType = 'div'>({
     setIsOpen,
     modal,
     forceMount,
+    triggerRef,
     contentRef,
     titleId,
     descriptionId,
@@ -154,7 +155,8 @@ export const DialogContent = <T extends ElementType = 'div'>({
   );
 
   // Outside interaction handler — works for both modal and non-modal dialogs.
-  useInteractOutside([contentRef], {
+  // Excludes triggerRef so clicking the trigger doesn't double-fire dismiss.
+  useInteractOutside([contentRef, triggerRef], {
     enabled: isOpen,
     onPointerDownOutside: (event) => {
       onPointerDownOutside?.(event);
