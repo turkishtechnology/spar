@@ -95,6 +95,35 @@ export type SwitchProps<T extends ElementType = 'button'> = PolymorphicProps<
   SwitchOwnProps
 >;
 
+export interface SwitchRootOwnProps {
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onChange?: (checked: boolean) => void;
+  disabled?: boolean;
+  name?: string;
+  value?: string;
+  form?: string;
+  required?: boolean;
+  readOnly?: boolean;
+  children?: ReactNode | ((state: SwitchRenderProps) => ReactNode);
+}
+
+export type SwitchRootProps<T extends ElementType = 'div'> = PolymorphicProps<
+  'div',
+  T,
+  SwitchRootOwnProps
+>;
+
+export type SwitchControlProps<T extends ElementType = 'button'> = PolymorphicProps<'button', T>;
+
+export type SwitchTrackProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
+
+export type SwitchThumbProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
+
+export type SwitchLabelProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
+
+export type SwitchHintProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
+
 /**
  * Props for useSwitch hook
  */
@@ -149,4 +178,28 @@ export interface UseSwitchReturn {
     'aria-hidden': true;
     style: CSSProperties;
   };
+}
+
+export interface SwitchContextValue {
+  checked: boolean;
+  setChecked: (next: boolean) => void;
+  disabled: boolean;
+  readOnly: boolean;
+  required: boolean;
+  isFocused: boolean;
+  isHovered: boolean;
+  isPressed: boolean;
+  controlId: string;
+  labelId: string | undefined;
+  hintId: string | undefined;
+  registerLabel: (id: string) => () => void;
+  registerHint: (id: string) => () => void;
+}
+
+export interface SwitchInternalContextValue extends SwitchContextValue {
+  switchProps: UseSwitchReturn['switchProps'];
+  hiddenInputProps: UseSwitchReturn['hiddenInputProps'];
+  value: string;
+  name?: string;
+  form?: string;
 }

@@ -18,12 +18,12 @@ import {
   Popover,
   Radio,
   Select,
+  Switch,
   Tabs,
   Tooltip,
   // Simple components
   Button,
   Checkbox,
-  Switch,
   Label,
   // Individual imports for LiveCode's internal UI
   TabsList,
@@ -142,12 +142,12 @@ export const LiveCode = ({ code, cssCode }: LiveCodeProps) => {
       Popover,
       Radio,
       Select,
+      Switch,
       Tabs,
       Tooltip,
       // Simple components
       Button,
       Checkbox,
-      Switch,
       Label,
     }),
     [],

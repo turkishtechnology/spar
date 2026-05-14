@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import userEvent from '@testing-library/user-event';
-import { Switch } from '../Switch';
+import { Switch, SwitchControl, SwitchHint, SwitchLabel, SwitchRoot } from '..';
 
 expect.extend(toHaveNoViolations);
 
@@ -113,5 +113,17 @@ describe('Switch Accessibility', () => {
     expect(handleChange).toHaveBeenNthCalledWith(1, true);
     expect(handleChange).toHaveBeenNthCalledWith(2, false);
     expect(handleChange).toHaveBeenCalledTimes(2);
+  });
+
+  it('passes axe checks for compound anatomy', async () => {
+    const { container } = render(
+      <SwitchRoot name='alerts' required>
+        <SwitchControl />
+        <SwitchLabel>Travel alerts</SwitchLabel>
+        <SwitchHint>Only operational changes are sent here.</SwitchHint>
+      </SwitchRoot>,
+    );
+
+    expect(await axe(container)).toHaveNoViolations();
   });
 });

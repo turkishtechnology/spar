@@ -220,45 +220,49 @@ export default function FormDemo() {
               </fieldset>
 
               <div className='demo-col'>
-                <div className='demo-field'>
-                  <Controller
-                    control={control}
-                    name='announcements'
-                    render={({ field: { value, onChange } }) => (
-                      <Switch
-                        id='announcements-switch'
-                        className='demo-switch'
-                        checked={value}
-                        onChange={onChange}
-                      >
-                        {() => <span className='demo-switch-thumb' />}
-                      </Switch>
-                    )}
-                  />
-                  <Label htmlFor='announcements-switch' className='demo-label'>
-                    Receive product announcements
-                  </Label>
-                </div>
+                <Controller
+                  control={control}
+                  name='announcements'
+                  render={({ field: { value, onChange } }) => (
+                    <Switch.Root
+                      id='announcements-switch'
+                      className='demo-field'
+                      checked={value}
+                      onChange={onChange}
+                    >
+                      <Switch.Control className='demo-switch'>
+                        <Switch.Track className='demo-switch-track'>
+                          <Switch.Thumb className='demo-switch-thumb' />
+                        </Switch.Track>
+                      </Switch.Control>
+                      <Switch.Label className='demo-label'>
+                        Receive product announcements
+                      </Switch.Label>
+                    </Switch.Root>
+                  )}
+                />
 
-                <div className='demo-field'>
-                  <Controller
-                    control={control}
-                    name='featureUpdates'
-                    render={({ field: { value, onChange } }) => (
-                      <Switch
-                        id='feature-updates-switch'
-                        className='demo-switch'
-                        checked={value}
-                        onChange={onChange}
-                      >
-                        {() => <span className='demo-switch-thumb' />}
-                      </Switch>
-                    )}
-                  />
-                  <Label htmlFor='feature-updates-switch' className='demo-label'>
-                    Enable experimental feature updates
-                  </Label>
-                </div>
+                <Controller
+                  control={control}
+                  name='featureUpdates'
+                  render={({ field: { value, onChange } }) => (
+                    <Switch.Root
+                      id='feature-updates-switch'
+                      className='demo-field'
+                      checked={value}
+                      onChange={onChange}
+                    >
+                      <Switch.Control className='demo-switch'>
+                        <Switch.Track className='demo-switch-track'>
+                          <Switch.Thumb className='demo-switch-thumb' />
+                        </Switch.Track>
+                      </Switch.Control>
+                      <Switch.Label className='demo-label'>
+                        Enable experimental feature updates
+                      </Switch.Label>
+                    </Switch.Root>
+                  )}
+                />
               </div>
 
               <Collapsible.Root className='demo-collapsible'>
