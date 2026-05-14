@@ -1019,37 +1019,84 @@
 }
 
 // Switch styles
-.switch-demo-container .switch {
-  background-color: rgba(0, 0, 0, 0.08);
+.switch-demo-container .switch-root {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.switch-demo-container .switch-control {
+  width: 56px;
+  height: 32px;
+  padding: 0;
   border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.switch-demo-container .switch-control:focus-visible {
+  outline: 2px solid #d43347;
+  outline-offset: 3px;
+  border-radius: 999px;
+}
+
+.switch-demo-container .switch-track {
+  box-sizing: border-box;
   width: 56px;
   height: 32px;
   padding: 4px;
-  border-radius: 24px;
-  position: relative;
+  border: 1px solid #e1e4ea;
+  border-radius: 999px;
+  background-color: rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
+  transition: background-color 0.2s ease;
 }
 
-.switch-demo-container .switch::after {
-  content: '';
-  width: 24px;
-  height: 24px;
+.switch-demo-container .switch-track[data-state='checked'] {
+  background-color: #d43347;
+  border-color: #d43347;
+}
+
+.switch-demo-container .switch-thumb {
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.72);
-  transition: transform 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
 }
 
-.switch-demo-container .switch[data-checked]::after {
-  transform: translateX(100%);
+.switch-demo-container .switch-track[data-state='checked'] .switch-thumb {
+  transform: translateX(24px);
+  background: #fff;
 }
 
-[data-theme='dark'] .switch-demo-container .switch {
+.switch-demo-container .switch-label {
+  font-weight: 500;
+}
+
+.switch-demo-container .switch-hint {
+  display: block;
+  color: #717784;
+  font-size: 0.875rem;
+}
+
+[data-theme='dark'] .switch-demo-container .switch-track {
+  border-color: #2b303b;
   background-color: rgba(255, 255, 255, 0.12);
 }
 
-[data-theme='dark'] .switch-demo-container .switch::after {
+[data-theme='dark'] .switch-demo-container .switch-thumb {
   background: rgba(255, 255, 255, 0.72);
+}
+
+[data-theme='dark'] .switch-demo-container .switch-track[data-state='checked'] {
+  background-color: #d43347;
+  border-color: #d43347;
 }
 
 // Tabs styles

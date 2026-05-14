@@ -164,8 +164,7 @@
     }
   }
   /* Checkbox & Switch */
-  .demo-checkbox,
-  .demo-switch {
+  .demo-checkbox {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -184,10 +183,6 @@
     &:focus-visible {
       outline: 2px solid #d43347;
       outline-offset: 2px;
-    }
-    &[data-disabled] + label {
-      color: #e1e4ea;
-      cursor: not-allowed;
     }
   }
 
@@ -210,25 +205,45 @@
   }
 
   .demo-switch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 44px;
     height: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
     border-radius: 24px;
+    cursor: pointer;
+    font-family: inherit;
+
+    &:focus-visible {
+      outline: 2px solid #d43347;
+      outline-offset: 2px;
+    }
+
+    &[data-disabled],
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .demo-switch-track {
+    display: flex;
+    align-items: center;
+    width: 44px;
+    height: 24px;
     padding: 2px;
-    justify-content: flex-start;
+    border-radius: 24px;
     transition: background 0.15s;
     background: #ccc;
-    border-color: #ccc;
 
     [data-theme='dark'] & {
       background: #555;
-      border-color: #555;
     }
 
-    &[aria-checked='true'],
     &[data-state='checked'] {
       background: #d43347;
-      border-color: #d43347;
-      justify-content: flex-end;
     }
   }
 
@@ -238,6 +253,11 @@
     height: 16px;
     background: #fff;
     border-radius: 50%;
+    transition: transform 0.15s;
+  }
+
+  .demo-switch-track[data-state='checked'] .demo-switch-thumb {
+    transform: translateX(20px);
   }
 
   /* Labels */
@@ -248,6 +268,12 @@
     font-weight: 500;
     cursor: pointer;
     user-select: none;
+
+    &[data-disabled],
+    &[data-readonly] {
+      color: #999;
+      cursor: not-allowed;
+    }
   }
 
   /* Input fields */
