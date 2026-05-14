@@ -1,6 +1,5 @@
 import type { ElementType } from 'react';
 import type { PolymorphicProps } from '../../types';
-import type { LabelProps } from '../Label/types';
 
 /**
  * Input context state
@@ -18,7 +17,11 @@ export interface InputContextValue {
 }
 
 /**
- * Own props for Input
+ * Own props for Input.
+ *
+ * When used inside a `<Field>`, the Input reads the Field's context values
+ * (`invalid`, `disabled`, `required`, `readOnly`) automatically as defaults.
+ * Props set directly on `<Input>` override the inherited values.
  */
 export interface InputOwnProps {
   /**
@@ -29,26 +32,22 @@ export interface InputOwnProps {
   id?: string;
 
   /**
-   * Input validation state
-   * @defaultValue false
+   * Input validation state. When inside a Field, inherited from Field.
    */
   isInvalid?: boolean;
 
   /**
-   * Input disabled state
-   * @defaultValue false
+   * Input disabled state. When inside a Field, inherited from Field.
    */
   disabled?: boolean;
 
   /**
-   * Input required state
-   * @defaultValue false
+   * Input required state. When inside a Field, inherited from Field.
    */
   required?: boolean;
 
   /**
-   * Input read-only state
-   * @defaultValue false
+   * Input read-only state. When inside a Field, inherited from Field.
    */
   readOnly?: boolean;
 }
@@ -80,21 +79,3 @@ export type InputFieldProps<T extends ElementType = 'input'> = PolymorphicProps<
   T,
   InputFieldOwnProps
 >;
-
-/**
- * Props for InputLabel
- * @remarks Associated label element with automatic ID linking
- */
-export type InputLabelProps<T extends ElementType = 'label'> = LabelProps<T>;
-
-/**
- * Props for InputDescription
- * @remarks Helper text element for additional input guidance
- */
-export type InputDescriptionProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
-
-/**
- * Props for InputErrorMessage
- * @remarks Error announcement element with automatic ARIA handling
- */
-export type InputErrorMessageProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
