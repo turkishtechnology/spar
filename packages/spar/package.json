@@ -48,6 +48,11 @@
       "import": "./dist/dropdown-menu.mjs",
       "require": "./dist/dropdown-menu.cjs"
     },
+    "./field": {
+      "types": "./dist/field.d.ts",
+      "import": "./dist/field.mjs",
+      "require": "./dist/field.cjs"
+    },
     "./input": {
       "types": "./dist/input.d.ts",
       "import": "./dist/input.mjs",
@@ -112,6 +117,9 @@
       ],
       "dropdown-menu": [
         "./dist/dropdown-menu.d.ts"
+      ],
+      "field": [
+        "./dist/field.d.ts"
       ],
       "input": [
         "./dist/input.d.ts"
