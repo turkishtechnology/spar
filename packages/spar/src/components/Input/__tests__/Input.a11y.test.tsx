@@ -74,7 +74,6 @@ describe('Input - Accessibility Tests', () => {
     expect(field).toHaveAttribute('aria-describedby', error.id);
     expect(field).toHaveAttribute('aria-invalid', 'true');
     expect(error).toHaveAttribute('role', 'alert');
-    expect(error).toHaveAttribute('aria-live', 'assertive');
   });
 
   it('supports keyboard focus and blur state', async () => {

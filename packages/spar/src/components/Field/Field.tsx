@@ -49,7 +49,7 @@ export const Field = <T extends ElementType = 'div'>({
 
   return (
     <FieldContext.Provider value={contextValue}>
-      <Component ref={ref} {...props} {...dataAttributes}>
+      <Component ref={ref} id={id} {...props} {...dataAttributes}>
         {children}
       </Component>
     </FieldContext.Provider>

@@ -1,1 +1,1 @@
-export { InputContext, useInputContext } from './useInputContext';
+export { InputContext, useInputContext, useOptionalInputContext } from './useInputContext';

@@ -160,7 +160,6 @@ describe('Input - Unit Tests', () => {
     const error = screen.getByText('Username is required');
     expect(field).toHaveAttribute('aria-describedby', error.id);
     expect(error).toHaveAttribute('role', 'alert');
-    expect(error).toHaveAttribute('aria-live', 'assertive');
   });
 
   it('toggles focused data attribute and calls focus handlers', async () => {

@@ -30,7 +30,9 @@ export interface FieldOwnProps {
 
   /**
    * Whether the field is in an invalid/error state.
-   * Drives conditional rendering of `FieldErrorMessage` and ARIA attributes.
+   * Drives conditional rendering of `FieldErrorMessage` and propagates
+   * to nested form controls (e.g. Input) which apply `aria-invalid`
+   * on the actual input element.
    * Intended to be set by external validation (e.g. Zod).
    * @defaultValue false
    */
@@ -65,6 +67,8 @@ export type FieldProps<T extends ElementType = 'div'> = PolymorphicProps<'div', 
 /**
  * Props for FieldLabel.
  * @remarks Renders as `<label>` by default with automatic htmlFor linking.
+ * When used inside a Field, `disabled`, `required`, `readOnly`, and
+ * `isInvalid` are provided by Field context and cannot be overridden.
  */
 export type FieldLabelProps<T extends ElementType = 'label'> = LabelProps<T>;
 

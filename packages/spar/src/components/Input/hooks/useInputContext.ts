@@ -10,3 +10,10 @@ export const useInputContext = () => {
   }
   return context;
 };
+
+/**
+ * Optionally read the nearest Input context. Returns `null` when no Input
+ * ancestor is present, allowing controls to work both standalone and inside
+ * an Input.
+ */
+export const useOptionalInputContext = () => useContext(InputContext);
