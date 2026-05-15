@@ -9,7 +9,7 @@ export const SwitchThumb = <T extends ElementType = 'span'>({
   ...props
 }: SwitchThumbProps<T>) => {
   const Component = as || 'span';
-  const { checked, disabled, readOnly, required, isFocused, isHovered, isPressed } =
+  const { checked, disabled, readOnly, required, isInvalid, isFocused, isHovered, isPressed } =
     useSwitchContext();
 
   return (
@@ -22,6 +22,7 @@ export const SwitchThumb = <T extends ElementType = 'span'>({
       data-disabled={disabled ? '' : undefined}
       data-readonly={readOnly ? '' : undefined}
       data-required={required ? '' : undefined}
+      data-invalid={isInvalid ? '' : undefined}
       data-focus={isFocused ? '' : undefined}
       data-hover={isHovered ? '' : undefined}
       data-active={isPressed ? '' : undefined}

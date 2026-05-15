@@ -1,4 +1,5 @@
 import type { ElementType, FocusEvent, KeyboardEvent, MouseEvent, PointerEvent } from 'react';
+import { useOptionalFieldContext } from '../Field/hooks';
 import { useSwitchInternalContext } from './hooks/useSwitchContext';
 import type { SwitchControlProps } from './types';
 
@@ -29,16 +30,20 @@ export const SwitchControl = <T extends ElementType = 'button'>({
     disabled,
     readOnly,
     required,
+    isInvalid,
     controlId,
-    labelId,
-    hintId,
     name,
     value,
     form,
     switchProps,
     hiddenInputProps,
   } = useSwitchInternalContext();
-  const describedBy = [ariaDescribedBy, hintId].filter(Boolean).join(' ') || undefined;
+
+  const fieldCtx = useOptionalFieldContext();
+  const resolvedId = id ?? fieldCtx?.fieldId ?? controlId;
+  const resolvedLabelledBy = ariaLabelledBy ?? fieldCtx?.labelId;
+  const resolvedDescribedBy =
+    ariaDescribedBy ?? (isInvalid ? fieldCtx?.errorId : fieldCtx?.descriptionId);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     switchProps.onClick(event as MouseEvent);
@@ -87,21 +92,23 @@ export const SwitchControl = <T extends ElementType = 'button'>({
 
   const elementProps: Record<string, unknown> = {
     ref,
-    id: id ?? controlId,
+    id: resolvedId,
     ...props,
     role: 'switch',
     'aria-checked': checked,
     'aria-label': ariaLabel,
-    'aria-labelledby': ariaLabelledBy ?? labelId,
-    'aria-describedby': describedBy,
+    'aria-labelledby': resolvedLabelledBy,
+    'aria-describedby': resolvedDescribedBy,
     'aria-required': required || undefined,
     'aria-readonly': readOnly || undefined,
+    'aria-invalid': isInvalid || undefined,
     'data-switch': '',
     'data-state': checked ? 'checked' : 'unchecked',
     'data-checked': checked ? '' : undefined,
     'data-disabled': disabled ? '' : undefined,
     'data-readonly': readOnly ? '' : undefined,
     'data-required': required ? '' : undefined,
+    'data-invalid': isInvalid ? '' : undefined,
     'data-focus': switchProps['data-focus'],
     'data-hover': switchProps['data-hover'],
     'data-active': switchProps['data-active'],

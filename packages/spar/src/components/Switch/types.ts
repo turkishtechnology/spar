@@ -31,6 +31,14 @@ export interface SwitchRenderProps {
    */
   readOnly: boolean;
   /**
+   * Whether the switch is required
+   */
+  required: boolean;
+  /**
+   * Whether the switch is in an invalid/error state
+   */
+  isInvalid: boolean;
+  /**
    * Whether the switch is currently focused
    */
   isFocused: boolean;
@@ -68,6 +76,13 @@ export interface SwitchOwnProps extends ButtonOwnProps {
   onChange?: (checked: boolean) => void;
 
   /**
+   * Whether the switch is in an invalid/error state.
+   * Inherited from Field unless explicitly overridden.
+   * @defaultValue false
+   */
+  isInvalid?: boolean;
+
+  /**
    * Required state for form validation
    * @defaultValue false
    */
@@ -100,6 +115,7 @@ export interface SwitchRootOwnProps {
   defaultChecked?: boolean;
   onChange?: (checked: boolean) => void;
   disabled?: boolean;
+  isInvalid?: boolean;
   name?: string;
   value?: string;
   form?: string;
@@ -119,10 +135,6 @@ export type SwitchControlProps<T extends ElementType = 'button'> = PolymorphicPr
 export type SwitchTrackProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
 
 export type SwitchThumbProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
-
-export type SwitchLabelProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
-
-export type SwitchHintProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
 
 /**
  * Props for useSwitch hook
@@ -186,14 +198,11 @@ export interface SwitchContextValue {
   disabled: boolean;
   readOnly: boolean;
   required: boolean;
+  isInvalid: boolean;
   isFocused: boolean;
   isHovered: boolean;
   isPressed: boolean;
   controlId: string;
-  labelId: string | undefined;
-  hintId: string | undefined;
-  registerLabel: (id: string) => () => void;
-  registerHint: (id: string) => () => void;
 }
 
 export interface SwitchInternalContextValue extends SwitchContextValue {

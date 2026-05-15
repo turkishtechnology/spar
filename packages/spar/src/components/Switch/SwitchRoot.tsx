@@ -1,4 +1,5 @@
-import { useCallback, useId, useMemo, useState, type ElementType } from 'react';
+import { useId, useMemo, type ElementType } from 'react';
+import { useOptionalFieldContext } from '../Field/hooks';
 import { useSwitch } from './hooks';
 import { SwitchContext } from './hooks/useSwitchContext';
 import type { SwitchInternalContextValue, SwitchRenderProps, SwitchRootProps } from './types';
@@ -8,12 +9,13 @@ export const SwitchRoot = <T extends ElementType = 'div'>({
   checked,
   defaultChecked,
   onChange,
-  disabled = false,
+  disabled,
+  isInvalid,
   name,
   value = 'on',
   form,
-  required = false,
-  readOnly = false,
+  required,
+  readOnly,
   id: providedId,
   children,
   ref,
@@ -23,8 +25,13 @@ export const SwitchRoot = <T extends ElementType = 'div'>({
   const generatedId = useId();
   const rootId = providedId ?? generatedId;
   const controlId = `${rootId}-control`;
-  const [labelId, setLabelId] = useState<string>();
-  const [hintId, setHintId] = useState<string>();
+
+  // Field context integration — direct props win over inherited Field values.
+  const fieldCtx = useOptionalFieldContext();
+  const resolvedInvalid = isInvalid ?? fieldCtx?.invalid ?? false;
+  const resolvedDisabled = disabled ?? fieldCtx?.disabled ?? false;
+  const resolvedRequired = required ?? fieldCtx?.required ?? false;
+  const resolvedReadOnly = readOnly ?? fieldCtx?.readOnly ?? false;
 
   const {
     checked: checkedState,
@@ -38,35 +45,22 @@ export const SwitchRoot = <T extends ElementType = 'div'>({
     ...(checked !== undefined && { checked }),
     ...(defaultChecked !== undefined && { defaultChecked }),
     ...(onChange && { onChange }),
-    disabled,
-    readOnly,
+    disabled: resolvedDisabled,
+    readOnly: resolvedReadOnly,
   });
-
-  const registerLabel = useCallback((id: string) => {
-    setLabelId(id);
-    return () => setLabelId((current) => (current === id ? undefined : current));
-  }, []);
-
-  const registerHint = useCallback((id: string) => {
-    setHintId(id);
-    return () => setHintId((current) => (current === id ? undefined : current));
-  }, []);
 
   const contextValue = useMemo<SwitchInternalContextValue>(
     () => ({
       checked: checkedState,
       setChecked,
-      disabled,
-      readOnly,
-      required,
+      disabled: resolvedDisabled,
+      readOnly: resolvedReadOnly,
+      required: resolvedRequired,
+      isInvalid: resolvedInvalid,
       isFocused,
       isHovered,
       isPressed: isActive,
       controlId,
-      labelId,
-      hintId,
-      registerLabel,
-      registerHint,
       switchProps,
       hiddenInputProps,
       value,
@@ -76,17 +70,14 @@ export const SwitchRoot = <T extends ElementType = 'div'>({
     [
       checkedState,
       setChecked,
-      disabled,
-      readOnly,
-      required,
+      resolvedDisabled,
+      resolvedReadOnly,
+      resolvedRequired,
+      resolvedInvalid,
       isFocused,
       isHovered,
       isActive,
       controlId,
-      labelId,
-      hintId,
-      registerLabel,
-      registerHint,
       switchProps,
       hiddenInputProps,
       value,
@@ -98,8 +89,10 @@ export const SwitchRoot = <T extends ElementType = 'div'>({
   const renderProps: SwitchRenderProps = {
     checked: checkedState,
     setChecked,
-    disabled,
-    readOnly,
+    disabled: resolvedDisabled,
+    readOnly: resolvedReadOnly,
+    required: resolvedRequired,
+    isInvalid: resolvedInvalid,
     isFocused,
     isHovered,
     isPressed: isActive,
@@ -114,9 +107,10 @@ export const SwitchRoot = <T extends ElementType = 'div'>({
         data-switch-root=''
         data-state={checkedState ? 'checked' : 'unchecked'}
         data-checked={checkedState ? '' : undefined}
-        data-disabled={disabled ? '' : undefined}
-        data-readonly={readOnly ? '' : undefined}
-        data-required={required ? '' : undefined}
+        data-disabled={resolvedDisabled ? '' : undefined}
+        data-readonly={resolvedReadOnly ? '' : undefined}
+        data-required={resolvedRequired ? '' : undefined}
+        data-invalid={resolvedInvalid ? '' : undefined}
         data-focus={isFocused ? '' : undefined}
         data-hover={isHovered ? '' : undefined}
         data-active={isActive ? '' : undefined}

@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import userEvent from '@testing-library/user-event';
-import { Switch, SwitchControl, SwitchHint, SwitchLabel, SwitchRoot } from '..';
+import { Switch, SwitchControl, SwitchRoot } from '..';
+import { Field } from '../../Field';
 
 expect.extend(toHaveNoViolations);
 
@@ -115,13 +116,15 @@ describe('Switch Accessibility', () => {
     expect(handleChange).toHaveBeenCalledTimes(2);
   });
 
-  it('passes axe checks for compound anatomy', async () => {
+  it('passes axe checks for compound anatomy with Field', async () => {
     const { container } = render(
-      <SwitchRoot name='alerts' required>
-        <SwitchControl />
-        <SwitchLabel>Travel alerts</SwitchLabel>
-        <SwitchHint>Only operational changes are sent here.</SwitchHint>
-      </SwitchRoot>,
+      <Field required>
+        <Field.Label>Travel alerts</Field.Label>
+        <SwitchRoot name='alerts'>
+          <SwitchControl />
+        </SwitchRoot>
+        <Field.Description>Only operational changes are sent here.</Field.Description>
+      </Field>,
     );
 
     expect(await axe(container)).toHaveNoViolations();

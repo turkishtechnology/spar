@@ -1,7 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Switch, SwitchControl, SwitchLabel, SwitchRoot } from '..';
+import { Switch, SwitchControl, SwitchRoot } from '..';
+import { Field } from '../../Field';
 
 describe('Switch Integration', () => {
   it('submits checked uncontrolled switches through form data', async () => {
@@ -170,17 +171,19 @@ describe('Switch Integration', () => {
 
     render(
       <form aria-label='compound preferences'>
-        <SwitchRoot name='security' required>
-          <SwitchControl />
-          <SwitchLabel>Security notices</SwitchLabel>
-        </SwitchRoot>
+        <Field required>
+          <Field.Label>Security notices</Field.Label>
+          <SwitchRoot name='security'>
+            <SwitchControl />
+          </SwitchRoot>
+        </Field>
       </form>,
     );
 
-    const form = screen.getByRole('form', { name: 'compound preferences' });
+    const form = screen.getByRole('form', { name: 'compound preferences' }) as HTMLFormElement;
     expect(form.checkValidity()).toBe(false);
 
-    await user.click(screen.getByText('Security notices'));
+    await user.click(screen.getByRole('switch'));
 
     expect(form.checkValidity()).toBe(true);
   });

@@ -240,9 +240,7 @@ export default function FormDemo() {
                           <Switch.Thumb className='demo-switch-thumb' />
                         </Switch.Track>
                       </Switch.Control>
-                      <Switch.Label className='demo-label'>
-                        Receive product announcements
-                      </Switch.Label>
+                      <span className='demo-label'>Receive product announcements</span>
                     </Switch.Root>
                   )}
                 />
@@ -262,9 +260,7 @@ export default function FormDemo() {
                           <Switch.Thumb className='demo-switch-thumb' />
                         </Switch.Track>
                       </Switch.Control>
-                      <Switch.Label className='demo-label'>
-                        Enable experimental feature updates
-                      </Switch.Label>
+                      <span className='demo-label'>Enable experimental feature updates</span>
                     </Switch.Root>
                   )}
                 />
