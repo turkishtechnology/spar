@@ -23,6 +23,7 @@ export type {
   FieldContextValue,
   FieldOwnProps,
   FieldProps,
+  FieldRenderProps,
   FieldLabelProps,
   FieldDescriptionProps,
   FieldErrorMessageProps,

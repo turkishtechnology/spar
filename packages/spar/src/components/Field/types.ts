@@ -1,4 +1,4 @@
-import type { ElementType } from 'react';
+import type { ElementType, ReactNode } from 'react';
 import type { PolymorphicProps } from '../../types';
 import type { LabelProps } from '../Label/types';
 
@@ -14,6 +14,20 @@ export interface FieldContextValue {
   invalid: boolean;
   disabled: boolean;
   required: boolean;
+  readOnly: boolean;
+}
+
+/**
+ * Render props provided to Field children function.
+ */
+export interface FieldRenderProps {
+  /** Whether the field is in an invalid/error state */
+  invalid: boolean;
+  /** Whether the field is disabled */
+  disabled: boolean;
+  /** Whether the field is required */
+  required: boolean;
+  /** Whether the field is read-only */
   readOnly: boolean;
 }
 
@@ -55,6 +69,11 @@ export interface FieldOwnProps {
    * @defaultValue false
    */
   readOnly?: boolean;
+
+  /**
+   * Field content, or a render function receiving field state.
+   */
+  children?: ReactNode | ((props: FieldRenderProps) => ReactNode);
 }
 
 /**

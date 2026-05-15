@@ -1,6 +1,6 @@
 import { useId, useMemo, type ElementType } from 'react';
 import { FieldContext } from './hooks';
-import type { FieldContextValue, FieldProps } from './types';
+import type { FieldContextValue, FieldProps, FieldRenderProps } from './types';
 
 /**
  * Generic form-field root that provides shared ARIA context for any form
@@ -47,10 +47,17 @@ export const Field = <T extends ElementType = 'div'>({
     'data-readonly': readOnly ? '' : undefined,
   };
 
+  const renderProps: FieldRenderProps = {
+    invalid,
+    disabled,
+    required,
+    readOnly,
+  };
+
   return (
     <FieldContext.Provider value={contextValue}>
       <Component ref={ref} id={id} {...props} {...dataAttributes}>
-        {children}
+        {typeof children === 'function' ? children(renderProps) : children}
       </Component>
     </FieldContext.Provider>
   );
