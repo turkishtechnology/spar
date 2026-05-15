@@ -22,6 +22,14 @@ export interface CheckboxRenderProps {
    */
   readOnly: boolean;
   /**
+   * Whether the checkbox is required
+   */
+  required: boolean;
+  /**
+   * Whether the checkbox is in an invalid/error state
+   */
+  isInvalid: boolean;
+  /**
    * Whether the checkbox is currently focused
    */
   isFocused: boolean;
@@ -90,6 +98,13 @@ export interface CheckboxOwnProps {
    * @defaultValue false
    */
   readOnly?: boolean;
+
+  /**
+   * Invalid/error state. When inside a `<Field>`, inherited automatically
+   * unless explicitly overridden.
+   * @defaultValue false
+   */
+  isInvalid?: boolean;
 
   /**
    * Auto-focus on mount

@@ -1,76 +1,141 @@
 ---
 title: Checkbox
-description: Headless checkbox component providing accessibility and behavior without styling. Supports dual-state and tri-state functionality with complete ARIA compliance.
+description: Headless checkbox component providing accessibility and behavior without styling. Supports dual-state and tri-state functionality with complete ARIA compliance and Field integration.
 ---
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Checkbox } from '@turkish-technology/spar';
+import { Checkbox, Field } from '@turkish-technology/spar';
 
 # Checkbox
 
-Headless checkbox component providing accessibility and behavior without styling. Supports dual-state and tri-state functionality with complete ARIA compliance.
+Headless checkbox component providing accessible form input primitives with zero styling opinions. Pair it with the [Field](./Field.mdx) primitive to get label, description, and error-message wiring with coordinated ARIA IDs.
 
 ## Live Demo
 
-<div className='checkbox-demo-container'>
 <LiveCode
-  code={`function CheckboxDemo() {
-  const [checked, setChecked] = React.useState(true);
-  return (
-    <div className='checkbox-demo-container'>
-      <Checkbox
-        className='checkbox'
-        checked={checked}
-        onChange={setChecked}
-      >
-        {checked && (
-          <svg className="checkbox-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M8.79555 15.8754L5.32555 12.4054C4.93555 12.0154 4.30555 12.0154 3.91555 12.4054C3.52555 12.7954 3.52555 13.4254 3.91555 13.8154L8.09555 17.9954C8.48555 18.3854 9.11555 18.3854 9.50555 17.9954L20.0855 7.41539C20.4755 7.02539 20.4755 6.39539 20.0855 6.00539C19.6955 5.61539 19.0655 5.61539 18.6755 6.00539L8.79555 15.8754Z"/>
-          </svg>
-        )}
-      </Checkbox>
-    </div>
-  );
-}`}
-  cssCode={`.checkbox-demo-container .checkbox {
-  width: 24px;
-  height: 24px;
+  code={`<Field.Root className='checkbox-demo-container' invalid>
+  <div className='checkbox-row'>
+    <Checkbox className='checkbox' name="terms">
+      {({ checked }) => (
+        <span className='checkbox-indicator'>
+          {checked === true && '✓'}
+          {checked === 'indeterminate' && '−'}
+        </span>
+      )}
+    </Checkbox>
+    <Field.Label className='label'>I accept the terms of service</Field.Label>
+  </div>
+  <Field.Description className='description'>
+    Helper text for guidance
+  </Field.Description>
+  <Field.ErrorMessage className='error'>
+    This field is required
+  </Field.ErrorMessage>
+</Field.Root>`}
+cssCode={`.checkbox-demo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 260px;
+  margin-inline: auto;
+}
+
+.checkbox-demo-container .checkbox-row {
   display: flex;
   align-items: center;
+  gap: 8px;
+}
+
+.checkbox-demo-container .checkbox {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  border: 2px solid #cacfd8;
-  border-radius: 8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 2px solid #b0b4bc;
   background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkbox-demo-container .checkbox[data-checked] {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.checkbox-demo-container .checkbox[data-invalid] {
+  border-color: #d14343;
+}
+
+.checkbox-demo-container .checkbox[data-checked][data-invalid] {
+  background: #d14343;
+  border-color: #d14343;
+}
+
+.checkbox-demo-container .checkbox-indicator {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 [data-theme='dark'] .checkbox-demo-container .checkbox {
-border-color: #525866;
+  border-color: #525866;
 }
 
-.checkbox-demo-container .checkbox-icon {
-width: 14px;
-height: 14px;
-flex-shrink: 0;
-border-radius: 4px;
-background: rgba(0, 0, 0, 0.72);
-fill: #fff;
+[data-theme='dark'] .checkbox-demo-container .checkbox[data-checked] {
+  background: #3b82f6;
+  border-color: #3b82f6;
 }
 
-[data-theme='dark'] .checkbox-demo-container .checkbox-icon {
-background: rgba(255, 255, 255, 0.72);
-fill: #111827;
+.checkbox-demo-container .label {
+  color: #222530;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  margin: 0;
+  cursor: pointer;
 }
-`}
+
+[data-theme='dark'] .checkbox-demo-container .label {
+  color: #f2f5f8;
+}
+
+.checkbox-demo-container .description {
+  color: #717784;
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0;
+  padding-left: 28px;
+}
+
+[data-theme='dark'] .checkbox-demo-container .description {
+  color: #99a0ae;
+}
+
+.checkbox-demo-container .error {
+  color: #d14343;
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0;
+  padding-left: 28px;
+}
+
+[data-theme='dark'] .checkbox-demo-container .error {
+  color: #ff8a8a;
+}`}
 />
 
-</div>
-
-This example shows a controlled checkbox that swaps in a check icon when the value is `true`.
+The live demo shows the recommended pattern: a `Field` wrapper supplying label, helper text, and error message wiring around the `Checkbox` primitive.
 
 ## Features
 
+- ✅ **Field integration** - Inherits `invalid`, `disabled`, `required`, `readOnly` from parent `<Field>`
 - ✅ **Dual-state and tri-state support** - Boolean checked/unchecked and indeterminate states
 - ✅ **Form integration** - Hidden input for native form submission with name/value attributes
 - ✅ **Controlled and uncontrolled modes** - Works with or without external state management
@@ -78,54 +143,127 @@ This example shows a controlled checkbox that swaps in a check icon when the val
 - ✅ **Polymorphic rendering** - Customizable root element via `as` prop
 - ✅ **Interaction states** - Focus, hover, pressed, and disabled state tracking
 - ✅ **Auto-focus support** - Focus on mount capability
+- ✅ **Coordinated ARIA IDs** - Automatic `aria-labelledby`, `aria-describedby` wiring with Field
 
 ## Import
 
 ```tsx
-import { Checkbox } from '@turkish-technology/spar';
+import { Checkbox, Field } from '@turkish-technology/spar';
+```
+
+`Checkbox` is a self-contained interactive element. Label, description, and error message are owned by the [`Field`](./Field.mdx) primitive:
+
+```tsx
+// Dot notation
+<Field.Root>
+  <Field.Label />
+  <Checkbox />
+  <Field.Description />
+  <Field.ErrorMessage />
+</Field.Root>
+
+// Named import style
+import {
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldErrorMessage,
+  Checkbox,
+} from '@turkish-technology/spar';
+
+<Field>
+  <FieldLabel />
+  <Checkbox />
+  <FieldDescription />
+  <FieldErrorMessage />
+</Field>;
 ```
 
 ## Anatomy
 
-The Checkbox component is a single, self-contained element that manages its own state and accessibility:
+The Checkbox component focuses on the interactive element itself. Label, description, and error message are provided by the `Field` primitive, which shares ARIA IDs and state with `Checkbox` via context.
 
 <AnatomyViewer
   parts={[
     {
+      name: 'fieldRoot',
+      label: 'Field.Root',
+      description: 'Field context provider (label, description, error wiring)',
+    },
+    {
+      name: 'label',
+      label: 'Field.Label',
+      description: 'Accessible label, auto-linked via aria-labelledby',
+    },
+    {
       name: 'checkbox',
       label: 'Checkbox',
-      description: 'Self-contained checkbox element with state management',
+      description: 'Self-contained checkbox element with state management, accessibility, and interaction handling',
+    },
+    { name: 'description', label: 'Field.Description', description: 'Helper text for guidance' },
+    {
+      name: 'errorMessage',
+      label: 'Field.ErrorMessage',
+      description: 'Error announcement with role="alert"',
     },
   ]}
 >
-  <div className='checkbox-demo-container'>
-    <Checkbox data-spar-part='checkbox' defaultChecked className='checkbox'>
-      <svg
-        className='checkbox-icon'
-        xmlns='http://www.w3.org/2000/svg'
-        width='24'
-        height='24'
-        viewBox='0 0 24 24'
-        fill='none'
-      >
-        <path d='M8.79555 15.8754L5.32555 12.4054C4.93555 12.0154 4.30555 12.0154 3.91555 12.4054C3.52555 12.7954 3.52555 13.4254 3.91555 13.8154L8.09555 17.9954C8.48555 18.3854 9.11555 18.3854 9.50555 17.9954L20.0855 7.41539C20.4755 7.02539 20.4755 6.39539 20.0855 6.00539C19.6955 5.61539 19.0655 5.61539 18.6755 6.00539L8.79555 15.8754Z' />
-      </svg>
-    </Checkbox>
-  </div>
+  <Field className='checkbox-demo-container' invalid data-spar-part='fieldRoot'>
+    <div className='checkbox-row'>
+      <Checkbox data-spar-part='checkbox' defaultChecked className='checkbox'>
+        {({ checked }) => (
+          <span className='checkbox-indicator'>
+            {checked === true && '✓'}
+          </span>
+        )}
+      </Checkbox>
+      <Field.Label className='label' data-spar-part='label'>
+        {'I accept the terms'}
+      </Field.Label>
+    </div>
+    <Field.Description className='description' data-spar-part='description'>
+      {'Helper text for guidance'}
+    </Field.Description>
+    <Field.ErrorMessage className='error' data-spar-part='errorMessage'>
+      {'This field is required'}
+    </Field.ErrorMessage>
+  </Field>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<Checkbox>{/* Optional children content or render function */}</Checkbox>
+<Checkbox>
+  {({ checked }) => (
+    <span className='indicator'>{checked && '✓'}</span>
+  )}
+</Checkbox>
+```
+
+**With Field:**
+
+```tsx
+<Field.Root required invalid>
+  <div className='checkbox-row'>
+    <Checkbox name="fieldName">
+      {({ checked }) => (
+        <span className='indicator'>{checked && '✓'}</span>
+      )}
+    </Checkbox>
+    <Field.Label>Label text</Field.Label>
+  </div>
+  <Field.Description>Description text</Field.Description>
+  <Field.ErrorMessage>Error text</Field.ErrorMessage>
+</Field.Root>
 ```
 
 **Data Flow:**
 
 - User interaction (click/keyboard) → State change → ARIA updates → Form submission (if form context)
 - Checkbox manages internal checked state (controlled or uncontrolled)
+- When inside a Field, Checkbox inherits `invalid`, `disabled`, `required`, `readOnly` automatically
 - Hidden input synchronizes with checkbox state for native form integration
-- ARIA attributes automatically update to reflect current state
+- ARIA attributes (`aria-labelledby`, `aria-describedby`) are automatically wired from Field's coordinated IDs
 
 ## Code Examples
 
@@ -136,10 +274,11 @@ Use a render function when you want the visual checkmark to appear only in the c
 ```tsx
 function BasicCheckbox() {
   return (
-    <div>
-      <Checkbox>{({ checked }) => checked && <span>✓</span>}</Checkbox>
-      <label>Accept terms</label>
-    </div>
+    <Checkbox>
+      {({ checked }) => (
+        <span className='indicator'>{checked ? '✓' : ''}</span>
+      )}
+    </Checkbox>
   );
 }
 ```
@@ -148,17 +287,19 @@ function BasicCheckbox() {
 
 Manage the checked value in parent state when the checkbox needs to stay in sync with other UI.
 
-```tsx {2,6-7,9}
+```tsx {2,6-11}
 function ControlledCheckbox() {
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
   return (
-    <div>
-      <Checkbox checked={isChecked} onChange={setIsChecked}>
-        {isChecked && <span>✓</span>}
-      </Checkbox>
-      <label onClick={() => setIsChecked(!isChecked)}>Subscribe to newsletter</label>
-    </div>
+    <Field.Root>
+      <div className='checkbox-row'>
+        <Checkbox checked={isChecked} onChange={setIsChecked}>
+          {({ checked }) => <span className='indicator'>{checked ? '✓' : ''}</span>}
+        </Checkbox>
+        <Field.Label>Subscribe to newsletter</Field.Label>
+      </div>
+    </Field.Root>
   );
 }
 ```
@@ -167,12 +308,11 @@ function ControlledCheckbox() {
 
 Use the indeterminate state for mixed selections, such as a parent checkbox that represents partially selected children.
 
-```tsx {2,4-12,23-24}
+```tsx {2,4-12}
 function IndeterminateCheckbox() {
   const [checked, setChecked] = useState<CheckedState>('indeterminate');
 
   const handleChange = (newChecked: CheckedState) => {
-    // Cycle: indeterminate → true → false → indeterminate
     if (newChecked === true) {
       setChecked(false);
     } else if (newChecked === false) {
@@ -182,19 +322,20 @@ function IndeterminateCheckbox() {
     }
   };
 
-  const getIcon = () => {
-    if (checked === true) return '✓';
-    if (checked === 'indeterminate') return '−';
-    return '';
-  };
-
   return (
-    <div>
-      <Checkbox checked={checked} onChange={handleChange}>
-        <span>{getIcon()}</span>
-      </Checkbox>
-      <label onClick={() => handleChange(checked)}>Select all items (Click to cycle states)</label>
-    </div>
+    <Field.Root>
+      <div className='checkbox-row'>
+        <Checkbox checked={checked} onChange={handleChange}>
+          {({ checked }) => (
+            <span className='indicator'>
+              {checked === true && '✓'}
+              {checked === 'indeterminate' && '−'}
+            </span>
+          )}
+        </Checkbox>
+        <Field.Label>Select all items</Field.Label>
+      </div>
+    </Field.Root>
   );
 }
 ```
@@ -203,28 +344,65 @@ function IndeterminateCheckbox() {
 
 Provide `name` and `value` when the checkbox should participate in native form submission.
 
-```tsx {6-7,13-14,19}
+```tsx {3-4,8-9}
 function FormCheckbox() {
   return (
     <form>
-      <div>
-        <div>
-          <Checkbox name='terms' value='accepted' required>
-            {({ checked }) => checked && <span>✓</span>}
+      <Field.Root required>
+        <div className='checkbox-row'>
+          <Checkbox name='terms' value='accepted'>
+            {({ checked }) => <span className='indicator'>{checked ? '✓' : ''}</span>}
           </Checkbox>
-          <label>I agree to the terms of service *</label>
+          <Field.Label>I agree to the terms</Field.Label>
         </div>
+      </Field.Root>
 
-        <div>
+      <Field.Root>
+        <div className='checkbox-row'>
           <Checkbox name='newsletter' value='subscribed' defaultChecked={true}>
-            <span>✓</span>
+            {({ checked }) => <span className='indicator'>{checked ? '✓' : ''}</span>}
           </Checkbox>
-          <label>Subscribe to newsletter</label>
+          <Field.Label>Subscribe to newsletter</Field.Label>
         </div>
+      </Field.Root>
 
-        <button type='submit'>Submit</button>
-      </div>
+      <button type='submit'>Submit</button>
     </form>
+  );
+}
+```
+
+### Field Integration
+
+Wrap a Checkbox in a `<Field.Root>` to automatically inherit validation state and wire ARIA relationships.
+
+```tsx {4-5,11-12}
+function FieldCheckbox() {
+  const [accepted, setAccepted] = useState(false);
+
+  return (
+    <div>
+      <Field.Root required invalid={!accepted}>
+        <div className='checkbox-row'>
+          <Checkbox name='terms' checked={accepted} onChange={setAccepted}>
+            {({ checked }) => <span className='indicator'>{checked ? '✓' : ''}</span>}
+          </Checkbox>
+          <Field.Label>Terms & Conditions</Field.Label>
+        </div>
+        <Field.Description>You must accept to proceed.</Field.Description>
+        <Field.ErrorMessage>Please accept the terms.</Field.ErrorMessage>
+      </Field.Root>
+
+      <Field.Root disabled>
+        <div className='checkbox-row'>
+          <Checkbox name='archive'>
+            {({ checked }) => <span className='indicator'>{checked ? '✓' : ''}</span>}
+          </Checkbox>
+          <Field.Label>Archived Option</Field.Label>
+        </div>
+        <Field.Description>This option is currently unavailable.</Field.Description>
+      </Field.Root>
+    </div>
   );
 }
 ```
@@ -233,35 +411,20 @@ function FormCheckbox() {
 
 The render-props API exposes interaction state so you can build custom visuals without reimplementing behavior.
 
-```tsx {5,8,13,16,19,22}
+```tsx {3-8}
 function RenderPropsCheckbox() {
   return (
-    <div>
-      <Checkbox defaultChecked={false}>
-        {({ checked, disabled, isFocused, isHovered, isPressed }) => (
-          <div>
-            <div>
-              <span>{checked && <span>✓</span>}</span>
-              Interactive Checkbox
-            </div>
-            <div>
-              <div>
-                Status: <strong>{checked ? 'Checked' : 'Unchecked'}</strong>
-              </div>
-              <div>
-                Focused: <strong>{isFocused ? 'Yes' : 'No'}</strong>
-              </div>
-              <div>
-                Hovered: <strong>{isHovered ? 'Yes' : 'No'}</strong>
-              </div>
-              <div>
-                Pressed: <strong>{isPressed ? 'Yes' : 'No'}</strong>
-              </div>
-            </div>
-          </div>
-        )}
-      </Checkbox>
-    </div>
+    <Checkbox defaultChecked={false}>
+      {({ checked, disabled, isInvalid, required, isFocused, isHovered, isPressed }) => (
+        <div>
+          <span>{checked ? '✓' : '☐'}</span>
+          <span>Invalid: {isInvalid ? 'Yes' : 'No'}</span>
+          <span>Focused: {isFocused ? 'Yes' : 'No'}</span>
+          <span>Hovered: {isHovered ? 'Yes' : 'No'}</span>
+          <span>Pressed: {isPressed ? 'Yes' : 'No'}</span>
+        </div>
+      )}
+    </Checkbox>
   );
 }
 ```
@@ -270,28 +433,19 @@ function RenderPropsCheckbox() {
 
 Disabled checkboxes remain readable but do not respond to pointer or keyboard input.
 
-```tsx {5,10,17}
+```tsx {2,6,10}
 function DisabledCheckbox() {
   return (
     <div>
-      <div>
-        <Checkbox disabled>{({ checked }) => checked && <span>✓</span>}</Checkbox>
-        <label>Disabled unchecked</label>
-      </div>
-
-      <div>
-        <Checkbox disabled defaultChecked={true}>
-          <span>✓</span>
-        </Checkbox>
-        <label>Disabled checked</label>
-      </div>
-
-      <div>
-        <Checkbox disabled checked='indeterminate'>
-          <span>−</span>
-        </Checkbox>
-        <label>Disabled indeterminate</label>
-      </div>
+      <Checkbox disabled>
+        {({ checked }) => <span className='indicator'>{checked ? '✓' : ''}</span>}
+      </Checkbox>
+      <Checkbox disabled defaultChecked={true}>
+        {({ checked }) => <span className='indicator'>{checked ? '✓' : ''}</span>}
+      </Checkbox>
+      <Checkbox disabled checked='indeterminate'>
+        {({ checked }) => <span className='indicator'>{checked === 'indeterminate' ? '−' : ''}</span>}
+      </Checkbox>
     </div>
   );
 }
@@ -299,55 +453,37 @@ function DisabledCheckbox() {
 
 ### Custom Element with Polymorphic Rendering
 
-Render the checkbox as another element when your layout needs a custom wrapper while keeping checkbox semantics.
+Render the checkbox as another element when your layout needs a custom wrapper.
 
-```tsx {4-8}
+```tsx {3}
 function CustomElementCheckbox() {
   return (
-    <div>
-      <Checkbox as='button'>
-        {({ checked }) => (
-          <>
-            <span>{checked && <span>✓</span>}</span>
-            Custom button checkbox
-          </>
-        )}
-      </Checkbox>
-    </div>
+    <Checkbox as='button'>
+      {({ checked }) => <span className='indicator'>{checked ? '✓' : ''}</span>}
+    </Checkbox>
   );
 }
 ```
 
-### Accessibility Enhanced
+### Accessibility Enhanced with Field
 
-Combine ARIA attributes and supporting text when the checkbox needs to surface validation feedback.
+Combine Field integration for automatic ARIA wiring with validation feedback.
 
-```tsx {2,7-15,20-22}
+```tsx {2,6-12}
 function AccessibleCheckbox() {
-  const [hasError, setHasError] = useState(false);
+  const [hasError, setHasError] = useState(true);
 
   return (
-    <div>
-      <div>
-        <Checkbox
-          required
-          aria-describedby={hasError ? 'error-message' : undefined}
-          aria-invalid={hasError}
-          onChange={(checked) => {
-            setHasError(!checked);
-          }}
-        >
-          {({ checked }) => checked && <span>✓</span>}
+    <Field.Root required invalid={hasError}>
+      <div className='checkbox-row'>
+        <Checkbox onChange={(checked) => setHasError(!checked)}>
+          {({ checked }) => <span className='indicator'>{checked ? '✓' : ''}</span>}
         </Checkbox>
-        <label>Required field *</label>
+        <Field.Label>Agreement</Field.Label>
       </div>
-
-      {hasError && (
-        <div id='error-message' role='alert'>
-          ⚠️ This field is required
-        </div>
-      )}
-    </div>
+      <Field.Description>This field is required to continue.</Field.Description>
+      <Field.ErrorMessage>⚠️ This field is required</Field.ErrorMessage>
+    </Field.Root>
   );
 }
 ```
@@ -356,32 +492,30 @@ function AccessibleCheckbox() {
 
 ### Checkbox
 
-A headless checkbox component that provides complete accessibility and behavior without any styling opinions. Supports both controlled and uncontrolled usage patterns with optional tri-state functionality.
+A self-contained headless checkbox component with full accessibility and Field integration. When nested inside a `<Field>`, it reads the Field's state automatically.
 
 **Props**
 
-| Name                | Type                                                                   | Default          | Description                                                                       |
-| ------------------- | ---------------------------------------------------------------------- | ---------------- | --------------------------------------------------------------------------------- |
-| `as?`               | `React.ElementType`                                                    | `'span'`         | The element or component to render as                                             |
-| `ref?`              | `React.Ref<HTMLElement>`                                               | `undefined`      | Ref to the underlying DOM element                                                 |
-| `checked?`          | `CheckedState`                                                         | `undefined`      | Controlled checked state. When provided, component operates in controlled mode    |
-| `defaultChecked?`   | `CheckedState`                                                         | `false`          | Default checked state for uncontrolled usage                                      |
-| `onChange?`         | `(checked: CheckedState) => void`                                      | `undefined`      | Callback fired when the checked state changes                                     |
-| `disabled?`         | `boolean`                                                              | `false`          | Disabled state - prevents interaction and is properly announced to screen readers |
-| `name?`             | `string`                                                               | `undefined`      | Name attribute for form submission                                                |
-| `value?`            | `string`                                                               | `'on'`           | Value sent in form data when checked                                              |
-| `form?`             | `string`                                                               | `undefined`      | ID of the form this checkbox belongs to                                           |
-| `required?`         | `boolean`                                                              | `false`          | Required state for form validation                                                |
-| `readOnly?`         | `boolean`                                                              | `false`          | Read-only state - prevents interaction                                            |
-| `autoFocus?`        | `boolean`                                                              | `false`          | Auto-focus on mount                                                               |
-| `aria-label?`       | `string`                                                               | `undefined`      | Accessible name for the checkbox. Required when checkbox has no visible label     |
-| `aria-labelledby?`  | `string`                                                               | `undefined`      | ID of element that labels the checkbox                                            |
-| `aria-describedby?` | `string`                                                               | `undefined`      | ID of element that describes the checkbox                                         |
-| `children?`         | `React.ReactNode \| ((state: CheckboxRenderProps) => React.ReactNode)` | `undefined`      | Content to display inside the checkbox, or render props function                  |
-| `id?`               | `string`                                                               | `auto-generated` | Unique identifier for the checkbox                                                |
-| `className?`        | `string`                                                               | `undefined`      | CSS class name                                                                    |
-| `style?`            | `React.CSSProperties`                                                  | `undefined`      | Inline styles                                                                     |
-| `tabIndex?`         | `number`                                                               | `0`              | Tab index for keyboard navigation                                                 |
+| Name              | Type                                                                   | Default          | Description                                                                       |
+| ----------------- | ---------------------------------------------------------------------- | ---------------- | --------------------------------------------------------------------------------- |
+| `as?`             | `React.ElementType`                                                    | `'span'`         | The element or component to render as                                             |
+| `ref?`            | `React.Ref<HTMLElement>`                                               | `undefined`      | Ref to the underlying DOM element                                                 |
+| `checked?`        | `CheckedState`                                                         | `undefined`      | Controlled checked state. When provided, component operates in controlled mode    |
+| `defaultChecked?` | `CheckedState`                                                         | `false`          | Default checked state for uncontrolled usage                                      |
+| `onChange?`       | `(checked: CheckedState) => void`                                      | `undefined`      | Callback fired when the checked state changes                                     |
+| `disabled?`       | `boolean`                                                              | `false`          | Disabled state - prevents interaction and is properly announced to screen readers |
+| `name?`           | `string`                                                               | `undefined`      | Name attribute for form submission                                                |
+| `value?`          | `string`                                                               | `'on'`           | Value sent in form data when checked                                              |
+| `form?`           | `string`                                                               | `undefined`      | ID of the form this checkbox belongs to                                           |
+| `required?`       | `boolean`                                                              | `false`          | Required state for form validation                                                |
+| `readOnly?`       | `boolean`                                                              | `false`          | Read-only state - prevents interaction                                            |
+| `isInvalid?`      | `boolean`                                                              | `false`          | Invalid/error state. Inherited from Field unless explicitly overridden            |
+| `autoFocus?`      | `boolean`                                                              | `false`          | Auto-focus on mount                                                               |
+| `children?`       | `React.ReactNode \| ((state: CheckboxRenderProps) => React.ReactNode)` | `undefined`      | Content to display, or render props function                                      |
+| `id?`             | `string`                                                               | `auto-generated` | Unique identifier for the checkbox                                                |
+| `className?`      | `string`                                                               | `undefined`      | CSS class name                                                                    |
+| `style?`          | `React.CSSProperties`                                                  | `undefined`      | Inline styles                                                                     |
+| `tabIndex?`       | `number`                                                               | `0`              | Tab index for keyboard navigation                                                 |
 
 #### CheckboxRenderProps
 
@@ -393,6 +527,8 @@ When using the render props pattern, the following state properties are passed t
 | `setChecked` | `(checked: CheckedState) => void` | Function to programmatically set the checked state            |
 | `disabled`   | `boolean`                         | Whether the checkbox is disabled                              |
 | `readOnly`   | `boolean`                         | Whether the checkbox is read-only                             |
+| `required`   | `boolean`                         | Whether the checkbox is required                              |
+| `isInvalid`  | `boolean`                         | Whether the checkbox is in an invalid/error state             |
 | `isFocused`  | `boolean`                         | Whether the checkbox currently has focus                      |
 | `isHovered`  | `boolean`                         | Whether the checkbox is being hovered                         |
 | `isPressed`  | `boolean`                         | Whether the checkbox is being pressed                         |
@@ -407,7 +543,7 @@ When using the render props pattern, the following state properties are passed t
 | `onFocus`   | `(event: React.FocusEvent)`    | Element gains focus   | Focus enters checkbox                              |
 | `onBlur`    | `(event: React.FocusEvent)`    | Element loses focus   | Focus leaves checkbox                              |
 
-**HTML Attributes**
+**Data Attributes**
 
 | Attribute            | Value | Purpose                                     |
 | -------------------- | ----- | ------------------------------------------- |
@@ -416,19 +552,18 @@ When using the render props pattern, the following state properties are passed t
 | `data-disabled`      | `""`  | Present when `disabled` is `true`           |
 | `data-readonly`      | `""`  | Present when `readOnly` is `true`           |
 | `data-required`      | `""`  | Present when `required` is `true`           |
+| `data-invalid`       | `""`  | Present when `isInvalid` is `true`          |
 | `data-focus`         | `""`  | Present when the checkbox has focus         |
 | `data-hover`         | `""`  | Present when the checkbox is hovered        |
 | `data-active`        | `""`  | Present when the checkbox is being pressed  |
 
 ## Keyboard Interactions
 
-Complete keyboard behavior for the Checkbox component:
-
-| Key           | Action               | Context         | Notes                                      |
-| ------------- | -------------------- | --------------- | ------------------------------------------ |
-| `Tab`         | Navigate to checkbox | Always          | Moves focus to the checkbox                |
-| `Shift + Tab` | Navigate backward    | Always          | Moves focus away from checkbox             |
-| `Space`       | Toggle checked state | Focused         | Primary activation method for checkboxes   |
-| `Enter`       | Submit form          | In form context | Does not toggle state, submits parent form |
+| Key           | Action               | Context         | Notes                                        |
+| ------------- | -------------------- | --------------- | -------------------------------------------- |
+| `Tab`         | Navigate to checkbox | Always          | Moves focus to the checkbox                  |
+| `Shift + Tab` | Navigate backward    | Always          | Moves focus away from checkbox               |
+| `Space`       | Toggle checked state | Focused         | Primary activation method for checkboxes     |
+| `Enter`       | Submit form          | In form context | Does not toggle state, submits parent form   |
 
 **Note**: The checkbox follows WCAG guidelines where Space is the primary toggle key, while Enter submits forms without changing checkbox state.
