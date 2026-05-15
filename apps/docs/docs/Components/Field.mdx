@@ -34,51 +34,51 @@ A generic headless form-field container that provides shared ARIA context, coord
 }
 
 .field-demo .field-label {
-  color: #222530;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 18px;
+color: #222530;
+font-size: 13px;
+font-weight: 500;
+line-height: 18px;
 }
 
 [data-theme='dark'] .field-demo .field-label {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .field-demo .field-input {
-  min-height: 40px;
-  padding: 0 14px;
-  border-radius: 10px;
-  border: 1px solid #e1e4ea;
-  background: rgba(0, 0, 0, 0.08);
-  color: #222530;
-  font-size: 14px;
-  line-height: 20px;
+min-height: 40px;
+padding: 0 14px;
+border-radius: 10px;
+border: 1px solid #e1e4ea;
+background: rgba(0, 0, 0, 0.08);
+color: #222530;
+font-size: 14px;
+line-height: 20px;
 }
 
 [data-theme='dark'] .field-demo .field-input {
-  border-color: #2b303b;
-  background: rgba(255, 255, 255, 0.12);
-  color: #f2f5f8;
+border-color: #2b303b;
+background: rgba(255, 255, 255, 0.12);
+color: #f2f5f8;
 }
 
 .field-demo .field-description {
-  color: #717784;
-  font-size: 12px;
-  line-height: 16px;
+color: #717784;
+font-size: 12px;
+line-height: 16px;
 }
 
 [data-theme='dark'] .field-demo .field-description {
-  color: #99a0ae;
+color: #99a0ae;
 }
 
 .field-demo .field-error {
-  color: #d14343;
-  font-size: 12px;
-  line-height: 16px;
+color: #d14343;
+font-size: 12px;
+line-height: 16px;
 }
 
 [data-theme='dark'] .field-demo .field-error {
-  color: #ff8a8a;
+color: #ff8a8a;
 }`}
 />
 
@@ -105,21 +105,16 @@ import { Field } from '@turkish-technology/spar';
   <Field.Label />
   <Field.Description />
   <Field.ErrorMessage />
-</Field.Root>
+</Field.Root>;
 
 // Named import style
-import {
-  Field,
-  FieldLabel,
-  FieldDescription,
-  FieldErrorMessage,
-} from '@turkish-technology/spar';
+import { Field, FieldLabel, FieldDescription, FieldErrorMessage } from '@turkish-technology/spar';
 
 <Field>
   <FieldLabel />
   <FieldDescription />
   <FieldErrorMessage />
-</Field>
+</Field>;
 ```
 
 ## Anatomy
@@ -128,7 +123,11 @@ import {
   parts={[
     { name: 'root', label: 'Root', description: 'Context provider managing IDs and state' },
     { name: 'label', label: 'Label', description: 'Accessible label with auto-linked htmlFor' },
-    { name: 'description', label: 'Description', description: 'Helper text linked via aria-describedby' },
+    {
+      name: 'description',
+      label: 'Description',
+      description: 'Helper text linked via aria-describedby',
+    },
     {
       name: 'errorMessage',
       label: 'ErrorMessage',
@@ -359,26 +358,26 @@ The root context provider that wraps all compound field parts. `Field` and `Fiel
 
 **Props**
 
-| Name        | Type                                                          | Default     | Description                                                              |
-| ----------- | ------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------ |
-| `id?`       | `string`                                                      | `undefined` | Base ID for ARIA relationships. Sub-element IDs are derived from this.   |
-| `as?`       | `React.ElementType`                                           | `'div'`     | Polymorphic element type                                                 |
-| `ref?`      | `React.Ref<T>`                                                | `undefined` | Ref for the root element                                                 |
-| `children`  | `React.ReactNode \| ((props: FieldRenderProps) => ReactNode)` | -           | Static content or render function receiving field state                  |
-| `invalid?`  | `boolean`                                                     | `false`     | Validation state propagated to all compound parts                        |
-| `disabled?` | `boolean`                                                     | `false`     | Disabled state propagated to all compound parts                          |
-| `required?` | `boolean`                                                     | `false`     | Required state propagated to all compound parts                          |
-| `readOnly?` | `boolean`                                                     | `false`     | Read-only state propagated to all compound parts                         |
-| `...props`  | `React.ComponentProps<T>`                                     | -           | All standard HTML attributes for the root element                        |
+| Name        | Type                                                          | Default     | Description                                                            |
+| ----------- | ------------------------------------------------------------- | ----------- | ---------------------------------------------------------------------- |
+| `id?`       | `string`                                                      | `undefined` | Base ID for ARIA relationships. Sub-element IDs are derived from this. |
+| `as?`       | `React.ElementType`                                           | `'div'`     | Polymorphic element type                                               |
+| `ref?`      | `React.Ref<T>`                                                | `undefined` | Ref for the root element                                               |
+| `children`  | `React.ReactNode \| ((props: FieldRenderProps) => ReactNode)` | -           | Static content or render function receiving field state                |
+| `invalid?`  | `boolean`                                                     | `false`     | Validation state propagated to all compound parts                      |
+| `disabled?` | `boolean`                                                     | `false`     | Disabled state propagated to all compound parts                        |
+| `required?` | `boolean`                                                     | `false`     | Required state propagated to all compound parts                        |
+| `readOnly?` | `boolean`                                                     | `false`     | Read-only state propagated to all compound parts                       |
+| `...props`  | `React.ComponentProps<T>`                                     | -           | All standard HTML attributes for the root element                      |
 
 **FieldRenderProps** (passed to children function)
 
-| Name       | Type      | Description                          |
-| ---------- | --------- | ------------------------------------ |
-| `invalid`  | `boolean` | Whether the field is in error state  |
-| `disabled` | `boolean` | Whether the field is disabled        |
-| `required` | `boolean` | Whether the field is required        |
-| `readOnly` | `boolean` | Whether the field is read-only       |
+| Name       | Type      | Description                         |
+| ---------- | --------- | ----------------------------------- |
+| `invalid`  | `boolean` | Whether the field is in error state |
+| `disabled` | `boolean` | Whether the field is disabled       |
+| `required` | `boolean` | Whether the field is required       |
+| `readOnly` | `boolean` | Whether the field is read-only      |
 
 **Data Attributes**
 
@@ -395,11 +394,11 @@ Accessible label auto-linked to the field's control via `htmlFor`. Renders `<lab
 
 **Props**
 
-| Name       | Type                | Default   | Description                             |
-| ---------- | ------------------- | --------- | --------------------------------------- |
-| `as?`      | `React.ElementType` | `'label'` | Polymorphic element type                |
-| `children` | `React.ReactNode`   | -         | Label content                           |
-| `ref?`     | `React.Ref<T>`      | `undefined`| Ref for the label element              |
+| Name       | Type                | Default     | Description               |
+| ---------- | ------------------- | ----------- | ------------------------- |
+| `as?`      | `React.ElementType` | `'label'`   | Polymorphic element type  |
+| `children` | `React.ReactNode`   | -           | Label content             |
+| `ref?`     | `React.Ref<T>`      | `undefined` | Ref for the label element |
 
 **Auto-set from context:**
 
@@ -413,18 +412,18 @@ Helper/hint text linked to the control via `aria-describedby`. Renders `<div>` b
 
 **Props**
 
-| Name       | Type                | Default | Description              |
-| ---------- | ------------------- | ------- | ------------------------ |
-| `as?`      | `React.ElementType` | `'div'` | Polymorphic element type |
-| `children` | `React.ReactNode`   | -       | Description content      |
-| `ref?`     | `React.Ref<T>`      | `undefined`| Ref for the element   |
+| Name       | Type                | Default     | Description              |
+| ---------- | ------------------- | ----------- | ------------------------ |
+| `as?`      | `React.ElementType` | `'div'`     | Polymorphic element type |
+| `children` | `React.ReactNode`   | -           | Description content      |
+| `ref?`     | `React.Ref<T>`      | `undefined` | Ref for the element      |
 
 **Data Attributes**
 
-| Attribute       | Value               | Purpose                  |
-| --------------- | ------------------- | ------------------------ |
-| `data-disabled` | `""` \| `undefined` | Indicates disabled state |
-| `data-readonly` | `""` \| `undefined` | Indicates read-only state|
+| Attribute       | Value               | Purpose                   |
+| --------------- | ------------------- | ------------------------- |
+| `data-disabled` | `""` \| `undefined` | Indicates disabled state  |
+| `data-readonly` | `""` \| `undefined` | Indicates read-only state |
 
 ### Field.ErrorMessage
 
@@ -432,28 +431,28 @@ Error message that only renders when `invalid` is `true`. Uses `role="alert"` fo
 
 **Props**
 
-| Name       | Type                | Default | Description              |
-| ---------- | ------------------- | ------- | ------------------------ |
-| `as?`      | `React.ElementType` | `'div'` | Polymorphic element type |
-| `children` | `React.ReactNode`   | -       | Error content            |
-| `ref?`     | `React.Ref<T>`      | `undefined`| Ref for the element   |
+| Name       | Type                | Default     | Description              |
+| ---------- | ------------------- | ----------- | ------------------------ |
+| `as?`      | `React.ElementType` | `'div'`     | Polymorphic element type |
+| `children` | `React.ReactNode`   | -           | Error content            |
+| `ref?`     | `React.Ref<T>`      | `undefined` | Ref for the element      |
 
 **Data Attributes**
 
-| Attribute       | Value               | Purpose                    |
-| --------------- | ------------------- | -------------------------- |
+| Attribute       | Value               | Purpose                           |
+| --------------- | ------------------- | --------------------------------- |
 | `role`          | `"alert"`           | Announces error to screen readers |
-| `data-invalid`  | `""` \| `undefined` | Indicates validation state |
-| `data-disabled` | `""` \| `undefined` | Indicates disabled state   |
-| `data-readonly` | `""` \| `undefined` | Indicates read-only state  |
+| `data-invalid`  | `""` \| `undefined` | Indicates validation state        |
+| `data-disabled` | `""` \| `undefined` | Indicates disabled state          |
+| `data-readonly` | `""` \| `undefined` | Indicates read-only state         |
 
 ## Accessibility
 
-| Feature              | Implementation                                                  |
-| -------------------- | --------------------------------------------------------------- |
-| Label association     | `Field.Label` auto-sets `htmlFor` matching the field's control |
-| Description linking   | `Field.Description` ID used in `aria-describedby`              |
-| Error announcement    | `Field.ErrorMessage` uses `role="alert"` (assertive live)      |
-| Disabled propagation  | Context shares `disabled` to all compound parts                |
-| Required propagation  | Context shares `required` to all compound parts                |
-| Data attributes       | Styling hooks via `data-invalid`, `data-disabled`, etc.        |
+| Feature              | Implementation                                                 |
+| -------------------- | -------------------------------------------------------------- |
+| Label association    | `Field.Label` auto-sets `htmlFor` matching the field's control |
+| Description linking  | `Field.Description` ID used in `aria-describedby`              |
+| Error announcement   | `Field.ErrorMessage` uses `role="alert"` (assertive live)      |
+| Disabled propagation | Context shares `disabled` to all compound parts                |
+| Required propagation | Context shares `required` to all compound parts                |
+| Data attributes      | Styling hooks via `data-invalid`, `data-disabled`, etc.        |

@@ -146,9 +146,21 @@ The Input component focuses on the field element itself. Label, description, and
 
 <AnatomyViewer
   parts={[
-    { name: 'fieldRoot', label: 'Field.Root', description: 'Field context provider (label, description, error wiring)' },
-    { name: 'label', label: 'Field.Label', description: 'Accessible label, auto-linked via htmlFor' },
-    { name: 'inputRoot', label: 'Input.Root', description: 'Input context provider for visual state' },
+    {
+      name: 'fieldRoot',
+      label: 'Field.Root',
+      description: 'Field context provider (label, description, error wiring)',
+    },
+    {
+      name: 'label',
+      label: 'Field.Label',
+      description: 'Accessible label, auto-linked via htmlFor',
+    },
+    {
+      name: 'inputRoot',
+      label: 'Input.Root',
+      description: 'Input context provider for visual state',
+    },
     { name: 'field', label: 'Input.Field', description: 'Core input element (input/textarea)' },
     { name: 'description', label: 'Field.Description', description: 'Helper text for guidance' },
     {
