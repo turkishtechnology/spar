@@ -48,11 +48,16 @@ function parseComponentIndex(filePath) {
   }
 
   const compoundExports = {};
+  const compoundParents = new Set();
   const compoundRegex = /^(\w+)\.(\w+)\s*=\s*(\w+);/gm;
   let match;
   while ((match = compoundRegex.exec(content)) !== null) {
-    const [, , shortName, fullName] = match;
+    const [, parentName, shortName, fullName] = match;
     compoundExports[shortName] = fullName;
+    compoundParents.add(parentName);
+  }
+  for (const parent of compoundParents) {
+    compoundExports[parent] = parent;
   }
 
   const hooks = [];
