@@ -372,17 +372,17 @@ The root container that provides context and manages the state for all accordion
 
 **Props**
 
-| Name             | Type                                  | Default      | Description                                              |
-| ---------------- | ------------------------------------- | ------------ | -------------------------------------------------------- |
-| `multiple?`      | `boolean`                             | `false`      | Whether multiple panels can be expanded simultaneously   |
-| `collapsible?`   | `boolean`                             | `true`       | Whether panels can be collapsed (only for `single` mode) |
-| `value?`         | `string \| number \| (string \| number)[]` | `undefined` | Controlled state - single value or array for multiple |
-| `defaultValue?`  | `string \| number \| (string \| number)[]` | `undefined` | Uncontrolled initial state                          |
-| `onValueChange?` | `(value: string \| number \| (string \| number)[]) => void` | `undefined` | Callback when state changes      |
-| `disabled?`      | `boolean`                             | `false`      | Disables all accordion items                             |
-| `orientation?`   | `"vertical" \| "horizontal"`          | `"vertical"` | Orientation for keyboard navigation                      |
-| `as?`            | `React.ElementType`                   | `"div"`      | Polymorphic component type                               |
-| `children`       | `React.ReactNode`                     | -            | Accordion.Item components                                |
+| Name             | Type                                                        | Default      | Description                                              |
+| ---------------- | ----------------------------------------------------------- | ------------ | -------------------------------------------------------- |
+| `multiple?`      | `boolean`                                                   | `false`      | Whether multiple panels can be expanded simultaneously   |
+| `collapsible?`   | `boolean`                                                   | `true`       | Whether panels can be collapsed (only for `single` mode) |
+| `value?`         | `string \| number \| (string \| number)[]`                  | `undefined`  | Controlled state - single value or array for multiple    |
+| `defaultValue?`  | `string \| number \| (string \| number)[]`                  | `undefined`  | Uncontrolled initial state                               |
+| `onValueChange?` | `(value: string \| number \| (string \| number)[]) => void` | `undefined`  | Callback when state changes                              |
+| `disabled?`      | `boolean`                                                   | `false`      | Disables all accordion items                             |
+| `orientation?`   | `"vertical" \| "horizontal"`                                | `"vertical"` | Orientation for keyboard navigation                      |
+| `as?`            | `React.ElementType`                                         | `"div"`      | Polymorphic component type                               |
+| `children`       | `React.ReactNode`                                           | -            | Accordion.Item components                                |
 
 **Events**
 

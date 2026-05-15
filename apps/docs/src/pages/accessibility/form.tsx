@@ -7,6 +7,7 @@ import {
   Checkbox,
   CheckedState,
   Collapsible,
+  Field,
   Input,
   Label,
   Radio,
@@ -85,31 +86,35 @@ export default function FormDemo() {
           <form onSubmit={handleSubmit(onSubmit)} className='demo-col'>
             <div className='demo-col'>
               {/* Profile Fields */}
-              <Input required isInvalid={!!errors.fullName}>
-                <Input.Label className='demo-label'>Full name *</Input.Label>
-                <Input.Field
-                  className='demo-input'
-                  placeholder='Ada Lovelace'
-                  {...register('fullName', {
-                    required: true,
-                    validate: (v) => v.trim().length > 0,
-                  })}
-                />
-                <Input.Description className='demo-input-description'>
+              <Field required invalid={!!errors.fullName}>
+                <Field.Label className='demo-label'>Full name *</Field.Label>
+                <Input>
+                  <Input.Field
+                    className='demo-input'
+                    placeholder='Ada Lovelace'
+                    {...register('fullName', {
+                      required: true,
+                      validate: (v) => v.trim().length > 0,
+                    })}
+                  />
+                </Input>
+                <Field.Description className='demo-input-description'>
                   This will be shown on your public profile.
-                </Input.Description>
-              </Input>
+                </Field.Description>
+              </Field>
 
-              <Input isInvalid={!!errors.email} required>
-                <Input.Label className='demo-label'>Email *</Input.Label>
-                <Input.Field
-                  className='demo-input'
-                  type='email'
-                  placeholder='ada@example.com'
-                  {...register('email', {
-                    validate: (v) => v.length === 0 || v.includes('@'),
-                  })}
-                />
+              <Field invalid={!!errors.email} required>
+                <Field.Label className='demo-label'>Email *</Field.Label>
+                <Input>
+                  <Input.Field
+                    className='demo-input'
+                    type='email'
+                    placeholder='ada@example.com'
+                    {...register('email', {
+                      validate: (v) => v.length === 0 || v.includes('@'),
+                    })}
+                  />
+                </Input>
                 <Tooltip.Provider>
                   <Tooltip.Root>
                     <Tooltip.Trigger
@@ -126,11 +131,11 @@ export default function FormDemo() {
                   </Tooltip.Root>
                 </Tooltip.Provider>
                 {errors.email && (
-                  <Input.ErrorMessage className='demo-input-error'>
+                  <Field.ErrorMessage className='demo-input-error'>
                     Please include @ in the email address.
-                  </Input.ErrorMessage>
+                  </Field.ErrorMessage>
                 )}
-              </Input>
+              </Field>
 
               <div className='demo-col'>
                 <Label className='demo-label' htmlFor='role-select-trigger' required>
@@ -374,15 +379,17 @@ const { register, control, handleSubmit,
 });
 
 // 2. register with rules — RHF handles native inputs.
-<Input required isInvalid={!!errors.fullName}>
-  <Input.Label>Full name *</Input.Label>
-  <Input.Field
-    {...register('fullName', {
-      required: true,
-      validate: (v) => v.trim().length > 0,
-    })}
-  />
-</Input>
+<Field required invalid={!!errors.fullName}>
+  <Field.Label>Full name *</Field.Label>
+  <Input>
+    <Input.Field
+      {...register('fullName', {
+        required: true,
+        validate: (v) => v.trim().length > 0,
+      })}
+    />
+  </Input>
+</Field>
 
 // 3. Controller + field.ref — lets RHF focus custom
 //    components (Select, Checkbox) on validation error.

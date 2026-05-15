@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
-import { Input, InputDescription, InputErrorMessage, InputField, InputLabel } from '../index';
+import { Input, InputField } from '../index';
+import { Field, FieldDescription, FieldErrorMessage, FieldLabel } from '../../Field';
 
 describe('Input - Unit Tests', () => {
   afterEach(() => {
@@ -27,13 +28,15 @@ describe('Input - Unit Tests', () => {
     expect(field).not.toHaveAttribute('type');
   });
 
-  it('derives deterministic ids from provided root id', () => {
+  it('derives deterministic ids from provided Field id', () => {
     render(
-      <Input id='profile-email'>
-        <InputLabel>Email</InputLabel>
-        <InputField />
-        <InputDescription>Use your work email</InputDescription>
-      </Input>,
+      <Field id='profile-email'>
+        <FieldLabel>Email</FieldLabel>
+        <Input>
+          <InputField />
+        </Input>
+        <FieldDescription>Use your work email</FieldDescription>
+      </Field>,
     );
 
     const field = screen.getByRole('textbox', { name: 'Email' });
@@ -48,14 +51,18 @@ describe('Input - Unit Tests', () => {
   it('keeps generated ids unique across instances', () => {
     render(
       <>
-        <Input>
-          <InputLabel>First Name</InputLabel>
-          <InputField />
-        </Input>
-        <Input>
-          <InputLabel>Last Name</InputLabel>
-          <InputField />
-        </Input>
+        <Field>
+          <FieldLabel>First Name</FieldLabel>
+          <Input>
+            <InputField />
+          </Input>
+        </Field>
+        <Field>
+          <FieldLabel>Last Name</FieldLabel>
+          <Input>
+            <InputField />
+          </Input>
+        </Field>
       </>,
     );
 
@@ -69,10 +76,12 @@ describe('Input - Unit Tests', () => {
 
   it('renders root as custom element and keeps state data attributes absent by default', () => {
     render(
-      <Input as='section' data-testid='root'>
-        <InputLabel>Username</InputLabel>
-        <InputField />
-      </Input>,
+      <Field>
+        <FieldLabel>Username</FieldLabel>
+        <Input as='section' data-testid='root'>
+          <InputField />
+        </Input>
+      </Field>,
     );
 
     const root = screen.getByTestId('root');
@@ -84,21 +93,30 @@ describe('Input - Unit Tests', () => {
     expect(root).not.toHaveAttribute('data-readonly');
   });
 
-  it('applies root and field state attributes from context', () => {
+  it('applies root and field state attributes from Field context', () => {
     render(
-      <Input isInvalid disabled required readOnly data-testid='root'>
-        <InputLabel>Username</InputLabel>
-        <InputField />
-      </Input>,
+      <Field invalid disabled required readOnly data-testid='field-root'>
+        <FieldLabel>Username</FieldLabel>
+        <Input data-testid='input-root'>
+          <InputField />
+        </Input>
+      </Field>,
     );
 
-    const root = screen.getByTestId('root');
+    const fieldRoot = screen.getByTestId('field-root');
+    const inputRoot = screen.getByTestId('input-root');
     const field = screen.getByRole('textbox', { name: 'Username' });
 
-    expect(root).toHaveAttribute('data-invalid', '');
-    expect(root).toHaveAttribute('data-disabled', '');
-    expect(root).toHaveAttribute('data-required', '');
-    expect(root).toHaveAttribute('data-readonly', '');
+    expect(fieldRoot).toHaveAttribute('data-invalid', '');
+    expect(fieldRoot).toHaveAttribute('data-disabled', '');
+    expect(fieldRoot).toHaveAttribute('data-required', '');
+    expect(fieldRoot).toHaveAttribute('data-readonly', '');
+
+    // Input root inherits from Field context
+    expect(inputRoot).toHaveAttribute('data-invalid', '');
+    expect(inputRoot).toHaveAttribute('data-disabled', '');
+    expect(inputRoot).toHaveAttribute('data-required', '');
+    expect(inputRoot).toHaveAttribute('data-readonly', '');
 
     expect(field).toBeDisabled();
     expect(field).toBeRequired();
@@ -112,12 +130,14 @@ describe('Input - Unit Tests', () => {
 
   it('uses description when valid and switches to error id when invalid', () => {
     const { rerender } = render(
-      <Input isInvalid={false}>
-        <InputLabel>Username</InputLabel>
-        <InputField />
-        <InputDescription>At least 3 characters</InputDescription>
-        <InputErrorMessage>Username is required</InputErrorMessage>
-      </Input>,
+      <Field invalid={false}>
+        <FieldLabel>Username</FieldLabel>
+        <Input>
+          <InputField />
+        </Input>
+        <FieldDescription>At least 3 characters</FieldDescription>
+        <FieldErrorMessage>Username is required</FieldErrorMessage>
+      </Field>,
     );
 
     const field = screen.getByRole('textbox', { name: 'Username' });
@@ -127,18 +147,19 @@ describe('Input - Unit Tests', () => {
     expect(screen.queryByText('Username is required')).not.toBeInTheDocument();
 
     rerender(
-      <Input isInvalid>
-        <InputLabel>Username</InputLabel>
-        <InputField />
-        <InputDescription>At least 3 characters</InputDescription>
-        <InputErrorMessage>Username is required</InputErrorMessage>
-      </Input>,
+      <Field invalid>
+        <FieldLabel>Username</FieldLabel>
+        <Input>
+          <InputField />
+        </Input>
+        <FieldDescription>At least 3 characters</FieldDescription>
+        <FieldErrorMessage>Username is required</FieldErrorMessage>
+      </Field>,
     );
 
     const error = screen.getByText('Username is required');
     expect(field).toHaveAttribute('aria-describedby', error.id);
     expect(error).toHaveAttribute('role', 'alert');
-    expect(error).toHaveAttribute('aria-live', 'assertive');
   });
 
   it('toggles focused data attribute and calls focus handlers', async () => {
@@ -148,10 +169,12 @@ describe('Input - Unit Tests', () => {
 
     render(
       <>
-        <Input>
-          <InputLabel>Username</InputLabel>
-          <InputField onFocus={onFocus} onBlur={onBlur} />
-        </Input>
+        <Field>
+          <FieldLabel>Username</FieldLabel>
+          <Input>
+            <InputField onFocus={onFocus} onBlur={onBlur} />
+          </Input>
+        </Field>
         <button type='button'>Next</button>
       </>,
     );
@@ -194,17 +217,17 @@ describe('Input - Unit Tests', () => {
     expect(controlled).toHaveValue('hello');
   });
 
-  it('throws when compound-only parts are used outside Input', () => {
+  it('throws when Field compound-only parts are used outside Field', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    expect(() => render(<InputLabel>Username</InputLabel>)).toThrow(
-      'Input compound components must be used within Input',
+    expect(() => render(<FieldLabel>Username</FieldLabel>)).toThrow(
+      'Field compound components must be used within Field',
     );
-    expect(() => render(<InputDescription>Help text</InputDescription>)).toThrow(
-      'Input compound components must be used within Input',
+    expect(() => render(<FieldDescription>Help text</FieldDescription>)).toThrow(
+      'Field compound components must be used within Field',
     );
-    expect(() => render(<InputErrorMessage>Error</InputErrorMessage>)).toThrow(
-      'Input compound components must be used within Input',
+    expect(() => render(<FieldErrorMessage>Error</FieldErrorMessage>)).toThrow(
+      'Field compound components must be used within Field',
     );
 
     jest.restoreAllMocks();

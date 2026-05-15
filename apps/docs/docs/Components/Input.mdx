@@ -6,27 +6,27 @@ description: A headless input component with compound pattern support, full acce
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Input } from '@turkish-technology/spar';
+import { Field, Input } from '@turkish-technology/spar';
 
 # Input
 
-A headless input component providing accessible form input primitives with compound pattern support and zero styling opinions.
+A headless input component providing accessible form input primitives with zero styling opinions. Pair it with the [Field](./Field.mdx) primitive to get label, description, and error-message wiring with coordinated ARIA IDs.
 
 ## Live Demo
 
 <LiveCode
-  code={`<Input.Root className='input-demo-container' isInvalid>
-  <Input.Label htmlFor='my-input' className='label'>
-    Label
-  </Input.Label>
-  <Input.Field id='my-input' className='input' />
-  <Input.Description className='description'>
+  code={`<Field.Root className='input-demo-container' invalid>
+  <Field.Label className='label'>Label</Field.Label>
+  <Input.Root>
+    <Input.Field className='input' />
+  </Input.Root>
+  <Field.Description className='description'>
     Helper text for guidance
-  </Input.Description>
-  <Input.ErrorMessage className='error'>
+  </Field.Description>
+  <Field.ErrorMessage className='error'>
     This field is required
-  </Input.ErrorMessage>
-</Input.Root>`}
+  </Field.ErrorMessage>
+</Field.Root>`}
 cssCode={`.input-demo-container {
   display: flex;
   flex-direction: column;
@@ -91,100 +91,122 @@ color: #ff8a8a;
 }`}
 />
 
-The live demo shows the full compound pattern with label, field, helper text, and an error message tied to an invalid state.
+The live demo shows the recommended pattern: a `Field` wrapper supplying label, helper text, and error message wiring around the `Input` primitive.
 
 ## Features
 
 - ✅ Text input and textarea support via polymorphic rendering (`input` or `textarea`)
-- ✅ Validation, disabled, required, and read-only states that propagate automatically to all compound parts
-- ✅ Conditional error message rendering based on validation state
-- ✅ Helper text support linked to the input field
-- ✅ Form integration with name, value, and change event support
+- ✅ Reads validation, disabled, required, and read-only state from a parent `Field` automatically (direct props still override)
 - ✅ Focus state tracking on the input element
+- ✅ Form integration with name, value, and change event support
+- ✅ Works standalone or composed with `Field`, `Label`, and custom layout wrappers
 
 ## Import
 
 ```tsx
-import { Input } from '@turkish-technology/spar';
+import { Field, Input } from '@turkish-technology/spar';
 ```
 
-`Input` and `Input.Root` refer to the same component — the difference is only notation style:
+`Input` and `Input.Root` refer to the same component — the difference is only notation style. Label, description, and error message are owned by the [`Field`](./Field.mdx) primitive:
 
 ```tsx
-// Dot notation (sub-parts accessed via Input.*)
-<Input.Root>
-  <Input.Label />
-  <Input.Field />
-  <Input.Description />
-  <Input.ErrorMessage />
-</Input.Root>;
+// Dot notation
+<Field.Root>
+  <Field.Label />
+  <Input.Root>
+    <Input.Field />
+  </Input.Root>
+  <Field.Description />
+  <Field.ErrorMessage />
+</Field.Root>;
 
-// Named import style (sub-parts imported separately)
+// Named import style
 import {
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldErrorMessage,
   Input,
-  InputLabel,
   InputField,
-  InputDescription,
-  InputErrorMessage,
 } from '@turkish-technology/spar';
 
-<Input>
-  <InputLabel />
-  <InputField />
-  <InputDescription />
-  <InputErrorMessage />
-</Input>;
+<Field>
+  <FieldLabel />
+  <Input>
+    <InputField />
+  </Input>
+  <FieldDescription />
+  <FieldErrorMessage />
+</Field>;
 ```
 
 ## Anatomy
 
-The Input component follows a compound component pattern with context-based state management:
+The Input component focuses on the field element itself. Label, description, and error message are provided by the `Field` primitive, which shares ARIA IDs and state with `Input` via context.
 
 <AnatomyViewer
   parts={[
-    { name: 'root', label: 'Root', description: 'Context provider for state management' },
-    { name: 'label', label: 'Label', description: 'Associated label with automatic ID linking' },
-    { name: 'field', label: 'Field', description: 'Core input element (input/textarea)' },
-    { name: 'description', label: 'Description', description: 'Helper text for guidance' },
+    {
+      name: 'fieldRoot',
+      label: 'Field.Root',
+      description: 'Field context provider (label, description, error wiring)',
+    },
+    {
+      name: 'label',
+      label: 'Field.Label',
+      description: 'Accessible label, auto-linked via htmlFor',
+    },
+    {
+      name: 'inputRoot',
+      label: 'Input.Root',
+      description: 'Input context provider for visual state',
+    },
+    { name: 'field', label: 'Input.Field', description: 'Core input element (input/textarea)' },
+    { name: 'description', label: 'Field.Description', description: 'Helper text for guidance' },
     {
       name: 'errorMessage',
-      label: 'ErrorMessage',
+      label: 'Field.ErrorMessage',
       description: 'Error announcement with role="alert"',
     },
   ]}
 >
-  <Input className='input-demo-container' isInvalid data-spar-part='root'>
-    <Input.Label htmlFor='my-input' className='label' data-spar-part='label'>
+  <Field className='input-demo-container' invalid data-spar-part='fieldRoot'>
+    <Field.Label className='label' data-spar-part='label'>
       {'Label'}
-    </Input.Label>
-    <Input.Field id='my-input' className='input' data-spar-part='field' />
-    <Input.Description className='description' data-spar-part='description'>
+    </Field.Label>
+    <Input data-spar-part='inputRoot'>
+      <Input.Field className='input' data-spar-part='field' />
+    </Input>
+    <Field.Description className='description' data-spar-part='description'>
       {'Helper text for guidance'}
-    </Input.Description>
-    <Input.ErrorMessage className='error' data-spar-part='errorMessage'>
+    </Field.Description>
+    <Field.ErrorMessage className='error' data-spar-part='errorMessage'>
       {'This field is required'}
-    </Input.ErrorMessage>
-  </Input>
+    </Field.ErrorMessage>
+  </Field>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<Input.Root>
-  <Input.Label />
-  <Input.Field />
-  <Input.Description />
-  <Input.ErrorMessage />
-</Input.Root>
+<Field.Root>
+  <Field.Label />
+  <Input.Root>
+    <Input.Field />
+  </Input.Root>
+  <Field.Description />
+  <Field.ErrorMessage />
+</Field.Root>
 ```
 
 **Data Flow:**
 
-- **Input.Root**: Context provider that manages validation, disabled, required, and read-only states
+- **Field.Root**: Owns coordinated IDs and the `invalid` / `disabled` / `required` / `readOnly` state, propagated via context
+- **Field.Label**: Accessible `<label>` auto-linked to the input via `htmlFor`
+- **Input.Root**: Provides visual-input context; inherits state from the enclosing `Field` when present
 - **Input.Field**: Core input element with polymorphic support (input/textarea)
-- **Input.Label**: Associated label element with automatic ID linking
-- **Input.Description**: Helper text element for additional guidance
-- **Input.ErrorMessage**: Error announcement element with role="alert"
+- **Field.Description**: Helper text linked via `aria-describedby`
+- **Field.ErrorMessage**: Error announcement with `role="alert"`, only rendered when `invalid` is `true`
 
 ## Code Examples
 
@@ -197,16 +219,18 @@ function BasicTextInput() {
   const [value, setValue] = React.useState('');
 
   return (
-    <Input.Root>
-      <Input.Label>Email Address</Input.Label>
-      <Input.Field
-        type='email'
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder='Enter your email'
-      />
-      <Input.Description>We'll use this to send you important updates</Input.Description>
-    </Input.Root>
+    <Field.Root>
+      <Field.Label>Email Address</Field.Label>
+      <Input.Root>
+        <Input.Field
+          type='email'
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder='Enter your email'
+        />
+      </Input.Root>
+      <Field.Description>We'll use this to send you important updates</Field.Description>
+    </Field.Root>
   );
 }
 ```
@@ -215,7 +239,7 @@ function BasicTextInput() {
 
 Demonstrates validation state management with conditional error message display.
 
-```tsx {2-3,5-7,12,20-21,23}
+```tsx {2-3,5-7,12,21-22,24}
 function ValidatedInput() {
   const [email, setEmail] = React.useState('');
   const [isInvalid, setIsInvalid] = React.useState(false);
@@ -227,17 +251,19 @@ function ValidatedInput() {
 
   return (
     <div>
-      <Input.Root isInvalid={isInvalid} required>
-        <Input.Label>Email Address</Input.Label>
-        <Input.Field
-          type='email'
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder='user@example.com'
-        />
-        <Input.Description>Enter a valid email address for account verification</Input.Description>
-        <Input.ErrorMessage>Please enter a valid email address</Input.ErrorMessage>
-      </Input.Root>
+      <Field.Root invalid={isInvalid} required>
+        <Field.Label>Email Address</Field.Label>
+        <Input.Root>
+          <Input.Field
+            type='email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder='user@example.com'
+          />
+        </Input.Root>
+        <Field.Description>Enter a valid email address for account verification</Field.Description>
+        <Field.ErrorMessage>Please enter a valid email address</Field.ErrorMessage>
+      </Field.Root>
       <button type='button' onClick={handleSubmit}>
         Validate Email
       </button>
@@ -250,38 +276,42 @@ function ValidatedInput() {
 
 Shows polymorphic rendering capability for multi-line text input with proper accessibility.
 
-```tsx {2,7-12,14}
+```tsx {2,7-14,16}
 function TextareaInput() {
   const [message, setMessage] = React.useState('');
 
   return (
-    <Input.Root>
-      <Input.Label>Message</Input.Label>
-      <Input.Field
-        as='textarea'
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        rows={4}
-        placeholder='Enter your message here...'
-      />
-      <Input.Description>Maximum 500 characters ({message.length}/500)</Input.Description>
-    </Input.Root>
+    <Field.Root>
+      <Field.Label>Message</Field.Label>
+      <Input.Root>
+        <Input.Field
+          as='textarea'
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          rows={4}
+          placeholder='Enter your message here...'
+        />
+      </Input.Root>
+      <Field.Description>Maximum 500 characters ({message.length}/500)</Field.Description>
+    </Field.Root>
   );
 }
 ```
 
 ### Disabled Input
 
-Demonstrates disabled state propagation across all compound parts.
+Demonstrates disabled state propagation from `Field` down to `Input` automatically.
 
-```tsx {3,5-6}
+```tsx {3,5-7}
 function DisabledInput() {
   return (
-    <Input.Root disabled>
-      <Input.Label>Account Type</Input.Label>
-      <Input.Field value='Premium Account' readOnly />
-      <Input.Description>Contact support to change your account type</Input.Description>
-    </Input.Root>
+    <Field.Root disabled>
+      <Field.Label>Account Type</Field.Label>
+      <Input.Root>
+        <Input.Field value='Premium Account' readOnly />
+      </Input.Root>
+      <Field.Description>Contact support to change your account type</Field.Description>
+    </Field.Root>
   );
 }
 ```
@@ -290,7 +320,7 @@ function DisabledInput() {
 
 Complete form example with validation, submission, and error handling.
 
-```tsx {2-3,5-14,17-22,25-33,36-43,47-56,59}
+```tsx
 function ContactForm() {
   const [formData, setFormData] = React.useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = React.useState<Record<string, string>>({});
@@ -316,38 +346,44 @@ function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate>
-      <Input.Root isInvalid={!!errors.name} required>
-        <Input.Label>Full Name</Input.Label>
-        <Input.Field
-          name='name'
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-        />
-        <Input.ErrorMessage>{errors.name}</Input.ErrorMessage>
-      </Input.Root>
+      <Field.Root invalid={!!errors.name} required>
+        <Field.Label>Full Name</Field.Label>
+        <Input.Root>
+          <Input.Field
+            name='name'
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          />
+        </Input.Root>
+        <Field.ErrorMessage>{errors.name}</Field.ErrorMessage>
+      </Field.Root>
 
-      <Input.Root isInvalid={!!errors.email} required>
-        <Input.Label>Email</Input.Label>
-        <Input.Field
-          type='email'
-          name='email'
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        />
-        <Input.ErrorMessage>{errors.email}</Input.ErrorMessage>
-      </Input.Root>
+      <Field.Root invalid={!!errors.email} required>
+        <Field.Label>Email</Field.Label>
+        <Input.Root>
+          <Input.Field
+            type='email'
+            name='email'
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          />
+        </Input.Root>
+        <Field.ErrorMessage>{errors.email}</Field.ErrorMessage>
+      </Field.Root>
 
-      <Input.Root isInvalid={!!errors.message} required>
-        <Input.Label>Message</Input.Label>
-        <Input.Field
-          as='textarea'
-          name='message'
-          rows={4}
-          value={formData.message}
-          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-        />
-        <Input.ErrorMessage>{errors.message}</Input.ErrorMessage>
-      </Input.Root>
+      <Field.Root invalid={!!errors.message} required>
+        <Field.Label>Message</Field.Label>
+        <Input.Root>
+          <Input.Field
+            as='textarea'
+            name='message'
+            rows={4}
+            value={formData.message}
+            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+          />
+        </Input.Root>
+        <Field.ErrorMessage>{errors.message}</Field.ErrorMessage>
+      </Field.Root>
 
       <button type='submit'>Send Message</button>
     </form>
@@ -417,60 +453,9 @@ The core input element with polymorphic rendering support. Handles focus states,
 | `data-required`  | `""` \| `undefined` | Indicates required state                                                     |
 | `data-readonly`  | `""` \| `undefined` | Indicates read-only state                                                    |
 
-### Input.Label
+### Label, Description, and Error Message
 
-The label element that provides accessible labeling for the input field. When used inside `Input.Root`, the `id` and `htmlFor` attributes are set automatically from context.
-
-**Props**
-
-| Name          | Type                          | Default     | Description                                                  |
-| ------------- | ----------------------------- | ----------- | ------------------------------------------------------------ |
-| `as?`         | `React.ElementType`           | `'label'`   | Polymorphic element type                                     |
-| `isOptional?` | `boolean`                     | `false`     | Marks the label as optional (sets `data-optional` attribute) |
-| `children`    | `React.ReactNode`             | -           | Label content                                                |
-| `ref?`        | `React.Ref<HTMLLabelElement>` | `undefined` | Ref for the label element                                    |
-
-**Auto-set from context**: When used inside `Input.Root`, the following are automatically set from context:
-
-- `id` — set to `${rootId}-label`
-- `htmlFor` — set to `${rootId}-field`, linking the label to `Input.Field`
-- `disabled` — mirrors `Input.Root`'s `disabled` prop → sets `data-disabled`
-- `required` — mirrors `Input.Root`'s `required` prop → sets `data-required`
-- `readOnly` — mirrors `Input.Root`'s `readOnly` prop → sets `data-readonly`
-- `isInvalid` — mirrors `Input.Root`'s `isInvalid` prop → sets `data-invalid`
-
-These data attributes can be used as styling hooks without manually passing props.
-
-### Input.Description
-
-The description element that provides helper text for the input field. The `id` is set automatically from context and referenced by `aria-describedby` on `Input.Field`.
-
-**Props**
-
-| Name       | Type                        | Default     | Description                     |
-| ---------- | --------------------------- | ----------- | ------------------------------- |
-| `as?`      | `React.ElementType`         | `'div'`     | Polymorphic element type        |
-| `children` | `React.ReactNode`           | -           | Description content             |
-| `ref?`     | `React.Ref<HTMLDivElement>` | `undefined` | Ref for the description element |
-
-### Input.ErrorMessage
-
-The error message element. Renders `null` when the parent `Input.Root` has `isInvalid={false}`. When visible, its `id` is referenced by `aria-describedby` on `Input.Field` (replacing the description reference).
-
-**Props**
-
-| Name       | Type                        | Default     | Description               |
-| ---------- | --------------------------- | ----------- | ------------------------- |
-| `as?`      | `React.ElementType`         | `'div'`     | Polymorphic element type  |
-| `children` | `React.ReactNode`           | -           | Error content             |
-| `ref?`     | `React.Ref<HTMLDivElement>` | `undefined` | Ref for the error element |
-
-**HTML Attributes**
-
-| Attribute   | Value         | Purpose                                                 |
-| ----------- | ------------- | ------------------------------------------------------- |
-| `role`      | `"alert"`     | Causes screen readers to announce the error immediately |
-| `aria-live` | `"assertive"` | Ensures errors are announced as they appear             |
+Label, helper text, and validation messaging are not part of `Input`. Use the [`Field`](./Field.mdx) primitive — `Field.Label`, `Field.Description`, and `Field.ErrorMessage` — which share coordinated ARIA IDs and state (`invalid`, `disabled`, `required`, `readOnly`) with the enclosed `Input` via context.
 
 ## Keyboard Interactions
 

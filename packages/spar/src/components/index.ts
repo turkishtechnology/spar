@@ -2,6 +2,7 @@ export * from './Breadcrumb';
 export * from './Accordion';
 export * from './Button';
 export * from './Collapsible';
+export * from './Field';
 export * from './Label';
 export * from './DropdownMenu';
 export * from './Radio';
