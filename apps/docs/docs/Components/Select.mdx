@@ -6,7 +6,7 @@ description: Fully accessible, headless select component for single-value select
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Select } from '@turkish-technology/spar';
+import { Field, Select } from '@turkish-technology/spar';
 
 # Select
 
@@ -14,44 +14,105 @@ A headless, fully accessible dropdown component that allows users to choose a si
 
 `Select` does not include dedicated trigger-icon or selected-indicator primitives. Add any chevron, caret, or selected marker directly inside `Select.Trigger` and `Select.Item` so the visual layer stays fully application-owned.
 
+Pair it with the [Field](./Field.mdx) primitive to get label, description, and error-message wiring with coordinated ARIA IDs — `Select` reads the enclosing `Field`'s `invalid`, `disabled`, `required`, and `readOnly` state automatically.
+
 ## Live Demo
 
 <div className='select-demo-container'>
 <LiveCode
-  code={`<div className='select-demo-container'>
+  code={`<Field.Root className='select-demo-container' invalid>
+  <Field.Label className='select-label'>Plan</Field.Label>
   <Select.Root>
     <Select.Trigger className='select-trigger'>
-      <Select.Value className='select-value' placeholder='Options' />
+      <Select.Value className='select-value' placeholder='Choose a plan' />
       <span aria-hidden='true' className='select-trigger-addon'>▾</span>
     </Select.Trigger>
     <Select.Content className='select-content'>
-      <Select.Item className='select-item' value='option1'>
-        <Select.ItemText className='select-item-text'>Option 1</Select.ItemText>
+      <Select.Item className='select-item' value='basic'>
+        <Select.ItemText className='select-item-text'>Basic</Select.ItemText>
         <span aria-hidden='true' className='select-item-check'>✓</span>
       </Select.Item>
-      <Select.Item className='select-item' value='option2'>
-        <Select.ItemText className='select-item-text'>Option 2</Select.ItemText>
+      <Select.Item className='select-item' value='premium'>
+        <Select.ItemText className='select-item-text'>Premium</Select.ItemText>
         <span aria-hidden='true' className='select-item-check'>✓</span>
       </Select.Item>
-      <Select.Item className='select-item' value='option3'>
-        <Select.ItemText className='select-item-text'>Option 3</Select.ItemText>
+      <Select.Item className='select-item' value='enterprise'>
+        <Select.ItemText className='select-item-text'>Enterprise</Select.ItemText>
         <span aria-hidden='true' className='select-item-check'>✓</span>
       </Select.Item>
       <Select.Arrow className='select-arrow' />
     </Select.Content>
   </Select.Root>
-</div>`}
-  cssCode={`.select-demo-container .select-trigger {
-  min-width: 180px;
-  min-height: 40px;
+  <Field.Description className='select-description'>
+    Pick the subscription tier you want.
+  </Field.Description>
+  <Field.ErrorMessage className='select-error'>
+    Plan is required.
+  </Field.ErrorMessage>
+</Field.Root>`}
+  cssCode={`.select-demo-container {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 0 14px;
-  border-radius: 10px;
-  border: 1px solid #e1e4ea;
-  background: rgba(0, 0, 0, 0.08);
+  flex-direction: column;
+  gap: 6px;
+  margin-inline: auto;
+}
+
+.select-demo-container .select-label {
+color: #222530;
+display: block;
+font-size: 12px;
+line-height: 16px;
+font-weight: 500;
+margin: 0;
+}
+
+[data-theme='dark'] .select-demo-container .select-label {
+color: #f2f5f8;
+}
+
+.select-demo-container .select-description {
+color: #717784;
+display: block;
+font-size: 12px;
+line-height: 16px;
+margin: 0;
+}
+
+[data-theme='dark'] .select-demo-container .select-description {
+color: #99a0ae;
+}
+
+.select-demo-container .select-error {
+color: #d14343;
+display: block;
+font-size: 12px;
+line-height: 16px;
+margin: 0;
+}
+
+[data-theme='dark'] .select-demo-container .select-error {
+color: #ff8a8a;
+}
+
+.select-demo-container .select-trigger {
+min-width: 180px;
+min-height: 40px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+padding: 0 14px;
+border-radius: 10px;
+border: 1px solid #e1e4ea;
+background: rgba(0, 0, 0, 0.08);
+}
+
+.select-demo-container .select-trigger[aria-invalid='true'] {
+border-color: #d14343;
+}
+
+[data-theme='dark'] .select-demo-container .select-trigger[aria-invalid='true'] {
+border-color: #ff8a8a;
 }
 
 [data-theme='dark'] .select-demo-container .select-trigger {
@@ -148,12 +209,13 @@ color: var(--select-surface);
 
 </div>
 
-The live demo shows a custom chevron in the trigger and a checkmark inside each item to illustrate how visual indicators are composed manually.
+The live demo shows the recommended pattern: a `Field` wrapper supplying label, helper text, and error message wiring around the `Select` primitive — with a custom chevron in the trigger and a checkmark inside each item to illustrate how visual indicators are composed manually.
 
 ## Features
 
 - ✅ Single-value selection (`value: string`)
 - ✅ Controlled and uncontrolled usage (`value/defaultValue`, `open/defaultOpen`)
+- ✅ Reads validation, disabled, required, and read-only state from a parent `Field` automatically (direct props still override)
 - ✅ Built-in typeahead search (default 700ms buffer)
 - ✅ Positioning with `useFloating` (offset, flip, shift, hide)
 - ✅ Form integration (generates a hidden input when `name` is provided)
@@ -165,7 +227,23 @@ The live demo shows a custom chevron in the trigger and a checkmark inside each 
 ## Import
 
 ```tsx
-import { Select } from '@turkish-technology/spar';
+import { Field, Select } from '@turkish-technology/spar';
+```
+
+`Select` and `Select.Root` refer to the same component — the difference is only notation style. Label, description, and error message are owned by the [`Field`](./Field.mdx) primitive when you need them:
+
+```tsx
+<Field.Root>
+  <Field.Label />
+  <Select.Root>
+    <Select.Trigger>
+      <Select.Value />
+    </Select.Trigger>
+    <Select.Content>{/* items */}</Select.Content>
+  </Select.Root>
+  <Field.Description />
+  <Field.ErrorMessage />
+</Field.Root>
 ```
 
 ## Anatomy
@@ -382,6 +460,67 @@ function GroupedSelect() {
 }
 ```
 
+### With Field (label, description, error)
+
+Wrap `Select` with `Field` to attach a label, helper text, and an error message. The trigger's `aria-labelledby` and `aria-describedby` are wired automatically through Field context, and `invalid` / `disabled` / `required` / `readOnly` propagate down to the trigger and the hidden form input.
+
+```tsx {1,4-6,8-19}
+function FieldSelect() {
+  const [plan, setPlan] = React.useState('');
+
+  return (
+    <Field.Root invalid={plan === ''} required>
+      <Field.Label>Plan</Field.Label>
+      <Select.Root value={plan} onValueChange={setPlan} name='plan'>
+        <Select.Trigger>
+          <Select.Value placeholder='Choose a plan' />
+        </Select.Trigger>
+        <Select.Content>
+          <Select.Item value='basic'>
+            <Select.ItemText>Basic</Select.ItemText>
+          </Select.Item>
+          <Select.Item value='premium'>
+            <Select.ItemText>Premium</Select.ItemText>
+          </Select.Item>
+        </Select.Content>
+      </Select.Root>
+      <Field.Description>Choose the tier you want to subscribe to.</Field.Description>
+      <Field.ErrorMessage>Plan is required.</Field.ErrorMessage>
+    </Field.Root>
+  );
+}
+```
+
+When the enclosing `Field` is `invalid`, the trigger receives `aria-invalid="true"` and its `aria-describedby` points to the rendered `Field.ErrorMessage` instead of `Field.Description`.
+
+### Disabled and Read-only via Field
+
+`disabled` and `readOnly` propagate from Field. A read-only Select can still be opened and inspected, but its value cannot change.
+
+```tsx {1,5-7}
+function ReadOnlyField() {
+  return (
+    <Field.Root readOnly>
+      <Field.Label>Region</Field.Label>
+      <Select.Root defaultValue='eu-west-1'>
+        <Select.Trigger>
+          <Select.Value />
+        </Select.Trigger>
+        <Select.Content>
+          <Select.Item value='eu-west-1'>
+            <Select.ItemText>EU (Ireland)</Select.ItemText>
+          </Select.Item>
+          <Select.Item value='us-east-1'>
+            <Select.ItemText>US (N. Virginia)</Select.ItemText>
+          </Select.Item>
+        </Select.Content>
+      </Select.Root>
+      <Field.Description>Locked to your billing region.</Field.Description>
+    </Field.Root>
+  );
+}
+```
+
 ### Form Integration
 
 When `name` is provided, Root generates a hidden input for the selected value.
@@ -439,8 +578,10 @@ Provides the root state and context. `Select` and `Select.Root` are the same com
 | `open?`          | `boolean`                 | `undefined` | Controlled open/closed state                                      |
 | `defaultOpen?`   | `boolean`                 | `false`     | Initial uncontrolled open state                                   |
 | `onOpenChange?`  | `(open: boolean) => void` | `undefined` | Open/closed change callback                                       |
-| `disabled?`      | `boolean`                 | `false`     | Disables the entire Select                                        |
-| `required?`      | `boolean`                 | `false`     | Marks the field as required for forms                             |
+| `isInvalid?`     | `boolean`                 | `false`     | Validation state; inherited from a parent `Field` when present    |
+| `disabled?`      | `boolean`                 | `false`     | Disables the entire Select; inherited from `Field` when present   |
+| `required?`      | `boolean`                 | `false`     | Marks the field as required; inherited from `Field` when present  |
+| `readOnly?`      | `boolean`                 | `false`     | Read-only state; inherited from `Field` when present              |
 | `name?`          | `string`                  | `undefined` | Form field name; generates a hidden input when `value` is defined |
 | `dir?`           | `'ltr' \| 'rtl'`          | `'ltr'`     | Writing direction                                                 |
 | `autoFocus?`     | `boolean`                 | `false`     | Focuses the trigger on mount                                      |
@@ -456,10 +597,13 @@ Provides the root state and context. `Select` and `Select.Root` are the same com
 
 **HTML Attributes**
 
-| Attribute        | Value | Purpose                        |
-| ---------------- | ----- | ------------------------------ |
-| `data-disabled`  | `""`  | Added when Root is disabled    |
-| `data-autofocus` | `""`  | Added when `autoFocus` is true |
+| Attribute        | Value | Purpose                                                         |
+| ---------------- | ----- | --------------------------------------------------------------- |
+| `data-invalid`   | `""`  | Added when Root (or the enclosing Field) is in an invalid state |
+| `data-disabled`  | `""`  | Added when Root (or the enclosing Field) is disabled            |
+| `data-required`  | `""`  | Added when Root (or the enclosing Field) is required            |
+| `data-readonly`  | `""`  | Added when Root (or the enclosing Field) is read-only           |
+| `data-autofocus` | `""`  | Added when `autoFocus` is true                                  |
 
 ### Select.Trigger
 
@@ -501,21 +645,27 @@ Trigger part that opens and closes the root state.
 
 **HTML Attributes**
 
-| Attribute          | Value                | Purpose                               |
-| ------------------ | -------------------- | ------------------------------------- |
-| `role`             | `"combobox"`         | Trigger semantic role                 |
-| `aria-haspopup`    | `"listbox"`          | Type of panel that opens              |
-| `aria-expanded`    | `boolean`            | Open/closed state                     |
-| `aria-controls`    | `string`             | Id of the content element             |
-| `aria-labelledby`  | `string`             | Reference to the value node id        |
-| `aria-required`    | `true`               | Added when Root `required` is true    |
-| `data-state`       | `"open" \| "closed"` | Open/closed state                     |
-| `data-required`    | `""`                 | Added when Root `required` is true    |
-| `data-placeholder` | `""`                 | Added when there is no selected value |
-| `data-disabled`    | `""`                 | Button disabled state                 |
-| `data-loading`     | `""`                 | Button loading state                  |
-| `data-pressed`     | `""`                 | Button toggle pressed state           |
-| `data-autofocus`   | `""`                 | Button autofocus state                |
+| Attribute          | Value                | Purpose                                                                                                 |
+| ------------------ | -------------------- | ------------------------------------------------------------------------------------------------------- |
+| `role`             | `"combobox"`         | Trigger semantic role                                                                                   |
+| `aria-haspopup`    | `"listbox"`          | Type of panel that opens                                                                                |
+| `aria-expanded`    | `boolean`            | Open/closed state                                                                                       |
+| `aria-controls`    | `string`             | Id of the content element                                                                               |
+| `aria-labelledby`  | `string`             | References the value node id; also includes the Field label id when inside Field                        |
+| `aria-describedby` | `string`             | Points to `Field.Description`, or `Field.ErrorMessage` while `invalid` is true                          |
+| `aria-required`    | `true`               | Added when Root `required` is true                                                                      |
+| `aria-invalid`     | `true`               | Added when Root (or the enclosing Field) is in an invalid state                                         |
+| `aria-readonly`    | `true`               | Added when Root (or the enclosing Field) is read-only                                                   |
+| `id`               | `string`             | Equals the Field's `fieldId` when wrapped in a `Field`, so `Field.Label` `htmlFor` lands on the trigger |
+| `data-state`       | `"open" \| "closed"` | Open/closed state                                                                                       |
+| `data-invalid`     | `""`                 | Added when invalid (own prop or inherited from Field)                                                   |
+| `data-required`    | `""`                 | Added when required (own prop or inherited from Field)                                                  |
+| `data-readonly`    | `""`                 | Added when read-only (own prop or inherited from Field)                                                 |
+| `data-placeholder` | `""`                 | Added when there is no selected value                                                                   |
+| `data-disabled`    | `""`                 | Button disabled state                                                                                   |
+| `data-loading`     | `""`                 | Button loading state                                                                                    |
+| `data-pressed`     | `""`                 | Button toggle pressed state                                                                             |
+| `data-autofocus`   | `""`                 | Button autofocus state                                                                                  |
 
 ### Select.Value
 

@@ -1,10 +1,19 @@
 import { useId, useMemo, useState, useCallback, useRef, type ElementType } from 'react';
 import { useItemRegistry, useControlledState } from '@/hooks';
 import { SelectContext } from './hooks';
+import { useOptionalFieldContext } from '../Field/hooks';
 import type { SelectProps, SelectContextValue, SelectItemData, SelectFocusStrategy } from './types';
 
 /**
- * Select root component providing context and state management for all select components. Supports controlled and uncontrolled patterns with full keyboard navigation and accessibility.
+ * Select root component providing context and state management for all select
+ * components. Supports controlled and uncontrolled patterns with full keyboard
+ * navigation and accessibility.
+ *
+ * When nested inside a `<Field>`, it reads the Field's `invalid`, `disabled`,
+ * `required` and `readOnly` values automatically, and inherits the coordinated
+ * ARIA IDs so FieldLabel / FieldDescription / FieldErrorMessage wire to the
+ * SelectTrigger without extra plumbing. Direct props on `<Select>` override
+ * the inherited values.
  */
 export const Select = <T extends ElementType = 'div'>({
   id: providedId,
@@ -14,8 +23,10 @@ export const Select = <T extends ElementType = 'div'>({
   open: controlledOpen,
   defaultOpen = false,
   onOpenChange,
-  disabled = false,
-  required = false,
+  isInvalid,
+  disabled,
+  required,
+  readOnly,
   name,
   autoFocus = false,
   as,
@@ -23,6 +34,14 @@ export const Select = <T extends ElementType = 'div'>({
   ...props
 }: SelectProps<T>) => {
   const Component = as || 'div';
+  const fieldCtx = useOptionalFieldContext();
+
+  // Direct props win; otherwise fall back to Field context; then default false.
+  const resolvedInvalid = isInvalid ?? fieldCtx?.invalid ?? false;
+  const resolvedDisabled = disabled ?? fieldCtx?.disabled ?? false;
+  const resolvedRequired = required ?? fieldCtx?.required ?? false;
+  const resolvedReadOnly = readOnly ?? fieldCtx?.readOnly ?? false;
+
   // State management - controlled/uncontrolled
   const [currentValue, setValueState] = useControlledState(
     controlledValue,
@@ -41,12 +60,16 @@ export const Select = <T extends ElementType = 'div'>({
   const valueNodeRef = useRef<HTMLElement>(null);
   const arrowRef = useRef<Element | null>(null);
 
-  // IDs
+  // IDs - reuse Field's coordinated IDs when nested so FieldLabel's htmlFor
+  // lands on the trigger button and aria-describedby resolves correctly.
   const generatedId = useId();
   const baseId = providedId ?? generatedId;
-  const triggerId = `${baseId}-trigger`;
+  const triggerId = fieldCtx?.fieldId ?? `${baseId}-trigger`;
   const contentId = `${baseId}-content`;
   const valueId = `${baseId}-value`;
+  const labelId = fieldCtx?.labelId ?? `${baseId}-label`;
+  const descriptionId = fieldCtx?.descriptionId ?? `${baseId}-description`;
+  const errorId = fieldCtx?.errorId ?? `${baseId}-error`;
 
   // Item collection
   const { items, registerItem, unregisterItem } = useItemRegistry<SelectItemData>();
@@ -57,16 +80,16 @@ export const Select = <T extends ElementType = 'div'>({
   // Value change handler
   const handleValueChange = useCallback(
     (newValue: string) => {
-      if (disabled) return;
+      if (resolvedDisabled || resolvedReadOnly) return;
       setValueState(newValue);
     },
-    [disabled, setValueState],
+    [resolvedDisabled, resolvedReadOnly, setValueState],
   );
 
   // Open change handler
   const handleOpenChange = useCallback(
     (newOpen: boolean) => {
-      if (disabled) return;
+      if (resolvedDisabled) return;
       setOpenState(newOpen);
 
       // Reset focus strategy when closing
@@ -74,7 +97,7 @@ export const Select = <T extends ElementType = 'div'>({
         setFocusStrategy('none');
       }
     },
-    [disabled, setOpenState],
+    [resolvedDisabled, setOpenState],
   );
 
   // Context value
@@ -83,8 +106,10 @@ export const Select = <T extends ElementType = 'div'>({
       // State
       open: currentOpen,
       value: currentValue,
-      disabled,
-      required,
+      isInvalid: resolvedInvalid,
+      disabled: resolvedDisabled,
+      required: resolvedRequired,
+      readOnly: resolvedReadOnly,
       autoFocus,
 
       // Actions
@@ -101,6 +126,10 @@ export const Select = <T extends ElementType = 'div'>({
       triggerId,
       contentId,
       valueId,
+      labelId,
+      descriptionId,
+      errorId,
+      hasField: fieldCtx !== null,
 
       // Collections
       items,
@@ -114,14 +143,20 @@ export const Select = <T extends ElementType = 'div'>({
     [
       currentOpen,
       currentValue,
-      disabled,
-      required,
+      resolvedInvalid,
+      resolvedDisabled,
+      resolvedRequired,
+      resolvedReadOnly,
       autoFocus,
       handleValueChange,
       handleOpenChange,
       triggerId,
       contentId,
       valueId,
+      labelId,
+      descriptionId,
+      errorId,
+      fieldCtx,
       registerItem,
       unregisterItem,
       focusStrategy,
@@ -129,13 +164,17 @@ export const Select = <T extends ElementType = 'div'>({
     ],
   );
 
+  const dataAttributes = {
+    'data-invalid': resolvedInvalid ? '' : undefined,
+    'data-disabled': resolvedDisabled ? '' : undefined,
+    'data-required': resolvedRequired ? '' : undefined,
+    'data-readonly': resolvedReadOnly ? '' : undefined,
+    'data-autofocus': autoFocus ? '' : undefined,
+  };
+
   return (
     <SelectContext.Provider value={contextValue}>
-      <Component
-        {...props}
-        data-disabled={disabled ? '' : undefined}
-        data-autofocus={autoFocus ? '' : undefined}
-      >
+      <Component {...props} {...dataAttributes}>
         {children}
       </Component>
       {/* Hidden input for form integration */}
@@ -144,8 +183,8 @@ export const Select = <T extends ElementType = 'div'>({
           type='hidden'
           name={name}
           value={currentValue}
-          required={required}
-          disabled={disabled}
+          required={resolvedRequired}
+          disabled={resolvedDisabled}
         />
       )}
     </SelectContext.Provider>
