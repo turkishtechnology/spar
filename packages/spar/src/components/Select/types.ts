@@ -30,7 +30,7 @@ export interface SelectOwnProps {
    * Callback when selection changes
    * @param value - The new selected value
    */
-  onValueChange?: (value: string) => void;
+  onChange?: (value: string) => void;
 
   /**
    * Controlled open state
@@ -52,7 +52,7 @@ export interface SelectOwnProps {
   /**
    * Select validation state. When inside a Field, inherited from Field.
    */
-  isInvalid?: boolean;
+  invalid?: boolean;
 
   /**
    * Disables the entire select. When inside a Field, inherited from Field.
@@ -315,14 +315,14 @@ export interface SelectContextValue {
   // State
   open: boolean;
   value: string | undefined;
-  isInvalid: boolean;
+  invalid: boolean;
   disabled: boolean;
   required: boolean;
   readOnly: boolean;
   autoFocus: boolean;
 
   // Actions
-  onValueChange: (value: string) => void;
+  onChange: (value: string) => void;
   onOpenChange: (open: boolean) => void;
 
   // Refs

@@ -46,7 +46,7 @@ Generic form-field container. Provides a shared ARIA context (coordinated IDs an
 
 ## Label Props
 
-Same as the standalone `Label` component. `htmlFor`, `id`, `disabled`, `required`, `readOnly`, `isInvalid` are provided by Field context and cannot be overridden.
+Same as the standalone `Label` component. `htmlFor`, `id`, `disabled`, `required`, `readOnly`, `invalid` are provided by Field context and cannot be overridden.
 
 | Prop          | Type      | Default | Description             |
 | ------------- | --------- | ------- | ----------------------- |

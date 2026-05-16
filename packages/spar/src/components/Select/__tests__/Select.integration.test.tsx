@@ -56,7 +56,7 @@ describe('Select Integration', () => {
 
       return (
         <div>
-          <Select value={value} onValueChange={setValue} name='plan'>
+          <Select value={value} onChange={setValue} name='plan'>
             <SelectTrigger aria-label='Choose plan'>
               <SelectValue />
             </SelectTrigger>
@@ -139,7 +139,7 @@ describe('Select Integration', () => {
     const { rerender } = render(
       <Field invalid required disabled>
         <FieldLabel>Plan</FieldLabel>
-        <Select onValueChange={handleChange}>
+        <Select onChange={handleChange}>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>
@@ -166,7 +166,7 @@ describe('Select Integration', () => {
     rerender(
       <Field readOnly>
         <FieldLabel>Plan</FieldLabel>
-        <Select onValueChange={handleChange}>
+        <Select onChange={handleChange}>
           <SelectTrigger>
             <SelectValue placeholder='Select...' />
           </SelectTrigger>

@@ -286,7 +286,7 @@ export default function TicketingPage() {
                       <Radio.Root
                         aria-label='Trip type'
                         value={tripType}
-                        onValueChange={(value) => {
+                        onChange={(value) => {
                           setTripType(value);
                         }}
                         className='ticketing-trip-type-options'
@@ -305,7 +305,7 @@ export default function TicketingPage() {
                     <div className='ticketing-fields'>
                       <Select.Root
                         value={fromAirport}
-                        onValueChange={(value) => {
+                        onChange={(value) => {
                           setFromAirport(value);
                         }}
                       >
@@ -343,7 +343,7 @@ export default function TicketingPage() {
                       </Button>
                       <Select.Root
                         value={toAirport}
-                        onValueChange={(value) => {
+                        onChange={(value) => {
                           setToAirport(value);
                         }}
                       >
@@ -397,7 +397,7 @@ export default function TicketingPage() {
                       </Field>
                       <Select.Root
                         value={passengerCount}
-                        onValueChange={(value) => {
+                        onChange={(value) => {
                           setPassengerCount(value);
                         }}
                       >

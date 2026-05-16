@@ -14,7 +14,7 @@ Simple component — no compound parts. When nested inside a `<Field>`, reads `i
 | `disabled?`       | `boolean`                    | `false`    | Disables the switch. Inherited from Field          |
 | `required?`       | `boolean`                    | `false`    | Required for form validation. Inherited from Field |
 | `readOnly?`       | `boolean`                    | `false`    | Prevents state changes. Inherited from Field       |
-| `isInvalid?`      | `boolean`                    | `false`    | Error state (`aria-invalid`). Inherited from Field |
+| `invalid?`        | `boolean`                    | `false`    | Error state (`aria-invalid`). Inherited from Field |
 | `name?`           | `string`                     | —          | Form field name (renders hidden `<input>`)         |
 | `value?`          | `string`                     | `'on'`     | Form field value when checked                      |
 | `form?`           | `string`                     | —          | Associated form ID                                 |
@@ -32,7 +32,7 @@ Plus all native `<button>` HTML attributes.
     disabled,
     readOnly,
     required,
-    isInvalid,
+    invalid,
     isFocused,
     isHovered,
     isPressed,
@@ -52,7 +52,7 @@ Plus all native `<button>` HTML attributes.
 | `disabled`   | `boolean`                    | Whether disabled      |
 | `readOnly`   | `boolean`                    | Whether read-only     |
 | `required`   | `boolean`                    | Whether required      |
-| `isInvalid`  | `boolean`                    | Whether invalid       |
+| `invalid`    | `boolean`                    | Whether invalid       |
 | `isFocused`  | `boolean`                    | Whether focused       |
 | `isHovered`  | `boolean`                    | Whether hovered       |
 | `isPressed`  | `boolean`                    | Whether being pressed |

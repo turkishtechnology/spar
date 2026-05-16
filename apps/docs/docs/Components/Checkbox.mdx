@@ -415,10 +415,10 @@ The render-props API exposes interaction state so you can build custom visuals w
 function RenderPropsCheckbox() {
   return (
     <Checkbox defaultChecked={false}>
-      {({ checked, disabled, isInvalid, required, isFocused, isHovered, isPressed }) => (
+      {({ checked, disabled, invalid, required, isFocused, isHovered, isPressed }) => (
         <div>
           <span>{checked ? '✓' : '☐'}</span>
-          <span>Invalid: {isInvalid ? 'Yes' : 'No'}</span>
+          <span>Invalid: {invalid ? 'Yes' : 'No'}</span>
           <span>Focused: {isFocused ? 'Yes' : 'No'}</span>
           <span>Hovered: {isHovered ? 'Yes' : 'No'}</span>
           <span>Pressed: {isPressed ? 'Yes' : 'No'}</span>
@@ -509,7 +509,7 @@ A self-contained headless checkbox component with full accessibility and Field i
 | `form?`           | `string`                                                               | `undefined`      | ID of the form this checkbox belongs to                                           |
 | `required?`       | `boolean`                                                              | `false`          | Required state for form validation                                                |
 | `readOnly?`       | `boolean`                                                              | `false`          | Read-only state - prevents interaction                                            |
-| `isInvalid?`      | `boolean`                                                              | `false`          | Invalid/error state. Inherited from Field unless explicitly overridden            |
+| `invalid?`      | `boolean`                                                              | `false`          | Invalid/error state. Inherited from Field unless explicitly overridden            |
 | `autoFocus?`      | `boolean`                                                              | `false`          | Auto-focus on mount                                                               |
 | `children?`       | `React.ReactNode \| ((state: CheckboxRenderProps) => React.ReactNode)` | `undefined`      | Content to display, or render props function                                      |
 | `id?`             | `string`                                                               | `auto-generated` | Unique identifier for the checkbox                                                |
@@ -528,7 +528,7 @@ When using the render props pattern, the following state properties are passed t
 | `disabled`   | `boolean`                         | Whether the checkbox is disabled                              |
 | `readOnly`   | `boolean`                         | Whether the checkbox is read-only                             |
 | `required`   | `boolean`                         | Whether the checkbox is required                              |
-| `isInvalid`  | `boolean`                         | Whether the checkbox is in an invalid/error state             |
+| `invalid`  | `boolean`                         | Whether the checkbox is in an invalid/error state             |
 | `isFocused`  | `boolean`                         | Whether the checkbox currently has focus                      |
 | `isHovered`  | `boolean`                         | Whether the checkbox is being hovered                         |
 | `isPressed`  | `boolean`                         | Whether the checkbox is being pressed                         |
@@ -552,7 +552,7 @@ When using the render props pattern, the following state properties are passed t
 | `data-disabled`      | `""`  | Present when `disabled` is `true`           |
 | `data-readonly`      | `""`  | Present when `readOnly` is `true`           |
 | `data-required`      | `""`  | Present when `required` is `true`           |
-| `data-invalid`       | `""`  | Present when `isInvalid` is `true`          |
+| `data-invalid`       | `""`  | Present when `invalid` is `true`          |
 | `data-focus`         | `""`  | Present when the checkbox has focus         |
 | `data-hover`         | `""`  | Present when the checkbox is hovered        |
 | `data-active`        | `""`  | Present when the checkbox is being pressed  |

@@ -87,7 +87,7 @@ export type FieldProps<T extends ElementType = 'div'> = PolymorphicProps<'div', 
  * Props for FieldLabel.
  * @remarks Renders as `<label>` by default with automatic htmlFor linking.
  * When used inside a Field, `disabled`, `required`, `readOnly`, and
- * `isInvalid` are provided by Field context and cannot be overridden.
+ * `invalid` are provided by Field context and cannot be overridden.
  */
 export type FieldLabelProps<T extends ElementType = 'label'> = LabelProps<T>;
 

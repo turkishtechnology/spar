@@ -95,10 +95,10 @@ describe('Input - Integration Tests', () => {
 
     const ControlledValidationExample = () => {
       const [value, setValue] = useState('');
-      const isInvalid = value.length > 0 && value.length < 3;
+      const invalid = value.length > 0 && value.length < 3;
 
       return (
-        <Field invalid={isInvalid}>
+        <Field invalid={invalid}>
           <FieldLabel>Username</FieldLabel>
           <Input>
             <InputField value={value} onChange={(event) => setValue(event.target.value)} />

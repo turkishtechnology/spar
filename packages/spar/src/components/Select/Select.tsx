@@ -19,11 +19,11 @@ export const Select = <T extends ElementType = 'div'>({
   id: providedId,
   value: controlledValue,
   defaultValue,
-  onValueChange,
+  onChange,
   open: controlledOpen,
   defaultOpen = false,
   onOpenChange,
-  isInvalid,
+  invalid,
   disabled,
   required,
   readOnly,
@@ -37,17 +37,13 @@ export const Select = <T extends ElementType = 'div'>({
   const fieldCtx = useOptionalFieldContext();
 
   // Direct props win; otherwise fall back to Field context; then default false.
-  const resolvedInvalid = isInvalid ?? fieldCtx?.invalid ?? false;
+  const resolvedInvalid = invalid ?? fieldCtx?.invalid ?? false;
   const resolvedDisabled = disabled ?? fieldCtx?.disabled ?? false;
   const resolvedRequired = required ?? fieldCtx?.required ?? false;
   const resolvedReadOnly = readOnly ?? fieldCtx?.readOnly ?? false;
 
   // State management - controlled/uncontrolled
-  const [currentValue, setValueState] = useControlledState(
-    controlledValue,
-    defaultValue,
-    onValueChange,
-  );
+  const [currentValue, setValueState] = useControlledState(controlledValue, defaultValue, onChange);
   const [currentOpen = false, setOpenState] = useControlledState(
     controlledOpen,
     defaultOpen,
@@ -106,14 +102,14 @@ export const Select = <T extends ElementType = 'div'>({
       // State
       open: currentOpen,
       value: currentValue,
-      isInvalid: resolvedInvalid,
+      invalid: resolvedInvalid,
       disabled: resolvedDisabled,
       required: resolvedRequired,
       readOnly: resolvedReadOnly,
       autoFocus,
 
       // Actions
-      onValueChange: handleValueChange,
+      onChange: handleValueChange,
       onOpenChange: handleOpenChange,
 
       // Refs

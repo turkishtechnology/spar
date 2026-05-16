@@ -88,7 +88,7 @@ describe('Checkbox Integration Tests', () => {
 
         return (
           <form onSubmit={validateAndSubmit}>
-            <Checkbox checked={isChecked} onChange={handleCheckedChange} data-invalid={!!error}>
+            <Checkbox checked={isChecked} onChange={handleCheckedChange} invalid={!!error}>
               I agree to the terms
             </Checkbox>
             {error && <div role='alert'>{error}</div>}
@@ -109,7 +109,7 @@ describe('Checkbox Integration Tests', () => {
         error: 'You must agree to the terms',
       });
       expect(screen.getByRole('alert')).toHaveTextContent('You must agree to the terms');
-      expect(checkbox).toHaveAttribute('data-invalid', 'true');
+      expect(checkbox).toHaveAttribute('data-invalid', '');
 
       // Check and submit - should be valid
       await user.click(checkbox);
@@ -119,7 +119,7 @@ describe('Checkbox Integration Tests', () => {
         error: '',
       });
       expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-      expect(checkbox).toHaveAttribute('data-invalid', 'false');
+      expect(checkbox).not.toHaveAttribute('data-invalid');
     });
 
     it('submits form with Enter key without toggling checkbox state', async () => {

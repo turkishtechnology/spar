@@ -274,7 +274,7 @@ When you need full props, render props, events, and keyboard for a specific comp
 - [Accordion](references/accordion.md) — multiple, collapsible, value/onValueChange, orientation
 - [Breadcrumb](references/breadcrumb.md) — onNavigate, Link, Page, Separator
 - [Button](references/button.md) — isLoading, toggle mode (isPressed/onPressedChange)
-- [Checkbox](references/checkbox.md) — CheckedState (true/false/'indeterminate'), isInvalid, Field context
+- [Checkbox](references/checkbox.md) — CheckedState (true/false/'indeterminate'), invalid, Field context
 - [Collapsible](references/collapsible.md) — open/onOpenChange, forceMount
 - [Dialog](references/dialog.md) — modal, trapFocus, initialFocus, onEscapeKeyDown
 - [DropdownMenu](references/dropdown-menu.md) — side/align, closeOnSelect, onSelect per item
@@ -282,9 +282,9 @@ When you need full props, render props, events, and keyboard for a specific comp
 - [Input](references/input.md) — Root + Field only; reads Field context for invalid/disabled/required/readOnly
 - [Label](references/label.md) — required, isOptional, data attributes
 - [Popover](references/popover.md) — side/align, trapFocus, onInteractOutside
-- [Radio](references/radio.md) — selectOnFocus, orientation, isInvalid, roving tabindex
-- [Select](references/select.md) — Value/placeholder, ItemText, Group/Label, isInvalid, readOnly, typeahead
-- [Switch](references/switch.md) — render props, isInvalid, useSwitch hook, Field context
+- [Radio](references/radio.md) — selectOnFocus, orientation, invalid, readOnly, roving tabindex
+- [Select](references/select.md) — Value/placeholder, ItemText, Group/Label, invalid, readOnly, typeahead
+- [Switch](references/switch.md) — render props, invalid, useSwitch hook, Field context
 - [Tabs](references/tabs.md) — activationMode (automatic/manual), orientation
 - [Tooltip](references/tooltip.md) — Provider (delayDuration, skipDelayDuration), per-instance delay
 

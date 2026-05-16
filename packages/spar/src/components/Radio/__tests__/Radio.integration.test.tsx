@@ -82,7 +82,7 @@ describe('Radio Integration Tests', () => {
         return (
           <div>
             <form onSubmit={handleSubmit}>
-              <Radio name='plan' value={selectedPlan} onValueChange={setSelectedPlan}>
+              <Radio name='plan' value={selectedPlan} onChange={setSelectedPlan}>
                 <RadioItem value='basic'>Basic Plan</RadioItem>
                 <RadioItem value='premium'>Premium Plan</RadioItem>
               </Radio>
@@ -125,7 +125,7 @@ describe('Radio Integration Tests', () => {
             <Radio
               name='plan'
               value={selectedPlan}
-              onValueChange={setSelectedPlan}
+              onChange={setSelectedPlan}
               aria-describedby={error ? 'error-message' : undefined}
               required
             >
@@ -198,12 +198,7 @@ describe('Radio Integration Tests', () => {
             <button type='button' onClick={() => setShowAdditional((prev) => !prev)}>
               Toggle Additional Options
             </button>
-            <Radio
-              name='options'
-              value={value}
-              onValueChange={setValue}
-              aria-label='Available options'
-            >
+            <Radio name='options' value={value} onChange={setValue} aria-label='Available options'>
               <RadioItem value='option1'>Option 1</RadioItem>
               <RadioItem value='option2'>Option 2</RadioItem>
               {showAdditional && (
@@ -318,7 +313,7 @@ describe('Radio Integration Tests', () => {
       render(
         <Field invalid disabled>
           <FieldLabel>Plan</FieldLabel>
-          <Radio isInvalid={false} disabled={false}>
+          <Radio invalid={false} disabled={false}>
             <RadioItem value='basic'>Basic</RadioItem>
           </Radio>
         </Field>,

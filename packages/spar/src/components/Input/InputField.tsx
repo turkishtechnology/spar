@@ -52,9 +52,9 @@ export const InputField = <T extends ElementType = 'input'>({
   const ariaAttributes = context
     ? {
         'aria-labelledby': context.labelId,
-        'aria-describedby': context.isInvalid ? context.errorId : context.descriptionId,
+        'aria-describedby': context.invalid ? context.errorId : context.descriptionId,
         'aria-required': context.required,
-        'aria-invalid': context.isInvalid,
+        'aria-invalid': context.invalid,
       }
     : {};
 

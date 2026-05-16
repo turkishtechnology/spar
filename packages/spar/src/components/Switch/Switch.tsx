@@ -21,7 +21,7 @@ export const Switch = <T extends ElementType = 'button'>({
   disabled,
   readOnly,
   required,
-  isInvalid,
+  invalid,
   name,
   value = 'on',
   form,
@@ -44,7 +44,7 @@ export const Switch = <T extends ElementType = 'button'>({
   const resolvedDisabled = disabled ?? fieldCtx?.disabled ?? false;
   const resolvedReadOnly = readOnly ?? fieldCtx?.readOnly ?? false;
   const resolvedRequired = required ?? fieldCtx?.required ?? false;
-  const resolvedInvalid = isInvalid ?? fieldCtx?.invalid ?? false;
+  const resolvedInvalid = invalid ?? fieldCtx?.invalid ?? false;
 
   const elementRef = useRef<HTMLElement>(null);
   const hiddenInputRef = useRef<HTMLInputElement>(null);
@@ -81,7 +81,7 @@ export const Switch = <T extends ElementType = 'button'>({
     disabled: resolvedDisabled,
     readOnly: resolvedReadOnly,
     required: resolvedRequired,
-    isInvalid: resolvedInvalid,
+    invalid: resolvedInvalid,
     isFocused,
     isHovered,
     isPressed: isActive,

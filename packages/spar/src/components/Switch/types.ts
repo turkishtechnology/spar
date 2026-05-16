@@ -24,7 +24,7 @@ export interface SwitchRenderProps {
   /** Whether the switch is required */
   required: boolean;
   /** Whether the switch is in an invalid/error state */
-  isInvalid: boolean;
+  invalid: boolean;
   /** Whether the switch is currently focused */
   isFocused: boolean;
   /** Whether the switch is currently hovered */
@@ -65,7 +65,7 @@ export interface SwitchOwnProps {
    * Invalid/error state. When inside a `<Field>`, inherited automatically.
    * @defaultValue false
    */
-  isInvalid?: boolean;
+  invalid?: boolean;
   /** Name attribute for form submission. */
   name?: string;
   /**

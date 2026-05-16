@@ -28,7 +28,7 @@ export interface CheckboxRenderProps {
   /**
    * Whether the checkbox is in an invalid/error state
    */
-  isInvalid: boolean;
+  invalid: boolean;
   /**
    * Whether the checkbox is currently focused
    */
@@ -104,7 +104,7 @@ export interface CheckboxOwnProps {
    * unless explicitly overridden.
    * @defaultValue false
    */
-  isInvalid?: boolean;
+  invalid?: boolean;
 
   /**
    * Auto-focus on mount

@@ -22,8 +22,9 @@ export const RadioItem = <T extends ElementType = 'label'>({
   const context = useRadioContext();
   const {
     value: groupValue,
-    onValueChange,
+    onChange,
     disabled: groupDisabled,
+    readOnly: groupReadOnly,
     required: groupRequired,
     name,
     firstFocusableValue,
@@ -55,10 +56,10 @@ export const RadioItem = <T extends ElementType = 'label'>({
 
   // Handle selection
   const handleClick = useCallback(() => {
-    if (!isDisabled) {
-      onValueChange(itemValue);
+    if (!isDisabled && !groupReadOnly) {
+      onChange(itemValue);
     }
-  }, [isDisabled, onValueChange, itemValue]);
+  }, [isDisabled, groupReadOnly, onChange, itemValue]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
@@ -93,7 +94,8 @@ export const RadioItem = <T extends ElementType = 'label'>({
   const dataAttributes = {
     'data-state': isChecked ? 'checked' : 'unchecked',
     'data-disabled': isDisabled ? '' : undefined,
-    'data-focused': isFocused ? '' : undefined,
+    'data-readonly': groupReadOnly ? '' : undefined,
+    'data-focus': isFocused ? '' : undefined,
     'data-orientation': orientation,
   };
 
@@ -101,6 +103,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
     role: 'radio',
     'aria-checked': isChecked,
     'aria-disabled': isDisabled || undefined,
+    'aria-readonly': groupReadOnly || undefined,
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
   };

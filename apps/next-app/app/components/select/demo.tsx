@@ -7,7 +7,7 @@ export function SelectDemo() {
   const [value, setValue] = useState('');
 
   return (
-    <Select.Root value={value} onValueChange={setValue}>
+    <Select.Root value={value} onChange={setValue}>
       <Select.Trigger>
         <Select.Value placeholder='Select an option' />
       </Select.Trigger>

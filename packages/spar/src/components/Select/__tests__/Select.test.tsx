@@ -69,7 +69,7 @@ describe('Select', () => {
     const handleValueChange = jest.fn();
 
     const Controlled = ({ value }: { value: string }) => (
-      <Select value={value} onValueChange={handleValueChange}>
+      <Select value={value} onChange={handleValueChange}>
         <SelectTrigger aria-label='Choose option'>
           <SelectValue placeholder='Select...' />
         </SelectTrigger>
@@ -101,7 +101,7 @@ describe('Select', () => {
     const user = userEvent.setup();
     const handleValueChange = jest.fn();
 
-    renderSelect({ disabled: true, onValueChange: handleValueChange });
+    renderSelect({ disabled: true, onChange: handleValueChange });
 
     const trigger = screen.getByRole('combobox');
     await user.click(trigger);

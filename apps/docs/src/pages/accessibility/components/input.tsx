@@ -8,7 +8,7 @@ import '../../../styles/accessibility-demos.scss';
 
 export default function InputDemo() {
   const [value, setValue] = useState('');
-  const [isInvalid, setIsInvalid] = useState(false);
+  const [invalid, setInvalid] = useState(false);
 
   const validateEmail = (v: string) => {
     if (v.length === 0) return false;
@@ -110,7 +110,7 @@ export default function InputDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <Field invalid={isInvalid} required>
+                <Field invalid={invalid} required>
                   <Field.Label className='demo-label'>Email</Field.Label>
                   <Input>
                     <Input.Field
@@ -120,7 +120,7 @@ export default function InputDemo() {
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const v = e.target.value;
                         setValue(v);
-                        setIsInvalid(validateEmail(v));
+                        setInvalid(validateEmail(v));
                       }}
                       placeholder='Type an invalid email to see error'
                     />
@@ -139,7 +139,7 @@ export default function InputDemo() {
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Field invalid={isInvalid} required>
+                <code>{`<Field invalid={invalid} required>
   <Field.Label>Email</Field.Label>
   <Input>
     <Input.Field value={value} onChange={handleChange} />

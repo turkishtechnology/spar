@@ -361,7 +361,7 @@ describe('Radio Accessibility', () => {
       const user = userEvent.setup();
 
       const { container } = render(
-        <Radio value='option1' onValueChange={handleChange}>
+        <Radio value='option1' onChange={handleChange}>
           <RadioItem value='option1'>Option 1</RadioItem>
           <RadioItem value='option2'>Option 2</RadioItem>
         </Radio>,

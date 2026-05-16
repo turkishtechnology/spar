@@ -14,7 +14,7 @@ import type { InputContextValue, InputProps } from './types';
 export const Input = <T extends ElementType = 'div'>({
   as,
   id: providedId,
-  isInvalid,
+  invalid,
   disabled,
   required,
   readOnly,
@@ -28,7 +28,7 @@ export const Input = <T extends ElementType = 'div'>({
   const fieldCtx = useOptionalFieldContext();
 
   // Direct props win; otherwise fall back to Field context; then default false.
-  const resolvedInvalid = isInvalid ?? fieldCtx?.invalid ?? false;
+  const resolvedInvalid = invalid ?? fieldCtx?.invalid ?? false;
   const resolvedDisabled = disabled ?? fieldCtx?.disabled ?? false;
   const resolvedRequired = required ?? fieldCtx?.required ?? false;
   const resolvedReadOnly = readOnly ?? fieldCtx?.readOnly ?? false;
@@ -39,7 +39,7 @@ export const Input = <T extends ElementType = 'div'>({
       labelId: fieldCtx?.labelId ?? `${id}-label`,
       descriptionId: fieldCtx?.descriptionId ?? `${id}-description`,
       errorId: fieldCtx?.errorId ?? `${id}-error`,
-      isInvalid: resolvedInvalid,
+      invalid: resolvedInvalid,
       disabled: resolvedDisabled,
       required: resolvedRequired,
       readOnly: resolvedReadOnly,

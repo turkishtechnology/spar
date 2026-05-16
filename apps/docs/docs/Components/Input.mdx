@@ -242,16 +242,16 @@ Demonstrates validation state management with conditional error message display.
 ```tsx {2-3,5-7,12,21-22,24}
 function ValidatedInput() {
   const [email, setEmail] = React.useState('');
-  const [isInvalid, setIsInvalid] = React.useState(false);
+  const [invalid, setInvalid] = React.useState(false);
 
   const handleSubmit = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setIsInvalid(!emailRegex.test(email));
+    setInvalid(!emailRegex.test(email));
   };
 
   return (
     <div>
-      <Field.Root invalid={isInvalid} required>
+      <Field.Root invalid={invalid} required>
         <Field.Label>Email Address</Field.Label>
         <Input.Root>
           <Input.Field
@@ -405,7 +405,7 @@ The root context provider that wraps all compound input parts. `Input` and `Inpu
 | `as?`        | `React.ElementType`       | `'div'`     | Element type for the root wrapper                                    |
 | `ref?`       | `React.Ref<T>`            | `undefined` | Ref for the root wrapper element                                     |
 | `children`   | `React.ReactNode`         | -           | Compound input elements                                              |
-| `isInvalid?` | `boolean`                 | `false`     | Validation state propagated to all compound parts                    |
+| `invalid?`   | `boolean`                 | `false`     | Validation state propagated to all compound parts                    |
 | `disabled?`  | `boolean`                 | `false`     | Disabled state propagated to all compound parts                      |
 | `required?`  | `boolean`                 | `false`     | Required state propagated to all compound parts                      |
 | `readOnly?`  | `boolean`                 | `false`     | Read-only state propagated to all compound parts                     |

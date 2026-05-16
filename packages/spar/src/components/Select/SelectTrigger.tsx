@@ -79,7 +79,7 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
   // Only point to description/error when a Field is in scope — otherwise
   // those IDs are synthetic and resolve to no DOM node.
   const describedBy = context.hasField
-    ? context.isInvalid
+    ? context.invalid
       ? context.errorId
       : context.descriptionId
     : undefined;
@@ -97,10 +97,10 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
     'aria-labelledby': labelledBy,
     'aria-describedby': describedBy,
     'aria-required': context.required || undefined,
-    'aria-invalid': context.isInvalid || undefined,
+    'aria-invalid': context.invalid || undefined,
     'aria-readonly': context.readOnly || undefined,
     'data-state': context.open ? 'open' : 'closed',
-    'data-invalid': context.isInvalid ? '' : undefined,
+    'data-invalid': context.invalid ? '' : undefined,
     'data-required': context.required ? '' : undefined,
     'data-readonly': context.readOnly ? '' : undefined,
     'data-placeholder': !context.value ? '' : undefined,

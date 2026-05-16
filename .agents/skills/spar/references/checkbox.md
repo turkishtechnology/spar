@@ -14,7 +14,7 @@ Simple component — no compound parts. When nested inside a `<Field>`, reads `i
 | `disabled?`       | `boolean`                         | `false` | Disables the checkbox. Inherited from Field        |
 | `required?`       | `boolean`                         | `false` | Required for form validation. Inherited from Field |
 | `readOnly?`       | `boolean`                         | `false` | Prevents state changes. Inherited from Field       |
-| `isInvalid?`      | `boolean`                         | `false` | Error state (`aria-invalid`). Inherited from Field |
+| `invalid?`        | `boolean`                         | `false` | Error state (`aria-invalid`). Inherited from Field |
 | `name?`           | `string`                          | —       | Form field name                                    |
 | `value?`          | `string`                          | `'on'`  | Form field value                                   |
 | `form?`           | `string`                          | —       | Associated form ID                                 |
@@ -36,7 +36,7 @@ Children can be a function receiving internal state:
     disabled,
     readOnly,
     required,
-    isInvalid,
+    invalid,
     setChecked,
   }) => (
     <span className={checked === true ? 'checked' : checked === 'indeterminate' ? 'mixed' : ''}>
@@ -54,7 +54,7 @@ Children can be a function receiving internal state:
 | `disabled`   | `boolean`                         | Whether disabled      |
 | `readOnly`   | `boolean`                         | Whether read-only     |
 | `required`   | `boolean`                         | Whether required      |
-| `isInvalid`  | `boolean`                         | Whether invalid       |
+| `invalid`    | `boolean`                         | Whether invalid       |
 | `isFocused`  | `boolean`                         | Whether focused       |
 | `isHovered`  | `boolean`                         | Whether hovered       |
 | `isPressed`  | `boolean`                         | Whether being pressed |

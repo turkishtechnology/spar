@@ -10,7 +10,7 @@ export interface InputContextValue {
   labelId: string;
   descriptionId: string;
   errorId: string;
-  isInvalid: boolean;
+  invalid: boolean;
   disabled: boolean;
   required: boolean;
   readOnly: boolean;
@@ -34,7 +34,7 @@ export interface InputOwnProps {
   /**
    * Input validation state. When inside a Field, inherited from Field.
    */
-  isInvalid?: boolean;
+  invalid?: boolean;
 
   /**
    * Input disabled state. When inside a Field, inherited from Field.

@@ -12,7 +12,7 @@ Simple component — no compound parts.
 | `isOptional?` | `boolean`     | `false`   | Indicates optional field |
 | `disabled?`   | `boolean`     | `false`   | Disabled state           |
 | `readOnly?`   | `boolean`     | `false`   | Read-only state          |
-| `isInvalid?`  | `boolean`     | `false`   | Error state              |
+| `invalid?`    | `boolean`     | `false`   | Error state              |
 | `as?`         | `ElementType` | `'label'` | Polymorphic element      |
 
 Plus all native `<label>` HTML attributes (`htmlFor`, `className`, `style`, `ref`, etc.)
@@ -23,6 +23,6 @@ Plus all native `<label>` HTML attributes (`htmlFor`, `className`, `style`, `ref
 | --------------- | ----------------- |
 | `data-disabled` | When `disabled`   |
 | `data-readonly` | When `readOnly`   |
-| `data-invalid`  | When `isInvalid`  |
+| `data-invalid`  | When `invalid`    |
 | `data-required` | When `required`   |
 | `data-optional` | When `isOptional` |

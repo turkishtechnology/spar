@@ -19,7 +19,7 @@ export const Checkbox = <T extends ElementType = 'span'>({
   checked: controlledChecked,
   defaultChecked = false,
   onChange,
-  isInvalid,
+  invalid,
   disabled,
   readOnly,
   required,
@@ -45,7 +45,7 @@ export const Checkbox = <T extends ElementType = 'span'>({
 
   // Field context integration — direct props win over inherited Field values.
   const fieldCtx = useOptionalFieldContext();
-  const resolvedInvalid = isInvalid ?? fieldCtx?.invalid ?? false;
+  const resolvedInvalid = invalid ?? fieldCtx?.invalid ?? false;
   const resolvedDisabled = disabled ?? fieldCtx?.disabled ?? false;
   const resolvedRequired = required ?? fieldCtx?.required ?? false;
   const resolvedReadOnly = readOnly ?? fieldCtx?.readOnly ?? false;
@@ -171,7 +171,7 @@ export const Checkbox = <T extends ElementType = 'span'>({
     disabled: resolvedDisabled,
     readOnly: resolvedReadOnly,
     required: resolvedRequired,
-    isInvalid: resolvedInvalid,
+    invalid: resolvedInvalid,
     isFocused,
     isHovered,
     isPressed,

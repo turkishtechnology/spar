@@ -141,7 +141,7 @@ describe('Radio', () => {
         const handleValueChange = jest.fn();
 
         render(
-          <Radio value='option1' onValueChange={handleValueChange}>
+          <Radio value='option1' onChange={handleValueChange}>
             <RadioItem value='option1'>Option 1</RadioItem>
             <RadioItem value='option2'>Option 2</RadioItem>
           </Radio>,
@@ -156,12 +156,12 @@ describe('Radio', () => {
         expect(option2).toHaveAttribute('aria-checked', 'false');
       });
 
-      it('calls onValueChange when selection changes', async () => {
+      it('calls onChange when selection changes', async () => {
         const user = userEvent.setup();
         const handleValueChange = jest.fn();
 
         const { container } = render(
-          <Radio onValueChange={handleValueChange}>
+          <Radio onChange={handleValueChange}>
             <RadioItem value='option1'>Option 1</RadioItem>
             <RadioItem value='option2'>Option 2</RadioItem>
           </Radio>,
@@ -221,7 +221,7 @@ describe('Radio', () => {
         const handleValueChange = jest.fn();
 
         const { container } = render(
-          <Radio disabled onValueChange={handleValueChange}>
+          <Radio disabled onChange={handleValueChange}>
             <RadioItem value='option1'>Option 1</RadioItem>
             <RadioItem value='option2'>Option 2</RadioItem>
           </Radio>,
@@ -551,7 +551,7 @@ describe('Radio', () => {
         const handleValueChange = jest.fn();
 
         const { container } = render(
-          <Radio onValueChange={handleValueChange}>
+          <Radio onChange={handleValueChange}>
             <RadioItem value='option1' disabled>
               Option 1
             </RadioItem>

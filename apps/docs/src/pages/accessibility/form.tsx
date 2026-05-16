@@ -150,7 +150,7 @@ export default function FormDemo() {
                     <Select.Root
                       required
                       value={field.value}
-                      onValueChange={(v) => {
+                      onChange={(v) => {
                         field.onChange(v);
                         field.onBlur();
                       }}
@@ -196,7 +196,7 @@ export default function FormDemo() {
                     <Radio.Root
                       className='demo-radio-group'
                       value={value}
-                      onValueChange={onChange}
+                      onChange={onChange}
                       aria-label='Plan selection'
                     >
                       {[
@@ -390,7 +390,7 @@ const { register, control, handleSubmit,
 <Controller name='role' rules={{ required: true }}
   render={({ field }) => (
     <Select.Root value={field.value}
-      onValueChange={(v) => {
+      onChange={(v) => {
         field.onChange(v);
         field.onBlur();
       }}>

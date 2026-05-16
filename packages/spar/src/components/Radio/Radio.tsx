@@ -28,11 +28,12 @@ export const Radio = <T extends ElementType = 'div'>({
   id: providedId,
   value: controlledValue,
   defaultValue,
-  onValueChange,
+  onChange,
   name: nameProp,
   disabled,
+  readOnly,
   required,
-  isInvalid,
+  invalid,
   orientation = 'vertical',
   selectOnFocus = true,
   autoFocus = false,
@@ -47,11 +48,12 @@ export const Radio = <T extends ElementType = 'div'>({
   const fieldCtx = useOptionalFieldContext();
 
   // Direct props win; otherwise fall back to Field context; then default false.
-  const resolvedInvalid = isInvalid ?? fieldCtx?.invalid ?? false;
+  const resolvedInvalid = invalid ?? fieldCtx?.invalid ?? false;
   const resolvedDisabled = disabled ?? fieldCtx?.disabled ?? false;
   const resolvedRequired = required ?? fieldCtx?.required ?? false;
+  const resolvedReadOnly = readOnly ?? fieldCtx?.readOnly ?? false;
 
-  const [value, setValue] = useControlledState(controlledValue, defaultValue, onValueChange);
+  const [value, setValue] = useControlledState(controlledValue, defaultValue, onChange);
   const [focusedValue, setFocusedValue] = useState<string | null>(null);
   const {
     items: radioItems,
@@ -187,8 +189,9 @@ export const Radio = <T extends ElementType = 'div'>({
   const contextValue = useMemo<RadioContextValue>(
     () => ({
       value,
-      onValueChange: handleValueChange,
+      onChange: handleValueChange,
       disabled: resolvedDisabled,
+      readOnly: resolvedReadOnly,
       required: resolvedRequired,
       name,
       firstFocusableValue: getItemAtIndex(0) ?? null,
@@ -203,6 +206,7 @@ export const Radio = <T extends ElementType = 'div'>({
       value,
       handleValueChange,
       resolvedDisabled,
+      resolvedReadOnly,
       resolvedRequired,
       name,
       getItemAtIndex,
@@ -219,6 +223,7 @@ export const Radio = <T extends ElementType = 'div'>({
   const dataAttributes = {
     'data-orientation': orientation,
     'data-disabled': resolvedDisabled ? '' : undefined,
+    'data-readonly': resolvedReadOnly ? '' : undefined,
     'data-required': resolvedRequired ? '' : undefined,
     'data-invalid': resolvedInvalid ? '' : undefined,
     'data-select-on-focus': selectOnFocus ? '' : undefined,

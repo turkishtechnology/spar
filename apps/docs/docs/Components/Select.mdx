@@ -388,7 +388,7 @@ function ControlledSelect() {
   return (
     <Select.Root
       value={selectedFruit}
-      onValueChange={setSelectedFruit}
+      onChange={setSelectedFruit}
       open={open}
       onOpenChange={setOpen}
     >
@@ -421,7 +421,7 @@ function GroupedSelect() {
   const [value, setValue] = React.useState('');
 
   return (
-    <Select.Root value={value} onValueChange={setValue}>
+    <Select.Root value={value} onChange={setValue}>
       <Select.Trigger>
         <Select.Value placeholder='Select a country' />
       </Select.Trigger>
@@ -471,7 +471,7 @@ function FieldSelect() {
   return (
     <Field.Root invalid={plan === ''} required>
       <Field.Label>Plan</Field.Label>
-      <Select.Root value={plan} onValueChange={setPlan} name='plan'>
+      <Select.Root value={plan} onChange={setPlan} name='plan'>
         <Select.Trigger>
           <Select.Value placeholder='Choose a plan' />
         </Select.Trigger>
@@ -538,7 +538,7 @@ function SelectInForm() {
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor='category-select'>Product Category</label>
-      <Select.Root name='category' value={category} onValueChange={setCategory} required>
+      <Select.Root name='category' value={category} onChange={setCategory} required>
         <Select.Trigger id='category-select'>
           <Select.Value placeholder='Select category' />
         </Select.Trigger>
@@ -574,11 +574,11 @@ Provides the root state and context. `Select` and `Select.Root` are the same com
 | `id?`            | `string`                  | `undefined` | Base id for ARIA relationship ids                                 |
 | `value?`         | `string`                  | `undefined` | Controlled selected value                                         |
 | `defaultValue?`  | `string`                  | `undefined` | Initial uncontrolled value                                        |
-| `onValueChange?` | `(value: string) => void` | `undefined` | Value change callback                                             |
+| `onChange?` | `(value: string) => void` | `undefined` | Value change callback                                             |
 | `open?`          | `boolean`                 | `undefined` | Controlled open/closed state                                      |
 | `defaultOpen?`   | `boolean`                 | `false`     | Initial uncontrolled open state                                   |
 | `onOpenChange?`  | `(open: boolean) => void` | `undefined` | Open/closed change callback                                       |
-| `isInvalid?`     | `boolean`                 | `false`     | Validation state; inherited from a parent `Field` when present    |
+| `invalid?`       | `boolean`                 | `false`     | Validation state; inherited from a parent `Field` when present    |
 | `disabled?`      | `boolean`                 | `false`     | Disables the entire Select; inherited from `Field` when present   |
 | `required?`      | `boolean`                 | `false`     | Marks the field as required; inherited from `Field` when present  |
 | `readOnly?`      | `boolean`                 | `false`     | Read-only state; inherited from `Field` when present              |
@@ -592,7 +592,7 @@ Provides the root state and context. `Select` and `Select.Root` are the same com
 
 | Name            | Parameters        | Description               | When Triggered                                          |
 | --------------- | ----------------- | ------------------------- | ------------------------------------------------------- |
-| `onValueChange` | `(value: string)` | Selected value changes    | When an item is selected or controlled state is updated |
+| `onChange` | `(value: string)` | Selected value changes    | When an item is selected or controlled state is updated |
 | `onOpenChange`  | `(open: boolean)` | Open/closed state changes | On trigger interaction or programmatic open/close calls |
 
 **HTML Attributes**

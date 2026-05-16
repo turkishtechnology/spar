@@ -19,21 +19,21 @@ When nested inside a `<Field>`, the Select inherits `invalid`, `disabled`, `requ
 
 ## Root Props
 
-| Prop             | Type                      | Default | Description                                                               |
-| ---------------- | ------------------------- | ------- | ------------------------------------------------------------------------- |
-| `id?`            | `string`                  | auto    | Base ID for ARIA relationships                                            |
-| `value?`         | `string`                  | —       | Controlled selected value                                                 |
-| `defaultValue?`  | `string`                  | —       | Default selected value                                                    |
-| `onValueChange?` | `(value: string) => void` | —       | Called when selection changes                                             |
-| `open?`          | `boolean`                 | —       | Controlled open state                                                     |
-| `defaultOpen?`   | `boolean`                 | `false` | Default open state                                                        |
-| `onOpenChange?`  | `(open: boolean) => void` | —       | Called when open state changes                                            |
-| `disabled?`      | `boolean`                 | `false` | Disables the select. Inherited from Field                                 |
-| `required?`      | `boolean`                 | `false` | Required for form validation. Inherited from Field                        |
-| `readOnly?`      | `boolean`                 | `false` | Can be opened and inspected but value cannot change. Inherited from Field |
-| `isInvalid?`     | `boolean`                 | `false` | Error state (`aria-invalid`). Inherited from Field                        |
-| `name?`          | `string`                  | —       | Form field name                                                           |
-| `autoFocus?`     | `boolean`                 | `false` | Auto-focus trigger on mount                                               |
+| Prop            | Type                      | Default | Description                                                               |
+| --------------- | ------------------------- | ------- | ------------------------------------------------------------------------- |
+| `id?`           | `string`                  | auto    | Base ID for ARIA relationships                                            |
+| `value?`        | `string`                  | —       | Controlled selected value                                                 |
+| `defaultValue?` | `string`                  | —       | Default selected value                                                    |
+| `onChange?`     | `(value: string) => void` | —       | Called when selection changes                                             |
+| `open?`         | `boolean`                 | —       | Controlled open state                                                     |
+| `defaultOpen?`  | `boolean`                 | `false` | Default open state                                                        |
+| `onOpenChange?` | `(open: boolean) => void` | —       | Called when open state changes                                            |
+| `disabled?`     | `boolean`                 | `false` | Disables the select. Inherited from Field                                 |
+| `required?`     | `boolean`                 | `false` | Required for form validation. Inherited from Field                        |
+| `readOnly?`     | `boolean`                 | `false` | Can be opened and inspected but value cannot change. Inherited from Field |
+| `invalid?`      | `boolean`                 | `false` | Error state (`aria-invalid`). Inherited from Field                        |
+| `name?`         | `string`                  | —       | Form field name                                                           |
+| `autoFocus?`    | `boolean`                 | `false` | Auto-focus trigger on mount                                               |
 
 ## Trigger Props
 
@@ -112,7 +112,7 @@ Useful when building custom select children (custom triggers, custom item render
 ```tsx
 <Field invalid={!!errors.country} required>
   <Field.Label>Country</Field.Label>
-  <Select name='country' value={form.country} onValueChange={(v) => setForm({ country: v })}>
+  <Select name='country' value={form.country} onChange={(v) => setForm({ country: v })}>
     <Select.Trigger>
       <Select.Value placeholder='Pick one' />
     </Select.Trigger>
@@ -129,4 +129,4 @@ Useful when building custom select children (custom triggers, custom item render
 </Field>
 ```
 
-`isInvalid` / `disabled` / `required` / `readOnly` are inherited from Field. ARIA wiring (`aria-labelledby`, `aria-describedby`) is set up automatically — Spar's `Select` reports a `hasField` flag internally to coordinate `aria-describedby` emission.
+`invalid` / `disabled` / `required` / `readOnly` are inherited from Field. ARIA wiring (`aria-labelledby`, `aria-describedby`) is set up automatically — Spar's `Select` reports a `hasField` flag internally to coordinate `aria-describedby` emission.

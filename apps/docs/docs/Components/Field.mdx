@@ -273,10 +273,10 @@ Render props let you apply conditional styles based on field state.
 
 ```tsx {4-12}
 function DynamicStyledField() {
-  const [isInvalid, setIsInvalid] = React.useState(false);
+  const [invalid, setInvalid] = React.useState(false);
 
   return (
-    <Field.Root invalid={isInvalid}>
+    <Field.Root invalid={invalid}>
       {({ invalid, disabled }) => (
         <>
           <Field.Label>Full Name</Field.Label>
@@ -285,7 +285,7 @@ function DynamicStyledField() {
               borderColor: invalid ? '#d14343' : '#e1e4ea',
               opacity: disabled ? 0.5 : 1,
             }}
-            onChange={(e) => setIsInvalid(e.target.value.length === 0)}
+            onChange={(e) => setInvalid(e.target.value.length === 0)}
             placeholder='Enter your full name'
           />
           <Field.ErrorMessage>Name cannot be empty</Field.ErrorMessage>
@@ -404,7 +404,7 @@ Accessible label auto-linked to the field's control via `htmlFor`. Renders `<lab
 
 - `id` → `${rootId}-label`
 - `htmlFor` → `${rootId}-field`
-- `disabled`, `required`, `readOnly`, `isInvalid` mirror the root state
+- `disabled`, `required`, `readOnly`, `invalid` mirror the root state
 
 ### Field.Description
 

@@ -25,7 +25,7 @@ export interface RadioOwnProps {
    * Callback when selection changes
    * @param value - The new selected value
    */
-  onValueChange?: (value: string) => void;
+  onChange?: (value: string) => void;
 
   /**
    * HTML name attribute for form submission
@@ -45,12 +45,19 @@ export interface RadioOwnProps {
   required?: boolean;
 
   /**
+   * Read-only state. A read-only radio group can be inspected but its value
+   * cannot change. When inside a `<Field>`, inherited automatically.
+   * @defaultValue false
+   */
+  readOnly?: boolean;
+
+  /**
    * Marks the group as invalid for ARIA wiring (`aria-invalid`). When nested
    * inside a `<Field>` with `invalid`, this is inherited automatically; a
    * direct prop on `<Radio>` always wins.
    * @defaultValue false
    */
-  isInvalid?: boolean;
+  invalid?: boolean;
 
   /**
    * Layout direction affecting keyboard navigation
@@ -139,8 +146,9 @@ export type RadioItemProps<T extends ElementType = 'label'> = PolymorphicProps<
  */
 export interface RadioContextValue {
   value: string | undefined;
-  onValueChange: (value: string) => void;
+  onChange: (value: string) => void;
   disabled: boolean;
+  readOnly: boolean;
   required: boolean;
   name: string;
   firstFocusableValue: string | null;

@@ -13,16 +13,16 @@
 
 ## Root Props
 
-Inherited from `<Field>` context when nested: `isInvalid`, `disabled`, `required`, `readOnly`. Props set directly on `<Input>` override the inherited values.
+Inherited from `<Field>` context when nested: `invalid`, `disabled`, `required`, `readOnly`. Props set directly on `<Input>` override the inherited values.
 
-| Prop         | Type          | Default | Description                                                               |
-| ------------ | ------------- | ------- | ------------------------------------------------------------------------- |
-| `id?`        | `string`      | auto    | Base ID for ARIA relationships                                            |
-| `isInvalid?` | `boolean`     | `false` | Error state (`aria-invalid`). Inherited from Field if not provided        |
-| `disabled?`  | `boolean`     | `false` | Disables the input. Inherited from Field if not provided                  |
-| `required?`  | `boolean`     | `false` | Marks as required (`aria-required`). Inherited from Field if not provided |
-| `readOnly?`  | `boolean`     | `false` | Read-only mode. Inherited from Field if not provided                      |
-| `as?`        | `ElementType` | `'div'` | Polymorphic element                                                       |
+| Prop        | Type          | Default | Description                                                               |
+| ----------- | ------------- | ------- | ------------------------------------------------------------------------- |
+| `id?`       | `string`      | auto    | Base ID for ARIA relationships                                            |
+| `invalid?`  | `boolean`     | `false` | Error state (`aria-invalid`). Inherited from Field if not provided        |
+| `disabled?` | `boolean`     | `false` | Disables the input. Inherited from Field if not provided                  |
+| `required?` | `boolean`     | `false` | Marks as required (`aria-required`). Inherited from Field if not provided |
+| `readOnly?` | `boolean`     | `false` | Read-only mode. Inherited from Field if not provided                      |
+| `as?`       | `ElementType` | `'div'` | Polymorphic element                                                       |
 
 ## Field Props
 
@@ -38,7 +38,7 @@ When inside a `<Field>`:
 
 - `Input.Field` → `id="{fieldId}"`, `aria-labelledby="{labelId}"`
 - `Input.Field` → `aria-describedby` points to Field's description (valid) or error (invalid)
-- `Input.Field` → `aria-invalid="true"` when `isInvalid`
+- `Input.Field` → `aria-invalid="true"` when `invalid`
 - `Input.Field` → `aria-required="true"` when `required`
 
 When standalone, set `aria-label` (or wire your own `<label htmlFor>`) yourself.
@@ -49,7 +49,7 @@ When standalone, set `aria-label` (or wire your own `<label htmlFor>`) yourself.
 import { useInputContext } from '@turkish-technology/spar/input';
 ```
 
-Returns the Input's internal context (fieldId, labelId, descriptionId, errorId, isInvalid, disabled, required, readOnly). Useful when building custom input children.
+Returns the Input's internal context (fieldId, labelId, descriptionId, errorId, invalid, disabled, required, readOnly). Useful when building custom input children.
 
 ## Examples
 
@@ -84,7 +84,7 @@ The old `Input.Label`, `Input.Description`, `Input.ErrorMessage` no longer exist
 
 ```tsx
 // Before
-<Input.Root isInvalid={!!error} required>
+<Input.Root invalid={!!error} required>
   <Input.Label>Email</Input.Label>
   <Input.Field type='email' />
   <Input.Description>...</Input.Description>
@@ -102,4 +102,4 @@ The old `Input.Label`, `Input.Description`, `Input.ErrorMessage` no longer exist
 </Field>
 ```
 
-Note that `isInvalid` on `Input.Root` became `invalid` on `Field`.
+The `invalid` prop now uses the same name on both `Input` and `Field` — previously `Input.Root` exposed `invalid` while `Field` used `invalid`; both are now `invalid`.

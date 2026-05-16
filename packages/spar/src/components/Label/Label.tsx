@@ -10,7 +10,7 @@ export const Label = <T extends ElementType = 'label'>({
   isOptional = false,
   disabled = false,
   readOnly = false,
-  isInvalid = false,
+  invalid = false,
   children,
   ref,
   onClick,
@@ -55,7 +55,7 @@ export const Label = <T extends ElementType = 'label'>({
     'data-optional': isOptional ? '' : undefined,
     'data-disabled': disabled ? '' : undefined,
     'data-readonly': readOnly ? '' : undefined,
-    'data-invalid': isInvalid ? '' : undefined,
+    'data-invalid': invalid ? '' : undefined,
   };
 
   return (
