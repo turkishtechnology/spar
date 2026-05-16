@@ -64,7 +64,7 @@ export const Radio = <T extends ElementType = 'div'>({
   const generatedId = useId();
   // Reuse Field's coordinated fieldId when nested so FieldLabel's htmlFor and
   // aria-labelledby resolve against the radiogroup element.
-  const baseId = providedId ?? fieldCtx?.fieldId ?? generatedId;
+  const baseId = fieldCtx?.fieldId ?? providedId ?? generatedId;
   const name = nameProp ?? `${baseId}-radio-group`;
   const hasAutoFocused = useRef(false);
 
