@@ -1,6 +1,6 @@
 ---
 name: spar
-description: Build UI with @turkish-technology/spar headless React components. Use when importing, composing, styling, or configuring Spar components. Covers all 15 unstyled, accessible primitives — Accordion, Breadcrumb, Button, Checkbox, Collapsible, Dialog, DropdownMenu, Input, Label, Popover, Radio, Select, Switch, Tabs, Tooltip — with compound patterns, controlled/uncontrolled state, render props, polymorphic elements, ARIA compliance, and keyboard support.
+description: Build UI with @turkish-technology/spar headless React components. Use when importing, composing, styling, or configuring Spar components. Covers all 16 unstyled, accessible primitives — Accordion, Breadcrumb, Button, Checkbox, Collapsible, Dialog, DropdownMenu, Field, Input, Label, Popover, Radio, Select, Switch, Tabs, Tooltip — with compound patterns, controlled/uncontrolled state, render props, polymorphic elements, ARIA compliance, and keyboard support.
 ---
 
 # Spar — Headless React Component Library
@@ -39,6 +39,7 @@ import { Tooltip } from '@turkish-technology/spar/tooltip';
 import { DropdownMenu } from '@turkish-technology/spar/dropdown-menu';
 import { Collapsible } from '@turkish-technology/spar/collapsible';
 import { Breadcrumb } from '@turkish-technology/spar/breadcrumb';
+import { Field } from '@turkish-technology/spar/field';
 ```
 
 ## Compound component pattern
@@ -67,7 +68,8 @@ Named exports also available: `import { AccordionRoot, AccordionTrigger } from '
 | `Collapsible`  | `Root`, `Trigger`, `Content`                                                                      |
 | `Dialog`       | `Root`, `Trigger`, `Overlay`, `Content`, `Title`, `Description`, `Close`                          |
 | `DropdownMenu` | `Root`, `Trigger`, `Content`, `Item`, `Separator`, `Label`, `Group`, `Arrow`                      |
-| `Input`        | `Root`, `Field`, `Label`, `Description`, `ErrorMessage`                                           |
+| `Field`        | `Root`, `Label`, `Description`, `ErrorMessage`                                                    |
+| `Input`        | `Root`, `Field`                                                                                   |
 | `Popover`      | `Root`, `Trigger`, `Content`, `Arrow`, `Close`                                                    |
 | `Radio`        | `Root`, `Item`                                                                                    |
 | `Select`       | `Root`, `Trigger`, `Value`, `Content`, `Item`, `Group`, `Label`, `ItemText`, `Separator`, `Arrow` |
@@ -75,6 +77,23 @@ Named exports also available: `import { AccordionRoot, AccordionTrigger } from '
 | `Tooltip`      | `Provider`, `Root`, `Trigger`, `Content`, `Arrow`                                                 |
 
 **Simple components** (no compound parts): `Button`, `Checkbox`, `Label`, `Switch`
+
+## Field — the form-field container
+
+`Field` is a generic wrapper that provides `invalid`, `disabled`, `required`, and `readOnly` state to nested form controls (`Input`, `Switch`, `Checkbox`, `Radio`, `Select`) via context, and coordinates ARIA IDs for `Field.Label`, `Field.Description`, and `Field.ErrorMessage`. Set form state once on the `Field` and every nested control picks it up — direct props on the control still win.
+
+```tsx
+<Field invalid={!!error} required>
+  <Field.Label>Email</Field.Label>
+  <Input>
+    <Input.Field type='email' />
+  </Input>
+  <Field.Description>We'll never share it.</Field.Description>
+  <Field.ErrorMessage>{error}</Field.ErrorMessage>
+</Field>
+```
+
+`Field.ErrorMessage` only renders when `invalid` is true (and uses `role="alert"`). Use `Field` for any form control — not just `Input`.
 
 ## Controlled vs uncontrolled
 
@@ -210,18 +229,25 @@ function ConfirmDialog({ title, description, onConfirm, trigger }) {
 ```tsx
 function FormField({ label, error, description, required, children }) {
   return (
-    <Input.Root isInvalid={!!error} required={required}>
-      <Input.Label>{label}</Input.Label>
+    <Field invalid={!!error} required={required}>
+      <Field.Label>{label}</Field.Label>
       {children}
-      {description && <Input.Description>{description}</Input.Description>}
-      {error && <Input.ErrorMessage>{error}</Input.ErrorMessage>}
-    </Input.Root>
+      {description && <Field.Description>{description}</Field.Description>}
+      {error && <Field.ErrorMessage>{error}</Field.ErrorMessage>}
+    </Field>
   );
 }
 
-// Usage
+// Usage with Input
 <FormField label='Email' error={errors.email} required>
-  <Input.Field type='email' {...register('email')} />
+  <Input>
+    <Input.Field type='email' {...register('email')} />
+  </Input>
+</FormField>;
+
+// Same wrapper works with Switch, Checkbox, Select, Radio
+<FormField label='Notifications' description='Email me on activity'>
+  <Switch name='notify' />
 </FormField>;
 ```
 
@@ -245,19 +271,20 @@ function FormField({ label, error, description, required, children }) {
 
 When you need full props, render props, events, and keyboard for a specific component, read the corresponding reference:
 
-- [Accordion](references/accordion.md) — selectionMode, isCollapsible, value/onValueChange, orientation
+- [Accordion](references/accordion.md) — multiple, collapsible, value/onValueChange, orientation
 - [Breadcrumb](references/breadcrumb.md) — onNavigate, Link, Page, Separator
 - [Button](references/button.md) — isLoading, toggle mode (isPressed/onPressedChange)
-- [Checkbox](references/checkbox.md) — CheckedState (true/false/'indeterminate'), render props
+- [Checkbox](references/checkbox.md) — CheckedState (true/false/'indeterminate'), isInvalid, Field context
 - [Collapsible](references/collapsible.md) — open/onOpenChange, forceMount
 - [Dialog](references/dialog.md) — modal, trapFocus, initialFocus, onEscapeKeyDown
 - [DropdownMenu](references/dropdown-menu.md) — side/align, closeOnSelect, onSelect per item
-- [Input](references/input.md) — isInvalid, Field/Label/Description/ErrorMessage ARIA wiring
+- [Field](references/field.md) — invalid/disabled/required/readOnly context for nested form controls; Label/Description/ErrorMessage
+- [Input](references/input.md) — Root + Field only; reads Field context for invalid/disabled/required/readOnly
 - [Label](references/label.md) — required, isOptional, data attributes
 - [Popover](references/popover.md) — side/align, trapFocus, onInteractOutside
-- [Radio](references/radio.md) — selectOnFocus, orientation, roving tabindex
-- [Select](references/select.md) — Value/placeholder, ItemText, Group/Label, typeahead
-- [Switch](references/switch.md) — render props, data attributes
+- [Radio](references/radio.md) — selectOnFocus, orientation, isInvalid, roving tabindex
+- [Select](references/select.md) — Value/placeholder, ItemText, Group/Label, isInvalid, readOnly, typeahead
+- [Switch](references/switch.md) — render props, isInvalid, useSwitch hook, Field context
 - [Tabs](references/tabs.md) — activationMode (automatic/manual), orientation
 - [Tooltip](references/tooltip.md) — Provider (delayDuration, skipDelayDuration), per-instance delay
 
@@ -268,11 +295,13 @@ Only load the reference for the component the user is working with.
 - **All components are unstyled**: They render semantic HTML with ARIA but zero CSS.
 - **Compound parts must be nested correctly**: `Accordion.Trigger` inside `Accordion.Item` inside `Accordion.Root`. Wrong nesting throws a context error.
 - **Don't mix controlled and uncontrolled**: Use `value` OR `defaultValue`, never both.
+- **Use `Field` for label/description/error**: `Input` no longer ships its own `Label`/`Description`/`ErrorMessage` — wrap any form control (`Input`, `Switch`, `Checkbox`, `Radio`, `Select`) in `<Field>` and use `Field.Label`, `Field.Description`, `Field.ErrorMessage`. The wrapped control inherits `invalid`/`disabled`/`required`/`readOnly` from `Field`.
+- **`Input` is now `Root` + `Field` only**: Render the text input as `<Input><Input.Field type="email" /></Input>`. For labels/errors, wrap in `<Field>`.
 - **Dialog.Title is required**: Screen readers need it. Hide visually with `className="sr-only"` if needed.
 - **Dialog needs Overlay**: For modal dialogs, include `Dialog.Overlay` for backdrop.
 - **Tooltip needs Provider**: Wrap your app once with `Tooltip.Provider` for delay config.
 - **Select.ItemText is required**: Each `Select.Item` must have a `Select.ItemText` child.
-- **Accordion `selectionMode`**: `"single"` = one panel open, `"multiple"` = many. Default is `"single"`.
+- **Accordion `multiple`**: Boolean — `false` (default) = one panel open at a time, `true` = many. Use `collapsible` (default `true`) to control whether the open item can be re-clicked to close it in single mode.
 - **Radio needs `name`**: Set on `Radio.Root` for form submission.
 - **Icon-only buttons need `aria-label`**: Spar can't infer meaning from icon children.
 - **Don't add redundant ARIA**: Spar already sets roles and aria-\* attributes. Adding extras may conflict.

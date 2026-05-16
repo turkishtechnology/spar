@@ -1,24 +1,28 @@
 # Input API Reference
 
+`Input` is the text-input primitive. As of the latest version it is **just `Root` + `Field`** — the previous `Input.Label`, `Input.Description`, and `Input.ErrorMessage` have moved to the new generic [Field](./field.md) component. Wrap the input in `<Field>` to get label/description/error wiring.
+
 ## Parts
 
-| Part                 | Element   | Description                                                              |
-| -------------------- | --------- | ------------------------------------------------------------------------ |
-| `Input.Root`         | `<div>`   | Container managing field state and ARIA connections                      |
-| `Input.Field`        | `<input>` | The actual input element                                                 |
-| `Input.Label`        | `<label>` | Label connected to the field                                             |
-| `Input.Description`  | `<div>`   | Helper text (connected via `aria-describedby`)                           |
-| `Input.ErrorMessage` | `<div>`   | Error message (shown when `isInvalid`, connected via `aria-describedby`) |
+| Part          | Element   | Description                                                   |
+| ------------- | --------- | ------------------------------------------------------------- |
+| `Input.Root`  | `<div>`   | Container that manages input state and emits an Input context |
+| `Input.Field` | `<input>` | The actual `<input>` element                                  |
+
+`Input` and `Input.Root` are the same component (default export is also `Root`).
 
 ## Root Props
 
-| Prop         | Type      | Default | Description                         |
-| ------------ | --------- | ------- | ----------------------------------- |
-| `id?`        | `string`  | auto    | Base ID for ARIA relationships      |
-| `isInvalid?` | `boolean` | `false` | Sets error state (`aria-invalid`)   |
-| `disabled?`  | `boolean` | `false` | Disables the entire field           |
-| `required?`  | `boolean` | `false` | Marks as required (`aria-required`) |
-| `readOnly?`  | `boolean` | `false` | Read-only mode                      |
+Inherited from `<Field>` context when nested: `isInvalid`, `disabled`, `required`, `readOnly`. Props set directly on `<Input>` override the inherited values.
+
+| Prop         | Type          | Default | Description                                                               |
+| ------------ | ------------- | ------- | ------------------------------------------------------------------------- |
+| `id?`        | `string`      | auto    | Base ID for ARIA relationships                                            |
+| `isInvalid?` | `boolean`     | `false` | Error state (`aria-invalid`). Inherited from Field if not provided        |
+| `disabled?`  | `boolean`     | `false` | Disables the input. Inherited from Field if not provided                  |
+| `required?`  | `boolean`     | `false` | Marks as required (`aria-required`). Inherited from Field if not provided |
+| `readOnly?`  | `boolean`     | `false` | Read-only mode. Inherited from Field if not provided                      |
+| `as?`        | `ElementType` | `'div'` | Polymorphic element                                                       |
 
 ## Field Props
 
@@ -26,30 +30,76 @@
 | ------------ | --------- | ------- | ------------------- |
 | `autoFocus?` | `boolean` | `false` | Auto-focus on mount |
 
-Plus all native `<input>` HTML attributes (`type`, `placeholder`, `value`, `onChange`, `name`, etc.)
+Plus all native `<input>` HTML attributes (`type`, `placeholder`, `value`, `onChange`, `name`, etc.).
 
-## Label Props
+## ARIA wiring (automatic)
 
-Same as the standalone `Label` component:
+When inside a `<Field>`:
 
-| Prop          | Type      | Default | Description             |
-| ------------- | --------- | ------- | ----------------------- |
-| `required?`   | `boolean` | `false` | Show required indicator |
-| `isOptional?` | `boolean` | `false` | Show optional indicator |
-| `disabled?`   | `boolean` | `false` | Disabled style          |
-| `readOnly?`   | `boolean` | `false` | Read-only style         |
-| `isInvalid?`  | `boolean` | `false` | Error style             |
-
-## ARIA connections (automatic)
-
-Spar automatically connects these ARIA relationships:
-
-- `Input.Label` → `<label htmlFor="{fieldId}">`
-- `Input.Field` → `aria-describedby` pointing to description and/or error message
+- `Input.Field` → `id="{fieldId}"`, `aria-labelledby="{labelId}"`
+- `Input.Field` → `aria-describedby` points to Field's description (valid) or error (invalid)
 - `Input.Field` → `aria-invalid="true"` when `isInvalid`
 - `Input.Field` → `aria-required="true"` when `required`
-- `Input.ErrorMessage` → `role="alert"` for screen reader announcement
+
+When standalone, set `aria-label` (or wire your own `<label htmlFor>`) yourself.
+
+## Hook
+
+```tsx
+import { useInputContext } from '@turkish-technology/spar/input';
+```
+
+Returns the Input's internal context (fieldId, labelId, descriptionId, errorId, isInvalid, disabled, required, readOnly). Useful when building custom input children.
+
+## Examples
+
+### Recommended — wrapped in Field
+
+```tsx
+<Field invalid={!!error} required>
+  <Field.Label>Email</Field.Label>
+  <Input>
+    <Input.Field type='email' />
+  </Input>
+  <Field.Description>We'll never share it.</Field.Description>
+  <Field.ErrorMessage>{error}</Field.ErrorMessage>
+</Field>
+```
+
+### Standalone
+
+```tsx
+<Input>
+  <Input.Field aria-label='Search' type='search' placeholder='Search...' />
+</Input>
+```
 
 ## Keyboard
 
-Standard `<input>` keyboard behavior. No custom keyboard shortcuts.
+Standard native `<input>` keyboard behavior. No custom keyboard shortcuts.
+
+## Migration from earlier versions
+
+The old `Input.Label`, `Input.Description`, `Input.ErrorMessage` no longer exist. Replace:
+
+```tsx
+// Before
+<Input.Root isInvalid={!!error} required>
+  <Input.Label>Email</Input.Label>
+  <Input.Field type='email' />
+  <Input.Description>...</Input.Description>
+  <Input.ErrorMessage>{error}</Input.ErrorMessage>
+</Input.Root>
+
+// After
+<Field invalid={!!error} required>
+  <Field.Label>Email</Field.Label>
+  <Input>
+    <Input.Field type='email' />
+  </Input>
+  <Field.Description>...</Field.Description>
+  <Field.ErrorMessage>{error}</Field.ErrorMessage>
+</Field>
+```
+
+Note that `isInvalid` on `Input.Root` became `invalid` on `Field`.

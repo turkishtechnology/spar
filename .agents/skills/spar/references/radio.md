@@ -7,22 +7,23 @@
 | `Radio.Root` | `<div>`   | Radio group container (role="radiogroup") |
 | `Radio.Item` | `<label>` | Individual radio option                   |
 
-`Radio.Group` is an alias for `Radio.Root`.
+When nested inside a `<Field>`, the Radio inherits `invalid`, `disabled`, `required`, and `readOnly` from Field context. Direct props on `<Radio>` override the inherited values.
 
 ## Root Props
 
-| Prop             | Type                         | Default      | Description                           |
-| ---------------- | ---------------------------- | ------------ | ------------------------------------- |
-| `id?`            | `string`                     | auto         | Base ID for ARIA relationships        |
-| `value?`         | `string`                     | —            | Controlled selected value             |
-| `defaultValue?`  | `string`                     | —            | Default selected value                |
-| `onValueChange?` | `(value: string) => void`    | —            | Called when selection changes         |
-| `name?`          | `string`                     | —            | Form field name (shared by all items) |
-| `disabled?`      | `boolean`                    | `false`      | Disables all items                    |
-| `required?`      | `boolean`                    | `false`      | Makes selection required              |
-| `orientation?`   | `'vertical' \| 'horizontal'` | `'vertical'` | Affects arrow key navigation          |
-| `selectOnFocus?` | `boolean`                    | `true`       | Select item when focused via keyboard |
-| `autoFocus?`     | `boolean`                    | `false`      | Auto-focus first item on mount        |
+| Prop             | Type                         | Default      | Description                                        |
+| ---------------- | ---------------------------- | ------------ | -------------------------------------------------- |
+| `id?`            | `string`                     | auto         | Base ID for ARIA relationships                     |
+| `value?`         | `string`                     | —            | Controlled selected value                          |
+| `defaultValue?`  | `string`                     | —            | Default selected value                             |
+| `onValueChange?` | `(value: string) => void`    | —            | Called when selection changes                      |
+| `name?`          | `string`                     | —            | Form field name (shared by all items)              |
+| `disabled?`      | `boolean`                    | `false`      | Disables all items. Inherited from Field           |
+| `required?`      | `boolean`                    | `false`      | Makes selection required. Inherited from Field     |
+| `isInvalid?`     | `boolean`                    | `false`      | Error state (`aria-invalid`). Inherited from Field |
+| `orientation?`   | `'vertical' \| 'horizontal'` | `'vertical'` | Affects arrow key navigation                       |
+| `selectOnFocus?` | `boolean`                    | `true`       | Select item when focused via keyboard              |
+| `autoFocus?`     | `boolean`                    | `false`      | Auto-focus first item on mount                     |
 
 ## Item Props
 
@@ -57,3 +58,19 @@
 | `Tab`                        | Move focus out of group          |
 
 Uses roving tabindex — only one item is in the tab order at a time.
+
+## Field integration
+
+```tsx
+<Field invalid={!!errors.plan} required>
+  <Field.Label>Plan</Field.Label>
+  <Radio name='plan' value={form.plan} onValueChange={(v) => setForm({ plan: v })}>
+    <Radio.Item value='free'>Free</Radio.Item>
+    <Radio.Item value='pro'>Pro</Radio.Item>
+    <Radio.Item value='enterprise'>Enterprise</Radio.Item>
+  </Radio>
+  <Field.ErrorMessage>{errors.plan?.message}</Field.ErrorMessage>
+</Field>
+```
+
+`isInvalid` / `disabled` / `required` are inherited from Field when not set directly on `<Radio>`.
