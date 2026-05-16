@@ -1,1 +1,1 @@
-export { RadioGroupContext, useRadioGroupContext } from './useRadioGroupContext';
+export { RadioContext, useRadioContext } from './useRadioContext';

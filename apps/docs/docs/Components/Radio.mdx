@@ -14,51 +14,127 @@ Headless radio component for creating mutually exclusive selections in forms and
 
 ## Live Demo
 
-This demo renders a simple three-option radio group styled as custom circular controls.
+This demo shows the recommended pattern: a `Field` wrapper supplies the group
+label, helper text, and error message — all wired to the radiogroup via
+coordinated ARIA IDs — while each `Radio.Item` carries its own visible label.
+Setting `invalid` on `Field.Root` cascades to the radiogroup as
+`aria-invalid` and renders the `Field.ErrorMessage`.
 
 <div className="radio-demo-container">
 <LiveCode
-  code={`<div className='radio-demo-container'>
-      <Radio.Root orientation="horizontal">
-        <Radio.Item value="option1"></Radio.Item>
-        <Radio.Item value='option2' className='radio-item'></Radio.Item>
-        <Radio.Item value='option3' className='radio-item'></Radio.Item>
-</Radio.Root>
-</div>`}
-cssCode={`.radio-demo-container > * {
+  code={`<Field.Root className='radio-demo-container'>
+  <Field.Label className='group-label'>Subscription plan</Field.Label>
+  <Radio.Root name='plan' className='radio-group'>
+    <Radio.Item value='basic' className='radio-item'>
+      <span className='radio-text'>Basic</span>
+    </Radio.Item>
+    <Radio.Item value='pro' className='radio-item'>
+      <span className='radio-text'>Pro</span>
+    </Radio.Item>
+    <Radio.Item value='enterprise' className='radio-item'>
+      <span className='radio-text'>Enterprise</span>
+    </Radio.Item>
+  </Radio.Root>
+  <Field.Description className='description'>
+    Pick the plan that best fits your team.
+  </Field.Description>
+  <Field.ErrorMessage className='error'>
+    Please select a plan
+  </Field.ErrorMessage>
+</Field.Root>`}
+cssCode={`.radio-demo-container {
   display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-inline: auto;
+}
+
+.radio-demo-container .group-label {
+  color: #222530;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+[data-theme='dark'] .radio-demo-container .group-label {
+  color: #f2f5f8;
+}
+
+.radio-demo-container .radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.radio-demo-container .radio-item {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  color: #222530;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
 }
 
-.radio-demo-container input[type='radio'] {
-position: relative;
-appearance: none;
-width: 24px;
-height: 24px;
-border: 2px solid #cacfd8;
-border-radius: 50%;
-background: transparent;
+[data-theme='dark'] .radio-demo-container .radio-item {
+  color: #f2f5f8;
 }
 
-.radio-demo-container input[type='radio']:checked:before {
-content: '';
-width: 12px;
-height: 12px;
-background-color: rgba(0, 0, 0, 0.72);
-border-radius: 50%;
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
+/* The headless Radio.Item renders a label with data-state="checked|unchecked";
+   we draw the indicator with a pseudo-element on the item itself — no JSX
+   indicator needed. The hidden native input is visually-hidden by Spar. */
+.radio-demo-container .radio-item::before {
+  content: '';
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #cacfd8;
+  border-radius: 50%;
+  background: transparent;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease-in-out, background 0.15s ease-in-out;
 }
 
-[data-theme='dark'] .radio-demo-container input[type='radio'] {
-border-color: #525866;
+.radio-demo-container .radio-item[data-state='checked']::before {
+  border-color: rgba(0, 0, 0, 0.72);
+  background: radial-gradient(circle 5px at center, rgba(0, 0, 0, 0.72) 100%, transparent 100%);
 }
 
-[data-theme='dark'] .radio-demo-container input[type='radio']:checked:before {
-background-color: rgba(255, 255, 255, 0.72);
+[data-theme='dark'] .radio-demo-container .radio-item::before {
+  border-color: #525866;
+}
+
+[data-theme='dark'] .radio-demo-container .radio-item[data-state='checked']::before {
+  border-color: rgba(255, 255, 255, 0.72);
+  background: radial-gradient(circle 5px at center, rgba(255, 255, 255, 0.72) 100%, transparent 100%);
+}
+
+.radio-demo-container[data-invalid] .radio-item::before {
+  border-color: #d14343;
+}
+
+.radio-demo-container .description {
+  color: #717784;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0;
+}
+
+[data-theme='dark'] .radio-demo-container .description {
+  color: #99a0ae;
+}
+
+.radio-demo-container .error {
+  color: #d14343;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0;
+}
+
+[data-theme='dark'] .radio-demo-container .error {
+  color: #ff8a8a;
 }
 `}
 />
@@ -110,7 +186,7 @@ The Radio component is built as a compound component with two main parts:
 </Radio.Root>
 ```
 
-**Alias Note:** `Radio.Group` is an alias of `Radio.Root`.
+**Alias Note:** `Radio` and `Radio.Root` are the same component — pick whichever import style fits your project.
 
 ```tsx
 import { Radio } from '@turkish-technology/spar';
@@ -405,17 +481,23 @@ Individual option inside `Radio.Root`.
 
 **Internal Hidden Input (`Radio.Item`)**
 
-| Attribute       | Value     | Purpose                                         |
-| --------------- | --------- | ----------------------------------------------- |
-| `type`          | `"radio"` | Native radio semantics for forms                |
-| `name`          | `string`  | Comes from `Radio.Root` context                 |
-| `value`         | `string`  | Item value                                      |
-| `checked`       | `boolean` | Mirrors item checked state                      |
-| `disabled`      | `boolean` | True when root or item is disabled              |
-| `tabIndex`      | `-1`      | Excludes hidden input from tab order            |
-| `data-hidden`   | `""`      | Marks internal helper input                     |
-| `data-disabled` | `""`      | Present when disabled                           |
-| `readOnly`      | `true`    | Prevents React controlled/uncontrolled warnings |
+Each `Radio.Item` renders a sibling `<input type="radio">` for form
+submission and native HTML5 validation. The element is hidden via inline
+`style={visuallyHidden}` (a 1px-clipped sr-only style), so consumers do not
+need to add CSS to suppress it.
+
+| Attribute     | Value     | Purpose                                                                                              |
+| ------------- | --------- | ---------------------------------------------------------------------------------------------------- |
+| `type`        | `"radio"` | Native radio semantics for forms                                                                     |
+| `name`        | `string`  | Comes from `Radio.Root` context                                                                      |
+| `value`       | `string`  | Item value                                                                                           |
+| `checked`     | `boolean` | Mirrors item checked state                                                                           |
+| `disabled`    | `boolean` | True when root or item is disabled                                                                   |
+| `required`    | `boolean` | True when group/Field marks the selection as required (browsers treat `required` on radios as group-level by `name`) |
+| `tabIndex`    | `-1`      | Excludes hidden input from tab order                                                                 |
+| `aria-hidden` | `"true"`  | Keeps the hidden input out of the AT tree — the visible `role="radio"` element owns assistive semantics |
+| `onChange`    | no-op     | Silences React's controlled-input warning; the visible `role="radio"` element owns interaction       |
+| `style`       | `visuallyHidden` | Inline 1px-clipped style applied by the headless package itself                              |
 
 ## Keyboard Interactions
 

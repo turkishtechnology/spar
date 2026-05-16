@@ -1,17 +1,15 @@
-import { RadioGroup as RadioRoot } from './RadioGroup';
+import { Radio as RadioRoot } from './Radio';
 import { RadioItem } from './RadioItem';
-export { useRadioGroupContext } from './hooks';
+export { useRadioContext } from './hooks';
 
 const Radio = RadioRoot as typeof RadioRoot & {
   Root: typeof RadioRoot;
-  Group: typeof RadioRoot;
   Item: typeof RadioItem;
 };
 
 Radio.Root = RadioRoot;
-Radio.Group = RadioRoot;
 Radio.Item = RadioItem;
 
-export { Radio, RadioRoot, RadioRoot as RadioGroup, RadioItem };
+export { Radio, RadioRoot, RadioItem };
 
-export type { RadioGroupProps, RadioItemProps, RadioItemRenderProps } from './types';
+export type { RadioProps, RadioItemProps, RadioItemRenderProps } from './types';
