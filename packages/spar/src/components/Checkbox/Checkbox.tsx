@@ -145,6 +145,8 @@ export const Checkbox = <T extends ElementType = 'span'>({
 
   // Data attributes for styling
   const dataAttributes: Record<string, string | undefined> = {
+    'data-state':
+      checked === 'indeterminate' ? 'indeterminate' : checked === true ? 'checked' : 'unchecked',
     'data-checked': checked === true ? '' : undefined,
     'data-indeterminate': checked === 'indeterminate' ? '' : undefined,
     'data-disabled': resolvedDisabled ? '' : undefined,
@@ -220,7 +222,6 @@ export const Checkbox = <T extends ElementType = 'span'>({
   const isNativeButton = Component === 'button';
   const elementProps: Record<string, unknown> = {
     ref: mergedRef,
-    id: fieldCtx?.fieldId ?? id,
     className,
     style,
     onClick: handleClick,
@@ -231,9 +232,12 @@ export const Checkbox = <T extends ElementType = 'span'>({
     onMouseLeave: handleMouseLeave,
     onMouseDown: handleMouseDown,
     onMouseUp: handleMouseUp,
+    ...restProps,
+    // ID and ARIA/data attributes must win over user-supplied restProps to
+    // preserve accessibility semantics and Field context wiring.
+    id: fieldCtx?.fieldId ?? id,
     ...dataAttributes,
     ...ariaAttributes,
-    ...restProps,
     tabIndex: resolvedDisabled ? -1 : tabIndex,
   };
 
@@ -267,6 +271,8 @@ export const Checkbox = <T extends ElementType = 'span'>({
           name={name}
           value={value}
           form={form}
+          required={resolvedRequired}
+          disabled={resolvedDisabled}
           checked={checked === true}
           onChange={() => {}} // Controlled by main component
           style={visuallyHidden}
