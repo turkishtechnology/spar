@@ -149,7 +149,7 @@ export function AccordionSection() {
 | `@turkish-technology/spar/popover`       | Root, Trigger, Content, Arrow, Close                                          |
 | `@turkish-technology/spar/radio`         | Root, Group, Item                                                             |
 | `@turkish-technology/spar/select`        | Root, Trigger, Value, Content, Item, Group, Label, ItemText, Separator, Arrow |
-| `@turkish-technology/spar/switch`        | Switch, Root, Control, Track, Thumb, Label, Hint, useSwitch, useSwitchContext |
+| `@turkish-technology/spar/switch`        | Switch, useSwitch                                                             |
 | `@turkish-technology/spar/tabs`          | Root, List, Trigger, Content                                                  |
 | `@turkish-technology/spar/tooltip`       | Provider, Root, Trigger, Content, Arrow                                       |
 

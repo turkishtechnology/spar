@@ -1,16 +1,16 @@
 ---
 title: Switch
-description: Headless switch primitives for on/off settings with accessible ARIA semantics, form integration, and controlled or uncontrolled state.
+description: Headless switch primitive for on/off settings with accessible ARIA semantics, form integration, Field context awareness, and controlled or uncontrolled state.
 ---
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Switch } from '@turkish-technology/spar';
+import { Field, Switch } from '@turkish-technology/spar';
 
 # Switch
 
-Headless switch primitives for creating accessible on/off settings with custom track, thumb, label, and hint parts.
+Headless switch primitive for creating accessible on/off settings. Renders a single focusable element with `role="switch"`; you compose the visual track/thumb in your own DOM and combine it with `<Field>` for labels, descriptions, and validation wiring.
 
 ## Live Demo
 
@@ -19,274 +19,236 @@ Headless switch primitives for creating accessible on/off settings with custom t
   code={`function SwitchDemo() {
   const [checked, setChecked] = React.useState(true);
 
-return (
-
-<div className='switch-demo-container'>
-<Switch.Root className='switch-root' checked={checked} onChange={setChecked}>
-<Switch.Control className='switch-control'>
-<Switch.Track className='switch-track'>
-<Switch.Thumb className='switch-thumb' />
-</Switch.Track>
-</Switch.Control>
-<Switch.Label className='switch-label'>Notifications</Switch.Label>
-</Switch.Root>
-</div>
-);
+  return (
+    <Field className='switch-field'>
+      <Field.Label className='switch-label'>Notifications</Field.Label>
+      <Switch
+        className='switch-control'
+        checked={checked}
+        onChange={setChecked}
+      >
+        <span className='switch-track' aria-hidden='true'>
+          <span className='switch-thumb' />
+        </span>
+      </Switch>
+    </Field>
+  );
 }`}
-  cssCode={`.switch-demo-container .switch-root {
-display: inline-flex;
-align-items: center;
-gap: 12px;
+  cssCode={`.switch-demo-container .switch-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .switch-demo-container .switch-control {
-width: 56px;
-height: 32px;
-padding: 0;
-border: 0;
-background: transparent;
-display: inline-flex;
-align-items: center;
-cursor: pointer;
+  width: 56px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 .switch-demo-container .switch-control:focus-visible {
-outline: 2px solid #d43347;
-outline-offset: 3px;
-border-radius: 999px;
+  outline: 2px solid #d43347;
+  outline-offset: 3px;
+  border-radius: 999px;
 }
 
 .switch-demo-container .switch-track {
-box-sizing: border-box;
-width: 56px;
-height: 32px;
-padding: 4px;
-border: 1px solid #e1e4ea;
-border-radius: 999px;
-background-color: rgba(0, 0, 0, 0.08);
-display: flex;
-align-items: center;
-transition: background-color 0.2s ease;
+  box-sizing: border-box;
+  width: 56px;
+  height: 32px;
+  padding: 4px;
+  border: 1px solid #e1e4ea;
+  border-radius: 999px;
+  background-color: rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
 }
 
-.switch-demo-container .switch-track[data-state='checked'] {
-background-color: #d43347;
-border-color: #d43347;
+.switch-demo-container .switch-control[data-state='checked'] .switch-track {
+  background-color: #d43347;
+  border-color: #d43347;
 }
 
 .switch-demo-container .switch-thumb {
-width: 22px;
-height: 22px;
-border-radius: 50%;
-background: rgba(0, 0, 0, 0.72);
-transition: transform 0.2s ease, background-color 0.2s ease;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.72);
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.switch-demo-container .switch-track[data-state='checked'] .switch-thumb {
-transform: translateX(24px);
-background: #fff;
+.switch-demo-container .switch-control[data-state='checked'] .switch-thumb {
+  transform: translateX(24px);
+  background: #fff;
 }
 
 .switch-demo-container .switch-label {
-font-weight: 500;
+  font-weight: 500;
 }
 
 [data-theme='dark'] .switch-demo-container .switch-track {
-border-color: #2b303b;
-background-color: rgba(255, 255, 255, 0.12);
+  border-color: #2b303b;
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 [data-theme='dark'] .switch-demo-container .switch-thumb {
-background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.72);
 }
 
-[data-theme='dark'] .switch-demo-container .switch-track[data-state='checked'] {
-background-color: #d43347;
-border-color: #d43347;
+[data-theme='dark'] .switch-demo-container .switch-control[data-state='checked'] .switch-track {
+  background-color: #d43347;
+  border-color: #d43347;
 }`}/>
 
 </div>
 
-The live demo uses the compound API so the switch behavior, visual track, thumb, and label can be styled independently.
+`Switch` is a single polymorphic element (default `<button>`) that emits `data-state="checked|unchecked"`. The visual track/thumb live in your DOM as ordinary children, and `<Field>` provides the label/description wiring.
 
 ## Features
 
-- ✅ Compound parts for root, control, track, thumb, label, and hint
-- ✅ Supports both controlled (`checked`) and uncontrolled (`defaultChecked`) state
-- ✅ Integrates with native forms through a hidden checkbox input (`name`, `value`, `form`, `required`)
-- ✅ Automatically wires `Switch.Label` and `Switch.Hint` to the control
-- ✅ Supports render-prop children for programmatic state updates
-- ✅ Supports disabled and read-only interaction modes
-- ✅ Supports polymorphic rendering via the `as` prop
+- ✅ Single accessible control with `role="switch"` and full ARIA wiring
+- ✅ Controlled (`checked`) and uncontrolled (`defaultChecked`) modes
+- ✅ Native form submission via hidden `input[type="checkbox"]` (`name`, `value`, `form`, `required`)
+- ✅ Inherits `disabled`, `readOnly`, `required`, and `invalid` from an ancestor `<Field>`; direct props win
+- ✅ Render-prop children expose state for derived UI
+- ✅ Polymorphic via the `as` prop
 
 ## Import
 
 ```tsx
 import { Switch } from '@turkish-technology/spar';
-```
-
-```tsx
-import {
-  Switch,
-  SwitchRoot,
-  SwitchControl,
-  SwitchTrack,
-  SwitchThumb,
-  SwitchLabel,
-  SwitchHint,
-} from '@turkish-technology/spar/switch';
+// Low-level hook for fully custom anatomy
+import { useSwitch } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
 
-The Switch component is built as a compound component. `Switch.Root` owns state and context, while `Switch.Control` carries the interactive switch semantics.
+The Switch is a single interactive element. Compose surrounding layout, label, and description with `<Field>`; place the visual track and thumb inside the switch as plain children so they can be styled freely.
 
 <AnatomyViewer
   parts={[
     {
-      name: 'root',
-      label: 'Root',
-      description: 'State and context container',
-    },
-    {
-      name: 'control',
-      label: 'Control',
-      description: 'Interactive element with role="switch"',
-    },
-    {
-      name: 'track',
-      label: 'Track',
-      description: 'Visual switch track',
-    },
-    {
-      name: 'thumb',
-      label: 'Thumb',
-      description: 'Visual movable thumb',
+      name: 'field',
+      label: 'Field',
+      description: 'Generic wrapper that owns ARIA relationships (label, description, error)',
     },
     {
       name: 'label',
-      label: 'Label',
-      description: 'Visible label registered with the control',
+      label: 'Field.Label',
+      description: 'Visible label, linked via aria-labelledby',
     },
     {
-      name: 'hint',
-      label: 'Hint',
-      description: 'Description registered with the control',
+      name: 'switch',
+      label: 'Switch',
+      description: 'The interactive control with role="switch"',
+    },
+    {
+      name: 'track',
+      label: 'Visual track',
+      description: 'Decorative child you own, styled via data-state',
+    },
+    {
+      name: 'thumb',
+      label: 'Visual thumb',
+      description: 'Decorative child you own, styled via data-state',
     },
   ]}
 >
   <div className='switch-demo-container'>
-    <Switch.Root data-spar-part='root' className='switch-root' defaultChecked>
-      <Switch.Control data-spar-part='control' className='switch-control'>
-        <Switch.Track data-spar-part='track' className='switch-track'>
-          <Switch.Thumb data-spar-part='thumb' className='switch-thumb' />
-        </Switch.Track>
-      </Switch.Control>
-      <div>
-        <Switch.Label data-spar-part='label' className='switch-label'>
-          {'Flight alerts'}
-        </Switch.Label>
-        <Switch.Hint data-spar-part='hint' className='switch-hint'>
-          {'Only operational alerts are sent.'}
-        </Switch.Hint>
-      </div>
-    </Switch.Root>
+    <Field data-spar-part='field' className='switch-field'>
+      <Field.Label data-spar-part='label' className='switch-label'>
+        {'Flight alerts'}
+      </Field.Label>
+      <Switch data-spar-part='switch' className='switch-control' defaultChecked>
+        <span data-spar-part='track' className='switch-track' aria-hidden='true'>
+          <span data-spar-part='thumb' className='switch-thumb' />
+        </span>
+      </Switch>
+    </Field>
   </div>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<Switch.Root>
-  <Switch.Control>
-    <Switch.Track>
-      <Switch.Thumb />
-    </Switch.Track>
-  </Switch.Control>
-  <Switch.Label />
-  <Switch.Hint />
-</Switch.Root>
+<Field>
+  <Field.Label>…</Field.Label>
+  <Switch>
+    <span className='track' aria-hidden='true'>
+      <span className='thumb' />
+    </span>
+  </Switch>
+  <Field.Description>…</Field.Description>
+</Field>
 ```
 
-**Data Flow:**
+**Data flow:**
 
-- `Switch.Root` manages controlled or uncontrolled checked state and provides context
-- `Switch.Control` receives switch ARIA attributes and toggles state on click, `Space`, and `Enter`
-- `Switch.Label` registers its id as the control label and toggles the switch when clicked
-- `Switch.Hint` registers its id as the control description
-- When `name` is provided on `Switch.Root`, `Switch.Control` renders a synchronized hidden checkbox input
+- `Switch` owns the controlled/uncontrolled checked state and toggles on click, `Space`, and `Enter`.
+- When nested inside `<Field>`, `disabled`, `readOnly`, `required`, and `invalid` are inherited automatically; props on `<Switch>` always take precedence.
+- `aria-labelledby` and `aria-describedby` are wired to `Field.Label` and `Field.Description` / `Field.ErrorMessage` when a Field ancestor is present.
+- When `name` is set, `Switch` renders a synchronized hidden `input[type="checkbox"]` for native form submission.
 
 ## Code Examples
 
 ### Basic Usage
 
-Use the compound parts when you want a custom visual switch with an accessible label.
-
 ```tsx
 function BasicSwitch() {
   return (
-    <Switch.Root defaultChecked>
-      <Switch.Control>
-        <Switch.Track>
-          <Switch.Thumb />
-        </Switch.Track>
-      </Switch.Control>
-      <Switch.Label>Enable notifications</Switch.Label>
-    </Switch.Root>
+    <Field>
+      <Field.Label>Enable notifications</Field.Label>
+      <Switch defaultChecked>
+        <span className='track' aria-hidden='true'>
+          <span className='thumb' />
+        </span>
+      </Switch>
+    </Field>
   );
 }
 ```
 
 ### Controlled Switch
 
-Control the checked value from parent state when the setting needs to stay in sync with other UI.
-
-```tsx {2,5-6}
+```tsx {2,5}
 function ControlledSwitch() {
   const [enabled, setEnabled] = React.useState(false);
 
   return (
-    <Switch.Root checked={enabled} onChange={setEnabled}>
-      <Switch.Control>
-        <Switch.Track>
-          <Switch.Thumb />
-        </Switch.Track>
-      </Switch.Control>
-      <Switch.Label>Dark mode</Switch.Label>
-      <Switch.Hint>{enabled ? 'Theme is dark' : 'Theme is light'}</Switch.Hint>
-    </Switch.Root>
+    <Field>
+      <Field.Label>Dark mode</Field.Label>
+      <Switch checked={enabled} onChange={setEnabled} />
+      <Field.Description>{enabled ? 'Theme is dark' : 'Theme is light'}</Field.Description>
+    </Field>
   );
 }
 ```
 
 ### Uncontrolled Switch
 
-Use `defaultChecked` for simple cases where the switch can manage its own state internally.
-
 ```tsx {3}
 function UncontrolledSwitch() {
   return (
-    <Switch.Root defaultChecked={false} onChange={(checked) => console.log('Changed to:', checked)}>
-      <Switch.Control>
-        <Switch.Track>
-          <Switch.Thumb />
-        </Switch.Track>
-      </Switch.Control>
-      <Switch.Label>Auto-managed switch</Switch.Label>
-    </Switch.Root>
+    <Switch
+      defaultChecked={false}
+      onChange={(checked) => console.log('Changed to:', checked)}
+    />
   );
 }
 ```
 
 ### Form Integration
 
-Provide `name` and optional `value` on `Switch.Root` when the switch should submit as part of a native form.
+Provide `name` and optional `value`. The hidden `input[type="checkbox"]` is rendered automatically and submits alongside the rest of the form.
 
-```tsx {2-3,7-10,13,22}
+```tsx {12,18}
 function FormExample() {
-  const [notifications, setNotifications] = React.useState(false);
-  const [darkMode, setDarkMode] = React.useState(true);
-
   return (
     <form
       onSubmit={(event) => {
@@ -295,23 +257,15 @@ function FormExample() {
         console.log(formData.get('notifications'), formData.get('darkMode'));
       }}
     >
-      <Switch.Root name='notifications' checked={notifications} onChange={setNotifications}>
-        <Switch.Control>
-          <Switch.Track>
-            <Switch.Thumb />
-          </Switch.Track>
-        </Switch.Control>
-        <Switch.Label>Notifications</Switch.Label>
-      </Switch.Root>
+      <Field>
+        <Field.Label>Notifications</Field.Label>
+        <Switch name='notifications' defaultChecked />
+      </Field>
 
-      <Switch.Root name='darkMode' checked={darkMode} onChange={setDarkMode} value='enabled'>
-        <Switch.Control>
-          <Switch.Track>
-            <Switch.Thumb />
-          </Switch.Track>
-        </Switch.Control>
-        <Switch.Label>Dark mode</Switch.Label>
-      </Switch.Root>
+      <Field>
+        <Field.Label>Dark mode</Field.Label>
+        <Switch name='darkMode' value='enabled' defaultChecked />
+      </Field>
 
       <button type='submit'>Save</button>
     </form>
@@ -319,227 +273,135 @@ function FormExample() {
 }
 ```
 
-### Accessibility with Labels and Hints
+### Inheriting Field State
 
-Use `Switch.Label` and `Switch.Hint` when the control should expose visible text as its accessible name and description.
-
-```tsx {6-15}
-function AccessibleSwitch() {
-  const [isOn, setIsOn] = React.useState(false);
-
-  return (
-    <Switch.Root checked={isOn} onChange={setIsOn} required>
-      <Switch.Control>
-        <Switch.Track>
-          <Switch.Thumb />
-        </Switch.Track>
-      </Switch.Control>
-      <Switch.Label>Wi-Fi connection</Switch.Label>
-      <Switch.Hint>{isOn ? 'Connected to Wi-Fi' : 'Disconnected from Wi-Fi'}</Switch.Hint>
-    </Switch.Root>
-  );
-}
-```
-
-### Disabled and Read-only States
-
-Use `disabled` to block interaction entirely, or `readOnly` when users may inspect the value but should not change it.
-
-```tsx {2,13,24}
-function StateVariations() {
-  const [enabled, setEnabled] = React.useState(true);
-
-  return (
-    <div>
-      <Switch.Root checked={enabled} onChange={setEnabled}>
-        <Switch.Control>
-          <Switch.Track>
-            <Switch.Thumb />
-          </Switch.Track>
-        </Switch.Control>
-        <Switch.Label>Normal switch</Switch.Label>
-      </Switch.Root>
-
-      <Switch.Root defaultChecked disabled>
-        <Switch.Control>
-          <Switch.Track>
-            <Switch.Thumb />
-          </Switch.Track>
-        </Switch.Control>
-        <Switch.Label>Disabled on</Switch.Label>
-      </Switch.Root>
-
-      <Switch.Root defaultChecked readOnly>
-        <Switch.Control>
-          <Switch.Track>
-            <Switch.Thumb />
-          </Switch.Track>
-        </Switch.Control>
-        <Switch.Label>Read-only on</Switch.Label>
-      </Switch.Root>
-    </div>
-  );
-}
-```
-
-### Custom Element Rendering
-
-The `as` prop lets you choose custom elements while preserving the same state and accessibility model.
-
-```tsx {2,5}
-function CustomElement() {
-  return (
-    <Switch.Root as='section' defaultChecked>
-      <Switch.Control as='div'>
-        <Switch.Track>
-          <Switch.Thumb />
-        </Switch.Track>
-      </Switch.Control>
-      <Switch.Label>Custom element switch</Switch.Label>
-    </Switch.Root>
-  );
-}
-```
-
-### Standalone Shortcut
-
-The standalone `<Switch>` component remains available for simple single-element usage. Use the compound parts when you need separate track, thumb, label, or hint elements.
+When wrapped in `<Field>`, the Switch picks up `disabled`, `readOnly`, `required`, and `invalid` automatically.
 
 ```tsx
-function StandaloneSwitch() {
-  const [enabled, setEnabled] = React.useState(false);
+<Field disabled>
+  <Field.Label>Disabled (off)</Field.Label>
+  <Switch />
+</Field>
+
+<Field readOnly>
+  <Field.Label>Read-only (on)</Field.Label>
+  <Switch defaultChecked />
+</Field>
+
+<Field required invalid>
+  <Field.Label>Required</Field.Label>
+  <Switch />
+  <Field.ErrorMessage>You must enable this option.</Field.ErrorMessage>
+</Field>
+```
+
+### Render-prop Children
+
+Pass a function as children to derive UI from current state without subscribing externally.
+
+```tsx
+<Switch defaultChecked>
+  {({ checked }) => (
+    <span className='track' aria-hidden='true' data-on={checked || undefined}>
+      <span className='thumb' />
+    </span>
+  )}
+</Switch>
+```
+
+### Custom Element
+
+```tsx
+<Switch as='div' defaultChecked>
+  <span className='track' aria-hidden='true'>
+    <span className='thumb' />
+  </span>
+</Switch>
+```
+
+When `as` is not a native button, `aria-disabled` is emitted instead of the `disabled` HTML attribute.
+
+### Fully Custom Anatomy with `useSwitch`
+
+When you need a totally different DOM shape, use the low-level hook instead of `<Switch>`.
+
+```tsx
+import { useSwitch } from '@turkish-technology/spar';
+
+function CustomSwitch() {
+  const { checked, switchProps, hiddenInputProps } = useSwitch({ defaultChecked: true });
 
   return (
-    <Switch checked={enabled} onChange={setEnabled}>
-      {enabled ? 'On' : 'Off'}
-    </Switch>
+    <label>
+      <span>Wi-Fi</span>
+      <button {...switchProps}>{checked ? 'on' : 'off'}</button>
+      <input {...hiddenInputProps} name='wifi' />
+    </label>
   );
 }
 ```
 
 ## API Reference
 
-### Switch.Root
+### Switch
 
-State provider and layout wrapper for compound switch parts.
+| Name              | Type                                                                 | Default     | Description                                                                       |
+| ----------------- | -------------------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------- |
+| `as?`             | `React.ElementType`                                                  | `"button"`  | Element or component to render as                                                 |
+| `checked?`        | `boolean`                                                            | `undefined` | Controlled checked state                                                          |
+| `defaultChecked?` | `boolean`                                                            | `false`     | Initial checked state in uncontrolled mode                                        |
+| `onChange?`       | `(checked: boolean) => void`                                         | `undefined` | Called when checked state changes                                                 |
+| `disabled?`       | `boolean`                                                            | inherited   | Prevents interaction; inherited from `<Field>` when omitted                       |
+| `readOnly?`       | `boolean`                                                            | inherited   | Keeps focus, blocks state changes; inherited from `<Field>`                       |
+| `required?`       | `boolean`                                                            | inherited   | Sets `aria-required` and hidden-input `required`; inherited from `<Field>`        |
+| `isInvalid?`      | `boolean`                                                            | inherited   | Sets `aria-invalid` and `data-invalid`; inherited from `<Field>`                  |
+| `name?`           | `string`                                                             | `undefined` | Hidden input name. When set, the hidden form input is rendered                    |
+| `value?`          | `string`                                                             | `"on"`      | Hidden input value when checked                                                   |
+| `form?`           | `string`                                                             | `undefined` | Associates the hidden input with an external form id                              |
+| `autoFocus?`      | `boolean`                                                            | `false`     | Focuses the control on mount                                                      |
+| `id?`             | `string`                                                             | generated   | Overrides the control id; ignored when inside `<Field>` (the field's id is used)  |
+| `children?`       | `React.ReactNode \| ((state: SwitchRenderProps) => React.ReactNode)` | `undefined` | Visual content (track/thumb) or render-prop function                              |
+| `...props`        | `ComponentPropsWithRef<"button">`                                    | `-`         | Other native props for the polymorphic element                                    |
 
-| Name              | Type                                                                 | Default     | Description                                         |
-| ----------------- | -------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `as?`             | `React.ElementType`                                                  | `"div"`     | Element or component to render as                   |
-| `checked?`        | `boolean`                                                            | `undefined` | Controlled checked state                            |
-| `defaultChecked?` | `boolean`                                                            | `false`     | Initial checked state in uncontrolled mode          |
-| `onChange?`       | `(checked: boolean) => void`                                         | `undefined` | Called when checked state changes                   |
-| `disabled?`       | `boolean`                                                            | `false`     | Prevents interaction                                |
-| `name?`           | `string`                                                             | `undefined` | Hidden input name for form submission               |
-| `value?`          | `string`                                                             | `"on"`      | Hidden input value when checked                     |
-| `form?`           | `string`                                                             | `undefined` | Form id used by hidden input                        |
-| `required?`       | `boolean`                                                            | `false`     | Marks hidden input and switch semantics as required |
-| `readOnly?`       | `boolean`                                                            | `false`     | Prevents state changes while keeping focus behavior |
-| `id?`             | `string`                                                             | generated   | Used to derive the default control id               |
-| `children?`       | `React.ReactNode \| ((state: SwitchRenderProps) => React.ReactNode)` | `undefined` | Static content or render-prop function              |
-| `...props`        | `ComponentPropsWithRef<"div">`                                       | `-`         | Other native props for the polymorphic root element |
-
-### Switch.Control
-
-Interactive element that receives `role="switch"` and toggles the root checked state.
-
-| Name                | Type                              | Default     | Description                                    |
-| ------------------- | --------------------------------- | ----------- | ---------------------------------------------- |
-| `as?`               | `React.ElementType`               | `"button"`  | Element or component to render as              |
-| `id?`               | `string`                          | generated   | Overrides the generated control id             |
-| `type?`             | `button` attributes               | `"button"`  | Native button type when rendered as a button   |
-| `aria-label?`       | `string`                          | `undefined` | Accessible name override                       |
-| `aria-labelledby?`  | `string`                          | label id    | Overrides the registered `Switch.Label` id     |
-| `aria-describedby?` | `string`                          | hint id     | Merged with the registered `Switch.Hint` id    |
-| `children?`         | `React.ReactNode`                 | `undefined` | Visual switch content, usually track and thumb |
-| `...props`          | `ComponentPropsWithRef<"button">` | `-`         | Other native props for the polymorphic control |
-
-When `Switch.Root` has a `name`, `Switch.Control` also renders a hidden synchronized `input[type="checkbox"]` for native form submission.
-
-### Switch.Track
-
-Visual track part. It is marked `aria-hidden="true"` and mirrors root state with data attributes.
-
-| Name        | Type                            | Default     | Description                              |
-| ----------- | ------------------------------- | ----------- | ---------------------------------------- |
-| `as?`       | `React.ElementType`             | `"span"`    | Element or component to render as        |
-| `children?` | `React.ReactNode`               | `undefined` | Usually contains `Switch.Thumb`          |
-| `...props`  | `ComponentPropsWithRef<"span">` | `-`         | Other native props for the track element |
-
-### Switch.Thumb
-
-Visual thumb part. It is marked `aria-hidden="true"` and mirrors root state with data attributes.
-
-| Name        | Type                            | Default     | Description                              |
-| ----------- | ------------------------------- | ----------- | ---------------------------------------- |
-| `as?`       | `React.ElementType`             | `"span"`    | Element or component to render as        |
-| `children?` | `React.ReactNode`               | `undefined` | Optional visual content                  |
-| `...props`  | `ComponentPropsWithRef<"span">` | `-`         | Other native props for the thumb element |
-
-### Switch.Label
-
-Visible label part. It registers itself as the control label and toggles the switch when clicked unless the root is disabled or read-only.
-
-| Name        | Type                            | Default     | Description                              |
-| ----------- | ------------------------------- | ----------- | ---------------------------------------- |
-| `as?`       | `React.ElementType`             | `"span"`    | Element or component to render as        |
-| `id?`       | `string`                        | generated   | Overrides the generated label id         |
-| `children?` | `React.ReactNode`               | `undefined` | Visible label content                    |
-| `...props`  | `ComponentPropsWithRef<"span">` | `-`         | Other native props for the label element |
-
-### Switch.Hint
-
-Description part. It registers itself as the control description.
-
-| Name        | Type                            | Default     | Description                             |
-| ----------- | ------------------------------- | ----------- | --------------------------------------- |
-| `as?`       | `React.ElementType`             | `"span"`    | Element or component to render as       |
-| `id?`       | `string`                        | generated   | Overrides the generated hint id         |
-| `children?` | `React.ReactNode`               | `undefined` | Visible description content             |
-| `...props`  | `ComponentPropsWithRef<"span">` | `-`         | Other native props for the hint element |
-
-### Standalone Switch
-
-The standalone `Switch` export is a single interactive element for compatibility and compact use cases. It supports the same state, form, render-prop, disabled, read-only, and polymorphic props as the previous single-part API.
-
-**Render Props (SwitchRenderProps)**
+### SwitchRenderProps
 
 | Property     | Type                         | Description                                        |
 | ------------ | ---------------------------- | -------------------------------------------------- |
 | `checked`    | `boolean`                    | Whether the switch is currently checked            |
 | `setChecked` | `(checked: boolean) => void` | Function to programmatically set the checked state |
-| `disabled`   | `boolean`                    | Whether the switch is disabled                     |
-| `readOnly`   | `boolean`                    | Whether the switch is read-only                    |
+| `disabled`   | `boolean`                    | Resolved disabled state                            |
+| `readOnly`   | `boolean`                    | Resolved read-only state                           |
+| `required`   | `boolean`                    | Resolved required state                            |
+| `isInvalid`  | `boolean`                    | Resolved invalid state                             |
 | `isFocused`  | `boolean`                    | Whether the switch currently has focus             |
 | `isHovered`  | `boolean`                    | Whether the switch is being hovered                |
 | `isPressed`  | `boolean`                    | Whether the switch is being pressed                |
 
 ## HTML Attributes
 
-| Part              | Attribute          | Value                      | Purpose                                      |
-| ----------------- | ------------------ | -------------------------- | -------------------------------------------- |
-| `Switch.Root`     | `data-switch-root` | `""`                       | Root marker attribute                        |
-| `Switch.Root`     | `data-state`       | `"checked" \| "unchecked"` | Checked state token                          |
-| `Switch.Control`  | `role`             | `"switch"`                 | Applies switch semantics                     |
-| `Switch.Control`  | `aria-checked`     | `boolean`                  | Reflects checked state                       |
-| `Switch.Control`  | `aria-labelledby`  | `string`                   | Registered label id or explicit override     |
-| `Switch.Control`  | `aria-describedby` | `string`                   | Registered hint id plus explicit description |
-| `Switch.Control`  | `aria-readonly`    | `true`                     | Present when `readOnly` is `true`            |
-| `Switch.Control`  | `aria-required`    | `true`                     | Present when `required` is `true`            |
-| `Switch.Control`  | `data-switch`      | `""`                       | Control marker attribute                     |
-| `Switch.Control`  | `data-state`       | `"checked" \| "unchecked"` | Checked state token                          |
-| `Switch.Track`    | `aria-hidden`      | `"true"`                   | Keeps decorative track out of the AT tree    |
-| `Switch.Thumb`    | `aria-hidden`      | `"true"`                   | Keeps decorative thumb out of the AT tree    |
-| `Track` / `Thumb` | `data-state`       | `"checked" \| "unchecked"` | Mirrors checked state for styling            |
-| `Label` / `Hint`  | `data-disabled`    | `""`                       | Present when disabled                        |
-| `Label` / `Hint`  | `data-readonly`    | `""`                       | Present when read-only                       |
-| `Label` / `Hint`  | `data-required`    | `""`                       | Present when required                        |
-
-Stateful parts also expose `data-checked`, `data-disabled`, `data-readonly`, `data-required`, `data-focus`, `data-hover`, and `data-active` when those states apply.
+| Attribute         | Value                      | Purpose                                       |
+| ----------------- | -------------------------- | --------------------------------------------- |
+| `role`            | `"switch"`                 | Applies switch semantics                      |
+| `aria-checked`    | `boolean`                  | Reflects checked state                        |
+| `aria-labelledby` | `string`                   | Wired to `Field.Label` when inside `<Field>`  |
+| `aria-describedby`| `string`                   | Wired to `Field.Description` / `ErrorMessage` |
+| `aria-readonly`   | `true`                     | Present when read-only                        |
+| `aria-required`   | `true`                     | Present when required                         |
+| `aria-invalid`    | `true`                     | Present when invalid                          |
+| `data-switch`     | `""`                       | Marker attribute                              |
+| `data-state`      | `"checked" \| "unchecked"` | Checked state token                           |
+| `data-checked`    | `""`                       | Present when checked                          |
+| `data-disabled`   | `""`                       | Present when disabled                         |
+| `data-readonly`   | `""`                       | Present when read-only                        |
+| `data-required`   | `""`                       | Present when required                         |
+| `data-invalid`    | `""`                       | Present when invalid                          |
+| `data-focus`      | `""`                       | Present while focused                         |
+| `data-hover`      | `""`                       | Present while hovered                         |
+| `data-active`     | `""`                       | Present while pressed                         |
 
 ## Hidden Input
 
-`Switch.Control` renders a hidden input only when `name` is provided on `Switch.Root`.
+`Switch` renders a hidden `input[type="checkbox"]` only when `name` is provided.
 
 | Attribute     | Value        | Purpose                                  |
 | ------------- | ------------ | ---------------------------------------- |
@@ -555,9 +417,9 @@ Stateful parts also expose `data-checked`, `data-disabled`, `data-readonly`, `da
 
 ## Keyboard Interactions
 
-| Key           | Action                | Context          | Notes                                                   |
-| ------------- | --------------------- | ---------------- | ------------------------------------------------------- |
-| `Tab`         | Moves focus to switch | Focus management | Available when switch is not disabled                   |
-| `Shift + Tab` | Moves focus backward  | Focus management | Standard reverse tab navigation                         |
-| `Space`       | Toggles checked state | Switch focused   | No state change when `disabled` or `readOnly` is `true` |
-| `Enter`       | Toggles checked state | Switch focused   | No state change when `disabled` or `readOnly` is `true` |
+| Key           | Action                | Notes                                                   |
+| ------------- | --------------------- | ------------------------------------------------------- |
+| `Tab`         | Moves focus to switch | Skipped when `disabled` is `true`                       |
+| `Shift + Tab` | Moves focus backward  | Standard reverse tab navigation                         |
+| `Space`       | Toggles checked state | No state change when `disabled` or `readOnly` is `true` |
+| `Enter`       | Toggles checked state | No state change when `disabled` or `readOnly` is `true` |

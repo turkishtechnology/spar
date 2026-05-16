@@ -229,21 +229,18 @@ export default function FormDemo() {
                   control={control}
                   name='announcements'
                   render={({ field: { value, onChange } }) => (
-                    <Switch.Root
-                      id='announcements-switch'
-                      className='demo-field'
-                      checked={value}
-                      onChange={onChange}
-                    >
-                      <Switch.Control className='demo-switch'>
-                        <Switch.Track className='demo-switch-track'>
-                          <Switch.Thumb className='demo-switch-thumb' />
-                        </Switch.Track>
-                      </Switch.Control>
-                      <Switch.Label className='demo-label'>
+                    <div className='demo-field'>
+                      <label htmlFor='announcements-switch' className='demo-label'>
                         Receive product announcements
-                      </Switch.Label>
-                    </Switch.Root>
+                      </label>
+                      <Switch
+                        id='announcements-switch'
+                        className='demo-switch'
+                        checked={value}
+                        onChange={onChange}
+                        aria-label='Receive product announcements'
+                      />
+                    </div>
                   )}
                 />
 
@@ -251,21 +248,18 @@ export default function FormDemo() {
                   control={control}
                   name='featureUpdates'
                   render={({ field: { value, onChange } }) => (
-                    <Switch.Root
-                      id='feature-updates-switch'
-                      className='demo-field'
-                      checked={value}
-                      onChange={onChange}
-                    >
-                      <Switch.Control className='demo-switch'>
-                        <Switch.Track className='demo-switch-track'>
-                          <Switch.Thumb className='demo-switch-thumb' />
-                        </Switch.Track>
-                      </Switch.Control>
-                      <Switch.Label className='demo-label'>
+                    <div className='demo-field'>
+                      <label htmlFor='feature-updates-switch' className='demo-label'>
                         Enable experimental feature updates
-                      </Switch.Label>
-                    </Switch.Root>
+                      </label>
+                      <Switch
+                        id='feature-updates-switch'
+                        className='demo-switch'
+                        checked={value}
+                        onChange={onChange}
+                        aria-label='Enable experimental feature updates'
+                      />
+                    </div>
                   )}
                 />
               </div>

@@ -1,14 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  Switch,
-  SwitchControl,
-  SwitchHint,
-  SwitchLabel,
-  SwitchRoot,
-  SwitchThumb,
-  SwitchTrack,
-} from '..';
+import { Field, FieldLabel, FieldDescription, FieldErrorMessage, Switch } from '../..';
 
 describe('Switch', () => {
   it('renders with switch semantics and accessible name', () => {
@@ -196,170 +188,37 @@ describe('Switch', () => {
     expect(screen.getByText('On')).toBeInTheDocument();
   });
 
-  it('wires compound label and hint ids to the control', () => {
+  it('inherits invalid, disabled, required and readOnly from <Field>', () => {
     render(
-      <SwitchRoot defaultChecked required>
-        <SwitchControl>
-          <SwitchTrack>
-            <SwitchThumb />
-          </SwitchTrack>
-        </SwitchControl>
-        <SwitchLabel>Critical travel alerts</SwitchLabel>
-        <SwitchHint>Only operational changes are sent here.</SwitchHint>
-      </SwitchRoot>,
+      <Field invalid disabled required readOnly>
+        <FieldLabel>Push alerts</FieldLabel>
+        <Switch />
+        <FieldDescription>Updates only.</FieldDescription>
+        <FieldErrorMessage>Required.</FieldErrorMessage>
+      </Field>,
     );
 
-    const control = screen.getByRole('switch', { name: 'Critical travel alerts' });
-    const label = screen.getByText('Critical travel alerts');
-    const hint = screen.getByText('Only operational changes are sent here.');
-
-    expect(control).toHaveAttribute('aria-checked', 'true');
-    expect(control).toHaveAttribute('aria-labelledby', label.id);
-    expect(control).toHaveAttribute('aria-describedby', hint.id);
-    expect(control).toHaveAttribute('aria-required', 'true');
+    const switchElement = screen.getByRole('switch');
+    expect(switchElement).toHaveAttribute('aria-invalid', 'true');
+    expect(switchElement).toHaveAttribute('aria-required', 'true');
+    expect(switchElement).toHaveAttribute('aria-readonly', 'true');
+    expect(switchElement).toBeDisabled();
+    // When invalid, describedby points to the error message, not the description.
+    expect(screen.getByText('Required.').id).toBe(switchElement.getAttribute('aria-describedby'));
+    expect(screen.getByText('Push alerts').id).toBe(switchElement.getAttribute('aria-labelledby'));
   });
 
-  it('toggles compound state from the label click', async () => {
-    const user = userEvent.setup();
-    const handleChange = jest.fn();
-
+  it('lets direct props override Field-inherited values', () => {
     render(
-      <SwitchRoot onChange={handleChange}>
-        <SwitchControl />
-        <SwitchLabel>Clickable label</SwitchLabel>
-      </SwitchRoot>,
+      <Field disabled required>
+        <Switch disabled={false} required={false}>
+          Override
+        </Switch>
+      </Field>,
     );
 
-    await user.click(screen.getByText('Clickable label'));
-
-    expect(handleChange).toHaveBeenCalledWith(true);
-    expect(screen.getByRole('switch', { name: 'Clickable label' })).toHaveAttribute(
-      'aria-checked',
-      'true',
-    );
-  });
-
-  it('supports controlled compound state', async () => {
-    const user = userEvent.setup();
-    const handleChange = jest.fn();
-
-    const { rerender } = render(
-      <SwitchRoot checked={false} onChange={handleChange}>
-        <SwitchControl />
-        <SwitchLabel>Controlled compound</SwitchLabel>
-      </SwitchRoot>,
-    );
-
-    await user.click(screen.getByRole('switch', { name: 'Controlled compound' }));
-
-    expect(handleChange).toHaveBeenCalledWith(true);
-    expect(screen.getByRole('switch', { name: 'Controlled compound' })).toHaveAttribute(
-      'aria-checked',
-      'false',
-    );
-
-    rerender(
-      <SwitchRoot checked={true} onChange={handleChange}>
-        <SwitchControl />
-        <SwitchLabel>Controlled compound</SwitchLabel>
-      </SwitchRoot>,
-    );
-
-    expect(screen.getByRole('switch', { name: 'Controlled compound' })).toHaveAttribute(
-      'aria-checked',
-      'true',
-    );
-  });
-
-  it('toggles compound control with Space and Enter', async () => {
-    const user = userEvent.setup();
-    const handleChange = jest.fn();
-
-    render(
-      <SwitchRoot onChange={handleChange}>
-        <SwitchControl />
-        <SwitchLabel>Keyboard compound</SwitchLabel>
-      </SwitchRoot>,
-    );
-
-    const control = screen.getByRole('switch', { name: 'Keyboard compound' });
-    control.focus();
-    await user.keyboard(' ');
-    await user.keyboard('{Enter}');
-
-    expect(handleChange).toHaveBeenNthCalledWith(1, true);
-    expect(handleChange).toHaveBeenNthCalledWith(2, false);
-  });
-
-  it('submits compound value through the hidden input', async () => {
-    const user = userEvent.setup();
-    const handleSubmit = jest.fn();
-
-    render(
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          handleSubmit(new FormData(event.currentTarget).get('alerts'));
-        }}
-      >
-        <SwitchRoot name='alerts' value='critical'>
-          <SwitchControl />
-          <SwitchLabel>Critical alerts</SwitchLabel>
-        </SwitchRoot>
-        <button type='submit'>Save</button>
-      </form>,
-    );
-
-    await user.click(screen.getByRole('button', { name: 'Save' }));
-    expect(handleSubmit).toHaveBeenLastCalledWith(null);
-
-    await user.click(screen.getByText('Critical alerts'));
-    await user.click(screen.getByRole('button', { name: 'Save' }));
-
-    expect(handleSubmit).toHaveBeenLastCalledWith('critical');
-  });
-
-  it('prevents compound label toggles when disabled or readOnly', async () => {
-    const user = userEvent.setup();
-    const disabledChange = jest.fn();
-    const readonlyChange = jest.fn();
-
-    render(
-      <>
-        <SwitchRoot disabled onChange={disabledChange}>
-          <SwitchControl />
-          <SwitchLabel>Disabled compound</SwitchLabel>
-        </SwitchRoot>
-        <SwitchRoot readOnly onChange={readonlyChange}>
-          <SwitchControl />
-          <SwitchLabel>Readonly compound</SwitchLabel>
-        </SwitchRoot>
-      </>,
-    );
-
-    await user.click(screen.getByText('Disabled compound'));
-    await user.click(screen.getByText('Readonly compound'));
-
-    expect(disabledChange).not.toHaveBeenCalled();
-    expect(readonlyChange).not.toHaveBeenCalled();
-    expect(screen.getByRole('switch', { name: 'Disabled compound' })).toHaveAttribute(
-      'data-disabled',
-      '',
-    );
-    expect(screen.getByRole('switch', { name: 'Readonly compound' })).toHaveAttribute(
-      'aria-readonly',
-      'true',
-    );
-  });
-
-  it('keeps the namespace Switch.Root aliases available', () => {
-    render(
-      <Switch.Root>
-        <Switch.Control />
-        <Switch.Label>Namespaced switch</Switch.Label>
-      </Switch.Root>,
-    );
-
-    expect(screen.getByRole('switch', { name: 'Namespaced switch' })).toBeInTheDocument();
+    const switchElement = screen.getByRole('switch');
+    expect(switchElement).not.toBeDisabled();
+    expect(switchElement).not.toHaveAttribute('aria-required');
   });
 });

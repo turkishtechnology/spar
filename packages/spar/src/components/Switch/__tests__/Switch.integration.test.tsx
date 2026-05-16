@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Switch, SwitchControl, SwitchLabel, SwitchRoot } from '..';
+import { Switch } from '..';
 
 describe('Switch Integration', () => {
   it('submits checked uncontrolled switches through form data', async () => {
@@ -163,25 +163,5 @@ describe('Switch Integration', () => {
     await user.click(screen.getByRole('button', { name: 'Submit preferences' }));
 
     expect(handleSubmit).toHaveBeenCalledWith('on');
-  });
-
-  it('reflects compound required validation state through the hidden input', async () => {
-    const user = userEvent.setup();
-
-    render(
-      <form aria-label='compound preferences'>
-        <SwitchRoot name='security' required>
-          <SwitchControl />
-          <SwitchLabel>Security notices</SwitchLabel>
-        </SwitchRoot>
-      </form>,
-    );
-
-    const form = screen.getByRole('form', { name: 'compound preferences' });
-    expect(form.checkValidity()).toBe(false);
-
-    await user.click(screen.getByText('Security notices'));
-
-    expect(form.checkValidity()).toBe(true);
   });
 });

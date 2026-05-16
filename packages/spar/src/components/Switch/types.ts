@@ -1,128 +1,97 @@
 import type {
   CSSProperties,
   ElementType,
+  FocusEvent,
   KeyboardEvent,
   MouseEvent,
-  FocusEvent,
   PointerEvent,
   ReactNode,
 } from 'react';
 import type { PolymorphicProps } from '../../types';
-import type { ButtonOwnProps } from '../Button/types';
 
 /**
  * Render props provided to children function for Switch
  */
 export interface SwitchRenderProps {
-  /**
-   * Current checked state
-   */
+  /** Current checked state */
   checked: boolean;
-  /**
-   * Function to programmatically set the checked state
-   */
+  /** Function to programmatically set the checked state */
   setChecked: (checked: boolean) => void;
-  /**
-   * Whether the switch is disabled
-   */
+  /** Whether the switch is disabled */
   disabled: boolean;
-  /**
-   * Whether the switch is read-only
-   */
+  /** Whether the switch is read-only */
   readOnly: boolean;
-  /**
-   * Whether the switch is currently focused
-   */
+  /** Whether the switch is required */
+  required: boolean;
+  /** Whether the switch is in an invalid/error state */
+  isInvalid: boolean;
+  /** Whether the switch is currently focused */
   isFocused: boolean;
-  /**
-   * Whether the switch is currently hovered
-   */
+  /** Whether the switch is currently hovered */
   isHovered: boolean;
-  /**
-   * Whether the switch is currently being pressed
-   */
+  /** Whether the switch is currently being pressed */
   isPressed: boolean;
 }
 
 /**
  * Own props for Switch component
- * @remarks Extends ButtonOwnProps for shared button behavior
  */
-export interface SwitchOwnProps extends ButtonOwnProps {
-  /**
-   * Controlled checked state
-   * @remarks When provided, component operates in controlled mode
-   */
+export interface SwitchOwnProps {
+  /** Controlled checked state. */
   checked?: boolean;
-
   /**
-   * Default checked state for uncontrolled usage
+   * Default checked state for uncontrolled usage.
    * @defaultValue false
    */
   defaultChecked?: boolean;
-
-  /**
-   * Callback fired when the checked state changes
-   * @param checked - The new checked state
-   */
+  /** Callback fired when the checked state changes. */
   onChange?: (checked: boolean) => void;
-
   /**
-   * Required state for form validation
+   * Disabled state. When inside a `<Field>`, inherited automatically.
+   * @defaultValue false
+   */
+  disabled?: boolean;
+  /**
+   * Required state for form validation. When inside a `<Field>`, inherited automatically.
    * @defaultValue false
    */
   required?: boolean;
-
   /**
-   * Read-only state - prevents interaction
+   * Read-only state. When inside a `<Field>`, inherited automatically.
    * @defaultValue false
    */
   readOnly?: boolean;
-
   /**
-   * Children content or render function
+   * Invalid/error state. When inside a `<Field>`, inherited automatically.
+   * @defaultValue false
    */
+  isInvalid?: boolean;
+  /** Name attribute for form submission. */
+  name?: string;
+  /**
+   * Value sent in form data when checked.
+   * @defaultValue 'on'
+   */
+  value?: string;
+  /** ID of the form this switch belongs to. */
+  form?: string;
+  /**
+   * Auto-focus on mount.
+   * @defaultValue false
+   */
+  autoFocus?: boolean;
+  /** Children content or render function. */
   children?: ReactNode | ((state: SwitchRenderProps) => ReactNode);
 }
 
 /**
  * Props for Switch component
- * @remarks Fully accessible, headless switch component providing binary toggle functionality
  */
 export type SwitchProps<T extends ElementType = 'button'> = PolymorphicProps<
   'button',
   T,
   SwitchOwnProps
 >;
-
-export interface SwitchRootOwnProps {
-  checked?: boolean;
-  defaultChecked?: boolean;
-  onChange?: (checked: boolean) => void;
-  disabled?: boolean;
-  name?: string;
-  value?: string;
-  form?: string;
-  required?: boolean;
-  readOnly?: boolean;
-  children?: ReactNode | ((state: SwitchRenderProps) => ReactNode);
-}
-
-export type SwitchRootProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  SwitchRootOwnProps
->;
-
-export type SwitchControlProps<T extends ElementType = 'button'> = PolymorphicProps<'button', T>;
-
-export type SwitchTrackProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
-
-export type SwitchThumbProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
-
-export type SwitchLabelProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
-
-export type SwitchHintProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
 
 /**
  * Props for useSwitch hook
@@ -178,28 +147,4 @@ export interface UseSwitchReturn {
     'aria-hidden': true;
     style: CSSProperties;
   };
-}
-
-export interface SwitchContextValue {
-  checked: boolean;
-  setChecked: (next: boolean) => void;
-  disabled: boolean;
-  readOnly: boolean;
-  required: boolean;
-  isFocused: boolean;
-  isHovered: boolean;
-  isPressed: boolean;
-  controlId: string;
-  labelId: string | undefined;
-  hintId: string | undefined;
-  registerLabel: (id: string) => () => void;
-  registerHint: (id: string) => () => void;
-}
-
-export interface SwitchInternalContextValue extends SwitchContextValue {
-  switchProps: UseSwitchReturn['switchProps'];
-  hiddenInputProps: UseSwitchReturn['hiddenInputProps'];
-  value: string;
-  name?: string;
-  form?: string;
 }
