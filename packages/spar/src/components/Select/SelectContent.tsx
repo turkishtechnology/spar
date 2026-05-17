@@ -219,7 +219,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
           if (highlightedId) {
             const selectedItem = enabledItems.find((item) => item.value === highlightedId);
             if (selectedItem) {
-              context.onValueChange(selectedItem.value);
+              context.onChange(selectedItem.value);
               context.onOpenChange(false);
               context.triggerRef.current?.focus();
             }

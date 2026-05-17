@@ -1,12 +1,17 @@
-import { useId, useState, useRef, useEffect, useMemo, ElementType } from 'react';
+import { useId, useState, useRef, useEffect, useMemo, type ElementType } from 'react';
 import { useMergedRef, useAutoFocus, useControlledState } from '@/hooks';
 import { visuallyHidden } from '@/utils';
+import { useOptionalFieldContext } from '../Field/hooks';
 import type { CheckboxProps, CheckboxRenderProps } from './types';
 import type { CheckedState } from '../../types';
 
 /**
  * Headless checkbox component providing accessibility and behavior without styling.
  * Supports dual-state and tri-state functionality with complete ARIA compliance.
+ *
+ * When nested inside a `<Field>`, it reads the Field's `invalid`, `disabled`,
+ * `required` and `readOnly` values automatically. Direct props on `<Checkbox>`
+ * override the inherited values.
  */
 export const Checkbox = <T extends ElementType = 'span'>({
   as,
@@ -14,9 +19,10 @@ export const Checkbox = <T extends ElementType = 'span'>({
   checked: controlledChecked,
   defaultChecked = false,
   onChange,
-  disabled = false,
-  readOnly = false,
-  required = false,
+  invalid,
+  disabled,
+  readOnly,
+  required,
   name,
   value = 'on',
   form,
@@ -36,6 +42,13 @@ export const Checkbox = <T extends ElementType = 'span'>({
   // Generate stable ID
   const generatedId = useId();
   const id = providedId ?? generatedId;
+
+  // Field context integration — direct props win over inherited Field values.
+  const fieldCtx = useOptionalFieldContext();
+  const resolvedInvalid = invalid ?? fieldCtx?.invalid ?? false;
+  const resolvedDisabled = disabled ?? fieldCtx?.disabled ?? false;
+  const resolvedRequired = required ?? fieldCtx?.required ?? false;
+  const resolvedReadOnly = readOnly ?? fieldCtx?.readOnly ?? false;
 
   // State management - controlled/uncontrolled
   const [checked = defaultChecked, updateChecked] = useControlledState<CheckedState>(
@@ -67,7 +80,7 @@ export const Checkbox = <T extends ElementType = 'span'>({
 
   // Toggle checked state
   const handleToggleChecked = () => {
-    if (disabled || readOnly) return;
+    if (resolvedDisabled || resolvedReadOnly) return;
 
     const newChecked: CheckedState = checked === 'indeterminate' ? true : !checked;
     updateChecked(newChecked);
@@ -110,7 +123,7 @@ export const Checkbox = <T extends ElementType = 'span'>({
   };
 
   const handleMouseEnter = () => {
-    if (!disabled) {
+    if (!resolvedDisabled) {
       setIsHovered(true);
     }
   };
@@ -121,7 +134,7 @@ export const Checkbox = <T extends ElementType = 'span'>({
   };
 
   const handleMouseDown = () => {
-    if (!disabled) {
+    if (!resolvedDisabled) {
       setIsPressed(true);
     }
   };
@@ -132,20 +145,22 @@ export const Checkbox = <T extends ElementType = 'span'>({
 
   // Data attributes for styling
   const dataAttributes: Record<string, string | undefined> = {
+    'data-state':
+      checked === 'indeterminate' ? 'indeterminate' : checked === true ? 'checked' : 'unchecked',
     'data-checked': checked === true ? '' : undefined,
     'data-indeterminate': checked === 'indeterminate' ? '' : undefined,
-    'data-disabled': disabled ? '' : undefined,
-    'data-readonly': readOnly ? '' : undefined,
+    'data-disabled': resolvedDisabled ? '' : undefined,
+    'data-readonly': resolvedReadOnly ? '' : undefined,
     'data-focus': isFocused ? '' : undefined,
     'data-hover': isHovered ? '' : undefined,
     'data-active': isPressed ? '' : undefined,
-    'data-invalid': undefined, // Will be set by validation logic
-    'data-required': required ? '' : undefined,
+    'data-invalid': resolvedInvalid ? '' : undefined,
+    'data-required': resolvedRequired ? '' : undefined,
   };
 
   // Function to programmatically set checked state
   const setCheckedState = (newChecked: CheckedState) => {
-    if (disabled || readOnly) return;
+    if (resolvedDisabled || resolvedReadOnly) return;
     updateChecked(newChecked);
   };
 
@@ -153,14 +168,16 @@ export const Checkbox = <T extends ElementType = 'span'>({
   const renderProps: CheckboxRenderProps = {
     checked,
     setChecked: setCheckedState,
-    disabled,
-    readOnly,
+    disabled: resolvedDisabled,
+    readOnly: resolvedReadOnly,
+    required: resolvedRequired,
+    invalid: resolvedInvalid,
     isFocused,
     isHovered,
     isPressed,
   };
 
-  // ARIA attributes - consistent with Button component pattern
+  // ARIA attributes
   const ariaAttributes = useMemo(() => {
     const attrs: Record<string, boolean | string> = {
       role: 'checkbox',
@@ -168,32 +185,43 @@ export const Checkbox = <T extends ElementType = 'span'>({
     };
 
     // Disabled state - only add aria-disabled for non-native button elements
-    // Native buttons already communicate disabled state via the disabled attribute
-    if (disabled && Component !== 'button') {
+    if (resolvedDisabled && Component !== 'button') {
       attrs['aria-disabled'] = true;
     }
 
-    // Read-only state
-    if (readOnly) {
+    if (resolvedReadOnly) {
       attrs['aria-readonly'] = true;
     }
 
-    // Required state
-    if (required) {
+    if (resolvedRequired) {
       attrs['aria-required'] = true;
     }
 
-    // Invalid state - placeholder for validation logic
-    // attrs['aria-invalid'] = false; // Uncomment when validation is implemented
+    if (resolvedInvalid) {
+      attrs['aria-invalid'] = true;
+    }
+
+    // Wire ARIA relationships from Field context
+    if (fieldCtx) {
+      attrs['aria-labelledby'] = fieldCtx.labelId;
+      attrs['aria-describedby'] = resolvedInvalid ? fieldCtx.errorId : fieldCtx.descriptionId;
+    }
 
     return attrs;
-  }, [checked, disabled, readOnly, required, Component]);
+  }, [
+    checked,
+    resolvedDisabled,
+    resolvedReadOnly,
+    resolvedRequired,
+    resolvedInvalid,
+    Component,
+    fieldCtx,
+  ]);
 
   // Build props for the element
   const isNativeButton = Component === 'button';
   const elementProps: Record<string, unknown> = {
     ref: mergedRef,
-    id,
     className,
     style,
     onClick: handleClick,
@@ -204,22 +232,23 @@ export const Checkbox = <T extends ElementType = 'span'>({
     onMouseLeave: handleMouseLeave,
     onMouseDown: handleMouseDown,
     onMouseUp: handleMouseUp,
+    ...restProps,
+    // ID and ARIA/data attributes must win over user-supplied restProps to
+    // preserve accessibility semantics and Field context wiring.
+    id: fieldCtx?.fieldId ?? id,
     ...dataAttributes,
     ...ariaAttributes,
-    ...restProps,
-    tabIndex: disabled ? -1 : tabIndex,
+    tabIndex: resolvedDisabled ? -1 : tabIndex,
   };
 
   // Add button-specific props when rendering as button
   if (isNativeButton) {
     (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).type = 'button';
-    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = disabled;
-    // Remove aria-disabled if present in restProps (native button uses disabled attribute)
+    (elementProps as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled = resolvedDisabled;
     if ('aria-disabled' in elementProps) {
       delete elementProps['aria-disabled'];
     }
   } else {
-    // Remove native disabled and type attributes if present in restProps
     if ('disabled' in elementProps) {
       delete elementProps['disabled'];
     }
@@ -242,6 +271,8 @@ export const Checkbox = <T extends ElementType = 'span'>({
           name={name}
           value={value}
           form={form}
+          required={resolvedRequired}
+          disabled={resolvedDisabled}
           checked={checked === true}
           onChange={() => {}} // Controlled by main component
           style={visuallyHidden}

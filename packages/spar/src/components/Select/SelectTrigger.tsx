@@ -71,6 +71,19 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
     toggle: () => context.onOpenChange(!context.open),
   };
 
+  // When wrapped in a Field, expose the field label alongside the value so
+  // screen readers announce "Label: Value". Standalone usage keeps the
+  // original valueId-only behavior.
+  const labelledBy = context.hasField ? `${context.labelId} ${context.valueId}` : context.valueId;
+
+  // Only point to description/error when a Field is in scope — otherwise
+  // those IDs are synthetic and resolve to no DOM node.
+  const describedBy = context.hasField
+    ? context.invalid
+      ? context.errorId
+      : context.descriptionId
+    : undefined;
+
   const buttonProps = {
     ...(as && { as }),
     ref: mergedRef,
@@ -81,10 +94,15 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
     'aria-haspopup': 'listbox' as const,
     'aria-expanded': context.open,
     'aria-controls': context.contentId,
-    'aria-labelledby': context.valueId,
+    'aria-labelledby': labelledBy,
+    'aria-describedby': describedBy,
     'aria-required': context.required || undefined,
+    'aria-invalid': context.invalid || undefined,
+    'aria-readonly': context.readOnly || undefined,
     'data-state': context.open ? 'open' : 'closed',
+    'data-invalid': context.invalid ? '' : undefined,
     'data-required': context.required ? '' : undefined,
+    'data-readonly': context.readOnly ? '' : undefined,
     'data-placeholder': !context.value ? '' : undefined,
     onClick: handleClick,
     onKeyDown: handleKeyDown,

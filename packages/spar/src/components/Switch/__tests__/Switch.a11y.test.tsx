@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import userEvent from '@testing-library/user-event';
-import { Switch } from '../Switch';
+import { Field, FieldDescription, FieldLabel, Switch } from '../..';
 
 expect.extend(toHaveNoViolations);
 
@@ -113,5 +113,17 @@ describe('Switch Accessibility', () => {
     expect(handleChange).toHaveBeenNthCalledWith(1, true);
     expect(handleChange).toHaveBeenNthCalledWith(2, false);
     expect(handleChange).toHaveBeenCalledTimes(2);
+  });
+
+  it('passes axe checks when composed inside <Field>', async () => {
+    const { container } = render(
+      <Field required>
+        <FieldLabel>Travel alerts</FieldLabel>
+        <Switch name='alerts' />
+        <FieldDescription>Only operational changes are sent here.</FieldDescription>
+      </Field>,
+    );
+
+    expect(await axe(container)).toHaveNoViolations();
   });
 });

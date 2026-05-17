@@ -8,6 +8,7 @@ export { useItemRegistry } from './useItemRegistry';
 export { useFloating, type UseFloatingOptions, type UseFloatingReturn } from './useFloating';
 export type { ItemRegistry } from './useItemRegistry';
 export { useCloseButton, type CloseButtonRenderProps } from './useCloseButton';
+export { useScrollLock } from './useScrollLock';
 export {
   useTypeahead,
   type TypeaheadItem,

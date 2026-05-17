@@ -36,12 +36,28 @@ function toKebabCase(str) {
 function parseComponentIndex(filePath) {
   const content = readFileSync(filePath, 'utf-8');
 
+  const typeExports = [];
+  const typeRegex = /^export\s+type\s*\{([^}]+)\}\s*from\s*'\.\/types';/gm;
+  let typeMatch;
+  while ((typeMatch = typeRegex.exec(content)) !== null) {
+    const names = typeMatch[1]
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    typeExports.push(...names);
+  }
+
   const compoundExports = {};
+  const compoundParents = new Set();
   const compoundRegex = /^(\w+)\.(\w+)\s*=\s*(\w+);/gm;
   let match;
   while ((match = compoundRegex.exec(content)) !== null) {
-    const [, , shortName, fullName] = match;
+    const [, parentName, shortName, fullName] = match;
     compoundExports[shortName] = fullName;
+    compoundParents.add(parentName);
+  }
+  for (const parent of compoundParents) {
+    compoundExports[parent] = parent;
   }
 
   const hooks = [];
@@ -55,7 +71,7 @@ function parseComponentIndex(filePath) {
   }
 
   if (Object.keys(compoundExports).length > 0) {
-    return { exports: compoundExports, hooks };
+    return { exports: compoundExports, hooks, typeExports };
   }
 
   const singleExports = [];
@@ -73,7 +89,7 @@ function parseComponentIndex(filePath) {
     namedMap[name] = name;
   }
 
-  return { exports: namedMap, hooks };
+  return { exports: namedMap, hooks, typeExports };
 }
 
 function buildExportClause(exports) {
@@ -102,10 +118,12 @@ function generateCJS(exports, hooks) {
   return `"use client";\nconst _spar = require('./index.cjs');\n${assigns}\n`;
 }
 
-function generateDTS(exports, hooks) {
+function generateDTS(exports, hooks, typeExports) {
   const parts = [buildExportClause(exports)];
   if (hooks.length > 0) parts.push(hooks.join(', '));
-  return `export { ${parts.join(', ')} } from './index';\n`;
+  const typeClause =
+    typeExports.length > 0 ? `export type { ${typeExports.join(', ')} } from './index';\n` : '';
+  return `export { ${parts.join(', ')} } from './index';\n${typeClause}`;
 }
 
 function discoverComponents() {
@@ -130,13 +148,13 @@ for (const dir of componentDirs) {
   const indexPath = resolve(componentsDir, dir, 'index.ts');
   if (!existsSync(indexPath)) continue;
 
-  const { exports, hooks } = parseComponentIndex(indexPath);
+  const { exports, hooks, typeExports } = parseComponentIndex(indexPath);
   if (Object.keys(exports).length === 0) continue;
 
   const kebabName = toKebabCase(dir);
   writeFileSync(resolve(distDir, `${kebabName}.mjs`), generateESM(exports, hooks));
   writeFileSync(resolve(distDir, `${kebabName}.cjs`), generateCJS(exports, hooks));
-  writeFileSync(resolve(distDir, `${kebabName}.d.ts`), generateDTS(exports, hooks));
+  writeFileSync(resolve(distDir, `${kebabName}.d.ts`), generateDTS(exports, hooks, typeExports));
 
   generated++;
 }

@@ -46,7 +46,19 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Determine dist-tag from tag name
+        id: disttag
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          if [[ "$TAG_NAME" == *-* ]]; then
+            echo "script=publish:spar:beta" >> "$GITHUB_OUTPUT"
+            echo "Prerelease tag detected ($TAG_NAME) -> publishing under 'beta' dist-tag"
+          else
+            echo "script=publish:spar" >> "$GITHUB_OUTPUT"
+            echo "Stable tag detected ($TAG_NAME) -> publishing under 'latest' dist-tag"
+          fi
+
       - name: Publish to NPM
-        run: pnpm run publish:spar
+        run: pnpm run ${{ steps.disttag.outputs.script }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

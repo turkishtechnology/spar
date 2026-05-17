@@ -8,6 +8,7 @@ import {
   Checkbox,
   Dialog,
   DropdownMenu,
+  Field,
   Input,
   Label,
   Radio,
@@ -285,7 +286,7 @@ export default function TicketingPage() {
                       <Radio.Root
                         aria-label='Trip type'
                         value={tripType}
-                        onValueChange={(value) => {
+                        onChange={(value) => {
                           setTripType(value);
                         }}
                         className='ticketing-trip-type-options'
@@ -304,7 +305,7 @@ export default function TicketingPage() {
                     <div className='ticketing-fields'>
                       <Select.Root
                         value={fromAirport}
-                        onValueChange={(value) => {
+                        onChange={(value) => {
                           setFromAirport(value);
                         }}
                       >
@@ -342,7 +343,7 @@ export default function TicketingPage() {
                       </Button>
                       <Select.Root
                         value={toAirport}
-                        onValueChange={(value) => {
+                        onChange={(value) => {
                           setToAirport(value);
                         }}
                       >
@@ -367,32 +368,36 @@ export default function TicketingPage() {
                         </Select.Content>
                       </Select.Root>
 
-                      <Input className='ticketing-input-wrap'>
-                        <Input.Label className='ticketing-field-label'>Departure</Input.Label>
-                        <Input.Field
-                          className='ticketing-date-input'
-                          value={departureDate}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            setDepartureDate(event.target.value);
-                          }}
-                          placeholder='DD.MM.YYYY'
-                        />
-                      </Input>
-                      <Input className='ticketing-input-wrap'>
-                        <Input.Label className='ticketing-field-label'>Return</Input.Label>
-                        <Input.Field
-                          className='ticketing-date-input'
-                          value={returnDate}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            setReturnDate(event.target.value);
-                          }}
-                          placeholder='DD.MM.YYYY'
-                          disabled={tripType === 'one-way'}
-                        />
-                      </Input>
+                      <Field className='ticketing-input-wrap'>
+                        <Field.Label className='ticketing-field-label'>Departure</Field.Label>
+                        <Input>
+                          <Input.Field
+                            className='ticketing-date-input'
+                            value={departureDate}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                              setDepartureDate(event.target.value);
+                            }}
+                            placeholder='DD.MM.YYYY'
+                          />
+                        </Input>
+                      </Field>
+                      <Field className='ticketing-input-wrap'>
+                        <Field.Label className='ticketing-field-label'>Return</Field.Label>
+                        <Input>
+                          <Input.Field
+                            className='ticketing-date-input'
+                            value={returnDate}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                              setReturnDate(event.target.value);
+                            }}
+                            placeholder='DD.MM.YYYY'
+                            disabled={tripType === 'one-way'}
+                          />
+                        </Input>
+                      </Field>
                       <Select.Root
                         value={passengerCount}
-                        onValueChange={(value) => {
+                        onChange={(value) => {
                           setPassengerCount(value);
                         }}
                       >
@@ -599,45 +604,57 @@ export default function TicketingPage() {
                                   <h4>Passenger Information</h4>
                                   <p>Enter passenger details to continue with ticketing.</p>
                                   <div className='ticketing-booking-fields'>
-                                    <Input className='ticketing-input-wrap'>
-                                      <Input.Label className='ticketing-field-label'>
+                                    <Field className='ticketing-input-wrap'>
+                                      <Field.Label className='ticketing-field-label'>
                                         Name
-                                      </Input.Label>
-                                      <Input.Field
-                                        className='ticketing-date-input'
-                                        value={passengerFirstName}
-                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                          setPassengerFirstName(event.target.value);
-                                        }}
-                                        placeholder='Passenger name'
-                                      />
-                                    </Input>
-                                    <Input className='ticketing-input-wrap'>
-                                      <Input.Label className='ticketing-field-label'>
+                                      </Field.Label>
+                                      <Input>
+                                        <Input.Field
+                                          className='ticketing-date-input'
+                                          value={passengerFirstName}
+                                          onChange={(
+                                            event: React.ChangeEvent<HTMLInputElement>,
+                                          ) => {
+                                            setPassengerFirstName(event.target.value);
+                                          }}
+                                          placeholder='Passenger name'
+                                        />
+                                      </Input>
+                                    </Field>
+                                    <Field className='ticketing-input-wrap'>
+                                      <Field.Label className='ticketing-field-label'>
                                         Surname
-                                      </Input.Label>
-                                      <Input.Field
-                                        className='ticketing-date-input'
-                                        value={passengerLastName}
-                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                          setPassengerLastName(event.target.value);
-                                        }}
-                                        placeholder='Passenger surname'
-                                      />
-                                    </Input>
-                                    <Input className='ticketing-input-wrap'>
-                                      <Input.Label className='ticketing-field-label'>
+                                      </Field.Label>
+                                      <Input>
+                                        <Input.Field
+                                          className='ticketing-date-input'
+                                          value={passengerLastName}
+                                          onChange={(
+                                            event: React.ChangeEvent<HTMLInputElement>,
+                                          ) => {
+                                            setPassengerLastName(event.target.value);
+                                          }}
+                                          placeholder='Passenger surname'
+                                        />
+                                      </Input>
+                                    </Field>
+                                    <Field className='ticketing-input-wrap'>
+                                      <Field.Label className='ticketing-field-label'>
                                         Identity Number
-                                      </Input.Label>
-                                      <Input.Field
-                                        className='ticketing-date-input'
-                                        value={passengerIdNumber}
-                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                          setPassengerIdNumber(event.target.value);
-                                        }}
-                                        placeholder='11 digit number'
-                                      />
-                                    </Input>
+                                      </Field.Label>
+                                      <Input>
+                                        <Input.Field
+                                          className='ticketing-date-input'
+                                          value={passengerIdNumber}
+                                          onChange={(
+                                            event: React.ChangeEvent<HTMLInputElement>,
+                                          ) => {
+                                            setPassengerIdNumber(event.target.value);
+                                          }}
+                                          placeholder='11 digit number'
+                                        />
+                                      </Input>
+                                    </Field>
                                   </div>
                                   <Button
                                     type='submit'
@@ -658,11 +675,11 @@ export default function TicketingPage() {
                                   <h4>Payment</h4>
                                   <p>Enter your card information to complete ticketing.</p>
                                   <div className='ticketing-booking-fields'>
-                                    <Input className='ticketing-input-wrap'>
+                                    <Field className='ticketing-input-wrap'>
                                       <div className='ticketing-label-with-tip'>
-                                        <Input.Label className='ticketing-field-label'>
+                                        <Field.Label className='ticketing-field-label'>
                                           Card Number
-                                        </Input.Label>
+                                        </Field.Label>
                                         <Tooltip.Provider delayDuration={200}>
                                           <Tooltip.Root>
                                             <Tooltip.Trigger
@@ -677,15 +694,19 @@ export default function TicketingPage() {
                                           </Tooltip.Root>
                                         </Tooltip.Provider>
                                       </div>
-                                      <Input.Field
-                                        className='ticketing-date-input'
-                                        value={paymentCardNumber}
-                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                          setPaymentCardNumber(event.target.value);
-                                        }}
-                                        placeholder='0000 0000 0000 0000'
-                                      />
-                                    </Input>
+                                      <Input>
+                                        <Input.Field
+                                          className='ticketing-date-input'
+                                          value={paymentCardNumber}
+                                          onChange={(
+                                            event: React.ChangeEvent<HTMLInputElement>,
+                                          ) => {
+                                            setPaymentCardNumber(event.target.value);
+                                          }}
+                                          placeholder='0000 0000 0000 0000'
+                                        />
+                                      </Input>
+                                    </Field>
                                   </div>
                                   <div className='ticketing-payment-check'>
                                     <Checkbox
@@ -759,32 +780,36 @@ export default function TicketingPage() {
                       </p>
                     </div>
                     <div className='ticketing-fields'>
-                      <Input className='ticketing-input-wrap'>
-                        <Input.Label className='ticketing-field-label'>
+                      <Field className='ticketing-input-wrap'>
+                        <Field.Label className='ticketing-field-label'>
                           Ticket or Reservation Code (PNR)
-                        </Input.Label>
-                        <Input.Field
-                          className='ticketing-date-input'
-                          value={checkInPnr}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            setCheckInPnr(event.target.value);
-                          }}
-                          placeholder='Enter as written on your ID'
-                        />
-                      </Input>
-                      <Input className='ticketing-input-wrap'>
-                        <Input.Label className='ticketing-field-label'>
+                        </Field.Label>
+                        <Input>
+                          <Input.Field
+                            className='ticketing-date-input'
+                            value={checkInPnr}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                              setCheckInPnr(event.target.value);
+                            }}
+                            placeholder='Enter as written on your ID'
+                          />
+                        </Input>
+                      </Field>
+                      <Field className='ticketing-input-wrap'>
+                        <Field.Label className='ticketing-field-label'>
                           Passenger Surname
-                        </Input.Label>
-                        <Input.Field
-                          className='ticketing-date-input'
-                          value={checkInSurname}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            setCheckInSurname(event.target.value);
-                          }}
-                          placeholder='Enter as written on your ID'
-                        />
-                      </Input>
+                        </Field.Label>
+                        <Input>
+                          <Input.Field
+                            className='ticketing-date-input'
+                            value={checkInSurname}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                              setCheckInSurname(event.target.value);
+                            }}
+                            placeholder='Enter as written on your ID'
+                          />
+                        </Input>
+                      </Field>
                       <Button type='submit' className='ticketing-search-btn'>
                         Complete Check-in
                       </Button>

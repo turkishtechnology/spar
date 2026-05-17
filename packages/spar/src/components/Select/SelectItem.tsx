@@ -69,7 +69,7 @@ export const SelectItem = <T extends ElementType = 'div'>({
   const handleSelect = useCallback(() => {
     if (disabled || context.disabled) return;
 
-    context.onValueChange(value);
+    context.onChange(value);
     context.onOpenChange(false);
     context.triggerRef.current?.focus();
   }, [context, value, disabled]);

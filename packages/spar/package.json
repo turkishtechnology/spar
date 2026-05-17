@@ -1,6 +1,6 @@
 {
   "name": "@turkish-technology/spar",
-  "version": "0.1.4",
+  "version": "0.2.0-beta.0",
   "description": "A modern headless React component library providing unstyled, accessible UI primitives",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -47,6 +47,11 @@
       "types": "./dist/dropdown-menu.d.ts",
       "import": "./dist/dropdown-menu.mjs",
       "require": "./dist/dropdown-menu.cjs"
+    },
+    "./field": {
+      "types": "./dist/field.d.ts",
+      "import": "./dist/field.mjs",
+      "require": "./dist/field.cjs"
     },
     "./input": {
       "types": "./dist/input.d.ts",
@@ -112,6 +117,9 @@
       ],
       "dropdown-menu": [
         "./dist/dropdown-menu.d.ts"
+      ],
+      "field": [
+        "./dist/field.d.ts"
       ],
       "input": [
         "./dist/input.d.ts"

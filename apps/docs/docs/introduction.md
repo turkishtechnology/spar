@@ -75,7 +75,7 @@ Every component in Spar uses a compound component pattern with granular parts:
 
 ```tsx
 // Simple accordion example
-<AccordionRoot selectionMode='single'>
+<AccordionRoot>
   <AccordionItem value='item-1'>
     <AccordionHeader>
       <AccordionTrigger>What is Spar?</AccordionTrigger>

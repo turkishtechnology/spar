@@ -31,7 +31,7 @@ The Input component provides accessible form input primitives with zero styling 
 | Name       | Type        | Required | Default | Description             |
 | ---------- | ----------- | -------- | ------- | ----------------------- |
 | `id`       | `string`    | No       | `undefined` | Custom base ID for compound ARIA relationships |
-| `isInvalid`  | `boolean`   | No       | `false` | Input validation state  |
+| `invalid`  | `boolean`   | No       | `false` | Input validation state  |
 | `disabled` | `boolean`   | No       | `false` | Input disabled state    |
 | `required` | `boolean`   | No       | `false` | Input required state    |
 | `readOnly` | `boolean`   | No       | `false` | Input read-only state   |
@@ -56,7 +56,7 @@ The Input component provides accessible form input primitives with zero styling 
 - `disabled` — mirrors `InputRoot`'s `disabled` prop
 - `required` — mirrors `InputRoot`'s `required` prop
 - `readOnly` — mirrors `InputRoot`'s `readOnly` prop
-- `isInvalid` — mirrors `InputRoot`'s `isInvalid` prop
+- `invalid` — mirrors `InputRoot`'s `invalid` prop
 
 These produce corresponding `data-disabled`, `data-required`, `data-readonly`, and `data-invalid` attributes on the rendered label element for styling hooks.
 
@@ -76,7 +76,7 @@ These produce corresponding `data-disabled`, `data-required`, `data-readonly`, a
 
 | State        | ARIA/DOM Result                                             |
 | ------------ | ----------------------------------------------------------- |
-| **Initial**  | Proper label association; `aria-invalid` reflects `isInvalid` |
+| **Initial**  | Proper label association; `aria-invalid` reflects `invalid` |
 | **Focus**    | Focus visible, label association announced                  |
 | **Invalid**  | `aria-invalid="true"`, `aria-describedby` includes error ID |
 | **Disabled** | `disabled` attribute, non-interactive                       |
@@ -90,9 +90,9 @@ These produce corresponding `data-disabled`, `data-required`, `data-readonly`, a
 ```tsx
 // InputField
 aria-labelledby={labelId}
-aria-describedby={isInvalid ? errorId : descriptionId}
+aria-describedby={invalid ? errorId : descriptionId}
 aria-required={required}
-aria-invalid={isInvalid}
+aria-invalid={invalid}
 disabled={disabled}
 
 // InputErrorMessage
@@ -114,7 +114,7 @@ id={errorId}
 ```tsx
 const useInputContext = () => {
   const id = useId();
-  const isInvalid = false;
+  const invalid = false;
   const disabled = false;
   const required = false;
   const readOnly = false;
@@ -124,7 +124,7 @@ const useInputContext = () => {
     labelId: `${id}-label`,
     descriptionId: `${id}-description`,
     errorId: `${id}-error`,
-    isInvalid,
+    invalid,
     disabled,
     required,
     readOnly,

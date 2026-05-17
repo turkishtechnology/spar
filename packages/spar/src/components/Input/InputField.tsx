@@ -1,6 +1,6 @@
-import { useState, useContext, useRef, type ElementType } from 'react';
+import { useState, useRef, type ElementType } from 'react';
 import type { InputFieldProps } from './types';
-import { InputContext } from './hooks';
+import { useOptionalInputContext } from './hooks';
 import { useMergedRef, useAutoFocus } from '@/hooks';
 
 /**
@@ -15,7 +15,7 @@ export const InputField = <T extends ElementType = 'input'>({
   onBlur,
   ...props
 }: InputFieldProps<T>) => {
-  const context = useContext(InputContext); // Optional context - can be null
+  const context = useOptionalInputContext();
   const [focused, setFocused] = useState(false);
   const Component = as || 'input';
   const internalRef = useRef<HTMLElement>(null);
@@ -52,9 +52,9 @@ export const InputField = <T extends ElementType = 'input'>({
   const ariaAttributes = context
     ? {
         'aria-labelledby': context.labelId,
-        'aria-describedby': context.isInvalid ? context.errorId : context.descriptionId,
+        'aria-describedby': context.invalid ? context.errorId : context.descriptionId,
         'aria-required': context.required,
-        'aria-invalid': context.isInvalid,
+        'aria-invalid': context.invalid,
       }
     : {};
 

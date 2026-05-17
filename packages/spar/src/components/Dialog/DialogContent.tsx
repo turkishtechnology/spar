@@ -32,6 +32,7 @@ export const DialogContent = <T extends ElementType = 'div'>({
     setIsOpen,
     modal,
     forceMount,
+    triggerRef,
     contentRef,
     titleId,
     descriptionId,
@@ -153,9 +154,10 @@ export const DialogContent = <T extends ElementType = 'div'>({
     [onEscapeKeyDown, onKeyDown, setIsOpen],
   );
 
-  // Outside interaction handler
-  useInteractOutside([contentRef], {
-    enabled: isOpen && modal,
+  // Outside interaction handler — works for both modal and non-modal dialogs.
+  // Excludes triggerRef so clicking the trigger doesn't double-fire dismiss.
+  useInteractOutside([contentRef, triggerRef], {
+    enabled: isOpen,
     onPointerDownOutside: (event) => {
       onPointerDownOutside?.(event);
       onInteractOutside?.(event);

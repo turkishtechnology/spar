@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Switch } from '../Switch';
+import { Field, FieldLabel, FieldDescription, FieldErrorMessage, Switch } from '../..';
 
 describe('Switch', () => {
   it('renders with switch semantics and accessible name', () => {
@@ -186,5 +186,39 @@ describe('Switch', () => {
 
     expect(switchElement).toHaveAttribute('aria-checked', 'true');
     expect(screen.getByText('On')).toBeInTheDocument();
+  });
+
+  it('inherits invalid, disabled, required and readOnly from <Field>', () => {
+    render(
+      <Field invalid disabled required readOnly>
+        <FieldLabel>Push alerts</FieldLabel>
+        <Switch />
+        <FieldDescription>Updates only.</FieldDescription>
+        <FieldErrorMessage>Required.</FieldErrorMessage>
+      </Field>,
+    );
+
+    const switchElement = screen.getByRole('switch');
+    expect(switchElement).toHaveAttribute('aria-invalid', 'true');
+    expect(switchElement).toHaveAttribute('aria-required', 'true');
+    expect(switchElement).toHaveAttribute('aria-readonly', 'true');
+    expect(switchElement).toBeDisabled();
+    // When invalid, describedby points to the error message, not the description.
+    expect(screen.getByText('Required.').id).toBe(switchElement.getAttribute('aria-describedby'));
+    expect(screen.getByText('Push alerts').id).toBe(switchElement.getAttribute('aria-labelledby'));
+  });
+
+  it('lets direct props override Field-inherited values', () => {
+    render(
+      <Field disabled required>
+        <Switch disabled={false} required={false}>
+          Override
+        </Switch>
+      </Field>,
+    );
+
+    const switchElement = screen.getByRole('switch');
+    expect(switchElement).not.toBeDisabled();
+    expect(switchElement).not.toHaveAttribute('aria-required');
   });
 });

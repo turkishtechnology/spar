@@ -14,51 +14,127 @@ Headless radio component for creating mutually exclusive selections in forms and
 
 ## Live Demo
 
-This demo renders a simple three-option radio group styled as custom circular controls.
+This demo shows the recommended pattern: a `Field` wrapper supplies the group
+label, helper text, and error message — all wired to the radiogroup via
+coordinated ARIA IDs — while each `Radio.Item` carries its own visible label.
+Setting `invalid` on `Field.Root` cascades to the radiogroup as
+`aria-invalid` and renders the `Field.ErrorMessage`.
 
 <div className="radio-demo-container">
 <LiveCode
-  code={`<div className='radio-demo-container'>
-      <Radio.Root orientation="horizontal">
-        <Radio.Item value="option1"></Radio.Item>
-        <Radio.Item value='option2' className='radio-item'></Radio.Item>
-        <Radio.Item value='option3' className='radio-item'></Radio.Item>
-</Radio.Root>
-</div>`}
-cssCode={`.radio-demo-container > * {
+  code={`<Field.Root className='radio-demo-container'>
+  <Field.Label className='group-label'>Subscription plan</Field.Label>
+  <Radio.Root name='plan' className='radio-group'>
+    <Radio.Item value='basic' className='radio-item'>
+      <span className='radio-text'>Basic</span>
+    </Radio.Item>
+    <Radio.Item value='pro' className='radio-item'>
+      <span className='radio-text'>Pro</span>
+    </Radio.Item>
+    <Radio.Item value='enterprise' className='radio-item'>
+      <span className='radio-text'>Enterprise</span>
+    </Radio.Item>
+  </Radio.Root>
+  <Field.Description className='description'>
+    Pick the plan that best fits your team.
+  </Field.Description>
+  <Field.ErrorMessage className='error'>
+    Please select a plan
+  </Field.ErrorMessage>
+</Field.Root>`}
+cssCode={`.radio-demo-container {
   display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-inline: auto;
+}
+
+.radio-demo-container .group-label {
+  color: #222530;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+[data-theme='dark'] .radio-demo-container .group-label {
+  color: #f2f5f8;
+}
+
+.radio-demo-container .radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.radio-demo-container .radio-item {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  color: #222530;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
 }
 
-.radio-demo-container input[type='radio'] {
-position: relative;
-appearance: none;
-width: 24px;
-height: 24px;
-border: 2px solid #cacfd8;
-border-radius: 50%;
-background: transparent;
+[data-theme='dark'] .radio-demo-container .radio-item {
+  color: #f2f5f8;
 }
 
-.radio-demo-container input[type='radio']:checked:before {
-content: '';
-width: 12px;
-height: 12px;
-background-color: rgba(0, 0, 0, 0.72);
-border-radius: 50%;
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
+/* The headless Radio.Item renders a label with data-state="checked|unchecked";
+   we draw the indicator with a pseudo-element on the item itself — no JSX
+   indicator needed. The hidden native input is visually-hidden by Spar. */
+.radio-demo-container .radio-item::before {
+  content: '';
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #cacfd8;
+  border-radius: 50%;
+  background: transparent;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease-in-out, background 0.15s ease-in-out;
 }
 
-[data-theme='dark'] .radio-demo-container input[type='radio'] {
-border-color: #525866;
+.radio-demo-container .radio-item[data-state='checked']::before {
+  border-color: rgba(0, 0, 0, 0.72);
+  background: radial-gradient(circle 5px at center, rgba(0, 0, 0, 0.72) 100%, transparent 100%);
 }
 
-[data-theme='dark'] .radio-demo-container input[type='radio']:checked:before {
-background-color: rgba(255, 255, 255, 0.72);
+[data-theme='dark'] .radio-demo-container .radio-item::before {
+  border-color: #525866;
+}
+
+[data-theme='dark'] .radio-demo-container .radio-item[data-state='checked']::before {
+  border-color: rgba(255, 255, 255, 0.72);
+  background: radial-gradient(circle 5px at center, rgba(255, 255, 255, 0.72) 100%, transparent 100%);
+}
+
+.radio-demo-container[data-invalid] .radio-item::before {
+  border-color: #d14343;
+}
+
+.radio-demo-container .description {
+  color: #717784;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0;
+}
+
+[data-theme='dark'] .radio-demo-container .description {
+  color: #99a0ae;
+}
+
+.radio-demo-container .error {
+  color: #d14343;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0;
+}
+
+[data-theme='dark'] .radio-demo-container .error {
+  color: #ff8a8a;
 }
 `}
 />
@@ -110,7 +186,7 @@ The Radio component is built as a compound component with two main parts:
 </Radio.Root>
 ```
 
-**Alias Note:** `Radio.Group` is an alias of `Radio.Root`.
+**Alias Note:** `Radio` and `Radio.Root` are the same component — pick whichever import style fits your project.
 
 ```tsx
 import { Radio } from '@turkish-technology/spar';
@@ -140,7 +216,7 @@ function ControlledRadio() {
   const [selectedValue, setSelectedValue] = React.useState('medium');
 
   return (
-    <Radio.Root value={selectedValue} onValueChange={setSelectedValue} aria-label='Size selection'>
+    <Radio.Root value={selectedValue} onChange={setSelectedValue} aria-label='Size selection'>
       <Radio.Item value='small'>Small</Radio.Item>
       <Radio.Item value='medium'>Medium</Radio.Item>
       <Radio.Item value='large'>Large</Radio.Item>
@@ -162,7 +238,7 @@ function UncontrolledRadio() {
   return (
     <Radio.Root
       defaultValue='silver'
-      onValueChange={handleValueChange}
+      onChange={handleValueChange}
       aria-label='Membership tier'
     >
       <Radio.Item value='bronze'>Bronze Membership</Radio.Item>
@@ -184,7 +260,7 @@ function HorizontalRadio() {
   return (
     <Radio.Root
       value={alignment}
-      onValueChange={setAlignment}
+      onChange={setAlignment}
       orientation='horizontal'
       aria-label='Text alignment'
     >
@@ -205,7 +281,7 @@ function DisabledRadio() {
   const [plan, setPlan] = React.useState('basic');
 
   return (
-    <Radio.Root value={plan} onValueChange={setPlan} aria-label='Subscription plan'>
+    <Radio.Root value={plan} onChange={setPlan} aria-label='Subscription plan'>
       <Radio.Item value='free'>Free Plan</Radio.Item>
       <Radio.Item value='basic'>Basic Plan</Radio.Item>
       <Radio.Item value='premium' disabled>
@@ -228,7 +304,7 @@ function ToolbarRadio() {
     <div role='toolbar' aria-label='Text formatting'>
       <Radio.Root
         value={alignment}
-        onValueChange={setAlignment}
+        onChange={setAlignment}
         selectOnFocus={false}
         orientation='horizontal'
         aria-label='Text alignment'
@@ -262,7 +338,7 @@ function FormRadio() {
     <form onSubmit={handleSubmit}>
       <Radio.Root
         value={paymentMethod}
-        onValueChange={setPaymentMethod}
+        onChange={setPaymentMethod}
         name='payment'
         required
         aria-label='Payment method'
@@ -287,7 +363,7 @@ function CustomRadio() {
   const [theme, setTheme] = React.useState('light');
 
   return (
-    <Radio.Root value={theme} onValueChange={setTheme} as='fieldset' aria-label='Theme selection'>
+    <Radio.Root value={theme} onChange={setTheme} as='fieldset' aria-label='Theme selection'>
       <legend>Choose Theme</legend>
       <Radio.Item value='light' as='div'>
         Light Theme
@@ -316,10 +392,12 @@ Root container that manages selection state, registration, and keyboard behavior
 | `id?`               | `string`                     | `undefined`  | Base id used when generating fallback form `name`                                       |
 | `value?`            | `string`                     | `undefined`  | Controlled selected value                                                               |
 | `defaultValue?`     | `string`                     | `undefined`  | Uncontrolled initial value                                                              |
-| `onValueChange?`    | `(value: string) => void`    | `undefined`  | Selection change handler                                                                |
+| `onChange?`    | `(value: string) => void`    | `undefined`  | Selection change handler                                                                |
 | `name?`             | `string`                     | `undefined`  | Form key for hidden root input (fallback: `${id}-radio-group` or `useId()-radio-group`) |
 | `disabled?`         | `boolean`                    | `false`      | Disables entire radio group                                                             |
+| `readOnly?`         | `boolean`                    | `false`      | Read-only state. Group can be inspected but value cannot change; inherited from Field   |
 | `required?`         | `boolean`                    | `false`      | Marks group as required for forms                                                       |
+| `invalid?`          | `boolean`                    | `false`      | Marks group as invalid (`aria-invalid`); inherited from Field                           |
 | `orientation?`      | `'horizontal' \| 'vertical'` | `'vertical'` | Layout direction for keyboard navigation                                                |
 | `selectOnFocus?`    | `boolean`                    | `true`       | Whether arrow keys automatically select the focused item                                |
 | `autoFocus?`        | `boolean`                    | `false`      | Whether to focus the first focusable item on mount                                      |
@@ -333,7 +411,7 @@ Root container that manages selection state, registration, and keyboard behavior
 
 | Name            | Parameters                     | Description                 | When Triggered                                     |
 | --------------- | ------------------------------ | --------------------------- | -------------------------------------------------- |
-| `onValueChange` | `(value: string)`              | Selection state changes     | User selects different radio item                  |
+| `onChange` | `(value: string)`              | Selection state changes     | User selects different radio item                  |
 | `onKeyDown`     | `(event: React.KeyboardEvent)` | Internal navigation handler | Arrow/Home/End key handling on root element        |
 | `onFocus`       | `(event: React.FocusEvent)`    | Internal focus sync handler | Root receives focus and initializes `focusedValue` |
 
@@ -345,7 +423,9 @@ Root container that manages selection state, registration, and keyboard behavior
 | `aria-required`        | `true`                       | Present when `required` is `true`      |
 | `data-orientation`     | `"horizontal" \| "vertical"` | Indicates layout direction             |
 | `data-disabled`        | `""`                         | Present when group disabled            |
+| `data-readonly`        | `""`                         | Present when group is read-only        |
 | `data-required`        | `""`                         | Present when group is required         |
+| `data-invalid`         | `""`                         | Present when group is invalid          |
 | `data-select-on-focus` | `""`                         | Present when `selectOnFocus` is `true` |
 | `data-autofocus`       | `""`                         | Present when `autoFocus` is `true`     |
 
@@ -400,22 +480,29 @@ Individual option inside `Radio.Root`.
 | `aria-disabled` | `true`                     | Present when item is disabled      |
 | `data-state`    | `"checked" \| "unchecked"` | Indicates selection state          |
 | `data-disabled` | `""`                       | Present when item disabled         |
-| `data-focused`  | `""`                       | Present when item has focus        |
+| `data-focus`    | `""`                       | Present when item has focus        |
+| `data-readonly` | `""`                       | Present when group is read-only    |
 | `tabIndex`      | `0 \| -1`                  | Manages focus with roving tabindex |
 
 **Internal Hidden Input (`Radio.Item`)**
 
-| Attribute       | Value     | Purpose                                         |
-| --------------- | --------- | ----------------------------------------------- |
-| `type`          | `"radio"` | Native radio semantics for forms                |
-| `name`          | `string`  | Comes from `Radio.Root` context                 |
-| `value`         | `string`  | Item value                                      |
-| `checked`       | `boolean` | Mirrors item checked state                      |
-| `disabled`      | `boolean` | True when root or item is disabled              |
-| `tabIndex`      | `-1`      | Excludes hidden input from tab order            |
-| `data-hidden`   | `""`      | Marks internal helper input                     |
-| `data-disabled` | `""`      | Present when disabled                           |
-| `readOnly`      | `true`    | Prevents React controlled/uncontrolled warnings |
+Each `Radio.Item` renders a sibling `<input type="radio">` for form
+submission and native HTML5 validation. The element is hidden via inline
+`style={visuallyHidden}` (a 1px-clipped sr-only style), so consumers do not
+need to add CSS to suppress it.
+
+| Attribute     | Value     | Purpose                                                                                              |
+| ------------- | --------- | ---------------------------------------------------------------------------------------------------- |
+| `type`        | `"radio"` | Native radio semantics for forms                                                                     |
+| `name`        | `string`  | Comes from `Radio.Root` context                                                                      |
+| `value`       | `string`  | Item value                                                                                           |
+| `checked`     | `boolean` | Mirrors item checked state                                                                           |
+| `disabled`    | `boolean` | True when root or item is disabled                                                                   |
+| `required`    | `boolean` | True when group/Field marks the selection as required (browsers treat `required` on radios as group-level by `name`) |
+| `tabIndex`    | `-1`      | Excludes hidden input from tab order                                                                 |
+| `aria-hidden` | `"true"`  | Keeps the hidden input out of the AT tree — the visible `role="radio"` element owns assistive semantics |
+| `onChange`    | no-op     | Silences React's controlled-input warning; the visible `role="radio"` element owns interaction       |
+| `style`       | `visuallyHidden` | Inline 1px-clipped style applied by the headless package itself                              |
 
 ## Keyboard Interactions
 

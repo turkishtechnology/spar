@@ -192,7 +192,7 @@ export default function SelectDemo() {
                 </div>
                 <Select.Root
                   value={controlled}
-                  onValueChange={(v) => {
+                  onChange={(v) => {
                     setControlled(v);
                   }}
                 >
@@ -218,7 +218,7 @@ export default function SelectDemo() {
               <pre className='demo-code-block'>
                 <code>{`const [value, setValue] = useState('');
 
-<Select.Root value={value} onValueChange={(nextValue) => setValue(nextValue)}>
+<Select.Root value={value} onChange={(nextValue) => setValue(nextValue)}>
   <Select.Trigger><Select.Value placeholder='Select size…' /></Select.Trigger>
   <Select.Content>
     <Select.Item value='small'><Select.ItemText>Small</Select.ItemText></Select.Item>

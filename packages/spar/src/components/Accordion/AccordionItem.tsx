@@ -1,10 +1,10 @@
 import { useMemo, useCallback, useId, ElementType } from 'react';
-import type { AccordionItemProps, AccordionItemContextValue } from './types';
+import type { AccordionItemContextValue, AccordionItemProps } from './types';
 import { useAccordionContext, AccordionItemContext } from './hooks';
 import { Collapsible } from '../Collapsible';
 
 /**
- * Individual accordion item providing context for trigger and content components. Manages item registration and expansion state.
+ * Individual accordion item providing context for trigger and content components.
  */
 export const AccordionItem = <T extends ElementType = 'div'>({
   value,
@@ -12,6 +12,7 @@ export const AccordionItem = <T extends ElementType = 'div'>({
   id: providedId,
   as,
   children,
+  ref,
   ...props
 }: AccordionItemProps<T>) => {
   const Component = as || 'div';
@@ -21,17 +22,14 @@ export const AccordionItem = <T extends ElementType = 'div'>({
   const triggerId = `${baseId}-trigger`;
   const contentId = `${baseId}-content`;
 
-  // Determine if this item is expanded
   const isOpen = useMemo(() => {
-    if (accordionContext.selectionMode === 'single') {
+    if (!accordionContext.multiple) {
       return accordionContext.value === value;
-    } else {
-      const valueArray = Array.isArray(accordionContext.value) ? accordionContext.value : [];
-      return valueArray.includes(value);
     }
-  }, [accordionContext.selectionMode, accordionContext.value, value]);
+    const valueArray = Array.isArray(accordionContext.value) ? accordionContext.value : [];
+    return valueArray.includes(value);
+  }, [accordionContext.multiple, accordionContext.value, value]);
 
-  // Determine if this item is disabled
   const isItemDisabled = accordionContext.disabled || itemDisabled;
 
   const toggle = useCallback(() => {
@@ -75,6 +73,7 @@ export const AccordionItem = <T extends ElementType = 'div'>({
         triggerId={triggerId}
         contentId={contentId}
         as={Component}
+        ref={ref}
         {...props}
       >
         {children}

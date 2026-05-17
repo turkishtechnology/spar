@@ -16,7 +16,9 @@
     "prepare": "husky",
     "version:spar": "pnpm --filter @turkish-technology/spar version",
     "publish:spar": "pnpm publish --filter @turkish-technology/spar --no-git-checks --provenance",
+    "publish:spar:beta": "pnpm publish --filter @turkish-technology/spar --tag beta --no-git-checks --provenance",
     "publish:spar:dry": "pnpm --filter @turkish-technology/spar publish --dry-run --no-git-checks",
+    "publish:spar:beta:dry": "pnpm --filter @turkish-technology/spar publish --tag beta --dry-run --no-git-checks",
     "test": "pnpm --filter @turkish-technology/spar test"
   },
   "devDependencies": {

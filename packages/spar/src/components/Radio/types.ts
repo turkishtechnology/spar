@@ -2,9 +2,9 @@ import type { ElementType, ReactNode } from 'react';
 import type { Orientation, PolymorphicProps } from '../../types';
 
 /**
- * Own props for RadioGroup component
+ * Own props for Radio component
  */
-export interface RadioGroupOwnProps {
+export interface RadioOwnProps {
   /**
    * Custom base ID used for generating the form `name` attribute.
    * If not provided, one will be generated automatically.
@@ -25,7 +25,7 @@ export interface RadioGroupOwnProps {
    * Callback when selection changes
    * @param value - The new selected value
    */
-  onValueChange?: (value: string) => void;
+  onChange?: (value: string) => void;
 
   /**
    * HTML name attribute for form submission
@@ -43,6 +43,21 @@ export interface RadioGroupOwnProps {
    * @defaultValue false
    */
   required?: boolean;
+
+  /**
+   * Read-only state. A read-only radio group can be inspected but its value
+   * cannot change. When inside a `<Field>`, inherited automatically.
+   * @defaultValue false
+   */
+  readOnly?: boolean;
+
+  /**
+   * Marks the group as invalid for ARIA wiring (`aria-invalid`). When nested
+   * inside a `<Field>` with `invalid`, this is inherited automatically; a
+   * direct prop on `<Radio>` always wins.
+   * @defaultValue false
+   */
+  invalid?: boolean;
 
   /**
    * Layout direction affecting keyboard navigation
@@ -67,14 +82,10 @@ export interface RadioGroupOwnProps {
 }
 
 /**
- * Props for RadioGroup component
- * @remarks Fully accessible, headless radio group component
+ * Props for Radio component
+ * @remarks Fully accessible, headless radio group component (renders `role="radiogroup"`).
  */
-export type RadioGroupProps<T extends ElementType = 'div'> = PolymorphicProps<
-  'div',
-  T,
-  RadioGroupOwnProps
->;
+export type RadioProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T, RadioOwnProps>;
 
 /**
  * Render props provided to children function for RadioItem
@@ -121,7 +132,7 @@ export interface RadioItemOwnProps {
 
 /**
  * Props for RadioItem component
- * @remarks Individual radio option within a RadioGroup
+ * @remarks Individual radio option within a Radio (radiogroup).
  */
 export type RadioItemProps<T extends ElementType = 'label'> = PolymorphicProps<
   'label',
@@ -130,13 +141,15 @@ export type RadioItemProps<T extends ElementType = 'label'> = PolymorphicProps<
 >;
 
 /**
- * Internal context interface for RadioGroup
+ * Internal context interface for Radio.
  * @internal
  */
-export interface RadioGroupContextValue {
+export interface RadioContextValue {
   value: string | undefined;
-  onValueChange: (value: string) => void;
+  onChange: (value: string) => void;
   disabled: boolean;
+  readOnly: boolean;
+  required: boolean;
   name: string;
   firstFocusableValue: string | null;
   focusedValue: string | null;

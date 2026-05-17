@@ -8,22 +8,32 @@ import React, {
   ElementType,
 } from 'react';
 import { useControlledState, useItemRegistry } from '@/hooks';
-import { RadioGroupContext } from './hooks';
-import type { RadioGroupProps, RadioGroupContextValue } from './types';
+import { RadioContext } from './hooks';
+import { useOptionalFieldContext } from '../Field/hooks';
+import type { RadioProps, RadioContextValue } from './types';
 
 /**
- * RadioGroup component for creating mutually exclusive radio button groups.
- * Implements WCAG 2.2 AA standards with full keyboard navigation and accessibility features.
+ * Radio component for creating mutually exclusive radio button groups
+ * (renders `role="radiogroup"`). Implements WCAG 2.2 AA standards with full
+ * keyboard navigation and accessibility features.
+ *
+ * When nested inside a `<Field>`, it reads the Field's `invalid`, `disabled`,
+ * and `required` values automatically, and inherits the coordinated ARIA IDs
+ * so FieldLabel / FieldDescription / FieldErrorMessage wire to the radiogroup
+ * without extra plumbing. Direct props on `<Radio>` override the inherited
+ * values.
  */
-export const RadioGroup = <T extends ElementType = 'div'>({
+export const Radio = <T extends ElementType = 'div'>({
   ref,
   id: providedId,
   value: controlledValue,
   defaultValue,
-  onValueChange,
+  onChange,
   name: nameProp,
-  disabled = false,
-  required = false,
+  disabled,
+  readOnly,
+  required,
+  invalid,
   orientation = 'vertical',
   selectOnFocus = true,
   autoFocus = false,
@@ -33,9 +43,17 @@ export const RadioGroup = <T extends ElementType = 'div'>({
   as,
   children,
   ...rest
-}: RadioGroupProps<T>) => {
+}: RadioProps<T>) => {
   const Component = as || 'div';
-  const [value, setValue] = useControlledState(controlledValue, defaultValue, onValueChange);
+  const fieldCtx = useOptionalFieldContext();
+
+  // Direct props win; otherwise fall back to Field context; then default false.
+  const resolvedInvalid = invalid ?? fieldCtx?.invalid ?? false;
+  const resolvedDisabled = disabled ?? fieldCtx?.disabled ?? false;
+  const resolvedRequired = required ?? fieldCtx?.required ?? false;
+  const resolvedReadOnly = readOnly ?? fieldCtx?.readOnly ?? false;
+
+  const [value, setValue] = useControlledState(controlledValue, defaultValue, onChange);
   const [focusedValue, setFocusedValue] = useState<string | null>(null);
   const {
     items: radioItems,
@@ -46,7 +64,9 @@ export const RadioGroup = <T extends ElementType = 'div'>({
     count,
   } = useItemRegistry<HTMLElement>();
   const generatedId = useId();
-  const baseId = providedId ?? generatedId;
+  // Reuse Field's coordinated fieldId when nested so FieldLabel's htmlFor and
+  // aria-labelledby resolve against the radiogroup element.
+  const baseId = fieldCtx?.fieldId ?? providedId ?? generatedId;
   const name = nameProp ?? `${baseId}-radio-group`;
   const hasAutoFocused = useRef(false);
 
@@ -74,7 +94,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
 
   // Auto focus first item on mount
   useEffect(() => {
-    if (autoFocus && !disabled && count > 0 && !hasAutoFocused.current) {
+    if (autoFocus && !resolvedDisabled && count > 0 && !hasAutoFocused.current) {
       hasAutoFocused.current = true;
       // Focus the selected item, or the first item if none selected
       const itemToFocus = value || getItemAtIndex(0);
@@ -82,7 +102,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
         radioItems.get(itemToFocus)?.focus();
       }
     }
-  }, [autoFocus, disabled, count, value, getItemAtIndex, radioItems]);
+  }, [autoFocus, resolvedDisabled, count, value, getItemAtIndex, radioItems]);
 
   // Handle value changes
   const handleValueChange = useCallback(
@@ -166,11 +186,13 @@ export const RadioGroup = <T extends ElementType = 'div'>({
     [focusedValue, count, value, getItemAtIndex],
   );
 
-  const contextValue = useMemo<RadioGroupContextValue>(
+  const contextValue = useMemo<RadioContextValue>(
     () => ({
       value,
-      onValueChange: handleValueChange,
-      disabled,
+      onChange: handleValueChange,
+      disabled: resolvedDisabled,
+      readOnly: resolvedReadOnly,
+      required: resolvedRequired,
       name,
       firstFocusableValue: getItemAtIndex(0) ?? null,
       focusedValue,
@@ -183,7 +205,9 @@ export const RadioGroup = <T extends ElementType = 'div'>({
     [
       value,
       handleValueChange,
-      disabled,
+      resolvedDisabled,
+      resolvedReadOnly,
+      resolvedRequired,
       name,
       getItemAtIndex,
       focusedValue,
@@ -198,20 +222,32 @@ export const RadioGroup = <T extends ElementType = 'div'>({
   // Data attributes for styling
   const dataAttributes = {
     'data-orientation': orientation,
-    'data-disabled': disabled ? '' : undefined,
-    'data-required': required ? '' : undefined,
+    'data-disabled': resolvedDisabled ? '' : undefined,
+    'data-readonly': resolvedReadOnly ? '' : undefined,
+    'data-required': resolvedRequired ? '' : undefined,
+    'data-invalid': resolvedInvalid ? '' : undefined,
     'data-select-on-focus': selectOnFocus ? '' : undefined,
     'data-autofocus': autoFocus ? '' : undefined,
   };
 
+  // When inside a Field, default the ARIA wiring from Field's coordinated IDs.
+  // Consumer-provided aria-* props always win.
+  const fieldDescribedBy = fieldCtx
+    ? resolvedInvalid
+      ? fieldCtx.errorId
+      : fieldCtx.descriptionId
+    : undefined;
+
   const ariaAttributes = {
     'aria-label': ariaLabel,
-    'aria-labelledby': ariaLabelledBy,
-    'aria-describedby': ariaDescribedBy,
-    'aria-required': required || undefined,
+    'aria-labelledby': ariaLabelledBy ?? fieldCtx?.labelId,
+    'aria-describedby': ariaDescribedBy ?? fieldDescribedBy,
+    'aria-required': resolvedRequired || undefined,
+    'aria-invalid': resolvedInvalid || undefined,
   };
 
   const groupProps = {
+    id: baseId,
     ref,
     role: 'radiogroup',
     ...ariaAttributes,
@@ -222,7 +258,7 @@ export const RadioGroup = <T extends ElementType = 'div'>({
   };
 
   return (
-    <RadioGroupContext.Provider value={contextValue}>
+    <RadioContext.Provider value={contextValue}>
       <Component {...groupProps}>
         {children}
         {/* Hidden input for form submission */}
@@ -231,13 +267,13 @@ export const RadioGroup = <T extends ElementType = 'div'>({
             type='hidden'
             name={name}
             value={value}
-            disabled={disabled}
-            data-disabled={disabled ? '' : undefined}
+            disabled={resolvedDisabled}
+            data-disabled={resolvedDisabled ? '' : undefined}
           />
         )}
       </Component>
-    </RadioGroupContext.Provider>
+    </RadioContext.Provider>
   );
 };
 
-RadioGroup.displayName = 'RadioGroup';
+Radio.displayName = 'Radio';

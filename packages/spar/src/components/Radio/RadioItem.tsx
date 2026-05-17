@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useRef, ElementType } from 'react';
 import type { RadioItemProps, RadioItemRenderProps } from './types';
-import { useRadioGroupContext } from './hooks';
+import { useRadioContext } from './hooks';
 import { useMergedRef } from '@/hooks';
+import { visuallyHidden } from '@/utils';
 
 /**
- * RadioItem component representing individual radio options within a RadioGroup.
- * Implements roving tabindex and full accessibility features.
+ * RadioItem component representing individual radio options within a Radio
+ * (radiogroup). Implements roving tabindex and full accessibility features.
  */
 export const RadioItem = <T extends ElementType = 'label'>({
   ref,
@@ -18,11 +19,13 @@ export const RadioItem = <T extends ElementType = 'label'>({
   ...rest
 }: RadioItemProps<T>) => {
   const Component = as || 'label';
-  const context = useRadioGroupContext();
+  const context = useRadioContext();
   const {
     value: groupValue,
-    onValueChange,
+    onChange,
     disabled: groupDisabled,
+    readOnly: groupReadOnly,
+    required: groupRequired,
     name,
     firstFocusableValue,
     focusedValue,
@@ -53,10 +56,10 @@ export const RadioItem = <T extends ElementType = 'label'>({
 
   // Handle selection
   const handleClick = useCallback(() => {
-    if (!isDisabled) {
-      onValueChange(itemValue);
+    if (!isDisabled && !groupReadOnly) {
+      onChange(itemValue);
     }
-  }, [isDisabled, onValueChange, itemValue]);
+  }, [isDisabled, groupReadOnly, onChange, itemValue]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
@@ -91,7 +94,8 @@ export const RadioItem = <T extends ElementType = 'label'>({
   const dataAttributes = {
     'data-state': isChecked ? 'checked' : 'unchecked',
     'data-disabled': isDisabled ? '' : undefined,
-    'data-focused': isFocused ? '' : undefined,
+    'data-readonly': groupReadOnly ? '' : undefined,
+    'data-focus': isFocused ? '' : undefined,
     'data-orientation': orientation,
   };
 
@@ -99,6 +103,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
     role: 'radio',
     'aria-checked': isChecked,
     'aria-disabled': isDisabled || undefined,
+    'aria-readonly': groupReadOnly || undefined,
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
   };
@@ -115,21 +120,31 @@ export const RadioItem = <T extends ElementType = 'label'>({
   };
 
   return (
-    <Component {...itemProps}>
-      {typeof children === 'function' ? children(renderProps) : children}
-      {/* Hidden radio input for form submission and accessibility */}
+    <>
+      <Component {...itemProps}>
+        {typeof children === 'function' ? children(renderProps) : children}
+      </Component>
+      {/* Hidden radio input for form submission and native HTML5 validation.
+          Rendered as a sibling (not a child) and hidden via inline
+          `visuallyHidden` style so the headless package owns the gizleme —
+          consumers do not need recipe CSS to suppress this element.
+          `required` is applied per-item; browsers treat `required` on radios
+          as group-level by `name`, so any item being required marks the group.
+          `onChange` is a no-op because the visible role="radio" element owns
+          interaction; this just silences React's controlled-input warning. */}
       <input
         type='radio'
         name={name}
         value={itemValue}
         checked={isChecked}
         disabled={isDisabled}
+        required={groupRequired}
+        onChange={() => {}}
+        style={visuallyHidden}
         tabIndex={-1}
-        data-hidden
-        data-disabled={isDisabled ? '' : undefined}
-        readOnly
+        aria-hidden='true'
       />
-    </Component>
+    </>
   );
 };
 

@@ -1,0 +1,458 @@
+---
+title: Field
+description: A generic headless form-field container that provides shared ARIA context, coordinated IDs, and validation state for any form control.
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Field } from '@turkish-technology/spar';
+
+# Field
+
+A generic headless form-field container that provides shared ARIA context, coordinated IDs, and validation/disabled/required/read-only state for any form control. Does **not** own validation logic — `invalid` is a controlled prop driven by external validators (Zod, etc.).
+
+## Live Demo
+
+<LiveCode
+  code={`<Field.Root className='field-demo' invalid>
+  <Field.Label className='field-label'>Email</Field.Label>
+  <input className='field-input' placeholder='user@example.com' />
+  <Field.Description className='field-description'>
+    We'll never share your email.
+  </Field.Description>
+  <Field.ErrorMessage className='field-error'>
+    Please enter a valid email address.
+  </Field.ErrorMessage>
+</Field.Root>`}
+  cssCode={`.field-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 280px;
+  margin-inline: auto;
+}
+
+.field-demo .field-label {
+color: #222530;
+font-size: 13px;
+font-weight: 500;
+line-height: 18px;
+}
+
+[data-theme='dark'] .field-demo .field-label {
+color: #f2f5f8;
+}
+
+.field-demo .field-input {
+min-height: 40px;
+padding: 0 14px;
+border-radius: 10px;
+border: 1px solid #e1e4ea;
+background: rgba(0, 0, 0, 0.08);
+color: #222530;
+font-size: 14px;
+line-height: 20px;
+}
+
+[data-theme='dark'] .field-demo .field-input {
+border-color: #2b303b;
+background: rgba(255, 255, 255, 0.12);
+color: #f2f5f8;
+}
+
+.field-demo .field-description {
+color: #717784;
+font-size: 12px;
+line-height: 16px;
+}
+
+[data-theme='dark'] .field-demo .field-description {
+color: #99a0ae;
+}
+
+.field-demo .field-error {
+color: #d14343;
+font-size: 12px;
+line-height: 16px;
+}
+
+[data-theme='dark'] .field-demo .field-error {
+color: #ff8a8a;
+}`}
+/>
+
+## Features
+
+- ✅ Coordinated ARIA IDs for label, description, error, and field elements
+- ✅ Validation, disabled, required, and read-only state propagation
+- ✅ Conditional error message rendering (only when `invalid`)
+- ✅ Polymorphic `as` prop on all compound parts
+- ✅ Render props support for children function with field state
+- ✅ Works with any form control (Input, Switch, Checkbox, Select, etc.)
+
+## Import
+
+```tsx
+import { Field } from '@turkish-technology/spar';
+```
+
+`Field` and `Field.Root` refer to the same component — the difference is only notation style:
+
+```tsx
+// Dot notation
+<Field.Root>
+  <Field.Label />
+  <Field.Description />
+  <Field.ErrorMessage />
+</Field.Root>;
+
+// Named import style
+import { Field, FieldLabel, FieldDescription, FieldErrorMessage } from '@turkish-technology/spar';
+
+<Field>
+  <FieldLabel />
+  <FieldDescription />
+  <FieldErrorMessage />
+</Field>;
+```
+
+## Anatomy
+
+<AnatomyViewer
+  parts={[
+    { name: 'root', label: 'Root', description: 'Context provider managing IDs and state' },
+    { name: 'label', label: 'Label', description: 'Accessible label with auto-linked htmlFor' },
+    {
+      name: 'description',
+      label: 'Description',
+      description: 'Helper text linked via aria-describedby',
+    },
+    {
+      name: 'errorMessage',
+      label: 'ErrorMessage',
+      description: 'Error announcement with role="alert" (only when invalid)',
+    },
+  ]}
+>
+  <Field className='field-demo' invalid data-spar-part='root'>
+    <Field.Label className='field-label' data-spar-part='label'>
+      {'Email'}
+    </Field.Label>
+    <input className='field-input' placeholder='user@example.com' />
+    <Field.Description className='field-description' data-spar-part='description'>
+      {"We'll never share your email."}
+    </Field.Description>
+    <Field.ErrorMessage className='field-error' data-spar-part='errorMessage'>
+      {'Please enter a valid email address.'}
+    </Field.ErrorMessage>
+  </Field>
+</AnatomyViewer>
+
+### Structure
+
+```tsx
+<Field.Root>
+  <Field.Label />
+  {/* your form control here */}
+  <Field.Description />
+  <Field.ErrorMessage />
+</Field.Root>
+```
+
+**Data Flow:**
+
+- **Field.Root**: Context provider managing coordinated IDs and form state
+- **Field.Label**: Accessible `<label>` auto-linked via `htmlFor` to the field's control
+- **Field.Description**: Helper/hint text linked via `aria-describedby`
+- **Field.ErrorMessage**: Error text with `role="alert"`, only renders when `invalid` is `true`
+
+## Code Examples
+
+### Basic Field with Input
+
+A simple field wrapping a native input with label and description.
+
+```tsx
+function BasicField() {
+  return (
+    <Field.Root>
+      <Field.Label>Username</Field.Label>
+      <input placeholder='Enter your username' />
+      <Field.Description>Choose a unique username</Field.Description>
+    </Field.Root>
+  );
+}
+```
+
+### Invalid State with Error Message
+
+When `invalid` is set, `Field.ErrorMessage` renders and gets announced via `role="alert"`.
+
+```tsx {5,12-13}
+function InvalidField() {
+  const [value, setValue] = React.useState('');
+  const isEmpty = value.trim().length === 0;
+
+  return (
+    <Field.Root invalid={isEmpty} required>
+      <Field.Label>Email</Field.Label>
+      <input
+        type='email'
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder='user@example.com'
+      />
+      <Field.Description>We'll use this for account recovery</Field.Description>
+      <Field.ErrorMessage>Email is required</Field.ErrorMessage>
+    </Field.Root>
+  );
+}
+```
+
+### Disabled Field
+
+Disabled state propagates to all compound children via context.
+
+```tsx {2}
+function DisabledField() {
+  return (
+    <Field.Root disabled>
+      <Field.Label>Account Type</Field.Label>
+      <input value='Premium' readOnly />
+      <Field.Description>Contact support to change your plan</Field.Description>
+    </Field.Root>
+  );
+}
+```
+
+### Polymorphic Rendering with `as`
+
+Use the `as` prop to change the rendered element on any part.
+
+```tsx {2,3}
+function FieldsetField() {
+  return (
+    <Field.Root as='fieldset'>
+      <Field.Label as='legend'>Preferences</Field.Label>
+      <label>
+        <input type='checkbox' /> Receive email notifications
+      </label>
+      <label>
+        <input type='checkbox' /> Receive SMS notifications
+      </label>
+    </Field.Root>
+  );
+}
+```
+
+### Render Props
+
+Use a children function to access field state and conditionally render content.
+
+```tsx {3-11}
+function RenderPropsField() {
+  return (
+    <Field.Root invalid required>
+      {({ invalid, disabled, required, readOnly }) => (
+        <>
+          <Field.Label>Password</Field.Label>
+          <input type='password' placeholder='Enter password' />
+          {invalid && <span style={{ color: 'red' }}>⚠ This field has errors</span>}
+          {required && <span style={{ fontSize: 12 }}>* Required</span>}
+        </>
+      )}
+    </Field.Root>
+  );
+}
+```
+
+### Render Props with Dynamic Styling
+
+Render props let you apply conditional styles based on field state.
+
+```tsx {4-12}
+function DynamicStyledField() {
+  const [invalid, setInvalid] = React.useState(false);
+
+  return (
+    <Field.Root invalid={invalid}>
+      {({ invalid, disabled }) => (
+        <>
+          <Field.Label>Full Name</Field.Label>
+          <input
+            style={{
+              borderColor: invalid ? '#d14343' : '#e1e4ea',
+              opacity: disabled ? 0.5 : 1,
+            }}
+            onChange={(e) => setInvalid(e.target.value.length === 0)}
+            placeholder='Enter your full name'
+          />
+          <Field.ErrorMessage>Name cannot be empty</Field.ErrorMessage>
+        </>
+      )}
+    </Field.Root>
+  );
+}
+```
+
+### Render Props with Custom Badge
+
+Use render props to show status badges alongside field state.
+
+```tsx {3-14}
+function BadgeField() {
+  return (
+    <Field.Root required readOnly>
+      {({ required, readOnly }) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Field.Label>API Key</Field.Label>
+            {required && <span className='badge-required'>Required</span>}
+            {readOnly && <span className='badge-readonly'>Read-only</span>}
+          </div>
+          <input value='sk-abc123...' readOnly />
+          <Field.Description>Your API key for authentication</Field.Description>
+        </div>
+      )}
+    </Field.Root>
+  );
+}
+```
+
+### Combined with useFieldContext Hook
+
+For components nested deeper than direct children, use the `useFieldContext` hook.
+
+```tsx {2,5}
+import { Field, useFieldContext } from '@turkish-technology/spar';
+
+function CustomInput() {
+  const { fieldId, invalid, disabled } = useFieldContext();
+  return (
+    <input
+      id={fieldId}
+      disabled={disabled}
+      aria-invalid={invalid}
+      style={{ borderColor: invalid ? 'red' : 'gray' }}
+    />
+  );
+}
+
+function FieldWithCustomInput() {
+  return (
+    <Field.Root invalid>
+      <Field.Label>Custom Input</Field.Label>
+      <CustomInput />
+      <Field.ErrorMessage>Something went wrong</Field.ErrorMessage>
+    </Field.Root>
+  );
+}
+```
+
+## API Reference
+
+### Field / Field.Root
+
+The root context provider that wraps all compound field parts. `Field` and `Field.Root` are the same component. Renders a `<div>` by default.
+
+**Props**
+
+| Name        | Type                                                          | Default     | Description                                                            |
+| ----------- | ------------------------------------------------------------- | ----------- | ---------------------------------------------------------------------- |
+| `id?`       | `string`                                                      | `undefined` | Base ID for ARIA relationships. Sub-element IDs are derived from this. |
+| `as?`       | `React.ElementType`                                           | `'div'`     | Polymorphic element type                                               |
+| `ref?`      | `React.Ref<T>`                                                | `undefined` | Ref for the root element                                               |
+| `children`  | `React.ReactNode \| ((props: FieldRenderProps) => ReactNode)` | -           | Static content or render function receiving field state                |
+| `invalid?`  | `boolean`                                                     | `false`     | Validation state propagated to all compound parts                      |
+| `disabled?` | `boolean`                                                     | `false`     | Disabled state propagated to all compound parts                        |
+| `required?` | `boolean`                                                     | `false`     | Required state propagated to all compound parts                        |
+| `readOnly?` | `boolean`                                                     | `false`     | Read-only state propagated to all compound parts                       |
+| `...props`  | `React.ComponentProps<T>`                                     | -           | All standard HTML attributes for the root element                      |
+
+**FieldRenderProps** (passed to children function)
+
+| Name       | Type      | Description                         |
+| ---------- | --------- | ----------------------------------- |
+| `invalid`  | `boolean` | Whether the field is in error state |
+| `disabled` | `boolean` | Whether the field is disabled       |
+| `required` | `boolean` | Whether the field is required       |
+| `readOnly` | `boolean` | Whether the field is read-only      |
+
+**Data Attributes**
+
+| Attribute       | Value               | Purpose                    |
+| --------------- | ------------------- | -------------------------- |
+| `data-invalid`  | `""` \| `undefined` | Indicates validation state |
+| `data-disabled` | `""` \| `undefined` | Indicates disabled state   |
+| `data-required` | `""` \| `undefined` | Indicates required state   |
+| `data-readonly` | `""` \| `undefined` | Indicates read-only state  |
+
+### Field.Label
+
+Accessible label auto-linked to the field's control via `htmlFor`. Renders `<label>` by default.
+
+**Props**
+
+| Name       | Type                | Default     | Description               |
+| ---------- | ------------------- | ----------- | ------------------------- |
+| `as?`      | `React.ElementType` | `'label'`   | Polymorphic element type  |
+| `children` | `React.ReactNode`   | -           | Label content             |
+| `ref?`     | `React.Ref<T>`      | `undefined` | Ref for the label element |
+
+**Auto-set from context:**
+
+- `id` → `${rootId}-label`
+- `htmlFor` → `${rootId}-field`
+- `disabled`, `required`, `readOnly`, `invalid` mirror the root state
+
+### Field.Description
+
+Helper/hint text linked to the control via `aria-describedby`. Renders `<div>` by default.
+
+**Props**
+
+| Name       | Type                | Default     | Description              |
+| ---------- | ------------------- | ----------- | ------------------------ |
+| `as?`      | `React.ElementType` | `'div'`     | Polymorphic element type |
+| `children` | `React.ReactNode`   | -           | Description content      |
+| `ref?`     | `React.Ref<T>`      | `undefined` | Ref for the element      |
+
+**Data Attributes**
+
+| Attribute       | Value               | Purpose                   |
+| --------------- | ------------------- | ------------------------- |
+| `data-disabled` | `""` \| `undefined` | Indicates disabled state  |
+| `data-readonly` | `""` \| `undefined` | Indicates read-only state |
+
+### Field.ErrorMessage
+
+Error message that only renders when `invalid` is `true`. Uses `role="alert"` for immediate screen reader announcement.
+
+**Props**
+
+| Name       | Type                | Default     | Description              |
+| ---------- | ------------------- | ----------- | ------------------------ |
+| `as?`      | `React.ElementType` | `'div'`     | Polymorphic element type |
+| `children` | `React.ReactNode`   | -           | Error content            |
+| `ref?`     | `React.Ref<T>`      | `undefined` | Ref for the element      |
+
+**Data Attributes**
+
+| Attribute       | Value               | Purpose                           |
+| --------------- | ------------------- | --------------------------------- |
+| `role`          | `"alert"`           | Announces error to screen readers |
+| `data-invalid`  | `""` \| `undefined` | Indicates validation state        |
+| `data-disabled` | `""` \| `undefined` | Indicates disabled state          |
+| `data-readonly` | `""` \| `undefined` | Indicates read-only state         |
+
+## Accessibility
+
+| Feature              | Implementation                                                 |
+| -------------------- | -------------------------------------------------------------- |
+| Label association    | `Field.Label` auto-sets `htmlFor` matching the field's control |
+| Description linking  | `Field.Description` ID used in `aria-describedby`              |
+| Error announcement   | `Field.ErrorMessage` uses `role="alert"` (assertive live)      |
+| Disabled propagation | Context shares `disabled` to all compound parts                |
+| Required propagation | Context shares `required` to all compound parts                |
+| Data attributes      | Styling hooks via `data-invalid`, `data-disabled`, etc.        |

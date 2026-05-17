@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
-import { Switch, Label } from '@turkish-technology/spar';
+import { Field, Switch } from '@turkish-technology/spar';
 
 import '../../../styles/accessibility-demos.scss';
 
@@ -28,14 +28,10 @@ export default function SwitchDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <div className='demo-field'>
-                  <Switch id='basic-switch' className='demo-switch'>
-                    {({ checked: _checked }) => <span className='demo-switch-thumb' />}
-                  </Switch>
-                  <Label htmlFor='basic-switch' className='demo-label'>
-                    Enable feature
-                  </Label>
-                </div>
+                <Field id='basic-switch' className='demo-field'>
+                  <Field.Label className='demo-label'>Enable feature</Field.Label>
+                  <Switch className='demo-switch' />
+                </Field>
               </div>
               <div className='keyboard-hint'>
                 <strong>Keyboard:</strong> Tab to focus → Space or Enter to toggle
@@ -43,10 +39,10 @@ export default function SwitchDemo() {
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Switch id='basic-switch'>
-  {() => <span />}
-</Switch>
-<Label htmlFor='basic-switch'>Enable feature</Label>`}</code>
+                <code>{`<Field id='basic-switch'>
+  <Field.Label>Enable feature</Field.Label>
+  <Switch />
+</Field>`}</code>
               </pre>
             </div>
           </div>
@@ -61,21 +57,14 @@ export default function SwitchDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-col'>
-                <div className='demo-field'>
+                <Field id='controlled-switch' className='demo-field'>
+                  <Field.Label className='demo-label'>Dark mode</Field.Label>
                   <Switch
-                    id='controlled-switch'
                     className='demo-switch'
                     checked={controlled}
-                    onChange={(checked) => {
-                      setControlled(checked);
-                    }}
-                  >
-                    {() => <span className='demo-switch-thumb' />}
-                  </Switch>
-                  <Label htmlFor='controlled-switch' className='demo-label'>
-                    Dark mode
-                  </Label>
-                </div>
+                    onChange={(checked) => setControlled(checked)}
+                  />
+                </Field>
                 <div className='demo-row'>
                   <button className='demo-btn' onClick={() => setControlled(true)}>
                     Turn On
@@ -90,10 +79,13 @@ export default function SwitchDemo() {
               <pre className='demo-code-block'>
                 <code>{`const [checked, setChecked] = useState(false);
 
-<Switch id='controlled-switch' checked={checked} onChange={(nextChecked) => setChecked(nextChecked)}>
-  {() => <span />}
-</Switch>
-<Label htmlFor='controlled-switch'>Dark mode</Label>`}</code>
+<Field id='controlled-switch'>
+  <Field.Label>Dark mode</Field.Label>
+  <Switch
+    checked={checked}
+    onChange={(nextChecked) => setChecked(nextChecked)}
+  />
+</Field>`}</code>
               </pre>
             </div>
           </div>
@@ -106,22 +98,18 @@ export default function SwitchDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <div className='demo-field'>
-                  <Switch id='default-checked-switch' className='demo-switch' defaultChecked>
-                    {() => <span className='demo-switch-thumb' />}
-                  </Switch>
-                  <Label htmlFor='default-checked-switch' className='demo-label'>
-                    Notifications (default on)
-                  </Label>
-                </div>
+                <Field id='default-checked-switch' className='demo-field'>
+                  <Field.Label className='demo-label'>Notifications (default on)</Field.Label>
+                  <Switch className='demo-switch' defaultChecked />
+                </Field>
               </div>
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Switch id='default-checked-switch' defaultChecked>
-  {() => <span />}
-</Switch>
-<Label htmlFor='default-checked-switch'>Notifications</Label>`}</code>
+                <code>{`<Field id='default-checked-switch'>
+  <Field.Label>Notifications</Field.Label>
+  <Switch defaultChecked />
+</Field>`}</code>
               </pre>
             </div>
           </div>
@@ -136,22 +124,14 @@ export default function SwitchDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area demo-col'>
-                <div className='demo-field'>
-                  <Switch id='disabled-off' className='demo-switch' disabled>
-                    {() => <span className='demo-switch-thumb' />}
-                  </Switch>
-                  <Label htmlFor='disabled-off' className='demo-label' disabled>
-                    Disabled (off)
-                  </Label>
-                </div>
-                <div className='demo-field'>
-                  <Switch id='disabled-on' className='demo-switch' disabled defaultChecked>
-                    {() => <span className='demo-switch-thumb' />}
-                  </Switch>
-                  <Label htmlFor='disabled-on' className='demo-label' disabled>
-                    Disabled (on)
-                  </Label>
-                </div>
+                <Field id='disabled-off' className='demo-field' disabled>
+                  <Field.Label className='demo-label'>Disabled (off)</Field.Label>
+                  <Switch className='demo-switch' />
+                </Field>
+                <Field id='disabled-on' className='demo-field' disabled>
+                  <Field.Label className='demo-label'>Disabled (on)</Field.Label>
+                  <Switch className='demo-switch' defaultChecked />
+                </Field>
               </div>
               <div className='keyboard-hint'>
                 <strong>Expected:</strong> Tab should skip disabled switches.
@@ -159,11 +139,15 @@ export default function SwitchDemo() {
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Switch id='disabled-off' disabled>{() => <span />}</Switch>
-<Label htmlFor='disabled-off' disabled>Disabled (off)</Label>
+                <code>{`<Field id='disabled-off' disabled>
+  <Field.Label>Disabled (off)</Field.Label>
+  <Switch />
+</Field>
 
-<Switch id='disabled-on' disabled defaultChecked>{() => <span />}</Switch>
-<Label htmlFor='disabled-on' disabled>Disabled (on)</Label>`}</code>
+<Field id='disabled-on' disabled>
+  <Field.Label>Disabled (on)</Field.Label>
+  <Switch defaultChecked />
+</Field>`}</code>
               </pre>
             </div>
           </div>
@@ -178,20 +162,18 @@ export default function SwitchDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <div className='demo-field'>
-                  <Switch id='readonly-switch' className='demo-switch' readOnly defaultChecked>
-                    {() => <span className='demo-switch-thumb' />}
-                  </Switch>
-                  <Label htmlFor='readonly-switch' className='demo-label' readOnly>
-                    Read-only (on)
-                  </Label>
-                </div>
+                <Field id='readonly-switch' className='demo-field' readOnly>
+                  <Field.Label className='demo-label'>Read-only (on)</Field.Label>
+                  <Switch className='demo-switch' defaultChecked />
+                </Field>
               </div>
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Switch id='readonly-switch' readOnly defaultChecked>{() => <span />}</Switch>
-<Label htmlFor='readonly-switch' readOnly>Read-only (on)</Label>`}</code>
+                <code>{`<Field id='readonly-switch' readOnly>
+  <Field.Label>Read-only (on)</Field.Label>
+  <Switch defaultChecked />
+</Field>`}</code>
               </pre>
             </div>
           </div>
@@ -206,20 +188,18 @@ export default function SwitchDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <div className='demo-field'>
-                  <Switch id='required-switch' className='demo-switch' required>
-                    {() => <span className='demo-switch-thumb' />}
-                  </Switch>
-                  <Label htmlFor='required-switch' className='demo-label' required>
-                    Agree to terms *
-                  </Label>
-                </div>
+                <Field id='required-switch' className='demo-field' required>
+                  <Field.Label className='demo-label'>Agree to terms</Field.Label>
+                  <Switch className='demo-switch' />
+                </Field>
               </div>
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Switch id='required-switch' required>{() => <span />}</Switch>
-<Label htmlFor='required-switch' required>Agree to terms *</Label>`}</code>
+                <code>{`<Field id='required-switch' required>
+  <Field.Label>Agree to terms</Field.Label>
+  <Switch />
+</Field>`}</code>
               </pre>
             </div>
           </div>

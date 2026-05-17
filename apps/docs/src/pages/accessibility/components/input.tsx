@@ -2,13 +2,13 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
-import { Input } from '@turkish-technology/spar';
+import { Field, Input } from '@turkish-technology/spar';
 
 import '../../../styles/accessibility-demos.scss';
 
 export default function InputDemo() {
   const [value, setValue] = useState('');
-  const [isInvalid, setIsInvalid] = useState(false);
+  const [invalid, setInvalid] = useState(false);
 
   const validateEmail = (v: string) => {
     if (v.length === 0) return false;
@@ -37,13 +37,15 @@ export default function InputDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <Input>
-                  <Input.Label className='demo-label'>Username</Input.Label>
-                  <Input.Field className='demo-input' placeholder='Enter your username' />
-                  <Input.Description className='demo-input-description'>
+                <Field>
+                  <Field.Label className='demo-label'>Username</Field.Label>
+                  <Input>
+                    <Input.Field className='demo-input' placeholder='Enter your username' />
+                  </Input>
+                  <Field.Description className='demo-input-description'>
                     Your unique username for login
-                  </Input.Description>
-                </Input>
+                  </Field.Description>
+                </Field>
               </div>
               <div className='keyboard-hint'>
                 <strong>Test:</strong> Click the label → input should focus. Screen reader should
@@ -52,11 +54,13 @@ export default function InputDemo() {
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Input>
-  <Input.Label>Username</Input.Label>
-  <Input.Field placeholder='Enter your username' />
-  <Input.Description>Your unique username for login</Input.Description>
-</Input>`}</code>
+                <code>{`<Field>
+  <Field.Label>Username</Field.Label>
+  <Input>
+    <Input.Field placeholder='Enter your username' />
+  </Input>
+  <Field.Description>Your unique username for login</Field.Description>
+</Field>`}</code>
               </pre>
             </div>
           </div>
@@ -71,21 +75,25 @@ export default function InputDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <Input required>
-                  <Input.Label className='demo-label'>Email *</Input.Label>
-                  <Input.Field className='demo-input' type='email' placeholder='Required field' />
-                  <Input.Description className='demo-input-description'>
+                <Field required>
+                  <Field.Label className='demo-label'>Email *</Field.Label>
+                  <Input>
+                    <Input.Field className='demo-input' type='email' placeholder='Required field' />
+                  </Input>
+                  <Field.Description className='demo-input-description'>
                     We&apos;ll never share your email
-                  </Input.Description>
-                </Input>
+                  </Field.Description>
+                </Field>
               </div>
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Input required>
-  <Input.Label>Email *</Input.Label>
-  <Input.Field type='email' placeholder='Required field' />
-</Input>`}</code>
+                <code>{`<Field required>
+  <Field.Label>Email *</Field.Label>
+  <Input>
+    <Input.Field type='email' placeholder='Required field' />
+  </Input>
+</Field>`}</code>
               </pre>
             </div>
           </div>
@@ -102,28 +110,28 @@ export default function InputDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <Input isInvalid={isInvalid} required>
-                  <Input.Label className='demo-label'>Email</Input.Label>
-                  <Input.Field
-                    className='demo-input'
-                    type='email'
-                    value={value}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      const v = e.target.value;
-                      setValue(v);
-                      setIsInvalid(validateEmail(v));
-                    }}
-                    placeholder='Type an invalid email to see error'
-                  />
-                  <Input.Description className='demo-input-description'>
+                <Field invalid={invalid} required>
+                  <Field.Label className='demo-label'>Email</Field.Label>
+                  <Input>
+                    <Input.Field
+                      className='demo-input'
+                      type='email'
+                      value={value}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const v = e.target.value;
+                        setValue(v);
+                        setInvalid(validateEmail(v));
+                      }}
+                      placeholder='Type an invalid email to see error'
+                    />
+                  </Input>
+                  <Field.Description className='demo-input-description'>
                     Enter a valid email address
-                  </Input.Description>
-                  {isInvalid && (
-                    <Input.ErrorMessage className='demo-input-error'>
-                      Please enter a valid email address (must contain @)
-                    </Input.ErrorMessage>
-                  )}
-                </Input>
+                  </Field.Description>
+                  <Field.ErrorMessage className='demo-input-error'>
+                    Please enter a valid email address (must contain @)
+                  </Field.ErrorMessage>
+                </Field>
               </div>
               <div className='keyboard-hint'>
                 <strong>Screen reader:</strong> Error message should be announced when it appears.
@@ -131,11 +139,13 @@ export default function InputDemo() {
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Input isInvalid={isInvalid} required>
-  <Input.Label>Email</Input.Label>
-  <Input.Field value={value} onChange={handleChange} />
-  {isInvalid && <Input.ErrorMessage>Please enter a valid email</Input.ErrorMessage>}
-</Input>`}</code>
+                <code>{`<Field invalid={invalid} required>
+  <Field.Label>Email</Field.Label>
+  <Input>
+    <Input.Field value={value} onChange={handleChange} />
+  </Input>
+  <Field.ErrorMessage>Please enter a valid email</Field.ErrorMessage>
+</Field>`}</code>
               </pre>
             </div>
           </div>
@@ -148,13 +158,15 @@ export default function InputDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <Input disabled>
-                  <Input.Label className='demo-label'>Organization</Input.Label>
-                  <Input.Field className='demo-input' value='Acme Corporation' />
-                  <Input.Description className='demo-input-description'>
+                <Field disabled>
+                  <Field.Label className='demo-label'>Organization</Field.Label>
+                  <Input>
+                    <Input.Field className='demo-input' value='Acme Corporation' />
+                  </Input>
+                  <Field.Description className='demo-input-description'>
                     Contact support to change your organization
-                  </Input.Description>
-                </Input>
+                  </Field.Description>
+                </Field>
               </div>
               <div className='keyboard-hint'>
                 <strong>Expected:</strong> Tab should skip the disabled input.
@@ -162,10 +174,12 @@ export default function InputDemo() {
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Input disabled>
-  <Input.Label>Organization</Input.Label>
-  <Input.Field value='Acme Corporation' />
-</Input>`}</code>
+                <code>{`<Field disabled>
+  <Field.Label>Organization</Field.Label>
+  <Input>
+    <Input.Field value='Acme Corporation' />
+  </Input>
+</Field>`}</code>
               </pre>
             </div>
           </div>
@@ -181,21 +195,25 @@ export default function InputDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <Input readOnly>
-                  <Input.Label className='demo-label'>Account ID</Input.Label>
-                  <Input.Field className='demo-input' value='ACC-2025-XYZ' />
-                  <Input.Description className='demo-input-description'>
+                <Field readOnly>
+                  <Field.Label className='demo-label'>Account ID</Field.Label>
+                  <Input>
+                    <Input.Field className='demo-input' value='ACC-2025-XYZ' />
+                  </Input>
+                  <Field.Description className='demo-input-description'>
                     This value cannot be changed
-                  </Input.Description>
-                </Input>
+                  </Field.Description>
+                </Field>
               </div>
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Input readOnly>
-  <Input.Label>Account ID</Input.Label>
-  <Input.Field value='ACC-2025-XYZ' />
-</Input>`}</code>
+                <code>{`<Field readOnly>
+  <Field.Label>Account ID</Field.Label>
+  <Input>
+    <Input.Field value='ACC-2025-XYZ' />
+  </Input>
+</Field>`}</code>
               </pre>
             </div>
           </div>
@@ -208,18 +226,26 @@ export default function InputDemo() {
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
-                <Input>
-                  <Input.Label className='demo-label'>Search</Input.Label>
-                  <Input.Field className='demo-input' placeholder='I should be focused' autoFocus />
-                </Input>
+                <Field>
+                  <Field.Label className='demo-label'>Search</Field.Label>
+                  <Input>
+                    <Input.Field
+                      className='demo-input'
+                      placeholder='I should be focused'
+                      autoFocus
+                    />
+                  </Input>
+                </Field>
               </div>
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Input>
-  <Input.Label>Search</Input.Label>
-  <Input.Field placeholder='I should be focused' autoFocus />
-</Input>`}</code>
+                <code>{`<Field>
+  <Field.Label>Search</Field.Label>
+  <Input>
+    <Input.Field placeholder='I should be focused' autoFocus />
+  </Input>
+</Field>`}</code>
               </pre>
             </div>
           </div>

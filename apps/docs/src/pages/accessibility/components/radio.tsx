@@ -88,7 +88,7 @@ export default function RadioDemo() {
                 <Radio.Root
                   className='demo-radio-group'
                   value={controlled}
-                  onValueChange={(v) => {
+                  onChange={(v) => {
                     setControlled(v);
                   }}
                   aria-label='Billing cycle'
@@ -115,7 +115,7 @@ export default function RadioDemo() {
               <pre className='demo-code-block'>
                 <code>{`const [value, setValue] = useState(undefined);
 
-<Radio.Root value={value} onValueChange={(nextValue) => setValue(nextValue)} aria-label='Billing cycle'>
+<Radio.Root value={value} onChange={(nextValue) => setValue(nextValue)} aria-label='Billing cycle'>
   <Radio.Item value='monthly' id='monthly' />
   <Label htmlFor='monthly'>Monthly</Label>
 </Radio.Root>`}</code>

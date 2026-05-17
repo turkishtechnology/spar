@@ -30,7 +30,7 @@ export interface SelectOwnProps {
    * Callback when selection changes
    * @param value - The new selected value
    */
-  onValueChange?: (value: string) => void;
+  onChange?: (value: string) => void;
 
   /**
    * Controlled open state
@@ -50,16 +50,25 @@ export interface SelectOwnProps {
   onOpenChange?: (open: boolean) => void;
 
   /**
-   * Disables the entire select
-   * @defaultValue false
+   * Select validation state. When inside a Field, inherited from Field.
+   */
+  invalid?: boolean;
+
+  /**
+   * Disables the entire select. When inside a Field, inherited from Field.
    */
   disabled?: boolean;
 
   /**
-   * Makes the select required for forms
-   * @defaultValue false
+   * Makes the select required for forms. When inside a Field, inherited from Field.
    */
   required?: boolean;
+
+  /**
+   * Select read-only state. When inside a Field, inherited from Field.
+   * A read-only select can be opened and inspected but its value cannot change.
+   */
+  readOnly?: boolean;
 
   /**
    * Form field name
@@ -306,12 +315,14 @@ export interface SelectContextValue {
   // State
   open: boolean;
   value: string | undefined;
+  invalid: boolean;
   disabled: boolean;
   required: boolean;
+  readOnly: boolean;
   autoFocus: boolean;
 
   // Actions
-  onValueChange: (value: string) => void;
+  onChange: (value: string) => void;
   onOpenChange: (open: boolean) => void;
 
   // Refs
@@ -324,6 +335,12 @@ export interface SelectContextValue {
   triggerId: string;
   contentId: string;
   valueId: string;
+  labelId: string;
+  descriptionId: string;
+  errorId: string;
+
+  /** True when the Select is nested inside a Field. Drives aria-describedby emission. */
+  hasField: boolean;
 
   // Collections
   items: Map<string, SelectItemData>;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Switch } from '../Switch';
+import { Switch } from '..';
 
 describe('Switch Integration', () => {
   it('submits checked uncontrolled switches through form data', async () => {

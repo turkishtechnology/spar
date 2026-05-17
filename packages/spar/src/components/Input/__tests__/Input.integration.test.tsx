@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { type FormEvent, useState } from 'react';
-import { Input, InputDescription, InputErrorMessage, InputField, InputLabel } from '../index';
+import { Input, InputField } from '../index';
+import { Field, FieldDescription, FieldErrorMessage, FieldLabel } from '../../Field';
 
 describe('Input - Integration Tests', () => {
   afterEach(() => {
@@ -19,14 +20,18 @@ describe('Input - Integration Tests', () => {
 
     render(
       <form onSubmit={handleSubmit}>
-        <Input>
-          <InputLabel>Username</InputLabel>
-          <InputField name='username' />
-        </Input>
-        <Input>
-          <InputLabel>Email</InputLabel>
-          <InputField name='email' type='email' />
-        </Input>
+        <Field>
+          <FieldLabel>Username</FieldLabel>
+          <Input>
+            <InputField name='username' />
+          </Input>
+        </Field>
+        <Field>
+          <FieldLabel>Email</FieldLabel>
+          <Input>
+            <InputField name='email' type='email' />
+          </Input>
+        </Field>
         <button type='submit'>Submit</button>
       </form>,
     );
@@ -43,10 +48,12 @@ describe('Input - Integration Tests', () => {
 
     render(
       <form>
-        <Input>
-          <InputLabel>Username</InputLabel>
-          <InputField name='username' defaultValue='initial-user' />
-        </Input>
+        <Field>
+          <FieldLabel>Username</FieldLabel>
+          <Input>
+            <InputField name='username' defaultValue='initial-user' />
+          </Input>
+        </Field>
         <button type='reset'>Reset</button>
       </form>,
     );
@@ -61,14 +68,16 @@ describe('Input - Integration Tests', () => {
     expect(field).toHaveValue('initial-user');
   });
 
-  it('preserves id contract with custom root id in form context', () => {
+  it('preserves id contract with custom Field id in form context', () => {
     render(
       <form>
-        <Input id='billing-email'>
-          <InputLabel>Email</InputLabel>
-          <InputField name='email' type='email' />
-          <InputDescription>Invoice notifications will be sent here</InputDescription>
-        </Input>
+        <Field id='billing-email'>
+          <FieldLabel>Email</FieldLabel>
+          <Input>
+            <InputField name='email' type='email' />
+          </Input>
+          <FieldDescription>Invoice notifications will be sent here</FieldDescription>
+        </Field>
       </form>,
     );
 
@@ -86,15 +95,17 @@ describe('Input - Integration Tests', () => {
 
     const ControlledValidationExample = () => {
       const [value, setValue] = useState('');
-      const isInvalid = value.length > 0 && value.length < 3;
+      const invalid = value.length > 0 && value.length < 3;
 
       return (
-        <Input isInvalid={isInvalid}>
-          <InputLabel>Username</InputLabel>
-          <InputField value={value} onChange={(event) => setValue(event.target.value)} />
-          <InputDescription>At least 3 characters</InputDescription>
-          <InputErrorMessage>Username must be at least 3 characters</InputErrorMessage>
-        </Input>
+        <Field invalid={invalid}>
+          <FieldLabel>Username</FieldLabel>
+          <Input>
+            <InputField value={value} onChange={(event) => setValue(event.target.value)} />
+          </Input>
+          <FieldDescription>At least 3 characters</FieldDescription>
+          <FieldErrorMessage>Username must be at least 3 characters</FieldErrorMessage>
+        </Field>
       );
     };
 

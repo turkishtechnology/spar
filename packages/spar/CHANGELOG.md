@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0-beta.0] - 2026-05-17
+
+First beta of the 0.2 line. Significant work since 0.1.4 including the Field
+primitive, Switch / Radio / Checkbox / Select integration with Field,
+Accordion API rework, and form prop standardization. Published under the
+`beta` dist-tag; `latest` remains 0.1.4. See git history for the full set of
+changes.
+
 ## [0.0.1] - 2025-10-16
 
 ### Added

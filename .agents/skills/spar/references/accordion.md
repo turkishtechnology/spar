@@ -12,26 +12,27 @@
 
 ## Root Props
 
-| Prop             | Type                                  | Default      | Description                                   |
-| ---------------- | ------------------------------------- | ------------ | --------------------------------------------- |
-| `selectionMode?` | `'single' \| 'multiple'`              | `'single'`   | Whether one or multiple items can be open     |
-| `isCollapsible?` | `boolean`                             | `false`      | Whether all items can be closed (single mode) |
-| `value?`         | `string \| string[]`                  | —            | Controlled open item(s)                       |
-| `defaultValue?`  | `string \| string[]`                  | —            | Default open item(s)                          |
-| `onValueChange?` | `(value: string \| string[]) => void` | —            | Called when open items change                 |
-| `disabled?`      | `boolean`                             | `false`      | Disables all items                            |
-| `orientation?`   | `'vertical' \| 'horizontal'`          | `'vertical'` | Affects keyboard navigation direction         |
-| `as?`            | `ElementType`                         | `'div'`      | Polymorphic element                           |
+| Prop             | Type                                                  | Default      | Description                                                                               |
+| ---------------- | ----------------------------------------------------- | ------------ | ----------------------------------------------------------------------------------------- |
+| `multiple?`      | `boolean`                                             | `false`      | When `true`, multiple items can be open at once                                           |
+| `collapsible?`   | `boolean`                                             | `true`       | In single mode, whether the open item can be re-clicked to close. No effect in multi mode |
+| `value?`         | `AccordionValue \| AccordionValue[]`                  | —            | Controlled open item(s). Scalar in single mode, array in multiple mode                    |
+| `defaultValue?`  | `AccordionValue \| AccordionValue[]`                  | —            | Uncontrolled initial open item(s)                                                         |
+| `onValueChange?` | `(value: AccordionValue \| AccordionValue[]) => void` | —            | Called when open items change                                                             |
+| `disabled?`      | `boolean`                                             | `false`      | Disables all items                                                                        |
+| `orientation?`   | `'vertical' \| 'horizontal'`                          | `'vertical'` | Affects keyboard navigation direction                                                     |
+| `as?`            | `ElementType`                                         | `'div'`      | Polymorphic element                                                                       |
+
+`AccordionValue = string | number`
 
 ## Item Props
 
-| Prop            | Type                      | Default      | Description                            |
-| --------------- | ------------------------- | ------------ | -------------------------------------- |
-| `value`         | `string`                  | **required** | Unique identifier for this item        |
-| `open?`         | `boolean`                 | —            | Controlled open state (overrides root) |
-| `defaultOpen?`  | `boolean`                 | `false`      | Default open state                     |
-| `onOpenChange?` | `(open: boolean) => void` | —            | Called when item open state changes    |
-| `disabled?`     | `boolean`                 | `false`      | Disables this item                     |
+Item is now purely identity + per-item disabled. Open state is owned by Root via `value`/`defaultValue`.
+
+| Prop        | Type             | Default      | Description                     |
+| ----------- | ---------------- | ------------ | ------------------------------- |
+| `value`     | `AccordionValue` | **required** | Unique identifier for this item |
+| `disabled?` | `boolean`        | `false`      | Disables this item              |
 
 ## Header Props
 
@@ -41,13 +42,11 @@
 
 ## Trigger Props
 
-Extends Button props.
-
-**Render props** — children can be a function:
+Extends Button props. Render props identical to `Collapsible.Trigger`.
 
 ```tsx
 <Accordion.Trigger>
-  {({ isOpen, disabled }) => <span>{isOpen ? '▼' : '▶'} Section</span>}
+  {({ isOpen, disabled, open, close, toggle }) => <span>{isOpen ? '▼' : '▶'} Section</span>}
 </Accordion.Trigger>
 ```
 
@@ -65,6 +64,15 @@ Extends Button props.
 | ------------- | --------- | ------- | ----------------------- |
 | `forceMount?` | `boolean` | `false` | Keep in DOM when closed |
 
+## Hooks
+
+```tsx
+import { useAccordionContext, useAccordionItemContext } from '@turkish-technology/spar/accordion';
+```
+
+- `useAccordionContext()` — root state and navigation helpers.
+- `useAccordionItemContext()` — per-item state (`value`, `isOpen`, `disabled`, `triggerId`, `contentId`, `open()`, `close()`, `toggle()`).
+
 ## Keyboard
 
 | Key               | Action                              |
@@ -76,3 +84,27 @@ Extends Button props.
 | `Arrow Left`      | Focus previous trigger (horizontal) |
 | `Home`            | Focus first trigger                 |
 | `End`             | Focus last trigger                  |
+
+## Migration from earlier versions
+
+- `selectionMode="single" | "multiple"` → `multiple: boolean` (default `false`).
+- `isCollapsible` → `collapsible` (default flipped: now `true`).
+- `Accordion.Item`'s `open` / `defaultOpen` / `onOpenChange` are gone. Drive open state via `value` / `defaultValue` / `onValueChange` on `Accordion.Root`.
+
+```tsx
+// Before
+<Accordion.Root selectionMode='single' isCollapsible defaultValue='item-1'>
+  <Accordion.Item value='item-1'>...</Accordion.Item>
+</Accordion.Root>
+
+// After
+<Accordion.Root defaultValue='item-1'>
+  <Accordion.Item value='item-1'>...</Accordion.Item>
+</Accordion.Root>
+
+// Before — multiple
+<Accordion.Root selectionMode='multiple'>...</Accordion.Root>
+
+// After — multiple
+<Accordion.Root multiple>...</Accordion.Root>
+```

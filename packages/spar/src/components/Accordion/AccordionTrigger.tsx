@@ -1,7 +1,10 @@
-import React, { useCallback, useEffect, useRef, ElementType } from 'react';
+import React, { useCallback, useEffect, useRef, useMemo, ElementType } from 'react';
+import { useMergedRef } from '@/hooks';
 import type { AccordionTriggerProps, AccordionTriggerRenderProps } from './types';
 import { useAccordionContext, useAccordionItemContext } from './hooks';
 import { CollapsibleTrigger } from '../Collapsible';
+
+const getRegistryItemId = (value: string | number): string => `${typeof value}:${String(value)}`;
 
 /**
  * Accordion trigger button that toggles panel visibility. Provides keyboard navigation and screen reader support.
@@ -11,24 +14,29 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
   children,
   onClick,
   onKeyDown,
+  ref: forwardedRef,
   ...props
 }: AccordionTriggerProps<T>) => {
   const Component = as || 'button';
   const accordionContext = useAccordionContext();
   const itemContext = useAccordionItemContext();
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const composedRef = useMergedRef(triggerRef, forwardedRef);
+
+  const itemId = useMemo(() => getRegistryItemId(itemContext.value), [itemContext.value]);
+  const dataValue = useMemo(() => String(itemContext.value), [itemContext.value]);
 
   useEffect(() => {
     if (triggerRef.current) {
-      accordionContext.registerItem(itemContext.value, triggerRef.current);
+      accordionContext.registerItem(itemId, triggerRef.current);
     }
-    return () => accordionContext.unregisterItem(itemContext.value);
-  }, [itemContext.value, accordionContext.registerItem, accordionContext.unregisterItem]);
+    return () => accordionContext.unregisterItem(itemId);
+  }, [itemId, accordionContext.registerItem, accordionContext.unregisterItem]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       const { key } = event;
-      const currentIndex = accordionContext.getItemIndex(itemContext.value);
+      const currentIndex = accordionContext.getItemIndex(itemId);
       const totalItems = accordionContext.itemCount;
       const isHorizontal = accordionContext.orientation === 'horizontal';
 
@@ -75,7 +83,7 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
 
       onKeyDown?.(event as React.KeyboardEvent<HTMLButtonElement>);
     },
-    [accordionContext, itemContext.value, onKeyDown],
+    [accordionContext, itemId, onKeyDown],
   );
 
   // Render props for children function
@@ -90,11 +98,11 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
   return (
     <CollapsibleTrigger
       as={Component}
-      ref={triggerRef}
+      ref={composedRef}
       onClick={onClick}
       onKeyDown={handleKeyDown}
       data-accordion-trigger=''
-      data-value={itemContext.value}
+      data-value={dataValue}
       {...props}
     >
       {typeof children === 'function' ? children(renderProps) : children}

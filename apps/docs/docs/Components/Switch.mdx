@@ -1,149 +1,254 @@
 ---
 title: Switch
-description: Headless switch control for on/off settings with accessible ARIA semantics, form integration, and controlled or uncontrolled state.
+description: Headless switch primitive for on/off settings with accessible ARIA semantics, form integration, Field context awareness, and controlled or uncontrolled state.
 ---
 
 import React from 'react';
 import LiveCode from '../../src/components/LiveCode';
 import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
-import { Switch } from '@turkish-technology/spar';
+import { Field, Switch } from '@turkish-technology/spar';
 
 # Switch
 
-A headless boolean toggle control that provides switch-specific ARIA semantics and behavior for on/off states.
+Headless switch primitive for creating accessible on/off settings. Renders a single focusable element with `role="switch"`; you compose the visual track/thumb in your own DOM and combine it with `<Field>` for labels, descriptions, and validation wiring.
 
 ## Live Demo
 
 <div className='switch-demo-container'>
 <LiveCode
-  code={`<div className='switch-demo-container'>
-  <Switch className='switch'/>
-</div>`}
-  cssCode={`.switch-demo-container .switch {
-  width: 52px;
+  code={`function SwitchDemo() {
+  const [checked, setChecked] = React.useState(true);
+
+  return (
+    <Field className='switch-field'>
+      <Field.Label className='switch-label'>Notifications</Field.Label>
+      <Switch
+        className='switch-control'
+        checked={checked}
+        onChange={setChecked}
+      >
+        <span className='switch-track' aria-hidden='true'>
+          <span className='switch-thumb' />
+        </span>
+      </Switch>
+    </Field>
+  );
+}`}
+  cssCode={`.switch-demo-container .switch-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.switch-demo-container .switch-control {
+  width: 56px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.switch-demo-container .switch-control:focus-visible {
+  outline: 2px solid #d43347;
+  outline-offset: 3px;
+  border-radius: 999px;
+}
+
+.switch-demo-container .switch-track {
+  box-sizing: border-box;
+  width: 56px;
   height: 32px;
   padding: 4px;
   border: 1px solid #e1e4ea;
   border-radius: 999px;
   background-color: rgba(0, 0, 0, 0.08);
-  position: relative;
   display: flex;
   align-items: center;
+  transition: background-color 0.2s ease;
 }
 
-.switch-demo-container .switch::after {
-content: '';
-width: 22px;
-height: 22px;
-border-radius: 50%;
-background: rgba(0, 0, 0, 0.72);
-transition: transform 0.2s ease;
+.switch-demo-container .switch-control[data-state='checked'] .switch-track {
+  background-color: #d43347;
+  border-color: #d43347;
 }
 
-.switch-demo-container .switch[data-checked]::after {
-transform: translateX(20px);
+.switch-demo-container .switch-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.72);
+  transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-[data-theme='dark'] .switch-demo-container .switch {
-border-color: #2b303b;
-background-color: rgba(255, 255, 255, 0.12);
+.switch-demo-container .switch-control[data-state='checked'] .switch-thumb {
+  transform: translateX(24px);
+  background: #fff;
 }
 
-[data-theme='dark'] .switch-demo-container .switch::after {
-background: rgba(255, 255, 255, 0.72);
-}`}
-/>
+.switch-demo-container .switch-label {
+  font-weight: 500;
+}
+
+[data-theme='dark'] .switch-demo-container .switch-track {
+  border-color: #2b303b;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme='dark'] .switch-demo-container .switch-thumb {
+  background: rgba(255, 255, 255, 0.72);
+}
+
+[data-theme='dark'] .switch-demo-container .switch-control[data-state='checked'] .switch-track {
+  background-color: #d43347;
+  border-color: #d43347;
+}`}/>
 
 </div>
 
-The live demo shows a minimal switch track and thumb that moves when the control becomes checked.
+`Switch` is a single polymorphic element (default `<button>`) that emits `data-state="checked|unchecked"`. The visual track/thumb live in your DOM as ordinary children, and `<Field>` provides the label/description wiring.
 
 ## Features
 
-- ✅ Supports both controlled (`checked`) and uncontrolled (`defaultChecked`) state
-- ✅ Integrates with native forms through hidden checkbox input (`name`, `value`, `form`, `required`)
-- ✅ Supports render-prop children for programmatic state updates
-- ✅ Supports disabled and read-only interaction modes
-- ✅ Supports polymorphic rendering via the `as` prop
-- ✅ Supports optional auto focus on mount
+- ✅ Single accessible control with `role="switch"` and full ARIA wiring
+- ✅ Controlled (`checked`) and uncontrolled (`defaultChecked`) modes
+- ✅ Native form submission via hidden `input[type="checkbox"]` (`name`, `value`, `form`, `required`)
+- ✅ Inherits `disabled`, `readOnly`, `required`, and `invalid` from an ancestor `<Field>`; direct props win
+- ✅ Render-prop children expose state for derived UI
+- ✅ Polymorphic via the `as` prop
 
 ## Import
 
 ```tsx
 import { Switch } from '@turkish-technology/spar';
+// Low-level hook for fully custom anatomy
+import { useSwitch } from '@turkish-technology/spar';
 ```
 
 ## Anatomy
 
-The Switch component is a single-part component. Its root element handles interaction and state.
+The Switch is a single interactive element. Compose surrounding layout, label, and description with `<Field>`; place the visual track and thumb inside the switch as plain children so they can be styled freely.
 
 <AnatomyViewer
   parts={[
     {
-      name: 'root',
-      label: 'Root',
-      description: 'Interactive switch element that manages checked state and form sync',
+      name: 'field',
+      label: 'Field',
+      description: 'Generic wrapper that owns ARIA relationships (label, description, error)',
+    },
+    {
+      name: 'label',
+      label: 'Field.Label',
+      description: 'Visible label, linked via aria-labelledby',
+    },
+    {
+      name: 'switch',
+      label: 'Switch',
+      description: 'The interactive control with role="switch"',
+    },
+    {
+      name: 'track',
+      label: 'Visual track',
+      description: 'Decorative child you own, styled via data-state',
+    },
+    {
+      name: 'thumb',
+      label: 'Visual thumb',
+      description: 'Decorative child you own, styled via data-state',
     },
   ]}
 >
   <div className='switch-demo-container'>
-    <Switch data-spar-part='root' className='switch' />
+    <Field data-spar-part='field' className='switch-field'>
+      <Field.Label data-spar-part='label' className='switch-label'>
+        {'Flight alerts'}
+      </Field.Label>
+      <Switch data-spar-part='switch' className='switch-control' defaultChecked>
+        <span data-spar-part='track' className='switch-track' aria-hidden='true'>
+          <span data-spar-part='thumb' className='switch-thumb' />
+        </span>
+      </Switch>
+    </Field>
   </div>
 </AnatomyViewer>
 
 ### Structure
 
 ```tsx
-<Switch />
+<Field>
+  <Field.Label>…</Field.Label>
+  <Switch>
+    <span className='track' aria-hidden='true'>
+      <span className='thumb' />
+    </span>
+  </Switch>
+  <Field.Description>…</Field.Description>
+</Field>
 ```
 
-**Data Flow:**
+**Data flow:**
 
-- User interaction updates internal or controlled checked state
-- `onChange` receives the next boolean checked value
-- When `name` is provided, a hidden checkbox input is rendered and synchronized
+- `Switch` owns the controlled/uncontrolled checked state and toggles on click, `Space`, and `Enter`.
+- When nested inside `<Field>`, `disabled`, `readOnly`, `required`, and `invalid` are inherited automatically; props on `<Switch>` always take precedence.
+- `aria-labelledby` and `aria-describedby` are wired to `Field.Label` and `Field.Description` / `Field.ErrorMessage` when a Field ancestor is present.
+- When `name` is set, `Switch` renders a synchronized hidden `input[type="checkbox"]` for native form submission.
 
 ## Code Examples
 
 ### Basic Usage
 
-Use a controlled switch when the setting state also needs to update labels, previews, or saved preferences.
-
 ```tsx
 function BasicSwitch() {
+  return (
+    <Field>
+      <Field.Label>Enable notifications</Field.Label>
+      <Switch defaultChecked>
+        <span className='track' aria-hidden='true'>
+          <span className='thumb' />
+        </span>
+      </Switch>
+    </Field>
+  );
+}
+```
+
+### Controlled Switch
+
+```tsx {2,5}
+function ControlledSwitch() {
   const [enabled, setEnabled] = React.useState(false);
 
   return (
-    <Switch checked={enabled} onChange={setEnabled}>
-      Toggle Setting
-    </Switch>
+    <Field>
+      <Field.Label>Dark mode</Field.Label>
+      <Switch checked={enabled} onChange={setEnabled} />
+      <Field.Description>{enabled ? 'Theme is dark' : 'Theme is light'}</Field.Description>
+    </Field>
   );
 }
 ```
 
 ### Uncontrolled Switch
 
-Use `defaultChecked` for simple cases where the switch can manage its own state internally.
-
 ```tsx {3}
 function UncontrolledSwitch() {
   return (
-    <Switch defaultChecked={false} onChange={(checked) => console.log('Changed to:', checked)}>
-      Auto-managed Switch
-    </Switch>
+    <Switch
+      defaultChecked={false}
+      onChange={(checked) => console.log('Changed to:', checked)}
+    />
   );
 }
 ```
 
 ### Form Integration
 
-Provide `name` and optional `value` when the switch should submit as part of a native form.
+Provide `name` and optional `value`. The hidden `input[type="checkbox"]` is rendered automatically and submits alongside the rest of the form.
 
-```tsx {2-3,7-10,13,17,21}
+```tsx {12,18}
 function FormExample() {
-  const [notifications, setNotifications] = React.useState(false);
-  const [darkMode, setDarkMode] = React.useState(true);
-
   return (
     <form
       onSubmit={(event) => {
@@ -152,13 +257,15 @@ function FormExample() {
         console.log(formData.get('notifications'), formData.get('darkMode'));
       }}
     >
-      <Switch name='notifications' checked={notifications} onChange={setNotifications}>
-        Notifications
-      </Switch>
+      <Field>
+        <Field.Label>Notifications</Field.Label>
+        <Switch name='notifications' defaultChecked />
+      </Field>
 
-      <Switch name='darkMode' checked={darkMode} onChange={setDarkMode} value='enabled'>
-        Dark mode
-      </Switch>
+      <Field>
+        <Field.Label>Dark mode</Field.Label>
+        <Switch name='darkMode' value='enabled' defaultChecked />
+      </Field>
 
       <button type='submit'>Save</button>
     </form>
@@ -166,76 +273,70 @@ function FormExample() {
 }
 ```
 
-### Accessibility with Labels
+### Inheriting Field State
 
-Pair the switch with visible labels and descriptions when the meaning of the toggle is not obvious from the control alone.
+When wrapped in `<Field>`, the Switch picks up `disabled`, `readOnly`, `required`, and `invalid` automatically.
 
-```tsx {6-12}
-function AccessibleSwitch() {
-  const [isOn, setIsOn] = React.useState(false);
+```tsx
+<Field disabled>
+  <Field.Label>Disabled (off)</Field.Label>
+  <Switch />
+</Field>
 
-  return (
-    <div>
-      <label id='wifi-label' htmlFor='wifi-switch'>
-        Wi-Fi Connection
-      </label>
-      <p id='wifi-desc'>Toggle to enable or disable Wi-Fi connectivity</p>
-      <Switch
-        id='wifi-switch'
-        checked={isOn}
-        onChange={setIsOn}
-        aria-labelledby='wifi-label'
-        aria-describedby='wifi-desc'
-      >
-        {isOn ? 'Connected' : 'Disconnected'}
-      </Switch>
-    </div>
-  );
-}
+<Field readOnly>
+  <Field.Label>Read-only (on)</Field.Label>
+  <Switch defaultChecked />
+</Field>
+
+<Field required invalid>
+  <Field.Label>Required</Field.Label>
+  <Switch />
+  <Field.ErrorMessage>You must enable this option.</Field.ErrorMessage>
+</Field>
 ```
 
-### Disabled and Read-only States
+### Render-prop Children
 
-Use `disabled` to block interaction entirely, or `readOnly` when users may inspect the value but should not change it.
+Pass a function as children to derive UI from current state without subscribing externally.
 
-```tsx {2,6,10,14,18}
-function StateVariations() {
-  const [enabled, setEnabled] = React.useState(true);
-
-  return (
-    <div>
-      <Switch checked={enabled} onChange={setEnabled}>
-        Normal Switch
-      </Switch>
-
-      <Switch checked={true} disabled>
-        Disabled (On)
-      </Switch>
-
-      <Switch checked={false} disabled>
-        Disabled (Off)
-      </Switch>
-
-      <Switch checked={true} readOnly>
-        Read-only (On)
-      </Switch>
-    </div>
-  );
-}
+```tsx
+<Switch defaultChecked>
+  {({ checked }) => (
+    <span className='track' aria-hidden='true' data-on={checked || undefined}>
+      <span className='thumb' />
+    </span>
+  )}
+</Switch>
 ```
 
-### Custom Element Rendering
+### Custom Element
 
-The `as` prop lets you reuse the switch behavior inside a custom layout wrapper while preserving the same interaction model.
+```tsx
+<Switch as='div' defaultChecked>
+  <span className='track' aria-hidden='true'>
+    <span className='thumb' />
+  </span>
+</Switch>
+```
 
-```tsx {2,5}
-function CustomElement() {
-  const [active, setActive] = React.useState(false);
+When `as` is not a native button, `aria-disabled` is emitted instead of the `disabled` HTML attribute.
+
+### Fully Custom Anatomy with `useSwitch`
+
+When you need a totally different DOM shape, use the low-level hook instead of `<Switch>`.
+
+```tsx
+import { useSwitch } from '@turkish-technology/spar';
+
+function CustomSwitch() {
+  const { checked, switchProps, hiddenInputProps } = useSwitch({ defaultChecked: true });
 
   return (
-    <Switch as='div' checked={active} onChange={setActive}>
-      Custom Div Switch
-    </Switch>
+    <label>
+      <span>Wi-Fi</span>
+      <button {...switchProps}>{checked ? 'on' : 'off'}</button>
+      <input {...hiddenInputProps} name='wifi' />
+    </label>
   );
 }
 ```
@@ -244,86 +345,63 @@ function CustomElement() {
 
 ### Switch
 
-A headless boolean toggle control. It extends `Button` props and renders a switch role by default.
+| Name              | Type                                                                 | Default     | Description                                                                       |
+| ----------------- | -------------------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------- |
+| `as?`             | `React.ElementType`                                                  | `"button"`  | Element or component to render as                                                 |
+| `checked?`        | `boolean`                                                            | `undefined` | Controlled checked state                                                          |
+| `defaultChecked?` | `boolean`                                                            | `false`     | Initial checked state in uncontrolled mode                                        |
+| `onChange?`       | `(checked: boolean) => void`                                         | `undefined` | Called when checked state changes                                                 |
+| `disabled?`       | `boolean`                                                            | inherited   | Prevents interaction; inherited from `<Field>` when omitted                       |
+| `readOnly?`       | `boolean`                                                            | inherited   | Keeps focus, blocks state changes; inherited from `<Field>`                       |
+| `required?`       | `boolean`                                                            | inherited   | Sets `aria-required` and hidden-input `required`; inherited from `<Field>`        |
+| `invalid?`      | `boolean`                                                            | inherited   | Sets `aria-invalid` and `data-invalid`; inherited from `<Field>`                  |
+| `name?`           | `string`                                                             | `undefined` | Hidden input name. When set, the hidden form input is rendered                    |
+| `value?`          | `string`                                                             | `"on"`      | Hidden input value when checked                                                   |
+| `form?`           | `string`                                                             | `undefined` | Associates the hidden input with an external form id                              |
+| `autoFocus?`      | `boolean`                                                            | `false`     | Focuses the control on mount                                                      |
+| `id?`             | `string`                                                             | generated   | Overrides the control id; ignored when inside `<Field>` (the field's id is used)  |
+| `children?`       | `React.ReactNode \| ((state: SwitchRenderProps) => React.ReactNode)` | `undefined` | Visual content (track/thumb) or render-prop function                              |
+| `...props`        | `ComponentPropsWithRef<"button">`                                    | `-`         | Other native props for the polymorphic element                                    |
 
-**Props**
-
-| Name                | Type                                                                 | Default             | Description                                                                |
-| ------------------- | -------------------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------- |
-| `as?`               | `React.ElementType`                                                  | `"button"`          | Element or component to render as                                          |
-| `checked?`          | `boolean`                                                            | `undefined`         | Controlled checked state                                                   |
-| `defaultChecked?`   | `boolean`                                                            | `false`             | Initial checked state in uncontrolled mode                                 |
-| `onChange?`         | `(checked: boolean) => void`                                         | `undefined`         | Called when checked state changes                                          |
-| `disabled?`         | `boolean`                                                            | `false`             | Prevents interaction                                                       |
-| `name?`             | `string`                                                             | `undefined`         | Hidden input name for form submission                                      |
-| `value?`            | `string`                                                             | `"on"`              | Hidden input value when checked                                            |
-| `form?`             | `string`                                                             | `undefined`         | Form id used by hidden input                                               |
-| `required?`         | `boolean`                                                            | `false`             | Marks hidden input as required                                             |
-| `readOnly?`         | `boolean`                                                            | `false`             | Prevents state changes while keeping focus behavior                        |
-| `autoFocus?`        | `boolean`                                                            | `false`             | Focuses the switch on mount                                                |
-| `id?`               | `string`                                                             | `useId()` generated | Uses provided id or an auto-generated id                                   |
-| `isLoading?`        | `boolean`                                                            | `false`             | Inherited from `Button`; marks element as loading                          |
-| `isPressed?`        | `boolean`                                                            | `undefined`         | Inherited toggle state from `Button`                                       |
-| `onPressedChange?`  | `(pressed: boolean) => void`                                         | `undefined`         | Inherited callback for `isPressed` toggle state                            |
-| `aria-label?`       | `string`                                                             | `undefined`         | Accessible name override                                                   |
-| `aria-labelledby?`  | `string`                                                             | `undefined`         | Id of labeling element                                                     |
-| `aria-describedby?` | `string`                                                             | `undefined`         | Id of descriptive element                                                  |
-| `children?`         | `React.ReactNode \| ((state: SwitchRenderProps) => React.ReactNode)` | `undefined`         | Static content or render-prop function                                     |
-| `...props`          | `ComponentPropsWithRef<"button">`                                    | `-`                 | Other native button props (polymorphic target props when `as` is provided) |
-
-**Render Props (SwitchRenderProps)**
+### SwitchRenderProps
 
 | Property     | Type                         | Description                                        |
 | ------------ | ---------------------------- | -------------------------------------------------- |
 | `checked`    | `boolean`                    | Whether the switch is currently checked            |
 | `setChecked` | `(checked: boolean) => void` | Function to programmatically set the checked state |
-| `disabled`   | `boolean`                    | Whether the switch is disabled                     |
-| `readOnly`   | `boolean`                    | Whether the switch is read-only                    |
+| `disabled`   | `boolean`                    | Resolved disabled state                            |
+| `readOnly`   | `boolean`                    | Resolved read-only state                           |
+| `required`   | `boolean`                    | Resolved required state                            |
+| `invalid`  | `boolean`                    | Resolved invalid state                             |
 | `isFocused`  | `boolean`                    | Whether the switch currently has focus             |
 | `isHovered`  | `boolean`                    | Whether the switch is being hovered                |
 | `isPressed`  | `boolean`                    | Whether the switch is being pressed                |
 
-**Events**
+## HTML Attributes
 
-| Name              | Parameters                                        | Description                                      | When Triggered                                                     |
-| ----------------- | ------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------ |
-| `onChange`        | `(checked: boolean)`                              | Reports checked state changes                    | Click, `Space`, `Enter`, or render-prop `setChecked` updates state |
-| `onPressedChange` | `(pressed: boolean)`                              | Inherited `Button` toggle callback               | Activation when `isPressed` is used                                |
-| `onClick`         | `(event: React.MouseEvent<HTMLButtonElement>)`    | Inherited click handler from underlying `Button` | On pointer click and keyboard activation                           |
-| `onKeyDown`       | `(event: React.KeyboardEvent<HTMLButtonElement>)` | Inherited keydown handler                        | On keydown events on the switch element                            |
-| `onFocus`         | `(event: React.FocusEvent<HTMLButtonElement>)`    | Inherited focus handler                          | When switch receives focus                                         |
-| `onBlur`          | `(event: React.FocusEvent<HTMLButtonElement>)`    | Inherited blur handler                           | When switch loses focus                                            |
-| `onPointerEnter`  | `(event: React.PointerEvent<HTMLButtonElement>)`  | Inherited pointer enter handler                  | Pointer enters switch area                                         |
-| `onPointerLeave`  | `(event: React.PointerEvent<HTMLButtonElement>)`  | Inherited pointer leave handler                  | Pointer leaves switch area                                         |
-| `onPointerDown`   | `(event: React.PointerEvent<HTMLButtonElement>)`  | Inherited pointer down handler                   | Pointer press starts                                               |
-| `onPointerUp`     | `(event: React.PointerEvent<HTMLButtonElement>)`  | Inherited pointer up handler                     | Pointer press ends                                                 |
-| `onPointerCancel` | `(event: React.PointerEvent<HTMLButtonElement>)`  | Inherited pointer cancel handler                 | Pointer interaction is canceled                                    |
+| Attribute         | Value                      | Purpose                                       |
+| ----------------- | -------------------------- | --------------------------------------------- |
+| `role`            | `"switch"`                 | Applies switch semantics                      |
+| `aria-checked`    | `boolean`                  | Reflects checked state                        |
+| `aria-labelledby` | `string`                   | Wired to `Field.Label` when inside `<Field>`  |
+| `aria-describedby`| `string`                   | Wired to `Field.Description` / `ErrorMessage` |
+| `aria-readonly`   | `true`                     | Present when read-only                        |
+| `aria-required`   | `true`                     | Present when required                         |
+| `aria-invalid`    | `true`                     | Present when invalid                          |
+| `data-switch`     | `""`                       | Marker attribute                              |
+| `data-state`      | `"checked" \| "unchecked"` | Checked state token                           |
+| `data-checked`    | `""`                       | Present when checked                          |
+| `data-disabled`   | `""`                       | Present when disabled                         |
+| `data-readonly`   | `""`                       | Present when read-only                        |
+| `data-required`   | `""`                       | Present when required                         |
+| `data-invalid`    | `""`                       | Present when invalid                          |
+| `data-focus`      | `""`                       | Present while focused                         |
+| `data-hover`      | `""`                       | Present while hovered                         |
+| `data-active`     | `""`                       | Present while pressed                         |
 
-**HTML Attributes**
+## Hidden Input
 
-| Attribute          | Value                      | Purpose                                                   |
-| ------------------ | -------------------------- | --------------------------------------------------------- |
-| `role`             | `"switch"`                 | Applies switch semantics                                  |
-| `aria-checked`     | `boolean`                  | Reflects checked state                                    |
-| `aria-label`       | `string`                   | Optional accessible name                                  |
-| `aria-labelledby`  | `string`                   | Optional accessible name reference                        |
-| `aria-describedby` | `string`                   | Optional description reference                            |
-| `aria-readonly`    | `true`                     | Present when `readOnly` is `true`                         |
-| `aria-required`    | `true`                     | Present when `required` is `true`                         |
-| `data-switch`      | `""`                       | Switch marker attribute                                   |
-| `data-state`       | `"checked" \| "unchecked"` | Checked state token                                       |
-| `data-checked`     | `""`                       | Present when checked                                      |
-| `data-readonly`    | `""`                       | Present when read-only                                    |
-| `data-required`    | `""`                       | Present when required                                     |
-| `data-focus`       | `""`                       | Present while focused                                     |
-| `data-hover`       | `""`                       | Present while hovered                                     |
-| `data-active`      | `""`                       | Present while pressed                                     |
-| `data-disabled`    | `""`                       | Present when disabled (from inherited `Button` behavior)  |
-| `data-loading`     | `""`                       | Present when `isLoading` is `true`                        |
-| `data-autofocus`   | `""`                       | Present when `autoFocus` is `true`                        |
-| `data-pressed`     | `""`                       | Present when inherited `isPressed` toggle state is active |
-
-**Hidden Input (rendered only when `name` is provided)**
+`Switch` renders a hidden `input[type="checkbox"]` only when `name` is provided.
 
 | Attribute     | Value        | Purpose                                  |
 | ------------- | ------------ | ---------------------------------------- |
@@ -333,14 +411,15 @@ A headless boolean toggle control. It extends `Button` props and renders a switc
 | `form`        | `string`     | Associates input to external form id     |
 | `required`    | `boolean`    | Participates in native form validation   |
 | `checked`     | `boolean`    | Mirrors switch checked state             |
+| `disabled`    | `boolean`    | Mirrors disabled state                   |
 | `tabIndex`    | `-1`         | Keeps hidden input out of tab sequence   |
 | `aria-hidden` | `true`       | Hides input from assistive tech tree     |
 
 ## Keyboard Interactions
 
-| Key           | Action                | Context          | Notes                                                   |
-| ------------- | --------------------- | ---------------- | ------------------------------------------------------- |
-| `Tab`         | Moves focus to switch | Focus management | Available when switch is not disabled                   |
-| `Shift + Tab` | Moves focus backward  | Focus management | Standard reverse tab navigation                         |
-| `Space`       | Toggles checked state | Switch focused   | No state change when `disabled` or `readOnly` is `true` |
-| `Enter`       | Toggles checked state | Switch focused   | No state change when `disabled` or `readOnly` is `true` |
+| Key           | Action                | Notes                                                   |
+| ------------- | --------------------- | ------------------------------------------------------- |
+| `Tab`         | Moves focus to switch | Skipped when `disabled` is `true`                       |
+| `Shift + Tab` | Moves focus backward  | Standard reverse tab navigation                         |
+| `Space`       | Toggles checked state | No state change when `disabled` or `readOnly` is `true` |
+| `Enter`       | Toggles checked state | No state change when `disabled` or `readOnly` is `true` |

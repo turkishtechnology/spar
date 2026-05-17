@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo, type ElementType } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef, type ElementType } from 'react';
 import { createPortal } from 'react-dom';
 import {
   useInteractOutside,
@@ -51,10 +51,11 @@ export const PopoverContent = <T extends ElementType = 'div'>({
   const { floatingStyles, arrowStyles, placement, refs }: UseFloatingReturn =
     useFloating(floatingOptions);
 
-  // Set reference element
-  useEffect(() => {
+  // Set reference element synchronously so floating-ui can compute position
+  // on the very first render instead of waiting for an effect.
+  if (triggerRef.current) {
     refs.setReference(triggerRef.current);
-  }, [refs, triggerRef]);
+  }
 
   const mergedRef = useMergedRef(contentRef, ref);
 
@@ -68,6 +69,18 @@ export const PopoverContent = <T extends ElementType = 'div'>({
 
   const [mounted, setMounted] = useState(false);
 
+  // Track whether the popover was dismissed by a pointer event (click outside).
+  // When dismissed by pointer, we skip focus return because the user intended
+  // to interact with another element — returning focus would steal it back.
+  const dismissedByPointerRef = useRef(false);
+
+  // Stabilize callback refs so the focus effect doesn't re-run when
+  // consumers pass inline functions.
+  const onOpenAutoFocusRef = useRef(onOpenAutoFocus);
+  onOpenAutoFocusRef.current = onOpenAutoFocus;
+  const onCloseAutoFocusRef = useRef(onCloseAutoFocus);
+  onCloseAutoFocusRef.current = onCloseAutoFocus;
+
   // SSR safety
   useEffect(() => {
     setMounted(true);
@@ -77,28 +90,30 @@ export const PopoverContent = <T extends ElementType = 'div'>({
   useEffect(() => {
     if (!isOpen || !contentRef.current) return;
 
+    dismissedByPointerRef.current = false;
+
     const contentElement = contentRef.current;
 
     // Focus first focusable element when opening
     const focusableElements = getFocusableElements(contentElement);
     if (focusableElements.length > 0) {
-      focusableElements[0]?.focus();
+      focusableElements[0]?.focus({ preventScroll: true });
     } else {
-      contentElement.focus();
+      contentElement.focus({ preventScroll: true });
     }
 
-    onOpenAutoFocus?.(new Event('openautofocus'));
+    onOpenAutoFocusRef.current?.(new Event('openautofocus'));
 
     return () => {
       // Return focus to trigger when closing
       const event = new Event('closeautofocus', { cancelable: true });
-      onCloseAutoFocus?.(event);
+      onCloseAutoFocusRef.current?.(event);
 
-      if (!event.defaultPrevented && triggerRef.current) {
-        (triggerRef.current as HTMLElement).focus();
+      if (!event.defaultPrevented && triggerRef.current && !dismissedByPointerRef.current) {
+        (triggerRef.current as HTMLElement).focus({ preventScroll: true });
       }
     };
-  }, [isOpen, onOpenAutoFocus, onCloseAutoFocus, contentRef, triggerRef]);
+  }, [isOpen, contentRef, triggerRef]);
 
   // Escape key handling
   const handleEscapeKey = useCallback(
@@ -132,6 +147,7 @@ export const PopoverContent = <T extends ElementType = 'div'>({
       onInteractOutside?.(event);
 
       if (!event.defaultPrevented) {
+        dismissedByPointerRef.current = true;
         closePopover();
       }
     },

@@ -37,7 +37,7 @@ export interface LabelOwnProps {
    * @remarks Does NOT invalidate the control - set `aria-invalid` on the control itself
    * @defaultValue false
    */
-  isInvalid?: boolean;
+  invalid?: boolean;
 }
 
 /**

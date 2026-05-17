@@ -193,14 +193,14 @@ export default function LabelDemo() {
         <section className='demo-section'>
           <h2>6. Invalid Field Label</h2>
           <p className='demo-description'>
-            Label with <code>isInvalid</code> prop. Exposes <code>data-invalid</code>. The control
+            Label with <code>invalid</code> prop. Exposes <code>data-invalid</code>. The control
             should have <code>aria-invalid=&quot;true&quot;</code>.
           </p>
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <div className='demo-input-wrapper'>
-                  <Label htmlFor='invalid-input' className='demo-label' isInvalid>
+                  <Label htmlFor='invalid-input' className='demo-label' invalid>
                     Password (invalid)
                   </Label>
                   <input
@@ -222,7 +222,7 @@ export default function LabelDemo() {
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Label htmlFor='invalid-input' isInvalid>Password</Label>
+                <code>{`<Label htmlFor='invalid-input' invalid>Password</Label>
 <input id='invalid-input' aria-invalid='true' aria-describedby='invalid-error' />
 <div id='invalid-error' role='alert'>Password must be at least 8 characters</div>`}</code>
               </pre>

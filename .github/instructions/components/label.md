@@ -46,14 +46,14 @@ Single component pattern - Label is a simple primitive that wraps label content 
 | `isOptional` | `boolean` | No | `false` | Marks label for an optional field (exposed via data attribute) |
 | `disabled` | `boolean` | No | `false` | Marks label for a disabled field (exposed via data attribute) |
 | `readOnly` | `boolean` | No | `false` | Marks label for a read-only field (exposed via data attribute) |
-| `isInvalid` | `boolean` | No | `false` | Marks label for an invalid field (exposed via data attribute) |
+| `invalid` | `boolean` | No | `false` | Marks label for an invalid field (exposed via data attribute) |
 | `as` | `ElementType` | No | `'label'` | Polymorphic element type |
 | `children` | `React.ReactNode` | Yes | — | Label content (text, icons, form controls) |
 
 **Note**: All standard element attributes (`htmlFor`, `className`, `style`, `id`, `aria-*`, `data-*`, event handlers, etc.) are forwarded through polymorphic props.
 
 **⚠️ Important Notes:**
-- `required`, `isOptional`, `disabled`, `readOnly`, and `isInvalid` are for **styling purposes only**. Always set `required`, `aria-required`, `disabled`, `readOnly`, and `aria-invalid` attributes on the **form control itself** for proper functionality.
+- `required`, `isOptional`, `disabled`, `readOnly`, and `invalid` are for **styling purposes only**. Always set `required`, `aria-required`, `disabled`, `readOnly`, and `aria-invalid` attributes on the **form control itself** for proper functionality.
 - When using `as` prop with non-label elements, `htmlFor` will not create native association. You must use `aria-labelledby` or other ARIA labeling techniques on the control.
 
 ### Ref Forwarding
@@ -88,7 +88,7 @@ The `as` prop allows rendering as any valid element, but **breaks native label b
 | Optional | Render with `isOptional={true}` | Marks as optional field label | `data-optional=""` |
 | Disabled | Render with `disabled={true}` | Marks as disabled field label | `data-disabled=""` |
 | ReadOnly | Render with `readOnly={true}` | Marks as read-only field label | `data-readonly=""` |
-| Invalid | Render with `isInvalid={true}` | Marks as invalid field label | `data-invalid=""` |
+| Invalid | Render with `invalid={true}` | Marks as invalid field label | `data-invalid=""` |
 | Polymorphic | Render with `as` prop | Changes root element | Renders as specified element |
 
 ## 4. Accessibility
@@ -182,7 +182,7 @@ export const Label = ({
   isOptional = false,
   disabled = false,
   readOnly = false,
-  isInvalid = false,
+  invalid = false,
   as,
   children,
   ref,
@@ -196,7 +196,7 @@ export const Label = ({
     'data-optional': isOptional || undefined,
     'data-disabled': disabled || undefined,
     'data-readonly': readOnly || undefined,
-    'data-invalid': isInvalid || undefined,
+    'data-invalid': invalid || undefined,
   };
 
   return (
@@ -237,7 +237,7 @@ export const Label = ({
 'data-optional': isOptional ? '' : undefined
 'data-disabled': disabled ? '' : undefined
 'data-readonly': readOnly ? '' : undefined
-'data-invalid': isInvalid ? '' : undefined
+'data-invalid': invalid ? '' : undefined
 ```
 
 ### Usage Examples for Styling
@@ -363,7 +363,7 @@ const styles = {
 2. ✅ Create `types.ts` with TypeScript interfaces
 3. ✅ Implement polymorphic `as` prop support
 4. ✅ Add `htmlFor` attribute support
-5. ✅ Add state props (`required`, `isOptional`, `disabled`, `readOnly`, `isInvalid`)
+5. ✅ Add state props (`required`, `isOptional`, `disabled`, `readOnly`, `invalid`)
 6. ✅ Implement data attributes for styling hooks
 7. ✅ Add ref forwarding
 8. ✅ Create `index.ts` with named exports
@@ -396,7 +396,7 @@ const styles = {
 <input id="accountId" type="text" readOnly />
 
 // With invalid indicator
-<Label htmlFor="email" isInvalid>Email</Label>
+<Label htmlFor="email" invalid>Email</Label>
 <input id="email" type="email" aria-invalid="true" />
 
 // Implicit association

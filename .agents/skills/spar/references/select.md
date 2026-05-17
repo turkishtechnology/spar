@@ -15,21 +15,25 @@
 | `Select.Separator` | `<div>`    | Visual separator                          |
 | `Select.Arrow`     | `<svg>`    | Pointing arrow                            |
 
+When nested inside a `<Field>`, the Select inherits `invalid`, `disabled`, `required`, and `readOnly` from Field context. Direct props on `<Select>` override the inherited values.
+
 ## Root Props
 
-| Prop             | Type                      | Default | Description                    |
-| ---------------- | ------------------------- | ------- | ------------------------------ |
-| `id?`            | `string`                  | auto    | Base ID for ARIA relationships |
-| `value?`         | `string`                  | —       | Controlled selected value      |
-| `defaultValue?`  | `string`                  | —       | Default selected value         |
-| `onValueChange?` | `(value: string) => void` | —       | Called when selection changes  |
-| `open?`          | `boolean`                 | —       | Controlled open state          |
-| `defaultOpen?`   | `boolean`                 | `false` | Default open state             |
-| `onOpenChange?`  | `(open: boolean) => void` | —       | Called when open state changes |
-| `disabled?`      | `boolean`                 | `false` | Disables the select            |
-| `required?`      | `boolean`                 | `false` | Required for form validation   |
-| `name?`          | `string`                  | —       | Form field name                |
-| `autoFocus?`     | `boolean`                 | `false` | Auto-focus trigger on mount    |
+| Prop            | Type                      | Default | Description                                                               |
+| --------------- | ------------------------- | ------- | ------------------------------------------------------------------------- |
+| `id?`           | `string`                  | auto    | Base ID for ARIA relationships                                            |
+| `value?`        | `string`                  | —       | Controlled selected value                                                 |
+| `defaultValue?` | `string`                  | —       | Default selected value                                                    |
+| `onChange?`     | `(value: string) => void` | —       | Called when selection changes                                             |
+| `open?`         | `boolean`                 | —       | Controlled open state                                                     |
+| `defaultOpen?`  | `boolean`                 | `false` | Default open state                                                        |
+| `onOpenChange?` | `(open: boolean) => void` | —       | Called when open state changes                                            |
+| `disabled?`     | `boolean`                 | `false` | Disables the select. Inherited from Field                                 |
+| `required?`     | `boolean`                 | `false` | Required for form validation. Inherited from Field                        |
+| `readOnly?`     | `boolean`                 | `false` | Can be opened and inspected but value cannot change. Inherited from Field |
+| `invalid?`      | `boolean`                 | `false` | Error state (`aria-invalid`). Inherited from Field                        |
+| `name?`         | `string`                  | —       | Form field name                                                           |
+| `autoFocus?`    | `boolean`                 | `false` | Auto-focus trigger on mount                                               |
 
 ## Trigger Props
 
@@ -89,3 +93,40 @@ Extends Button props.
 | `End`             | Highlight last item                    |
 | `Escape`          | Close listbox                          |
 | Type characters   | Typeahead to matching item             |
+
+## Hooks
+
+```tsx
+import {
+  useSelectContext,
+  useSelectGroupContext,
+  useSelectItemContext,
+  useSelectCollectionContext,
+} from '@turkish-technology/spar/select';
+```
+
+Useful when building custom select children (custom triggers, custom item rendering, etc.).
+
+## Field integration
+
+```tsx
+<Field invalid={!!errors.country} required>
+  <Field.Label>Country</Field.Label>
+  <Select name='country' value={form.country} onChange={(v) => setForm({ country: v })}>
+    <Select.Trigger>
+      <Select.Value placeholder='Pick one' />
+    </Select.Trigger>
+    <Select.Content>
+      <Select.Item value='tr'>
+        <Select.ItemText>Türkiye</Select.ItemText>
+      </Select.Item>
+      <Select.Item value='us'>
+        <Select.ItemText>United States</Select.ItemText>
+      </Select.Item>
+    </Select.Content>
+  </Select>
+  <Field.ErrorMessage>{errors.country?.message}</Field.ErrorMessage>
+</Field>
+```
+
+`invalid` / `disabled` / `required` / `readOnly` are inherited from Field. ARIA wiring (`aria-labelledby`, `aria-describedby`) is set up automatically — Spar's `Select` reports a `hasField` flag internally to coordinate `aria-describedby` emission.

@@ -1,7 +1,8 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { Input, InputDescription, InputErrorMessage, InputField, InputLabel } from '../index';
+import { Input, InputField } from '../index';
+import { Field, FieldDescription, FieldErrorMessage, FieldLabel } from '../../Field';
 
 expect.extend(toHaveNoViolations);
 
@@ -12,10 +13,12 @@ describe('Input - Accessibility Tests', () => {
 
   it('passes axe for labeled input', async () => {
     const { container } = render(
-      <Input>
-        <InputLabel>Username</InputLabel>
-        <InputField />
-      </Input>,
+      <Field>
+        <FieldLabel>Username</FieldLabel>
+        <Input>
+          <InputField />
+        </Input>
+      </Field>,
     );
 
     expect(await axe(container)).toHaveNoViolations();
@@ -23,11 +26,13 @@ describe('Input - Accessibility Tests', () => {
 
   it('passes axe for invalid input with error message', async () => {
     const { container } = render(
-      <Input isInvalid required>
-        <InputLabel>Email</InputLabel>
-        <InputField type='email' />
-        <InputErrorMessage>Email is required</InputErrorMessage>
-      </Input>,
+      <Field invalid required>
+        <FieldLabel>Email</FieldLabel>
+        <Input>
+          <InputField type='email' />
+        </Input>
+        <FieldErrorMessage>Email is required</FieldErrorMessage>
+      </Field>,
     );
 
     expect(await axe(container)).toHaveNoViolations();
@@ -35,11 +40,13 @@ describe('Input - Accessibility Tests', () => {
 
   it('associates accessible name and description through ARIA relationships', () => {
     render(
-      <Input>
-        <InputLabel>Password</InputLabel>
-        <InputField type='password' />
-        <InputDescription>Use at least 8 characters</InputDescription>
-      </Input>,
+      <Field>
+        <FieldLabel>Password</FieldLabel>
+        <Input>
+          <InputField type='password' />
+        </Input>
+        <FieldDescription>Use at least 8 characters</FieldDescription>
+      </Field>,
     );
 
     const field = screen.getByLabelText('Password');
@@ -51,12 +58,14 @@ describe('Input - Accessibility Tests', () => {
 
   it('switches aria-describedby target to error and exposes alert semantics', () => {
     render(
-      <Input isInvalid>
-        <InputLabel>Password</InputLabel>
-        <InputField type='password' />
-        <InputDescription>Use at least 8 characters</InputDescription>
-        <InputErrorMessage>Password is too short</InputErrorMessage>
-      </Input>,
+      <Field invalid>
+        <FieldLabel>Password</FieldLabel>
+        <Input>
+          <InputField type='password' />
+        </Input>
+        <FieldDescription>Use at least 8 characters</FieldDescription>
+        <FieldErrorMessage>Password is too short</FieldErrorMessage>
+      </Field>,
     );
 
     const field = screen.getByLabelText('Password');
@@ -65,7 +74,6 @@ describe('Input - Accessibility Tests', () => {
     expect(field).toHaveAttribute('aria-describedby', error.id);
     expect(field).toHaveAttribute('aria-invalid', 'true');
     expect(error).toHaveAttribute('role', 'alert');
-    expect(error).toHaveAttribute('aria-live', 'assertive');
   });
 
   it('supports keyboard focus and blur state', async () => {
@@ -73,10 +81,12 @@ describe('Input - Accessibility Tests', () => {
 
     render(
       <>
-        <Input>
-          <InputLabel>Username</InputLabel>
-          <InputField />
-        </Input>
+        <Field>
+          <FieldLabel>Username</FieldLabel>
+          <Input>
+            <InputField />
+          </Input>
+        </Field>
         <button type='button'>Next</button>
       </>,
     );
@@ -98,10 +108,12 @@ describe('Input - Accessibility Tests', () => {
     render(
       <>
         <button type='button'>Before</button>
-        <Input disabled>
-          <InputLabel>Disabled Username</InputLabel>
-          <InputField />
-        </Input>
+        <Field disabled>
+          <FieldLabel>Disabled Username</FieldLabel>
+          <Input>
+            <InputField />
+          </Input>
+        </Field>
         <button type='button'>After</button>
       </>,
     );
@@ -117,10 +129,12 @@ describe('Input - Accessibility Tests', () => {
 
   it('applies autoFocus behavior for compound and standalone fields', async () => {
     const { rerender } = render(
-      <Input>
-        <InputLabel>Username</InputLabel>
-        <InputField autoFocus />
-      </Input>,
+      <Field>
+        <FieldLabel>Username</FieldLabel>
+        <Input>
+          <InputField autoFocus />
+        </Input>
+      </Field>,
     );
 
     const compoundField = screen.getByRole('textbox', { name: 'Username' });
