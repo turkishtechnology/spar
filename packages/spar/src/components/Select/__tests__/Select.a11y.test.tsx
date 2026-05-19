@@ -5,10 +5,8 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import {
   Select,
   SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
-  SelectItemText,
   SelectGroup,
   SelectLabel,
   SelectSeparator,
@@ -18,15 +16,13 @@ expect.extend(toHaveNoViolations);
 
 const BasicSelect = ({ id }: { id?: string }) => (
   <Select id={id}>
-    <SelectTrigger aria-label='Choose option'>
-      <SelectValue placeholder='Select...' />
-    </SelectTrigger>
+    <SelectTrigger aria-label='Choose option' placeholder='Select...' />
     <SelectContent>
-      <SelectItem value='option1'>
-        <SelectItemText>Option 1</SelectItemText>
+      <SelectItem value='option1' label='Option 1'>
+        Option 1
       </SelectItem>
-      <SelectItem value='option2' disabled>
-        <SelectItemText>Option 2</SelectItemText>
+      <SelectItem value='option2' disabled label='Option 2'>
+        Option 2
       </SelectItem>
     </SelectContent>
   </Select>
@@ -54,14 +50,13 @@ describe('Select Accessibility', () => {
     expect(results).toHaveNoViolations();
   });
 
-  it('keeps trigger/value/listbox ARIA relationships in sync', async () => {
+  it('keeps trigger/listbox ARIA relationships in sync', async () => {
     const user = userEvent.setup();
 
     render(<BasicSelect id='a11y-select' />);
 
     const trigger = screen.getByRole('combobox');
     expect(trigger).toHaveAttribute('aria-controls', 'a11y-select-content');
-    expect(trigger).toHaveAttribute('aria-labelledby', 'a11y-select-value');
 
     await user.click(trigger);
 
@@ -75,15 +70,13 @@ describe('Select Accessibility', () => {
 
     render(
       <Select value='option1'>
-        <SelectTrigger aria-label='Choose option'>
-          <SelectValue placeholder='Select...' />
-        </SelectTrigger>
+        <SelectTrigger aria-label='Choose option' placeholder='Select...' />
         <SelectContent>
-          <SelectItem value='option1'>
-            <SelectItemText>Option 1</SelectItemText>
+          <SelectItem value='option1' label='Option 1'>
+            Option 1
           </SelectItem>
-          <SelectItem value='option2' disabled>
-            <SelectItemText>Option 2</SelectItemText>
+          <SelectItem value='option2' disabled label='Option 2'>
+            Option 2
           </SelectItem>
         </SelectContent>
       </Select>,
@@ -121,14 +114,12 @@ describe('Select Accessibility', () => {
 
     render(
       <Select>
-        <SelectTrigger aria-label='Choose grouped option'>
-          <SelectValue placeholder='Select...' />
-        </SelectTrigger>
+        <SelectTrigger aria-label='Choose grouped option' placeholder='Select...' />
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Fruits</SelectLabel>
-            <SelectItem value='apple'>
-              <SelectItemText>Apple</SelectItemText>
+            <SelectItem value='apple' label='Apple'>
+              Apple
             </SelectItem>
           </SelectGroup>
           <SelectSeparator />

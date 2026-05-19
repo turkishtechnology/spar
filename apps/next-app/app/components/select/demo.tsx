@@ -8,30 +8,28 @@ export function SelectDemo() {
 
   return (
     <Select.Root value={value} onChange={setValue}>
-      <Select.Trigger>
-        <Select.Value placeholder='Select an option' />
-      </Select.Trigger>
+      <Select.Trigger placeholder='Select an option' />
       <Select.Content>
         <Select.Group>
           <Select.Label>Fruits</Select.Label>
-          <Select.Item value='apple'>
-            <Select.ItemText>Apple</Select.ItemText>
+          <Select.Item value='apple' label='Apple'>
+            Apple
           </Select.Item>
-          <Select.Item value='banana'>
-            <Select.ItemText>Banana</Select.ItemText>
+          <Select.Item value='banana' label='Banana'>
+            Banana
           </Select.Item>
-          <Select.Item value='cherry'>
-            <Select.ItemText>Cherry</Select.ItemText>
+          <Select.Item value='cherry' label='Cherry'>
+            Cherry
           </Select.Item>
         </Select.Group>
         <Select.Separator />
         <Select.Group>
           <Select.Label>Vegetables</Select.Label>
-          <Select.Item value='carrot'>
-            <Select.ItemText>Carrot</Select.ItemText>
+          <Select.Item value='carrot' label='Carrot'>
+            Carrot
           </Select.Item>
-          <Select.Item value='potato'>
-            <Select.ItemText>Potato</Select.ItemText>
+          <Select.Item value='potato' label='Potato'>
+            Potato
           </Select.Item>
         </Select.Group>
       </Select.Content>

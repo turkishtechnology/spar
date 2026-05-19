@@ -22,22 +22,19 @@ Pair it with the [Field](./Field.mdx) primitive to get label, description, and e
 <LiveCode
   code={`<Field.Root className='select-demo-container' invalid>
   <Field.Label className='select-label'>Plan</Field.Label>
-  <Select.Root>
-    <Select.Trigger className='select-trigger'>
-      <Select.Value className='select-value' placeholder='Choose a plan' />
-      <span aria-hidden='true' className='select-trigger-addon'>▾</span>
-    </Select.Trigger>
+  <Select.Root defaultValue="basic">
+    <Select.Trigger className='select-trigger' placeholder='Choose a plan' />
     <Select.Content className='select-content'>
-      <Select.Item className='select-item' value='basic'>
-        <Select.ItemText className='select-item-text'>Basic</Select.ItemText>
+      <Select.Item className='select-item' value='basic' label='Basic'>
+        Basic
         <span aria-hidden='true' className='select-item-check'>✓</span>
       </Select.Item>
-      <Select.Item className='select-item' value='premium'>
-        <Select.ItemText className='select-item-text'>Premium</Select.ItemText>
+      <Select.Item className='select-item' value='premium' label='Premium'>
+        Premium
         <span aria-hidden='true' className='select-item-check'>✓</span>
       </Select.Item>
-      <Select.Item className='select-item' value='enterprise'>
-        <Select.ItemText className='select-item-text'>Enterprise</Select.ItemText>
+      <Select.Item className='select-item' value='enterprise' label='Enterprise'>
+        Enterprise
         <span aria-hidden='true' className='select-item-check'>✓</span>
       </Select.Item>
       <Select.Arrow className='select-arrow' />
@@ -120,14 +117,14 @@ border-color: #2b303b;
 background: rgba(255, 255, 255, 0.12);
 }
 
-.select-demo-container .select-value,
+.select-demo-container .select-trigger,
 .select-demo-container .select-trigger-addon {
 color: #222530;
 font-size: 14px;
 line-height: 20px;
 }
 
-[data-theme='dark'] .select-demo-container .select-value,
+[data-theme='dark'] .select-demo-container .select-trigger,
 [data-theme='dark'] .select-demo-container .select-trigger-addon {
 color: #f2f5f8;
 }
@@ -236,9 +233,7 @@ import { Field, Select } from '@turkish-technology/spar';
 <Field.Root>
   <Field.Label />
   <Select.Root>
-    <Select.Trigger>
-      <Select.Value />
-    </Select.Trigger>
+    <Select.Trigger placeholder='Choose...' />
     <Select.Content>{/* items */}</Select.Content>
   </Select.Root>
   <Field.Description />
@@ -253,8 +248,12 @@ import { Field, Select } from '@turkish-technology/spar';
 <AnatomyViewer
   parts={[
     { name: 'root', label: 'Root', description: 'Main container managing state and context' },
-    { name: 'trigger', label: 'Trigger', description: 'Button that toggles dropdown visibility' },
-    { name: 'value', label: 'Value', description: 'Displays selected value or placeholder' },
+    {
+      name: 'trigger',
+      label: 'Trigger',
+      description:
+        'Button that toggles dropdown visibility and displays selected value or placeholder',
+    },
     {
       name: 'content',
       label: 'Content',
@@ -263,40 +262,32 @@ import { Field, Select } from '@turkish-technology/spar';
     { name: 'group', label: 'Group', description: 'Groups related items together' },
     { name: 'label', label: 'Label', description: 'Label for item groups' },
     { name: 'item', label: 'Item', description: 'Individual selectable option' },
-    { name: 'itemText', label: 'ItemText', description: 'Text content of an item' },
     { name: 'separator', label: 'Separator', description: 'Visual separator between items/groups' },
     { name: 'arrow', label: 'Arrow', description: 'Optional arrow pointing to trigger' },
   ]}
 >
   <div className='select-demo-container'>
     <Select.Root data-spar-part='root' defaultValue='option2'>
-      <Select.Trigger data-spar-part='trigger' className='select-trigger'>
-        <Select.Value data-spar-part='value' className='select-value' placeholder='Options' />
+      <Select.Trigger data-spar-part='trigger' className='select-trigger' placeholder='Options'>
         <span aria-hidden='true' className='select-trigger-addon'>
           {'▾'}
         </span>
       </Select.Trigger>
       <Select.Content data-spar-part='content' className='select-content'>
-        <Select.Item data-spar-part='item' className='select-item' value='option1'>
-          <Select.ItemText data-spar-part='itemText' className='select-item-text'>
-            {'Option 1'}
-          </Select.ItemText>
+        <Select.Item data-spar-part='item' className='select-item' value='option1' label='Option 1'>
+          {'Option 1'}
           <span aria-hidden='true' className='select-item-check'>
             {'✓'}
           </span>
         </Select.Item>
-        <Select.Item data-spar-part='item' className='select-item' value='option2'>
-          <Select.ItemText data-spar-part='itemText' className='select-item-text'>
-            {'Option 2'}
-          </Select.ItemText>
+        <Select.Item data-spar-part='item' className='select-item' value='option2' label='Option 2'>
+          {'Option 2'}
           <span aria-hidden='true' className='select-item-check'>
             {'✓'}
           </span>
         </Select.Item>
-        <Select.Item data-spar-part='item' className='select-item' value='option3'>
-          <Select.ItemText data-spar-part='itemText' className='select-item-text'>
-            {'Option 3'}
-          </Select.ItemText>
+        <Select.Item data-spar-part='item' className='select-item' value='option3' label='Option 3'>
+          {'Option 3'}
           <span aria-hidden='true' className='select-item-check'>
             {'✓'}
           </span>
@@ -311,15 +302,13 @@ import { Field, Select } from '@turkish-technology/spar';
 
 ```tsx
 <Select.Root>
-  <Select.Trigger>
-    <Select.Value />
-  </Select.Trigger>
+  <Select.Trigger placeholder='Choose...' />
 
   <Select.Content>
     <Select.Group>
       <Select.Label />
-      <Select.Item>
-        <Select.ItemText />
+      <Select.Item value='...' label='...'>
+        ...
       </Select.Item>
     </Select.Group>
 
@@ -332,11 +321,9 @@ import { Field, Select } from '@turkish-technology/spar';
 **Data Flow:**
 
 - `Select.Root` manages open/closed state and the selected value, and provides context.
-- `Select.Trigger` toggles the Root state and sets the focus strategy for Content on arrow-key input.
-- `Select.Value` displays the selected `Item` text (or the `placeholder`).
+- `Select.Trigger` toggles the Root state, displays the selected item's `label` or the `placeholder`, and sets the focus strategy for Content on arrow-key input.
 - `Select.Content` renders into a portal when open and manages highlight state and keyboard navigation.
-- `Select.Item` updates the selection and changes the Root value through click or keyboard interaction.
-- `Select.ItemText` registers the text value used for typeahead.
+- `Select.Item` updates the selection and changes the Root value through click or keyboard interaction. The `label` prop registers the text used for typeahead and for display in the Trigger.
 - `Select.Group` + `Select.Label` establish the semantic group structure.
 - `Select.Separator` provides a separator role.
 - `Select.Arrow` is an optional arrow positioned relative to the Content placement.
@@ -344,12 +331,10 @@ import { Field, Select } from '@turkish-technology/spar';
 **Alternative: Tree-shakeable named imports**
 
 ```tsx
-import { SelectRoot, SelectTrigger, SelectValue } from '@turkish-technology/spar';
+import { SelectRoot, SelectTrigger } from '@turkish-technology/spar';
 
 <SelectRoot>
-  <SelectTrigger>
-    <SelectValue />
-  </SelectTrigger>
+  <SelectTrigger placeholder='Choose...' />
   {/* ... */}
 </SelectRoot>;
 ```
@@ -359,15 +344,14 @@ import { SelectRoot, SelectTrigger, SelectValue } from '@turkish-technology/spar
 `Select` does not include a separate icon/indicator primitive. The trigger arrow or selected marker is added as a normal React element inside the existing parts.
 
 ```tsx
-<Select.Trigger className='select-trigger'>
-  <Select.Value placeholder='Choose an option' />
+<Select.Trigger className='select-trigger' placeholder='Choose an option'>
   <span aria-hidden='true' className='select-trigger-addon'>
     ▾
   </span>
 </Select.Trigger>
 
-<Select.Item className='select-item' value='option1'>
-  <Select.ItemText>Option 1</Select.ItemText>
+<Select.Item className='select-item' value='option1' label='Option 1'>
+  Option 1
   <span aria-hidden='true' className='select-item-check'>
     ✓
   </span>
@@ -392,19 +376,17 @@ function ControlledSelect() {
       open={open}
       onOpenChange={setOpen}
     >
-      <Select.Trigger>
-        <Select.Value placeholder='Choose a fruit' />
-      </Select.Trigger>
+      <Select.Trigger placeholder='Choose a fruit' />
 
       <Select.Content>
-        <Select.Item value='apple'>
-          <Select.ItemText>Apple</Select.ItemText>
+        <Select.Item value='apple' label='Apple'>
+          Apple
         </Select.Item>
-        <Select.Item value='banana'>
-          <Select.ItemText>Banana</Select.ItemText>
+        <Select.Item value='banana' label='Banana'>
+          Banana
         </Select.Item>
-        <Select.Item value='orange'>
-          <Select.ItemText>Orange</Select.ItemText>
+        <Select.Item value='orange' label='Orange'>
+          Orange
         </Select.Item>
       </Select.Content>
     </Select.Root>
@@ -422,21 +404,19 @@ function GroupedSelect() {
 
   return (
     <Select.Root value={value} onChange={setValue}>
-      <Select.Trigger>
-        <Select.Value placeholder='Select a country' />
-      </Select.Trigger>
+      <Select.Trigger placeholder='Select a country' />
 
       <Select.Content>
         <Select.Group>
           <Select.Label>North America</Select.Label>
-          <Select.Item value='us'>
-            <Select.ItemText>United States</Select.ItemText>
+          <Select.Item value='us' label='United States'>
+            United States
           </Select.Item>
-          <Select.Item value='ca'>
-            <Select.ItemText>Canada</Select.ItemText>
+          <Select.Item value='ca' label='Canada'>
+            Canada
           </Select.Item>
-          <Select.Item value='mx'>
-            <Select.ItemText>Mexico</Select.ItemText>
+          <Select.Item value='mx' label='Mexico'>
+            Mexico
           </Select.Item>
         </Select.Group>
 
@@ -444,14 +424,14 @@ function GroupedSelect() {
 
         <Select.Group>
           <Select.Label>Europe</Select.Label>
-          <Select.Item value='uk'>
-            <Select.ItemText>United Kingdom</Select.ItemText>
+          <Select.Item value='uk' label='United Kingdom'>
+            United Kingdom
           </Select.Item>
-          <Select.Item value='de'>
-            <Select.ItemText>Germany</Select.ItemText>
+          <Select.Item value='de' label='Germany'>
+            Germany
           </Select.Item>
-          <Select.Item value='fr'>
-            <Select.ItemText>France</Select.ItemText>
+          <Select.Item value='fr' label='France'>
+            France
           </Select.Item>
         </Select.Group>
       </Select.Content>
@@ -472,15 +452,13 @@ function FieldSelect() {
     <Field.Root invalid={plan === ''} required>
       <Field.Label>Plan</Field.Label>
       <Select.Root value={plan} onChange={setPlan} name='plan'>
-        <Select.Trigger>
-          <Select.Value placeholder='Choose a plan' />
-        </Select.Trigger>
+        <Select.Trigger placeholder='Choose a plan' />
         <Select.Content>
-          <Select.Item value='basic'>
-            <Select.ItemText>Basic</Select.ItemText>
+          <Select.Item value='basic' label='Basic'>
+            Basic
           </Select.Item>
-          <Select.Item value='premium'>
-            <Select.ItemText>Premium</Select.ItemText>
+          <Select.Item value='premium' label='Premium'>
+            Premium
           </Select.Item>
         </Select.Content>
       </Select.Root>
@@ -503,15 +481,13 @@ function ReadOnlyField() {
     <Field.Root readOnly>
       <Field.Label>Region</Field.Label>
       <Select.Root defaultValue='eu-west-1'>
-        <Select.Trigger>
-          <Select.Value />
-        </Select.Trigger>
+        <Select.Trigger />
         <Select.Content>
-          <Select.Item value='eu-west-1'>
-            <Select.ItemText>EU (Ireland)</Select.ItemText>
+          <Select.Item value='eu-west-1' label='EU (Ireland)'>
+            EU (Ireland)
           </Select.Item>
-          <Select.Item value='us-east-1'>
-            <Select.ItemText>US (N. Virginia)</Select.ItemText>
+          <Select.Item value='us-east-1' label='US (N. Virginia)'>
+            US (N. Virginia)
           </Select.Item>
         </Select.Content>
       </Select.Root>
@@ -539,19 +515,17 @@ function SelectInForm() {
     <form onSubmit={handleSubmit}>
       <label htmlFor='category-select'>Product Category</label>
       <Select.Root name='category' value={category} onChange={setCategory} required>
-        <Select.Trigger id='category-select'>
-          <Select.Value placeholder='Select category' />
-        </Select.Trigger>
+        <Select.Trigger id='category-select' placeholder='Select category' />
 
         <Select.Content>
-          <Select.Item value='electronics'>
-            <Select.ItemText>Electronics</Select.ItemText>
+          <Select.Item value='electronics' label='Electronics'>
+            Electronics
           </Select.Item>
-          <Select.Item value='clothing'>
-            <Select.ItemText>Clothing</Select.ItemText>
+          <Select.Item value='clothing' label='Clothing'>
+            Clothing
           </Select.Item>
-          <Select.Item value='books'>
-            <Select.ItemText>Books</Select.ItemText>
+          <Select.Item value='books' label='Books'>
+            Books
           </Select.Item>
         </Select.Content>
       </Select.Root>
@@ -569,31 +543,31 @@ Provides the root state and context. `Select` and `Select.Root` are the same com
 
 **Props**
 
-| Name             | Type                      | Default     | Description                                                       |
-| ---------------- | ------------------------- | ----------- | ----------------------------------------------------------------- |
-| `id?`            | `string`                  | `undefined` | Base id for ARIA relationship ids                                 |
-| `value?`         | `string`                  | `undefined` | Controlled selected value                                         |
-| `defaultValue?`  | `string`                  | `undefined` | Initial uncontrolled value                                        |
-| `onChange?` | `(value: string) => void` | `undefined` | Value change callback                                             |
-| `open?`          | `boolean`                 | `undefined` | Controlled open/closed state                                      |
-| `defaultOpen?`   | `boolean`                 | `false`     | Initial uncontrolled open state                                   |
-| `onOpenChange?`  | `(open: boolean) => void` | `undefined` | Open/closed change callback                                       |
-| `invalid?`       | `boolean`                 | `false`     | Validation state; inherited from a parent `Field` when present    |
-| `disabled?`      | `boolean`                 | `false`     | Disables the entire Select; inherited from `Field` when present   |
-| `required?`      | `boolean`                 | `false`     | Marks the field as required; inherited from `Field` when present  |
-| `readOnly?`      | `boolean`                 | `false`     | Read-only state; inherited from `Field` when present              |
-| `name?`          | `string`                  | `undefined` | Form field name; generates a hidden input when `value` is defined |
-| `dir?`           | `'ltr' \| 'rtl'`          | `'ltr'`     | Writing direction                                                 |
-| `autoFocus?`     | `boolean`                 | `false`     | Focuses the trigger on mount                                      |
-| `as?`            | `React.ElementType`       | `'div'`     | Polymorphic element for Root                                      |
-| `children?`      | `React.ReactNode`         | `undefined` | Root content                                                      |
+| Name            | Type                      | Default     | Description                                                       |
+| --------------- | ------------------------- | ----------- | ----------------------------------------------------------------- |
+| `id?`           | `string`                  | `undefined` | Base id for ARIA relationship ids                                 |
+| `value?`        | `string`                  | `undefined` | Controlled selected value                                         |
+| `defaultValue?` | `string`                  | `undefined` | Initial uncontrolled value                                        |
+| `onChange?`     | `(value: string) => void` | `undefined` | Value change callback                                             |
+| `open?`         | `boolean`                 | `undefined` | Controlled open/closed state                                      |
+| `defaultOpen?`  | `boolean`                 | `false`     | Initial uncontrolled open state                                   |
+| `onOpenChange?` | `(open: boolean) => void` | `undefined` | Open/closed change callback                                       |
+| `invalid?`      | `boolean`                 | `false`     | Validation state; inherited from a parent `Field` when present    |
+| `disabled?`     | `boolean`                 | `false`     | Disables the entire Select; inherited from `Field` when present   |
+| `required?`     | `boolean`                 | `false`     | Marks the field as required; inherited from `Field` when present  |
+| `readOnly?`     | `boolean`                 | `false`     | Read-only state; inherited from `Field` when present              |
+| `name?`         | `string`                  | `undefined` | Form field name; generates a hidden input when `value` is defined |
+| `dir?`          | `'ltr' \| 'rtl'`          | `'ltr'`     | Writing direction                                                 |
+| `autoFocus?`    | `boolean`                 | `false`     | Focuses the trigger on mount                                      |
+| `as?`           | `React.ElementType`       | `'div'`     | Polymorphic element for Root                                      |
+| `children?`     | `React.ReactNode`         | `undefined` | Root content                                                      |
 
 **Events**
 
-| Name            | Parameters        | Description               | When Triggered                                          |
-| --------------- | ----------------- | ------------------------- | ------------------------------------------------------- |
-| `onChange` | `(value: string)` | Selected value changes    | When an item is selected or controlled state is updated |
-| `onOpenChange`  | `(open: boolean)` | Open/closed state changes | On trigger interaction or programmatic open/close calls |
+| Name           | Parameters        | Description               | When Triggered                                          |
+| -------------- | ----------------- | ------------------------- | ------------------------------------------------------- |
+| `onChange`     | `(value: string)` | Selected value changes    | When an item is selected or controlled state is updated |
+| `onOpenChange` | `(open: boolean)` | Open/closed state changes | On trigger interaction or programmatic open/close calls |
 
 **HTML Attributes**
 
@@ -613,6 +587,7 @@ Trigger part that opens and closes the root state.
 
 | Name               | Type                                                                        | Default                | Description                                           |
 | ------------------ | --------------------------------------------------------------------------- | ---------------------- | ----------------------------------------------------- |
+| `placeholder?`     | `string`                                                                    | `undefined`            | Text shown when no value is selected                  |
 | `children?`        | `React.ReactNode \| ((state: SelectTriggerRenderProps) => React.ReactNode)` | `undefined`            | Normal content or a render-props function             |
 | `as?`              | `React.ElementType`                                                         | `'button'`             | Polymorphic element for Trigger                       |
 | `disabled?`        | `boolean`                                                                   | Root `disabled` value  | Trigger disabled value; falls back to Root if omitted |
@@ -629,6 +604,7 @@ Trigger part that opens and closes the root state.
 | ---------- | --------------------- | ------------------------------------------------ |
 | `isOpen`   | `boolean`             | Whether the dropdown is currently visible        |
 | `value`    | `string \| undefined` | The currently selected value                     |
+| `label`    | `string \| undefined` | The label of the currently selected item         |
 | `disabled` | `boolean`             | Whether the trigger is disabled                  |
 | `open`     | `() => void`          | Function to programmatically open the dropdown   |
 | `close`    | `() => void`          | Function to programmatically close the dropdown  |
@@ -651,7 +627,7 @@ Trigger part that opens and closes the root state.
 | `aria-haspopup`    | `"listbox"`          | Type of panel that opens                                                                                |
 | `aria-expanded`    | `boolean`            | Open/closed state                                                                                       |
 | `aria-controls`    | `string`             | Id of the content element                                                                               |
-| `aria-labelledby`  | `string`             | References the value node id; also includes the Field label id when inside Field                        |
+| `aria-labelledby`  | `string`             | References the Field label id when inside Field; omitted standalone (use `aria-label`)                  |
 | `aria-describedby` | `string`             | Points to `Field.Description`, or `Field.ErrorMessage` while `invalid` is true                          |
 | `aria-required`    | `true`               | Added when Root `required` is true                                                                      |
 | `aria-invalid`     | `true`               | Added when Root (or the enclosing Field) is in an invalid state                                         |
@@ -666,30 +642,6 @@ Trigger part that opens and closes the root state.
 | `data-loading`     | `""`                 | Button loading state                                                                                    |
 | `data-pressed`     | `""`                 | Button toggle pressed state                                                                             |
 | `data-autofocus`   | `""`                 | Button autofocus state                                                                                  |
-
-### Select.Value
-
-Displays the selected Item text or the placeholder.
-
-**Props**
-
-| Name           | Type                | Default     | Description                                               |
-| -------------- | ------------------- | ----------- | --------------------------------------------------------- |
-| `placeholder?` | `React.ReactNode`   | `undefined` | Content shown when there is no selection                  |
-| `as?`          | `React.ElementType` | `'span'`    | Polymorphic element for Value                             |
-| `children?`    | `React.ReactNode`   | `undefined` | If provided, renders instead of placeholder/selected text |
-
-**Events**
-
-| Name | Parameters | Description                                    | When Triggered |
-| ---- | ---------- | ---------------------------------------------- | -------------- |
-| -    | -          | No component-specific events on the Value part | -              |
-
-**HTML Attributes**
-
-| Attribute | Value    | Purpose                                                               |
-| --------- | -------- | --------------------------------------------------------------------- |
-| `id`      | `string` | Assigned automatically for the Trigger `aria-labelledby` relationship |
 
 ### Select.Content
 
@@ -741,14 +693,14 @@ Selectable option part.
 
 **Props**
 
-| Name         | Type                                                                     | Default     | Description                                                        |
-| ------------ | ------------------------------------------------------------------------ | ----------- | ------------------------------------------------------------------ |
-| `value`      | `string`                                                                 | -           | Item value (required)                                              |
-| `disabled?`  | `boolean`                                                                | `false`     | Disables the item                                                  |
-| `textValue?` | `string`                                                                 | `undefined` | Typeahead text; falls back to text registered by `Select.ItemText` |
-| `children?`  | `React.ReactNode \| ((state: SelectItemRenderProps) => React.ReactNode)` | `undefined` | Normal content or render-props                                     |
-| `as?`        | `React.ElementType`                                                      | `'div'`     | Polymorphic element for Item                                       |
-| `ref?`       | `React.Ref<HTMLElement>`                                                 | `undefined` | Forwarded ref                                                      |
+| Name        | Type                                                                     | Default     | Description                                                             |
+| ----------- | ------------------------------------------------------------------------ | ----------- | ----------------------------------------------------------------------- |
+| `value`     | `string`                                                                 | -           | Item value (required)                                                   |
+| `disabled?` | `boolean`                                                                | `false`     | Disables the item                                                       |
+| `label?`    | `string`                                                                 | `undefined` | Text label — shown in the Trigger when selected, and used for typeahead |
+| `children?` | `React.ReactNode \| ((state: SelectItemRenderProps) => React.ReactNode)` | `undefined` | Normal content or render-props                                          |
+| `as?`       | `React.ElementType`                                                      | `'div'`     | Polymorphic element for Item                                            |
+| `ref?`      | `React.Ref<HTMLElement>`                                                 | `undefined` | Forwarded ref                                                           |
 
 **Render Props (SelectItemRenderProps)**
 
@@ -776,29 +728,6 @@ Selectable option part.
 | `data-state`       | `"checked" \| "unchecked"` | Selected/unselected state          |
 | `data-disabled`    | `""`                       | Added when the item is disabled    |
 | `data-highlighted` | `""`                       | Added when the item is highlighted |
-
-### Select.ItemText
-
-Provides the item text content.
-
-**Props**
-
-| Name        | Type                | Default     | Description                      |
-| ----------- | ------------------- | ----------- | -------------------------------- |
-| `as?`       | `React.ElementType` | `'span'`    | Polymorphic element for ItemText |
-| `children?` | `React.ReactNode`   | `undefined` | Item text content                |
-
-**Events**
-
-| Name | Parameters | Description                                       | When Triggered |
-| ---- | ---------- | ------------------------------------------------- | -------------- |
-| -    | -          | No component-specific events on the ItemText part | -              |
-
-**HTML Attributes**
-
-| Attribute | Value | Purpose                                                               |
-| --------- | ----- | --------------------------------------------------------------------- |
-| -         | -     | No fixed HTML/data attributes are added by the component for ItemText |
 
 ### Select.Group
 
@@ -909,6 +838,7 @@ Optional arrow part positioned according to the Content/Trigger placement.
 | ---------- | --------------------- | ----------------------- |
 | `isOpen`   | `boolean`             | Root open/closed state  |
 | `value`    | `string \| undefined` | Selected value          |
+| `label`    | `string \| undefined` | Selected item label     |
 | `disabled` | `boolean`             | Trigger disabled state  |
 | `open`     | `() => void`          | Open programmatically   |
 | `close`    | `() => void`          | Close programmatically  |
