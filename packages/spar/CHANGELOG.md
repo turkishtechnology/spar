@@ -7,6 +7,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Select — API Simplification (SelectValue & SelectItemText Removed)
+
+#### Removed
+
+- **`Select.Value` (SelectValue)** — The standalone value-display component has been removed.
+  The trigger now computes and renders the selected item's text internally.
+- **`Select.ItemText` (SelectItemText)** — The item text wrapper component has been removed.
+  Its only purpose was to register text for typeahead and value display via DOM reading;
+  this is now handled entirely by the `textValue` prop on `Select.Item`.
+
+#### Changed
+
+- **`Select.Trigger`** — Now accepts a `placeholder` prop (shown when no value is selected)
+  and renders the selected item's `textValue` automatically. Supports render-prop children
+  with a new `textValue` field in `SelectTriggerRenderProps` for custom display layouts.
+- **`Select.Item`** — The `textValue` prop is now the sole mechanism for registering display
+  text used in typeahead filtering and in the trigger's value display. Previously this was
+  optional if `SelectItemText` was used; it is now the recommended approach.
+- **`aria-labelledby` on trigger** — No longer references a value node id (which no longer
+  exists). When wrapped in a `Field`, it references the Field label id only. Standalone
+  triggers rely on `aria-label` directly.
+
+#### Why
+
+The `SelectValue` and `SelectItemText` sub-components added indirection without meaningful
+benefit. `SelectValue` was a passive display node whose content was already derivable from
+context; `SelectItemText` existed solely to read DOM text for typeahead — a concern better
+served by an explicit `textValue` prop. Removing both flattens the component tree, reduces
+the compound-component surface area, and makes the API easier to learn:
+
+```tsx
+// Before
+<Select.Trigger>
+  <Select.Value placeholder='Choose…' />
+</Select.Trigger>
+<Select.Item value='x'>
+  <Select.ItemText>Label</Select.ItemText>
+</Select.Item>
+
+// After
+<Select.Trigger placeholder='Choose…' />
+<Select.Item value='x' textValue='Label'>Label</Select.Item>
+```
+
+#### Migration
+
+1. Move the `placeholder` prop from `<Select.Value>` to `<Select.Trigger>`.
+2. Remove `<Select.Value>` from inside the trigger.
+3. Replace `<Select.ItemText>Text</Select.ItemText>` inside each item with
+   a `textValue='Text'` prop on `<Select.Item>` and render the text as direct children.
+4. If you used render-prop children on Trigger for custom layouts, the render props
+   now include `textValue` (the display text of the selected item).
+
 ## [0.2.0-beta.0] - 2026-05-17
 
 First beta of the 0.2 line. Significant work since 0.1.4 including the Field

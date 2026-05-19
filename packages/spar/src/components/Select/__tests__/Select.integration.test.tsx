@@ -1,14 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-  SelectItemText,
-} from '../index';
+import { Select, SelectTrigger, SelectContent, SelectItem } from '../index';
 import { Field, FieldDescription, FieldErrorMessage, FieldLabel } from '../../Field';
 
 describe('Select Integration', () => {
@@ -23,15 +16,13 @@ describe('Select Integration', () => {
     render(
       <form onSubmit={handleSubmit}>
         <Select name='plan'>
-          <SelectTrigger aria-label='Choose plan'>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
+          <SelectTrigger aria-label='Choose plan' placeholder='Select...' />
           <SelectContent>
-            <SelectItem value='basic'>
-              <SelectItemText>Basic</SelectItemText>
+            <SelectItem value='basic' textValue='Basic'>
+              Basic
             </SelectItem>
-            <SelectItem value='premium'>
-              <SelectItemText>Premium</SelectItemText>
+            <SelectItem value='premium' textValue='Premium'>
+              Premium
             </SelectItem>
           </SelectContent>
         </Select>
@@ -57,15 +48,13 @@ describe('Select Integration', () => {
       return (
         <div>
           <Select value={value} onChange={setValue} name='plan'>
-            <SelectTrigger aria-label='Choose plan'>
-              <SelectValue />
-            </SelectTrigger>
+            <SelectTrigger aria-label='Choose plan' />
             <SelectContent>
-              <SelectItem value='basic'>
-                <SelectItemText>Basic</SelectItemText>
+              <SelectItem value='basic' textValue='Basic'>
+                Basic
               </SelectItem>
-              <SelectItem value='premium'>
-                <SelectItemText>Premium</SelectItemText>
+              <SelectItem value='premium' textValue='Premium'>
+                Premium
               </SelectItem>
             </SelectContent>
           </Select>
@@ -89,29 +78,25 @@ describe('Select Integration', () => {
     render(
       <div>
         <Select name='size'>
-          <SelectTrigger aria-label='Choose size'>
-            <SelectValue placeholder='Select size' />
-          </SelectTrigger>
+          <SelectTrigger aria-label='Choose size' placeholder='Select size' />
           <SelectContent>
-            <SelectItem value='small'>
-              <SelectItemText>Small</SelectItemText>
+            <SelectItem value='small' textValue='Small'>
+              Small
             </SelectItem>
-            <SelectItem value='large'>
-              <SelectItemText>Large</SelectItemText>
+            <SelectItem value='large' textValue='Large'>
+              Large
             </SelectItem>
           </SelectContent>
         </Select>
 
         <Select name='color'>
-          <SelectTrigger aria-label='Choose color'>
-            <SelectValue placeholder='Select color' />
-          </SelectTrigger>
+          <SelectTrigger aria-label='Choose color' placeholder='Select color' />
           <SelectContent>
-            <SelectItem value='red'>
-              <SelectItemText>Red</SelectItemText>
+            <SelectItem value='red' textValue='Red'>
+              Red
             </SelectItem>
-            <SelectItem value='blue'>
-              <SelectItemText>Blue</SelectItemText>
+            <SelectItem value='blue' textValue='Blue'>
+              Blue
             </SelectItem>
           </SelectContent>
         </Select>
@@ -140,12 +125,10 @@ describe('Select Integration', () => {
       <Field invalid required disabled>
         <FieldLabel>Plan</FieldLabel>
         <Select onChange={handleChange}>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
+          <SelectTrigger placeholder='Select...' />
           <SelectContent>
-            <SelectItem value='basic'>
-              <SelectItemText>Basic</SelectItemText>
+            <SelectItem value='basic' textValue='Basic'>
+              Basic
             </SelectItem>
           </SelectContent>
         </Select>
@@ -167,12 +150,10 @@ describe('Select Integration', () => {
       <Field readOnly>
         <FieldLabel>Plan</FieldLabel>
         <Select onChange={handleChange}>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
+          <SelectTrigger placeholder='Select...' />
           <SelectContent>
-            <SelectItem value='basic'>
-              <SelectItemText>Basic</SelectItemText>
+            <SelectItem value='basic' textValue='Basic'>
+              Basic
             </SelectItem>
           </SelectContent>
         </Select>
@@ -194,12 +175,10 @@ describe('Select Integration', () => {
       <Field id='billing-plan'>
         <FieldLabel>Plan</FieldLabel>
         <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
+          <SelectTrigger placeholder='Select...' />
           <SelectContent>
-            <SelectItem value='basic'>
-              <SelectItemText>Basic</SelectItemText>
+            <SelectItem value='basic' textValue='Basic'>
+              Basic
             </SelectItem>
           </SelectContent>
         </Select>
@@ -223,12 +202,10 @@ describe('Select Integration', () => {
       <Field invalid>
         <FieldLabel>Plan</FieldLabel>
         <Select>
-          <SelectTrigger>
-            <SelectValue placeholder='Select...' />
-          </SelectTrigger>
+          <SelectTrigger placeholder='Select...' />
           <SelectContent>
-            <SelectItem value='basic'>
-              <SelectItemText>Basic</SelectItemText>
+            <SelectItem value='basic' textValue='Basic'>
+              Basic
             </SelectItem>
           </SelectContent>
         </Select>
@@ -245,12 +222,10 @@ describe('Select Integration', () => {
   it('omits aria-describedby when used standalone', () => {
     render(
       <Select>
-        <SelectTrigger aria-label='Choose plan'>
-          <SelectValue placeholder='Select...' />
-        </SelectTrigger>
+        <SelectTrigger aria-label='Choose plan' placeholder='Select...' />
         <SelectContent>
-          <SelectItem value='basic'>
-            <SelectItemText>Basic</SelectItemText>
+          <SelectItem value='basic' textValue='Basic'>
+            Basic
           </SelectItem>
         </SelectContent>
       </Select>,
@@ -268,12 +243,10 @@ describe('Select Integration', () => {
 
     render(
       <Select>
-        <SelectTrigger aria-label='Choose option'>
-          <SelectValue placeholder='Select...' />
-        </SelectTrigger>
+        <SelectTrigger aria-label='Choose option' placeholder='Select...' />
         <SelectContent container={portalTarget}>
-          <SelectItem value='option1'>
-            <SelectItemText>Option 1</SelectItemText>
+          <SelectItem value='option1' textValue='Option 1'>
+            Option 1
           </SelectItem>
         </SelectContent>
       </Select>,

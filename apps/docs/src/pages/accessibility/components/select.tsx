@@ -31,22 +31,21 @@ export default function SelectDemo() {
             <div>
               <div className='demo-area'>
                 <Select.Root>
-                  <Select.Trigger className='demo-select-trigger'>
-                    <Select.Value placeholder='Choose a fruit…' />
+                  <Select.Trigger className='demo-select-trigger' placeholder='Choose a fruit…'>
                     <span>▾</span>
                   </Select.Trigger>
                   <Select.Content className='demo-select-content'>
-                    <Select.Item className='demo-select-item' value='apple'>
-                      <Select.ItemText>Apple</Select.ItemText>
+                    <Select.Item className='demo-select-item' value='apple' textValue='Apple'>
+                      Apple
                     </Select.Item>
-                    <Select.Item className='demo-select-item' value='banana'>
-                      <Select.ItemText>Banana</Select.ItemText>
+                    <Select.Item className='demo-select-item' value='banana' textValue='Banana'>
+                      Banana
                     </Select.Item>
-                    <Select.Item className='demo-select-item' value='cherry'>
-                      <Select.ItemText>Cherry</Select.ItemText>
+                    <Select.Item className='demo-select-item' value='cherry' textValue='Cherry'>
+                      Cherry
                     </Select.Item>
-                    <Select.Item className='demo-select-item' value='grape'>
-                      <Select.ItemText>Grape</Select.ItemText>
+                    <Select.Item className='demo-select-item' value='grape' textValue='Grape'>
+                      Grape
                     </Select.Item>
                   </Select.Content>
                 </Select.Root>
@@ -59,11 +58,9 @@ export default function SelectDemo() {
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
                 <code>{`<Select.Root>
-  <Select.Trigger>
-    <Select.Value placeholder='Choose a fruit…' />
-  </Select.Trigger>
+  <Select.Trigger placeholder='Choose a fruit…' />
   <Select.Content>
-    <Select.Item value='apple'><Select.ItemText>Apple</Select.ItemText></Select.Item>
+    <Select.Item value='apple' textValue='Apple'>Apple</Select.Item>
   </Select.Content>
 </Select.Root>`}</code>
               </pre>
@@ -81,28 +78,31 @@ export default function SelectDemo() {
             <div>
               <div className='demo-area'>
                 <Select.Root>
-                  <Select.Trigger className='demo-select-trigger'>
-                    <Select.Value placeholder='Select a food…' />
+                  <Select.Trigger className='demo-select-trigger' placeholder='Select a food…'>
                     <span>▾</span>
                   </Select.Trigger>
                   <Select.Content className='demo-select-content'>
                     <Select.Group>
                       <Select.Label className='demo-select-label'>Fruits</Select.Label>
-                      <Select.Item className='demo-select-item' value='apple'>
-                        <Select.ItemText>Apple</Select.ItemText>
+                      <Select.Item className='demo-select-item' value='apple' textValue='Apple'>
+                        Apple
                       </Select.Item>
-                      <Select.Item className='demo-select-item' value='orange'>
-                        <Select.ItemText>Orange</Select.ItemText>
+                      <Select.Item className='demo-select-item' value='orange' textValue='Orange'>
+                        Orange
                       </Select.Item>
                     </Select.Group>
                     <Select.Separator className='demo-select-separator' />
                     <Select.Group>
                       <Select.Label className='demo-select-label'>Vegetables</Select.Label>
-                      <Select.Item className='demo-select-item' value='carrot'>
-                        <Select.ItemText>Carrot</Select.ItemText>
+                      <Select.Item className='demo-select-item' value='carrot' textValue='Carrot'>
+                        Carrot
                       </Select.Item>
-                      <Select.Item className='demo-select-item' value='broccoli'>
-                        <Select.ItemText>Broccoli</Select.ItemText>
+                      <Select.Item
+                        className='demo-select-item'
+                        value='broccoli'
+                        textValue='Broccoli'
+                      >
+                        Broccoli
                       </Select.Item>
                     </Select.Group>
                   </Select.Content>
@@ -112,11 +112,11 @@ export default function SelectDemo() {
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
                 <code>{`<Select.Root>
-  <Select.Trigger><Select.Value placeholder='Select a food…' /></Select.Trigger>
+  <Select.Trigger placeholder='Select a food…' />
   <Select.Content>
     <Select.Group>
       <Select.Label>Fruits</Select.Label>
-      <Select.Item value='apple'><Select.ItemText>Apple</Select.ItemText></Select.Item>
+      <Select.Item value='apple' textValue='Apple'>Apple</Select.Item>
     </Select.Group>
   </Select.Content>
 </Select.Root>`}</code>
@@ -135,19 +135,27 @@ export default function SelectDemo() {
             <div>
               <div className='demo-area'>
                 <Select.Root>
-                  <Select.Trigger className='demo-select-trigger'>
-                    <Select.Value placeholder='Choose a plan…' />
+                  <Select.Trigger className='demo-select-trigger' placeholder='Choose a plan…'>
                     <span>▾</span>
                   </Select.Trigger>
                   <Select.Content className='demo-select-content'>
-                    <Select.Item className='demo-select-item' value='free'>
-                      <Select.ItemText>Free</Select.ItemText>
+                    <Select.Item className='demo-select-item' value='free' textValue='Free'>
+                      Free
                     </Select.Item>
-                    <Select.Item className='demo-select-item' value='pro' disabled>
-                      <Select.ItemText>Pro (sold out)</Select.ItemText>
+                    <Select.Item
+                      className='demo-select-item'
+                      value='pro'
+                      disabled
+                      textValue='Pro (sold out)'
+                    >
+                      Pro (sold out)
                     </Select.Item>
-                    <Select.Item className='demo-select-item' value='enterprise'>
-                      <Select.ItemText>Enterprise</Select.ItemText>
+                    <Select.Item
+                      className='demo-select-item'
+                      value='enterprise'
+                      textValue='Enterprise'
+                    >
+                      Enterprise
                     </Select.Item>
                   </Select.Content>
                 </Select.Root>
@@ -159,10 +167,10 @@ export default function SelectDemo() {
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
                 <code>{`<Select.Root>
-  <Select.Trigger><Select.Value placeholder='Choose a plan…' /></Select.Trigger>
+  <Select.Trigger placeholder='Choose a plan…' />
   <Select.Content>
-    <Select.Item value='free'><Select.ItemText>Free</Select.ItemText></Select.Item>
-    <Select.Item value='pro' disabled><Select.ItemText>Pro (sold out)</Select.ItemText></Select.Item>
+    <Select.Item value='free' textValue='Free'>Free</Select.Item>
+    <Select.Item value='pro' disabled textValue='Pro (sold out)'>Pro (sold out)</Select.Item>
   </Select.Content>
 </Select.Root>`}</code>
               </pre>
@@ -196,19 +204,18 @@ export default function SelectDemo() {
                     setControlled(v);
                   }}
                 >
-                  <Select.Trigger className='demo-select-trigger'>
-                    <Select.Value placeholder='Select size…' />
+                  <Select.Trigger className='demo-select-trigger' placeholder='Select size…'>
                     <span>▾</span>
                   </Select.Trigger>
                   <Select.Content className='demo-select-content'>
-                    <Select.Item className='demo-select-item' value='small'>
-                      <Select.ItemText>Small</Select.ItemText>
+                    <Select.Item className='demo-select-item' value='small' textValue='Small'>
+                      Small
                     </Select.Item>
-                    <Select.Item className='demo-select-item' value='medium'>
-                      <Select.ItemText>Medium</Select.ItemText>
+                    <Select.Item className='demo-select-item' value='medium' textValue='Medium'>
+                      Medium
                     </Select.Item>
-                    <Select.Item className='demo-select-item' value='large'>
-                      <Select.ItemText>Large</Select.ItemText>
+                    <Select.Item className='demo-select-item' value='large' textValue='Large'>
+                      Large
                     </Select.Item>
                   </Select.Content>
                 </Select.Root>
@@ -219,9 +226,9 @@ export default function SelectDemo() {
                 <code>{`const [value, setValue] = useState('');
 
 <Select.Root value={value} onChange={(nextValue) => setValue(nextValue)}>
-  <Select.Trigger><Select.Value placeholder='Select size…' /></Select.Trigger>
+  <Select.Trigger placeholder='Select size…' />
   <Select.Content>
-    <Select.Item value='small'><Select.ItemText>Small</Select.ItemText></Select.Item>
+    <Select.Item value='small' textValue='Small'>Small</Select.Item>
   </Select.Content>
 </Select.Root>`}</code>
               </pre>
@@ -239,13 +246,12 @@ export default function SelectDemo() {
             <div>
               <div className='demo-area demo-row'>
                 <Select.Root disabled>
-                  <Select.Trigger className='demo-select-trigger'>
-                    <Select.Value placeholder='Disabled select' />
+                  <Select.Trigger className='demo-select-trigger' placeholder='Disabled select'>
                     <span>▾</span>
                   </Select.Trigger>
                   <Select.Content className='demo-select-content'>
-                    <Select.Item className='demo-select-item' value='a'>
-                      <Select.ItemText>Option A</Select.ItemText>
+                    <Select.Item className='demo-select-item' value='a' textValue='Option A'>
+                      Option A
                     </Select.Item>
                   </Select.Content>
                 </Select.Root>
@@ -254,9 +260,9 @@ export default function SelectDemo() {
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
                 <code>{`<Select.Root disabled>
-  <Select.Trigger><Select.Value placeholder='Disabled select' /></Select.Trigger>
+  <Select.Trigger placeholder='Disabled select' />
   <Select.Content>
-    <Select.Item value='a'><Select.ItemText>Option A</Select.ItemText></Select.Item>
+    <Select.Item value='a' textValue='Option A'>Option A</Select.Item>
   </Select.Content>
 </Select.Root>`}</code>
               </pre>
@@ -275,16 +281,15 @@ export default function SelectDemo() {
             <div>
               <div className='demo-area'>
                 <Select.Root required>
-                  <Select.Trigger className='demo-select-trigger'>
-                    <Select.Value placeholder='Required field *' />
+                  <Select.Trigger className='demo-select-trigger' placeholder='Required field *'>
                     <span>▾</span>
                   </Select.Trigger>
                   <Select.Content className='demo-select-content'>
-                    <Select.Item className='demo-select-item' value='opt1'>
-                      <Select.ItemText>Option 1</Select.ItemText>
+                    <Select.Item className='demo-select-item' value='opt1' textValue='Option 1'>
+                      Option 1
                     </Select.Item>
-                    <Select.Item className='demo-select-item' value='opt2'>
-                      <Select.ItemText>Option 2</Select.ItemText>
+                    <Select.Item className='demo-select-item' value='opt2' textValue='Option 2'>
+                      Option 2
                     </Select.Item>
                   </Select.Content>
                 </Select.Root>
@@ -293,9 +298,9 @@ export default function SelectDemo() {
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
                 <code>{`<Select.Root required>
-  <Select.Trigger><Select.Value placeholder='Required field *' /></Select.Trigger>
+  <Select.Trigger placeholder='Required field *' />
   <Select.Content>
-    <Select.Item value='opt1'><Select.ItemText>Option 1</Select.ItemText></Select.Item>
+    <Select.Item value='opt1' textValue='Option 1'>Option 1</Select.Item>
   </Select.Content>
 </Select.Root>`}</code>
               </pre>

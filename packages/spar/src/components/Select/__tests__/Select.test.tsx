@@ -1,30 +1,21 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-  SelectItemText,
-} from '../index';
+import { Select, SelectTrigger, SelectContent, SelectItem } from '../index';
 
 const renderSelect = (props?: React.ComponentProps<typeof Select>) => {
   return render(
     <Select {...props}>
-      <SelectTrigger aria-label='Choose option'>
-        <SelectValue placeholder='Select...' />
-      </SelectTrigger>
+      <SelectTrigger aria-label='Choose option' placeholder='Select...' />
       <SelectContent>
-        <SelectItem value='option1'>
-          <SelectItemText>Option 1</SelectItemText>
+        <SelectItem value='option1' textValue='Option 1'>
+          Option 1
         </SelectItem>
-        <SelectItem value='option2'>
-          <SelectItemText>Option 2</SelectItemText>
+        <SelectItem value='option2' textValue='Option 2'>
+          Option 2
         </SelectItem>
-        <SelectItem value='option3' disabled>
-          <SelectItemText>Option 3</SelectItemText>
+        <SelectItem value='option3' textValue='Option 3' disabled>
+          Option 3
         </SelectItem>
       </SelectContent>
     </Select>,
@@ -40,7 +31,6 @@ describe('Select', () => {
     const trigger = screen.getByRole('combobox');
     expect(trigger).toHaveAttribute('id', 'plan-select-trigger');
     expect(trigger).toHaveAttribute('aria-controls', 'plan-select-content');
-    expect(trigger).toHaveAttribute('aria-labelledby', 'plan-select-value');
     expect(trigger).toHaveAttribute('aria-required', 'true');
 
     await user.click(trigger);
@@ -70,15 +60,13 @@ describe('Select', () => {
 
     const Controlled = ({ value }: { value: string }) => (
       <Select value={value} onChange={handleValueChange}>
-        <SelectTrigger aria-label='Choose option'>
-          <SelectValue placeholder='Select...' />
-        </SelectTrigger>
+        <SelectTrigger aria-label='Choose option' placeholder='Select...' />
         <SelectContent>
-          <SelectItem value='option1'>
-            <SelectItemText>Option 1</SelectItemText>
+          <SelectItem value='option1' textValue='Option 1'>
+            Option 1
           </SelectItem>
-          <SelectItem value='option2'>
-            <SelectItemText>Option 2</SelectItemText>
+          <SelectItem value='option2' textValue='Option 2'>
+            Option 2
           </SelectItem>
         </SelectContent>
       </Select>
@@ -169,11 +157,7 @@ describe('Select', () => {
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
     expect(() => {
-      render(
-        <SelectTrigger>
-          <SelectValue placeholder='Select...' />
-        </SelectTrigger>,
-      );
+      render(<SelectTrigger placeholder='Select...' />);
     }).toThrow('Select components must be used within a Select');
 
     consoleErrorSpy.mockRestore();

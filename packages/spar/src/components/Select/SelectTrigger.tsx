@@ -7,11 +7,15 @@ import type { ButtonProps } from '../Button/types';
 
 /**
  * Trigger button that toggles the select dropdown. Handles keyboard navigation and accessibility attributes.
+ *
+ * When no `children` are provided, the trigger displays the selected item's `textValue` or the `placeholder`.
+ * When a render function is provided, it receives `SelectTriggerRenderProps` including `textValue`.
  */
 export const SelectTrigger = <T extends ElementType = 'button'>({
   ref,
   as,
   disabled: disabledProp,
+  placeholder,
   onClick,
   onKeyDown,
   children,
@@ -22,6 +26,10 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
 
   // Use prop if explicitly provided, otherwise use context
   const disabled = disabledProp ?? context.disabled;
+
+  // Compute the display text from the selected item's registered textValue
+  const selectedItem = context.value ? context.items.get(context.value) : undefined;
+  const textValue = selectedItem?.textValue;
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -65,16 +73,16 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
   const renderProps: SelectTriggerRenderProps = {
     isOpen: context.open,
     value: context.value,
+    textValue,
     disabled,
     open: () => context.onOpenChange(true),
     close: () => context.onOpenChange(false),
     toggle: () => context.onOpenChange(!context.open),
   };
 
-  // When wrapped in a Field, expose the field label alongside the value so
-  // screen readers announce "Label: Value". Standalone usage keeps the
-  // original valueId-only behavior.
-  const labelledBy = context.hasField ? `${context.labelId} ${context.valueId}` : context.valueId;
+  // Build aria-labelledby: use field label when inside a Field, otherwise
+  // the trigger's own text content serves as the accessible name via aria-label.
+  const labelledBy = context.hasField ? context.labelId : undefined;
 
   // Only point to description/error when a Field is in scope — otherwise
   // those IDs are synthetic and resolve to no DOM node.
@@ -109,11 +117,18 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
     ...props,
   } as ButtonProps<T>;
 
-  return (
-    <Button {...buttonProps}>
-      {typeof children === 'function' ? children(renderProps) : children}
-    </Button>
-  );
+  // Determine content to render
+  let content;
+  if (typeof children === 'function') {
+    content = children(renderProps);
+  } else if (children != null) {
+    content = children;
+  } else {
+    // Default: show textValue or placeholder
+    content = textValue || placeholder;
+  }
+
+  return <Button {...buttonProps}>{content}</Button>;
 };
 
 SelectTrigger.displayName = 'SelectTrigger';

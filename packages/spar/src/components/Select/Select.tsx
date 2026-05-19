@@ -53,7 +53,6 @@ export const Select = <T extends ElementType = 'div'>({
   // Refs
   const triggerRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const valueNodeRef = useRef<HTMLElement>(null);
   const arrowRef = useRef<Element | null>(null);
 
   // IDs - reuse Field's coordinated IDs when nested so FieldLabel's htmlFor
@@ -62,7 +61,6 @@ export const Select = <T extends ElementType = 'div'>({
   const baseId = providedId ?? generatedId;
   const triggerId = fieldCtx?.fieldId ?? `${baseId}-trigger`;
   const contentId = `${baseId}-content`;
-  const valueId = `${baseId}-value`;
   const labelId = fieldCtx?.labelId ?? `${baseId}-label`;
   const descriptionId = fieldCtx?.descriptionId ?? `${baseId}-description`;
   const errorId = fieldCtx?.errorId ?? `${baseId}-error`;
@@ -115,13 +113,11 @@ export const Select = <T extends ElementType = 'div'>({
       // Refs
       triggerRef,
       contentRef,
-      valueNodeRef,
       arrowRef,
 
       // IDs
       triggerId,
       contentId,
-      valueId,
       labelId,
       descriptionId,
       errorId,
@@ -148,7 +144,6 @@ export const Select = <T extends ElementType = 'div'>({
       handleOpenChange,
       triggerId,
       contentId,
-      valueId,
       labelId,
       descriptionId,
       errorId,

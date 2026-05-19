@@ -21,9 +21,7 @@ export const SelectItem = <T extends ElementType = 'div'>({
   const context = useSelectContext();
   const collection = useSelectCollectionContext();
   const itemRef = useRef<HTMLDivElement>(null);
-  const [textValue, setTextValue] = useState(
-    providedTextValue || context.items.get(value)?.textValue || '',
-  );
+  const [textValue] = useState(providedTextValue || context.items.get(value)?.textValue || '');
 
   // Merge external ref with internal ref
   const mergedRef = useMergedRef(itemRef, ref);
@@ -96,12 +94,6 @@ export const SelectItem = <T extends ElementType = 'div'>({
     [onClick, handleSelect],
   );
 
-  const registerItemText = useCallback((text: string) => {
-    if (text) {
-      setTextValue(text);
-    }
-  }, []);
-
   const itemContextValue = useMemo<SelectItemContextValue>(
     () => ({
       value,
@@ -110,9 +102,8 @@ export const SelectItem = <T extends ElementType = 'div'>({
       isHighlighted,
       textValue,
       onSelect: handleSelect,
-      registerItemText,
     }),
-    [value, isSelected, disabled, isHighlighted, textValue, handleSelect, registerItemText],
+    [value, isSelected, disabled, isHighlighted, textValue, handleSelect],
   );
 
   // Render props for children function

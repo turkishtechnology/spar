@@ -101,6 +101,10 @@ export interface SelectTriggerRenderProps {
    */
   value: string | undefined;
   /**
+   * The display text for the currently selected item
+   */
+  textValue: string | undefined;
+  /**
    * Whether the select is disabled
    */
   disabled: boolean;
@@ -123,7 +127,13 @@ export interface SelectTriggerRenderProps {
  */
 export interface SelectTriggerOwnProps extends ButtonOwnProps {
   /**
-   * Children content or render function
+   * Text shown when no value is selected
+   */
+  placeholder?: ReactNode;
+
+  /**
+   * Children content or render function.
+   * When omitted, the trigger displays the selected item's textValue or the placeholder.
    */
   children?: ReactNode | ((state: SelectTriggerRenderProps) => ReactNode);
 }
@@ -136,26 +146,6 @@ export type SelectTriggerProps<T extends ElementType = 'button'> = PolymorphicPr
   'button',
   T,
   SelectTriggerOwnProps
->;
-
-/**
- * Own props for SelectValue component
- */
-export interface SelectValueOwnProps {
-  /**
-   * Text shown when no value selected
-   */
-  placeholder?: ReactNode;
-}
-
-/**
- * Props for SelectValue component
- * @remarks Displays the selected value or placeholder
- */
-export type SelectValueProps<T extends ElementType = 'span'> = PolymorphicProps<
-  'span',
-  T,
-  SelectValueOwnProps
 >;
 
 /**
@@ -268,12 +258,6 @@ export type SelectItemProps<T extends ElementType = 'div'> = PolymorphicProps<
 >;
 
 /**
- * Props for SelectItemText component
- * @remarks The text content of an item
- */
-export type SelectItemTextProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
-
-/**
  * Props for SelectGroup component
  * @remarks Groups related items together
  */
@@ -328,13 +312,11 @@ export interface SelectContextValue {
   // Refs
   triggerRef: RefObject<HTMLButtonElement | null>;
   contentRef: RefObject<HTMLDivElement | null>;
-  valueNodeRef: RefObject<HTMLElement | null>;
   arrowRef: RefObject<Element | null>;
 
   // IDs
   triggerId: string;
   contentId: string;
-  valueId: string;
   labelId: string;
   descriptionId: string;
   errorId: string;
@@ -375,7 +357,6 @@ export interface SelectItemContextValue {
   isHighlighted: boolean;
   textValue: string;
   onSelect: () => void;
-  registerItemText: (textValue: string) => void;
 }
 
 /**
