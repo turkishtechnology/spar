@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useCallback, useRef, useState, type ElementType } from 'react';
+import React, { useEffect, useMemo, useCallback, useRef, type ElementType } from 'react';
 import { useSelectContext, useSelectCollectionContext, SelectItemContext } from './hooks';
 import type { SelectItemProps, SelectItemContextValue, SelectItemRenderProps } from './types';
 import { useMergedRef } from '@/hooks';
@@ -21,7 +21,7 @@ export const SelectItem = <T extends ElementType = 'div'>({
   const context = useSelectContext();
   const collection = useSelectCollectionContext();
   const itemRef = useRef<HTMLDivElement>(null);
-  const [textValue] = useState(providedTextValue || context.items.get(value)?.textValue || '');
+  const textValue = providedTextValue || context.items.get(value)?.textValue || '';
 
   // Merge external ref with internal ref
   const mergedRef = useMergedRef(itemRef, ref);
@@ -47,7 +47,7 @@ export const SelectItem = <T extends ElementType = 'div'>({
     };
 
     // Note: We intentionally do NOT unregister on unmount
-    // This keeps the textValue cached so SelectValue can display it
+    // This keeps the textValue cached so the trigger can display it
     // even when the dropdown is closed and items are unmounted
   }, [context, value, textValue, disabled]);
 

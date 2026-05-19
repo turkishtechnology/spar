@@ -309,7 +309,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
 
   if (!context.open || !mounted) {
     // Render children in a hidden container (no portal, no positioning)
-    // so items can register their data for SelectValue display.
+    // so items can register their data for the trigger's display text.
     return (
       <SelectContentContext.Provider value={contentContextValue}>
         <SelectCollectionContext.Provider value={collectionValue}>

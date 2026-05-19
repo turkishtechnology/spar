@@ -59,6 +59,9 @@ the compound-component surface area, and makes the API easier to learn:
    a `textValue='Text'` prop on `<Select.Item>` and render the text as direct children.
 4. If you used render-prop children on Trigger for custom layouts, the render props
    now include `textValue` (the display text of the selected item).
+5. If you styled the placeholder/value text via a `Select.Value` selector, move those
+   styles to `Select.Trigger`. The trigger now carries `[data-placeholder]` when no
+   value is selected, so empty-state styling lives on the trigger itself.
 
 ## [0.2.0-beta.0] - 2026-05-17
 
