@@ -12,7 +12,7 @@ export interface SelectOwnProps {
   /**
    * Custom base ID for ARIA relationships.
    * If not provided, one will be generated automatically.
-   * Sub-element IDs are derived as `${id}-trigger`, `${id}-content`, `${id}-value`.
+   * Sub-element IDs are derived as `${id}-trigger` and `${id}-content`.
    */
   id?: string;
 
@@ -101,6 +101,10 @@ export interface SelectTriggerRenderProps {
    */
   value: string | undefined;
   /**
+   * The label of the currently selected item (shown in the trigger)
+   */
+  label: string | undefined;
+  /**
    * Whether the select is disabled
    */
   disabled: boolean;
@@ -123,7 +127,13 @@ export interface SelectTriggerRenderProps {
  */
 export interface SelectTriggerOwnProps extends ButtonOwnProps {
   /**
-   * Children content or render function
+   * Text shown when no value is selected
+   */
+  placeholder?: ReactNode;
+
+  /**
+   * Children content or render function.
+   * When omitted, the trigger displays the selected item's label or the placeholder.
    */
   children?: ReactNode | ((state: SelectTriggerRenderProps) => ReactNode);
 }
@@ -136,26 +146,6 @@ export type SelectTriggerProps<T extends ElementType = 'button'> = PolymorphicPr
   'button',
   T,
   SelectTriggerOwnProps
->;
-
-/**
- * Own props for SelectValue component
- */
-export interface SelectValueOwnProps {
-  /**
-   * Text shown when no value selected
-   */
-  placeholder?: ReactNode;
-}
-
-/**
- * Props for SelectValue component
- * @remarks Displays the selected value or placeholder
- */
-export type SelectValueProps<T extends ElementType = 'span'> = PolymorphicProps<
-  'span',
-  T,
-  SelectValueOwnProps
 >;
 
 /**
@@ -247,9 +237,13 @@ export interface SelectItemOwnProps {
   disabled?: boolean;
 
   /**
-   * Text for type-ahead (auto-detected if not provided)
+   * Text label for this item. Shown in the trigger when this item is selected,
+   * and used as the search key for keyboard typeahead.
+   *
+   * Should be set whenever `children` is not plain text (e.g. contains icons or
+   * other elements) so the trigger can display a clean string representation.
    */
-  textValue?: string;
+  label?: string;
 
   /**
    * Children content or render function
@@ -266,12 +260,6 @@ export type SelectItemProps<T extends ElementType = 'div'> = PolymorphicProps<
   T,
   SelectItemOwnProps
 >;
-
-/**
- * Props for SelectItemText component
- * @remarks The text content of an item
- */
-export type SelectItemTextProps<T extends ElementType = 'span'> = PolymorphicProps<'span', T>;
 
 /**
  * Props for SelectGroup component
@@ -302,7 +290,7 @@ export type SelectArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<'
  */
 export interface SelectItemData {
   value: string;
-  textValue: string;
+  label: string;
   disabled: boolean;
   ref: RefObject<HTMLElement | null>;
   mounted: boolean;
@@ -328,13 +316,11 @@ export interface SelectContextValue {
   // Refs
   triggerRef: RefObject<HTMLButtonElement | null>;
   contentRef: RefObject<HTMLDivElement | null>;
-  valueNodeRef: RefObject<HTMLElement | null>;
   arrowRef: RefObject<Element | null>;
 
   // IDs
   triggerId: string;
   contentId: string;
-  valueId: string;
   labelId: string;
   descriptionId: string;
   errorId: string;
@@ -373,9 +359,8 @@ export interface SelectItemContextValue {
   isSelected: boolean;
   disabled: boolean;
   isHighlighted: boolean;
-  textValue: string;
+  label: string;
   onSelect: () => void;
-  registerItemText: (textValue: string) => void;
 }
 
 /**

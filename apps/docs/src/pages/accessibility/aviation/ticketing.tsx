@@ -310,10 +310,12 @@ export default function TicketingPage() {
                         }}
                       >
                         <Select.Trigger className='ticketing-field ticketing-field-wide ticketing-select-trigger'>
-                          <span className='ticketing-field-label'>From</span>
-                          <span className='ticketing-field-value'>
-                            <Select.Value placeholder='Select' />
-                          </span>
+                          {({ label }) => (
+                            <>
+                              <span className='ticketing-field-label'>From</span>
+                              <span className='ticketing-field-value'>{label || 'Select'}</span>
+                            </>
+                          )}
                         </Select.Trigger>
                         <Select.Content className='ticketing-select-content'>
                           {airportOptions.map((airport) => (
@@ -321,8 +323,9 @@ export default function TicketingPage() {
                               key={airport.value}
                               value={airport.value}
                               className='ticketing-select-item'
+                              label={airport.label}
                             >
-                              <Select.ItemText>{airport.label}</Select.ItemText>
+                              {airport.label}
                             </Select.Item>
                           ))}
                         </Select.Content>
@@ -348,10 +351,12 @@ export default function TicketingPage() {
                         }}
                       >
                         <Select.Trigger className='ticketing-field ticketing-field-wide ticketing-select-trigger'>
-                          <span className='ticketing-field-label'>To</span>
-                          <span className='ticketing-field-value'>
-                            <Select.Value placeholder='Select' />
-                          </span>
+                          {({ label }) => (
+                            <>
+                              <span className='ticketing-field-label'>To</span>
+                              <span className='ticketing-field-value'>{label || 'Select'}</span>
+                            </>
+                          )}
                         </Select.Trigger>
                         <Select.Content className='ticketing-select-content'>
                           {airportOptions
@@ -361,8 +366,9 @@ export default function TicketingPage() {
                                 key={airport.value}
                                 value={airport.value}
                                 className='ticketing-select-item'
+                                label={airport.label}
                               >
-                                <Select.ItemText>{airport.label}</Select.ItemText>
+                                {airport.label}
                               </Select.Item>
                             ))}
                         </Select.Content>
@@ -402,20 +408,36 @@ export default function TicketingPage() {
                         }}
                       >
                         <Select.Trigger className='ticketing-field ticketing-select-trigger'>
-                          <span className='ticketing-field-label'>Passengers</span>
-                          <span className='ticketing-field-value'>
-                            <Select.Value placeholder='1 Passenger' />
-                          </span>
+                          {({ label }) => (
+                            <>
+                              <span className='ticketing-field-label'>Passengers</span>
+                              <span className='ticketing-field-value'>
+                                {label || '1 Passenger'}
+                              </span>
+                            </>
+                          )}
                         </Select.Trigger>
                         <Select.Content className='ticketing-select-content'>
-                          <Select.Item value='1' className='ticketing-select-item'>
-                            <Select.ItemText>1 Passenger</Select.ItemText>
+                          <Select.Item
+                            value='1'
+                            className='ticketing-select-item'
+                            label='1 Passenger'
+                          >
+                            1 Passenger
                           </Select.Item>
-                          <Select.Item value='2' className='ticketing-select-item'>
-                            <Select.ItemText>2 Passengers</Select.ItemText>
+                          <Select.Item
+                            value='2'
+                            className='ticketing-select-item'
+                            label='2 Passengers'
+                          >
+                            2 Passengers
                           </Select.Item>
-                          <Select.Item value='3' className='ticketing-select-item'>
-                            <Select.ItemText>3 Passengers</Select.ItemText>
+                          <Select.Item
+                            value='3'
+                            className='ticketing-select-item'
+                            label='3 Passengers'
+                          >
+                            3 Passengers
                           </Select.Item>
                         </Select.Content>
                       </Select.Root>

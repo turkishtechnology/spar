@@ -43,91 +43,91 @@ cssCode={`.checkbox-demo-container {
 }
 
 .checkbox-demo-container .checkbox-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+display: flex;
+align-items: center;
+gap: 8px;
 }
 
 .checkbox-demo-container .checkbox {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  border: 2px solid #b0b4bc;
-  background: transparent;
-  cursor: pointer;
-  flex-shrink: 0;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 20px;
+height: 20px;
+border-radius: 4px;
+border: 2px solid #b0b4bc;
+background: transparent;
+cursor: pointer;
+flex-shrink: 0;
 }
 
 .checkbox-demo-container .checkbox[data-checked] {
-  background: #2563eb;
-  border-color: #2563eb;
+background: #2563eb;
+border-color: #2563eb;
 }
 
 .checkbox-demo-container .checkbox[data-invalid] {
-  border-color: #d14343;
+border-color: #d14343;
 }
 
 .checkbox-demo-container .checkbox[data-checked][data-invalid] {
-  background: #d14343;
-  border-color: #d14343;
+background: #d14343;
+border-color: #d14343;
 }
 
 .checkbox-demo-container .checkbox-indicator {
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1;
+color: #fff;
+font-size: 12px;
+font-weight: 700;
+line-height: 1;
 }
 
 [data-theme='dark'] .checkbox-demo-container .checkbox {
-  border-color: #525866;
+border-color: #525866;
 }
 
 [data-theme='dark'] .checkbox-demo-container .checkbox[data-checked] {
-  background: #3b82f6;
-  border-color: #3b82f6;
+background: #3b82f6;
+border-color: #3b82f6;
 }
 
 .checkbox-demo-container .label {
-  color: #222530;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  margin: 0;
-  cursor: pointer;
+color: #222530;
+font-size: 14px;
+line-height: 20px;
+font-weight: 400;
+margin: 0;
+cursor: pointer;
 }
 
 [data-theme='dark'] .checkbox-demo-container .label {
-  color: #f2f5f8;
+color: #f2f5f8;
 }
 
 .checkbox-demo-container .description {
-  color: #717784;
-  display: block;
-  font-size: 12px;
-  line-height: 16px;
-  margin: 0;
-  padding-left: 28px;
+color: #717784;
+display: block;
+font-size: 12px;
+line-height: 16px;
+margin: 0;
+padding-left: 28px;
 }
 
 [data-theme='dark'] .checkbox-demo-container .description {
-  color: #99a0ae;
+color: #99a0ae;
 }
 
 .checkbox-demo-container .error {
-  color: #d14343;
-  display: block;
-  font-size: 12px;
-  line-height: 16px;
-  margin: 0;
-  padding-left: 28px;
+color: #d14343;
+display: block;
+font-size: 12px;
+line-height: 16px;
+margin: 0;
+padding-left: 28px;
 }
 
 [data-theme='dark'] .checkbox-demo-container .error {
-  color: #ff8a8a;
+color: #ff8a8a;
 }`}
 />
 
@@ -160,7 +160,7 @@ import { Checkbox, Field } from '@turkish-technology/spar';
   <Checkbox />
   <Field.Description />
   <Field.ErrorMessage />
-</Field.Root>
+</Field.Root>;
 
 // Named import style
 import {
@@ -198,7 +198,8 @@ The Checkbox component focuses on the interactive element itself. Label, descrip
     {
       name: 'checkbox',
       label: 'Checkbox',
-      description: 'Self-contained checkbox element with state management, accessibility, and interaction handling',
+      description:
+        'Self-contained checkbox element with state management, accessibility, and interaction handling',
     },
     { name: 'description', label: 'Field.Description', description: 'Helper text for guidance' },
     {
@@ -211,11 +212,7 @@ The Checkbox component focuses on the interactive element itself. Label, descrip
   <Field className='checkbox-demo-container' invalid data-spar-part='fieldRoot'>
     <div className='checkbox-row'>
       <Checkbox data-spar-part='checkbox' defaultChecked className='checkbox'>
-        {({ checked }) => (
-          <span className='checkbox-indicator'>
-            {checked === true && '✓'}
-          </span>
-        )}
+        {({ checked }) => <span className='checkbox-indicator'>{checked === true && '✓'}</span>}
       </Checkbox>
       <Field.Label className='label' data-spar-part='label'>
         {'I accept the terms'}
@@ -233,11 +230,7 @@ The Checkbox component focuses on the interactive element itself. Label, descrip
 ### Structure
 
 ```tsx
-<Checkbox>
-  {({ checked }) => (
-    <span className='indicator'>{checked && '✓'}</span>
-  )}
-</Checkbox>
+<Checkbox>{({ checked }) => <span className='indicator'>{checked && '✓'}</span>}</Checkbox>
 ```
 
 **With Field:**
@@ -245,10 +238,8 @@ The Checkbox component focuses on the interactive element itself. Label, descrip
 ```tsx
 <Field.Root required invalid>
   <div className='checkbox-row'>
-    <Checkbox name="fieldName">
-      {({ checked }) => (
-        <span className='indicator'>{checked && '✓'}</span>
-      )}
+    <Checkbox name='fieldName'>
+      {({ checked }) => <span className='indicator'>{checked && '✓'}</span>}
     </Checkbox>
     <Field.Label>Label text</Field.Label>
   </div>
@@ -274,11 +265,7 @@ Use a render function when you want the visual checkmark to appear only in the c
 ```tsx
 function BasicCheckbox() {
   return (
-    <Checkbox>
-      {({ checked }) => (
-        <span className='indicator'>{checked ? '✓' : ''}</span>
-      )}
-    </Checkbox>
+    <Checkbox>{({ checked }) => <span className='indicator'>{checked ? '✓' : ''}</span>}</Checkbox>
   );
 }
 ```
@@ -444,7 +431,9 @@ function DisabledCheckbox() {
         {({ checked }) => <span className='indicator'>{checked ? '✓' : ''}</span>}
       </Checkbox>
       <Checkbox disabled checked='indeterminate'>
-        {({ checked }) => <span className='indicator'>{checked === 'indeterminate' ? '−' : ''}</span>}
+        {({ checked }) => (
+          <span className='indicator'>{checked === 'indeterminate' ? '−' : ''}</span>
+        )}
       </Checkbox>
     </div>
   );
@@ -509,7 +498,7 @@ A self-contained headless checkbox component with full accessibility and Field i
 | `form?`           | `string`                                                               | `undefined`      | ID of the form this checkbox belongs to                                           |
 | `required?`       | `boolean`                                                              | `false`          | Required state for form validation                                                |
 | `readOnly?`       | `boolean`                                                              | `false`          | Read-only state - prevents interaction                                            |
-| `invalid?`      | `boolean`                                                              | `false`          | Invalid/error state. Inherited from Field unless explicitly overridden            |
+| `invalid?`        | `boolean`                                                              | `false`          | Invalid/error state. Inherited from Field unless explicitly overridden            |
 | `autoFocus?`      | `boolean`                                                              | `false`          | Auto-focus on mount                                                               |
 | `children?`       | `React.ReactNode \| ((state: CheckboxRenderProps) => React.ReactNode)` | `undefined`      | Content to display, or render props function                                      |
 | `id?`             | `string`                                                               | `auto-generated` | Unique identifier for the checkbox                                                |
@@ -528,7 +517,7 @@ When using the render props pattern, the following state properties are passed t
 | `disabled`   | `boolean`                         | Whether the checkbox is disabled                              |
 | `readOnly`   | `boolean`                         | Whether the checkbox is read-only                             |
 | `required`   | `boolean`                         | Whether the checkbox is required                              |
-| `invalid`  | `boolean`                         | Whether the checkbox is in an invalid/error state             |
+| `invalid`    | `boolean`                         | Whether the checkbox is in an invalid/error state             |
 | `isFocused`  | `boolean`                         | Whether the checkbox currently has focus                      |
 | `isHovered`  | `boolean`                         | Whether the checkbox is being hovered                         |
 | `isPressed`  | `boolean`                         | Whether the checkbox is being pressed                         |
@@ -552,18 +541,18 @@ When using the render props pattern, the following state properties are passed t
 | `data-disabled`      | `""`  | Present when `disabled` is `true`           |
 | `data-readonly`      | `""`  | Present when `readOnly` is `true`           |
 | `data-required`      | `""`  | Present when `required` is `true`           |
-| `data-invalid`       | `""`  | Present when `invalid` is `true`          |
+| `data-invalid`       | `""`  | Present when `invalid` is `true`            |
 | `data-focus`         | `""`  | Present when the checkbox has focus         |
 | `data-hover`         | `""`  | Present when the checkbox is hovered        |
 | `data-active`        | `""`  | Present when the checkbox is being pressed  |
 
 ## Keyboard Interactions
 
-| Key           | Action               | Context         | Notes                                        |
-| ------------- | -------------------- | --------------- | -------------------------------------------- |
-| `Tab`         | Navigate to checkbox | Always          | Moves focus to the checkbox                  |
-| `Shift + Tab` | Navigate backward    | Always          | Moves focus away from checkbox               |
-| `Space`       | Toggle checked state | Focused         | Primary activation method for checkboxes     |
-| `Enter`       | Submit form          | In form context | Does not toggle state, submits parent form   |
+| Key           | Action               | Context         | Notes                                      |
+| ------------- | -------------------- | --------------- | ------------------------------------------ |
+| `Tab`         | Navigate to checkbox | Always          | Moves focus to the checkbox                |
+| `Shift + Tab` | Navigate backward    | Always          | Moves focus away from checkbox             |
+| `Space`       | Toggle checked state | Focused         | Primary activation method for checkboxes   |
+| `Enter`       | Submit form          | In form context | Does not toggle state, submits parent form |
 
 **Note**: The checkbox follows WCAG guidelines where Space is the primary toggle key, while Enter submits forms without changing checkbox state.

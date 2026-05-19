@@ -1,7 +1,20 @@
-import React, { useEffect, useMemo, useCallback, useRef, useState, type ElementType } from 'react';
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useCallback,
+  useRef,
+  type ElementType,
+} from 'react';
 import { useSelectContext, useSelectCollectionContext, SelectItemContext } from './hooks';
 import type { SelectItemProps, SelectItemContextValue, SelectItemRenderProps } from './types';
 import { useMergedRef } from '@/hooks';
+
+// Use layout effect on the client so item registration happens before the first
+// paint — otherwise a `<Select defaultValue=…>` flashes the placeholder for one
+// frame before the trigger picks up the selected item's label. On the server
+// `useLayoutEffect` warns; fall back to a no-op (SSR has nothing to register).
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 /**
  * Individual selectable option within the select dropdown. Handles selection state, focus, and accessibility.
@@ -9,7 +22,7 @@ import { useMergedRef } from '@/hooks';
 export const SelectItem = <T extends ElementType = 'div'>({
   value,
   disabled = false,
-  textValue: providedTextValue,
+  label: providedLabel,
   ref,
   as,
   onPointerMove,
@@ -21,27 +34,30 @@ export const SelectItem = <T extends ElementType = 'div'>({
   const context = useSelectContext();
   const collection = useSelectCollectionContext();
   const itemRef = useRef<HTMLDivElement>(null);
-  const [textValue, setTextValue] = useState(
-    providedTextValue || context.items.get(value)?.textValue || '',
-  );
+  const label = providedLabel || context.items.get(value)?.label || '';
 
   // Merge external ref with internal ref
   const mergedRef = useMergedRef(itemRef, ref);
 
-  // Register/unregister item
-  useEffect(() => {
-    context.registerItem(value, {
+  // Register/unregister item. Runs in a layout effect so the trigger sees the
+  // selected item's label on the very first paint when `defaultValue` is set.
+  // Dep list intentionally tracks only the registry action (which is stable via
+  // useCallback) plus this item's own identity/state — including `context` here
+  // would re-fire on every items-map mutation and loop infinitely.
+  const { registerItem } = context;
+  useIsomorphicLayoutEffect(() => {
+    registerItem(value, {
       value,
-      textValue: textValue || context.items.get(value)?.textValue || '',
+      label,
       disabled,
       ref: itemRef,
       mounted: true,
     });
     return () => {
-      // Keep cache (textValue) but mark unmounted so navigation/typeahead ignores it
-      context.registerItem(value, {
+      // Keep cache (label) but mark unmounted so navigation/typeahead ignores it
+      registerItem(value, {
         value,
-        textValue: context.items.get(value)?.textValue || textValue || '',
+        label,
         disabled,
         ref: itemRef,
         mounted: false,
@@ -49,9 +65,9 @@ export const SelectItem = <T extends ElementType = 'div'>({
     };
 
     // Note: We intentionally do NOT unregister on unmount
-    // This keeps the textValue cached so SelectValue can display it
+    // This keeps the label cached so the trigger can display it
     // even when the dropdown is closed and items are unmounted
-  }, [context, value, textValue, disabled]);
+  }, [registerItem, value, label, disabled]);
 
   // Determine if this item is selected
   const isSelected = context.value === value;
@@ -96,23 +112,16 @@ export const SelectItem = <T extends ElementType = 'div'>({
     [onClick, handleSelect],
   );
 
-  const registerItemText = useCallback((text: string) => {
-    if (text) {
-      setTextValue(text);
-    }
-  }, []);
-
   const itemContextValue = useMemo<SelectItemContextValue>(
     () => ({
       value,
       isSelected,
       disabled,
       isHighlighted,
-      textValue,
+      label,
       onSelect: handleSelect,
-      registerItemText,
     }),
-    [value, isSelected, disabled, isHighlighted, textValue, handleSelect, registerItemText],
+    [value, isSelected, disabled, isHighlighted, label, handleSelect],
   );
 
   // Render props for children function

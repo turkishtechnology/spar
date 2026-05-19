@@ -159,19 +159,31 @@ export default function FormDemo() {
                         ref={field.ref}
                         id='role-select-trigger'
                         className='demo-select-trigger'
+                        placeholder='Select a role…'
                       >
-                        <Select.Value placeholder='Select a role…' />
                         <span>▾</span>
                       </Select.Trigger>
                       <Select.Content className='demo-select-content'>
-                        <Select.Item className='demo-select-item' value='frontend-engineer'>
-                          <Select.ItemText>Frontend Engineer</Select.ItemText>
+                        <Select.Item
+                          className='demo-select-item'
+                          value='frontend-engineer'
+                          label='Frontend Engineer'
+                        >
+                          Frontend Engineer
                         </Select.Item>
-                        <Select.Item className='demo-select-item' value='product-designer'>
-                          <Select.ItemText>Product Designer</Select.ItemText>
+                        <Select.Item
+                          className='demo-select-item'
+                          value='product-designer'
+                          label='Product Designer'
+                        >
+                          Product Designer
                         </Select.Item>
-                        <Select.Item className='demo-select-item' value='engineering-manager'>
-                          <Select.ItemText>Engineering Manager</Select.ItemText>
+                        <Select.Item
+                          className='demo-select-item'
+                          value='engineering-manager'
+                          label='Engineering Manager'
+                        >
+                          Engineering Manager
                         </Select.Item>
                       </Select.Content>
                     </Select.Root>
@@ -394,9 +406,7 @@ const { register, control, handleSubmit,
         field.onChange(v);
         field.onBlur();
       }}>
-      <Select.Trigger ref={field.ref}>
-        <Select.Value placeholder='Select a role…' />
-      </Select.Trigger>
+      <Select.Trigger ref={field.ref} placeholder='Select a role…' />
     </Select.Root>
   )}
 />
