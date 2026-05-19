@@ -18,10 +18,10 @@ describe('Select Integration', () => {
         <Select name='plan'>
           <SelectTrigger aria-label='Choose plan' placeholder='Select...' />
           <SelectContent>
-            <SelectItem value='basic' textValue='Basic'>
+            <SelectItem value='basic' label='Basic'>
               Basic
             </SelectItem>
-            <SelectItem value='premium' textValue='Premium'>
+            <SelectItem value='premium' label='Premium'>
               Premium
             </SelectItem>
           </SelectContent>
@@ -50,10 +50,10 @@ describe('Select Integration', () => {
           <Select value={value} onChange={setValue} name='plan'>
             <SelectTrigger aria-label='Choose plan' />
             <SelectContent>
-              <SelectItem value='basic' textValue='Basic'>
+              <SelectItem value='basic' label='Basic'>
                 Basic
               </SelectItem>
-              <SelectItem value='premium' textValue='Premium'>
+              <SelectItem value='premium' label='Premium'>
                 Premium
               </SelectItem>
             </SelectContent>
@@ -80,10 +80,10 @@ describe('Select Integration', () => {
         <Select name='size'>
           <SelectTrigger aria-label='Choose size' placeholder='Select size' />
           <SelectContent>
-            <SelectItem value='small' textValue='Small'>
+            <SelectItem value='small' label='Small'>
               Small
             </SelectItem>
-            <SelectItem value='large' textValue='Large'>
+            <SelectItem value='large' label='Large'>
               Large
             </SelectItem>
           </SelectContent>
@@ -92,10 +92,10 @@ describe('Select Integration', () => {
         <Select name='color'>
           <SelectTrigger aria-label='Choose color' placeholder='Select color' />
           <SelectContent>
-            <SelectItem value='red' textValue='Red'>
+            <SelectItem value='red' label='Red'>
               Red
             </SelectItem>
-            <SelectItem value='blue' textValue='Blue'>
+            <SelectItem value='blue' label='Blue'>
               Blue
             </SelectItem>
           </SelectContent>
@@ -127,7 +127,7 @@ describe('Select Integration', () => {
         <Select onChange={handleChange}>
           <SelectTrigger placeholder='Select...' />
           <SelectContent>
-            <SelectItem value='basic' textValue='Basic'>
+            <SelectItem value='basic' label='Basic'>
               Basic
             </SelectItem>
           </SelectContent>
@@ -152,7 +152,7 @@ describe('Select Integration', () => {
         <Select onChange={handleChange}>
           <SelectTrigger placeholder='Select...' />
           <SelectContent>
-            <SelectItem value='basic' textValue='Basic'>
+            <SelectItem value='basic' label='Basic'>
               Basic
             </SelectItem>
           </SelectContent>
@@ -177,7 +177,7 @@ describe('Select Integration', () => {
         <Select>
           <SelectTrigger placeholder='Select...' />
           <SelectContent>
-            <SelectItem value='basic' textValue='Basic'>
+            <SelectItem value='basic' label='Basic'>
               Basic
             </SelectItem>
           </SelectContent>
@@ -204,7 +204,7 @@ describe('Select Integration', () => {
         <Select>
           <SelectTrigger placeholder='Select...' />
           <SelectContent>
-            <SelectItem value='basic' textValue='Basic'>
+            <SelectItem value='basic' label='Basic'>
               Basic
             </SelectItem>
           </SelectContent>
@@ -224,7 +224,7 @@ describe('Select Integration', () => {
       <Select>
         <SelectTrigger aria-label='Choose plan' placeholder='Select...' />
         <SelectContent>
-          <SelectItem value='basic' textValue='Basic'>
+          <SelectItem value='basic' label='Basic'>
             Basic
           </SelectItem>
         </SelectContent>
@@ -245,7 +245,7 @@ describe('Select Integration', () => {
       <Select>
         <SelectTrigger aria-label='Choose option' placeholder='Select...' />
         <SelectContent container={portalTarget}>
-          <SelectItem value='option1' textValue='Option 1'>
+          <SelectItem value='option1' label='Option 1'>
             Option 1
           </SelectItem>
         </SelectContent>

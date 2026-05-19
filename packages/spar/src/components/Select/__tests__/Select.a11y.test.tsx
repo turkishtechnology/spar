@@ -18,10 +18,10 @@ const BasicSelect = ({ id }: { id?: string }) => (
   <Select id={id}>
     <SelectTrigger aria-label='Choose option' placeholder='Select...' />
     <SelectContent>
-      <SelectItem value='option1' textValue='Option 1'>
+      <SelectItem value='option1' label='Option 1'>
         Option 1
       </SelectItem>
-      <SelectItem value='option2' disabled textValue='Option 2'>
+      <SelectItem value='option2' disabled label='Option 2'>
         Option 2
       </SelectItem>
     </SelectContent>
@@ -72,10 +72,10 @@ describe('Select Accessibility', () => {
       <Select value='option1'>
         <SelectTrigger aria-label='Choose option' placeholder='Select...' />
         <SelectContent>
-          <SelectItem value='option1' textValue='Option 1'>
+          <SelectItem value='option1' label='Option 1'>
             Option 1
           </SelectItem>
-          <SelectItem value='option2' disabled textValue='Option 2'>
+          <SelectItem value='option2' disabled label='Option 2'>
             Option 2
           </SelectItem>
         </SelectContent>
@@ -118,7 +118,7 @@ describe('Select Accessibility', () => {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Fruits</SelectLabel>
-            <SelectItem value='apple' textValue='Apple'>
+            <SelectItem value='apple' label='Apple'>
               Apple
             </SelectItem>
           </SelectGroup>

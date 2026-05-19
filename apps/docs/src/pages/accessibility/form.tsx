@@ -167,21 +167,21 @@ export default function FormDemo() {
                         <Select.Item
                           className='demo-select-item'
                           value='frontend-engineer'
-                          textValue='Frontend Engineer'
+                          label='Frontend Engineer'
                         >
                           Frontend Engineer
                         </Select.Item>
                         <Select.Item
                           className='demo-select-item'
                           value='product-designer'
-                          textValue='Product Designer'
+                          label='Product Designer'
                         >
                           Product Designer
                         </Select.Item>
                         <Select.Item
                           className='demo-select-item'
                           value='engineering-manager'
-                          textValue='Engineering Manager'
+                          label='Engineering Manager'
                         >
                           Engineering Manager
                         </Select.Item>

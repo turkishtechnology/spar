@@ -8,13 +8,13 @@ const renderSelect = (props?: React.ComponentProps<typeof Select>) => {
     <Select {...props}>
       <SelectTrigger aria-label='Choose option' placeholder='Select...' />
       <SelectContent>
-        <SelectItem value='option1' textValue='Option 1'>
+        <SelectItem value='option1' label='Option 1'>
           Option 1
         </SelectItem>
-        <SelectItem value='option2' textValue='Option 2'>
+        <SelectItem value='option2' label='Option 2'>
           Option 2
         </SelectItem>
-        <SelectItem value='option3' textValue='Option 3' disabled>
+        <SelectItem value='option3' label='Option 3' disabled>
           Option 3
         </SelectItem>
       </SelectContent>
@@ -62,10 +62,10 @@ describe('Select', () => {
       <Select value={value} onChange={handleValueChange}>
         <SelectTrigger aria-label='Choose option' placeholder='Select...' />
         <SelectContent>
-          <SelectItem value='option1' textValue='Option 1'>
+          <SelectItem value='option1' label='Option 1'>
             Option 1
           </SelectItem>
-          <SelectItem value='option2' textValue='Option 2'>
+          <SelectItem value='option2' label='Option 2'>
             Option 2
           </SelectItem>
         </SelectContent>

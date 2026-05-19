@@ -9,7 +9,7 @@ import { useMergedRef } from '@/hooks';
 export const SelectItem = <T extends ElementType = 'div'>({
   value,
   disabled = false,
-  textValue: providedTextValue,
+  label: providedLabel,
   ref,
   as,
   onPointerMove,
@@ -21,7 +21,7 @@ export const SelectItem = <T extends ElementType = 'div'>({
   const context = useSelectContext();
   const collection = useSelectCollectionContext();
   const itemRef = useRef<HTMLDivElement>(null);
-  const textValue = providedTextValue || context.items.get(value)?.textValue || '';
+  const label = providedLabel || context.items.get(value)?.label || '';
 
   // Merge external ref with internal ref
   const mergedRef = useMergedRef(itemRef, ref);
@@ -30,16 +30,16 @@ export const SelectItem = <T extends ElementType = 'div'>({
   useEffect(() => {
     context.registerItem(value, {
       value,
-      textValue: textValue || context.items.get(value)?.textValue || '',
+      label: label || context.items.get(value)?.label || '',
       disabled,
       ref: itemRef,
       mounted: true,
     });
     return () => {
-      // Keep cache (textValue) but mark unmounted so navigation/typeahead ignores it
+      // Keep cache (label) but mark unmounted so navigation/typeahead ignores it
       context.registerItem(value, {
         value,
-        textValue: context.items.get(value)?.textValue || textValue || '',
+        label: context.items.get(value)?.label || label || '',
         disabled,
         ref: itemRef,
         mounted: false,
@@ -47,9 +47,9 @@ export const SelectItem = <T extends ElementType = 'div'>({
     };
 
     // Note: We intentionally do NOT unregister on unmount
-    // This keeps the textValue cached so the trigger can display it
+    // This keeps the label cached so the trigger can display it
     // even when the dropdown is closed and items are unmounted
-  }, [context, value, textValue, disabled]);
+  }, [context, value, label, disabled]);
 
   // Determine if this item is selected
   const isSelected = context.value === value;
@@ -100,10 +100,10 @@ export const SelectItem = <T extends ElementType = 'div'>({
       isSelected,
       disabled,
       isHighlighted,
-      textValue,
+      label,
       onSelect: handleSelect,
     }),
-    [value, isSelected, disabled, isHighlighted, textValue, handleSelect],
+    [value, isSelected, disabled, isHighlighted, label, handleSelect],
   );
 
   // Render props for children function

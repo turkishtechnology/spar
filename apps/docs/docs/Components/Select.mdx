@@ -27,15 +27,15 @@ Pair it with the [Field](./Field.mdx) primitive to get label, description, and e
       <span aria-hidden='true' className='select-trigger-addon'>▾</span>
     </Select.Trigger>
     <Select.Content className='select-content'>
-      <Select.Item className='select-item' value='basic' textValue='Basic'>
+      <Select.Item className='select-item' value='basic' label='Basic'>
         Basic
         <span aria-hidden='true' className='select-item-check'>✓</span>
       </Select.Item>
-      <Select.Item className='select-item' value='premium' textValue='Premium'>
+      <Select.Item className='select-item' value='premium' label='Premium'>
         Premium
         <span aria-hidden='true' className='select-item-check'>✓</span>
       </Select.Item>
-      <Select.Item className='select-item' value='enterprise' textValue='Enterprise'>
+      <Select.Item className='select-item' value='enterprise' label='Enterprise'>
         Enterprise
         <span aria-hidden='true' className='select-item-check'>✓</span>
       </Select.Item>
@@ -271,19 +271,19 @@ import { Field, Select } from '@turkish-technology/spar';
         </span>
       </Select.Trigger>
       <Select.Content data-spar-part='content' className='select-content'>
-        <Select.Item data-spar-part='item' className='select-item' value='option1' textValue='Option 1'>
+        <Select.Item data-spar-part='item' className='select-item' value='option1' label='Option 1'>
           {'Option 1'}
           <span aria-hidden='true' className='select-item-check'>
             {'✓'}
           </span>
         </Select.Item>
-        <Select.Item data-spar-part='item' className='select-item' value='option2' textValue='Option 2'>
+        <Select.Item data-spar-part='item' className='select-item' value='option2' label='Option 2'>
           {'Option 2'}
           <span aria-hidden='true' className='select-item-check'>
             {'✓'}
           </span>
         </Select.Item>
-        <Select.Item data-spar-part='item' className='select-item' value='option3' textValue='Option 3'>
+        <Select.Item data-spar-part='item' className='select-item' value='option3' label='Option 3'>
           {'Option 3'}
           <span aria-hidden='true' className='select-item-check'>
             {'✓'}
@@ -304,7 +304,7 @@ import { Field, Select } from '@turkish-technology/spar';
   <Select.Content>
     <Select.Group>
       <Select.Label />
-      <Select.Item value='...' textValue='...'>...</Select.Item>
+      <Select.Item value='...' label='...'>...</Select.Item>
     </Select.Group>
 
     <Select.Separator />
@@ -316,9 +316,9 @@ import { Field, Select } from '@turkish-technology/spar';
 **Data Flow:**
 
 - `Select.Root` manages open/closed state and the selected value, and provides context.
-- `Select.Trigger` toggles the Root state, displays the selected item's `textValue` or the `placeholder`, and sets the focus strategy for Content on arrow-key input.
+- `Select.Trigger` toggles the Root state, displays the selected item's `label` or the `placeholder`, and sets the focus strategy for Content on arrow-key input.
 - `Select.Content` renders into a portal when open and manages highlight state and keyboard navigation.
-- `Select.Item` updates the selection and changes the Root value through click or keyboard interaction. The `textValue` prop registers text used for typeahead and for display in the Trigger.
+- `Select.Item` updates the selection and changes the Root value through click or keyboard interaction. The `label` prop registers the text used for typeahead and for display in the Trigger.
 - `Select.Group` + `Select.Label` establish the semantic group structure.
 - `Select.Separator` provides a separator role.
 - `Select.Arrow` is an optional arrow positioned relative to the Content placement.
@@ -345,7 +345,7 @@ import { SelectRoot, SelectTrigger } from '@turkish-technology/spar';
   </span>
 </Select.Trigger>
 
-<Select.Item className='select-item' value='option1' textValue='Option 1'>
+<Select.Item className='select-item' value='option1' label='Option 1'>
   Option 1
   <span aria-hidden='true' className='select-item-check'>
     ✓
@@ -374,13 +374,13 @@ function ControlledSelect() {
       <Select.Trigger placeholder='Choose a fruit' />
 
       <Select.Content>
-        <Select.Item value='apple' textValue='Apple'>
+        <Select.Item value='apple' label='Apple'>
           Apple
         </Select.Item>
-        <Select.Item value='banana' textValue='Banana'>
+        <Select.Item value='banana' label='Banana'>
           Banana
         </Select.Item>
-        <Select.Item value='orange' textValue='Orange'>
+        <Select.Item value='orange' label='Orange'>
           Orange
         </Select.Item>
       </Select.Content>
@@ -404,13 +404,13 @@ function GroupedSelect() {
       <Select.Content>
         <Select.Group>
           <Select.Label>North America</Select.Label>
-          <Select.Item value='us' textValue='United States'>
+          <Select.Item value='us' label='United States'>
             United States
           </Select.Item>
-          <Select.Item value='ca' textValue='Canada'>
+          <Select.Item value='ca' label='Canada'>
             Canada
           </Select.Item>
-          <Select.Item value='mx' textValue='Mexico'>
+          <Select.Item value='mx' label='Mexico'>
             Mexico
           </Select.Item>
         </Select.Group>
@@ -419,13 +419,13 @@ function GroupedSelect() {
 
         <Select.Group>
           <Select.Label>Europe</Select.Label>
-          <Select.Item value='uk' textValue='United Kingdom'>
+          <Select.Item value='uk' label='United Kingdom'>
             United Kingdom
           </Select.Item>
-          <Select.Item value='de' textValue='Germany'>
+          <Select.Item value='de' label='Germany'>
             Germany
           </Select.Item>
-          <Select.Item value='fr' textValue='France'>
+          <Select.Item value='fr' label='France'>
             France
           </Select.Item>
         </Select.Group>
@@ -449,10 +449,10 @@ function FieldSelect() {
       <Select.Root value={plan} onChange={setPlan} name='plan'>
         <Select.Trigger placeholder='Choose a plan' />
         <Select.Content>
-          <Select.Item value='basic' textValue='Basic'>
+          <Select.Item value='basic' label='Basic'>
             Basic
           </Select.Item>
-          <Select.Item value='premium' textValue='Premium'>
+          <Select.Item value='premium' label='Premium'>
             Premium
           </Select.Item>
         </Select.Content>
@@ -478,10 +478,10 @@ function ReadOnlyField() {
       <Select.Root defaultValue='eu-west-1'>
         <Select.Trigger />
         <Select.Content>
-          <Select.Item value='eu-west-1' textValue='EU (Ireland)'>
+          <Select.Item value='eu-west-1' label='EU (Ireland)'>
             EU (Ireland)
           </Select.Item>
-          <Select.Item value='us-east-1' textValue='US (N. Virginia)'>
+          <Select.Item value='us-east-1' label='US (N. Virginia)'>
             US (N. Virginia)
           </Select.Item>
         </Select.Content>
@@ -513,13 +513,13 @@ function SelectInForm() {
         <Select.Trigger id='category-select' placeholder='Select category' />
 
         <Select.Content>
-          <Select.Item value='electronics' textValue='Electronics'>
+          <Select.Item value='electronics' label='Electronics'>
             Electronics
           </Select.Item>
-          <Select.Item value='clothing' textValue='Clothing'>
+          <Select.Item value='clothing' label='Clothing'>
             Clothing
           </Select.Item>
-          <Select.Item value='books' textValue='Books'>
+          <Select.Item value='books' label='Books'>
             Books
           </Select.Item>
         </Select.Content>
@@ -599,7 +599,7 @@ Trigger part that opens and closes the root state.
 | ----------- | --------------------- | ------------------------------------------------ |
 | `isOpen`    | `boolean`             | Whether the dropdown is currently visible        |
 | `value`     | `string \| undefined` | The currently selected value                     |
-| `textValue` | `string \| undefined` | The display text of the currently selected item  |
+| `label`     | `string \| undefined` | The label of the currently selected item        |
 | `disabled`  | `boolean`             | Whether the trigger is disabled                  |
 | `open`      | `() => void`          | Function to programmatically open the dropdown   |
 | `close`     | `() => void`          | Function to programmatically close the dropdown  |
@@ -692,7 +692,7 @@ Selectable option part.
 | ------------ | ------------------------------------------------------------------------ | ----------- | ------------------------------------------------------------------ |
 | `value`      | `string`                                                                 | -           | Item value (required)                                              |
 | `disabled?`  | `boolean`                                                                | `false`     | Disables the item                                                  |
-| `textValue?` | `string`                                                                 | `undefined` | Text used for typeahead and displayed in the Trigger when selected |
+| `label?`     | `string`                                                                 | `undefined` | Text label — shown in the Trigger when selected, and used for typeahead |
 | `children?`  | `React.ReactNode \| ((state: SelectItemRenderProps) => React.ReactNode)` | `undefined` | Normal content or render-props                                     |
 | `as?`        | `React.ElementType`                                                      | `'div'`     | Polymorphic element for Item                                       |
 | `ref?`       | `React.Ref<HTMLElement>`                                                 | `undefined` | Forwarded ref                                                      |
@@ -833,7 +833,7 @@ Optional arrow part positioned according to the Content/Trigger placement.
 | ----------- | --------------------- | ----------------------- |
 | `isOpen`    | `boolean`             | Root open/closed state  |
 | `value`     | `string \| undefined` | Selected value          |
-| `textValue` | `string \| undefined` | Selected item text      |
+| `label`     | `string \| undefined` | Selected item label     |
 | `disabled`  | `boolean`             | Trigger disabled state  |
 | `open`      | `() => void`          | Open programmatically   |
 | `close`     | `() => void`          | Close programmatically  |

@@ -103,14 +103,15 @@ export const SelectContent = <T extends ElementType = 'div'>({
     [context.items],
   );
 
-  // Items mapped for typeahead (id = value string)
+  // Items mapped for typeahead (id = value string). useTypeahead expects
+  // `textValue` as the search key field, so we adapt `label` here.
   const typeaheadItems = useMemo(
     () =>
       Array.from(context.items.values())
         .filter((item) => item.mounted)
         .map((item) => ({
           id: item.value,
-          textValue: item.textValue,
+          textValue: item.label,
           disabled: item.disabled,
         })),
     [context.items],

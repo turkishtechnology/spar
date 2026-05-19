@@ -8,8 +8,8 @@ import type { ButtonProps } from '../Button/types';
 /**
  * Trigger button that toggles the select dropdown. Handles keyboard navigation and accessibility attributes.
  *
- * When no `children` are provided, the trigger displays the selected item's `textValue` or the `placeholder`.
- * When a render function is provided, it receives `SelectTriggerRenderProps` including `textValue`.
+ * When no `children` are provided, the trigger displays the selected item's `label` or the `placeholder`.
+ * When a render function is provided, it receives `SelectTriggerRenderProps` including `label`.
  */
 export const SelectTrigger = <T extends ElementType = 'button'>({
   ref,
@@ -27,9 +27,9 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
   // Use prop if explicitly provided, otherwise use context
   const disabled = disabledProp ?? context.disabled;
 
-  // Compute the display text from the selected item's registered textValue
+  // Compute the display text from the selected item's registered label
   const selectedItem = context.value ? context.items.get(context.value) : undefined;
-  const textValue = selectedItem?.textValue;
+  const label = selectedItem?.label;
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -73,7 +73,7 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
   const renderProps: SelectTriggerRenderProps = {
     isOpen: context.open,
     value: context.value,
-    textValue,
+    label,
     disabled,
     open: () => context.onOpenChange(true),
     close: () => context.onOpenChange(false),
@@ -124,8 +124,8 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
   } else if (children != null) {
     content = children;
   } else {
-    // Default: show textValue or placeholder
-    content = textValue || placeholder;
+    // Default: show label or placeholder
+    content = label || placeholder;
   }
 
   return <Button {...buttonProps}>{content}</Button>;

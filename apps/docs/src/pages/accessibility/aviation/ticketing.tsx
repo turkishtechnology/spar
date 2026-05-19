@@ -310,10 +310,10 @@ export default function TicketingPage() {
                         }}
                       >
                         <Select.Trigger className='ticketing-field ticketing-field-wide ticketing-select-trigger'>
-                          {({ textValue }) => (
+                          {({ label }) => (
                             <>
                               <span className='ticketing-field-label'>From</span>
-                              <span className='ticketing-field-value'>{textValue || 'Select'}</span>
+                              <span className='ticketing-field-value'>{label || 'Select'}</span>
                             </>
                           )}
                         </Select.Trigger>
@@ -323,7 +323,7 @@ export default function TicketingPage() {
                               key={airport.value}
                               value={airport.value}
                               className='ticketing-select-item'
-                              textValue={airport.label}
+                              label={airport.label}
                             >
                               {airport.label}
                             </Select.Item>
@@ -351,10 +351,10 @@ export default function TicketingPage() {
                         }}
                       >
                         <Select.Trigger className='ticketing-field ticketing-field-wide ticketing-select-trigger'>
-                          {({ textValue }) => (
+                          {({ label }) => (
                             <>
                               <span className='ticketing-field-label'>To</span>
-                              <span className='ticketing-field-value'>{textValue || 'Select'}</span>
+                              <span className='ticketing-field-value'>{label || 'Select'}</span>
                             </>
                           )}
                         </Select.Trigger>
@@ -366,7 +366,7 @@ export default function TicketingPage() {
                                 key={airport.value}
                                 value={airport.value}
                                 className='ticketing-select-item'
-                                textValue={airport.label}
+                                label={airport.label}
                               >
                                 {airport.label}
                               </Select.Item>
@@ -408,11 +408,11 @@ export default function TicketingPage() {
                         }}
                       >
                         <Select.Trigger className='ticketing-field ticketing-select-trigger'>
-                          {({ textValue }) => (
+                          {({ label }) => (
                             <>
                               <span className='ticketing-field-label'>Passengers</span>
                               <span className='ticketing-field-value'>
-                                {textValue || '1 Passenger'}
+                                {label || '1 Passenger'}
                               </span>
                             </>
                           )}
@@ -421,21 +421,21 @@ export default function TicketingPage() {
                           <Select.Item
                             value='1'
                             className='ticketing-select-item'
-                            textValue='1 Passenger'
+                            label='1 Passenger'
                           >
                             1 Passenger
                           </Select.Item>
                           <Select.Item
                             value='2'
                             className='ticketing-select-item'
-                            textValue='2 Passengers'
+                            label='2 Passengers'
                           >
                             2 Passengers
                           </Select.Item>
                           <Select.Item
                             value='3'
                             className='ticketing-select-item'
-                            textValue='3 Passengers'
+                            label='3 Passengers'
                           >
                             3 Passengers
                           </Select.Item>

@@ -101,9 +101,9 @@ export interface SelectTriggerRenderProps {
    */
   value: string | undefined;
   /**
-   * The display text for the currently selected item
+   * The label of the currently selected item (shown in the trigger)
    */
-  textValue: string | undefined;
+  label: string | undefined;
   /**
    * Whether the select is disabled
    */
@@ -133,7 +133,7 @@ export interface SelectTriggerOwnProps extends ButtonOwnProps {
 
   /**
    * Children content or render function.
-   * When omitted, the trigger displays the selected item's textValue or the placeholder.
+   * When omitted, the trigger displays the selected item's label or the placeholder.
    */
   children?: ReactNode | ((state: SelectTriggerRenderProps) => ReactNode);
 }
@@ -237,9 +237,13 @@ export interface SelectItemOwnProps {
   disabled?: boolean;
 
   /**
-   * Text for type-ahead (auto-detected if not provided)
+   * Text label for this item. Shown in the trigger when this item is selected,
+   * and used as the search key for keyboard typeahead.
+   *
+   * Should be set whenever `children` is not plain text (e.g. contains icons or
+   * other elements) so the trigger can display a clean string representation.
    */
-  textValue?: string;
+  label?: string;
 
   /**
    * Children content or render function
@@ -286,7 +290,7 @@ export type SelectArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<'
  */
 export interface SelectItemData {
   value: string;
-  textValue: string;
+  label: string;
   disabled: boolean;
   ref: RefObject<HTMLElement | null>;
   mounted: boolean;
@@ -355,7 +359,7 @@ export interface SelectItemContextValue {
   isSelected: boolean;
   disabled: boolean;
   isHighlighted: boolean;
-  textValue: string;
+  label: string;
   onSelect: () => void;
 }
 
