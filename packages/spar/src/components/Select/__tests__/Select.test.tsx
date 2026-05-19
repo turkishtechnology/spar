@@ -23,6 +23,42 @@ const renderSelect = (props?: React.ComponentProps<typeof Select>) => {
 };
 
 describe('Select', () => {
+  it('shows the selected item label on first render when defaultValue is set', () => {
+    render(
+      <Select defaultValue='option2'>
+        <SelectTrigger aria-label='Choose option' placeholder='Select...' />
+        <SelectContent>
+          <SelectItem value='option1' label='Option 1'>
+            Option 1
+          </SelectItem>
+          <SelectItem value='option2' label='Option 2'>
+            Option 2
+          </SelectItem>
+        </SelectContent>
+      </Select>,
+    );
+
+    expect(screen.getByRole('combobox')).toHaveTextContent('Option 2');
+  });
+
+  it('shows the selected item label on first render when value is controlled', () => {
+    render(
+      <Select value='option1' onChange={() => {}}>
+        <SelectTrigger aria-label='Choose option' placeholder='Select...' />
+        <SelectContent>
+          <SelectItem value='option1' label='Option 1'>
+            Option 1
+          </SelectItem>
+          <SelectItem value='option2' label='Option 2'>
+            Option 2
+          </SelectItem>
+        </SelectContent>
+      </Select>,
+    );
+
+    expect(screen.getByRole('combobox')).toHaveTextContent('Option 1');
+  });
+
   it('keeps aria contract and id suffixes when custom id is provided', async () => {
     const user = userEvent.setup();
 

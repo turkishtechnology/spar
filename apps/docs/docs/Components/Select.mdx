@@ -22,10 +22,8 @@ Pair it with the [Field](./Field.mdx) primitive to get label, description, and e
 <LiveCode
   code={`<Field.Root className='select-demo-container' invalid>
   <Field.Label className='select-label'>Plan</Field.Label>
-  <Select.Root>
-    <Select.Trigger className='select-trigger' placeholder='Choose a plan'>
-      <span aria-hidden='true' className='select-trigger-addon'>▾</span>
-    </Select.Trigger>
+  <Select.Root defaultValue="basic">
+    <Select.Trigger className='select-trigger' placeholder='Choose a plan' />
     <Select.Content className='select-content'>
       <Select.Item className='select-item' value='basic' label='Basic'>
         Basic

@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Select — Initial Render Label Bug Fix
+
+#### Fixed
+
+- The trigger now shows the selected item's `label` on the very first paint when
+  `defaultValue` (or controlled `value`) is set. Previously the trigger flashed
+  the placeholder until the user opened the dropdown once, because items were
+  registered in a regular effect (post-paint) and the root context value did not
+  depend on the items map, so consumers never re-rendered after registration.
+- Item registration moved from `useEffect` to `useLayoutEffect` (with an SSR
+  fallback) so registration commits before paint.
+- `items` added to the root context-value `useMemo` dependency list so that
+  changes to the registry trigger a re-render of `Select.Trigger`.
+- `Select.Item`'s registration effect dependency list narrowed to the stable
+  `registerItem` callback (instead of the whole context object) to avoid the
+  re-entrant render loop that the above changes would otherwise introduce.
+
 ### Select — API Simplification (SelectValue & SelectItemText Removed)
 
 #### Removed

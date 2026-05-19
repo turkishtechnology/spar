@@ -1,7 +1,20 @@
-import React, { useEffect, useMemo, useCallback, useRef, type ElementType } from 'react';
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useCallback,
+  useRef,
+  type ElementType,
+} from 'react';
 import { useSelectContext, useSelectCollectionContext, SelectItemContext } from './hooks';
 import type { SelectItemProps, SelectItemContextValue, SelectItemRenderProps } from './types';
 import { useMergedRef } from '@/hooks';
+
+// Use layout effect on the client so item registration happens before the first
+// paint — otherwise a `<Select defaultValue=…>` flashes the placeholder for one
+// frame before the trigger picks up the selected item's label. On the server
+// `useLayoutEffect` warns; fall back to a no-op (SSR has nothing to register).
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 /**
  * Individual selectable option within the select dropdown. Handles selection state, focus, and accessibility.
@@ -26,20 +39,25 @@ export const SelectItem = <T extends ElementType = 'div'>({
   // Merge external ref with internal ref
   const mergedRef = useMergedRef(itemRef, ref);
 
-  // Register/unregister item
-  useEffect(() => {
-    context.registerItem(value, {
+  // Register/unregister item. Runs in a layout effect so the trigger sees the
+  // selected item's label on the very first paint when `defaultValue` is set.
+  // Dep list intentionally tracks only the registry action (which is stable via
+  // useCallback) plus this item's own identity/state — including `context` here
+  // would re-fire on every items-map mutation and loop infinitely.
+  const { registerItem } = context;
+  useIsomorphicLayoutEffect(() => {
+    registerItem(value, {
       value,
-      label: label || context.items.get(value)?.label || '',
+      label,
       disabled,
       ref: itemRef,
       mounted: true,
     });
     return () => {
       // Keep cache (label) but mark unmounted so navigation/typeahead ignores it
-      context.registerItem(value, {
+      registerItem(value, {
         value,
-        label: context.items.get(value)?.label || label || '',
+        label,
         disabled,
         ref: itemRef,
         mounted: false,
@@ -49,7 +67,7 @@ export const SelectItem = <T extends ElementType = 'div'>({
     // Note: We intentionally do NOT unregister on unmount
     // This keeps the label cached so the trigger can display it
     // even when the dropdown is closed and items are unmounted
-  }, [context, value, label, disabled]);
+  }, [registerItem, value, label, disabled]);
 
   // Determine if this item is selected
   const isSelected = context.value === value;

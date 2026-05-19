@@ -148,6 +148,7 @@ export const Select = <T extends ElementType = 'div'>({
       descriptionId,
       errorId,
       fieldCtx,
+      items,
       registerItem,
       unregisterItem,
       focusStrategy,
