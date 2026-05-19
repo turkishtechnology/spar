@@ -622,7 +622,7 @@ Trigger part that opens and closes the root state.
 | `aria-haspopup`    | `"listbox"`          | Type of panel that opens                                                                                |
 | `aria-expanded`    | `boolean`            | Open/closed state                                                                                       |
 | `aria-controls`    | `string`             | Id of the content element                                                                               |
-| `aria-labelledby`  | `string`             | References the Field label id when inside Field                                                 |
+| `aria-labelledby`  | `string`             | References the Field label id when inside Field; omitted standalone (use `aria-label`)                  |
 | `aria-describedby` | `string`             | Points to `Field.Description`, or `Field.ErrorMessage` while `invalid` is true                          |
 | `aria-required`    | `true`               | Added when Root `required` is true                                                                      |
 | `aria-invalid`     | `true`               | Added when Root (or the enclosing Field) is in an invalid state                                         |
@@ -692,7 +692,7 @@ Selectable option part.
 | ------------ | ------------------------------------------------------------------------ | ----------- | ------------------------------------------------------------------ |
 | `value`      | `string`                                                                 | -           | Item value (required)                                              |
 | `disabled?`  | `boolean`                                                                | `false`     | Disables the item                                                  |
-| `textValue?` | `string`                                                                     | `undefined` | Text used for typeahead and displayed in the Trigger when selected |
+| `textValue?` | `string`                                                                 | `undefined` | Text used for typeahead and displayed in the Trigger when selected |
 | `children?`  | `React.ReactNode \| ((state: SelectItemRenderProps) => React.ReactNode)` | `undefined` | Normal content or render-props                                     |
 | `as?`        | `React.ElementType`                                                      | `'div'`     | Polymorphic element for Item                                       |
 | `ref?`       | `React.Ref<HTMLElement>`                                                 | `undefined` | Forwarded ref                                                      |
