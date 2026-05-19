@@ -248,7 +248,12 @@ import { Field, Select } from '@turkish-technology/spar';
 <AnatomyViewer
   parts={[
     { name: 'root', label: 'Root', description: 'Main container managing state and context' },
-    { name: 'trigger', label: 'Trigger', description: 'Button that toggles dropdown visibility and displays selected value or placeholder' },
+    {
+      name: 'trigger',
+      label: 'Trigger',
+      description:
+        'Button that toggles dropdown visibility and displays selected value or placeholder',
+    },
     {
       name: 'content',
       label: 'Content',
@@ -302,7 +307,9 @@ import { Field, Select } from '@turkish-technology/spar';
   <Select.Content>
     <Select.Group>
       <Select.Label />
-      <Select.Item value='...' label='...'>...</Select.Item>
+      <Select.Item value='...' label='...'>
+        ...
+      </Select.Item>
     </Select.Group>
 
     <Select.Separator />
@@ -536,31 +543,31 @@ Provides the root state and context. `Select` and `Select.Root` are the same com
 
 **Props**
 
-| Name             | Type                      | Default     | Description                                                       |
-| ---------------- | ------------------------- | ----------- | ----------------------------------------------------------------- |
-| `id?`            | `string`                  | `undefined` | Base id for ARIA relationship ids                                 |
-| `value?`         | `string`                  | `undefined` | Controlled selected value                                         |
-| `defaultValue?`  | `string`                  | `undefined` | Initial uncontrolled value                                        |
-| `onChange?` | `(value: string) => void` | `undefined` | Value change callback                                             |
-| `open?`          | `boolean`                 | `undefined` | Controlled open/closed state                                      |
-| `defaultOpen?`   | `boolean`                 | `false`     | Initial uncontrolled open state                                   |
-| `onOpenChange?`  | `(open: boolean) => void` | `undefined` | Open/closed change callback                                       |
-| `invalid?`       | `boolean`                 | `false`     | Validation state; inherited from a parent `Field` when present    |
-| `disabled?`      | `boolean`                 | `false`     | Disables the entire Select; inherited from `Field` when present   |
-| `required?`      | `boolean`                 | `false`     | Marks the field as required; inherited from `Field` when present  |
-| `readOnly?`      | `boolean`                 | `false`     | Read-only state; inherited from `Field` when present              |
-| `name?`          | `string`                  | `undefined` | Form field name; generates a hidden input when `value` is defined |
-| `dir?`           | `'ltr' \| 'rtl'`          | `'ltr'`     | Writing direction                                                 |
-| `autoFocus?`     | `boolean`                 | `false`     | Focuses the trigger on mount                                      |
-| `as?`            | `React.ElementType`       | `'div'`     | Polymorphic element for Root                                      |
-| `children?`      | `React.ReactNode`         | `undefined` | Root content                                                      |
+| Name            | Type                      | Default     | Description                                                       |
+| --------------- | ------------------------- | ----------- | ----------------------------------------------------------------- |
+| `id?`           | `string`                  | `undefined` | Base id for ARIA relationship ids                                 |
+| `value?`        | `string`                  | `undefined` | Controlled selected value                                         |
+| `defaultValue?` | `string`                  | `undefined` | Initial uncontrolled value                                        |
+| `onChange?`     | `(value: string) => void` | `undefined` | Value change callback                                             |
+| `open?`         | `boolean`                 | `undefined` | Controlled open/closed state                                      |
+| `defaultOpen?`  | `boolean`                 | `false`     | Initial uncontrolled open state                                   |
+| `onOpenChange?` | `(open: boolean) => void` | `undefined` | Open/closed change callback                                       |
+| `invalid?`      | `boolean`                 | `false`     | Validation state; inherited from a parent `Field` when present    |
+| `disabled?`     | `boolean`                 | `false`     | Disables the entire Select; inherited from `Field` when present   |
+| `required?`     | `boolean`                 | `false`     | Marks the field as required; inherited from `Field` when present  |
+| `readOnly?`     | `boolean`                 | `false`     | Read-only state; inherited from `Field` when present              |
+| `name?`         | `string`                  | `undefined` | Form field name; generates a hidden input when `value` is defined |
+| `dir?`          | `'ltr' \| 'rtl'`          | `'ltr'`     | Writing direction                                                 |
+| `autoFocus?`    | `boolean`                 | `false`     | Focuses the trigger on mount                                      |
+| `as?`           | `React.ElementType`       | `'div'`     | Polymorphic element for Root                                      |
+| `children?`     | `React.ReactNode`         | `undefined` | Root content                                                      |
 
 **Events**
 
-| Name            | Parameters        | Description               | When Triggered                                          |
-| --------------- | ----------------- | ------------------------- | ------------------------------------------------------- |
-| `onChange` | `(value: string)` | Selected value changes    | When an item is selected or controlled state is updated |
-| `onOpenChange`  | `(open: boolean)` | Open/closed state changes | On trigger interaction or programmatic open/close calls |
+| Name           | Parameters        | Description               | When Triggered                                          |
+| -------------- | ----------------- | ------------------------- | ------------------------------------------------------- |
+| `onChange`     | `(value: string)` | Selected value changes    | When an item is selected or controlled state is updated |
+| `onOpenChange` | `(open: boolean)` | Open/closed state changes | On trigger interaction or programmatic open/close calls |
 
 **HTML Attributes**
 
@@ -593,15 +600,15 @@ Trigger part that opens and closes the root state.
 
 **Render Props (SelectTriggerRenderProps)**
 
-| Property    | Type                  | Description                                      |
-| ----------- | --------------------- | ------------------------------------------------ |
-| `isOpen`    | `boolean`             | Whether the dropdown is currently visible        |
-| `value`     | `string \| undefined` | The currently selected value                     |
-| `label`     | `string \| undefined` | The label of the currently selected item        |
-| `disabled`  | `boolean`             | Whether the trigger is disabled                  |
-| `open`      | `() => void`          | Function to programmatically open the dropdown   |
-| `close`     | `() => void`          | Function to programmatically close the dropdown  |
-| `toggle`    | `() => void`          | Function to programmatically toggle the dropdown |
+| Property   | Type                  | Description                                      |
+| ---------- | --------------------- | ------------------------------------------------ |
+| `isOpen`   | `boolean`             | Whether the dropdown is currently visible        |
+| `value`    | `string \| undefined` | The currently selected value                     |
+| `label`    | `string \| undefined` | The label of the currently selected item         |
+| `disabled` | `boolean`             | Whether the trigger is disabled                  |
+| `open`     | `() => void`          | Function to programmatically open the dropdown   |
+| `close`    | `() => void`          | Function to programmatically close the dropdown  |
+| `toggle`   | `() => void`          | Function to programmatically toggle the dropdown |
 
 **Events**
 
@@ -686,14 +693,14 @@ Selectable option part.
 
 **Props**
 
-| Name         | Type                                                                     | Default     | Description                                                        |
-| ------------ | ------------------------------------------------------------------------ | ----------- | ------------------------------------------------------------------ |
-| `value`      | `string`                                                                 | -           | Item value (required)                                              |
-| `disabled?`  | `boolean`                                                                | `false`     | Disables the item                                                  |
-| `label?`     | `string`                                                                 | `undefined` | Text label — shown in the Trigger when selected, and used for typeahead |
-| `children?`  | `React.ReactNode \| ((state: SelectItemRenderProps) => React.ReactNode)` | `undefined` | Normal content or render-props                                     |
-| `as?`        | `React.ElementType`                                                      | `'div'`     | Polymorphic element for Item                                       |
-| `ref?`       | `React.Ref<HTMLElement>`                                                 | `undefined` | Forwarded ref                                                      |
+| Name        | Type                                                                     | Default     | Description                                                             |
+| ----------- | ------------------------------------------------------------------------ | ----------- | ----------------------------------------------------------------------- |
+| `value`     | `string`                                                                 | -           | Item value (required)                                                   |
+| `disabled?` | `boolean`                                                                | `false`     | Disables the item                                                       |
+| `label?`    | `string`                                                                 | `undefined` | Text label — shown in the Trigger when selected, and used for typeahead |
+| `children?` | `React.ReactNode \| ((state: SelectItemRenderProps) => React.ReactNode)` | `undefined` | Normal content or render-props                                          |
+| `as?`       | `React.ElementType`                                                      | `'div'`     | Polymorphic element for Item                                            |
+| `ref?`      | `React.Ref<HTMLElement>`                                                 | `undefined` | Forwarded ref                                                           |
 
 **Render Props (SelectItemRenderProps)**
 
@@ -827,15 +834,15 @@ Optional arrow part positioned according to the Content/Trigger placement.
 
 ### SelectTriggerRenderProps
 
-| Name        | Type                  | Description             |
-| ----------- | --------------------- | ----------------------- |
-| `isOpen`    | `boolean`             | Root open/closed state  |
-| `value`     | `string \| undefined` | Selected value          |
-| `label`     | `string \| undefined` | Selected item label     |
-| `disabled`  | `boolean`             | Trigger disabled state  |
-| `open`      | `() => void`          | Open programmatically   |
-| `close`     | `() => void`          | Close programmatically  |
-| `toggle`    | `() => void`          | Toggle programmatically |
+| Name       | Type                  | Description             |
+| ---------- | --------------------- | ----------------------- |
+| `isOpen`   | `boolean`             | Root open/closed state  |
+| `value`    | `string \| undefined` | Selected value          |
+| `label`    | `string \| undefined` | Selected item label     |
+| `disabled` | `boolean`             | Trigger disabled state  |
+| `open`     | `() => void`          | Open programmatically   |
+| `close`    | `() => void`          | Close programmatically  |
+| `toggle`   | `() => void`          | Toggle programmatically |
 
 ### SelectItemRenderProps
 
