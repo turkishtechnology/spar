@@ -40,6 +40,8 @@ export const Radio = <T extends ElementType = 'div'>({
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
   'aria-describedby': ariaDescribedBy,
+  onFocus,
+  onBlur,
   as,
   children,
   ...rest
@@ -174,7 +176,7 @@ export const Radio = <T extends ElementType = 'div'>({
   // Focus management: sync focusedValue state when user tabs into the group
   // (browser already focused the tabIndex=0 element; we just track which one)
   const handleFocus = useCallback(
-    (_event: React.FocusEvent) => {
+    (event: React.FocusEvent<HTMLDivElement>) => {
       // Only set initial focus when user tabs into the group
       if (focusedValue === null && count > 0) {
         const initialFocus = value || getItemAtIndex(0);
@@ -182,8 +184,20 @@ export const Radio = <T extends ElementType = 'div'>({
           setFocusedValue(initialFocus);
         }
       }
+      onFocus?.(event);
     },
-    [focusedValue, count, value, getItemAtIndex],
+    [focusedValue, count, value, getItemAtIndex, onFocus],
+  );
+
+  const handleBlur = useCallback(
+    (event: React.FocusEvent<HTMLDivElement>) => {
+      const nextFocusedElement = event.relatedTarget as Node | null;
+      if (!nextFocusedElement || !event.currentTarget.contains(nextFocusedElement)) {
+        setFocusedValue(null);
+      }
+      onBlur?.(event);
+    },
+    [onBlur],
   );
 
   const contextValue = useMemo<RadioContextValue>(
@@ -253,6 +267,7 @@ export const Radio = <T extends ElementType = 'div'>({
     ...ariaAttributes,
     onKeyDown: handleKeyDown,
     onFocus: handleFocus,
+    onBlur: handleBlur,
     ...dataAttributes,
     ...rest,
   };
