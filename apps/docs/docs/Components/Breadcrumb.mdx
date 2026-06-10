@@ -494,12 +494,15 @@ List item wrapper that receives position and current state from parent Breadcrum
 
 **Props**
 
-| Name         | Type                                                                         | Default    | Description                                             |
-| ------------ | ---------------------------------------------------------------------------- | ---------- | ------------------------------------------------------- |
-| `children`   | `React.ReactNode \| ((props: BreadcrumbItemRenderProps) => React.ReactNode)` | -          | Item content or render function receiving item state    |
-| `as?`        | `React.ElementType`                                                          | `'li'`     | Polymorphic element type                                |
-| `position?`  | `BreadcrumbPosition`                                                         | `'middle'` | Position in trail (automatically calculated)            |
-| `isCurrent?` | `boolean`                                                                    | `false`    | Whether this is current page (automatically calculated) |
+| Name       | Type                                                                         | Default | Description                                          |
+| ---------- | ---------------------------------------------------------------------------- | ------- | ---------------------------------------------------- |
+| `children` | `React.ReactNode \| ((props: BreadcrumbItemRenderProps) => React.ReactNode)` | -       | Item content or render function receiving item state |
+| `as?`      | `React.ElementType`                                                          | `'li'`  | Polymorphic element type                             |
+
+`position` and `isCurrent` are not props: each item registers with its
+`Breadcrumb.List` and derives them automatically from DOM order. Read them
+through the render-function children or the `data-position` / `data-current`
+attributes.
 
 **Events**
 

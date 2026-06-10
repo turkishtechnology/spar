@@ -1,17 +1,15 @@
-import {
-  Children,
-  cloneElement,
-  isValidElement,
-  type ReactElement,
-  type ReactNode,
-  type ElementType,
-} from 'react';
-import type { BreadcrumbListProps, BreadcrumbItemProps, BreadcrumbPosition } from './types';
-import { BreadcrumbItem } from './BreadcrumbItem';
+import { useCallback, useMemo, useState, type ElementType, type RefObject } from 'react';
+import { BreadcrumbListContext } from './hooks';
+import type { BreadcrumbListProps, BreadcrumbListContextValue, BreadcrumbPosition } from './types';
+
+interface RegisteredItem {
+  id: string;
+  ref: RefObject<HTMLElement | null>;
+}
 
 /**
- * Ordered list container for breadcrumb items. Provides semantic structure for navigation trail.
- * Calculates and passes position data to child items.
+ * Ordered list container for breadcrumb items. Provides semantic structure for
+ * the navigation trail and derives each item's position from registered DOM order.
  */
 export const BreadcrumbList = <T extends ElementType = 'ol'>({
   as,
@@ -19,37 +17,48 @@ export const BreadcrumbList = <T extends ElementType = 'ol'>({
   ...props
 }: BreadcrumbListProps<T>) => {
   const Component = as || 'ol';
+  const [items, setItems] = useState<RegisteredItem[]>([]);
 
-  const isBreadcrumbItem = (child: ReactNode): child is ReactElement<BreadcrumbItemProps> => {
-    if (!isValidElement(child)) return false;
-    return child.type === BreadcrumbItem;
-  };
+  const registerItem = useCallback((id: string, ref: RefObject<HTMLElement | null>) => {
+    setItems((previous) => {
+      const next = [...previous.filter((entry) => entry.id !== id), { id, ref }];
+      next.sort((a, b) => {
+        const aNode = a.ref.current;
+        const bNode = b.ref.current;
+        if (aNode && bNode) {
+          const position = aNode.compareDocumentPosition(bNode);
+          if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
+          if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1;
+        }
+        return 0;
+      });
+      return next;
+    });
+  }, []);
 
-  const items = Children.toArray(children).filter(isBreadcrumbItem);
-  const itemCount = items.length;
-  let itemIndex = 0;
+  const unregisterItem = useCallback((id: string) => {
+    setItems((previous) => previous.filter((entry) => entry.id !== id));
+  }, []);
+
+  const getItemPosition = useCallback(
+    (id: string) => {
+      const index = items.findIndex((entry) => entry.id === id);
+      const isCurrent = index !== -1 && index === items.length - 1;
+      const position: BreadcrumbPosition = index === 0 ? 'first' : isCurrent ? 'last' : 'middle';
+      return { position, isCurrent };
+    },
+    [items],
+  );
+
+  const contextValue = useMemo<BreadcrumbListContextValue>(
+    () => ({ registerItem, unregisterItem, getItemPosition }),
+    [registerItem, unregisterItem, getItemPosition],
+  );
 
   return (
-    <Component {...props}>
-      {Children.map(children, (child) => {
-        if (isBreadcrumbItem(child)) {
-          const currentItemIndex = itemIndex++;
-
-          const position: BreadcrumbPosition =
-            currentItemIndex === 0
-              ? 'first'
-              : currentItemIndex === itemCount - 1
-                ? 'last'
-                : 'middle';
-
-          return cloneElement(child, {
-            position,
-            isCurrent: currentItemIndex === itemCount - 1,
-          });
-        }
-        return child;
-      })}
-    </Component>
+    <BreadcrumbListContext.Provider value={contextValue}>
+      <Component {...props}>{children}</Component>
+    </BreadcrumbListContext.Provider>
   );
 };
 

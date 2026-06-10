@@ -7,6 +7,7 @@ import {
   BreadcrumbLink,
   BreadcrumbPage,
   BreadcrumbSeparator,
+  type BreadcrumbItemProps,
 } from '../index';
 
 describe('Breadcrumb Components', () => {
@@ -108,6 +109,73 @@ describe('Breadcrumb Components', () => {
     );
 
     expect(screen.getByText('first-true-true')).toBeInTheDocument();
+  });
+
+  it('passes computed position/isCurrent to items wrapped in a custom component', () => {
+    const ItemWrapper = (props: BreadcrumbItemProps) => <BreadcrumbItem {...props} />;
+
+    render(
+      <Breadcrumb>
+        <BreadcrumbList>
+          <ItemWrapper>
+            {({ position, isCurrent }) => <span>{`a:${position}:${String(isCurrent)}`}</span>}
+          </ItemWrapper>
+          <BreadcrumbSeparator>/</BreadcrumbSeparator>
+          <ItemWrapper>
+            {({ position, isCurrent }) => <span>{`b:${position}:${String(isCurrent)}`}</span>}
+          </ItemWrapper>
+          <BreadcrumbSeparator>/</BreadcrumbSeparator>
+          <ItemWrapper>
+            {({ position, isCurrent }) => <span>{`c:${position}:${String(isCurrent)}`}</span>}
+          </ItemWrapper>
+        </BreadcrumbList>
+      </Breadcrumb>,
+    );
+
+    expect(screen.getByText('a:first:false')).toBeInTheDocument();
+    expect(screen.getByText('b:middle:false')).toBeInTheDocument();
+    expect(screen.getByText('c:last:true')).toBeInTheDocument();
+
+    expect(screen.getByText('a:first:false').closest('li')).toHaveAttribute(
+      'data-position',
+      'first',
+    );
+    expect(screen.getByText('c:last:true').closest('li')).toHaveAttribute('data-current', '');
+  });
+
+  it('recomputes positions when items mount and unmount', () => {
+    const trail = (labels: string[]) => (
+      <Breadcrumb>
+        <BreadcrumbList>
+          {labels.map((label) => (
+            <BreadcrumbItem key={label}>
+              {({ position, isCurrent }) => (
+                <span>{`${label}:${position}:${String(isCurrent)}`}</span>
+              )}
+            </BreadcrumbItem>
+          ))}
+        </BreadcrumbList>
+      </Breadcrumb>
+    );
+
+    const { rerender } = render(trail(['a', 'b', 'c']));
+
+    expect(screen.getByText('c:last:true').closest('li')).toHaveAttribute('data-current', '');
+
+    // Removing the last item unregisters it and promotes the previous one.
+    rerender(trail(['a', 'b']));
+
+    expect(screen.getByText('a:first:false')).toBeInTheDocument();
+    expect(screen.getByText('b:last:true')).toBeInTheDocument();
+    expect(screen.getByText('b:last:true').closest('li')).toHaveAttribute('data-position', 'last');
+    expect(screen.getByText('b:last:true').closest('li')).toHaveAttribute('data-current', '');
+
+    // Mounting a new tail item demotes it back to middle.
+    rerender(trail(['a', 'b', 'd']));
+
+    expect(screen.getByText('b:middle:false')).toBeInTheDocument();
+    expect(screen.getByText('b:middle:false').closest('li')).not.toHaveAttribute('data-current');
+    expect(screen.getByText('d:last:true').closest('li')).toHaveAttribute('data-current', '');
   });
 
   it('calls onNavigate for click, Enter and Space when href exists', async () => {
