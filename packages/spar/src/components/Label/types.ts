@@ -16,7 +16,7 @@ export interface LabelOwnProps {
    * Marks label for an optional field (exposed via data attribute for styling)
    * @defaultValue false
    */
-  isOptional?: boolean;
+  optional?: boolean;
 
   /**
    * Marks label for a disabled field (exposed via data attribute for styling)

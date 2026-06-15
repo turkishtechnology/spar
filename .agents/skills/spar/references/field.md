@@ -1,6 +1,6 @@
 # Field API Reference
 
-Generic form-field container. Provides a shared ARIA context (coordinated IDs and form state) for any nested form control — `Input`, `Switch`, `Checkbox`, `Radio`, `Select`. The wrapped control inherits `invalid`, `disabled`, `required`, and `readOnly` from the Field; direct props on the control still win.
+Generic form-field container. Provides a shared ARIA context (coordinated IDs and form state) for any nested form control — `Input`, `Switch`, `Checkbox`, `Radio`, `Select`. The wrapped control inherits `invalid`, `disabled`, `required`, `optional`, and `readOnly` from the Field; direct props on the control still win.
 
 `Field` does **not** own validation logic — `invalid` is a controlled prop intended to be driven by external validation (Zod, React Hook Form, etc.).
 
@@ -23,6 +23,7 @@ Generic form-field container. Provides a shared ARIA context (coordinated IDs an
 | `invalid?`  | `boolean`                                               | `false` | Error state — drives `Field.ErrorMessage` rendering and `aria-invalid` |
 | `disabled?` | `boolean`                                               | `false` | Disables nested control(s)                                             |
 | `required?` | `boolean`                                               | `false` | Marks the field as required                                            |
+| `optional?` | `boolean`                                               | `false` | Marks the field as optional                                            |
 | `readOnly?` | `boolean`                                               | `false` | Read-only mode                                                         |
 | `as?`       | `ElementType`                                           | `'div'` | Polymorphic element                                                    |
 | `children`  | `ReactNode \| ((state: FieldRenderProps) => ReactNode)` | —       | Field content or render function                                       |
@@ -31,7 +32,7 @@ Generic form-field container. Provides a shared ARIA context (coordinated IDs an
 
 ```tsx
 <Field invalid={!!error}>
-  {({ invalid, disabled, required, readOnly }) => (
+  {({ invalid, disabled, required, optional, readOnly }) => (
     <div className={invalid ? 'has-error' : ''}>...</div>
   )}
 </Field>
@@ -42,15 +43,12 @@ Generic form-field container. Provides a shared ARIA context (coordinated IDs an
 | `invalid`   | `boolean` | Current invalid state          |
 | `disabled`  | `boolean` | Whether the field is disabled  |
 | `required`  | `boolean` | Whether the field is required  |
+| `optional`  | `boolean` | Whether the field is optional  |
 | `readOnly`  | `boolean` | Whether the field is read-only |
 
 ## Label Props
 
-Same as the standalone `Label` component. `htmlFor`, `id`, `disabled`, `required`, `readOnly`, `invalid` are provided by Field context and cannot be overridden.
-
-| Prop          | Type      | Default | Description             |
-| ------------- | --------- | ------- | ----------------------- |
-| `isOptional?` | `boolean` | `false` | Show optional indicator |
+Same as the standalone `Label` component. `htmlFor`, `id`, `disabled`, `required`, `optional`, `readOnly`, `invalid` are provided by Field context and cannot be overridden.
 
 ## Description Props
 
@@ -77,7 +75,7 @@ import { useFieldContext, useOptionalFieldContext } from '@turkish-technology/sp
 - `useFieldContext()` — throws if used outside a Field. Use inside custom field children.
 - `useOptionalFieldContext()` — returns `undefined` when no Field ancestor. Used by Spar's form controls (`Input`, `Switch`, `Checkbox`, `Radio`, `Select`) to opt into Field context when present, but still work standalone.
 
-`FieldContextValue` shape: `{ fieldId, labelId, descriptionId, errorId, invalid, disabled, required, readOnly }`.
+`FieldContextValue` shape: `{ fieldId, labelId, descriptionId, errorId, invalid, disabled, required, optional, readOnly }`.
 
 ## ARIA wiring (automatic)
 
@@ -95,6 +93,7 @@ Emitted on `Field.Root` (and mirrored on Label/Description/ErrorMessage where re
 | `data-invalid`  | Present when `invalid`  |
 | `data-disabled` | Present when `disabled` |
 | `data-required` | Present when `required` |
+| `data-optional` | Present when `optional` |
 | `data-readonly` | Present when `readOnly` |
 
 ## Examples
