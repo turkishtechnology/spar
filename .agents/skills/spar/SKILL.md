@@ -280,7 +280,7 @@ When you need full props, render props, events, and keyboard for a specific comp
 - [DropdownMenu](references/dropdown-menu.md) — side/align, closeOnSelect, onSelect per item
 - [Field](references/field.md) — invalid/disabled/required/readOnly context for nested form controls; Label/Description/ErrorMessage
 - [Input](references/input.md) — Root + Field only; reads Field context for invalid/disabled/required/readOnly
-- [Label](references/label.md) — required, isOptional, data attributes
+- [Label](references/label.md) — required, optional, data attributes
 - [Popover](references/popover.md) — side/align, trapFocus, onInteractOutside
 - [Radio](references/radio.md) — selectOnFocus, orientation, invalid, readOnly, roving tabindex
 - [Select](references/select.md) — Value/placeholder, ItemText, Group/Label, invalid, readOnly, typeahead

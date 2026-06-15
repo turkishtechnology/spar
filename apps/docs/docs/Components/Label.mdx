@@ -43,7 +43,7 @@ This demo is intentionally simple because `Label` is most useful when paired wit
 - ✅ **Implicit Association**: Supports wrapping a form control inside the label
 - ✅ **Polymorphic Rendering**: Can render as different elements via the `as` prop
 - ✅ **Native Props Pass-Through**: Forwards native HTML props and `ref` to the rendered element
-- ✅ **State Flag Props**: Supports `required`, `isOptional`, `disabled`, `readOnly`, and `invalid`
+- ✅ **State Flag Props**: Supports `required`, `optional`, `disabled`, `readOnly`, and `invalid`
 
 ## Import
 
@@ -122,13 +122,13 @@ function RequiredFieldExample() {
 
 ### Optional Field Indicator
 
-Mark fields as optional with `isOptional`:
+Mark fields as optional with `optional`:
 
 ```tsx {4,7}
 function OptionalFieldExample() {
   return (
     <div>
-      <Label htmlFor='middle-name' isOptional>
+      <Label htmlFor='middle-name' optional>
         Middle Name
       </Label>
       <input id='middle-name' type='text' />
@@ -359,16 +359,16 @@ The Label component creates accessible labels for form controls with support for
 
 **Props**
 
-| Name          | Type                | Default     | Description                                                                                                   |
-| ------------- | ------------------- | ----------- | ------------------------------------------------------------------------------------------------------------- |
-| `required?`   | `boolean`           | `false`     | Adds the `data-required` attribute. Does not make the control required; set `required` on the control itself  |
-| `isOptional?` | `boolean`           | `false`     | Adds the `data-optional` attribute                                                                            |
-| `disabled?`   | `boolean`           | `false`     | Adds the `data-disabled` attribute. Does not disable the control; set `disabled` on the control itself        |
-| `readOnly?`   | `boolean`           | `false`     | Adds the `data-readonly` attribute. Does not make the control read-only; set `readOnly` on the control itself |
-| `invalid?`    | `boolean`           | `false`     | Adds the `data-invalid` attribute. Does not set control validity; set `aria-invalid` on the control itself    |
-| `as?`         | `React.ElementType` | `'label'`   | Element type to render                                                                                        |
-| `children?`   | `React.ReactNode`   | `undefined` | Label content                                                                                                 |
-| `htmlFor?`    | `string`            | `undefined` | ID of the associated form control for explicit association                                                    |
+| Name        | Type                | Default     | Description                                                                                                   |
+| ----------- | ------------------- | ----------- | ------------------------------------------------------------------------------------------------------------- |
+| `required?` | `boolean`           | `false`     | Adds the `data-required` attribute. Does not make the control required; set `required` on the control itself  |
+| `optional?` | `boolean`           | `false`     | Adds the `data-optional` attribute                                                                            |
+| `disabled?` | `boolean`           | `false`     | Adds the `data-disabled` attribute. Does not disable the control; set `disabled` on the control itself        |
+| `readOnly?` | `boolean`           | `false`     | Adds the `data-readonly` attribute. Does not make the control read-only; set `readOnly` on the control itself |
+| `invalid?`  | `boolean`           | `false`     | Adds the `data-invalid` attribute. Does not set control validity; set `aria-invalid` on the control itself    |
+| `as?`       | `React.ElementType` | `'label'`   | Element type to render                                                                                        |
+| `children?` | `React.ReactNode`   | `undefined` | Label content                                                                                                 |
+| `htmlFor?`  | `string`            | `undefined` | ID of the associated form control for explicit association                                                    |
 
 **Note**: `LabelProps<T>` is derived from `PolymorphicProps<'label', T, LabelOwnProps>`, so native props and `ref` support come from the rendered element type.
 
@@ -380,13 +380,13 @@ The Label component creates accessible labels for form controls with support for
 
 **Data Attributes**
 
-| Attribute       | Value                    | Purpose                      |
-| --------------- | ------------------------ | ---------------------------- |
-| `data-required` | `""` (when `required`)   | Required state styling hook  |
-| `data-optional` | `""` (when `isOptional`) | Optional state styling hook  |
-| `data-disabled` | `""` (when `disabled`)   | Disabled state styling hook  |
-| `data-readonly` | `""` (when `readOnly`)   | Read-only state styling hook |
-| `data-invalid`  | `""` (when `invalid`)    | Invalid state styling hook   |
+| Attribute       | Value                  | Purpose                      |
+| --------------- | ---------------------- | ---------------------------- |
+| `data-required` | `""` (when `required`) | Required state styling hook  |
+| `data-optional` | `""` (when `optional`) | Optional state styling hook  |
+| `data-disabled` | `""` (when `disabled`) | Disabled state styling hook  |
+| `data-readonly` | `""` (when `readOnly`) | Read-only state styling hook |
+| `data-invalid`  | `""` (when `invalid`)  | Invalid state styling hook   |
 
 **HTML Attributes**
 
