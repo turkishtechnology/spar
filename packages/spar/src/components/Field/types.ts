@@ -14,6 +14,7 @@ export interface FieldContextValue {
   invalid: boolean;
   disabled: boolean;
   required: boolean;
+  optional: boolean;
   readOnly: boolean;
 }
 
@@ -27,6 +28,8 @@ export interface FieldRenderProps {
   disabled: boolean;
   /** Whether the field is required */
   required: boolean;
+  /** Whether the field is optional */
+  optional: boolean;
   /** Whether the field is read-only */
   readOnly: boolean;
 }
@@ -65,6 +68,12 @@ export interface FieldOwnProps {
   required?: boolean;
 
   /**
+   * Whether the field is optional.
+   * @defaultValue false
+   */
+  optional?: boolean;
+
+  /**
    * Whether the field is read-only.
    * @defaultValue false
    */
@@ -86,7 +95,7 @@ export type FieldProps<T extends ElementType = 'div'> = PolymorphicProps<'div', 
 /**
  * Props for FieldLabel.
  * @remarks Renders as `<label>` by default with automatic htmlFor linking.
- * When used inside a Field, `disabled`, `required`, `readOnly`, and
+ * When used inside a Field, `disabled`, `required`, `optional`, `readOnly`, and
  * `invalid` are provided by Field context and cannot be overridden.
  */
 export type FieldLabelProps<T extends ElementType = 'label'> = LabelProps<T>;
