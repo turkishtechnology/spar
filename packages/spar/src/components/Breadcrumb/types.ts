@@ -1,4 +1,4 @@
-import type { ElementType, MouseEvent, KeyboardEvent } from 'react';
+import type { ElementType, MouseEvent, KeyboardEvent, RefObject } from 'react';
 import type { PolymorphicProps } from '../../types';
 
 export type PressEvent = MouseEvent | KeyboardEvent;
@@ -41,6 +41,17 @@ export interface BreadcrumbContextValue {
 }
 
 /**
+ * Context value for breadcrumb list item registration. Items register their DOM
+ * ref with the nearest list, which derives each item's position from DOM order.
+ * @internal
+ */
+export interface BreadcrumbListContextValue {
+  registerItem: (id: string, ref: RefObject<HTMLElement | null>) => void;
+  unregisterItem: (id: string) => void;
+  getItemPosition: (id: string) => { position: BreadcrumbPosition; isCurrent: boolean };
+}
+
+/**
  * Own props for Breadcrumb
  */
 export interface BreadcrumbOwnProps {
@@ -77,16 +88,6 @@ export type BreadcrumbListProps<T extends ElementType = 'ol'> = PolymorphicProps
  * Own props for BreadcrumbItem
  */
 export interface BreadcrumbItemOwnProps {
-  /**
-   * Position of this item in the breadcrumb trail
-   * @internal Automatically calculated by BreadcrumbList
-   */
-  position?: BreadcrumbPosition;
-  /**
-   * Whether this is the current page (last item)
-   * @internal Automatically calculated by BreadcrumbList
-   */
-  isCurrent?: boolean;
   /**
    * Item content (Link or Page), or a render function receiving item state
    */
