@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0-beta.2] - 2026-06-17
+
+### Label — `isOptional` Renamed to `optional`
+
+#### Changed
+
+- **`Label`'s `isOptional` prop renamed to `optional`** to drop the redundant
+  `is` prefix and align with the other boolean state props (`required`,
+  `disabled`, `readOnly`, `invalid`). The emitted `data-optional` attribute is
+  unchanged, so styling hooks keep working.
+
+#### Migration
+
+- Replace `<Label isOptional>` with `<Label optional>`.
+
+### Field — `optional` Prop Added
+
+#### Added
+
+- **`Field` root now accepts an `optional` prop**, mirroring the other field
+  state props. It propagates through Field context to nested controls and the
+  `FieldLabel`, and is exposed via `data-optional` for styling.
+
 ## [0.2.0-beta.1] - 2026-05-20
 
 ### Select — Initial Render Label Bug Fix
