@@ -7,7 +7,7 @@ import type { LabelProps } from './types';
 export const Label = <T extends ElementType = 'label'>({
   as,
   required = false,
-  isOptional = false,
+  optional = false,
   disabled = false,
   readOnly = false,
   invalid = false,
@@ -52,7 +52,7 @@ export const Label = <T extends ElementType = 'label'>({
 
   const dataAttributes = {
     'data-required': required ? '' : undefined,
-    'data-optional': isOptional ? '' : undefined,
+    'data-optional': optional ? '' : undefined,
     'data-disabled': disabled ? '' : undefined,
     'data-readonly': readOnly ? '' : undefined,
     'data-invalid': invalid ? '' : undefined,

@@ -24,6 +24,7 @@ export const FieldLabel = <T extends ElementType = 'label'>({
       htmlFor={context.fieldId}
       disabled={context.disabled}
       required={context.required}
+      optional={context.optional}
       readOnly={context.readOnly}
       invalid={context.invalid}
     >

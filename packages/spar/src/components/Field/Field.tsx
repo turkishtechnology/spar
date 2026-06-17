@@ -4,7 +4,7 @@ import type { FieldContextValue, FieldProps, FieldRenderProps } from './types';
 
 /**
  * Generic form-field root that provides shared ARIA context for any form
- * control.  Manages coordinated IDs, validation, disabled, required and
+ * control.  Manages coordinated IDs, validation, disabled, required, optional and
  * read-only states so compound children (FieldLabel, FieldDescription,
  * FieldErrorMessage) and the wrapped control are wired automatically.
  *
@@ -17,6 +17,7 @@ export const Field = <T extends ElementType = 'div'>({
   invalid = false,
   disabled = false,
   required = false,
+  optional = false,
   readOnly = false,
   children,
   ref,
@@ -35,15 +36,17 @@ export const Field = <T extends ElementType = 'div'>({
       invalid,
       disabled,
       required,
+      optional,
       readOnly,
     }),
-    [id, invalid, disabled, required, readOnly],
+    [id, invalid, disabled, required, optional, readOnly],
   );
 
   const dataAttributes = {
     'data-invalid': invalid ? '' : undefined,
     'data-disabled': disabled ? '' : undefined,
     'data-required': required ? '' : undefined,
+    'data-optional': optional ? '' : undefined,
     'data-readonly': readOnly ? '' : undefined,
   };
 
@@ -51,6 +54,7 @@ export const Field = <T extends ElementType = 'div'>({
     invalid,
     disabled,
     required,
+    optional,
     readOnly,
   };
 

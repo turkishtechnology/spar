@@ -92,14 +92,14 @@ export default function LabelDemo() {
         <section className='demo-section'>
           <h2>3. Optional Field Label</h2>
           <p className='demo-description'>
-            Label with <code>isOptional</code> prop for visual indicator. Exposes{' '}
+            Label with <code>optional</code> prop for visual indicator. Exposes{' '}
             <code>data-optional</code>.
           </p>
           <div className='demo-section-split'>
             <div>
               <div className='demo-area'>
                 <div className='demo-input-wrapper'>
-                  <Label htmlFor='optional-input' className='demo-label' isOptional>
+                  <Label htmlFor='optional-input' className='demo-label' optional>
                     Phone (optional)
                   </Label>
                   <input
@@ -113,7 +113,7 @@ export default function LabelDemo() {
             </div>
             <div className='demo-side-example'>
               <pre className='demo-code-block'>
-                <code>{`<Label htmlFor='optional-input' isOptional>Phone</Label>
+                <code>{`<Label htmlFor='optional-input' optional>Phone</Label>
 <input id='optional-input' type='tel' />`}</code>
               </pre>
             </div>

@@ -609,6 +609,35 @@ describe('Radio', () => {
         await user.keyboard('{ArrowDown}');
         expect(option2).toHaveFocus();
       });
+
+      it('removes data-focus when focus leaves the group', async () => {
+        const user = userEvent.setup();
+        const handleBlur = jest.fn();
+
+        render(
+          <>
+            <Radio onBlur={handleBlur}>
+              <RadioItem value='option1'>Option 1</RadioItem>
+              <RadioItem value='option2'>Option 2</RadioItem>
+            </Radio>
+            <button type='button'>Next</button>
+          </>,
+        );
+
+        const option1 = getRadioByText('Option 1');
+        const nextButton = screen.getByRole('button', { name: 'Next' });
+
+        await user.tab();
+
+        expect(option1).toHaveFocus();
+        expect(option1).toHaveAttribute('data-focus', '');
+
+        await user.tab();
+
+        expect(nextButton).toHaveFocus();
+        expect(option1).not.toHaveAttribute('data-focus');
+        expect(handleBlur).toHaveBeenCalled();
+      });
     });
 
     describe('Selection', () => {

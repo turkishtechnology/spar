@@ -367,6 +367,7 @@ The root context provider that wraps all compound field parts. `Field` and `Fiel
 | `invalid?`  | `boolean`                                                     | `false`     | Validation state propagated to all compound parts                      |
 | `disabled?` | `boolean`                                                     | `false`     | Disabled state propagated to all compound parts                        |
 | `required?` | `boolean`                                                     | `false`     | Required state propagated to all compound parts                        |
+| `optional?` | `boolean`                                                     | `false`     | Optional state propagated to all compound parts                        |
 | `readOnly?` | `boolean`                                                     | `false`     | Read-only state propagated to all compound parts                       |
 | `...props`  | `React.ComponentProps<T>`                                     | -           | All standard HTML attributes for the root element                      |
 
@@ -377,6 +378,7 @@ The root context provider that wraps all compound field parts. `Field` and `Fiel
 | `invalid`  | `boolean` | Whether the field is in error state |
 | `disabled` | `boolean` | Whether the field is disabled       |
 | `required` | `boolean` | Whether the field is required       |
+| `optional` | `boolean` | Whether the field is optional       |
 | `readOnly` | `boolean` | Whether the field is read-only      |
 
 **Data Attributes**
@@ -386,6 +388,7 @@ The root context provider that wraps all compound field parts. `Field` and `Fiel
 | `data-invalid`  | `""` \| `undefined` | Indicates validation state |
 | `data-disabled` | `""` \| `undefined` | Indicates disabled state   |
 | `data-required` | `""` \| `undefined` | Indicates required state   |
+| `data-optional` | `""` \| `undefined` | Indicates optional state   |
 | `data-readonly` | `""` \| `undefined` | Indicates read-only state  |
 
 ### Field.Label
@@ -404,7 +407,7 @@ Accessible label auto-linked to the field's control via `htmlFor`. Renders `<lab
 
 - `id` → `${rootId}-label`
 - `htmlFor` → `${rootId}-field`
-- `disabled`, `required`, `readOnly`, `invalid` mirror the root state
+- `disabled`, `required`, `optional`, `readOnly`, `invalid` mirror the root state
 
 ### Field.Description
 
