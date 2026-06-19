@@ -346,15 +346,54 @@ describe('Toast', () => {
       }),
     ).resolves.toBe('done');
 
-    expect(toaster.getSnapshot()[0]).toMatchObject({ title: 'done', type: 'success' });
+    expect(toaster.getSnapshot()[0]).toMatchObject({
+      title: 'done',
+      type: 'success',
+      duration: 5000,
+    });
   });
 
-  it('should fall back to info when a toast type is not provided', () => {
+  it('should keep promise loading toasts visible until the promise settles', async () => {
+    const toaster = createToaster({ duration: 1000, removeDelay: 0 });
+    let resolvePromise: (value: string) => void = () => {};
+    const promise = new Promise<string>((resolve) => {
+      resolvePromise = resolve;
+    });
+
+    const trackedPromise = toaster.promise(promise, {
+      loading: { title: 'Loading' },
+      success: (value) => ({ title: value }),
+      error: { title: 'Failed' },
+    });
+
+    expect(toaster.getSnapshot()[0]).toMatchObject({
+      title: 'Loading',
+      type: 'loading',
+      duration: null,
+    });
+
+    act(() => {
+      jest.advanceTimersByTime(5000);
+    });
+
+    expect(toaster.getSnapshot()[0]).toMatchObject({ title: 'Loading', type: 'loading' });
+
+    resolvePromise('done');
+    await expect(trackedPromise).resolves.toBe('done');
+
+    expect(toaster.getSnapshot()[0]).toMatchObject({
+      title: 'done',
+      type: 'success',
+      duration: 1000,
+    });
+  });
+
+  it('should fall back to default when a toast type is not provided', () => {
     const toaster = createToaster();
 
     toaster.create({ title: 'Heads up' });
 
-    expect(toaster.getSnapshot()[0]).toMatchObject({ title: 'Heads up', type: 'info' });
+    expect(toaster.getSnapshot()[0]).toMatchObject({ title: 'Heads up', type: 'default' });
   });
 
   it('should expose toast content through compound parts', () => {

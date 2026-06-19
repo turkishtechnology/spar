@@ -34,6 +34,7 @@ altText: 'Undo booking update',
 };
 
 return (
+
 <div className='toast-demo-stage'>
 <button className='toast-demo-button' type='button' onClick={notify}>
 Save booking
@@ -443,6 +444,14 @@ interface ToastOptions {
   action?: ToastActionOptions;
   dismissible?: boolean;
   data?: unknown;
+}
+```
+
+```ts
+interface ToastActionOptions {
+  label: React.ReactNode;
+  altText: string;
+  onClick?: (toast: ToastData) => void;
 }
 ```
 

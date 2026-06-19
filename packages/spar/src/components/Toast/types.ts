@@ -11,7 +11,7 @@ export type ToastPlacement =
 
 export type ToastStatus = 'queued' | 'visible' | 'dismissing';
 
-export type ToastType = 'success' | 'error' | 'warning' | 'info' | 'loading';
+export type ToastType = 'default' | 'success' | 'error' | 'warning' | 'info' | 'loading';
 
 export type ToastAnnouncement = 'polite' | 'assertive';
 
@@ -32,7 +32,7 @@ export interface ToastData {
 
 export interface ToastActionOptions {
   label: ReactNode;
-  altText?: string;
+  altText: string;
   onClick?: (toast: ToastData) => void;
 }
 

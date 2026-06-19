@@ -143,7 +143,7 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
 
   const normalizeToast = (toastOptions: ToastOptions, type?: ToastType): ToastData => {
     const duration = toastOptions.duration === undefined ? defaultDuration : toastOptions.duration;
-    const toastType = type ?? toastOptions.type ?? 'info';
+    const toastType = type ?? toastOptions.type ?? 'default';
 
     return {
       id: toastOptions.id ?? idFactory(),
@@ -299,7 +299,10 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
   };
 
   const promise = async <T>(promiseValue: Promise<T>, promiseOptions: ToastPromiseOptions<T>) => {
-    const id = createWithType(promiseOptions.loading, promiseOptions.loading.type ?? 'loading');
+    const id = createWithType(
+      { duration: null, ...promiseOptions.loading },
+      promiseOptions.loading.type ?? 'loading',
+    );
 
     try {
       const value = await promiseValue;
@@ -308,7 +311,11 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
           ? promiseOptions.success(value)
           : promiseOptions.success;
 
-      update(id, { ...successOptions, type: successOptions.type ?? 'success' });
+      update(id, {
+        duration: defaultDuration,
+        ...successOptions,
+        type: successOptions.type ?? 'success',
+      });
       return value;
     } catch (error) {
       const errorOptions =
@@ -316,7 +323,11 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
           ? promiseOptions.error(error)
           : promiseOptions.error;
 
-      update(id, { ...errorOptions, type: errorOptions.type ?? 'error' });
+      update(id, {
+        duration: defaultDuration,
+        ...errorOptions,
+        type: errorOptions.type ?? 'error',
+      });
       throw error;
     }
   };
