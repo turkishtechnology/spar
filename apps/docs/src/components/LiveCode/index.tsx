@@ -22,6 +22,9 @@ import {
   Switch,
   Tabs,
   Tooltip,
+  Toast,
+  Toaster,
+  createToaster,
   // Simple components
   Button,
   Checkbox,
@@ -147,6 +150,9 @@ export const LiveCode = ({ code, cssCode }: LiveCodeProps) => {
       Switch,
       Tabs,
       Tooltip,
+      Toast,
+      Toaster,
+      createToaster,
       // Simple components
       Button,
       Checkbox,
