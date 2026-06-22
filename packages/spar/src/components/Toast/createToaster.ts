@@ -199,6 +199,8 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
       return;
     }
 
+    clearRemoveTimer(id);
+
     const duration =
       updateOptions.duration === undefined ? current.duration : updateOptions.duration;
 

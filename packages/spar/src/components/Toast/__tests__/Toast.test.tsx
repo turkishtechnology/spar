@@ -338,6 +338,23 @@ describe('Toast', () => {
     expect(toaster.getSnapshot()[0]).toMatchObject({ id: 'same-id', title: 'Second' });
   });
 
+  it('should keep an updated toast visible after it was dismissed', () => {
+    const toaster = createToaster({ removeDelay: 300, duration: null });
+
+    toaster.create({ id: 'same-id', title: 'First' });
+    toaster.dismiss('same-id');
+    toaster.update('same-id', { title: 'Revived' });
+
+    expect(toaster.getSnapshot()[0]).toMatchObject({ id: 'same-id', status: 'visible' });
+
+    act(() => {
+      jest.advanceTimersByTime(300);
+    });
+
+    expect(toaster.getSnapshot()).toHaveLength(1);
+    expect(toaster.getSnapshot()[0]).toMatchObject({ id: 'same-id', title: 'Revived' });
+  });
+
   it('should clean timers and page idle listener when destroyed', () => {
     const addSpy = jest.spyOn(document, 'addEventListener');
     const removeSpy = jest.spyOn(document, 'removeEventListener');

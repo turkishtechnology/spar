@@ -302,10 +302,10 @@ toaster.loading({ title: 'Uploading', duration: null });
 `ToastType` is intentionally limited to semantic notification states:
 
 ```ts
-type ToastType = 'success' | 'error' | 'warning' | 'info' | 'loading';
+type ToastType = 'default' | 'success' | 'error' | 'warning' | 'info' | 'loading';
 ```
 
-When `toaster.create(...)` is called without a type, Spar uses `info`.
+When `toaster.create(...)` is called without a type, Spar uses `default`.
 
 ### Promise Toast
 
@@ -395,7 +395,7 @@ Toast separates controller behavior from rendering concerns:
 | ------------------ | --------------------------------------------------------------------------------- | ---------------- | ----------------------------------------------------------------------------------------------------- |
 | `placement`        | `'top-start' \| 'top' \| 'top-end' \| 'bottom-start' \| 'bottom' \| 'bottom-end'` | `'bottom-end'`   | Placement reflected on `data-placement`.                                                              |
 | `duration`         | `number`                                                                          | `5000`           | Default auto-dismiss duration in milliseconds. Use item-level `duration: null` for persistent toasts. |
-| `maxVisibleToasts` | `number`                                                                          | `3`              | Maximum number of toasts to display at once. Extra items are `queued`.                                |
+| `maxVisibleToasts` | `number`                                                                          | `24`             | Maximum number of toasts to display at once. Extra items are `queued`.                                |
 | `pauseOnPageIdle`  | `boolean`                                                                         | `false`          | Pauses timers while the document is hidden.                                                           |
 | `removeDelay`      | `number`                                                                          | `200`            | Delay before a dismissing toast is removed.                                                           |
 | `idFactory`        | `() => string`                                                                    | internal counter | Custom id generator.                                                                                  |
@@ -421,6 +421,7 @@ Toast separates controller behavior from rendering concerns:
 | `pause(id?)`                | Pauses one visible toast timer or all visible timers.                                                    |
 | `resume(id?)`               | Resumes one visible toast timer or all visible timers.                                                   |
 | `clear()`                   | Removes every toast immediately without waiting for `removeDelay`.                                       |
+| `destroy()`                 | Clears all timers and listeners and tears down the controller.                                           |
 | `promise(promise, options)` | Creates a loading toast and updates it after resolution or rejection.                                    |
 | `subscribe(listener)`       | Subscribes to controller changes.                                                                        |
 | `getSnapshot()`             | Returns the current toast list.                                                                          |
@@ -489,6 +490,7 @@ interface ToasterController {
   pause: (id?: string) => void;
   resume: (id?: string) => void;
   clear: () => void;
+  destroy: () => void;
   promise: <TData>(promise: Promise<TData>, options: ToastPromiseOptions<TData>) => Promise<TData>;
   subscribe: (listener: () => void) => () => void;
   getSnapshot: () => ToastData[];

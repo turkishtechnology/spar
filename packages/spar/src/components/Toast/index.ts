@@ -8,6 +8,10 @@ import { ToastClose } from './ToastClose';
 export { createToaster } from './createToaster';
 export { useToastContext } from './hooks';
 
+// Unlike Dialog/Tabs, the `Toast` namespace is a plain object rather than a
+// callable root with parts attached: `Toast.Root` takes per-item `toast`/`toaster`
+// props supplied by the `Toaster` render prop, so `<Toast>` on its own is not a
+// meaningful component.
 const Toast = {
   Root: ToastRoot,
   Title: ToastTitle,
