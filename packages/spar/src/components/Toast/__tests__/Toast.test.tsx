@@ -410,6 +410,7 @@ describe('Toast', () => {
     );
 
     expect(screen.getByRole('status')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveAttribute('data-toast-id', toast?.id);
     expect(screen.getByText('Flight updated')).toBeInTheDocument();
     expect(screen.getByText('Gate changed')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Dismiss notification' })).toBeInTheDocument();

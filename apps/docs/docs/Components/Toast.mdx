@@ -410,7 +410,7 @@ Toast separates controller behavior from rendering concerns:
 
 | Method                      | Description                                                                                              |
 | --------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `create(options)`           | Creates an `info` toast unless `options.type` is provided.                                               |
+| `create(options)`           | Creates a `default` toast unless `options.type` is provided.                                             |
 | `success(options)`          | Creates a success toast.                                                                                 |
 | `error(options)`            | Creates an error toast.                                                                                  |
 | `warning(options)`          | Creates a warning toast.                                                                                 |
@@ -430,8 +430,19 @@ Toast separates controller behavior from rendering concerns:
 ```ts
 type ToastStatus = 'queued' | 'visible' | 'dismissing';
 type ToastAnnouncement = 'polite' | 'assertive';
-type ToastType = 'success' | 'error' | 'warning' | 'info' | 'loading';
+type ToastType = 'default' | 'success' | 'error' | 'warning' | 'info' | 'loading';
 ```
+
+### Data Attributes
+
+| Attribute        | Element      | Description                                        |
+| ---------------- | ------------ | -------------------------------------------------- |
+| `data-toaster`   | `Toaster`    | Marks the toast viewport.                          |
+| `data-placement` | `Toaster`    | Reflects the configured placement.                 |
+| `data-toast`     | `Toast.Root` | Marks an individual toast item.                    |
+| `data-toast-id`  | `Toast.Root` | Stable item id used by the headless layout motion. |
+| `data-status`    | `Toast.Root` | Reflects `queued`, `visible`, or `dismissing`.     |
+| `data-type`      | `Toast.Root` | Reflects the toast type.                           |
 
 ```ts
 interface ToastOptions {
