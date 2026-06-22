@@ -113,6 +113,65 @@ describe('Toast', () => {
     expect(screen.getByRole('region', { name: 'Notifications' })).toBeInTheDocument();
   });
 
+  it('should expand overlapping toasts on interaction', async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+    const toaster = createToaster();
+
+    render(
+      <Toaster toaster={toaster} overlap>
+        {(toast) => <ToastRoot key={toast.id} toast={toast} toaster={toaster} />}
+      </Toaster>,
+    );
+
+    const region = screen.getByRole('region');
+
+    expect(region).toHaveAttribute('data-overlap');
+    expect(region).not.toHaveAttribute('data-expanded');
+
+    await user.hover(region);
+    expect(region).toHaveAttribute('data-expanded');
+
+    act(() => {
+      region.focus();
+    });
+
+    await user.unhover(region);
+    expect(region).toHaveAttribute('data-expanded');
+
+    act(() => {
+      region.blur();
+    });
+
+    expect(region).not.toHaveAttribute('data-expanded');
+
+    act(() => {
+      region.focus();
+    });
+
+    expect(region).toHaveAttribute('data-expanded');
+  });
+
+  it('should render the newest bottom toast last when overlap is enabled', () => {
+    const toaster = createToaster({ placement: 'bottom-end' });
+    toaster.create({ title: 'First' });
+    toaster.create({ title: 'Second' });
+
+    render(
+      <Toaster toaster={toaster} overlap>
+        {(toast) => (
+          <ToastRoot key={toast.id} toast={toast} toaster={toaster} data-testid='toast'>
+            <ToastTitle />
+          </ToastRoot>
+        )}
+      </Toaster>,
+    );
+
+    expect(screen.getAllByTestId('toast').map((toast) => toast.textContent)).toEqual([
+      'First',
+      'Second',
+    ]);
+  });
+
   it('should focus the toaster only when the hotkey matches exactly', () => {
     const toaster = createToaster();
 
@@ -262,6 +321,43 @@ describe('Toast', () => {
     expect(toaster.getSnapshot()[0]).toMatchObject({ id: 'same-id', title: 'Second' });
     expect(onCreate).toHaveBeenCalledTimes(1);
     expect(onUpdate).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not remove a recreated toast after a pending remove delay', () => {
+    const toaster = createToaster({ removeDelay: 300 });
+
+    toaster.create({ id: 'same-id', title: 'First', duration: null });
+    toaster.dismiss('same-id');
+    toaster.create({ id: 'same-id', title: 'Second', duration: null });
+
+    act(() => {
+      jest.advanceTimersByTime(300);
+    });
+
+    expect(toaster.getSnapshot()).toHaveLength(1);
+    expect(toaster.getSnapshot()[0]).toMatchObject({ id: 'same-id', title: 'Second' });
+  });
+
+  it('should clean timers and page idle listener when destroyed', () => {
+    const addSpy = jest.spyOn(document, 'addEventListener');
+    const removeSpy = jest.spyOn(document, 'removeEventListener');
+    const toaster = createToaster({ pauseOnPageIdle: true, duration: 1000, removeDelay: 300 });
+    const visibilityListener = addSpy.mock.calls.find(([type]) => type === 'visibilitychange')?.[1];
+
+    toaster.create({ title: 'Destroy me' });
+    toaster.dismiss();
+    toaster.destroy();
+
+    expect(removeSpy).toHaveBeenCalledWith('visibilitychange', visibilityListener);
+
+    act(() => {
+      jest.advanceTimersByTime(1300);
+    });
+
+    expect(toaster.getSnapshot()).toHaveLength(0);
+
+    addSpy.mockRestore();
+    removeSpy.mockRestore();
   });
 
   it('should close a toast from the close control', async () => {

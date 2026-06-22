@@ -85,6 +85,7 @@ export interface ToasterController {
   pause: (id?: string) => void;
   resume: (id?: string) => void;
   clear: () => void;
+  destroy: () => void;
   promise: <TData>(promise: Promise<TData>, options: ToastPromiseOptions<TData>) => Promise<TData>;
   subscribe: (listener: () => void) => () => void;
   getSnapshot: () => ToastData[];
@@ -98,6 +99,7 @@ export type ToasterProps<T extends ElementType = 'div'> = PolymorphicProps<
     children: (toast: ToastData) => ReactNode;
     label?: string;
     hotkey?: string[];
+    overlap?: boolean;
   }
 >;
 

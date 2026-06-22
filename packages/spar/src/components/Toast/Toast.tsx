@@ -1,4 +1,4 @@
-import { ElementType, FocusEvent, KeyboardEvent, MouseEvent, useMemo } from 'react';
+import { ElementType, FocusEvent, KeyboardEvent, PointerEvent, useMemo } from 'react';
 import { ToastContext } from './hooks';
 import type { ToastRootProps } from './types';
 
@@ -7,8 +7,8 @@ export const Toast = <T extends ElementType = 'div'>({
   toast,
   toaster,
   children,
-  onMouseEnter,
-  onMouseLeave,
+  onPointerEnter,
+  onPointerLeave,
   onFocus,
   onBlur,
   onKeyDown,
@@ -19,14 +19,14 @@ export const Toast = <T extends ElementType = 'div'>({
   const contextValue = useMemo(() => ({ toast, toaster }), [toast, toaster]);
   const role = toast.announcement === 'assertive' ? 'alert' : 'status';
 
-  const handleMouseEnter = (event: MouseEvent<HTMLDivElement>) => {
+  const handlePointerEnter = (event: PointerEvent<HTMLDivElement>) => {
     toaster?.pause(toast.id);
-    onMouseEnter?.(event);
+    onPointerEnter?.(event);
   };
 
-  const handleMouseLeave = (event: MouseEvent<HTMLDivElement>) => {
+  const handlePointerLeave = (event: PointerEvent<HTMLDivElement>) => {
     toaster?.resume(toast.id);
-    onMouseLeave?.(event);
+    onPointerLeave?.(event);
   };
 
   const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
@@ -59,8 +59,8 @@ export const Toast = <T extends ElementType = 'div'>({
         data-toast-id={toast.id}
         data-status={toast.status}
         data-type={toast.type}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}

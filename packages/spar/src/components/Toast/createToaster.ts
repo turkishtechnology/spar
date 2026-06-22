@@ -10,7 +10,7 @@ import type {
 
 const DEFAULT_DURATION = 5000;
 const DEFAULT_REMOVE_DELAY = 200;
-const DEFAULT_MAX_VISIBLE_TOASTS = 3;
+const DEFAULT_MAX_VISIBLE_TOASTS = 24;
 
 const now = () => Date.now();
 
@@ -27,7 +27,9 @@ const getDefaultAnnouncement = (type: ToastType) =>
 export const createToaster = (options: CreateToasterOptions = {}): ToasterController => {
   const listeners = new Set<() => void>();
   const timers = new Map<string, ReturnType<typeof setTimeout>>();
+  const removeTimers = new Map<string, ReturnType<typeof setTimeout>>();
   let toasts: ToastData[] = [];
+  let pageIdleCleanup: (() => void) | undefined;
 
   const placement = options.placement ?? 'bottom-end';
   const maxVisibleToasts = Math.max(1, options.maxVisibleToasts ?? DEFAULT_MAX_VISIBLE_TOASTS);
@@ -45,6 +47,15 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
     if (timer) {
       clearTimeout(timer);
       timers.delete(id);
+    }
+  };
+
+  const clearRemoveTimer = (id: string) => {
+    const timer = removeTimers.get(id);
+
+    if (timer) {
+      clearTimeout(timer);
+      removeTimers.delete(id);
     }
   };
 
@@ -135,6 +146,7 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
     }
 
     clearTimer(id);
+    clearRemoveTimer(id);
     toasts = toasts.filter((toast) => toast.id !== id);
     options.onRemove?.(removed);
     syncTimers();
@@ -166,6 +178,7 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
     const existing = toasts.some((item) => item.id === toast.id);
 
     clearTimer(toast.id);
+    clearRemoveTimer(toast.id);
     toasts = [toast, ...toasts.filter((item) => item.id !== toast.id)];
     syncTimers();
     const current = toasts.find((item) => item.id === toast.id) ?? toast;
@@ -234,7 +247,12 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
       if (removeDelay <= 0) {
         remove(toastId);
       } else {
-        setTimeout(() => remove(toastId), removeDelay);
+        clearRemoveTimer(toastId);
+        const timer = setTimeout(() => {
+          removeTimers.delete(toastId);
+          remove(toastId);
+        }, removeDelay);
+        removeTimers.set(toastId, timer);
       }
     });
 
@@ -292,10 +310,23 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
   const clear = () => {
     const removed = toasts;
     timers.forEach((timer) => clearTimeout(timer));
+    removeTimers.forEach((timer) => clearTimeout(timer));
     timers.clear();
+    removeTimers.clear();
     toasts = [];
     removed.forEach((toast) => options.onRemove?.(toast));
     emit();
+  };
+
+  const destroy = () => {
+    timers.forEach((timer) => clearTimeout(timer));
+    removeTimers.forEach((timer) => clearTimeout(timer));
+    timers.clear();
+    removeTimers.clear();
+    listeners.clear();
+    pageIdleCleanup?.();
+    pageIdleCleanup = undefined;
+    toasts = [];
   };
 
   const promise = async <T>(promiseValue: Promise<T>, promiseOptions: ToastPromiseOptions<T>) => {
@@ -333,13 +364,17 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
   };
 
   if (options.pauseOnPageIdle && typeof document !== 'undefined') {
-    document.addEventListener('visibilitychange', () => {
+    const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
         pause();
       } else {
         resume();
       }
-    });
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    pageIdleCleanup = () =>
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
   }
 
   return {
@@ -356,6 +391,7 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
     pause,
     resume,
     clear,
+    destroy,
     promise,
     subscribe: (listener) => {
       listeners.add(listener);
