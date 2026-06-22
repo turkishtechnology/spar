@@ -11,7 +11,6 @@ import {
 } from 'react';
 import { useMergedRef } from '@/hooks';
 import type { ToasterProps } from './types';
-import { useToastLayoutMotion } from './useToastLayoutMotion';
 
 const DEFAULT_HOTKEY = ['F8'];
 const MODIFIER_KEYS = ['altKey', 'ctrlKey', 'metaKey', 'shiftKey'] as const;
@@ -65,15 +64,9 @@ export const Toaster = <T extends ElementType = 'div'>({
         : visibleToasts,
     [overlap, toaster.placement, visibleToasts],
   );
-  const layoutKey = useMemo(
-    () => renderedToasts.map((toast) => toast.id).join('|'),
-    [renderedToasts],
-  );
   const hotkeyLabel = hotkey.length > 0 ? ` (${hotkey.join('+')})` : '';
   const ariaLabel = label ?? `Notifications${hotkeyLabel}`;
   const expanded = overlap && (pointerInside || focusInside);
-
-  useToastLayoutMotion(internalRef, layoutKey);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (isHotkeyMatch(event, hotkey)) {

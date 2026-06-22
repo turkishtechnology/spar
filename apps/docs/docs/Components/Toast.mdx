@@ -436,14 +436,14 @@ type ToastType = 'default' | 'success' | 'error' | 'warning' | 'info' | 'loading
 
 ### Data Attributes
 
-| Attribute        | Element      | Description                                        |
-| ---------------- | ------------ | -------------------------------------------------- |
-| `data-toaster`   | `Toaster`    | Marks the toast viewport.                          |
-| `data-placement` | `Toaster`    | Reflects the configured placement.                 |
-| `data-toast`     | `Toast.Root` | Marks an individual toast item.                    |
-| `data-toast-id`  | `Toast.Root` | Stable item id used by the headless layout motion. |
-| `data-status`    | `Toast.Root` | Reflects `queued`, `visible`, or `dismissing`.     |
-| `data-type`      | `Toast.Root` | Reflects the toast type.                           |
+| Attribute        | Element      | Description                                                                 |
+| ---------------- | ------------ | --------------------------------------------------------------------------- |
+| `data-toaster`   | `Toaster`    | Marks the toast viewport.                                                   |
+| `data-placement` | `Toaster`    | Reflects the configured placement.                                          |
+| `data-toast`     | `Toast.Root` | Marks an individual toast item.                                             |
+| `data-toast-id`  | `Toast.Root` | Stable item id for targeting individual toasts in CSS or layout animations. |
+| `data-status`    | `Toast.Root` | Reflects `queued`, `visible`, or `dismissing`.                              |
+| `data-type`      | `Toast.Root` | Reflects the toast type.                                                    |
 
 ```ts
 interface ToastOptions {
