@@ -47,7 +47,10 @@ export const Toaster = <T extends ElementType = 'div'>({
   const internalRef = useRef<HTMLElement>(null);
   const mergedRef = useMergedRef(internalRef, ref);
   const toasts = useSyncExternalStore(toaster.subscribe, toaster.getSnapshot, toaster.getSnapshot);
-  const visibleToasts = useMemo(() => toasts.slice(0, toaster.max), [toaster.max, toasts]);
+  const visibleToasts = useMemo(
+    () => toasts.slice(0, toaster.maxVisibleToasts),
+    [toaster.maxVisibleToasts, toasts],
+  );
   const hotkeyLabel = hotkey.length > 0 ? ` (${hotkey.join('+')})` : '';
   const ariaLabel = label ?? `Notifications${hotkeyLabel}`;
 

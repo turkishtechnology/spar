@@ -59,7 +59,7 @@ export interface ToastPromiseOptions<TData> {
 export interface CreateToasterOptions {
   placement?: ToastPlacement;
   duration?: number;
-  max?: number;
+  maxVisibleToasts?: number;
   pauseOnPageIdle?: boolean;
   removeDelay?: number;
   idFactory?: () => string;
@@ -73,7 +73,7 @@ export interface CreateToasterOptions {
 
 export interface ToasterController {
   placement: ToastPlacement;
-  max: number;
+  maxVisibleToasts: number;
   create: (options: ToastOptions) => string;
   success: (options: ToastOptions) => string;
   error: (options: ToastOptions) => string;

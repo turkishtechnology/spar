@@ -10,7 +10,7 @@ import type {
 
 const DEFAULT_DURATION = 5000;
 const DEFAULT_REMOVE_DELAY = 200;
-const DEFAULT_MAX = 3;
+const DEFAULT_MAX_VISIBLE_TOASTS = 3;
 
 const now = () => Date.now();
 
@@ -30,7 +30,7 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
   let toasts: ToastData[] = [];
 
   const placement = options.placement ?? 'bottom-end';
-  const max = Math.max(1, options.max ?? DEFAULT_MAX);
+  const maxVisibleToasts = Math.max(1, options.maxVisibleToasts ?? DEFAULT_MAX_VISIBLE_TOASTS);
   const defaultDuration = options.duration ?? DEFAULT_DURATION;
   const removeDelay = options.removeDelay ?? DEFAULT_REMOVE_DELAY;
   const idFactory = options.idFactory ?? defaultIdFactory;
@@ -54,7 +54,7 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
         return toast;
       }
 
-      const status = index < max ? 'visible' : 'queued';
+      const status = index < maxVisibleToasts ? 'visible' : 'queued';
       return toast.status === status ? toast : { ...toast, status };
     });
   };
@@ -62,7 +62,7 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
   const visibleToastIds = () =>
     new Set(
       toasts
-        .slice(0, max)
+        .slice(0, maxVisibleToasts)
         .filter((toast) => toast.status === 'visible')
         .map((toast) => toast.id),
     );
@@ -344,7 +344,7 @@ export const createToaster = (options: CreateToasterOptions = {}): ToasterContro
 
   return {
     placement,
-    max,
+    maxVisibleToasts,
     create: (toastOptions) => createWithType(toastOptions),
     success: (toastOptions) => createWithType(toastOptions, 'success'),
     error: (toastOptions) => createWithType(toastOptions, 'error'),

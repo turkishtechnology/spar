@@ -77,7 +77,7 @@ describe('Toast', () => {
   });
 
   it('should render visible toasts through the toaster render prop', () => {
-    const toaster = createToaster({ max: 1 });
+    const toaster = createToaster({ maxVisibleToasts: 1 });
     toaster.create({ title: 'First' });
     toaster.create({ title: 'Second' });
 
@@ -150,7 +150,7 @@ describe('Toast', () => {
   });
 
   it('should not consume queued toast duration before the toast is visible', () => {
-    const toaster = createToaster({ duration: 1000, max: 1, removeDelay: 0 });
+    const toaster = createToaster({ duration: 1000, maxVisibleToasts: 1, removeDelay: 0 });
     const firstId = toaster.create({ title: 'First' });
     const secondId = toaster.create({ title: 'Second' });
 
@@ -180,7 +180,7 @@ describe('Toast', () => {
   });
 
   it('should not start the next toast timer while a dismissing toast still occupies the visible slot', () => {
-    const toaster = createToaster({ duration: 1000, max: 1, removeDelay: 300 });
+    const toaster = createToaster({ duration: 1000, maxVisibleToasts: 1, removeDelay: 300 });
     const firstId = toaster.create({ title: 'First' });
     toaster.create({ title: 'Second' });
 
