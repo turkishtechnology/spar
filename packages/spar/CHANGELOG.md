@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-06-24
+
+First stable release of the 0.2 line, promoting the 0.2.0-beta series to the
+`latest` dist-tag (previously `latest` was 0.1.4). It bundles all changes since
+0.1.4 — the Field primitive and form-control integration, the Accordion rework,
+the Select API simplification, and the Label/Field `optional` rename — together
+with the new Toast component below.
+
+### Toast — New Component
+
+#### Added
+
+- **New headless `Toast` primitive** for accessible, imperatively-driven
+  notifications. `createToaster()` returns a controller that can `update`,
+  `dismiss`, `clear`, and wrap a `promise`; the render-prop `<Toaster>`
+  component renders the live queue, and the `Toast` namespace
+  (`Toast.Root`, `Toast.Title`, `Toast.Description`, `Toast.Action`,
+  `Toast.Close`) composes each item. `useToastContext` exposes per-item state.
+- Configurable `placement`, `duration`, `maxVisibleToasts`, `overlap` stacking,
+  and default toast `type`.
+- Available as a tree-shakeable sub-path export: `@turkish-technology/spar/toast`,
+  matching the per-component export convention used by the rest of the library.
+
 ## [0.2.0-beta.2] - 2026-06-17
 
 ### Label — `isOptional` Renamed to `optional`
