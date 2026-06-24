@@ -1,0 +1,498 @@
+---
+title: Toast
+description: Headless toast primitives for rendering transient notifications with queueing, timers, promise updates, and accessible live-region behavior.
+---
+
+import React from 'react';
+import LiveCode from '../../src/components/LiveCode';
+import AnatomyViewer from '../../src/components/AnatomyViewer/AnatomyViewer';
+import { Toast, Toaster, createToaster } from '@turkish-technology/spar';
+
+# Toast
+
+Toast provides a headless notification controller and compound parts for rendering transient feedback. Spar owns the queue, timers, pause and resume behavior, promise updates, and live-region semantics; you bring the visual design.
+
+## Live Demo
+
+<div className='toast-demo-container'>
+<LiveCode
+  code={`React.createElement(function ToastDemo() {
+  const toaster = React.useMemo(
+    () => createToaster({ duration: 5000, placement: 'top-end' }),
+    [],
+  );
+
+const notify = () => {
+toaster.success({
+title: 'Booking saved',
+description: 'Passenger details were updated successfully.',
+action: {
+label: 'Undo',
+altText: 'Undo booking update',
+},
+});
+};
+
+return (
+
+<div className='toast-demo-stage'>
+<button className='toast-demo-button' type='button' onClick={notify}>
+Save booking
+</button>
+<Toaster toaster={toaster} className='toast-toaster'>
+{(toast) => (
+<Toast.Root key={toast.id} toast={toast} toaster={toaster} className='toast-root'>
+<div className='toast-content'>
+<Toast.Title className='toast-title' />
+<Toast.Description className='toast-description' />
+</div>
+<Toast.Action className='toast-action' />
+<Toast.Close className='toast-close'>×</Toast.Close>
+</Toast.Root>
+)}
+</Toaster>
+</div>
+);
+})`}
+  cssCode={`.toast-demo-stage {
+position: relative;
+min-height: 220px;
+width: 100%;
+padding: 16px;
+overflow: hidden;
+border: 1px dashed #d8dde6;
+border-radius: 12px;
+background: #f7f8fa;
+}
+
+[data-theme='dark'] .toast-demo-stage {
+border-color: #2b303b;
+background: #15181e;
+}
+
+.toast-demo-button {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+min-height: 40px;
+padding: 0 14px;
+border-radius: 10px;
+border: 1px solid #c4c9d4;
+background: #222530;
+color: #ffffff;
+font-size: 14px;
+font-weight: 600;
+cursor: pointer;
+}
+
+.toast-toaster {
+position: absolute;
+top: 16px;
+right: 16px;
+width: min(360px, calc(100% - 32px));
+}
+
+.toast-root {
+display: flex;
+align-items: flex-start;
+gap: 10px;
+padding: 12px;
+border: 1px solid #d8dde6;
+border-radius: 12px;
+background: #ffffff;
+color: #222530;
+box-shadow:
+0 12px 32px rgba(34, 37, 48, 0.08),
+0 4px 12px rgba(34, 37, 48, 0.06);
+}
+
+[data-theme='dark'] .toast-root {
+border-color: #2b303b;
+background: #1f232b;
+color: #f2f5f8;
+}
+
+.toast-content {
+min-width: 0;
+flex: 1;
+}
+
+.toast-title {
+font-size: 14px;
+line-height: 20px;
+font-weight: 700;
+}
+
+.toast-description {
+margin-top: 2px;
+color: #717784;
+font-size: 13px;
+line-height: 18px;
+}
+
+[data-theme='dark'] .toast-description {
+color: #99a0ae;
+}
+
+.toast-action,
+.toast-close {
+border: 1px solid #d8dde6;
+border-radius: 8px;
+background: transparent;
+color: inherit;
+cursor: pointer;
+}
+
+.toast-action {
+padding: 4px 8px;
+font-size: 12px;
+font-weight: 600;
+}
+
+.toast-close {
+width: 28px;
+height: 28px;
+line-height: 1;
+}
+
+[data-theme='dark'] .toast-action,
+[data-theme='dark'] .toast-close {
+border-color: #3a414f;
+}`}/>
+
+</div>
+
+The live demo creates a toast through the controller and renders every visible item through the `Toaster` render prop.
+
+## Features
+
+- ✅ Headless queue controller via `createToaster`
+- ✅ Visible queue limiting with `maxVisibleToasts` and `queued` status
+- ✅ Auto-dismiss timers with pause and resume on hover or focus
+- ✅ Promise lifecycle updates through `toaster.promise`
+- ✅ Accessible live-region behavior with `announcement: 'polite' | 'assertive'`
+- ✅ Compound anatomy with `Toast.Root`, `Toast.Title`, `Toast.Description`, `Toast.Action`, and `Toast.Close`
+- ✅ Polymorphic rendering support via `as`
+
+## Import
+
+```ts
+import { Toast, Toaster, createToaster } from '@turkish-technology/spar';
+```
+
+---
+
+## Anatomy
+
+The Toast component is split into a controller, a viewport host, and item-level compound parts:
+
+<AnatomyViewer
+  parts={[
+    {
+      name: 'toaster',
+      label: 'Toaster',
+      description: 'Host that subscribes to the toast controller and renders visible items',
+    },
+    {
+      name: 'root',
+      label: 'Root',
+      description: 'Single toast item root with pause, resume, escape, and live-region behavior',
+    },
+    { name: 'title', label: 'Title', description: 'Toast title text' },
+    { name: 'description', label: 'Description', description: 'Supporting toast message' },
+    { name: 'action', label: 'Action', description: 'Optional action button' },
+    { name: 'close', label: 'Close', description: 'Optional dismiss button' },
+  ]}
+>
+  <div className='toast-demo-stage' data-spar-part='toaster'>
+    <div className='toast-root' data-spar-part='root'>
+      <div className='toast-content'>
+        <div className='toast-title' data-spar-part='title'>
+          {'Booking saved'}
+        </div>
+        <div className='toast-description' data-spar-part='description'>
+          {'Passenger details were updated.'}
+        </div>
+      </div>
+      <button className='toast-action' data-spar-part='action'>
+        {'Undo'}
+      </button>
+      <button className='toast-close' data-spar-part='close'>
+        {'×'}
+      </button>
+    </div>
+  </div>
+</AnatomyViewer>
+
+### Structure
+
+```tsx
+const toaster = createToaster();
+
+<Toaster toaster={toaster}>
+  {(toast) => (
+    <Toast.Root toast={toast} toaster={toaster}>
+      <Toast.Title />
+      <Toast.Description />
+      <Toast.Action />
+      <Toast.Close />
+    </Toast.Root>
+  )}
+</Toaster>;
+```
+
+**Data Flow:**
+
+- `createToaster`: Creates the controller that owns queue state, timers, and updates
+- `Toaster`: Subscribes to the controller and renders the visible toast list
+- `Toast.Root`: Provides toast context and live-region attributes for one item
+- `Toast.Title`: Renders `toast.title` when children are omitted
+- `Toast.Description`: Renders `toast.description` when children are omitted
+- `Toast.Action`: Renders `toast.action.label`, calls `toast.action.onClick`, then dismisses
+- `Toast.Close`: Dismisses the toast
+
+---
+
+## Code Examples
+
+### Basic Toast
+
+```tsx
+const toaster = createToaster({ placement: 'bottom-end' });
+
+function App() {
+  return (
+    <>
+      <button
+        type='button'
+        onClick={() =>
+          toaster.success({
+            title: 'Booking saved',
+            description: 'Passenger details were updated successfully.',
+          })
+        }
+      >
+        Save
+      </button>
+
+      <Toaster toaster={toaster}>
+        {(toast) => (
+          <Toast.Root key={toast.id} toast={toast} toaster={toaster}>
+            <Toast.Title />
+            <Toast.Description />
+            <Toast.Close />
+          </Toast.Root>
+        )}
+      </Toaster>
+    </>
+  );
+}
+```
+
+### Toast Types
+
+```tsx
+toaster.success({ title: 'Saved' });
+toaster.info({ title: 'Gate updated' });
+toaster.warning({ title: 'Seat selection pending' });
+toaster.error({ title: 'Payment failed' });
+toaster.loading({ title: 'Uploading', duration: null });
+```
+
+`ToastType` is intentionally limited to semantic notification states:
+
+```ts
+type ToastType = 'default' | 'success' | 'error' | 'warning' | 'info' | 'loading';
+```
+
+When `toaster.create(...)` is called without a type, Spar uses `default`.
+
+### Promise Toast
+
+```tsx
+await toaster.promise(saveBooking(), {
+  loading: {
+    title: 'Saving booking',
+    description: 'Passenger details are being updated.',
+  },
+  success: (booking) => ({
+    title: 'Booking saved',
+    description: `PNR ${booking.pnr} is ready.`,
+  }),
+  error: {
+    title: 'Booking could not be saved',
+    description: 'Please try again.',
+  },
+});
+```
+
+Promise toasts automatically map lifecycle states to toast types: loading to `loading`, resolved to `success`, and rejected to `error`. Passing an explicit `type` overrides the default.
+
+### Custom Action
+
+```tsx
+toaster.warning({
+  title: 'Booking changed',
+  description: 'The selected seat was released.',
+  action: {
+    label: 'Undo',
+    altText: 'Undo seat release',
+    onClick: (toast) => {
+      console.log('Undo clicked for', toast.id);
+    },
+  },
+});
+```
+
+### Announcement Priority
+
+```tsx
+toaster.error({
+  title: 'Payment failed',
+  announcement: 'assertive',
+});
+
+toaster.info({
+  title: 'Gate updated',
+  announcement: 'polite',
+});
+```
+
+Errors and warnings default to `assertive`; success, info, and loading toasts default to `polite`.
+
+### Hotkey
+
+The toaster region can be focused with a keyboard shortcut. By default, Spar uses `F8`.
+
+```tsx
+<Toaster toaster={toaster} hotkey={['F8']}>
+  {(toast) => <Toast.Root toast={toast} toaster={toaster} />}
+</Toaster>
+```
+
+Use an empty array to disable the shortcut.
+
+```tsx
+<Toaster toaster={toaster} hotkey={[]}>
+  {(toast) => <Toast.Root toast={toast} toaster={toaster} />}
+</Toaster>
+```
+
+---
+
+## API Reference
+
+Toast separates controller behavior from rendering concerns:
+
+- `CreateToasterOptions` configures queue and timer behavior.
+- `ToasterController` exposes the imperative API returned by `createToaster`.
+- `Toaster` props cover DOM, render, label, and hotkey behavior.
+- `ToastOptions` describes a single toast item.
+
+### `createToaster(options)`
+
+| Option             | Type                                                                              | Default          | Description                                                                                           |
+| ------------------ | --------------------------------------------------------------------------------- | ---------------- | ----------------------------------------------------------------------------------------------------- |
+| `placement`        | `'top-start' \| 'top' \| 'top-end' \| 'bottom-start' \| 'bottom' \| 'bottom-end'` | `'bottom-end'`   | Placement reflected on `data-placement`.                                                              |
+| `duration`         | `number`                                                                          | `5000`           | Default auto-dismiss duration in milliseconds. Use item-level `duration: null` for persistent toasts. |
+| `maxVisibleToasts` | `number`                                                                          | `24`             | Maximum number of toasts to display at once. Extra items are `queued`.                                |
+| `pauseOnPageIdle`  | `boolean`                                                                         | `false`          | Pauses timers while the document is hidden.                                                           |
+| `removeDelay`      | `number`                                                                          | `200`            | Delay before a dismissing toast is removed.                                                           |
+| `idFactory`        | `() => string`                                                                    | internal counter | Custom id generator.                                                                                  |
+| `onCreate`         | `(toast: ToastData) => void`                                                      | -                | Called when a toast is created.                                                                       |
+| `onUpdate`         | `(toast: ToastData) => void`                                                      | -                | Called when a toast is updated.                                                                       |
+| `onDismiss`        | `(toast: ToastData) => void`                                                      | -                | Called when a toast enters `dismissing`.                                                              |
+| `onRemove`         | `(toast: ToastData) => void`                                                      | -                | Called when a toast is removed.                                                                       |
+| `onPause`          | `(toast: ToastData) => void`                                                      | -                | Called when a visible timer pauses.                                                                   |
+| `onResume`         | `(toast: ToastData) => void`                                                      | -                | Called when a visible timer resumes.                                                                  |
+
+### Controller Methods
+
+| Method                      | Description                                                                                              |
+| --------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `create(options)`           | Creates a `default` toast unless `options.type` is provided.                                             |
+| `success(options)`          | Creates a success toast.                                                                                 |
+| `error(options)`            | Creates an error toast.                                                                                  |
+| `warning(options)`          | Creates a warning toast.                                                                                 |
+| `info(options)`             | Creates an info toast.                                                                                   |
+| `loading(options)`          | Creates a loading toast with `duration: null` by default so it stays visible until updated or dismissed. |
+| `update(id, options)`       | Updates an existing toast.                                                                               |
+| `dismiss(id?)`              | Gracefully dismisses one toast, or all toasts when no id is provided. `removeDelay` still applies.       |
+| `pause(id?)`                | Pauses one visible toast timer or all visible timers.                                                    |
+| `resume(id?)`               | Resumes one visible toast timer or all visible timers.                                                   |
+| `clear()`                   | Removes every toast immediately without waiting for `removeDelay`.                                       |
+| `destroy()`                 | Clears all timers and listeners and tears down the controller.                                           |
+| `promise(promise, options)` | Creates a loading toast and updates it after resolution or rejection.                                    |
+| `subscribe(listener)`       | Subscribes to controller changes.                                                                        |
+| `getSnapshot()`             | Returns the current toast list.                                                                          |
+
+### Types
+
+```ts
+type ToastStatus = 'queued' | 'visible' | 'dismissing';
+type ToastAnnouncement = 'polite' | 'assertive';
+type ToastType = 'default' | 'success' | 'error' | 'warning' | 'info' | 'loading';
+```
+
+### Data Attributes
+
+| Attribute        | Element      | Description                                                                 |
+| ---------------- | ------------ | --------------------------------------------------------------------------- |
+| `data-toaster`   | `Toaster`    | Marks the toast viewport.                                                   |
+| `data-placement` | `Toaster`    | Reflects the configured placement.                                          |
+| `data-toast`     | `Toast.Root` | Marks an individual toast item.                                             |
+| `data-toast-id`  | `Toast.Root` | Stable item id for targeting individual toasts in CSS or layout animations. |
+| `data-status`    | `Toast.Root` | Reflects `queued`, `visible`, or `dismissing`.                              |
+| `data-type`      | `Toast.Root` | Reflects the toast type.                                                    |
+
+```ts
+interface ToastOptions {
+  id?: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  type?: ToastType;
+  duration?: number | null;
+  announcement?: ToastAnnouncement;
+  action?: ToastActionOptions;
+  dismissible?: boolean;
+  data?: unknown;
+}
+```
+
+```ts
+interface ToastActionOptions {
+  label: React.ReactNode;
+  altText: string;
+  onClick?: (toast: ToastData) => void;
+}
+```
+
+```ts
+interface ToastPromiseOptions<TData> {
+  loading: ToastOptions;
+  success: ToastOptions | ((value: TData) => ToastOptions);
+  error: ToastOptions | ((error: unknown) => ToastOptions);
+}
+```
+
+```ts
+interface ToasterController {
+  placement: ToastPlacement;
+  maxVisibleToasts: number;
+  create: (options: ToastOptions) => string;
+  success: (options: ToastOptions) => string;
+  error: (options: ToastOptions) => string;
+  warning: (options: ToastOptions) => string;
+  info: (options: ToastOptions) => string;
+  loading: (options: ToastOptions) => string;
+  update: (id: string, options: ToastUpdateOptions) => void;
+  dismiss: (id?: string) => void;
+  pause: (id?: string) => void;
+  resume: (id?: string) => void;
+  clear: () => void;
+  destroy: () => void;
+  promise: <TData>(promise: Promise<TData>, options: ToastPromiseOptions<TData>) => Promise<TData>;
+  subscribe: (listener: () => void) => () => void;
+  getSnapshot: () => ToastData[];
+}
+```
