@@ -84,6 +84,21 @@ function parseComponentIndex(filePath) {
     singleExports.push(...names);
   }
 
+  // Also capture local re-export lists that carry no module specifier, e.g.
+  //   export { Toaster, Toast, ToastRoot };
+  // Components like Toast expose a plain-object namespace (rather than the
+  // callable `Ns.Part = X` pattern that hits the compound branch above), so
+  // their public names land here. Each name is re-exported from the package
+  // barrel via `export *`, so it belongs in the sub-path entry too.
+  const localRegex = /^export\s*\{([^}]+)\}\s*;/gm;
+  while ((match = localRegex.exec(content)) !== null) {
+    const names = match[1]
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    singleExports.push(...names);
+  }
+
   const namedMap = {};
   for (const name of singleExports) {
     namedMap[name] = name;

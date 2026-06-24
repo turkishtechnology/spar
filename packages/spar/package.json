@@ -88,6 +88,11 @@
       "import": "./dist/tabs.mjs",
       "require": "./dist/tabs.cjs"
     },
+    "./toast": {
+      "types": "./dist/toast.d.ts",
+      "import": "./dist/toast.mjs",
+      "require": "./dist/toast.cjs"
+    },
     "./tooltip": {
       "types": "./dist/tooltip.d.ts",
       "import": "./dist/tooltip.mjs",
@@ -141,6 +146,9 @@
       ],
       "tabs": [
         "./dist/tabs.d.ts"
+      ],
+      "toast": [
+        "./dist/toast.d.ts"
       ],
       "tooltip": [
         "./dist/tooltip.d.ts"
