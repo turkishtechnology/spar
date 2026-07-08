@@ -7,7 +7,10 @@ export function SelectDemo() {
   const [value, setValue] = useState('');
 
   return (
-    <Select.Root value={value} onChange={setValue}>
+    <Select.Root
+      value={value}
+      onChange={(next) => setValue(Array.isArray(next) ? (next[0] ?? '') : next)}
+    >
       <Select.Trigger placeholder='Select an option' />
       <Select.Content>
         <Select.Group>
