@@ -66,7 +66,13 @@ export const useTypeahead = ({
     (event: ReactKeyboardEvent<HTMLElement>): boolean => {
       if (!isCharacterKey(event)) return false;
 
-      const key = normalizeValue(event.key);
+      // Space extends an in-progress search so multi-word labels ("New York")
+      // can be matched. With an empty buffer it is left for the caller — in
+      // menus/selects Space selects the highlighted item.
+      const isSpace = event.key === ' ';
+      if (isSpace && bufferRef.current.length === 0) return false;
+
+      const key = isSpace ? ' ' : normalizeValue(event.key);
       if (!key) return false;
 
       const nextSearch = `${bufferRef.current}${key}`;

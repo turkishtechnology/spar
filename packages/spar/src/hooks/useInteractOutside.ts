@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 
 export interface UseInteractOutsideOptions {
   /**
@@ -67,63 +67,61 @@ export function useInteractOutside(
     preventDefault = false,
   } = options;
 
-  const handlePointerDown = useCallback(
-    (event: PointerEvent) => {
-      if (!enabled) return;
-
-      const target = event.target as Node | null;
-      if (!target) return;
-
-      // Check if the click is outside all specified elements
-      const isOutside = refs.every((ref) => {
-        const element = ref.current;
-        return !element || !element.contains(target);
-      });
-
-      if (isOutside) {
-        onPointerDownOutside?.(event);
-        onInteractOutside?.(event);
-
-        if (preventDefault && !event.defaultPrevented) {
-          event.preventDefault();
-        }
-      }
-    },
-    [enabled, refs, onPointerDownOutside, onInteractOutside, preventDefault],
-  );
-
-  const handleFocusIn = useCallback(
-    (event: FocusEvent) => {
-      if (!enabled || !includeFocus) return;
-
-      const target = event.target as Node | null;
-      if (!target) return;
-
-      // Check if the focus is outside all specified elements
-      const isOutside = refs.every((ref) => {
-        const element = ref.current;
-        return !element || !element.contains(target);
-      });
-
-      if (isOutside) {
-        onFocusOutside?.(event);
-        onInteractOutside?.(event);
-
-        if (preventDefault && !event.defaultPrevented) {
-          event.preventDefault();
-        }
-      }
-    },
-    [enabled, includeFocus, refs, onFocusOutside, onInteractOutside, preventDefault],
-  );
+  // Keep the latest refs/callbacks in a mutable ref so the document listeners
+  // can stay subscribed across renders. Callers routinely pass a fresh `refs`
+  // array literal and inline callbacks every render; binding the listeners to
+  // those directly would tear down and re-add them on each render.
+  const latest = useRef({
+    refs,
+    onPointerDownOutside,
+    onFocusOutside,
+    onInteractOutside,
+    preventDefault,
+  });
+  latest.current = {
+    refs,
+    onPointerDownOutside,
+    onFocusOutside,
+    onInteractOutside,
+    preventDefault,
+  };
 
   useEffect(() => {
     if (!enabled) return;
 
     const doc = document;
 
-    doc.addEventListener('pointerdown', handlePointerDown);
+    const isOutside = (target: Node) =>
+      latest.current.refs.every((ref) => {
+        const element = ref.current;
+        return !element || !element.contains(target);
+      });
 
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (!target || !isOutside(target)) return;
+
+      latest.current.onPointerDownOutside?.(event);
+      latest.current.onInteractOutside?.(event);
+
+      if (latest.current.preventDefault && !event.defaultPrevented) {
+        event.preventDefault();
+      }
+    };
+
+    const handleFocusIn = (event: FocusEvent) => {
+      const target = event.target as Node | null;
+      if (!target || !isOutside(target)) return;
+
+      latest.current.onFocusOutside?.(event);
+      latest.current.onInteractOutside?.(event);
+
+      if (latest.current.preventDefault && !event.defaultPrevented) {
+        event.preventDefault();
+      }
+    };
+
+    doc.addEventListener('pointerdown', handlePointerDown);
     if (includeFocus) {
       doc.addEventListener('focusin', handleFocusIn);
     }
@@ -134,5 +132,5 @@ export function useInteractOutside(
         doc.removeEventListener('focusin', handleFocusIn);
       }
     };
-  }, [enabled, handlePointerDown, handleFocusIn, includeFocus]);
+  }, [enabled, includeFocus]);
 }
