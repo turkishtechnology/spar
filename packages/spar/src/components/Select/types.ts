@@ -17,20 +17,35 @@ export interface SelectOwnProps {
   id?: string;
 
   /**
-   * Controlled selected value
+   * Enables multi-select mode: `value` becomes an array, selecting an item
+   * toggles it, and the listbox stays open on selection (see `closeOnSelect`).
+   * @defaultValue false
    */
-  value?: string;
+  multiple?: boolean;
+
+  /**
+   * Whether selecting an item closes the listbox and returns focus to the
+   * trigger.
+   * @defaultValue `!multiple`
+   */
+  closeOnSelect?: boolean;
+
+  /**
+   * Controlled selected value. A string in single mode, a string array when
+   * `multiple` is set (scalars are coerced per mode).
+   */
+  value?: string | string[];
 
   /**
    * Uncontrolled initial value
    */
-  defaultValue?: string;
+  defaultValue?: string | string[];
 
   /**
    * Callback when selection changes
-   * @param value - The new selected value
+   * @param value - The new selected value (array in `multiple` mode)
    */
-  onChange?: (value: string) => void;
+  onChange?: (value: string | string[]) => void;
 
   /**
    * Controlled open state
@@ -97,13 +112,22 @@ export interface SelectTriggerRenderProps {
    */
   isOpen: boolean;
   /**
-   * The currently selected value
+   * The currently selected value (first selected in `multiple` mode)
    */
   value: string | undefined;
   /**
-   * The label of the currently selected item (shown in the trigger)
+   * The label of the currently selected item (in `multiple` mode, all
+   * selected labels joined with ', ')
    */
   label: string | undefined;
+  /**
+   * Every selected value; `[value]` or `[]` in single mode
+   */
+  values: string[];
+  /**
+   * Labels of every selected item, in selection order
+   */
+  labels: string[];
   /**
    * Whether the select is disabled
    */
@@ -286,7 +310,7 @@ export type SelectSeparatorProps<T extends ElementType = 'div'> = PolymorphicPro
 export type SelectArrowProps<T extends ElementType = 'svg'> = PolymorphicProps<'svg', T>;
 
 /**
- * @internal
+ * Registered item data, exposed through `useSelectContext().items`.
  */
 export interface SelectItemData {
   value: string;
@@ -297,12 +321,16 @@ export interface SelectItemData {
 }
 
 /**
- * @internal
+ * Context returned by the public `useSelectContext()` hook. Deliberately kept
+ * out of the stripped-from-declarations set — marking it internal would break
+ * the hook's emitted return type for consumers.
  */
 export interface SelectContextValue {
   // State
   open: boolean;
-  value: string | undefined;
+  value: string | string[] | undefined;
+  multiple: boolean;
+  closeOnSelect: boolean;
   invalid: boolean;
   disabled: boolean;
   required: boolean;
@@ -310,6 +338,7 @@ export interface SelectContextValue {
   autoFocus: boolean;
 
   // Actions
+  /** Item-scoped: pass the item's own value; the root replaces (single) or toggles (multiple). */
   onChange: (value: string) => void;
   onOpenChange: (open: boolean) => void;
 

@@ -3,6 +3,7 @@ import React, {
   useLayoutEffect,
   useCallback,
   useMemo,
+  useRef,
   useState,
   type ElementType,
 } from 'react';
@@ -29,7 +30,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
   container,
   onEscapeKeyDown,
   onPointerDownOutside,
-  onCloseAutoFocus: _onCloseAutoFocus,
+  onCloseAutoFocus,
   as,
   onKeyDown,
   style,
@@ -38,6 +39,16 @@ export const SelectContent = <T extends ElementType = 'div'>({
 }: SelectContentProps<T>) => {
   const Component = as || 'div';
   const context = useSelectContext();
+
+  // Stabilize the close-focus callback so the focus effect below doesn't
+  // re-run (and prematurely fire) when consumers pass an inline function.
+  const onCloseAutoFocusRef = useRef(onCloseAutoFocus);
+  onCloseAutoFocusRef.current = onCloseAutoFocus;
+
+  // Set when a pointer press outside the content dismisses the listbox, so the
+  // focus effect leaves focus where the user clicked instead of snapping it
+  // back to the trigger.
+  const dismissedByPointerRef = useRef(false);
 
   // SSR safety - only render portal after mount
   const [mounted, setMounted] = useState(false);
@@ -75,13 +86,31 @@ export const SelectContent = <T extends ElementType = 'div'>({
     refs.setReference(context.triggerRef.current);
   }, [refs, context.triggerRef]);
 
-  // Focus management - focus content when opened
+  // Focus management. On open, move focus to the listbox container so
+  // aria-activedescendant navigation works. On close (including selection in
+  // single / closeOnSelect mode), return focus to the trigger — honoring
+  // onCloseAutoFocus (call preventDefault to opt out) and skipping the restore
+  // when the listbox was dismissed by an outside pointer press. In multiple /
+  // closeOnSelect=false mode selection keeps the listbox open, so this effect
+  // does not re-run and focus stays put across toggles.
   useEffect(() => {
-    if (context.open && context.contentRef.current) {
-      // Use preventScroll to avoid scrolling the page when focusing
-      context.contentRef.current.focus({ preventScroll: true });
-    }
-  }, [context.open, context.contentRef]);
+    if (!context.open) return;
+
+    dismissedByPointerRef.current = false;
+
+    // Use preventScroll to avoid scrolling the page when focusing
+    context.contentRef.current?.focus({ preventScroll: true });
+
+    return () => {
+      const event = new FocusEvent('closeautofocus', { cancelable: true });
+      onCloseAutoFocusRef.current?.(event);
+
+      const trigger = context.triggerRef.current;
+      if (!event.defaultPrevented && trigger && !dismissedByPointerRef.current) {
+        trigger.focus({ preventScroll: true });
+      }
+    };
+  }, [context.open, context.contentRef, context.triggerRef]);
 
   // Handle outside interactions
   useInteractOutside([context.contentRef, context.triggerRef], {
@@ -89,6 +118,8 @@ export const SelectContent = <T extends ElementType = 'div'>({
     onPointerDownOutside: (event) => {
       onPointerDownOutside?.(event);
       if (!event.defaultPrevented) {
+        // Leave focus at the click target rather than the trigger.
+        dismissedByPointerRef.current = true;
         context.onOpenChange(false);
       }
     },
@@ -97,7 +128,10 @@ export const SelectContent = <T extends ElementType = 'div'>({
   // --- Highlight state (owned by Content, not Root) ---
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
-  // Enabled items for keyboard navigation
+  // Enabled items for keyboard navigation. Order follows item *registration*
+  // (Map insertion) order, which matches DOM order for statically-rendered
+  // lists; conditionally rendered or reordered items may register out of visual
+  // order and will navigate in registration order accordingly.
   const enabledItems = useMemo(
     () => Array.from(context.items.values()).filter((item) => item.mounted && !item.disabled),
     [context.items],
@@ -171,7 +205,12 @@ export const SelectContent = <T extends ElementType = 'div'>({
       return;
     }
     if (context.focusStrategy === 'selected') {
-      const selectedItem = enabledItems.find((item) => item.value === context.value);
+      // In multiple mode "selected" means the first selected item in DOM order.
+      const selectedItem = enabledItems.find((item) =>
+        context.multiple
+          ? Array.isArray(context.value) && context.value.includes(item.value)
+          : item.value === context.value,
+      );
       setHighlightedId(selectedItem?.value ?? enabledItems[0]?.value ?? null);
       context.setFocusStrategy('none');
     } else if (context.focusStrategy === 'first') {
@@ -207,22 +246,30 @@ export const SelectContent = <T extends ElementType = 'div'>({
       switch (event.key) {
         case 'Escape':
           onEscapeKeyDown?.(event.nativeEvent);
-          if (!event.defaultPrevented) {
+          // The handler is given the native event, so honor preventDefault on
+          // it — the synthetic event's flag would not reflect that call.
+          if (!event.nativeEvent.defaultPrevented) {
             event.preventDefault();
+            // Focus returns to the trigger via the focus effect on close.
             context.onOpenChange(false);
-            context.triggerRef.current?.focus();
           }
           break;
 
         case 'Enter':
         case ' ':
           event.preventDefault();
+          // Read-only selects can be navigated but their value cannot change.
+          if (context.readOnly) break;
           if (highlightedId) {
             const selectedItem = enabledItems.find((item) => item.value === highlightedId);
             if (selectedItem) {
               context.onChange(selectedItem.value);
-              context.onOpenChange(false);
-              context.triggerRef.current?.focus();
+              // Multiple mode (closeOnSelect false) keeps the listbox open and
+              // the highlight in place so the keyboard flow continues across
+              // toggles. When it does close, the focus effect restores focus.
+              if (context.closeOnSelect) {
+                context.onOpenChange(false);
+              }
             }
           }
           break;
@@ -250,8 +297,8 @@ export const SelectContent = <T extends ElementType = 'div'>({
           break;
 
         case 'Tab':
+          // Focus returns to the trigger via the focus effect on close.
           context.onOpenChange(false);
-          context.triggerRef.current?.focus();
           break;
 
         default:
@@ -329,6 +376,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
   const ariaAttributes = {
     role: 'listbox',
     'aria-labelledby': context.triggerId,
+    'aria-multiselectable': context.multiple || undefined,
     'aria-activedescendant': highlightedId
       ? `${context.contentId}-option-${encodeURIComponent(highlightedId)}`
       : undefined,

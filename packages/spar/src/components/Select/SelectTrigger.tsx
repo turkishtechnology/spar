@@ -27,9 +27,30 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
   // Use prop if explicitly provided, otherwise use context
   const disabled = disabledProp ?? context.disabled;
 
-  // Compute the display text from the selected item's registered label
-  const selectedItem = context.value ? context.items.get(context.value) : undefined;
-  const label = selectedItem?.label;
+  // Compute the display text from the selected items' registered labels.
+  // `hasSelection` guards the empty-array case — `[]` is truthy, so bare
+  // `context.value` checks would misreport multiple mode as selected.
+  const selectedValues = context.multiple
+    ? Array.isArray(context.value)
+      ? context.value
+      : []
+    : context.value !== undefined
+      ? [context.value as string]
+      : [];
+  const selectedLabels = selectedValues
+    .map((entry) => context.items.get(entry)?.label)
+    .filter((entry): entry is string => entry !== undefined);
+  const hasSelection = selectedValues.length > 0;
+  // Effective label text shown in the trigger. It collapses to undefined when
+  // there is nothing to show — no selection, or a selected value whose item
+  // never registered a label — so the placeholder and `data-placeholder` stay
+  // in sync with what's actually rendered.
+  const joinedLabel = context.multiple
+    ? selectedLabels.length > 0
+      ? selectedLabels.join(', ')
+      : undefined
+    : selectedLabels[0];
+  const label = joinedLabel || undefined;
 
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -38,12 +59,12 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
       const willOpen = !context.open;
       if (willOpen) {
         // Signal content to highlight the selected item (or first if none selected)
-        context.setFocusStrategy(context.value ? 'selected' : 'first');
+        context.setFocusStrategy(hasSelection ? 'selected' : 'first');
       }
       context.onOpenChange(willOpen);
       onClick?.(event);
     },
-    [disabled, context, onClick],
+    [disabled, context, hasSelection, onClick],
   );
 
   const handleKeyDown = useCallback(
@@ -62,18 +83,20 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
           context.onOpenChange(true);
 
           // Signal content to highlight the selected item (or first if none selected)
-          context.setFocusStrategy(context.value ? 'selected' : 'first');
+          context.setFocusStrategy(hasSelection ? 'selected' : 'first');
         }
       }
     },
-    [onKeyDown, disabled, context],
+    [onKeyDown, disabled, context, hasSelection],
   );
 
   // Render props for children function
   const renderProps: SelectTriggerRenderProps = {
     isOpen: context.open,
-    value: context.value,
+    value: selectedValues[0],
     label,
+    values: selectedValues,
+    labels: selectedLabels,
     disabled,
     open: () => context.onOpenChange(true),
     close: () => context.onOpenChange(false),
@@ -111,7 +134,7 @@ export const SelectTrigger = <T extends ElementType = 'button'>({
     'data-invalid': context.invalid ? '' : undefined,
     'data-required': context.required ? '' : undefined,
     'data-readonly': context.readOnly ? '' : undefined,
-    'data-placeholder': !context.value ? '' : undefined,
+    'data-placeholder': label ? undefined : '',
     onClick: handleClick,
     onKeyDown: handleKeyDown,
     ...props,

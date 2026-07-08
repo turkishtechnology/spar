@@ -7,6 +7,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Select
+
+#### Added
+
+- **`multiple` prop** for multi-value selection. `value`/`defaultValue`/
+  `onChange` accept `string[]` in this mode, selecting an item toggles its
+  membership, the listbox stays open across selections (focus and highlight
+  are preserved), the listbox emits `aria-multiselectable="true"`, the trigger
+  joins selected labels with `', '`, and `name` renders one hidden input per
+  selected value. The root emits `data-multiple`.
+- **`closeOnSelect` prop** controlling whether selecting an item closes the
+  listbox and returns focus to the trigger. Defaults to `!multiple`, so
+  single-select behavior is unchanged.
+- **`values` / `labels` trigger render props** exposing every selected value
+  and label (in single mode they hold zero or one entry); the scalar `value` /
+  `label` fields are unchanged.
+
+#### Changed
+
+- `value`, `defaultValue`, and `onChange` widened from `string` to
+  `string | string[]`. Inferred handlers are unaffected; consumers that
+  explicitly annotated `onChange={(v: string) => …}` need to widen the
+  annotation.
+- The open-highlight strategy now keys off "has any selection" instead of value
+  truthiness (an empty array previously counted as selected). `data-placeholder`
+  now tracks the text actually rendered in the trigger, so it stays correct even
+  when a selected value has no resolvable label.
+
+#### Fixed
+
+- The trigger now derives its display text from an item's text `children` when
+  no `label` prop is set (previously it rendered nothing for such a selection).
+- `onEscapeKeyDown`'s `preventDefault()` is now honored — calling it keeps the
+  listbox open (the guard previously checked the synthetic event and missed a
+  `preventDefault()` on the native event passed to the handler).
+- `onCloseAutoFocus` is now implemented: it fires when the listbox closes and
+  calling `preventDefault()` suppresses returning focus to the trigger
+  (previously the prop was accepted but ignored).
+- Read-only selects no longer change value or close when an item is activated by
+  click or Enter/Space; they still open for inspection.
+- Focus restoration on close is now centralized, so it also covers Escape/Tab,
+  keyboard selection, and controlled/programmatic close — all honoring
+  `onCloseAutoFocus`. Dismissing via an outside pointer press leaves focus where
+  the user clicked.
+- Single-select no longer fires `onChange` when the already-selected value is
+  re-selected.
+- Type-ahead now continues through a space, so multi-word labels (e.g.
+  "New York") can be matched; a space with no active search still selects the
+  highlighted item. (Shared type-ahead — also improves DropdownMenu.)
+
 ## [0.2.0] - 2026-06-24
 
 First stable release of the 0.2 line, promoting the 0.2.0-beta series to the

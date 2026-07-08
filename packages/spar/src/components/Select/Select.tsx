@@ -15,8 +15,28 @@ import type { SelectProps, SelectContextValue, SelectItemData, SelectFocusStrate
  * SelectTrigger without extra plumbing. Direct props on `<Select>` override
  * the inherited values.
  */
+/**
+ * Coerce a value into the shape the current mode expects: always an array in
+ * multiple mode (empty when unset), a scalar in single mode (an array picks
+ * its last entry, mirroring "last selection wins").
+ */
+const normalizeValue = (
+  input: string | string[] | undefined,
+  multiple: boolean,
+): string | string[] | undefined => {
+  if (multiple) {
+    if (input === undefined) return [];
+    return Array.isArray(input) ? input : [input];
+  }
+  if (input === undefined || !Array.isArray(input)) return input;
+  // Non-empty guaranteed by the length check, so the index access is safe.
+  return input.length === 0 ? undefined : input[input.length - 1]!;
+};
+
 export const Select = <T extends ElementType = 'div'>({
   id: providedId,
+  multiple = false,
+  closeOnSelect,
   value: controlledValue,
   defaultValue,
   onChange,
@@ -42,8 +62,24 @@ export const Select = <T extends ElementType = 'div'>({
   const resolvedRequired = required ?? fieldCtx?.required ?? false;
   const resolvedReadOnly = readOnly ?? fieldCtx?.readOnly ?? false;
 
-  // State management - controlled/uncontrolled
-  const [currentValue, setValueState] = useControlledState(controlledValue, defaultValue, onChange);
+  // State management - controlled/uncontrolled. Values are normalized per mode
+  // so multiple mode always works against an array. Memoized so a stable scalar
+  // in multiple mode does not yield a fresh array on every render — which would
+  // change the context value and needlessly re-render every consumer.
+  const normalizedControlledValue = useMemo(
+    () => (controlledValue !== undefined ? normalizeValue(controlledValue, multiple) : undefined),
+    [controlledValue, multiple],
+  );
+  const normalizedDefaultValue = useMemo(
+    () => normalizeValue(defaultValue, multiple),
+    [defaultValue, multiple],
+  );
+  const [currentValue, setValueState] = useControlledState<string | string[]>(
+    normalizedControlledValue,
+    normalizedDefaultValue,
+    onChange,
+  );
+  const resolvedCloseOnSelect = closeOnSelect ?? !multiple;
   const [currentOpen = false, setOpenState] = useControlledState(
     controlledOpen,
     defaultOpen,
@@ -71,13 +107,26 @@ export const Select = <T extends ElementType = 'div'>({
   // Focus strategy (consumed by SelectContent to decide initial highlight)
   const [focusStrategy, setFocusStrategy] = useState<SelectFocusStrategy>('none');
 
-  // Value change handler
+  // Value change handler. Item-scoped: receives the interacted item's value;
+  // single mode replaces the selection, multiple mode toggles membership.
   const handleValueChange = useCallback(
     (newValue: string) => {
       if (resolvedDisabled || resolvedReadOnly) return;
+      if (multiple) {
+        const current = Array.isArray(currentValue) ? currentValue : [];
+        setValueState(
+          current.includes(newValue)
+            ? current.filter((entry) => entry !== newValue)
+            : [...current, newValue],
+        );
+        return;
+      }
+      // Re-selecting the current value is a no-op; skip so onChange doesn't fire
+      // for an unchanged selection.
+      if (currentValue === newValue) return;
       setValueState(newValue);
     },
-    [resolvedDisabled, resolvedReadOnly, setValueState],
+    [resolvedDisabled, resolvedReadOnly, multiple, currentValue, setValueState],
   );
 
   // Open change handler
@@ -100,6 +149,8 @@ export const Select = <T extends ElementType = 'div'>({
       // State
       open: currentOpen,
       value: currentValue,
+      multiple,
+      closeOnSelect: resolvedCloseOnSelect,
       invalid: resolvedInvalid,
       disabled: resolvedDisabled,
       required: resolvedRequired,
@@ -135,6 +186,8 @@ export const Select = <T extends ElementType = 'div'>({
     [
       currentOpen,
       currentValue,
+      multiple,
+      resolvedCloseOnSelect,
       resolvedInvalid,
       resolvedDisabled,
       resolvedRequired,
@@ -157,6 +210,7 @@ export const Select = <T extends ElementType = 'div'>({
   );
 
   const dataAttributes = {
+    'data-multiple': multiple ? '' : undefined,
     'data-invalid': resolvedInvalid ? '' : undefined,
     'data-disabled': resolvedDisabled ? '' : undefined,
     'data-required': resolvedRequired ? '' : undefined,
@@ -169,8 +223,17 @@ export const Select = <T extends ElementType = 'div'>({
       <Component {...props} {...dataAttributes}>
         {children}
       </Component>
-      {/* Hidden input for form integration */}
-      {name && currentValue !== undefined && (
+      {/* Hidden inputs for form integration: one per selected value in
+          multiple mode. Note `required` is not emitted here — the attribute
+          has no effect on type=hidden inputs, so required enforcement stays
+          with form-level validation. */}
+      {name &&
+        multiple &&
+        Array.isArray(currentValue) &&
+        currentValue.map((entry) => (
+          <input key={entry} type='hidden' name={name} value={entry} disabled={resolvedDisabled} />
+        ))}
+      {name && !multiple && typeof currentValue === 'string' && (
         <input
           type='hidden'
           name={name}

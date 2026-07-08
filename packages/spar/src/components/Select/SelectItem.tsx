@@ -34,7 +34,16 @@ export const SelectItem = <T extends ElementType = 'div'>({
   const context = useSelectContext();
   const collection = useSelectCollectionContext();
   const itemRef = useRef<HTMLDivElement>(null);
-  const label = providedLabel || context.items.get(value)?.label || '';
+
+  // Resolve a text label for the trigger display and typeahead search, in order:
+  //   1. explicit `label` prop
+  //   2. plain-text `children` (the common case — no `label` prop required)
+  //   3. the rendered node's textContent, captured at registration time below
+  //   4. the previously-cached label (survives while the item is unmounted)
+  // Steps 1–2 are known during render; step 3 needs the mounted DOM node, so it
+  // is resolved inside the registration layout effect.
+  const textLabel = providedLabel ?? (typeof children === 'string' ? children : undefined);
+  const label = textLabel ?? context.items.get(value)?.label ?? '';
 
   // Merge external ref with internal ref
   const mergedRef = useMergedRef(itemRef, ref);
@@ -46,9 +55,13 @@ export const SelectItem = <T extends ElementType = 'div'>({
   // would re-fire on every items-map mutation and loop infinitely.
   const { registerItem } = context;
   useIsomorphicLayoutEffect(() => {
+    // Fall back to the rendered text when children aren't plain text and no
+    // `label` prop was given, so element/icon children still get a usable
+    // string. `?? label` preserves any previously cached value.
+    const resolvedLabel = textLabel ?? itemRef.current?.textContent?.trim() ?? label;
     registerItem(value, {
       value,
-      label,
+      label: resolvedLabel,
       disabled,
       ref: itemRef,
       mounted: true,
@@ -57,7 +70,7 @@ export const SelectItem = <T extends ElementType = 'div'>({
       // Keep cache (label) but mark unmounted so navigation/typeahead ignores it
       registerItem(value, {
         value,
-        label,
+        label: resolvedLabel,
         disabled,
         ref: itemRef,
         mounted: false,
@@ -67,10 +80,12 @@ export const SelectItem = <T extends ElementType = 'div'>({
     // Note: We intentionally do NOT unregister on unmount
     // This keeps the label cached so the trigger can display it
     // even when the dropdown is closed and items are unmounted
-  }, [registerItem, value, label, disabled]);
+  }, [registerItem, value, textLabel, label, disabled]);
 
   // Determine if this item is selected
-  const isSelected = context.value === value;
+  const isSelected = context.multiple
+    ? Array.isArray(context.value) && context.value.includes(value)
+    : context.value === value;
 
   // Determine if this item is highlighted
   const isHighlighted = collection.isItemHighlighted(value);
@@ -83,11 +98,18 @@ export const SelectItem = <T extends ElementType = 'div'>({
   }, [isHighlighted]);
 
   const handleSelect = useCallback(() => {
-    if (disabled || context.disabled) return;
+    // Read-only selects can be opened and inspected but not changed, so a
+    // click must neither toggle the value nor close the listbox.
+    if (disabled || context.disabled || context.readOnly) return;
 
     context.onChange(value);
-    context.onOpenChange(false);
-    context.triggerRef.current?.focus();
+    // In multiple mode (closeOnSelect false) the listbox stays open and the
+    // highlight is left untouched so successive toggles keep their flow. When
+    // it does close, focus returns to the trigger via SelectContent's focus
+    // effect (which also honors onCloseAutoFocus).
+    if (context.closeOnSelect) {
+      context.onOpenChange(false);
+    }
   }, [context, value, disabled]);
 
   const handlePointerMove = useCallback(
