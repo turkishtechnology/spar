@@ -32,22 +32,40 @@ Accessible dropdown menu component for creating interactive command menus with k
           </svg>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content className='dropdown-content'>
-          <DropdownMenu.Item className='dropdown-item'>
-            <span className='dropdown-item-avatar'></span>
-            Alice
-          </DropdownMenu.Item>
-          <DropdownMenu.Item className='dropdown-item'>
-            <span className='dropdown-item-avatar'></span>
-            Bob
-          </DropdownMenu.Item>
-          <DropdownMenu.Item className='dropdown-item'>
-            <span className='dropdown-item-avatar'></span>
-            Charlie
-          </DropdownMenu.Item>
-          <DropdownMenu.Item className='dropdown-item'>
-            <span className='dropdown-item-avatar'></span>
-            Diana
-          </DropdownMenu.Item>
+          <DropdownMenu.Viewport className='dropdown-viewport'>
+            <DropdownMenu.Item className='dropdown-item'>
+              <span className='dropdown-item-avatar'></span>
+              Alice
+            </DropdownMenu.Item>
+            <DropdownMenu.Item className='dropdown-item'>
+              <span className='dropdown-item-avatar'></span>
+              Bob
+            </DropdownMenu.Item>
+            <DropdownMenu.Item className='dropdown-item'>
+              <span className='dropdown-item-avatar'></span>
+              Charlie
+            </DropdownMenu.Item>
+            <DropdownMenu.Item className='dropdown-item'>
+              <span className='dropdown-item-avatar'></span>
+              Diana
+            </DropdownMenu.Item>
+            <DropdownMenu.Item className='dropdown-item'>
+              <span className='dropdown-item-avatar'></span>
+              Ethan
+            </DropdownMenu.Item>
+            <DropdownMenu.Item className='dropdown-item'>
+              <span className='dropdown-item-avatar'></span>
+              Fiona
+            </DropdownMenu.Item>
+            <DropdownMenu.Item className='dropdown-item'>
+              <span className='dropdown-item-avatar'></span>
+              George
+            </DropdownMenu.Item>
+            <DropdownMenu.Item className='dropdown-item'>
+              <span className='dropdown-item-avatar'></span>
+              Hannah
+            </DropdownMenu.Item>
+          </DropdownMenu.Viewport>
           <DropdownMenu.Arrow className='dropdown-arrow' />
         </DropdownMenu.Content>
       </DropdownMenu.Root>
@@ -100,6 +118,14 @@ border-color: #2b303b;
 background: #1f232b;
 }
 
+.dropdown-viewport {
+display: flex;
+flex-direction: column;
+gap: 4px;
+max-height: 200px;
+overflow-y: auto;
+}
+
 .dropdown-demo-container .dropdown-item {
 min-height: 36px;
 width: 100%;
@@ -149,7 +175,7 @@ color: var(--dropdown-surface);
 
 </div>
 
-This example uses a compact trigger and a short menu list to demonstrate item highlighting, selection affordances, and the optional arrow.
+This example wraps the items in a `DropdownMenu.Viewport` with a bounded height, so the list scrolls within the menu. Keyboard navigation and typeahead keep the highlighted item in view. It also demonstrates item highlighting, selection affordances, and the optional arrow.
 
 ## Features
 
@@ -176,6 +202,11 @@ The DropdownMenu component is built as a compound component with multiple parts:
     { name: 'root', label: 'Root', description: 'Container managing state and context' },
     { name: 'trigger', label: 'Trigger', description: 'Button that toggles menu visibility' },
     { name: 'content', label: 'Content', description: 'Menu container with positioning' },
+    {
+      name: 'viewport',
+      label: 'Viewport',
+      description: 'Scrollable region wrapping the menu items',
+    },
     { name: 'item', label: 'Item', description: 'Individual selectable menu option' },
     { name: 'group', label: 'Group', description: 'Semantic grouping container for related items' },
     { name: 'label', label: 'Label', description: 'Non-interactive label for a menu group' },
@@ -199,22 +230,24 @@ The DropdownMenu component is built as a compound component with multiple parts:
         </svg>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content data-spar-part='content' className='dropdown-content' align='end'>
-        <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
-          <span className='dropdown-item-avatar'></span>
-          {'Alice'}
-        </DropdownMenu.Item>
-        <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
-          <span className='dropdown-item-avatar'></span>
-          {'Bob'}
-        </DropdownMenu.Item>
-        <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
-          <span className='dropdown-item-avatar'></span>
-          {'Charlie'}
-        </DropdownMenu.Item>
-        <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
-          <span className='dropdown-item-avatar'></span>
-          {'Diana'}
-        </DropdownMenu.Item>
+        <DropdownMenu.Viewport data-spar-part='viewport' className='dropdown-viewport'>
+          <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
+            <span className='dropdown-item-avatar'></span>
+            {'Alice'}
+          </DropdownMenu.Item>
+          <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
+            <span className='dropdown-item-avatar'></span>
+            {'Bob'}
+          </DropdownMenu.Item>
+          <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
+            <span className='dropdown-item-avatar'></span>
+            {'Charlie'}
+          </DropdownMenu.Item>
+          <DropdownMenu.Item data-spar-part='item' className='dropdown-item'>
+            <span className='dropdown-item-avatar'></span>
+            {'Diana'}
+          </DropdownMenu.Item>
+        </DropdownMenu.Viewport>
         <DropdownMenu.Arrow data-spar-part='arrow' className='dropdown-arrow' />
       </DropdownMenu.Content>
     </DropdownMenu.Root>
@@ -227,16 +260,22 @@ The DropdownMenu component is built as a compound component with multiple parts:
 <DropdownMenu.Root>
   <DropdownMenu.Trigger />
   <DropdownMenu.Content>
-    <DropdownMenu.Label />
-    <DropdownMenu.Item />
-    <DropdownMenu.Group>
+    <DropdownMenu.Viewport>
+      <DropdownMenu.Label />
       <DropdownMenu.Item />
-    </DropdownMenu.Group>
-    <DropdownMenu.Separator />
+      <DropdownMenu.Group>
+        <DropdownMenu.Item />
+      </DropdownMenu.Group>
+      <DropdownMenu.Separator />
+    </DropdownMenu.Viewport>
     <DropdownMenu.Arrow />
   </DropdownMenu.Content>
 </DropdownMenu.Root>
 ```
+
+> `DropdownMenu.Viewport` is optional — omit it for short menus. Wrap the items
+> in a viewport when the list can grow long enough to need a bounded, scrollable
+> area.
 
 **Alternative: Tree-shakeable named imports**
 
@@ -349,6 +388,30 @@ function GroupedMenu() {
           <DropdownMenu.Item>Uppercase</DropdownMenu.Item>
           <DropdownMenu.Item>Lowercase</DropdownMenu.Item>
         </DropdownMenu.Group>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
+  );
+}
+```
+
+### Scrollable Menu
+
+Wrap the items in `DropdownMenu.Viewport` to keep a long list within a bounded,
+scrollable area. The Viewport is headless — set a `max-height` and `overflow`
+via CSS to enable scrolling. Keyboard navigation and typeahead automatically
+keep the highlighted item in view.
+
+```tsx {5,10}
+function ScrollableMenu() {
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>Timezone</DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Viewport style={{ maxHeight: 240, overflowY: 'auto' }}>
+          {timezones.map((tz) => (
+            <DropdownMenu.Item key={tz}>{tz}</DropdownMenu.Item>
+          ))}
+        </DropdownMenu.Viewport>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
@@ -542,6 +605,36 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 | `data-side`  | Side     | Current placement side         |
 | `data-align` | Align    | Current alignment              |
 | `tabIndex`   | `-1`     | Manages focus programmatically |
+
+### DropdownMenu.Viewport
+
+An optional scrollable region that wraps the menu items. Use it when the list can grow long enough to need a bounded, scrollable area. Headless: renders a plain element with no visual opinions — apply a `max-height` and `overflow` (e.g. `overflow-y: auto`) via `className`/`style` to enable scrolling.
+
+Because menu items are focused programmatically (with `preventScroll`), the browser will not reveal off-screen items on its own. The Viewport keeps the highlighted item visible during keyboard navigation and typeahead by scrolling it into view within the viewport only — it never scrolls the page.
+
+Defaults to `role="presentation"` so it stays transparent in the accessibility tree, preserving the `menu` → `menuitem` structure. Override `role` if you need different semantics.
+
+**Props**
+
+| Name        | Type                             | Default          | Description                                                  |
+| ----------- | -------------------------------- | ---------------- | ------------------------------------------------------------ |
+| `as?`       | `React.ElementType`              | `'div'`          | Polymorphic element type to render                           |
+| `role?`     | `string`                         | `'presentation'` | ARIA role for the viewport element                           |
+| `ref?`      | `React.Ref<HTMLElement \| null>` | `undefined`      | Forwarded ref to the viewport element                        |
+| `children?` | `React.ReactNode`                | `undefined`      | Menu items, groups, labels, and separators                   |
+| `...props`  | `HTMLAttributes`                 | -                | All standard element attributes (`className`, `style`, etc.) |
+
+**Events**
+
+| Name | Parameters | Description           | When Triggered                        |
+| ---- | ---------- | --------------------- | ------------------------------------- |
+| N/A  | N/A        | No interactive events | Viewport is a non-interactive wrapper |
+
+**HTML Attributes**
+
+| Attribute | Value            | Purpose                                         |
+| --------- | ---------------- | ----------------------------------------------- |
+| `role`    | `'presentation'` | Keeps the viewport transparent in the a11y tree |
 
 ### DropdownMenu.Item
 

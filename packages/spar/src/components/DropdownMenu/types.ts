@@ -155,6 +155,14 @@ export type DropdownMenuContentProps<T extends ElementType = 'div'> = Polymorphi
 >;
 
 /**
+ * Props for DropdownMenuViewport component
+ * @remarks Scrollable region wrapping the menu items. Keeps the highlighted item
+ * in view during keyboard navigation and typeahead. Headless: apply a `max-height`
+ * and `overflow` (e.g. `overflow-y: auto`) via styling to enable scrolling.
+ */
+export type DropdownMenuViewportProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
+
+/**
  * Own props for DropdownMenuItem component
  */
 export interface DropdownMenuItemOwnProps {
