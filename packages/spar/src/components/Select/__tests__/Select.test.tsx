@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Select, SelectTrigger, SelectContent, SelectItem } from '../index';
+import { Select, SelectTrigger, SelectContent, SelectViewport, SelectItem } from '../index';
 
 const renderSelect = (props?: React.ComponentProps<typeof Select>) => {
   return render(
@@ -197,5 +197,68 @@ describe('Select', () => {
     }).toThrow('Select components must be used within a Select');
 
     consoleErrorSpy.mockRestore();
+  });
+
+  describe('Select.Viewport', () => {
+    it('wraps options as a presentation container and preserves the listbox structure', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <Select>
+          <SelectTrigger aria-label='Choose option' placeholder='Select...' />
+          <SelectContent>
+            <SelectViewport data-testid='viewport'>
+              <SelectItem value='option1' label='Option 1'>
+                Option 1
+              </SelectItem>
+              <SelectItem value='option2' label='Option 2'>
+                Option 2
+              </SelectItem>
+            </SelectViewport>
+          </SelectContent>
+        </Select>,
+      );
+
+      await user.click(screen.getByRole('combobox'));
+
+      const viewport = screen.getByTestId('viewport');
+      expect(viewport).toHaveAttribute('role', 'presentation');
+      // Listbox structure stays intact — options nested in the viewport remain options.
+      expect(screen.getAllByRole('option')).toHaveLength(2);
+      expect(viewport).toContainElement(screen.getByRole('option', { name: 'Option 1' }));
+    });
+
+    it('supports polymorphic rendering and role override', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <Select>
+          <SelectTrigger aria-label='Choose option' placeholder='Select...' />
+          <SelectContent>
+            <SelectViewport as='ul' role='group' data-testid='viewport'>
+              <SelectItem as='li' value='option1' label='Option 1'>
+                Option 1
+              </SelectItem>
+            </SelectViewport>
+          </SelectContent>
+        </Select>,
+      );
+
+      await user.click(screen.getByRole('combobox'));
+
+      const viewport = screen.getByTestId('viewport');
+      expect(viewport.tagName).toBe('UL');
+      expect(viewport).toHaveAttribute('role', 'group');
+    });
+
+    it('throws when rendered outside SelectContent', () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+      expect(() => {
+        render(<SelectViewport>Viewport</SelectViewport>);
+      }).toThrow('Select items must be rendered within SelectContent');
+
+      consoleErrorSpy.mockRestore();
+    });
   });
 });
