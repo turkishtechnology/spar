@@ -260,5 +260,57 @@ describe('Select', () => {
 
       consoleErrorSpy.mockRestore();
     });
+
+    it('scrolls the highlighted option into view during keyboard navigation', async () => {
+      const scrollSpy = jest
+        .spyOn(HTMLElement.prototype, 'scrollIntoView')
+        .mockImplementation(() => {});
+      const user = userEvent.setup();
+
+      render(
+        <Select>
+          <SelectTrigger aria-label='Choose option' placeholder='Select...' />
+          <SelectContent>
+            <SelectViewport>
+              <SelectItem value='option1' label='Option 1'>
+                Option 1
+              </SelectItem>
+              <SelectItem value='option2' label='Option 2'>
+                Option 2
+              </SelectItem>
+            </SelectViewport>
+          </SelectContent>
+        </Select>,
+      );
+
+      const trigger = screen.getByRole('combobox');
+      trigger.focus();
+      await user.keyboard('{ArrowDown}');
+
+      expect(screen.getByRole('option', { name: 'Option 1' })).toHaveAttribute('data-highlighted');
+      expect(scrollSpy).toHaveBeenCalledWith({ block: 'nearest', inline: 'nearest' });
+
+      scrollSpy.mockRestore();
+    });
+
+    it('keeps the highlighted option in view even when options are not wrapped in a Viewport', async () => {
+      // Regression guard: scroll-into-view lives in SelectItem, not the optional
+      // Viewport, so an unwrapped long list stays keyboard-accessible.
+      const scrollSpy = jest
+        .spyOn(HTMLElement.prototype, 'scrollIntoView')
+        .mockImplementation(() => {});
+      const user = userEvent.setup();
+
+      renderSelect();
+
+      const trigger = screen.getByRole('combobox');
+      trigger.focus();
+      await user.keyboard('{ArrowDown}');
+
+      expect(screen.getByRole('option', { name: 'Option 1' })).toHaveAttribute('data-highlighted');
+      expect(scrollSpy).toHaveBeenCalledWith({ block: 'nearest', inline: 'nearest' });
+
+      scrollSpy.mockRestore();
+    });
   });
 });

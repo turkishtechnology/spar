@@ -363,7 +363,7 @@ import { Field, Select } from '@turkish-technology/spar';
 - `Select.Root` manages open/closed state and the selected value, and provides context.
 - `Select.Trigger` toggles the Root state, displays the selected item's `label` or the `placeholder`, and sets the focus strategy for Content on arrow-key input.
 - `Select.Content` renders into a portal when open and manages highlight state and keyboard navigation.
-- `Select.Viewport` is an optional scrollable wrapper around the options; it keeps the highlighted item in view during keyboard navigation and typeahead by scrolling itself (never the page).
+- `Select.Viewport` is an optional scrollable wrapper around the options; it only bounds the height and provides the scroll region. Keeping the highlighted item in view during keyboard navigation and typeahead is handled by `Select.Item`, which scrolls itself into the nearest scrollable region (the viewport when present), so it works with or without a viewport.
 - `Select.Item` updates the selection and changes the Root value through click or keyboard interaction. The `label` prop registers the text used for typeahead and for display in the Trigger.
 - `Select.Group` + `Select.Label` establish the semantic group structure.
 - `Select.Separator` provides a separator role.
@@ -854,7 +854,7 @@ Popup content layer. It does not render when closed.
 
 An optional scrollable region that wraps the options. Use it when the list can grow long enough to need a bounded, scrollable area. Headless: renders a plain element with no visual opinions — apply a `max-height` and `overflow` (e.g. `overflow-y: auto`) via `className`/`style` to enable scrolling.
 
-The Viewport keeps the highlighted option visible during keyboard navigation and typeahead by scrolling it into view within the viewport only — it never scrolls the page. Keep `Select.Arrow` as a sibling _outside_ the Viewport so it stays pinned while the options scroll.
+The Viewport is purely presentational — it just provides the bounded, scrollable box. Keeping the highlighted option visible during keyboard navigation and typeahead is handled by `Select.Item`, which scrolls itself into its nearest scrollable ancestor (this Viewport when present). It works the same whether or not a Viewport is used. Keep `Select.Arrow` as a sibling _outside_ the Viewport so it stays pinned while the options scroll.
 
 Defaults to `role="presentation"` so it stays transparent in the accessibility tree, preserving the `listbox` → `option` structure. Override `role` if you need different semantics.
 

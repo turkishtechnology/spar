@@ -201,10 +201,10 @@ export type SelectContentProps<T extends ElementType = 'div'> = PolymorphicProps
 
 /**
  * Props for SelectViewport component
- * @remarks Scrollable region wrapping the select options. Keeps the highlighted
- * option in view during keyboard navigation and typeahead. Headless: apply a
- * `max-height` and `overflow` (e.g. `overflow-y: auto`) via styling to enable
- * scrolling.
+ * @remarks Scrollable region wrapping the select options. Headless and purely
+ * presentational: apply a `max-height` and `overflow` (e.g. `overflow-y: auto`)
+ * via styling to enable scrolling. Keeping the highlighted option in view during
+ * keyboard navigation and typeahead is handled by `SelectItem`.
  */
 export type SelectViewportProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
