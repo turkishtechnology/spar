@@ -160,7 +160,7 @@ export interface SelectContentOwnProps {
 
   /**
    * Alignment relative to trigger
-   * @defaultValue 'start'
+   * @defaultValue 'center'
    */
   align?: Align;
 

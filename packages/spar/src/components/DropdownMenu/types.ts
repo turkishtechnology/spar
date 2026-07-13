@@ -115,7 +115,7 @@ export interface DropdownMenuContentOwnProps {
 
   /**
    * Alignment on placement side
-   * @defaultValue 'start'
+   * @defaultValue 'center'
    */
   align?: Align;
 
