@@ -222,8 +222,19 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
       hadHighlightRef.current = true;
       const currentItem = items.find((item) => item.id === highlightedId);
       const element = currentItem?.ref.current;
-      if (element && element !== element.ownerDocument.activeElement) {
-        element.focus({ preventScroll: true });
+      if (element) {
+        if (element !== element.ownerDocument.activeElement) {
+          element.focus({ preventScroll: true });
+        }
+        // Reveal the highlighted item within its nearest scrollable ancestor (e.g. a
+        // `DropdownMenu.Viewport`). Items are focused with `preventScroll`, so nothing
+        // else brings an off-screen item into view. This lives here — not in the optional
+        // Viewport — so keyboard navigation and typeahead stay accessible even when a long
+        // menu is not wrapped in a Viewport. `block: 'nearest'` is a no-op when the item is
+        // already visible and mirrors how Select keeps its highlighted item in view. Runs
+        // on every `items` change too, so it also recovers when the list reflows (async
+        // load, filtering) while the same item stays highlighted.
+        element.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
       }
     } else if (hadHighlightRef.current) {
       const contentNode = contentRef.current;

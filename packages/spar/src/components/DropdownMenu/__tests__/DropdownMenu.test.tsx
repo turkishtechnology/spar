@@ -1004,6 +1004,63 @@ describe('DropdownMenu', () => {
       expect(viewport.tagName).toBe('UL');
       expect(viewport).toHaveAttribute('role', 'group');
     });
+
+    it('should scroll the highlighted item into view during keyboard navigation', async () => {
+      const scrollSpy = jest
+        .spyOn(HTMLElement.prototype, 'scrollIntoView')
+        .mockImplementation(() => {});
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuViewport>
+              <DropdownMenuItem>Item 1</DropdownMenuItem>
+              <DropdownMenuItem>Item 2</DropdownMenuItem>
+            </DropdownMenuViewport>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      screen.getByRole('button').focus();
+      await user.keyboard('[ArrowDown]');
+
+      await waitFor(() => {
+        expect(screen.getAllByRole('menuitem')[0]).toHaveAttribute('data-highlighted');
+      });
+      expect(scrollSpy).toHaveBeenCalledWith({ block: 'nearest', inline: 'nearest' });
+
+      scrollSpy.mockRestore();
+    });
+
+    it('keeps the highlighted item in view even when items are not wrapped in a Viewport', async () => {
+      // Regression guard for the a11y footgun: items are focused with `preventScroll`,
+      // so scroll-into-view must live in Content (not the optional Viewport) or an
+      // unwrapped long menu becomes keyboard-inaccessible.
+      const scrollSpy = jest
+        .spyOn(HTMLElement.prototype, 'scrollIntoView')
+        .mockImplementation(() => {});
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+            <DropdownMenuItem>Item 2</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      screen.getByRole('button').focus();
+      await user.keyboard('[ArrowDown]');
+
+      await waitFor(() => {
+        expect(screen.getAllByRole('menuitem')[0]).toHaveAttribute('data-highlighted');
+      });
+      expect(scrollSpy).toHaveBeenCalledWith({ block: 'nearest', inline: 'nearest' });
+
+      scrollSpy.mockRestore();
+    });
   });
 
   afterEach(() => {

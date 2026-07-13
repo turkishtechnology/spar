@@ -610,7 +610,7 @@ The container for menu items with positioning, keyboard navigation, and typeahea
 
 An optional scrollable region that wraps the menu items. Use it when the list can grow long enough to need a bounded, scrollable area. Headless: renders a plain element with no visual opinions — apply a `max-height` and `overflow` (e.g. `overflow-y: auto`) via `className`/`style` to enable scrolling.
 
-Because menu items are focused programmatically (with `preventScroll`), the browser will not reveal off-screen items on its own. The Viewport keeps the highlighted item visible during keyboard navigation and typeahead by scrolling it into view within the viewport only — it never scrolls the page.
+Because menu items are focused programmatically (with `preventScroll`), the browser will not reveal off-screen items on its own. `DropdownMenu.Viewport` is purely presentational — it just provides the bounded, scrollable box. Keeping the highlighted item visible during keyboard navigation and typeahead is handled by `DropdownMenu.Content`, which scrolls the item into its nearest scrollable ancestor (this Viewport). It works the same whether or not a Viewport is present.
 
 Defaults to `role="presentation"` so it stays transparent in the accessibility tree, preserving the `menu` → `menuitem` structure. Override `role` if you need different semantics.
 
