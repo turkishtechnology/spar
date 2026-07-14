@@ -41,7 +41,7 @@ if (typeof HTMLFormElement.prototype.requestSubmit !== 'function') {
 
 /**
  * Polyfill for HTMLElement.prototype.scrollIntoView
- * JSDOM doesn't implement this method. Components (DropdownMenu, Select) call it to
+ * JSDOM doesn't implement this method. Components (Select, DropdownMenu) call it to
  * keep the highlighted item visible during keyboard navigation, and tests spy on it.
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
  */

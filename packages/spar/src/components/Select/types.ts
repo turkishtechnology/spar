@@ -160,7 +160,7 @@ export interface SelectContentOwnProps {
 
   /**
    * Alignment relative to trigger
-   * @defaultValue 'start'
+   * @defaultValue 'center'
    */
   align?: Align;
 
@@ -198,6 +198,15 @@ export type SelectContentProps<T extends ElementType = 'div'> = PolymorphicProps
   T,
   SelectContentOwnProps
 >;
+
+/**
+ * Props for SelectViewport component
+ * @remarks Scrollable region wrapping the select options. Headless and purely
+ * presentational: apply a `max-height` and `overflow` (e.g. `overflow-y: auto`)
+ * via styling to enable scrolling. Keeping the highlighted option in view during
+ * keyboard navigation and typeahead is handled by `SelectItem`.
+ */
+export type SelectViewportProps<T extends ElementType = 'div'> = PolymorphicProps<'div', T>;
 
 /**
  * Render props provided to children function for SelectItem
