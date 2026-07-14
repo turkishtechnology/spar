@@ -4,6 +4,7 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuViewport,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuLabel,
@@ -937,6 +938,128 @@ describe('DropdownMenu', () => {
       }).toThrow('DropdownMenu items must be rendered within DropdownMenuContent');
 
       consoleSpy.mockRestore();
+    });
+
+    it('should throw error when DropdownMenuViewport is used outside DropdownMenuContent', () => {
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+
+      expect(() => {
+        render(<DropdownMenuViewport>Viewport</DropdownMenuViewport>);
+      }).toThrow('DropdownMenu items must be rendered within DropdownMenuContent');
+
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('DropdownMenu.Viewport', () => {
+    it('should wrap items and render as a presentation container by default', () => {
+      render(
+        <DropdownMenu defaultOpen>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuViewport data-testid='viewport'>
+              <DropdownMenuItem>Item 1</DropdownMenuItem>
+              <DropdownMenuItem>Item 2</DropdownMenuItem>
+            </DropdownMenuViewport>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const viewport = screen.getByTestId('viewport');
+      expect(viewport).toHaveAttribute('role', 'presentation');
+      // Menu structure stays intact — items nested in the viewport remain menuitems.
+      expect(screen.getAllByRole('menuitem')).toHaveLength(2);
+      expect(viewport).toContainElement(screen.getByText('Item 1'));
+    });
+
+    it('should forward ref to the underlying element', () => {
+      const ref = jest.fn();
+      render(
+        <DropdownMenu defaultOpen>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuViewport ref={ref}>
+              <DropdownMenuItem>Item 1</DropdownMenuItem>
+            </DropdownMenuViewport>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      expect(ref).toHaveBeenCalledWith(expect.any(HTMLDivElement));
+    });
+
+    it('should support polymorphic rendering and role override', () => {
+      render(
+        <DropdownMenu defaultOpen>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuViewport as='ul' role='group' data-testid='viewport'>
+              <DropdownMenuItem as='li'>Item 1</DropdownMenuItem>
+            </DropdownMenuViewport>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      const viewport = screen.getByTestId('viewport');
+      expect(viewport.tagName).toBe('UL');
+      expect(viewport).toHaveAttribute('role', 'group');
+    });
+
+    it('should scroll the highlighted item into view during keyboard navigation', async () => {
+      const scrollSpy = jest
+        .spyOn(HTMLElement.prototype, 'scrollIntoView')
+        .mockImplementation(() => {});
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuViewport>
+              <DropdownMenuItem>Item 1</DropdownMenuItem>
+              <DropdownMenuItem>Item 2</DropdownMenuItem>
+            </DropdownMenuViewport>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      screen.getByRole('button').focus();
+      await user.keyboard('[ArrowDown]');
+
+      await waitFor(() => {
+        expect(screen.getAllByRole('menuitem')[0]).toHaveAttribute('data-highlighted');
+      });
+      expect(scrollSpy).toHaveBeenCalledWith({ block: 'nearest', inline: 'nearest' });
+
+      scrollSpy.mockRestore();
+    });
+
+    it('keeps the highlighted item in view even when items are not wrapped in a Viewport', async () => {
+      // Regression guard for the a11y footgun: items are focused with `preventScroll`,
+      // so scroll-into-view must live in Content (not the optional Viewport) or an
+      // unwrapped long menu becomes keyboard-inaccessible.
+      const scrollSpy = jest
+        .spyOn(HTMLElement.prototype, 'scrollIntoView')
+        .mockImplementation(() => {});
+      const user = userEvent.setup();
+      render(
+        <DropdownMenu>
+          <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>Item 1</DropdownMenuItem>
+            <DropdownMenuItem>Item 2</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>,
+      );
+
+      screen.getByRole('button').focus();
+      await user.keyboard('[ArrowDown]');
+
+      await waitFor(() => {
+        expect(screen.getAllByRole('menuitem')[0]).toHaveAttribute('data-highlighted');
+      });
+      expect(scrollSpy).toHaveBeenCalledWith({ block: 'nearest', inline: 'nearest' });
+
+      scrollSpy.mockRestore();
     });
   });
 

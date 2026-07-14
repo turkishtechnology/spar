@@ -1,6 +1,7 @@
 import { DropdownMenu as DropdownMenuRoot } from './DropdownMenu';
 import { DropdownMenuTrigger } from './DropdownMenuTrigger';
 import { DropdownMenuContent } from './DropdownMenuContent';
+import { DropdownMenuViewport } from './DropdownMenuViewport';
 import { DropdownMenuItem } from './DropdownMenuItem';
 import { DropdownMenuSeparator } from './DropdownMenuSeparator';
 import { DropdownMenuLabel } from './DropdownMenuLabel';
@@ -12,6 +13,7 @@ const DropdownMenu = DropdownMenuRoot as typeof DropdownMenuRoot & {
   Root: typeof DropdownMenuRoot;
   Trigger: typeof DropdownMenuTrigger;
   Content: typeof DropdownMenuContent;
+  Viewport: typeof DropdownMenuViewport;
   Item: typeof DropdownMenuItem;
   Separator: typeof DropdownMenuSeparator;
   Label: typeof DropdownMenuLabel;
@@ -22,6 +24,7 @@ const DropdownMenu = DropdownMenuRoot as typeof DropdownMenuRoot & {
 DropdownMenu.Root = DropdownMenuRoot;
 DropdownMenu.Trigger = DropdownMenuTrigger;
 DropdownMenu.Content = DropdownMenuContent;
+DropdownMenu.Viewport = DropdownMenuViewport;
 DropdownMenu.Item = DropdownMenuItem;
 DropdownMenu.Separator = DropdownMenuSeparator;
 DropdownMenu.Label = DropdownMenuLabel;
@@ -33,6 +36,7 @@ export {
   DropdownMenuRoot,
   DropdownMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuViewport,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuLabel,
@@ -45,6 +49,7 @@ export type {
   DropdownMenuTriggerProps,
   DropdownMenuTriggerRenderProps,
   DropdownMenuContentProps,
+  DropdownMenuViewportProps,
   DropdownMenuItemProps,
   DropdownMenuSeparatorProps,
   DropdownMenuLabelProps,
