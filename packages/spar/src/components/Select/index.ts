@@ -1,6 +1,7 @@
 import { Select as SelectRoot } from './Select';
 import { SelectTrigger } from './SelectTrigger';
 import { SelectContent } from './SelectContent';
+import { SelectViewport } from './SelectViewport';
 import { SelectItem } from './SelectItem';
 import { SelectGroup } from './SelectGroup';
 import { SelectLabel } from './SelectLabel';
@@ -17,6 +18,7 @@ const Select = SelectRoot as typeof SelectRoot & {
   Root: typeof SelectRoot;
   Trigger: typeof SelectTrigger;
   Content: typeof SelectContent;
+  Viewport: typeof SelectViewport;
   Item: typeof SelectItem;
   Group: typeof SelectGroup;
   Label: typeof SelectLabel;
@@ -27,6 +29,7 @@ const Select = SelectRoot as typeof SelectRoot & {
 Select.Root = SelectRoot;
 Select.Trigger = SelectTrigger;
 Select.Content = SelectContent;
+Select.Viewport = SelectViewport;
 Select.Item = SelectItem;
 Select.Group = SelectGroup;
 Select.Label = SelectLabel;
@@ -38,6 +41,7 @@ export {
   SelectRoot,
   SelectTrigger,
   SelectContent,
+  SelectViewport,
   SelectItem,
   SelectGroup,
   SelectLabel,
@@ -50,6 +54,7 @@ export type {
   SelectTriggerProps,
   SelectTriggerRenderProps,
   SelectContentProps,
+  SelectViewportProps,
   SelectItemProps,
   SelectItemRenderProps,
   SelectGroupProps,

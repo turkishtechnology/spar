@@ -25,18 +25,20 @@ Pair it with the [Field](./Field.mdx) primitive to get label, description, and e
   <Select.Root defaultValue="basic">
     <Select.Trigger className='select-trigger' placeholder='Choose a plan' />
     <Select.Content className='select-content'>
-      <Select.Item className='select-item' value='basic' label='Basic'>
-        Basic
-        <span aria-hidden='true' className='select-item-check'>✓</span>
-      </Select.Item>
-      <Select.Item className='select-item' value='premium' label='Premium'>
-        Premium
-        <span aria-hidden='true' className='select-item-check'>✓</span>
-      </Select.Item>
-      <Select.Item className='select-item' value='enterprise' label='Enterprise'>
-        Enterprise
-        <span aria-hidden='true' className='select-item-check'>✓</span>
-      </Select.Item>
+      <Select.Viewport className='select-viewport'>
+        <Select.Item className='select-item' value='basic' label='Basic'>
+          Basic
+          <span aria-hidden='true' className='select-item-check'>✓</span>
+        </Select.Item>
+        <Select.Item className='select-item' value='premium' label='Premium'>
+          Premium
+          <span aria-hidden='true' className='select-item-check'>✓</span>
+        </Select.Item>
+        <Select.Item className='select-item' value='enterprise' label='Enterprise'>
+          Enterprise
+          <span aria-hidden='true' className='select-item-check'>✓</span>
+        </Select.Item>
+      </Select.Viewport>
       <Select.Arrow className='select-arrow' />
     </Select.Content>
   </Select.Root>
@@ -153,6 +155,14 @@ border-color: #2b303b;
 background: #1f232b;
 }
 
+.select-viewport {
+display: flex;
+flex-direction: column;
+gap: 4px;
+max-height: 200px;
+overflow-y: auto;
+}
+
 .select-content .select-item {
 min-height: 36px;
 padding: 0 10px;
@@ -218,6 +228,7 @@ The live demo shows the recommended pattern: a `Field` wrapper supplying label, 
 - ✅ Form integration (generates a hidden input when `name` is provided)
 - ✅ Portal-based content rendering (`container` or `document.body`)
 - ✅ Grouping lists with groups, labels, and separators
+- ✅ Optional scrollable `Select.Viewport` that keeps the highlighted option in view
 - ✅ Disabling at the Root or Item level
 - ✅ Compound structure built around Root/Trigger/Content/Item
 
@@ -259,6 +270,11 @@ import { Field, Select } from '@turkish-technology/spar';
       label: 'Content',
       description: 'Dropdown container with smart positioning',
     },
+    {
+      name: 'viewport',
+      label: 'Viewport',
+      description: 'Optional scrollable region wrapping the options',
+    },
     { name: 'group', label: 'Group', description: 'Groups related items together' },
     { name: 'label', label: 'Label', description: 'Label for item groups' },
     { name: 'item', label: 'Item', description: 'Individual selectable option' },
@@ -274,24 +290,41 @@ import { Field, Select } from '@turkish-technology/spar';
         </span>
       </Select.Trigger>
       <Select.Content data-spar-part='content' className='select-content'>
-        <Select.Item data-spar-part='item' className='select-item' value='option1' label='Option 1'>
-          {'Option 1'}
-          <span aria-hidden='true' className='select-item-check'>
-            {'✓'}
-          </span>
-        </Select.Item>
-        <Select.Item data-spar-part='item' className='select-item' value='option2' label='Option 2'>
-          {'Option 2'}
-          <span aria-hidden='true' className='select-item-check'>
-            {'✓'}
-          </span>
-        </Select.Item>
-        <Select.Item data-spar-part='item' className='select-item' value='option3' label='Option 3'>
-          {'Option 3'}
-          <span aria-hidden='true' className='select-item-check'>
-            {'✓'}
-          </span>
-        </Select.Item>
+        <Select.Viewport data-spar-part='viewport' className='select-viewport'>
+          <Select.Item
+            data-spar-part='item'
+            className='select-item'
+            value='option1'
+            label='Option 1'
+          >
+            {'Option 1'}
+            <span aria-hidden='true' className='select-item-check'>
+              {'✓'}
+            </span>
+          </Select.Item>
+          <Select.Item
+            data-spar-part='item'
+            className='select-item'
+            value='option2'
+            label='Option 2'
+          >
+            {'Option 2'}
+            <span aria-hidden='true' className='select-item-check'>
+              {'✓'}
+            </span>
+          </Select.Item>
+          <Select.Item
+            data-spar-part='item'
+            className='select-item'
+            value='option3'
+            label='Option 3'
+          >
+            {'Option 3'}
+            <span aria-hidden='true' className='select-item-check'>
+              {'✓'}
+            </span>
+          </Select.Item>
+        </Select.Viewport>
         <Select.Arrow data-spar-part='arrow' className='select-arrow' />
       </Select.Content>
     </Select.Root>
@@ -305,24 +338,32 @@ import { Field, Select } from '@turkish-technology/spar';
   <Select.Trigger placeholder='Choose...' />
 
   <Select.Content>
-    <Select.Group>
-      <Select.Label />
-      <Select.Item value='...' label='...'>
-        ...
-      </Select.Item>
-    </Select.Group>
+    <Select.Viewport>
+      <Select.Group>
+        <Select.Label />
+        <Select.Item value='...' label='...'>
+          ...
+        </Select.Item>
+      </Select.Group>
 
-    <Select.Separator />
+      <Select.Separator />
+    </Select.Viewport>
     <Select.Arrow />
   </Select.Content>
 </Select.Root>
 ```
+
+> `Select.Viewport` is optional — omit it for short lists. Wrap the items in a
+> viewport when the list can grow long enough to need a bounded, scrollable area.
+> Keep the `Select.Arrow` outside the viewport so it stays pinned while the
+> options scroll.
 
 **Data Flow:**
 
 - `Select.Root` manages open/closed state and the selected value, and provides context.
 - `Select.Trigger` toggles the Root state, displays the selected item's `label` or the `placeholder`, and sets the focus strategy for Content on arrow-key input.
 - `Select.Content` renders into a portal when open and manages highlight state and keyboard navigation.
+- `Select.Viewport` is an optional scrollable wrapper around the options; it only bounds the height and provides the scroll region. Keeping the highlighted item in view during keyboard navigation and typeahead is handled by `Select.Item`, which scrolls itself into the nearest scrollable region (the viewport when present), so it works with or without a viewport.
 - `Select.Item` updates the selection and changes the Root value through click or keyboard interaction. The `label` prop registers the text used for typeahead and for display in the Trigger.
 - `Select.Group` + `Select.Label` establish the semantic group structure.
 - `Select.Separator` provides a separator role.
@@ -439,6 +480,128 @@ function GroupedSelect() {
   );
 }
 ```
+
+### Scrollable Select
+
+Wrap the options in `Select.Viewport` to keep a long list within a bounded,
+scrollable area. The Viewport is headless — set a `max-height` and `overflow`
+via CSS to enable scrolling. Keyboard navigation and typeahead automatically keep
+the highlighted option in view. Keep `Select.Arrow` outside the viewport so it
+stays pinned while the options scroll.
+
+<div className='select-scroll-container'>
+<LiveCode
+  code={`<Select.Root defaultValue='utc'>
+  <Select.Trigger className='select-scroll-trigger' placeholder='Choose a timezone' />
+  <Select.Content className='select-scroll-content'>
+    <Select.Viewport className='select-scroll-viewport'>
+      <Select.Item className='select-scroll-item' value='utc' label='UTC'>UTC</Select.Item>
+      <Select.Item className='select-scroll-item' value='london' label='London (GMT)'>London (GMT)</Select.Item>
+      <Select.Item className='select-scroll-item' value='paris' label='Paris (CET)'>Paris (CET)</Select.Item>
+      <Select.Item className='select-scroll-item' value='istanbul' label='Istanbul (TRT)'>Istanbul (TRT)</Select.Item>
+      <Select.Item className='select-scroll-item' value='moscow' label='Moscow (MSK)'>Moscow (MSK)</Select.Item>
+      <Select.Item className='select-scroll-item' value='dubai' label='Dubai (GST)'>Dubai (GST)</Select.Item>
+      <Select.Item className='select-scroll-item' value='karachi' label='Karachi (PKT)'>Karachi (PKT)</Select.Item>
+      <Select.Item className='select-scroll-item' value='dhaka' label='Dhaka (BST)'>Dhaka (BST)</Select.Item>
+      <Select.Item className='select-scroll-item' value='bangkok' label='Bangkok (ICT)'>Bangkok (ICT)</Select.Item>
+      <Select.Item className='select-scroll-item' value='singapore' label='Singapore (SGT)'>Singapore (SGT)</Select.Item>
+      <Select.Item className='select-scroll-item' value='tokyo' label='Tokyo (JST)'>Tokyo (JST)</Select.Item>
+      <Select.Item className='select-scroll-item' value='sydney' label='Sydney (AEST)'>Sydney (AEST)</Select.Item>
+      <Select.Item className='select-scroll-item' value='auckland' label='Auckland (NZST)'>Auckland (NZST)</Select.Item>
+    </Select.Viewport>
+    <Select.Arrow className='select-scroll-arrow' />
+  </Select.Content>
+</Select.Root>`}
+  cssCode={`.select-scroll-container {
+display: flex;
+justify-content: center;
+}
+
+.select-scroll-container .select-scroll-trigger {
+min-width: 200px;
+min-height: 40px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+padding: 0 14px;
+border-radius: 10px;
+border: 1px solid #e1e4ea;
+background: rgba(0, 0, 0, 0.08);
+color: #222530;
+font-size: 14px;
+line-height: 20px;
+}
+
+[data-theme='dark'] .select-scroll-container .select-scroll-trigger {
+border-color: #2b303b;
+background: rgba(255, 255, 255, 0.12);
+color: #f2f5f8;
+}
+
+.select-scroll-content {
+--select-scroll-surface: #f7f8fa;
+padding: 8px;
+display: flex;
+flex-direction: column;
+gap: 4px;
+border-radius: 12px;
+border: 1px solid #e1e4ea;
+background: var(--select-scroll-surface);
+box-shadow:
+0 12px 32px rgba(34, 37, 48, 0.08),
+0 4px 12px rgba(34, 37, 48, 0.06);
+}
+
+[data-theme='dark'] .select-scroll-content {
+--select-scroll-surface: #1f232b;
+border-color: #2b303b;
+background: #1f232b;
+}
+
+.select-scroll-viewport {
+display: flex;
+flex-direction: column;
+gap: 4px;
+max-height: 200px;
+overflow-y: auto;
+}
+
+.select-scroll-content .select-scroll-item {
+min-height: 36px;
+padding: 0 10px;
+border-radius: 8px;
+cursor: pointer;
+display: flex;
+align-items: center;
+color: #222530;
+font-size: 14px;
+line-height: 18px;
+}
+
+[data-theme='dark'] .select-scroll-content .select-scroll-item {
+color: #f2f5f8;
+}
+
+.select-scroll-content .select-scroll-item[data-highlighted] {
+background: rgba(0, 0, 0, 0.08);
+outline: none;
+}
+
+[data-theme='dark'] .select-scroll-content .select-scroll-item[data-highlighted] {
+background: rgba(255, 255, 255, 0.12);
+}
+
+.select-scroll-content .select-scroll-item[data-state='checked'] {
+font-weight: 600;
+}
+
+.select-scroll-arrow {
+color: var(--select-scroll-surface);
+}`}
+/>
+
+</div>
 
 ### With Field (label, description, error)
 
@@ -686,6 +849,36 @@ Popup content layer. It does not render when closed.
 - `useFloating` middleware: `offset(8)`, `flip()`, `shift({ padding: 8 })`, `hide()`
 - `minWidth` is matched to the trigger width
 - `Select.Arrow` is positioned automatically through context when rendered inside Content
+
+### Select.Viewport
+
+An optional scrollable region that wraps the options. Use it when the list can grow long enough to need a bounded, scrollable area. Headless: renders a plain element with no visual opinions — apply a `max-height` and `overflow` (e.g. `overflow-y: auto`) via `className`/`style` to enable scrolling.
+
+The Viewport is purely presentational — it just provides the bounded, scrollable box. Keeping the highlighted option visible during keyboard navigation and typeahead is handled by `Select.Item`, which scrolls itself into its nearest scrollable ancestor (this Viewport when present). It works the same whether or not a Viewport is used. Keep `Select.Arrow` as a sibling _outside_ the Viewport so it stays pinned while the options scroll.
+
+Defaults to `role="presentation"` so it stays transparent in the accessibility tree, preserving the `listbox` → `option` structure. Override `role` if you need different semantics.
+
+**Props**
+
+| Name        | Type                             | Default          | Description                                                  |
+| ----------- | -------------------------------- | ---------------- | ------------------------------------------------------------ |
+| `as?`       | `React.ElementType`              | `'div'`          | Polymorphic element type to render                           |
+| `role?`     | `string`                         | `'presentation'` | ARIA role for the viewport element                           |
+| `ref?`      | `React.Ref<HTMLElement \| null>` | `undefined`      | Forwarded ref to the viewport element                        |
+| `children?` | `React.ReactNode`                | `undefined`      | Options, groups, labels, and separators                      |
+| `...props`  | `HTMLAttributes`                 | -                | All standard element attributes (`className`, `style`, etc.) |
+
+**Events**
+
+| Name | Parameters | Description           | When Triggered                        |
+| ---- | ---------- | --------------------- | ------------------------------------- |
+| -    | -          | No interactive events | Viewport is a non-interactive wrapper |
+
+**HTML Attributes**
+
+| Attribute | Value            | Purpose                                         |
+| --------- | ---------------- | ----------------------------------------------- |
+| `role`    | `'presentation'` | Keeps the viewport transparent in the a11y tree |
 
 ### Select.Item
 
