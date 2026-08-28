@@ -1,5 +1,5 @@
 import type { ElementType } from 'react';
-import type { PolymorphicProps } from '../../types';
+import type { Mask, MaskChangeMeta, PolymorphicProps } from '../../types';
 
 /**
  * Input context state
@@ -68,6 +68,30 @@ export interface InputFieldOwnProps {
    * @defaultValue false
    */
   autoFocus?: boolean;
+
+  /**
+   * Input mask — a shape/date/time/number/regex pattern, or a resolver
+   * function.
+   *
+   * @remarks
+   * Omitting it leaves the field exactly as it was: no masking, no forced
+   * reconciliation of `value`, and `onValueChange` is never called.
+   *
+   * Setting it makes the field's displayed value the masked projection of what
+   * was typed, and makes `onValueChange` the channel that reports every change.
+   */
+  mask?: Mask;
+
+  /**
+   * Fires with the **masked** value plus `raw` / `completed` / `iso` metadata.
+   *
+   * @remarks
+   * Only called while `mask` is set. It fires for every change the mask
+   * produces, including the ones the field applies itself — a delimiter-aware
+   * delete, an undo — which produce no DOM change event and therefore never
+   * reach `onChange`. Prefer this over `onChange` on a masked field.
+   */
+  onValueChange?: (value: string, meta: MaskChangeMeta) => void;
 }
 
 /**
