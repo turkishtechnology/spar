@@ -18,7 +18,7 @@ import {
   toDigits,
 } from './mask-shared';
 
-const DEFAULT_PATTERN: MaskTimeToken[] = ['h', 'm'];
+const DEFAULT_PATTERN: readonly MaskTimeToken[] = ['h', 'm'];
 
 /** DEVIATION 1 — cleave clamps minutes to 60, which is not a minute. */
 const MAX_MINUTES = 59;
@@ -27,7 +27,7 @@ const MAX_MINUTES = 59;
 const MAX_SECONDS = 59;
 
 /** Every time block is two digits wide. */
-export const timeBlocks = (tokens: MaskTimeToken[] = DEFAULT_PATTERN): number[] =>
+export const timeBlocks = (tokens: readonly MaskTimeToken[] = DEFAULT_PATTERN): number[] =>
   tokens.map(() => 2);
 
 const format = (input: string, options: MaskTimeOptions): MaskResolverResult => {
@@ -52,7 +52,10 @@ const format = (input: string, options: MaskTimeOptions): MaskResolverResult => 
 
     if (token === 'h') {
       // DEVIATION 3 — cleave ignores `timeFormat` in this clamp and allows 60.
-      if (Number(first) > maxHourFirstDigit) block = `0${first}`;
+      // A 12-hour clock runs 01–12, so `00` is an hour it does not have; the
+      // 24-hour one keeps it. Same shape as the day/month clamp in `mask-date`.
+      if (twelveHour && block === '00') block = '01';
+      else if (Number(first) > maxHourFirstDigit) block = `0${first}`;
       else if (Number(block) > maxHours) block = `${maxHours}`;
     } else {
       const limit = token === 's' ? MAX_SECONDS : MAX_MINUTES;

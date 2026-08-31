@@ -110,7 +110,7 @@ export const presetResolver = (mask: Mask): MaskResolver | null => {
  * pattern is the whole specification — and neither does `number`, whose grouping
  * is variable-width and applied right-to-left.
  */
-export const getMaskBlocks = (mask: MaskPattern | MaskPreset): number[] => {
+export const getMaskBlocks = (mask: MaskPattern | MaskPreset): readonly number[] => {
   if (isRegexMask(mask)) return [];
   if (isDateMask(mask)) return dateBlocks(mask.datePattern);
   if (isTimeMask(mask)) return timeBlocks(mask.timePattern);
@@ -138,28 +138,36 @@ const maskShape = (input: string, pattern: MaskShapeOptions): MaskResult => {
 // ── L3 — regex ──────────────────────────────────────────────────────────────
 
 /**
- * Compiled matchers, keyed by pattern source.
+ * Compiled matchers, keyed by pattern source and flags.
  *
  * Compilation walks the pattern and builds an NFA, so it must not run per
  * keystroke. The cache also makes the development warning for an unsupported
  * pattern fire once per pattern rather than once per character.
+ *
+ * Flags are part of the key: `/abc/` and `/abc/i` are different matchers, and
+ * keying on the source alone would hand one pattern the other's automaton.
  */
 const matcherCache = new Map<string, MatcherCompileResult>();
 
 /** Compiles a pattern source, reusing a previous result when there is one. */
-export const getIncrementalMatcher = (source: string): MatcherCompileResult => {
-  const cached = matcherCache.get(source);
+export const getIncrementalMatcher = (source: string, flags = ''): MatcherCompileResult => {
+  const key = `${flags}\u0000${source}`;
+  const cached = matcherCache.get(key);
   if (cached) return cached;
 
-  const compiled = createIncrementalMatcher(source);
-  matcherCache.set(source, compiled);
+  const compiled = createIncrementalMatcher(source, flags);
+  matcherCache.set(key, compiled);
   return compiled;
 };
 
 const maskRegex = (input: string, pattern: MaskRegexOptions): MaskResult => {
-  const source =
-    typeof pattern.regex === 'string' ? pattern.regex : (pattern.regex as RegExp).source;
-  const compiled = getIncrementalMatcher(stripAnchors(source));
+  // A `RegExp` carries flags that decide what its own source means — `i` above
+  // all. Compiling `regex.source` alone reads the pattern as the author did not
+  // write it, and an `/i` pattern silently rejects every character.
+  const { regex } = pattern;
+  const source = typeof regex === 'string' ? regex : regex.source;
+  const flags = typeof regex === 'string' ? '' : regex.flags;
+  const compiled = getIncrementalMatcher(stripAnchors(source), flags);
   const cased = applyCase(input, pattern);
 
   if (!compiled.ok) {
@@ -169,14 +177,17 @@ const maskRegex = (input: string, pattern: MaskRegexOptions): MaskResult => {
     return { value: cased, raw: cased, completed: true, unsupportedReason: compiled.reason };
   }
 
-  const { matcher } = compiled;
+  // One pass, one automaton step per character. Re-matching the accepted prefix
+  // on every character instead makes a long paste quadratic — and L3 has no
+  // block capacity to slice against the way L1 does.
+  const scanner = compiled.scan();
   let accepted = '';
 
   for (const char of cased) {
-    if (matcher(accepted + char) !== FAILED) accepted += char;
+    if (scanner.push(char) !== FAILED) accepted += char;
   }
 
-  return { value: accepted, raw: accepted, completed: matcher(accepted) === DONE };
+  return { value: accepted, raw: accepted, completed: scanner.state() === DONE };
 };
 
 // ── Entry point ─────────────────────────────────────────────────────────────

@@ -24,13 +24,25 @@ export const getGapDelimiters = (options: MaskCommonOptions, gapCount: number): 
   return Array.from({ length: gapCount }, () => delimiter ?? '');
 };
 
-/** Removes every delimiter occurrence, so masking an already-masked value is idempotent. */
-export const stripDelimiters = (value: string, delimiters: string[]): string => {
+/**
+ * Removes every delimiter occurrence, so masking an already-masked value is
+ * idempotent — then any delimiter character left standing on its own.
+ *
+ * The second pass is what makes a multi-character delimiter survive a partial
+ * delete. Backspace inside `') '` leaves a stray `)`, which the whole-occurrence
+ * pass no longer recognises; laid out as content it comes back doubled, turning
+ * `'532) 123-4567'` into `'532) )12-3456'`. A delimiter character is structural
+ * wherever it appears, so it never counts as content.
+ */
+export const stripDelimiters = (value: string, delimiters: readonly string[]): string => {
+  const used = [...new Set(delimiters.filter(Boolean))];
+  if (!used.length) return value;
+
   let result = value;
-  for (const delimiter of new Set(delimiters.filter(Boolean))) {
-    result = result.split(delimiter).join('');
-  }
-  return result;
+  for (const delimiter of used) result = result.split(delimiter).join('');
+
+  const characters = new Set(used.flatMap((delimiter) => [...delimiter]));
+  return [...result].filter((char) => !characters.has(char)).join('');
 };
 
 /** `uppercase` wins when both flags are set. */
@@ -57,7 +69,11 @@ export const applyCharFilter = (
  * the preceding block is full **and** characters remain — so `'12'` with blocks
  * `[2, 2]` stays `'12'` while `'123'` becomes `'12/3'`.
  */
-export const distribute = (chars: string, blocks: number[], delimiters: string[]): string => {
+export const distribute = (
+  chars: string,
+  blocks: readonly number[],
+  delimiters: readonly string[],
+): string => {
   let rest = chars;
   let result = '';
 
@@ -75,7 +91,7 @@ export const distribute = (chars: string, blocks: number[], delimiters: string[]
   return result;
 };
 
-export const capacityOf = (blocks: number[]): number =>
+export const capacityOf = (blocks: readonly number[]): number =>
   blocks.reduce((total, size) => total + size, 0);
 
 export const pad2 = (value: number): string => (value < 10 ? `0${value}` : `${value}`);
@@ -83,7 +99,7 @@ export const pad2 = (value: number): string => (value < 10 ? `0${value}` : `${va
 export const pad4 = (value: number): string => `${value}`.padStart(4, '0');
 
 /** Splits a digit string into per-block parts using block sizes. */
-export const splitIntoParts = (digits: string, blocks: number[]): string[] => {
+export const splitIntoParts = (digits: string, blocks: readonly number[]): string[] => {
   const parts: string[] = [];
   let offset = 0;
 
@@ -99,5 +115,5 @@ export const splitIntoParts = (digits: string, blocks: number[]): string[] => {
  * Digits only, capped at the pattern's capacity — the entry step every
  * digit-shaped mask starts from.
  */
-export const toDigits = (input: string, delimiters: string[], capacity: number): string =>
+export const toDigits = (input: string, delimiters: readonly string[], capacity: number): string =>
   stripDelimiters(input, delimiters).replace(/[^\d]/g, '').slice(0, capacity);

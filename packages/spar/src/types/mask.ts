@@ -40,7 +40,7 @@ export interface MaskCommonOptions {
    * Per-gap delimiters. Takes precedence over `delimiter` when non-empty.
    * Index `n` is the delimiter between block `n` and block `n + 1`.
    */
-  delimiters?: string[];
+  delimiters?: readonly string[];
 
   /** Uppercase the result. Locale-independent, like the Core/cleave behaviour. */
   uppercase?: boolean;
@@ -61,7 +61,7 @@ export interface MaskCommonOptions {
 /** L1 — pure shape mask. */
 export interface MaskShapeOptions extends MaskCommonOptions {
   /** Character counts per block, e.g. `[2, 2, 4]` for `dd/mm/yyyy`. */
-  blocks: number[];
+  blocks: readonly number[];
 
   /** Strip every non-digit. */
   numericOnly?: boolean;
@@ -75,7 +75,7 @@ export interface MaskDateOptions extends MaskCommonOptions {
   date: true;
 
   /** @defaultValue ['d', 'm', 'Y'] */
-  datePattern?: MaskDateToken[];
+  datePattern?: readonly MaskDateToken[];
 
   /** Inclusive lower bound, ISO `YYYY-MM-DD`. */
   dateMin?: string;
@@ -89,7 +89,7 @@ export interface MaskTimeOptions extends MaskCommonOptions {
   time: true;
 
   /** @defaultValue ['h', 'm'] */
-  timePattern?: MaskTimeToken[];
+  timePattern?: readonly MaskTimeToken[];
 
   /** @defaultValue '24' */
   timeFormat?: '12' | '24';

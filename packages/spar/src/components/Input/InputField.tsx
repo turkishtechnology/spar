@@ -68,7 +68,7 @@ export const InputField = <T extends ElementType = 'input'>({
    * the raw keystrokes.
    */
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (maskState.active) maskState.onChange(event);
+    if (maskState.controlled) maskState.onChange(event);
     onChange?.(event);
   };
 
@@ -80,8 +80,10 @@ export const InputField = <T extends ElementType = 'input'>({
   const resolvedReadOnly = context?.readOnly ?? props.readOnly;
 
   // With a mask the field is controlled by the hook, so `defaultValue` must not
-  // also reach the element. Without one, both fall through untouched.
-  const valueProps = maskState.active
+  // also reach the element. Without one, both fall through untouched. The hook
+  // keeps the element after a mask is removed — handing it back would switch
+  // React from controlled to uncontrolled mid-life.
+  const valueProps = maskState.controlled
     ? { value: maskState.value }
     : {
         ...(value === undefined ? {} : { value }),
@@ -90,7 +92,7 @@ export const InputField = <T extends ElementType = 'input'>({
 
   // Attached only when something needs it, so an unmasked field with a `value`
   // and no handler still gets React's read-only-input warning.
-  const changeProps = maskState.active || onChange ? { onChange: handleChange } : {};
+  const changeProps = maskState.controlled || onChange ? { onChange: handleChange } : {};
 
   const dataAttributes = {
     'data-autofocus': autoFocus ? '' : undefined,

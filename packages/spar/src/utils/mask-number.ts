@@ -142,10 +142,19 @@ export const groupDigits = (
 
 const format = (input: string, options: MaskNumberOptions): MaskResolverResult => {
   const config = getNumberLocaleConfig(options.numberLocale);
-  const group = options.delimiter ?? config.group;
   const decimalMark = options.numberDecimalMark ?? config.decimal;
   const decimalScale = options.numberDecimalScale ?? DEFAULT_DECIMAL_SCALE;
   const allowDecimal = decimalScale > 0;
+
+  // A group separator that is also the decimal mark makes the value ambiguous,
+  // and the mask stops being idempotent: `delimiter: '.'` in a locale that
+  // already decides with `.` renders `1234` as `1.234`, and re-masking that
+  // reads the separator back as a decimal point and returns `1.23`. The decimal
+  // mark wins, because dropping it would throw away digits the user typed while
+  // grouping only adds punctuation. With no decimals in play there is nothing to
+  // collide with, so the separator stands.
+  const configuredGroup = options.delimiter ?? config.group;
+  const group = allowDecimal && configuredGroup === decimalMark ? '' : configuredGroup;
 
   // The minus sign is a character the user *types*, so it has to round-trip
   // through the keyboard: ASCII only, wherever in the string it landed. The

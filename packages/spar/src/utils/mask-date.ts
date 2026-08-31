@@ -25,17 +25,21 @@ import {
 
 const BLOCK_SIZE: Record<MaskDateToken, number> = { d: 2, m: 2, y: 2, Y: 4 };
 
-const DEFAULT_PATTERN: MaskDateToken[] = ['d', 'm', 'Y'];
+const DEFAULT_PATTERN: readonly MaskDateToken[] = ['d', 'm', 'Y'];
 
 /** Block sizes implied by a date pattern's tokens. */
-export const dateBlocks = (tokens: MaskDateToken[] = DEFAULT_PATTERN): number[] =>
+export const dateBlocks = (tokens: readonly MaskDateToken[] = DEFAULT_PATTERN): number[] =>
   tokens.map((token) => BLOCK_SIZE[token]);
 
 const isLeapYear = (year: number): boolean =>
   (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 
 /** Per-block clamp applied while typing, before the value is complete. */
-const clampParts = (digits: string, tokens: MaskDateToken[], blocks: number[]): string => {
+const clampParts = (
+  digits: string,
+  tokens: readonly MaskDateToken[],
+  blocks: readonly number[],
+): string => {
   let rest = digits;
   let result = '';
 
@@ -63,9 +67,17 @@ const clampParts = (digits: string, tokens: MaskDateToken[], blocks: number[]): 
   return result;
 };
 
-/** Clamps a day to the length of its month, once both are known. */
+/**
+ * Clamps a day to the length of its month, once both are known.
+ *
+ * A pattern with no `m` token has no month to measure against and reports 0.
+ * There is nothing to clamp to then, so the day keeps its own bound — otherwise
+ * month 0 falls into the 30-day branch and `['d', 'Y']` rewrites `31/2025`.
+ */
 const clampDayToMonth = (day: number, month: number, year: number): number => {
   let result = Math.min(day, 31);
+  if (month < 1) return result;
+
   const monthLength = Math.min(month, 12);
 
   if ((monthLength < 7 && monthLength % 2 === 0) || (monthLength > 8 && monthLength % 2 === 1)) {
