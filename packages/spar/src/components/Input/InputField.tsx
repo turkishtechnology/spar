@@ -75,9 +75,14 @@ export const InputField = <T extends ElementType = 'input'>({
   const inputType =
     Component === 'input' ? ('type' in props ? (props.type as string) : 'text') : undefined;
 
-  const resolvedDisabled = context?.disabled ?? props.disabled;
-  const resolvedRequired = context?.required ?? props.required;
-  const resolvedReadOnly = context?.readOnly ?? props.readOnly;
+  // Either source may set these, and neither may clear the other's answer: a
+  // `Field` or `Input` that disables its group wins, and so does a field that
+  // disables itself. `??` cannot express that — `Input` resolves its context to
+  // a plain boolean, so an unset group reports `false` rather than `undefined`
+  // and would silently unset an explicitly passed prop.
+  const resolvedDisabled = context?.disabled || props.disabled;
+  const resolvedRequired = context?.required || props.required;
+  const resolvedReadOnly = context?.readOnly || props.readOnly;
 
   // With a mask the field is controlled by the hook, so `defaultValue` must not
   // also reach the element. Without one, both fall through untouched. The hook
@@ -114,12 +119,14 @@ export const InputField = <T extends ElementType = 'input'>({
       }
     : {};
 
+  // The resolved values, not the raw context ones — spreading `context.disabled`
+  // here is what unset the instance prop, since it lands after `{...props}`.
   const contextProps = context
     ? {
         id: context.fieldId,
-        disabled: context.disabled,
-        required: context.required,
-        readOnly: context.readOnly,
+        disabled: resolvedDisabled,
+        required: resolvedRequired,
+        readOnly: resolvedReadOnly,
       }
     : {};
 
