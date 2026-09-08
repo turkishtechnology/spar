@@ -217,6 +217,34 @@ describe('Input - Unit Tests', () => {
     expect(controlled).toHaveValue('hello');
   });
 
+  it('keeps disabled / required / readOnly passed on the field itself', () => {
+    // The Input context resolves all three to a plain boolean, so an unset group
+    // reports `false`. Spreading that over the instance props used to unset
+    // them: a field asked to be disabled rendered enabled.
+    render(
+      <Input>
+        <InputField aria-label='plain' disabled required readOnly />
+      </Input>,
+    );
+
+    const field = screen.getByLabelText('plain');
+    expect(field).toBeDisabled();
+    expect(field).toBeRequired();
+    expect(field).toHaveAttribute('readonly');
+  });
+
+  it('lets a surrounding Field still set the field state', () => {
+    render(
+      <Field disabled>
+        <Input>
+          <InputField aria-label='in-field' />
+        </Input>
+      </Field>,
+    );
+
+    expect(screen.getByLabelText('in-field')).toBeDisabled();
+  });
+
   it('throws when Field compound-only parts are used outside Field', () => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
 

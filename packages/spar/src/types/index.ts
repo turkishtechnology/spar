@@ -35,3 +35,4 @@ export type Side = 'top' | 'right' | 'bottom' | 'left';
  * Alignment relative to reference element
  */
 export type Align = 'start' | 'center' | 'end';
+export * from './mask';

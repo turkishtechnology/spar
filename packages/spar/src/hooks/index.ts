@@ -15,3 +15,4 @@ export {
   type UseTypeaheadOptions,
   type UseTypeaheadReturn,
 } from './useTypeahead';
+export { useMask, type UseMaskOptions, type UseMaskReturn } from './useMask';
