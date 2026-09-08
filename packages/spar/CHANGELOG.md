@@ -7,6 +7,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-09-08
+
+### Input — Masking
+
+#### Added
+
+- **`Input.Field` now accepts a `mask` prop.** A mask can be a shape pattern
+  (`blocks`, `delimiter`/`delimiters`, `numericOnly`, `letterOnly`,
+  `uppercase`/`lowercase`), a regex pattern (`regex`), one of the built-in
+  presets (`{ date: true }`, `{ time: true }`, `{ number: true }`), or a custom
+  `MaskResolver` function. Omitting `mask` leaves the field's behaviour
+  unchanged.
+- **`onValueChange(value, meta)` on `Input.Field`**, fired only while `mask` is
+  set. It reports the masked value plus `raw`, `completed` and `iso` metadata,
+  and also fires for changes the mask applies itself (delimiter-aware deletes,
+  undo) that never surface as a DOM `change` event. Prefer it over `onChange`
+  on a masked field.
+- **`useMask` hook** exported for building masked inputs outside `Input.Field`,
+  along with `UseMaskOptions` / `UseMaskReturn`.
+- **Built-in mask factories exported** — `createDateMask`, `createNumberMask`
+  and `createTimeMask` — so a preset can be composed, wrapped or extended with
+  the same tools userland has.
+- **Mask types exported** from the package root: `Mask`, `MaskPattern`,
+  `MaskPreset`, `MaskResolver`, `MaskResolverContext`, `MaskResolverResult`,
+  `MaskChangeMeta`, and the per-kind option interfaces.
+
+#### Fixed
+
+- Corrected caret mapping, delimiter-aware deletes, IME composition handling and
+  regex bounds in the masking engine.
+- **`Input.Field` may now set its own `disabled`, `required` and `readOnly`**
+  instead of always deferring to the surrounding `Field` context.
+
+## [0.2.1] - 2026-07-14
+
+### DropdownMenu / Select — Scrollable Viewport
+
+#### Added
+
+- **`DropdownMenu.Viewport`** — an optional scrollable wrapper inside
+  `DropdownMenu.Content` for long menus.
+- **`Select.Viewport`** — the matching scrollable part for `Select.Content`,
+  implemented as a pure styling wrapper so both components behave the same.
+
+#### Fixed
+
+- The highlighted item is now kept in view from `DropdownMenu.Content` using
+  native `scrollIntoView`.
+- Documented `Content`'s `align` default correctly as `'center'`.
+
 ## [0.2.0] - 2026-06-24
 
 First stable release of the 0.2 line, promoting the 0.2.0-beta series to the
