@@ -77,9 +77,9 @@ export const DialogContent = <T extends ElementType = 'div'>({
           restoreFocusRef.current = document.activeElement as HTMLElement;
         }
       }
-    } else {
-      restoreFocusRef.current = null;
     }
+    // No reset on close: Dialog reads this ref in its own close effect, which
+    // runs after this one, and clears it once focus is restored.
   }, [isOpen, restoreFocus, finalFocus, restoreFocusRef]);
 
   // Handle open auto-focus
@@ -146,7 +146,9 @@ export const DialogContent = <T extends ElementType = 'div'>({
 
       if (event.key === 'Escape') {
         onEscapeKeyDown?.(event.nativeEvent);
-        if (!event.defaultPrevented) {
+        // onEscapeKeyDown gets the native event, and the React event does not
+        // pick up a preventDefault made on it, so read the veto from the native one.
+        if (!event.nativeEvent.defaultPrevented) {
           setIsOpen(false);
         }
       }
