@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Dialog
+
+#### Fixed
+
+- **`preventDefault()` in `onEscapeKeyDown` now keeps the dialog open.** The
+  handler receives the native `KeyboardEvent`, but the close check read the
+  React event, which never sees a `preventDefault` made on the native one, so
+  the veto was ignored.
+- **Closing moves focus back to the element that opened the dialog.**
+  `DialogContent` cleared the stored element on close before `Dialog` could
+  read it, so `restoreFocus` (on by default) never restored focus.
+
 ## [0.2.2] - 2026-09-08
 
 ### Input — Masking

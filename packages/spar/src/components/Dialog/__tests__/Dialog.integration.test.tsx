@@ -325,6 +325,27 @@ describe('Dialog Integration Tests', () => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
+    it('should keep dialog open when Escape default is prevented in onEscapeKeyDown', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = jest.fn();
+      const onEscapeKeyDown = jest.fn((event: KeyboardEvent) => event.preventDefault());
+
+      render(
+        <Dialog defaultOpen={true} onOpenChange={onOpenChange}>
+          <DialogContent onEscapeKeyDown={onEscapeKeyDown}>
+            <DialogTitle>Persistent Dialog</DialogTitle>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
+        </Dialog>,
+      );
+
+      await user.keyboard('{Escape}');
+
+      expect(onEscapeKeyDown).toHaveBeenCalledTimes(1);
+      expect(onOpenChange).not.toHaveBeenCalled();
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
     it('should handle controlled state changes', async () => {
       const ControlledDialog = () => {
         const [open, setOpen] = React.useState(false);

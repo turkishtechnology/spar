@@ -315,9 +315,30 @@ describe('Dialog Accessibility', () => {
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       });
 
-      // Focus restoration may not work reliably in test environment
-      // but the dialog should be closed and the mechanism should not crash
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(trigger).toHaveFocus();
+    });
+
+    it('should restore focus to trigger when a force-mounted dialog closes with Escape', async () => {
+      const user = userEvent.setup();
+      render(
+        <Dialog forceMount>
+          <DialogTrigger>Open Dialog</DialogTrigger>
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+            <DialogClose>Close</DialogClose>
+          </DialogContent>
+        </Dialog>,
+      );
+
+      const trigger = screen.getByRole('button', { name: 'Open Dialog' });
+      await user.click(trigger);
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: 'Close' })).toHaveFocus();
+      });
+
+      await user.keyboard('{Escape}');
+
+      expect(trigger).toHaveFocus();
     });
 
     it('should handle custom initial focus', async () => {
