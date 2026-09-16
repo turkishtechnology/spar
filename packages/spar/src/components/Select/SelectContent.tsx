@@ -29,7 +29,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
   container,
   onEscapeKeyDown,
   onPointerDownOutside,
-  onCloseAutoFocus: _onCloseAutoFocus,
+  onCloseAutoFocus,
   as,
   onKeyDown,
   style,
@@ -75,13 +75,29 @@ export const SelectContent = <T extends ElementType = 'div'>({
     refs.setReference(context.triggerRef.current);
   }, [refs, context.triggerRef]);
 
-  // Focus management - focus content when opened
+  // Focus management - focus content when opened. `mounted` is a dependency
+  // because an initially-open select (defaultOpen / controlled open on mount)
+  // renders the hidden, ref-less container on its first pass; the listbox only
+  // exists after the SSR-safety effect flips `mounted`, so the focus effect has
+  // to re-run at that point or keyboard handling never receives focus.
   useEffect(() => {
-    if (context.open && context.contentRef.current) {
+    if (context.open && mounted && context.contentRef.current) {
       // Use preventScroll to avoid scrolling the page when focusing
       context.contentRef.current.focus({ preventScroll: true });
     }
-  }, [context.open, context.contentRef]);
+  }, [context.open, mounted, context.contentRef]);
+
+  // Return focus to the trigger after a close initiated from inside the listbox
+  // (Escape, Enter/Space, Tab, item click). Consumers can veto the focus return
+  // through `onCloseAutoFocus` + `preventDefault`. Outside pointer dismissal
+  // deliberately does not go through here: the user chose another target.
+  const returnFocusToTrigger = useCallback(() => {
+    const event = new FocusEvent('closeautofocus', { cancelable: true });
+    onCloseAutoFocus?.(event);
+    if (!event.defaultPrevented) {
+      context.triggerRef.current?.focus();
+    }
+  }, [onCloseAutoFocus, context.triggerRef]);
 
   // Handle outside interactions
   useInteractOutside([context.contentRef, context.triggerRef], {
@@ -207,10 +223,13 @@ export const SelectContent = <T extends ElementType = 'div'>({
       switch (event.key) {
         case 'Escape':
           onEscapeKeyDown?.(event.nativeEvent);
-          if (!event.defaultPrevented) {
+          // The consumer receives the native event, so the veto has to be read
+          // from that same object: the synthetic `defaultPrevented` is a
+          // snapshot taken when the React event was created.
+          if (!event.nativeEvent.defaultPrevented) {
             event.preventDefault();
             context.onOpenChange(false);
-            context.triggerRef.current?.focus();
+            returnFocusToTrigger();
           }
           break;
 
@@ -222,7 +241,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
             if (selectedItem) {
               context.onChange(selectedItem.value);
               context.onOpenChange(false);
-              context.triggerRef.current?.focus();
+              returnFocusToTrigger();
             }
           }
           break;
@@ -251,7 +270,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
 
         case 'Tab':
           context.onOpenChange(false);
-          context.triggerRef.current?.focus();
+          returnFocusToTrigger();
           break;
 
         default:
@@ -269,6 +288,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
       highlightLast,
       onKeyDown,
       onEscapeKeyDown,
+      returnFocusToTrigger,
     ],
   );
 
@@ -296,6 +316,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
       highlightPrevious,
       isItemHighlighted,
       highlightedId,
+      returnFocusToTrigger,
     }),
     [
       highlightItem,
@@ -305,6 +326,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
       highlightPrevious,
       isItemHighlighted,
       highlightedId,
+      returnFocusToTrigger,
     ],
   );
 

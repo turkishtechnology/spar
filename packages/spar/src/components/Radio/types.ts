@@ -69,7 +69,7 @@ export interface RadioOwnProps {
    * Whether arrow key navigation automatically selects the focused radio item
    * Changes keyboard behavior per WAI-ARIA guidelines:
    * - true: Arrow keys move focus and select (standard radio group behavior)
-   * - false: Arrow keys only move focus, Space/Enter selects (toolbar behavior)
+   * - false: Arrow keys only move focus, Space/Enter on an item selects it (toolbar behavior)
    * @defaultValue true
    */
   selectOnFocus?: boolean;
@@ -132,10 +132,12 @@ export interface RadioItemOwnProps {
 
 /**
  * Props for RadioItem component
- * @remarks Individual radio option within a Radio (radiogroup).
+ * @remarks Individual radio option within a Radio (radiogroup). Renders a
+ * `<span role="radio">` by default; use `as` for another element that may
+ * carry `role="radio"` (not `<label>`, which allows no ARIA role).
  */
-export type RadioItemProps<T extends ElementType = 'label'> = PolymorphicProps<
-  'label',
+export type RadioItemProps<T extends ElementType = 'span'> = PolymorphicProps<
+  'span',
   T,
   RadioItemOwnProps
 >;
@@ -151,7 +153,8 @@ export interface RadioContextValue {
   readOnly: boolean;
   required: boolean;
   name: string;
-  firstFocusableValue: string | null;
+  /** Value of the single item that currently holds `tabIndex={0}`. */
+  tabStopValue: string | null;
   focusedValue: string | null;
   setFocusedValue: (value: string | null) => void;
   orientation: Orientation;

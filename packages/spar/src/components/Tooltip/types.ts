@@ -148,28 +148,12 @@ export interface TooltipContentOwnProps {
   container?: HTMLElement | null;
 
   /**
-   * Escape key handler
-   * @param event - The keyboard event (call preventDefault to prevent close)
+   * Called when `Escape` is pressed while the tooltip is open, whether focus is on the
+   * trigger, inside the content, or elsewhere in the document. Runs before the internal
+   * close so the consumer can veto it.
+   * @param event - The native keyboard event (call `preventDefault` to keep the tooltip open)
    */
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
-
-  /**
-   * Outside pointer down handler
-   * @param event - The pointer event (call preventDefault to prevent close)
-   */
-  onPointerDownOutside?: (event: PointerEvent) => void;
-
-  /**
-   * Called when auto-focusing on open
-   * @param event - The focus event (call preventDefault to prevent auto-focus)
-   */
-  onOpenAutoFocus?: (event: Event) => void;
-
-  /**
-   * Called when auto-focusing on close
-   * @param event - The focus event (call preventDefault to prevent focus restore)
-   */
-  onCloseAutoFocus?: (event: Event) => void;
 }
 
 /**
@@ -207,6 +191,8 @@ export interface TooltipContextValue {
   // Hide timer control for hoverable content (WCAG 1.4.13)
   startHideTimer: (delayMs: number, callback: () => void) => void;
   cancelHideTimer: () => void;
+  // Latest TooltipContent onEscapeKeyDown, read by the trigger's Escape handlers
+  onEscapeKeyDownRef: RefObject<((event: KeyboardEvent) => void) | undefined>;
 }
 
 /**

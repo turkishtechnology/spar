@@ -18,6 +18,7 @@ export const Checkbox = <T extends ElementType = 'span'>({
   ref,
   checked: controlledChecked,
   defaultChecked = false,
+  indeterminate = false,
   onChange,
   invalid,
   disabled,
@@ -51,11 +52,17 @@ export const Checkbox = <T extends ElementType = 'span'>({
   const resolvedReadOnly = readOnly ?? fieldCtx?.readOnly ?? false;
 
   // State management - controlled/uncontrolled
-  const [checked = defaultChecked, updateChecked] = useControlledState<CheckedState>(
+  const [checkedState = defaultChecked, updateChecked] = useControlledState<CheckedState>(
     controlledChecked,
     defaultChecked,
     onChange,
   );
+
+  // `indeterminate` layers over the checked state without owning it: the
+  // uncontrolled boolean keeps advancing underneath, so a consumer can clear the
+  // override from `onChange` and immediately see the new boolean state instead
+  // of a stale 'indeterminate' value.
+  const checked: CheckedState = indeterminate ? 'indeterminate' : checkedState;
 
   // Interaction state
   const [isFocused, setIsFocused] = useState(false);

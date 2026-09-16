@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import type { MouseEvent as ReactMouseEvent, KeyboardEvent as ReactKeyboardEvent } from 'react';
 import userEvent from '@testing-library/user-event';
 import {
   Breadcrumb,
@@ -254,6 +255,205 @@ describe('Breadcrumb Components', () => {
 
     expect(onClick).not.toHaveBeenCalled();
     expect(onNavigate).not.toHaveBeenCalled();
+  });
+
+  it('runs the consumer onClick before onPress', async () => {
+    const user = userEvent.setup();
+    const calls: string[] = [];
+    const onClick = jest.fn(() => {
+      calls.push('onClick');
+    });
+    const onPress = jest.fn(() => {
+      calls.push('onPress');
+    });
+
+    render(
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/home' onClick={onClick} onPress={onPress}>
+              Home
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>,
+    );
+
+    await user.click(screen.getByRole('link', { name: 'Home' }));
+
+    expect(calls).toEqual(['onClick', 'onPress']);
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(onPress).toHaveBeenCalledTimes(1);
+  });
+
+  it('runs the consumer onClick alongside the root onNavigate', async () => {
+    const user = userEvent.setup();
+    const onClick = jest.fn();
+    const onNavigate = jest.fn();
+
+    render(
+      <Breadcrumb onNavigate={onNavigate}>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/home' onClick={onClick}>
+              Home
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>,
+    );
+
+    await user.click(screen.getByRole('link', { name: 'Home' }));
+
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(onNavigate).toHaveBeenCalledTimes(1);
+    expect(onNavigate).toHaveBeenCalledWith('/home', expect.any(Object));
+  });
+
+  it('skips onPress and onNavigate when the consumer onClick calls preventDefault', async () => {
+    const user = userEvent.setup();
+    const onClick = jest.fn((event: ReactMouseEvent) => event.preventDefault());
+    const onPress = jest.fn();
+    const onNavigate = jest.fn();
+
+    render(
+      <Breadcrumb onNavigate={onNavigate}>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/home' onClick={onClick} onPress={onPress}>
+              Home
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>,
+    );
+
+    await user.click(screen.getByRole('link', { name: 'Home' }));
+
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(onPress).not.toHaveBeenCalled();
+    expect(onNavigate).not.toHaveBeenCalled();
+  });
+
+  it('runs the consumer onKeyDown first and calls onPress exactly once for Enter', async () => {
+    const user = userEvent.setup();
+    const calls: string[] = [];
+    const onKeyDown = jest.fn(() => {
+      calls.push('onKeyDown');
+    });
+    const onClick = jest.fn(() => {
+      calls.push('onClick');
+    });
+    const onPress = jest.fn(() => {
+      calls.push('onPress');
+    });
+
+    render(
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/home' onKeyDown={onKeyDown} onClick={onClick} onPress={onPress}>
+              Home
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>,
+    );
+
+    screen.getByRole('link', { name: 'Home' }).focus();
+    await user.keyboard('{Enter}');
+
+    // Enter's synthesized click is suppressed, so onPress does not run twice.
+    expect(calls).toEqual(['onKeyDown', 'onPress']);
+    expect(onPress).toHaveBeenCalledTimes(1);
+
+    await user.keyboard(' ');
+    expect(onPress).toHaveBeenCalledTimes(2);
+    expect(onKeyDown).toHaveBeenCalledTimes(2);
+  });
+
+  it('skips onPress when the consumer onKeyDown calls preventDefault', async () => {
+    const user = userEvent.setup();
+    const onKeyDown = jest.fn((event: ReactKeyboardEvent) => event.preventDefault());
+    const onPress = jest.fn();
+
+    render(
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/home' onKeyDown={onKeyDown} onPress={onPress}>
+              Home
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>,
+    );
+
+    screen.getByRole('link', { name: 'Home' }).focus();
+    await user.keyboard('{Enter}');
+
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
+    expect(onPress).not.toHaveBeenCalled();
+  });
+
+  it('lets non-activation keys reach the consumer onKeyDown on a disabled link', async () => {
+    const user = userEvent.setup();
+    const onKeyDown = jest.fn();
+    const onPress = jest.fn();
+    const onNavigate = jest.fn();
+
+    render(
+      <Breadcrumb onNavigate={onNavigate}>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/home' disabled onKeyDown={onKeyDown} onPress={onPress}>
+              Home
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>,
+    );
+
+    const disabledLink = screen.getByText('Home');
+    disabledLink.focus();
+
+    await user.keyboard('{ArrowRight}');
+    await user.keyboard('{Escape}');
+
+    expect(onKeyDown).toHaveBeenCalledTimes(2);
+    expect(onKeyDown.mock.calls.map(([event]) => (event as ReactKeyboardEvent).key)).toEqual([
+      'ArrowRight',
+      'Escape',
+    ]);
+
+    await user.keyboard('{Enter}');
+    await user.keyboard(' ');
+
+    expect(onKeyDown).toHaveBeenCalledTimes(2);
+    expect(onPress).not.toHaveBeenCalled();
+    expect(onNavigate).not.toHaveBeenCalled();
+  });
+
+  it('prevents only Enter and Space on a disabled link', () => {
+    render(
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/home' disabled>
+              Home
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>,
+    );
+
+    const disabledLink = screen.getByText('Home');
+
+    // fireEvent returns false when the default action was cancelled.
+    expect(fireEvent.keyDown(disabledLink, { key: 'Enter' })).toBe(false);
+    expect(fireEvent.keyDown(disabledLink, { key: ' ' })).toBe(false);
+    expect(fireEvent.keyDown(disabledLink, { key: 'ArrowRight' })).toBe(true);
+    expect(fireEvent.keyDown(disabledLink, { key: 'Escape' })).toBe(true);
   });
 
   it('applies external link defaults and allows explicit overrides', () => {

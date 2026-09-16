@@ -4,6 +4,10 @@ import type { ButtonProps } from './types';
 
 /**
  * A headless, accessible button component that provides complete keyboard support and toggle functionality.
+ *
+ * When rendered as a non-native element (`as='a'`, a router link, `as='div'`)
+ * while `disabled` or `isLoading`, the click's default action is cancelled so an
+ * anchor cannot navigate; a plain `as='a'` additionally loses its `href`.
  */
 export const Button = <T extends ElementType = 'button'>({
   as,
@@ -22,6 +26,7 @@ export const Button = <T extends ElementType = 'button'>({
   ...htmlProps
 }: ButtonProps<T>) => {
   const Component = as || 'button';
+  const isNativeButton = Component === 'button';
   // Internal state for uncontrolled toggle
   const [internalPressed, setInternalPressed] = useState<boolean>(false);
 
@@ -65,9 +70,15 @@ export const Button = <T extends ElementType = 'button'>({
   // Click handler
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
+      // A native <button disabled> never dispatches click. Non-native elements
+      // (anchors, router links) keep their default action while inert, so the
+      // click must be cancelled to stop navigation.
+      if (!isInteractive && !isNativeButton) {
+        event.preventDefault();
+      }
       handleActivation(event);
     },
-    [handleActivation],
+    [isInteractive, isNativeButton, handleActivation],
   );
 
   // Keyboard handler
@@ -124,7 +135,6 @@ export const Button = <T extends ElementType = 'button'>({
   }, [isToggle, currentPressed, isLoading, disabled, Component]);
 
   // Build props for the element
-  const isNativeButton = Component === 'button';
   const elementProps: Record<string, unknown> = {
     ref: mergedRef,
     className,
@@ -161,6 +171,11 @@ export const Button = <T extends ElementType = 'button'>({
     }
     if ('type' in elementProps) {
       delete elementProps['type'];
+    }
+    // An inert anchor must not stay a navigable link: drop `href` so it is
+    // neither followed on click nor exposed as a link target.
+    if (Component === 'a' && !isInteractive && 'href' in elementProps) {
+      delete elementProps['href'];
     }
   }
 

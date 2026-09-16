@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from '../Button';
 
@@ -125,5 +125,91 @@ describe('Button', () => {
 
   it('exposes stable displayName', () => {
     expect(Button.displayName).toBe('Button');
+  });
+  describe('inert non-native elements', () => {
+    it('drops href and cancels the click on a disabled anchor', () => {
+      const onClick = jest.fn();
+
+      render(
+        <Button as='a' href='/dashboard' disabled onClick={onClick}>
+          Dashboard
+        </Button>,
+      );
+      const link = screen.getByRole('button', { name: 'Dashboard' });
+
+      expect(link.tagName).toBe('A');
+      expect(link).not.toHaveAttribute('href');
+      expect(link).toHaveAttribute('aria-disabled', 'true');
+      expect(link).toHaveAttribute('tabIndex', '-1');
+
+      // fireEvent returns false when the default action was cancelled.
+      expect(fireEvent.click(link)).toBe(false);
+      expect(onClick).not.toHaveBeenCalled();
+    });
+
+    it('drops href and cancels the click on a loading anchor while keeping it focusable', () => {
+      const onClick = jest.fn();
+
+      render(
+        <Button as='a' href='/dashboard' isLoading onClick={onClick}>
+          Dashboard
+        </Button>,
+      );
+      const link = screen.getByRole('button', { name: 'Dashboard' });
+
+      expect(link).not.toHaveAttribute('href');
+      expect(link).toHaveAttribute('aria-busy', 'true');
+      expect(link).not.toHaveAttribute('aria-disabled');
+      expect(link).toHaveAttribute('tabIndex', '0');
+
+      expect(fireEvent.click(link)).toBe(false);
+      expect(onClick).not.toHaveBeenCalled();
+    });
+
+    it('keeps href and the default click action on an enabled anchor', () => {
+      const onClick = jest.fn((event: React.MouseEvent) => {
+        // jsdom would try to navigate; the assertion below reads the flag first.
+        expect(event.defaultPrevented).toBe(false);
+        event.preventDefault();
+      });
+
+      render(
+        <Button as='a' href='/dashboard' onClick={onClick}>
+          Dashboard
+        </Button>,
+      );
+      const link = screen.getByRole('button', { name: 'Dashboard' });
+
+      expect(link).toHaveAttribute('href', '/dashboard');
+      expect(link).toHaveAttribute('tabIndex', '0');
+
+      fireEvent.click(link);
+      expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it('cancels the click on a disabled custom component without stripping its props', () => {
+      const onClick = jest.fn();
+      const RouterLink = ({
+        to,
+        ...props
+      }: { to: string } & React.ComponentPropsWithoutRef<'a'>) => (
+        <a data-to={to} href={to} {...props} />
+      );
+
+      render(
+        <Button as={RouterLink} to='/dashboard' disabled onClick={onClick}>
+          Dashboard
+        </Button>,
+      );
+      const link = screen.getByRole('button', { name: 'Dashboard' });
+
+      expect(link).toHaveAttribute('data-to', '/dashboard');
+      expect(link).toHaveAttribute('href', '/dashboard');
+      expect(link).toHaveAttribute('aria-disabled', 'true');
+      expect(link).toHaveAttribute('tabIndex', '-1');
+
+      expect(fireEvent.click(link)).toBe(false);
+      expect(onClick).not.toHaveBeenCalled();
+    });
   });
 });

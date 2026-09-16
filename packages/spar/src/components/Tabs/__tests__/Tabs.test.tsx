@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../index';
+import { Tabs, TabsList, TabsTrigger, TabsContent, type TabsActivationMode } from '../index';
 
 // Test setup helper
 const BasicTabs = ({
@@ -458,6 +458,207 @@ describe('Tabs', () => {
 
       expect(tab2).toHaveFocus();
       expect(tab2).toHaveAttribute('aria-selected', 'true');
+    });
+  });
+
+  describe('onValueChange Contract', () => {
+    it('does not call onValueChange for the automatic first-tab selection on mount', () => {
+      const handleValueChange = jest.fn();
+      render(<BasicTabs onValueChange={handleValueChange} />);
+
+      expect(handleValueChange).not.toHaveBeenCalled();
+      expect(screen.getByRole('tab', { name: 'Tab 1' })).toHaveAttribute('aria-selected', 'true');
+      expect(screen.getByText('Content for Tab 1')).toBeInTheDocument();
+    });
+
+    it('calls onValueChange once on the first user activation after auto-selection', async () => {
+      const user = userEvent.setup();
+      const handleValueChange = jest.fn();
+      render(<BasicTabs onValueChange={handleValueChange} />);
+
+      await user.click(screen.getByRole('tab', { name: 'Tab 2' }));
+
+      expect(handleValueChange).toHaveBeenCalledTimes(1);
+      expect(handleValueChange).toHaveBeenCalledWith('tab2');
+    });
+
+    it('moves the automatic selection to the new first tab when the selected tab unmounts', () => {
+      const handleValueChange = jest.fn();
+      const DynamicTabs = ({ tabs }: { tabs: string[] }) => (
+        <Tabs onValueChange={handleValueChange}>
+          <TabsList>
+            {tabs.map((tab) => (
+              <TabsTrigger key={tab} value={tab}>
+                {tab}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {tabs.map((tab) => (
+            <TabsContent key={tab} value={tab}>
+              Content {tab}
+            </TabsContent>
+          ))}
+        </Tabs>
+      );
+
+      const { rerender } = render(<DynamicTabs tabs={['alpha', 'beta']} />);
+      expect(screen.getByRole('tab', { name: 'alpha' })).toHaveAttribute('aria-selected', 'true');
+
+      rerender(<DynamicTabs tabs={['beta']} />);
+
+      expect(screen.getByRole('tab', { name: 'beta' })).toHaveAttribute('aria-selected', 'true');
+      expect(screen.getByText('Content beta')).toBeInTheDocument();
+      expect(handleValueChange).not.toHaveBeenCalled();
+    });
+
+    it('does not call onValueChange when the selected tab is clicked again', async () => {
+      const user = userEvent.setup();
+      const handleValueChange = jest.fn();
+      render(<BasicTabs defaultValue='tab1' onValueChange={handleValueChange} />);
+
+      await user.click(screen.getByRole('tab', { name: 'Tab 1' }));
+      expect(handleValueChange).not.toHaveBeenCalled();
+
+      await user.click(screen.getByRole('tab', { name: 'Tab 2' }));
+      expect(handleValueChange).toHaveBeenCalledTimes(1);
+      expect(handleValueChange).toHaveBeenCalledWith('tab2');
+    });
+
+    it('does not call onValueChange when Home/End land on the selected tab in automatic mode', async () => {
+      const user = userEvent.setup();
+      const handleValueChange = jest.fn();
+      render(<BasicTabs defaultValue='tab1' onValueChange={handleValueChange} />);
+
+      await user.tab(); // Focus the selected first tab
+      await user.keyboard('{Home}');
+      expect(screen.getByRole('tab', { name: 'Tab 1' })).toHaveFocus();
+      expect(handleValueChange).not.toHaveBeenCalled();
+
+      await user.keyboard('{End}'); // Last enabled tab is Tab 2
+      expect(handleValueChange).toHaveBeenCalledTimes(1);
+      expect(handleValueChange).toHaveBeenCalledWith('tab2');
+
+      await user.keyboard('{End}'); // Already selected
+      expect(handleValueChange).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not call onValueChange when Enter/Space re-activate the selected tab in manual mode', async () => {
+      const user = userEvent.setup();
+      const handleValueChange = jest.fn();
+      render(
+        <BasicTabs activationMode='manual' defaultValue='tab1' onValueChange={handleValueChange} />,
+      );
+
+      await user.tab(); // Focus the selected first tab
+      await user.keyboard('{Enter}');
+      await user.keyboard(' ');
+      expect(handleValueChange).not.toHaveBeenCalled();
+      expect(screen.getByRole('tab', { name: 'Tab 1' })).toHaveAttribute('aria-selected', 'true');
+
+      await user.keyboard('{ArrowRight}');
+      await user.keyboard('{Enter}');
+      expect(handleValueChange).toHaveBeenCalledTimes(1);
+      expect(handleValueChange).toHaveBeenCalledWith('tab2');
+    });
+  });
+
+  describe('Non-button Triggers', () => {
+    const DivTabs = ({
+      activationMode = 'automatic',
+      onValueChange,
+    }: {
+      activationMode?: TabsActivationMode;
+      onValueChange?: (value: string) => void;
+    }) => (
+      <Tabs activationMode={activationMode} {...(onValueChange && { onValueChange })}>
+        <TabsList>
+          <TabsTrigger as='div' value='tab1'>
+            Tab 1
+          </TabsTrigger>
+          <TabsTrigger as='div' value='tab2'>
+            Tab 2
+          </TabsTrigger>
+          <TabsTrigger as='div' value='tab3' disabled>
+            Tab 3
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value='tab1'>Content 1</TabsContent>
+        <TabsContent value='tab2'>Content 2</TabsContent>
+        <TabsContent value='tab3'>Content 3</TabsContent>
+      </Tabs>
+    );
+
+    it.each(['automatic', 'manual'] as const)(
+      'ignores Enter and Space on a focused disabled trigger in %s mode',
+      async (activationMode) => {
+        const user = userEvent.setup();
+        const handleValueChange = jest.fn();
+        render(<DivTabs activationMode={activationMode} onValueChange={handleValueChange} />);
+
+        const disabledTab = screen.getByRole('tab', { name: 'Tab 3' });
+        disabledTab.focus();
+        expect(disabledTab).toHaveFocus();
+
+        await user.keyboard('{Enter}');
+        await user.keyboard(' ');
+
+        expect(disabledTab).toHaveAttribute('aria-selected', 'false');
+        expect(screen.getByRole('tab', { name: 'Tab 1' })).toHaveAttribute('aria-selected', 'true');
+        expect(screen.queryByText('Content 3')).not.toBeInTheDocument();
+        expect(handleValueChange).not.toHaveBeenCalled();
+      },
+    );
+
+    it('activates an enabled trigger exactly once with Enter in manual mode', async () => {
+      const user = userEvent.setup();
+      const handleValueChange = jest.fn();
+      render(<DivTabs activationMode='manual' onValueChange={handleValueChange} />);
+
+      const tab2 = screen.getByRole('tab', { name: 'Tab 2' });
+      await user.tab(); // Focus the selected first tab
+      await user.keyboard('{ArrowRight}');
+      expect(tab2).toHaveFocus();
+      expect(tab2).toHaveAttribute('aria-selected', 'false');
+
+      await user.keyboard('{Enter}');
+      expect(tab2).toHaveAttribute('aria-selected', 'true');
+      expect(screen.getByText('Content 2')).toBeInTheDocument();
+      expect(handleValueChange).toHaveBeenCalledTimes(1);
+      expect(handleValueChange).toHaveBeenCalledWith('tab2');
+
+      await user.keyboard('{Enter}'); // Already selected
+      expect(handleValueChange).toHaveBeenCalledTimes(1);
+    });
+
+    it('activates an enabled trigger exactly once with Space in manual mode', async () => {
+      const user = userEvent.setup();
+      const handleValueChange = jest.fn();
+      render(<DivTabs activationMode='manual' onValueChange={handleValueChange} />);
+
+      const tab2 = screen.getByRole('tab', { name: 'Tab 2' });
+      await user.tab();
+      await user.keyboard('{ArrowRight}');
+      await user.keyboard(' ');
+
+      expect(tab2).toHaveAttribute('aria-selected', 'true');
+      expect(handleValueChange).toHaveBeenCalledTimes(1);
+      expect(handleValueChange).toHaveBeenCalledWith('tab2');
+    });
+
+    it('does not re-fire onValueChange for Enter on the selected trigger in automatic mode', async () => {
+      const user = userEvent.setup();
+      const handleValueChange = jest.fn();
+      render(<DivTabs onValueChange={handleValueChange} />);
+
+      await user.tab(); // Focus the selected first tab
+      await user.keyboard('{Enter}');
+      expect(handleValueChange).not.toHaveBeenCalled();
+
+      await user.keyboard('{ArrowRight}'); // Automatic mode selects Tab 2
+      expect(handleValueChange).toHaveBeenCalledTimes(1);
+
+      await user.keyboard('{Enter}'); // Already selected
+      expect(handleValueChange).toHaveBeenCalledTimes(1);
     });
   });
 });

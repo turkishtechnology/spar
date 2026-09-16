@@ -87,8 +87,8 @@ export const SelectItem = <T extends ElementType = 'div'>({
 
     context.onChange(value);
     context.onOpenChange(false);
-    context.triggerRef.current?.focus();
-  }, [context, value, disabled]);
+    collection.returnFocusToTrigger();
+  }, [context, collection, value, disabled]);
 
   const handlePointerMove = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {

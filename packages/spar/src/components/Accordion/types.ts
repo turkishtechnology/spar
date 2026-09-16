@@ -52,7 +52,8 @@ export interface AccordionOwnProps {
   collapsible?: boolean;
 
   /**
-   * Disables every item in the accordion.
+   * Disables every item in the accordion. Keyboard navigation skips disabled
+   * triggers.
    * @defaultValue false
    */
   disabled?: boolean;
@@ -84,7 +85,7 @@ export interface AccordionItemOwnProps {
   value: AccordionValue;
 
   /**
-   * Disables this item.
+   * Disables this item. Arrow/Home/End navigation skips its trigger.
    * @defaultValue false
    */
   disabled?: boolean;
@@ -152,6 +153,13 @@ export type AccordionContentOwnProps = CollapsibleContentOwnProps;
 export type AccordionContentProps<T extends ElementType = 'div'> = CollapsibleContentProps<T>;
 
 /**
+ * Where keyboard navigation moves focus, relative to the trigger that
+ * received the key. Disabled triggers are skipped.
+ * @internal
+ */
+export type AccordionFocusTarget = 'next' | 'previous' | 'first' | 'last';
+
+/**
  * @internal
  */
 export interface AccordionContextValue {
@@ -163,12 +171,7 @@ export interface AccordionContextValue {
   orientation: Orientation;
   registerItem: (itemId: string, element: HTMLElement) => void;
   unregisterItem: (itemId: string) => void;
-  focusedIndex: number;
-  setFocusedIndex: (index: number) => void;
-  getItemIndex: (itemId: string) => number;
-  getItemAtIndex: (index: number) => string | undefined;
-  focusItemAtIndex: (index: number) => void;
-  itemCount: number;
+  focusItem: (itemId: string, target: AccordionFocusTarget) => void;
 }
 
 /**

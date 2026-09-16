@@ -530,17 +530,17 @@ Interactive link component with accessibility features, routing integration, and
 | `href?`       | `string`                      | `undefined` | Link destination                                                   |
 | `disabled?`   | `boolean`                     | `false`     | Disable this specific link                                         |
 | `isExternal?` | `boolean`                     | `false`     | Indicates external link (adds security attributes)                 |
-| `onPress?`    | `(event: PressEvent) => void` | `undefined` | Press event handler (overrides default navigation)                 |
+| `onPress?`    | `(event: PressEvent) => void` | `undefined` | Press handler for click/Enter/Space; replaces `onNavigate`         |
 | `target?`     | `string`                      | `undefined` | Link target (auto-set to '\_blank' for external links)             |
 | `rel?`        | `string`                      | `undefined` | Link relationship (auto-set to 'noopener noreferrer' for external) |
 
 **Events**
 
-| Name        | Parameters                     | Description                                    | When Triggered                        |
-| ----------- | ------------------------------ | ---------------------------------------------- | ------------------------------------- |
-| `onPress`   | `(event: PressEvent)`          | Custom press handler that overrides navigation | Click, Enter, or Space key            |
-| `onClick`   | `(event: React.MouseEvent)`    | Standard click handler                         | Mouse click (if onPress not provided) |
-| `onKeyDown` | `(event: React.KeyboardEvent)` | Standard keyboard handler                      | Key press (if onPress not provided)   |
+| Name        | Parameters                     | Description                                     | When Triggered                                                                                                                                                          |
+| ----------- | ------------------------------ | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onPress`   | `(event: PressEvent)`          | Custom press handler that replaces `onNavigate` | Click, Enter, or Space key, after `onClick`/`onKeyDown` and unless they called `preventDefault()`. Not called while disabled                                            |
+| `onClick`   | `(event: React.MouseEvent)`    | Standard click handler, runs first              | Every click on an enabled link; `preventDefault()` skips `onPress`/`onNavigate`. Not called while disabled                                                              |
+| `onKeyDown` | `(event: React.KeyboardEvent)` | Standard keyboard handler, runs first           | Every key on an enabled link; on Enter/Space `preventDefault()` skips `onPress`/`onNavigate`. While disabled, Enter/Space are blocked and every other key still arrives |
 
 **HTML Attributes**
 

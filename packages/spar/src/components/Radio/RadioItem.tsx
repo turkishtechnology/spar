@@ -6,19 +6,30 @@ import { visuallyHidden } from '@/utils';
 
 /**
  * RadioItem component representing individual radio options within a Radio
- * (radiogroup). Implements roving tabindex and full accessibility features.
+ * (radiogroup). Renders a `<span role="radio">` by default (an element that
+ * may carry the role; a `<label>` may not) whose text content names the
+ * radio, plus a visually hidden native `<input type="radio">` sibling for form
+ * submission. Implements roving tabindex and full accessibility features.
+ *
+ * Consumer `onClick` / `onKeyDown` / `onFocus` handlers are composed with the
+ * internal ones: the consumer handler runs first, and calling
+ * `event.preventDefault()` inside `onClick` or `onKeyDown` vetoes the
+ * built-in selection for that event.
  */
-export const RadioItem = <T extends ElementType = 'label'>({
+export const RadioItem = <T extends ElementType = 'span'>({
   ref,
   value: itemValue,
   disabled: itemDisabled = false,
   'aria-label': ariaLabel,
   'aria-describedby': ariaDescribedBy,
+  onClick,
+  onKeyDown,
+  onFocus,
   as,
   children,
   ...rest
 }: RadioItemProps<T>) => {
-  const Component = as || 'label';
+  const Component = as || 'span';
   const context = useRadioContext();
   const {
     value: groupValue,
@@ -27,7 +38,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
     readOnly: groupReadOnly,
     required: groupRequired,
     name,
-    firstFocusableValue,
+    tabStopValue,
     focusedValue,
     setFocusedValue,
     orientation,
@@ -40,11 +51,8 @@ export const RadioItem = <T extends ElementType = 'label'>({
   const isDisabled = groupDisabled || itemDisabled;
   const isFocused = focusedValue === itemValue;
 
-  // Determine if this item should be focusable (tabIndex={0})
-  // Uses roving tabindex: exactly one item in the group should have tabIndex={0}
-  const isFirstItemFallback =
-    groupValue === undefined && focusedValue === null && firstFocusableValue === itemValue;
-  const isFocusable = !isDisabled && (isFocused || isChecked || isFirstItemFallback);
+  // Roving tabindex: the root elects exactly one enabled item as the tab stop
+  const isFocusable = !isDisabled && tabStopValue === itemValue;
 
   // Register/unregister with group, providing the DOM element for imperative focus management
   useEffect(() => {
@@ -54,30 +62,47 @@ export const RadioItem = <T extends ElementType = 'label'>({
     return () => unregisterItem(itemValue);
   }, [itemValue, registerItem, unregisterItem, isDisabled]);
 
-  // Handle selection
-  const handleClick = useCallback(() => {
+  // Handle selection. The root ignores a request for the already-selected
+  // value, so `onChange` only fires when the selection actually changes.
+  const select = useCallback(() => {
     if (!isDisabled && !groupReadOnly) {
       onChange(itemValue);
     }
   }, [isDisabled, groupReadOnly, onChange, itemValue]);
 
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key === ' ') {
-        event.preventDefault();
-        if (!isDisabled && !isChecked) {
-          handleClick();
-        }
-      }
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      onClick?.(event);
+      if (event.defaultPrevented) return;
+      select();
     },
-    [handleClick, isDisabled, isChecked],
+    [onClick, select],
   );
 
-  const handleFocus = useCallback(() => {
-    if (!isDisabled) {
-      setFocusedValue(itemValue);
-    }
-  }, [isDisabled, setFocusedValue, itemValue]);
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLElement>) => {
+      onKeyDown?.(event);
+      if (event.defaultPrevented) return;
+
+      // Space and Enter select the focused item (matters when
+      // `selectOnFocus` is false, where arrow keys only move focus).
+      if (event.key === ' ' || event.key === 'Enter') {
+        event.preventDefault();
+        select();
+      }
+    },
+    [onKeyDown, select],
+  );
+
+  const handleFocus = useCallback(
+    (event: React.FocusEvent<HTMLElement>) => {
+      onFocus?.(event);
+      if (!isDisabled) {
+        setFocusedValue(itemValue);
+      }
+    },
+    [onFocus, isDisabled, setFocusedValue, itemValue],
+  );
 
   // Merge refs
   const mergedRef = useMergedRef(itemRef, ref);
@@ -85,7 +110,7 @@ export const RadioItem = <T extends ElementType = 'label'>({
   // Render props for children function
   const renderProps: RadioItemRenderProps = {
     isChecked,
-    select: handleClick,
+    select,
     disabled: isDisabled,
     isFocused,
   };
@@ -99,11 +124,12 @@ export const RadioItem = <T extends ElementType = 'label'>({
     'data-orientation': orientation,
   };
 
+  // `aria-readonly` is not allowed on `role="radio"`; the root exposes it on
+  // the radiogroup instead.
   const ariaAttributes = {
     role: 'radio',
     'aria-checked': isChecked,
     'aria-disabled': isDisabled || undefined,
-    'aria-readonly': groupReadOnly || undefined,
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
   };
@@ -112,11 +138,11 @@ export const RadioItem = <T extends ElementType = 'label'>({
     ref: mergedRef,
     ...ariaAttributes,
     tabIndex: isFocusable ? 0 : -1,
+    ...dataAttributes,
+    ...rest,
     onClick: handleClick,
     onKeyDown: handleKeyDown,
     onFocus: handleFocus,
-    ...dataAttributes,
-    ...rest,
   };
 
   return (
@@ -125,13 +151,15 @@ export const RadioItem = <T extends ElementType = 'label'>({
         {typeof children === 'function' ? children(renderProps) : children}
       </Component>
       {/* Hidden radio input for form submission and native HTML5 validation.
-          Rendered as a sibling (not a child) and hidden via inline
-          `visuallyHidden` style so the headless package owns the gizleme —
-          consumers do not need recipe CSS to suppress this element.
-          `required` is applied per-item; browsers treat `required` on radios
-          as group-level by `name`, so any item being required marks the group.
-          `onChange` is a no-op because the visible role="radio" element owns
-          interaction; this just silences React's controlled-input warning. */}
+          This is the group's only native representation of the selected
+          value, so form data carries it exactly once. Rendered as a sibling
+          (not a child) and hidden via inline `visuallyHidden` style so the
+          headless package owns the hiding — consumers do not need recipe CSS
+          to suppress this element. `required` is applied per-item; browsers
+          treat `required` on radios as group-level by `name`, so any item
+          being required marks the group. `onChange` is a no-op because the
+          visible role="radio" element owns interaction; this just silences
+          React's controlled-input warning. */}
       <input
         type='radio'
         name={name}

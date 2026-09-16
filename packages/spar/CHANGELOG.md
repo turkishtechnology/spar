@@ -7,6 +7,170 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Accordion
+
+#### Fixed
+
+- **Arrow, Home and End keys skip disabled items.** Navigation previously
+  tried to focus the disabled trigger and stalled there; it now moves to the
+  next enabled trigger, wraps around, and Home/End land on the first/last
+  enabled item.
+- **Keyboard navigation follows DOM order** and keeps working after an item is
+  inserted between existing ones or replaced by another (shared item registry
+  fix, also used by Radio, Select and Tabs).
+
+### Breadcrumb
+
+#### Fixed
+
+- **Consumer `onClick` / `onKeyDown` on `Breadcrumb.Link` are composed, not
+  replaced.** They run first, and `preventDefault()` skips `onPress` /
+  `onNavigate`; Enter calls `onPress` exactly once.
+- **Disabled links only block the activation keys.** Enter/Space are
+  prevented; every other key still reaches the consumer `onKeyDown`.
+
+### Button
+
+#### Fixed
+
+- **Inert anchors no longer navigate.** While `disabled` or `isLoading`, a
+  non-native element cancels the click's default action, and `as='a'`
+  additionally drops `href`.
+
+### Checkbox
+
+#### Added
+
+- **`indeterminate` prop.** Layers the mixed state over `checked` /
+  `defaultChecked` without owning the value, giving uncontrolled checkboxes a
+  first-class way to enter and leave the indeterminate state; a toggle still
+  fires `onChange(true)` and advances the internal state underneath.
+
+### Dialog
+
+#### Fixed
+
+- **Render-prop `open()` and `toggle()` no longer bypass `disabled`.** Calling
+  them from a disabled `Dialog.Trigger` is a no-op and does not fire
+  `onOpenChange`; `close()` remains available.
+
+### DropdownMenu
+
+#### Fixed
+
+- **`onEscapeKeyDown`, `onPointerDownOutside` and `onFocusOutside` now honour
+  `event.preventDefault()`.** The Escape handler runs before the menu acts on
+  the key and the veto is read from the native event; outside pointer-down and
+  outside focus no longer close unconditionally. For modal menus, preventing
+  default in `onFocusOutside` skips the focus recapture; for non-modal menus it
+  keeps the menu open.
+
+### Popover
+
+#### Fixed
+
+- **`onOpenAutoFocus` can now veto the open-time auto-focus.** The handler
+  receives a cancelable event before focus moves into the content;
+  `event.preventDefault()` skips the focus move (previously it fired after
+  focusing with a non-cancelable event).
+- **`onFocusOutside` / `onInteractOutside` can now keep the popover open on the
+  focus path.** Native `focusin` is not cancelable, so handlers receive a
+  cancelable `focusoutside` `FocusEvent` dispatched on the newly focused
+  element; `event.preventDefault()` prevents the close, matching the pointer
+  path.
+- **`Popover.Trigger` now receives the documented `${id}-trigger` id.** A
+  consumer-supplied `id` prop still overrides it.
+
+### Radio
+
+#### Fixed
+
+- **`Radio.Item` renders a `<span role="radio">` by default instead of
+  `<label>`.** ARIA in HTML allows no role on `<label>`, so every item failed
+  axe's `aria-allowed-role`; the item's text still names the radio and the
+  native input stays `aria-hidden`. Selectors such as `label[role="radio"]`
+  need updating.
+- **The selected value reaches native form data exactly once.** The root's
+  extra `<input type="hidden">` was removed; each item's visually hidden
+  `<input type="radio">` is the only native representation and still carries
+  `required` for native validity.
+- **`onChange` fires only when the value actually changes.** Clicking or
+  `select()`-ing the already-checked item no longer re-emits the same value.
+- **A `readOnly` group no longer changes its value from the keyboard.** Arrow
+  keys and Home/End still move focus.
+- **`aria-readonly` moved from the items to the radiogroup**, the only role
+  that permits it.
+- **The group stays reachable when the checked item is disabled.** The first
+  enabled item becomes the tab stop.
+- **Toggling `disabled` on a middle item keeps the arrow-key order.**
+  Re-enabled items resume their DOM position instead of moving to the end.
+
+#### Changed
+
+- **Consumer `onKeyDown` / `onFocus` / `onBlur` on `Radio` and `onClick` /
+  `onKeyDown` / `onFocus` on `Radio.Item` are composed with the built-in
+  handlers.** The consumer handler runs first; `event.preventDefault()` vetoes
+  the built-in navigation or selection.
+- **Enter selects the focused item when `selectOnFocus` is `false`**, matching
+  the documented Space/Enter behavior.
+
+### Select
+
+#### Fixed
+
+- **`onEscapeKeyDown` can now veto the close.** The handler receives the native
+  event, and the close checks that same event's `defaultPrevented` instead of
+  the synthetic snapshot.
+- **`onCloseAutoFocus` is now called.** Fires when the listbox closes from
+  inside (Escape, Enter/Space, Tab, item click) right before focus returns to
+  the trigger; `preventDefault()` keeps focus where it is. Not called for
+  outside-pointer dismissal, which moves no focus.
+- **Initially-open selects receive focus.** With `defaultOpen` or a controlled
+  `open` on mount, the listbox is focused after mount so Escape, arrows and
+  Enter work without reopening.
+
+#### Changed
+
+- **`Select.Separator` is presentational by default.** Renders
+  `role="presentation"` + `aria-hidden="true"` so a `listbox` no longer fails
+  `aria-required-children`; pass `role='separator'` to restore separator
+  semantics.
+
+### Tabs
+
+#### Fixed
+
+- **`onValueChange` no longer fires on mount.** The automatic first-tab
+  selection (uncontrolled, no `value` / `defaultValue`) is derived from the
+  first tab in DOM order instead of being written through the change handler,
+  so consumers only hear about user-driven changes. It also follows the next
+  first tab if the selected one unmounts instead of leaving nothing selected.
+- **`onValueChange` only fires when the value actually changes.** Clicking,
+  pressing Enter/Space on, or navigating back onto the already selected tab no
+  longer re-reports the same value.
+- **Enter and Space respect `disabled` on non-button triggers.** In manual
+  activation mode a focused disabled `Tabs.Trigger` rendered with `as` (e.g.
+  `as='div'`) could still be selected from the keyboard.
+
+### Tooltip
+
+#### Fixed
+
+- **`onEscapeKeyDown` now fires for Escape on the trigger and honours
+  `preventDefault`.** The callback never ran while focus was on the trigger and
+  the documented veto was ignored; it now runs before the internal close for
+  Escape on the trigger, inside the content, or anywhere in the document, and
+  `preventDefault()` on the received event keeps the tooltip open.
+- **Consumer `onKeyDown` on `Tooltip.Content` is composed with the internal
+  Escape handler** instead of replacing it.
+
+#### Changed
+
+- **Removed the unused `onPointerDownOutside`, `onOpenAutoFocus` and
+  `onCloseAutoFocus` props from `Tooltip.Content`.** They were never called and
+  were forwarded to the DOM, producing unknown-prop warnings (type-level
+  breaking change only).
+
 ## [0.2.3] - 2026-09-12
 
 ### Dialog

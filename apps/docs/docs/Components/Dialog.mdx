@@ -464,13 +464,13 @@ Interactive element that opens the dialog when activated. Extends all `Button` c
 
 **Render Props (DialogTriggerRenderProps)**
 
-| Property   | Type         | Description                                    |
-| ---------- | ------------ | ---------------------------------------------- |
-| `isOpen`   | `boolean`    | Whether the dialog is currently visible        |
-| `disabled` | `boolean`    | Whether the trigger is disabled                |
-| `open`     | `() => void` | Function to programmatically open the dialog   |
-| `close`    | `() => void` | Function to programmatically close the dialog  |
-| `toggle`   | `() => void` | Function to programmatically toggle the dialog |
+| Property   | Type         | Description                                                             |
+| ---------- | ------------ | ----------------------------------------------------------------------- |
+| `isOpen`   | `boolean`    | Whether the dialog is currently visible                                 |
+| `disabled` | `boolean`    | Whether the trigger is disabled                                         |
+| `open`     | `() => void` | Function to programmatically open the dialog (no-op while `disabled`)   |
+| `close`    | `() => void` | Function to programmatically close the dialog                           |
+| `toggle`   | `() => void` | Function to programmatically toggle the dialog (no-op while `disabled`) |
 
 **Events**
 

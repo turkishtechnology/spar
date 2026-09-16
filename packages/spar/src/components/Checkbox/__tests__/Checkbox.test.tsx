@@ -183,6 +183,88 @@ describe('Checkbox - Unit Tests', () => {
       expect(checkbox).toHaveAttribute('data-indeterminate', '');
       expect(checkbox).not.toHaveAttribute('data-checked');
     });
+
+    it('advances the uncontrolled state underneath the indeterminate prop on click', async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+
+      const { rerender } = render(<Checkbox indeterminate onChange={handleChange} />);
+      const checkbox = screen.getByRole('checkbox');
+
+      expect(checkbox).toHaveAttribute('aria-checked', 'mixed');
+      expect(checkbox).toHaveAttribute('data-state', 'indeterminate');
+
+      await user.click(checkbox);
+
+      expect(handleChange).toHaveBeenCalledTimes(1);
+      expect(handleChange).toHaveBeenCalledWith(true);
+      // The override still wins until the consumer clears it.
+      expect(checkbox).toHaveAttribute('aria-checked', 'mixed');
+
+      rerender(<Checkbox indeterminate={false} onChange={handleChange} />);
+
+      // Not a stale 'indeterminate': the internal boolean already moved to true.
+      expect(checkbox).toHaveAttribute('aria-checked', 'true');
+      expect(checkbox).toHaveAttribute('data-state', 'checked');
+      expect(checkbox).not.toHaveAttribute('data-indeterminate');
+      expect(handleChange).toHaveBeenCalledTimes(1);
+    });
+
+    it('advances the uncontrolled state underneath the indeterminate prop on Space', async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+
+      const { rerender } = render(<Checkbox indeterminate onChange={handleChange} />);
+      const checkbox = screen.getByRole('checkbox');
+
+      checkbox.focus();
+      await user.keyboard(' ');
+
+      expect(handleChange).toHaveBeenCalledTimes(1);
+      expect(handleChange).toHaveBeenCalledWith(true);
+
+      rerender(<Checkbox indeterminate={false} onChange={handleChange} />);
+
+      expect(checkbox).toHaveAttribute('aria-checked', 'true');
+      expect(checkbox).toHaveAttribute('data-state', 'checked');
+    });
+
+    it('layers indeterminate over a controlled checked value', async () => {
+      const user = userEvent.setup();
+      const handleChange = jest.fn();
+
+      const { rerender } = render(
+        <Checkbox checked={false} indeterminate onChange={handleChange} />,
+      );
+      const checkbox = screen.getByRole('checkbox');
+
+      expect(checkbox).toHaveAttribute('aria-checked', 'mixed');
+      expect(checkbox).toHaveAttribute('data-state', 'indeterminate');
+      expect(checkbox).toHaveAttribute('data-indeterminate', '');
+
+      await user.click(checkbox);
+      expect(handleChange).toHaveBeenCalledTimes(1);
+      expect(handleChange).toHaveBeenCalledWith(true);
+
+      // Clearing the override reveals the controlled value again.
+      rerender(<Checkbox checked={false} indeterminate={false} onChange={handleChange} />);
+
+      expect(checkbox).toHaveAttribute('aria-checked', 'false');
+      expect(checkbox).toHaveAttribute('data-state', 'unchecked');
+      expect(checkbox).not.toHaveAttribute('data-indeterminate');
+    });
+
+    it('mirrors the indeterminate prop onto the hidden form input', () => {
+      const { container, rerender } = render(<Checkbox name='all' indeterminate />);
+      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
+
+      expect(input.indeterminate).toBe(true);
+      expect(input.checked).toBe(false);
+
+      rerender(<Checkbox name='all' indeterminate={false} />);
+
+      expect(input.indeterminate).toBe(false);
+    });
   });
 
   describe('Disabled State', () => {

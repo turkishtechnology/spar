@@ -125,8 +125,9 @@ export interface PopoverContentOwnProps {
   container?: HTMLElement | null;
 
   /**
-   * Called when popover opens and focus moves inside
-   * @param event - The focus event (call preventDefault to prevent auto-focus)
+   * Called when the popover opens, right before focus is moved into the content
+   * (first focusable element, otherwise the content element itself).
+   * @param event - A cancelable `openautofocus` event (call preventDefault to skip the auto-focus)
    */
   onOpenAutoFocus?: (event: Event) => void;
 
@@ -149,14 +150,19 @@ export interface PopoverContentOwnProps {
   onPointerDownOutside?: (event: PointerEvent) => void;
 
   /**
-   * Called when focus moves outside the content
-   * @param event - The focus event (call preventDefault to prevent close)
+   * Called when focus moves outside the content and trigger. Only fires while focus is not
+   * trapped (neither `modal` nor `trapFocus`).
+   * @param event - A cancelable `focusoutside` FocusEvent dispatched on the newly focused
+   * element (native `focusin` is not cancelable). `event.target` is the element that received
+   * focus. Call preventDefault to prevent close.
    */
   onFocusOutside?: (event: FocusEvent) => void;
 
   /**
-   * Called when interaction occurs outside the content
-   * @param event - The pointer or focus event (call preventDefault to prevent close)
+   * Called when interaction occurs outside the content and trigger, after
+   * `onPointerDownOutside` / `onFocusOutside`.
+   * @param event - The `pointerdown` event, or the cancelable `focusoutside` FocusEvent
+   * described on `onFocusOutside` (call preventDefault to prevent close)
    */
   onInteractOutside?: (event: PointerEvent | FocusEvent) => void;
 
@@ -209,6 +215,7 @@ export type PopoverCloseProps<T extends ElementType = 'button'> = PolymorphicPro
  */
 export interface PopoverContextValue {
   isOpen: boolean;
+  triggerId: string;
   contentId: string;
   triggerRef: RefObject<HTMLElement | null>;
   contentRef: RefObject<HTMLDivElement | null>;

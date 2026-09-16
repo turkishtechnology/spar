@@ -22,6 +22,11 @@ import type { RadioProps, RadioContextValue } from './types';
  * so FieldLabel / FieldDescription / FieldErrorMessage wire to the radiogroup
  * without extra plumbing. Direct props on `<Radio>` override the inherited
  * values.
+ *
+ * Consumer `onKeyDown` / `onFocus` / `onBlur` handlers are composed with the
+ * internal ones: the consumer handler runs first, and calling
+ * `event.preventDefault()` inside `onKeyDown` vetoes the built-in arrow /
+ * Home / End navigation for that key press.
  */
 export const Radio = <T extends ElementType = 'div'>({
   ref,
@@ -40,6 +45,7 @@ export const Radio = <T extends ElementType = 'div'>({
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
   'aria-describedby': ariaDescribedBy,
+  onKeyDown,
   onFocus,
   onBlur,
   as,
@@ -72,6 +78,9 @@ export const Radio = <T extends ElementType = 'div'>({
   const name = nameProp ?? `${baseId}-radio-group`;
   const hasAutoFocused = useRef(false);
 
+  // Only enabled items take part in keyboard navigation. The registry orders
+  // indexed lookups by DOM position, so an item that toggles `disabled` and
+  // re-registers keeps its place in the arrow-key order.
   const registerItem = useCallback(
     (itemValue: string, element: HTMLElement, itemDisabled: boolean): void => {
       if (itemDisabled) {
@@ -94,6 +103,17 @@ export const Radio = <T extends ElementType = 'div'>({
     [radioItems, getItemAtIndex],
   );
 
+  // Roving tabindex: exactly one item is the group's tab stop — the item that
+  // currently has focus, else the checked item when it is enabled, else the
+  // first enabled item. Before any item has registered (`count === 0`, e.g.
+  // the SSR pass) the checked value is trusted so the markup still carries a
+  // tab stop.
+  const tabStopValue = useMemo<string | null>(() => {
+    if (focusedValue !== null) return focusedValue;
+    if (value !== undefined && (count === 0 || radioItems.has(value))) return value;
+    return getItemAtIndex(0) ?? null;
+  }, [focusedValue, value, count, radioItems, getItemAtIndex]);
+
   // Auto focus first item on mount
   useEffect(() => {
     if (autoFocus && !resolvedDisabled && count > 0 && !hasAutoFocused.current) {
@@ -106,18 +126,24 @@ export const Radio = <T extends ElementType = 'div'>({
     }
   }, [autoFocus, resolvedDisabled, count, value, getItemAtIndex, radioItems]);
 
-  // Handle value changes
+  // Handle value changes. `onChange` fires once per user-visible change, so a
+  // request for the value that is already selected only moves the tab stop.
   const handleValueChange = useCallback(
     (newValue: string) => {
-      setValue(newValue);
+      if (newValue !== value) {
+        setValue(newValue);
+      }
       setFocusedValue(newValue);
     },
-    [setValue],
+    [setValue, value],
   );
 
   // Keyboard navigation
   const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      onKeyDown?.(event);
+      if (event.defaultPrevented) return;
+
       // Only handle navigation keys, not selection keys
       if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
         return;
@@ -154,48 +180,52 @@ export const Radio = <T extends ElementType = 'div'>({
           // Imperatively focus — RadioItem's onFocus updates focusedValue state
           focusItemAtIndex(nextIndex);
 
-          // When selectOnFocus is true, arrow keys also change selection
-          // When false, only Space/Enter changes selection
-          if (selectOnFocus) {
+          // When selectOnFocus is true, arrow keys also change selection.
+          // When false, only Space/Enter changes selection. A read-only group
+          // lets focus move but never changes its value.
+          if (selectOnFocus && !resolvedReadOnly) {
             handleValueChange(nextValue);
           }
         }
       }
     },
     [
+      onKeyDown,
       count,
       focusedValue,
       getItemIndex,
       getItemAtIndex,
       focusItemAtIndex,
       selectOnFocus,
+      resolvedReadOnly,
       handleValueChange,
     ],
   );
 
-  // Focus management: sync focusedValue state when user tabs into the group
-  // (browser already focused the tabIndex=0 element; we just track which one)
+  // Focus management: sync focusedValue state when focus enters the group.
+  // An item's own onFocus runs first (target before ancestors) and claims the
+  // focused value; the functional update sees that queued value, so this only
+  // fills in a default when no item claimed the focus.
   const handleFocus = useCallback(
     (event: React.FocusEvent<HTMLDivElement>) => {
-      // Only set initial focus when user tabs into the group
-      if (focusedValue === null && count > 0) {
+      onFocus?.(event);
+      if (count > 0) {
         const initialFocus = value || getItemAtIndex(0);
         if (initialFocus) {
-          setFocusedValue(initialFocus);
+          setFocusedValue((previous) => previous ?? initialFocus);
         }
       }
-      onFocus?.(event);
     },
-    [focusedValue, count, value, getItemAtIndex, onFocus],
+    [onFocus, count, value, getItemAtIndex],
   );
 
   const handleBlur = useCallback(
     (event: React.FocusEvent<HTMLDivElement>) => {
+      onBlur?.(event);
       const nextFocusedElement = event.relatedTarget as Node | null;
       if (!nextFocusedElement || !event.currentTarget.contains(nextFocusedElement)) {
         setFocusedValue(null);
       }
-      onBlur?.(event);
     },
     [onBlur],
   );
@@ -208,7 +238,7 @@ export const Radio = <T extends ElementType = 'div'>({
       readOnly: resolvedReadOnly,
       required: resolvedRequired,
       name,
-      firstFocusableValue: getItemAtIndex(0) ?? null,
+      tabStopValue,
       focusedValue,
       setFocusedValue,
       orientation,
@@ -223,7 +253,7 @@ export const Radio = <T extends ElementType = 'div'>({
       resolvedReadOnly,
       resolvedRequired,
       name,
-      getItemAtIndex,
+      tabStopValue,
       focusedValue,
       setFocusedValue,
       orientation,
@@ -252,11 +282,14 @@ export const Radio = <T extends ElementType = 'div'>({
       : fieldCtx.descriptionId
     : undefined;
 
+  // `aria-readonly` is only permitted on the radiogroup (ARIA 1.2 disallows it
+  // on `role="radio"`), so it lives here rather than on each item.
   const ariaAttributes = {
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy ?? fieldCtx?.labelId,
     'aria-describedby': ariaDescribedBy ?? fieldDescribedBy,
     'aria-required': resolvedRequired || undefined,
+    'aria-readonly': resolvedReadOnly || undefined,
     'aria-invalid': resolvedInvalid || undefined,
   };
 
@@ -265,28 +298,19 @@ export const Radio = <T extends ElementType = 'div'>({
     ref,
     role: 'radiogroup',
     ...ariaAttributes,
+    ...dataAttributes,
+    ...rest,
     onKeyDown: handleKeyDown,
     onFocus: handleFocus,
     onBlur: handleBlur,
-    ...dataAttributes,
-    ...rest,
   };
 
+  // The selected value reaches native form data through the checked item's
+  // visually hidden `<input type="radio">` (see RadioItem), which also carries
+  // `required` for native validity — no extra hidden input is rendered here.
   return (
     <RadioContext.Provider value={contextValue}>
-      <Component {...groupProps}>
-        {children}
-        {/* Hidden input for form submission */}
-        {value && (
-          <input
-            type='hidden'
-            name={name}
-            value={value}
-            disabled={resolvedDisabled}
-            data-disabled={resolvedDisabled ? '' : undefined}
-          />
-        )}
-      </Component>
+      <Component {...groupProps}>{children}</Component>
     </RadioContext.Provider>
   );
 };

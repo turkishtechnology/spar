@@ -340,11 +340,12 @@ export function PopoverWithArrow() {
 
 Popover with custom focus management logic:
 
-```tsx {2-5,7-11,17-18}
+```tsx {2-6,8-12,18-19}
 export function PopoverWithFocusCallbacks() {
   const handleOpenAutoFocus = (event: Event) => {
-    console.log('Popover opened, focus moved inside');
-    // Notification callback only (no preventDefault behavior on open)
+    console.log('Popover opening, focus is about to move inside');
+    // Prevent moving focus into the content:
+    // event.preventDefault();
   };
 
   const handleCloseAutoFocus = (event: Event) => {
@@ -435,7 +436,7 @@ The root container that provides context and manages state for all popover compo
 
 | Name            | Type                      | Default     | Description                                                              |
 | --------------- | ------------------------- | ----------- | ------------------------------------------------------------------------ |
-| `id?`           | `string`                  | `undefined` | Custom base ID for ARIA relationships (`${id}-content`)                  |
+| `id?`           | `string`                  | `undefined` | Custom base ID for ARIA relationships (`${id}-trigger`, `${id}-content`) |
 | `open?`         | `boolean`                 | `undefined` | Controlled open state                                                    |
 | `onOpenChange?` | `(open: boolean) => void` | `undefined` | Called when open state changes                                           |
 | `defaultOpen?`  | `boolean`                 | `false`     | Initial open state in uncontrolled mode                                  |
@@ -492,6 +493,7 @@ Button element that toggles the popover visibility. Extends all `Button` compone
 
 | Attribute       | Value                | Purpose                                                                            |
 | --------------- | -------------------- | ---------------------------------------------------------------------------------- |
+| `id`            | `string`             | `${id}-trigger` from root context (overridable via the `id` prop)                  |
 | `aria-expanded` | `boolean`            | Reflects open state                                                                |
 | `aria-controls` | `string`             | Points to content ID from root context                                             |
 | `aria-haspopup` | `"dialog"`           | Announces popup type                                                               |
@@ -506,27 +508,27 @@ Floating panel container that holds the popover content.
 
 **Props**
 
-| Name                    | Type                                          | Default         | Description                                                                          |
-| ----------------------- | --------------------------------------------- | --------------- | ------------------------------------------------------------------------------------ |
-| `as?`                   | `React.ElementType`                           | `"div"`         | Polymorphic element type                                                             |
-| `side?`                 | `"top" \| "bottom" \| "left" \| "right"`      | `"bottom"`      | Preferred side                                                                       |
-| `align?`                | `"start" \| "center" \| "end"`                | `"center"`      | Preferred alignment                                                                  |
-| `container?`            | `HTMLElement \| null`                         | `document.body` | Portal container                                                                     |
-| `onOpenAutoFocus?`      | `(event: Event) => void`                      | `undefined`     | Called after open-time focus move into content                                       |
-| `onCloseAutoFocus?`     | `(event: Event) => void`                      | `undefined`     | Called during close; `event.preventDefault()` prevents restoring focus to trigger    |
-| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`              | `undefined`     | Called on `Escape`; `event.preventDefault()` prevents close                          |
-| `onPointerDownOutside?` | `(event: PointerEvent) => void`               | `undefined`     | Called on pointer-down outside; `event.preventDefault()` prevents close              |
-| `onFocusOutside?`       | `(event: FocusEvent) => void`                 | `undefined`     | Called on focus moving outside; `event.preventDefault()` prevents close              |
-| `onInteractOutside?`    | `(event: PointerEvent \| FocusEvent) => void` | `undefined`     | Called for both outside pointer and outside focus interactions                       |
-| `trapFocus?`            | `boolean`                                     | `false`         | Enables focus trap while open (modal also enables focus trap)                        |
-| `children?`             | `React.ReactNode`                             | `undefined`     | Popover panel content                                                                |
-| `...props`              | `PopoverContentProps<T>`                      | `undefined`     | Inherits polymorphic element props (including `style`, `onKeyDown`, HTML attributes) |
+| Name                    | Type                                          | Default         | Description                                                                                |
+| ----------------------- | --------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------ |
+| `as?`                   | `React.ElementType`                           | `"div"`         | Polymorphic element type                                                                   |
+| `side?`                 | `"top" \| "bottom" \| "left" \| "right"`      | `"bottom"`      | Preferred side                                                                             |
+| `align?`                | `"start" \| "center" \| "end"`                | `"center"`      | Preferred alignment                                                                        |
+| `container?`            | `HTMLElement \| null`                         | `document.body` | Portal container                                                                           |
+| `onOpenAutoFocus?`      | `(event: Event) => void`                      | `undefined`     | Called before open-time focus move into content; `event.preventDefault()` skips it         |
+| `onCloseAutoFocus?`     | `(event: Event) => void`                      | `undefined`     | Called during close; `event.preventDefault()` prevents restoring focus to trigger          |
+| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`              | `undefined`     | Called on `Escape`; `event.preventDefault()` prevents close                                |
+| `onPointerDownOutside?` | `(event: PointerEvent) => void`               | `undefined`     | Called on pointer-down outside; `event.preventDefault()` prevents close                    |
+| `onFocusOutside?`       | `(event: FocusEvent) => void`                 | `undefined`     | Called on focus moving outside (cancelable event); `event.preventDefault()` prevents close |
+| `onInteractOutside?`    | `(event: PointerEvent \| FocusEvent) => void` | `undefined`     | Called for both outside pointer and outside focus; `event.preventDefault()` prevents close |
+| `trapFocus?`            | `boolean`                                     | `false`         | Enables focus trap while open (modal also enables focus trap)                              |
+| `children?`             | `React.ReactNode`                             | `undefined`     | Popover panel content                                                                      |
+| `...props`              | `PopoverContentProps<T>`                      | `undefined`     | Inherits polymorphic element props (including `style`, `onKeyDown`, HTML attributes)       |
 
 **Events**
 
 | Name                   | Parameters                                     | Description                             | When Triggered                      |
 | ---------------------- | ---------------------------------------------- | --------------------------------------- | ----------------------------------- |
-| `onOpenAutoFocus`      | `(event: Event)`                               | Open-time focus notification            | Content opens                       |
+| `onOpenAutoFocus`      | `(event: Event)`                               | Open-time focus hook (cancelable)       | Content opens, before auto-focus    |
 | `onCloseAutoFocus`     | `(event: Event)`                               | Close-time focus restore hook           | Content closes                      |
 | `onEscapeKeyDown`      | `(event: KeyboardEvent)`                       | Escape key hook                         | `Escape` is pressed while open      |
 | `onPointerDownOutside` | `(event: PointerEvent)`                        | Pointer outside hook                    | Pointer down occurs outside content |
@@ -538,7 +540,7 @@ Floating panel container that holds the popover content.
 
 | Attribute    | Value                                    | Purpose                     |
 | ------------ | ---------------------------------------- | --------------------------- |
-| `id`         | `string`                                 | Unique identifier           |
+| `id`         | `string`                                 | `${id}-content` from root   |
 | `tabIndex`   | `-1`                                     | Allows programmatic focus   |
 | `data-state` | `"open"`                                 | Always open when rendered   |
 | `data-side`  | `"top" \| "bottom" \| "left" \| "right"` | Actual positioned side      |

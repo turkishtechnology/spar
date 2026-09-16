@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Popover } from '../Popover';
 import { PopoverClose } from '../PopoverClose';
@@ -87,6 +87,41 @@ describe('Popover', () => {
     expect(content).toHaveAttribute('id', 'profile-content');
   });
 
+  it('assigns the documented `${id}-trigger` id to the trigger and lets props override it', () => {
+    const { rerender } = render(
+      <Popover id='profile'>
+        <PopoverTrigger>Open</PopoverTrigger>
+        <PopoverContent>Profile content</PopoverContent>
+      </Popover>,
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Open' });
+    expect(trigger).toHaveAttribute('id', 'profile-trigger');
+    expect(trigger).toHaveAttribute('aria-controls', 'profile-content');
+
+    rerender(
+      <Popover id='profile'>
+        <PopoverTrigger id='custom-trigger'>Open</PopoverTrigger>
+        <PopoverContent>Profile content</PopoverContent>
+      </Popover>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Open' })).toHaveAttribute('id', 'custom-trigger');
+  });
+
+  it('generates a trigger id when no id is provided', () => {
+    render(
+      <Popover>
+        <PopoverTrigger>Open</PopoverTrigger>
+        <PopoverContent>Content</PopoverContent>
+      </Popover>,
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Open' });
+    expect(trigger.id).toMatch(/-trigger$/);
+    expect(trigger.getAttribute('aria-controls')).toBe(trigger.id.replace(/-trigger$/, '-content'));
+  });
+
   it('does not open with ArrowDown and opens with Enter', async () => {
     const user = userEvent.setup();
 
@@ -137,6 +172,140 @@ describe('Popover', () => {
     expect(await screen.findByText('Content')).toBeInTheDocument();
     await user.keyboard('{Escape}');
     expect(screen.getByText('Content')).toBeInTheDocument();
+  });
+
+  it('calls onOpenAutoFocus with a cancelable event before moving focus into content', async () => {
+    const user = userEvent.setup();
+    const onOpenAutoFocus = jest.fn((event: Event) => {
+      expect(event.cancelable).toBe(true);
+      // Auto-focus has not happened yet when the handler runs
+      expect(screen.getByRole('button', { name: 'Open' })).toHaveFocus();
+    });
+
+    render(
+      <Popover>
+        <PopoverTrigger>Open</PopoverTrigger>
+        <PopoverContent onOpenAutoFocus={onOpenAutoFocus}>
+          <button>First focus target</button>
+        </PopoverContent>
+      </Popover>,
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+
+    expect(onOpenAutoFocus).toHaveBeenCalledTimes(1);
+    expect(await screen.findByRole('button', { name: 'First focus target' })).toHaveFocus();
+  });
+
+  it('skips auto-focus when onOpenAutoFocus prevents default', async () => {
+    const user = userEvent.setup();
+    const onOpenAutoFocus = jest.fn((event: Event) => event.preventDefault());
+
+    render(
+      <Popover>
+        <PopoverTrigger>Open</PopoverTrigger>
+        <PopoverContent onOpenAutoFocus={onOpenAutoFocus}>
+          <button>First focus target</button>
+        </PopoverContent>
+      </Popover>,
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Open' });
+    await user.click(trigger);
+
+    expect(await screen.findByRole('button', { name: 'First focus target' })).toBeInTheDocument();
+    expect(onOpenAutoFocus).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('button', { name: 'First focus target' })).not.toHaveFocus();
+    expect(trigger).toHaveFocus();
+  });
+
+  describe('focus moving outside', () => {
+    const renderWithOutsideButton = async (
+      contentProps: Partial<React.ComponentProps<typeof PopoverContent>> = {},
+    ) => {
+      const user = userEvent.setup();
+      render(
+        <div>
+          <Popover>
+            <PopoverTrigger>Open</PopoverTrigger>
+            <PopoverContent {...contentProps}>
+              <button>Inside</button>
+            </PopoverContent>
+          </Popover>
+          <button>Outside</button>
+        </div>,
+      );
+      await user.click(screen.getByRole('button', { name: 'Open' }));
+      return user;
+    };
+
+    it('calls onFocusOutside and onInteractOutside with a cancelable event and closes', async () => {
+      const onFocusOutside = jest.fn();
+      const onInteractOutside = jest.fn();
+
+      await renderWithOutsideButton({ onFocusOutside, onInteractOutside });
+      expect(await screen.findByRole('button', { name: 'Inside' })).toHaveFocus();
+
+      const outside = screen.getByRole('button', { name: 'Outside' });
+      act(() => {
+        outside.focus();
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByRole('button', { name: 'Inside' })).not.toBeInTheDocument();
+      });
+
+      expect(onFocusOutside).toHaveBeenCalledTimes(1);
+      expect(onInteractOutside).toHaveBeenCalledTimes(1);
+      const event = onFocusOutside.mock.calls[0]?.[0] as FocusEvent;
+      expect(event).toBeInstanceOf(FocusEvent);
+      expect(event.cancelable).toBe(true);
+      expect(event.target).toBe(outside);
+      expect(onInteractOutside.mock.calls[0]?.[0]).toBe(event);
+    });
+
+    it('stays open when onFocusOutside prevents default', async () => {
+      const onFocusOutside = jest.fn((event: FocusEvent) => event.preventDefault());
+
+      await renderWithOutsideButton({ onFocusOutside });
+      expect(await screen.findByRole('button', { name: 'Inside' })).toHaveFocus();
+
+      const outside = screen.getByRole('button', { name: 'Outside' });
+      act(() => {
+        outside.focus();
+      });
+
+      expect(onFocusOutside).toHaveBeenCalledTimes(1);
+      expect(screen.getByRole('button', { name: 'Inside' })).toBeInTheDocument();
+      expect(outside).toHaveFocus();
+    });
+
+    it('stays open when onInteractOutside prevents default on the focus path', async () => {
+      const onInteractOutside = jest.fn((event: PointerEvent | FocusEvent) =>
+        event.preventDefault(),
+      );
+
+      await renderWithOutsideButton({ onInteractOutside });
+      expect(await screen.findByRole('button', { name: 'Inside' })).toHaveFocus();
+
+      act(() => {
+        screen.getByRole('button', { name: 'Outside' }).focus();
+      });
+
+      expect(onInteractOutside).toHaveBeenCalledTimes(1);
+      expect(screen.getByRole('button', { name: 'Inside' })).toBeInTheDocument();
+    });
+
+    it('still closes on outside pointer down', async () => {
+      const onPointerDownOutside = jest.fn();
+
+      const user = await renderWithOutsideButton({ onPointerDownOutside });
+      await user.click(screen.getByRole('button', { name: 'Outside' }));
+      expect(onPointerDownOutside).toHaveBeenCalledTimes(1);
+      await waitFor(() => {
+        expect(screen.queryByRole('button', { name: 'Inside' })).not.toBeInTheDocument();
+      });
+    });
   });
 
   it('restores focus to trigger on close unless onCloseAutoFocus is prevented', async () => {

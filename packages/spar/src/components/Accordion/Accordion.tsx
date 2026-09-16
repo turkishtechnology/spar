@@ -1,8 +1,9 @@
-import { useMemo, useState, useCallback, ElementType } from 'react';
+import { useMemo, useCallback, ElementType } from 'react';
 import { useItemRegistry, useControlledState } from '@/hooks';
 import type {
   AccordionContextValue,
   AccordionCurrentValue,
+  AccordionFocusTarget,
   AccordionProps,
   AccordionValue,
 } from './types';
@@ -22,6 +23,13 @@ const normalizeValue = (
   }
   return input;
 };
+
+// Read the live DOM so a trigger disabled after it registered (item or root
+// `disabled`) is still skipped. Covers native buttons and `as` elements.
+const isDisabledTrigger = (element: HTMLElement): boolean =>
+  element.hasAttribute('disabled') ||
+  element.getAttribute('aria-disabled') === 'true' ||
+  element.hasAttribute('data-disabled');
 
 /**
  * Accordion root component providing context and state management for accordion items.
@@ -66,20 +74,39 @@ export const Accordion = <T extends ElementType = 'div'>({
     items: accordionItems,
     registerItem,
     unregisterItem,
-    getItemIndex,
-    getItemAtIndex,
-    count: itemCount,
+    getItemIds,
   } = useItemRegistry<HTMLElement>();
-  const [focusedIndex, setFocusedIndex] = useState(-1);
 
-  const focusItemAtIndex = useCallback(
-    (index: number): void => {
-      const key = getItemAtIndex(index);
-      if (key !== undefined) {
-        accordionItems.get(key)?.focus();
+  // Keyboard navigation follows DOM order (the registry sorts by document
+  // position), skips disabled triggers and wraps around at both ends.
+  const focusItem = useCallback(
+    (itemId: string, target: AccordionFocusTarget): void => {
+      const itemIds = getItemIds();
+      const isEnabled = (id: string): boolean => {
+        const element = accordionItems.get(id);
+        return element !== undefined && !isDisabledTrigger(element);
+      };
+
+      let nextId: string | undefined;
+
+      if (target === 'first' || target === 'last') {
+        const enabledIds = itemIds.filter(isEnabled);
+        nextId = target === 'first' ? enabledIds[0] : enabledIds[enabledIds.length - 1];
+      } else {
+        const step = target === 'next' ? 1 : -1;
+        let index = itemIds.indexOf(itemId);
+        for (let i = 0; i < itemIds.length && nextId === undefined; i += 1) {
+          index = (index + step + itemIds.length) % itemIds.length;
+          const candidate = itemIds[index];
+          if (candidate !== undefined && isEnabled(candidate)) nextId = candidate;
+        }
+      }
+
+      if (nextId !== undefined) {
+        accordionItems.get(nextId)?.focus();
       }
     },
-    [accordionItems, getItemAtIndex],
+    [accordionItems, getItemIds],
   );
 
   const handleItemToggle = useCallback(
@@ -117,12 +144,7 @@ export const Accordion = <T extends ElementType = 'div'>({
       orientation,
       registerItem,
       unregisterItem,
-      focusedIndex,
-      setFocusedIndex,
-      getItemIndex,
-      getItemAtIndex,
-      focusItemAtIndex,
-      itemCount,
+      focusItem,
     }),
     [
       effectiveMultiple,
@@ -133,12 +155,7 @@ export const Accordion = <T extends ElementType = 'div'>({
       orientation,
       registerItem,
       unregisterItem,
-      focusedIndex,
-      setFocusedIndex,
-      getItemIndex,
-      getItemAtIndex,
-      focusItemAtIndex,
-      itemCount,
+      focusItem,
     ],
   );
 

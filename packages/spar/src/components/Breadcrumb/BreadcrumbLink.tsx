@@ -2,8 +2,15 @@ import type { MouseEvent, KeyboardEvent, ElementType } from 'react';
 import { useBreadcrumbContext } from './hooks';
 import type { BreadcrumbLinkProps } from './types';
 
+const isActivationKey = (key: string): boolean => key === 'Enter' || key === ' ';
+
 /**
  * Interactive link for breadcrumb navigation. Handles routing integration and accessibility states.
+ *
+ * Consumer `onClick` / `onKeyDown` handlers run first and are composed with the
+ * internal activation flow: calling `preventDefault()` in them skips `onPress`
+ * and `onNavigate`. A disabled link blocks only the activation keys (Enter and
+ * Space); every other key still reaches the consumer `onKeyDown`.
  */
 export const BreadcrumbLink = <T extends ElementType = 'a'>({
   as,
@@ -28,6 +35,12 @@ export const BreadcrumbLink = <T extends ElementType = 'a'>({
       return;
     }
 
+    // Consumer handler first; a preventDefault there vetoes the press flow.
+    onClick?.(event);
+    if (event.defaultPrevented) {
+      return;
+    }
+
     if (onPress) {
       onPress(event);
       return;
@@ -36,32 +49,40 @@ export const BreadcrumbLink = <T extends ElementType = 'a'>({
     if (onNavigate && href) {
       event.preventDefault();
       onNavigate(href, event);
-      return;
     }
-
-    onClick?.(event);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLAnchorElement>) => {
+    const isActivation = isActivationKey(event.key);
+
     if (linkIsDisabled) {
+      // Block activation only; arrows, Escape, etc. still reach the consumer.
+      if (isActivation) {
+        event.preventDefault();
+        return;
+      }
+      onKeyDown?.(event);
       return;
     }
 
-    if (event.key === 'Enter' || event.key === ' ') {
-      if (onPress) {
-        event.preventDefault();
-        onPress(event);
-        return;
-      }
-
-      if (onNavigate && href) {
-        event.preventDefault();
-        onNavigate(href, event);
-        return;
-      }
+    // Consumer handler first; a preventDefault there vetoes the press flow.
+    onKeyDown?.(event);
+    if (event.defaultPrevented || !isActivation) {
+      return;
     }
 
-    onKeyDown?.(event);
+    // preventDefault stops the browser's synthesized click on Enter, which would
+    // otherwise run the press flow a second time through handleClick.
+    if (onPress) {
+      event.preventDefault();
+      onPress(event);
+      return;
+    }
+
+    if (onNavigate && href) {
+      event.preventDefault();
+      onNavigate(href, event);
+    }
   };
 
   const linkProps = {

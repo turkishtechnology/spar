@@ -95,13 +95,10 @@ export const TabsList = <T extends ElementType = 'div'>({
           break;
         }
 
-        case 'Enter':
-        case ' ':
-          if (activationMode === 'manual') {
-            onValueChange(currentValue);
-            event.preventDefault();
-          }
-          break;
+        // Enter/Space are not handled here: the focused trigger already
+        // activates itself through its click path (native button activation,
+        // or the Button emulation for non-button elements), which also
+        // enforces `disabled`. A second path here would double-fire.
       }
 
       if (nextValue) {

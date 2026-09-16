@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../index';
@@ -162,7 +162,6 @@ const FormTabs = () => {
 const AsyncContentTabs = () => {
   const [loadingTab, setLoadingTab] = useState<string | null>(null);
   const [loadedContent, setLoadedContent] = useState<Record<string, string>>({});
-  const hasInitializedRef = useRef(false);
 
   const simulateAsyncLoad = async (tabValue: string) => {
     setLoadingTab(tabValue);
@@ -177,11 +176,8 @@ const AsyncContentTabs = () => {
   return (
     <Tabs
       onValueChange={(value) => {
-        // Skip loading on initial auto-selection
-        if (!hasInitializedRef.current) {
-          hasInitializedRef.current = true;
-          return;
-        }
+        // The automatic first-tab selection is not reported here, so every
+        // call is a real user switch.
         if (!loadedContent[value]) {
           simulateAsyncLoad(value);
         }

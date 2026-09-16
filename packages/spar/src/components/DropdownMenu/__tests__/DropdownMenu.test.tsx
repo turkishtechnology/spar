@@ -652,6 +652,171 @@ describe('DropdownMenu', () => {
     });
   });
 
+  describe('dismiss vetoes', () => {
+    const renderMenu = (
+      contentProps: Partial<React.ComponentProps<typeof DropdownMenuContent>> = {},
+      modal = true,
+    ) =>
+      render(
+        <div>
+          <DropdownMenu defaultOpen={true} modal={modal}>
+            <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+            <DropdownMenuContent {...contentProps}>
+              <DropdownMenuItem>Item 1</DropdownMenuItem>
+              <DropdownMenuItem>Item 2</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <button>Outside</button>
+        </div>,
+      );
+
+    describe('onEscapeKeyDown', () => {
+      it.each([
+        ['modal', true],
+        ['non-modal', false],
+      ])('calls the handler with the native event and closes (%s)', async (_label, modal) => {
+        const user = userEvent.setup();
+        const onEscapeKeyDown = jest.fn();
+        renderMenu({ onEscapeKeyDown }, modal);
+
+        await act(async () => {
+          screen.getByRole('menu').focus();
+        });
+        await user.keyboard('{Escape}');
+
+        expect(onEscapeKeyDown).toHaveBeenCalledTimes(1);
+        expect(onEscapeKeyDown.mock.calls[0]?.[0]).toBeInstanceOf(KeyboardEvent);
+        await waitFor(() => {
+          expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+        });
+      });
+
+      it.each([
+        ['modal', true],
+        ['non-modal', false],
+      ])('keeps the menu open when the handler prevents default (%s)', async (_label, modal) => {
+        const user = userEvent.setup();
+        const onEscapeKeyDown = jest.fn((event: KeyboardEvent) => event.preventDefault());
+        renderMenu({ onEscapeKeyDown }, modal);
+
+        await act(async () => {
+          screen.getByRole('menu').focus();
+        });
+        await user.keyboard('{Escape}');
+
+        expect(onEscapeKeyDown).toHaveBeenCalledTimes(1);
+        expect(screen.getByRole('menu')).toBeInTheDocument();
+      });
+    });
+
+    describe('onPointerDownOutside', () => {
+      it.each([
+        ['modal', true],
+        ['non-modal', false],
+      ])('calls the handler and closes (%s)', async (_label, modal) => {
+        const user = userEvent.setup();
+        const onPointerDownOutside = jest.fn();
+        renderMenu({ onPointerDownOutside }, modal);
+
+        await user.click(screen.getByRole('button', { name: 'Outside' }));
+
+        expect(onPointerDownOutside).toHaveBeenCalledTimes(1);
+        expect(onPointerDownOutside.mock.calls[0]?.[0]?.type).toBe('pointerdown');
+        await waitFor(() => {
+          expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+        });
+      });
+
+      it.each([
+        ['modal', true],
+        ['non-modal', false],
+      ])('keeps the menu open when the handler prevents default (%s)', async (_label, modal) => {
+        const user = userEvent.setup();
+        const onPointerDownOutside = jest.fn((event: PointerEvent) => event.preventDefault());
+        renderMenu({ onPointerDownOutside }, modal);
+
+        await user.click(screen.getByRole('button', { name: 'Outside' }));
+
+        expect(onPointerDownOutside).toHaveBeenCalledTimes(1);
+        expect(screen.getByRole('menu')).toBeInTheDocument();
+      });
+
+      it('does not fire for pointer down on the trigger', async () => {
+        const user = userEvent.setup();
+        const onPointerDownOutside = jest.fn();
+        renderMenu({ onPointerDownOutside });
+
+        await user.click(screen.getByRole('button', { name: 'Open Menu' }));
+
+        expect(onPointerDownOutside).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('onFocusOutside', () => {
+      const focusOutside = async () => {
+        const outside = screen.getByRole('button', { name: 'Outside' });
+        await act(async () => {
+          outside.focus();
+        });
+        return outside;
+      };
+
+      it('non-modal: calls the handler with a cancelable event and closes', async () => {
+        const onFocusOutside = jest.fn();
+        renderMenu({ onFocusOutside }, false);
+
+        const outside = await focusOutside();
+
+        expect(onFocusOutside).toHaveBeenCalledTimes(1);
+        const event = onFocusOutside.mock.calls[0]?.[0] as FocusEvent;
+        expect(event).toBeInstanceOf(FocusEvent);
+        expect(event.cancelable).toBe(true);
+        expect(event.target).toBe(outside);
+        await waitFor(() => {
+          expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+        });
+        // Dismissed by moving focus elsewhere: focus is not pulled back to the trigger
+        expect(outside).toHaveFocus();
+      });
+
+      it('non-modal: keeps the menu open when the handler prevents default', async () => {
+        const onFocusOutside = jest.fn((event: FocusEvent) => event.preventDefault());
+        renderMenu({ onFocusOutside }, false);
+
+        const outside = await focusOutside();
+
+        expect(onFocusOutside).toHaveBeenCalledTimes(1);
+        expect(screen.getByRole('menu')).toBeInTheDocument();
+        expect(outside).toHaveFocus();
+      });
+
+      it('modal: calls the handler, stays open and pulls focus back to the first item', async () => {
+        const onFocusOutside = jest.fn();
+        renderMenu({ onFocusOutside }, true);
+
+        await focusOutside();
+
+        expect(onFocusOutside).toHaveBeenCalledTimes(1);
+        expect(screen.getByRole('menu')).toBeInTheDocument();
+        await waitFor(() => {
+          expect(screen.getByRole('menuitem', { name: 'Item 1' })).toHaveFocus();
+        });
+      });
+
+      it('modal: leaves focus outside when the handler prevents default', async () => {
+        const onFocusOutside = jest.fn((event: FocusEvent) => event.preventDefault());
+        renderMenu({ onFocusOutside }, true);
+
+        const outside = await focusOutside();
+
+        expect(onFocusOutside).toHaveBeenCalledTimes(1);
+        expect(screen.getByRole('menu')).toBeInTheDocument();
+        expect(outside).toHaveFocus();
+        expect(screen.getByRole('menuitem', { name: 'Item 1' })).not.toHaveFocus();
+      });
+    });
+  });
+
   describe('DropdownMenuItem', () => {
     it('should render as div by default', () => {
       render(

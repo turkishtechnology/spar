@@ -33,6 +33,9 @@ export const Tooltip = ({
   // Private hide timer — not exposed via context
   const hideTimeoutRef = useRef<number | null>(null);
 
+  // Populated by TooltipContent so Escape handled on the trigger can consult it
+  const onEscapeKeyDownRef = useRef<((event: KeyboardEvent) => void) | undefined>(undefined);
+
   // Get delay values from provider or props
   const effectiveDelay = delay ?? provider?.delayDuration ?? 700;
   const effectiveDisableHover = provider?.disableHoverableContent ?? false;
@@ -80,6 +83,7 @@ export const Tooltip = ({
       arrowRef,
       startHideTimer,
       cancelHideTimer,
+      onEscapeKeyDownRef,
     }),
     [
       isOpen,

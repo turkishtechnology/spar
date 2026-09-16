@@ -18,7 +18,7 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
   ...props
 }: AccordionTriggerProps<T>) => {
   const Component = as || 'button';
-  const accordionContext = useAccordionContext();
+  const { registerItem, unregisterItem, focusItem, orientation } = useAccordionContext();
   const itemContext = useAccordionItemContext();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const composedRef = useMergedRef(triggerRef, forwardedRef);
@@ -28,28 +28,22 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
 
   useEffect(() => {
     if (triggerRef.current) {
-      accordionContext.registerItem(itemId, triggerRef.current);
+      registerItem(itemId, triggerRef.current);
     }
-    return () => accordionContext.unregisterItem(itemId);
-  }, [itemId, accordionContext.registerItem, accordionContext.unregisterItem]);
+    return () => unregisterItem(itemId);
+  }, [itemId, registerItem, unregisterItem]);
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       const { key } = event;
-      const currentIndex = accordionContext.getItemIndex(itemId);
-      const totalItems = accordionContext.itemCount;
-      const isHorizontal = accordionContext.orientation === 'horizontal';
+      const isHorizontal = orientation === 'horizontal';
 
       switch (key) {
         case 'ArrowDown':
         case 'ArrowUp': {
           if (isHorizontal) break;
           event.preventDefault();
-          const isDown = key === 'ArrowDown';
-          const nextIndex = isDown
-            ? (currentIndex + 1) % totalItems
-            : (currentIndex - 1 + totalItems) % totalItems;
-          accordionContext.focusItemAtIndex(nextIndex);
+          focusItem(itemId, key === 'ArrowDown' ? 'next' : 'previous');
           break;
         }
 
@@ -57,23 +51,19 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
         case 'ArrowLeft': {
           if (!isHorizontal) break;
           event.preventDefault();
-          const isRight = key === 'ArrowRight';
-          const nextIndex = isRight
-            ? (currentIndex + 1) % totalItems
-            : (currentIndex - 1 + totalItems) % totalItems;
-          accordionContext.focusItemAtIndex(nextIndex);
+          focusItem(itemId, key === 'ArrowRight' ? 'next' : 'previous');
           break;
         }
 
         case 'Home': {
           event.preventDefault();
-          accordionContext.focusItemAtIndex(0);
+          focusItem(itemId, 'first');
           break;
         }
 
         case 'End': {
           event.preventDefault();
-          accordionContext.focusItemAtIndex(totalItems - 1);
+          focusItem(itemId, 'last');
           break;
         }
 
@@ -83,7 +73,7 @@ export const AccordionTrigger = <T extends ElementType = 'button'>({
 
       onKeyDown?.(event as React.KeyboardEvent<HTMLButtonElement>);
     },
-    [accordionContext, itemId, onKeyDown],
+    [orientation, focusItem, itemId, onKeyDown],
   );
 
   // Render props for children function
