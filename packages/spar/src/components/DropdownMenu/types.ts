@@ -126,20 +126,23 @@ export interface DropdownMenuContentOwnProps {
   container?: HTMLElement | null;
 
   /**
-   * Escape key handler
-   * @param event - The keyboard event (call preventDefault to prevent close)
+   * Called when Escape is pressed while the menu is open, before the menu closes
+   * @param event - The native keyboard event (call preventDefault to prevent close)
    */
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
 
   /**
-   * Outside click handler
+   * Called when a pointer down occurs outside the content and trigger, before the menu closes
    * @param event - The pointer event (call preventDefault to prevent close)
    */
   onPointerDownOutside?: (event: PointerEvent) => void;
 
   /**
-   * Outside focus handler
-   * @param event - The focus event (call preventDefault to prevent close)
+   * Called when focus moves outside the content and trigger. A non-modal menu closes
+   * afterwards; a modal menu stays open and pulls focus back to its first item instead.
+   * @param event - A cancelable `focusoutside` FocusEvent dispatched on the newly focused
+   * element (native `focusin` is not cancelable). `event.target` is the element that received
+   * focus. Call preventDefault to prevent the close (non-modal) or the focus recapture (modal).
    */
   onFocusOutside?: (event: FocusEvent) => void;
 }

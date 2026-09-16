@@ -171,7 +171,8 @@ export interface SelectContentOwnProps {
   container?: HTMLElement | null;
 
   /**
-   * Escape key handler
+   * Escape key handler. Receives the native keyboard event; calling
+   * `preventDefault()` on it keeps the select open.
    * @param event - The keyboard event (call preventDefault to prevent close)
    */
   onEscapeKeyDown?: (event: KeyboardEvent) => void;
@@ -183,7 +184,10 @@ export interface SelectContentOwnProps {
   onPointerDownOutside?: (event: PointerEvent) => void;
 
   /**
-   * Focus handler on close
+   * Called when the select closes from inside the listbox (Escape, Enter/Space,
+   * Tab or an item click) and focus is about to return to the trigger. Not
+   * called for outside pointer dismissal, where focus stays where the user
+   * clicked.
    * @param event - The focus event (call preventDefault to prevent focus restore)
    */
   onCloseAutoFocus?: (event: FocusEvent) => void;
@@ -358,6 +362,8 @@ export interface SelectCollectionContextValue {
   highlightPrevious: () => void;
   isItemHighlighted: (id: string) => boolean;
   highlightedId: string | null;
+  /** Runs `onCloseAutoFocus` and, unless vetoed, moves focus back to the trigger. */
+  returnFocusToTrigger: () => void;
 }
 
 /**

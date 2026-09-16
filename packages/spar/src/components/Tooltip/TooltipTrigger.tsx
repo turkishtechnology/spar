@@ -97,43 +97,54 @@ export const TooltipTrigger = <T extends ElementType = 'button'>({
     [hideTooltip, onBlur],
   );
 
+  // Shared Escape dismissal: consult TooltipContent's onEscapeKeyDown first and honour
+  // its veto (read from the same native event the consumer received), then close.
+  const dismissOnEscape = useCallback(
+    (nativeEvent: KeyboardEvent) => {
+      context.onEscapeKeyDownRef.current?.(nativeEvent);
+      if (nativeEvent.defaultPrevented) return;
+
+      nativeEvent.preventDefault();
+      nativeEvent.stopPropagation();
+      clearTimeouts();
+      context.onOpenChange(false);
+      // Keep focus on trigger
+      context.triggerRef.current?.focus();
+    },
+    [context, clearTimeouts],
+  );
+
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       onKeyDown?.(event as React.KeyboardEvent<HTMLButtonElement>);
       if (event.defaultPrevented) return;
 
-      if (event.key === 'Escape' && context.isOpen) {
-        event.preventDefault();
-        event.stopPropagation();
-        hideTooltip(true);
-        // Keep focus on trigger
-        context.triggerRef.current?.focus();
+      // While open the document-level capture handler below normally runs first; when it
+      // was vetoed the native event is already defaultPrevented, so skip a second call.
+      if (event.key === 'Escape' && context.isOpen && !event.nativeEvent.defaultPrevented) {
+        dismissOnEscape(event.nativeEvent);
       }
     },
-    [onKeyDown, context.isOpen, context.triggerRef, hideTooltip],
+    [onKeyDown, context.isOpen, dismissOnEscape],
   );
 
   // Global escape key handler for better accessibility
   const handleGlobalKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        // Check if the event originated from tooltip content
-        const target = event.target as HTMLElement;
-        const tooltipContent = context.contentRef.current;
+      if (event.key !== 'Escape') return;
 
-        // If the event came from tooltip content, let the content handle it
-        if (tooltipContent && (target === tooltipContent || tooltipContent.contains(target))) {
-          return;
-        }
+      // Check if the event originated from tooltip content
+      const target = event.target as HTMLElement;
+      const tooltipContent = context.contentRef.current;
 
-        event.preventDefault();
-        event.stopPropagation();
-        context.onOpenChange(false);
-        // Refocus trigger
-        context.triggerRef.current?.focus();
+      // If the event came from tooltip content, let the content handle it
+      if (tooltipContent && (target === tooltipContent || tooltipContent.contains(target))) {
+        return;
       }
+
+      dismissOnEscape(event);
     },
-    [context],
+    [context, dismissOnEscape],
   );
 
   useDocumentEvent('keydown', handleGlobalKeyDown, context.isOpen, true);

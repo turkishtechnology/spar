@@ -29,6 +29,7 @@ import {
   DropdownMenuContentContext,
 } from './hooks';
 import { Align, Side } from '@/types';
+import { createCancelableFocusOutsideEvent } from '@/utils';
 
 /**
  * Floating content panel for the dropdown menu.
@@ -250,12 +251,18 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
     includeFocus: true,
     onPointerDownOutside: (event) => {
       onPointerDownOutside?.(event);
+      if (event.defaultPrevented) return;
+
       menu.closeMenu({ focusTrigger: false });
     },
-    onFocusOutside: (event) => {
+    onFocusOutside: (nativeEvent) => {
+      // `focusin` is not cancelable, so hand consumers a cancelable event instead
+      const event = createCancelableFocusOutsideEvent(nativeEvent);
       onFocusOutside?.(event);
+      if (event.defaultPrevented) return;
+
       if (menu.modal) {
-        event.preventDefault();
+        // Modal menus keep focus inside: pull it back to the first item instead of closing
         highlightFirst();
       } else {
         menu.closeMenu({ focusTrigger: false });
@@ -300,8 +307,12 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
           highlightLast();
           return;
         case 'Escape':
-          event.preventDefault();
+          // Consumer first: the veto is read from the native event they received. React's
+          // synthetic `defaultPrevented` is a snapshot taken at creation, so it must not be used.
           onEscapeKeyDown?.(event.nativeEvent);
+          if (event.nativeEvent.defaultPrevented) return;
+
+          event.preventDefault();
           menu.closeMenu();
           return;
         case 'Tab':

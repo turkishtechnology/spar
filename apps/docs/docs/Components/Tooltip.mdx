@@ -412,26 +412,23 @@ The content that displays in the tooltip popup with smart positioning.
 
 **Props**
 
-| Name                    | Type                                     | Default         | Description                                                                     |
-| ----------------------- | ---------------------------------------- | --------------- | ------------------------------------------------------------------------------- |
-| `as?`                   | `React.ElementType`                      | `"div"`         | Polymorphic content element                                                     |
-| `side?`                 | `"top" \| "bottom" \| "left" \| "right"` | `"top"`         | Preferred side                                                                  |
-| `align?`                | `"start" \| "center" \| "end"`           | `"center"`      | Preferred alignment                                                             |
-| `container?`            | `HTMLElement \| null`                    | `document.body` | Portal container (`null` also falls back to `document.body`)                    |
-| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`         | `undefined`     | Called on `Escape` before internal close                                        |
-| `onPointerDownOutside?` | `(event: PointerEvent) => void`          | `undefined`     | Type-level prop; current implementation does not bind dedicated outside handler |
-| `onOpenAutoFocus?`      | `(event: Event) => void`                 | `undefined`     | Type-level prop; current implementation does not run open auto-focus logic      |
-| `onCloseAutoFocus?`     | `(event: Event) => void`                 | `undefined`     | Type-level prop; current implementation does not run close auto-focus logic     |
-| `...props`              | `React.ComponentPropsWithoutRef<T>`      | `undefined`     | Native props forwarded to rendered content element                              |
+| Name               | Type                                     | Default         | Description                                                                                               |
+| ------------------ | ---------------------------------------- | --------------- | --------------------------------------------------------------------------------------------------------- |
+| `as?`              | `React.ElementType`                      | `"div"`         | Polymorphic content element                                                                               |
+| `side?`            | `"top" \| "bottom" \| "left" \| "right"` | `"top"`         | Preferred side                                                                                            |
+| `align?`           | `"start" \| "center" \| "end"`           | `"center"`      | Preferred alignment                                                                                       |
+| `container?`       | `HTMLElement \| null`                    | `document.body` | Portal container (`null` also falls back to `document.body`)                                              |
+| `onEscapeKeyDown?` | `(event: KeyboardEvent) => void`         | `undefined`     | Called on `Escape` (trigger, content or document) before internal close; `preventDefault()` keeps it open |
+| `...props`         | `React.ComponentPropsWithoutRef<T>`      | `undefined`     | Native props forwarded to rendered content element                                                        |
 
 **Events**
 
-| Name              | Parameters                     | Description            | When Triggered                                       |
-| ----------------- | ------------------------------ | ---------------------- | ---------------------------------------------------- |
-| `onEscapeKeyDown` | `(event: KeyboardEvent)`       | Escape key pressed     | User presses Escape in content                       |
-| `onKeyDown`       | `(event: React.KeyboardEvent)` | Key pressed in content | Keyboard interaction                                 |
-| `onMouseEnter`    | `(event: React.MouseEvent)`    | Pointer enters content | Keeps content open when hoverable content is enabled |
-| `onMouseLeave`    | `(event: React.MouseEvent)`    | Pointer leaves content | Closes content when hoverable content is enabled     |
+| Name              | Parameters                     | Description            | When Triggered                                             |
+| ----------------- | ------------------------------ | ---------------------- | ---------------------------------------------------------- |
+| `onEscapeKeyDown` | `(event: KeyboardEvent)`       | Escape key pressed     | User presses Escape while open; veto with `preventDefault` |
+| `onKeyDown`       | `(event: React.KeyboardEvent)` | Key pressed in content | Keyboard interaction                                       |
+| `onMouseEnter`    | `(event: React.MouseEvent)`    | Pointer enters content | Keeps content open when hoverable content is enabled       |
+| `onMouseLeave`    | `(event: React.MouseEvent)`    | Pointer leaves content | Closes content when hoverable content is enabled           |
 
 **HTML Attributes**
 

@@ -24,15 +24,49 @@ describe('Radio Accessibility', () => {
         </Radio>,
       );
 
-      // Test specific to radiogroup container, excluding the problematic nested elements
       const radiogroup = container.querySelector('[role="radiogroup"]');
-      const results = await axe(radiogroup as Element, {
-        rules: {
-          'aria-allowed-role': { enabled: false }, // Disable custom role validation
-          'nested-interactive': { enabled: false }, // Disable nested interactive validation
-        },
-      });
+      const results = await axe(radiogroup as Element);
       expect(results).toHaveNoViolations();
+    });
+
+    it('passes axe on the documented anatomy with checked and disabled items', async () => {
+      const { container } = render(
+        <Radio.Root aria-label='Subscription plan' defaultValue='pro'>
+          <Radio.Item value='basic'>Basic</Radio.Item>
+          <Radio.Item value='pro'>Pro</Radio.Item>
+          <Radio.Item value='enterprise' disabled>
+            Enterprise
+          </Radio.Item>
+        </Radio.Root>,
+      );
+
+      // No rule overrides: the default `<span role="radio">` item must satisfy
+      // aria-allowed-role (a `<label>` may carry no role) and the visually
+      // hidden native input must not surface as a nested interactive control.
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+    });
+
+    it('names each item by its text and keeps the native input out of the AT tree', () => {
+      render(
+        <Radio aria-label='Subscription plan' value='pro'>
+          <RadioItem value='basic'>Basic</RadioItem>
+          <RadioItem value='pro'>Pro</RadioItem>
+        </Radio>,
+      );
+
+      // Only the two role="radio" spans are exposed; the aria-hidden inputs
+      // are excluded from the accessibility tree.
+      const radios = screen.getAllByRole('radio');
+      expect(radios).toHaveLength(2);
+      radios.forEach((radio) => expect(radio.tagName).toBe('SPAN'));
+
+      expect(screen.getByRole('radio', { name: 'Basic' })).toHaveAccessibleName('Basic');
+      expect(screen.getByRole('radio', { name: 'Pro' })).toHaveAttribute('aria-checked', 'true');
+
+      const nativeInputs = document.querySelectorAll('input[type="radio"]');
+      expect(nativeInputs).toHaveLength(2);
+      nativeInputs.forEach((input) => expect(input).toHaveAttribute('aria-hidden', 'true'));
     });
 
     it('should pass accessibility checks with form association', async () => {
@@ -48,14 +82,8 @@ describe('Radio Accessibility', () => {
         </form>,
       );
 
-      // Test the form structure which should be compliant
       const fieldset = container.querySelector('fieldset');
-      const results = await axe(fieldset as Element, {
-        rules: {
-          'aria-allowed-role': { enabled: false },
-          'nested-interactive': { enabled: false },
-        },
-      });
+      const results = await axe(fieldset as Element);
       expect(results).toHaveNoViolations();
     });
   });
@@ -192,7 +220,7 @@ describe('Radio Accessibility', () => {
         </Radio>,
       );
 
-      const labels = container.querySelectorAll('label[role="radio"]');
+      const labels = container.querySelectorAll('[role="radio"]');
 
       expect(labels[0]).toHaveAttribute('tabindex', '-1');
       expect(labels[1]).toHaveAttribute('tabindex', '0');
@@ -234,7 +262,7 @@ describe('Radio Accessibility', () => {
       );
 
       const radioGroup = container.querySelector('[role="radiogroup"]');
-      const labels = container.querySelectorAll('label[role="radio"]');
+      const labels = container.querySelectorAll('[role="radio"]');
       await waitFor(() => {
         expect(labels[0]).toHaveFocus();
       });
@@ -250,7 +278,7 @@ describe('Radio Accessibility', () => {
         </Radio>,
       );
 
-      const labels = container.querySelectorAll('label[role="radio"]');
+      const labels = container.querySelectorAll('[role="radio"]');
       await waitFor(() => {
         expect(labels[1]).toHaveFocus();
       });
@@ -278,7 +306,7 @@ describe('Radio Accessibility', () => {
         </Radio>,
       );
 
-      const labels = container.querySelectorAll('label[role="radio"]');
+      const labels = container.querySelectorAll('[role="radio"]');
       labels.forEach((label) => {
         expect(label).toHaveTextContent(/Option \d/);
       });
@@ -302,7 +330,7 @@ describe('Radio Accessibility', () => {
         </Radio>,
       );
 
-      const labels = container.querySelectorAll('label[role="radio"]');
+      const labels = container.querySelectorAll('[role="radio"]');
       expect(labels[0]).toHaveTextContent('Basic Plan$10/month');
       expect(labels[1]).toHaveTextContent('Premium Plan$20/month');
     });
@@ -367,7 +395,7 @@ describe('Radio Accessibility', () => {
         </Radio>,
       );
 
-      const labels = container.querySelectorAll('label[role="radio"]');
+      const labels = container.querySelectorAll('[role="radio"]');
       await user.click(labels[1] as HTMLElement);
 
       expect(handleChange).toHaveBeenCalledWith('option2');

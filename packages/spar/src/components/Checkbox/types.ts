@@ -60,6 +60,18 @@ export interface CheckboxOwnProps {
   defaultChecked?: CheckedState;
 
   /**
+   * Shows the mixed (`aria-checked="mixed"`) state on top of `checked` /
+   * `defaultChecked` without taking ownership of the checked value. Works in
+   * both modes; in uncontrolled mode it is the way to enter and leave the
+   * indeterminate state: a user toggle still advances the internal boolean
+   * state and fires `onChange(true)`, so clearing this prop from `onChange`
+   * lands on the new boolean state rather than on a stale `'indeterminate'`.
+   * Takes precedence over `checked="indeterminate"` (both render mixed).
+   * @defaultValue false
+   */
+  indeterminate?: boolean;
+
+  /**
    * Callback fired when the checked state changes
    * @param checked - The new checked state
    */

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   Dialog,
@@ -304,6 +304,68 @@ describe('Dialog', () => {
 
       await user.click(trigger);
       expect(onClick).not.toHaveBeenCalled();
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+
+    it('should make render-prop open/toggle no-ops while disabled', () => {
+      const onOpenChange = jest.fn();
+      let helpers: { open: () => void; toggle: () => void } | null = null;
+
+      render(
+        <Dialog onOpenChange={onOpenChange}>
+          <DialogTrigger disabled>
+            {({ open, toggle }) => {
+              helpers = { open, toggle };
+              return 'Open Dialog';
+            }}
+          </DialogTrigger>
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+          </DialogContent>
+        </Dialog>,
+      );
+
+      act(() => {
+        helpers?.open();
+      });
+      expect(onOpenChange).not.toHaveBeenCalled();
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+      act(() => {
+        helpers?.toggle();
+      });
+      expect(onOpenChange).not.toHaveBeenCalled();
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    });
+
+    it('should open and toggle the dialog through render props when enabled', () => {
+      const onOpenChange = jest.fn();
+      let helpers: { open: () => void; toggle: () => void } | null = null;
+
+      render(
+        <Dialog onOpenChange={onOpenChange}>
+          <DialogTrigger>
+            {({ open, toggle }) => {
+              helpers = { open, toggle };
+              return 'Open Dialog';
+            }}
+          </DialogTrigger>
+          <DialogContent>
+            <DialogTitle>Dialog Title</DialogTitle>
+          </DialogContent>
+        </Dialog>,
+      );
+
+      act(() => {
+        helpers?.open();
+      });
+      expect(onOpenChange).toHaveBeenLastCalledWith(true);
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+      act(() => {
+        helpers?.toggle();
+      });
+      expect(onOpenChange).toHaveBeenLastCalledWith(false);
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
 

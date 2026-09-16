@@ -295,6 +295,32 @@ function ControlledCheckbox() {
 
 Use the indeterminate state for mixed selections, such as a parent checkbox that represents partially selected children.
 
+The `indeterminate` prop layers the mixed state (`aria-checked="mixed"`, `data-state="indeterminate"`) on top of `checked`/`defaultChecked` without taking ownership of the value, so it works in both modes. A user toggle still fires `onChange(true)` and, in uncontrolled mode, advances the internal boolean state underneath, so clearing `indeterminate` from `onChange` lands on the new state instead of a stale mixed value:
+
+```tsx {2,5,10}
+function SelectAllCheckbox() {
+  const [indeterminate, setIndeterminate] = useState(true);
+
+  return (
+    <Field.Root>
+      <div className='checkbox-row'>
+        <Checkbox indeterminate={indeterminate} onChange={() => setIndeterminate(false)}>
+          {({ checked }) => (
+            <span className='indicator'>
+              {checked === true && '✓'}
+              {checked === 'indeterminate' && '−'}
+            </span>
+          )}
+        </Checkbox>
+        <Field.Label>Select all items</Field.Label>
+      </div>
+    </Field.Root>
+  );
+}
+```
+
+Alternatively, keep the whole tri-state value under your control with `checked='indeterminate'`:
+
 ```tsx {2,4-12}
 function IndeterminateCheckbox() {
   const [checked, setChecked] = useState<CheckedState>('indeterminate');
@@ -485,26 +511,27 @@ A self-contained headless checkbox component with full accessibility and Field i
 
 **Props**
 
-| Name              | Type                                                                   | Default          | Description                                                                       |
-| ----------------- | ---------------------------------------------------------------------- | ---------------- | --------------------------------------------------------------------------------- |
-| `as?`             | `React.ElementType`                                                    | `'span'`         | The element or component to render as                                             |
-| `ref?`            | `React.Ref<HTMLElement>`                                               | `undefined`      | Ref to the underlying DOM element                                                 |
-| `checked?`        | `CheckedState`                                                         | `undefined`      | Controlled checked state. When provided, component operates in controlled mode    |
-| `defaultChecked?` | `CheckedState`                                                         | `false`          | Default checked state for uncontrolled usage                                      |
-| `onChange?`       | `(checked: CheckedState) => void`                                      | `undefined`      | Callback fired when the checked state changes                                     |
-| `disabled?`       | `boolean`                                                              | `false`          | Disabled state - prevents interaction and is properly announced to screen readers |
-| `name?`           | `string`                                                               | `undefined`      | Name attribute for form submission                                                |
-| `value?`          | `string`                                                               | `'on'`           | Value sent in form data when checked                                              |
-| `form?`           | `string`                                                               | `undefined`      | ID of the form this checkbox belongs to                                           |
-| `required?`       | `boolean`                                                              | `false`          | Required state for form validation                                                |
-| `readOnly?`       | `boolean`                                                              | `false`          | Read-only state - prevents interaction                                            |
-| `invalid?`        | `boolean`                                                              | `false`          | Invalid/error state. Inherited from Field unless explicitly overridden            |
-| `autoFocus?`      | `boolean`                                                              | `false`          | Auto-focus on mount                                                               |
-| `children?`       | `React.ReactNode \| ((state: CheckboxRenderProps) => React.ReactNode)` | `undefined`      | Content to display, or render props function                                      |
-| `id?`             | `string`                                                               | `auto-generated` | Unique identifier for the checkbox                                                |
-| `className?`      | `string`                                                               | `undefined`      | CSS class name                                                                    |
-| `style?`          | `React.CSSProperties`                                                  | `undefined`      | Inline styles                                                                     |
-| `tabIndex?`       | `number`                                                               | `0`              | Tab index for keyboard navigation                                                 |
+| Name              | Type                                                                   | Default          | Description                                                                         |
+| ----------------- | ---------------------------------------------------------------------- | ---------------- | ----------------------------------------------------------------------------------- |
+| `as?`             | `React.ElementType`                                                    | `'span'`         | The element or component to render as                                               |
+| `ref?`            | `React.Ref<HTMLElement>`                                               | `undefined`      | Ref to the underlying DOM element                                                   |
+| `checked?`        | `CheckedState`                                                         | `undefined`      | Controlled checked state. When provided, component operates in controlled mode      |
+| `defaultChecked?` | `CheckedState`                                                         | `false`          | Default checked state for uncontrolled usage                                        |
+| `indeterminate?`  | `boolean`                                                              | `false`          | Shows the mixed state on top of `checked`/`defaultChecked` without owning the value |
+| `onChange?`       | `(checked: CheckedState) => void`                                      | `undefined`      | Callback fired when the checked state changes                                       |
+| `disabled?`       | `boolean`                                                              | `false`          | Disabled state - prevents interaction and is properly announced to screen readers   |
+| `name?`           | `string`                                                               | `undefined`      | Name attribute for form submission                                                  |
+| `value?`          | `string`                                                               | `'on'`           | Value sent in form data when checked                                                |
+| `form?`           | `string`                                                               | `undefined`      | ID of the form this checkbox belongs to                                             |
+| `required?`       | `boolean`                                                              | `false`          | Required state for form validation                                                  |
+| `readOnly?`       | `boolean`                                                              | `false`          | Read-only state - prevents interaction                                              |
+| `invalid?`        | `boolean`                                                              | `false`          | Invalid/error state. Inherited from Field unless explicitly overridden              |
+| `autoFocus?`      | `boolean`                                                              | `false`          | Auto-focus on mount                                                                 |
+| `children?`       | `React.ReactNode \| ((state: CheckboxRenderProps) => React.ReactNode)` | `undefined`      | Content to display, or render props function                                        |
+| `id?`             | `string`                                                               | `auto-generated` | Unique identifier for the checkbox                                                  |
+| `className?`      | `string`                                                               | `undefined`      | CSS class name                                                                      |
+| `style?`          | `React.CSSProperties`                                                  | `undefined`      | Inline styles                                                                       |
+| `tabIndex?`       | `number`                                                               | `0`              | Tab index for keyboard navigation                                                   |
 
 #### CheckboxRenderProps
 
@@ -534,17 +561,17 @@ When using the render props pattern, the following state properties are passed t
 
 **Data Attributes**
 
-| Attribute            | Value | Purpose                                     |
-| -------------------- | ----- | ------------------------------------------- |
-| `data-checked`       | `""`  | Present when `checked` is `true`            |
-| `data-indeterminate` | `""`  | Present when `checked` is `'indeterminate'` |
-| `data-disabled`      | `""`  | Present when `disabled` is `true`           |
-| `data-readonly`      | `""`  | Present when `readOnly` is `true`           |
-| `data-required`      | `""`  | Present when `required` is `true`           |
-| `data-invalid`       | `""`  | Present when `invalid` is `true`            |
-| `data-focus`         | `""`  | Present when the checkbox has focus         |
-| `data-hover`         | `""`  | Present when the checkbox is hovered        |
-| `data-active`        | `""`  | Present when the checkbox is being pressed  |
+| Attribute            | Value | Purpose                                                               |
+| -------------------- | ----- | --------------------------------------------------------------------- |
+| `data-checked`       | `""`  | Present when `checked` is `true`                                      |
+| `data-indeterminate` | `""`  | Present when `checked` is `'indeterminate'` or `indeterminate` is set |
+| `data-disabled`      | `""`  | Present when `disabled` is `true`                                     |
+| `data-readonly`      | `""`  | Present when `readOnly` is `true`                                     |
+| `data-required`      | `""`  | Present when `required` is `true`                                     |
+| `data-invalid`       | `""`  | Present when `invalid` is `true`                                      |
+| `data-focus`         | `""`  | Present when the checkbox has focus                                   |
+| `data-hover`         | `""`  | Present when the checkbox is hovered                                  |
+| `data-active`        | `""`  | Present when the checkbox is being pressed                            |
 
 ## Keyboard Interactions
 

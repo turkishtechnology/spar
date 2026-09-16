@@ -40,9 +40,15 @@ export const DialogTrigger = <T extends ElementType = 'button'>({
   const renderProps: DialogTriggerRenderProps = {
     isOpen,
     disabled,
-    open: () => setIsOpen(true),
+    // open/toggle mirror the click path and are inert while the trigger is disabled;
+    // close stays available so a trigger disabled while open can still dismiss.
+    open: () => {
+      if (!disabled) setIsOpen(true);
+    },
     close: () => setIsOpen(false),
-    toggle: () => setIsOpen(!isOpen),
+    toggle: () => {
+      if (!disabled) setIsOpen(!isOpen);
+    },
   };
 
   const dataState = isOpen ? 'open' : 'closed';

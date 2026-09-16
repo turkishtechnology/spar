@@ -526,15 +526,15 @@ Collapsible panel containing the accordion item content.
 
 Complete keyboard behavior for the accordion component:
 
-| Key           | Action            | Context                      | Notes                                              |
-| ------------- | ----------------- | ---------------------------- | -------------------------------------------------- |
-| `Tab`         | Navigate          | Always                       | Moves focus to next focusable element in DOM order |
-| `Shift + Tab` | Navigate backward | Always                       | Moves focus to previous focusable element          |
-| `Enter`       | Toggle panel      | Focused trigger              | Expands/collapses the associated panel             |
-| `Space`       | Toggle panel      | Focused trigger              | Alternative activation method for triggers         |
-| `ArrowDown`   | Next trigger      | Focused trigger (vertical)   | Moves focus to next accordion trigger              |
-| `ArrowUp`     | Previous trigger  | Focused trigger (vertical)   | Moves focus to previous accordion trigger          |
-| `ArrowRight`  | Next trigger      | Focused trigger (horizontal) | Moves focus to next accordion trigger              |
-| `ArrowLeft`   | Previous trigger  | Focused trigger (horizontal) | Moves focus to previous accordion trigger          |
-| `Home`        | First trigger     | Focused trigger              | Moves focus to first accordion trigger             |
-| `End`         | Last trigger      | Focused trigger              | Moves focus to last accordion trigger              |
+| Key           | Action            | Context                      | Notes                                                                                    |
+| ------------- | ----------------- | ---------------------------- | ---------------------------------------------------------------------------------------- |
+| `Tab`         | Navigate          | Always                       | Moves focus to next focusable element in DOM order                                       |
+| `Shift + Tab` | Navigate backward | Always                       | Moves focus to previous focusable element                                                |
+| `Enter`       | Toggle panel      | Focused trigger              | Expands/collapses the associated panel                                                   |
+| `Space`       | Toggle panel      | Focused trigger              | Alternative activation method for triggers                                               |
+| `ArrowDown`   | Next trigger      | Focused trigger (vertical)   | Moves focus to the next enabled trigger in DOM order; wraps and skips disabled items     |
+| `ArrowUp`     | Previous trigger  | Focused trigger (vertical)   | Moves focus to the previous enabled trigger in DOM order; wraps and skips disabled items |
+| `ArrowRight`  | Next trigger      | Focused trigger (horizontal) | Moves focus to the next enabled trigger in DOM order; wraps and skips disabled items     |
+| `ArrowLeft`   | Previous trigger  | Focused trigger (horizontal) | Moves focus to the previous enabled trigger in DOM order; wraps and skips disabled items |
+| `Home`        | First trigger     | Focused trigger              | Moves focus to the first enabled trigger                                                 |
+| `End`         | Last trigger      | Focused trigger              | Moves focus to the last enabled trigger                                                  |

@@ -82,9 +82,10 @@ cursor: pointer;
 color: #f2f5f8;
 }
 
-/_ The headless Radio.Item renders a label with data-state="checked|unchecked";
-we draw the indicator with a pseudo-element on the item itself — no JSX
-indicator needed. The hidden native input is visually-hidden by Spar. _/
+/_ The headless Radio.Item renders a <span role="radio"> with
+data-state="checked|unchecked"; we draw the indicator with a pseudo-element on
+the item itself — no JSX indicator needed. The hidden native input is
+visually-hidden by Spar. _/
 .radio-demo-container .radio-item::before {
 content: '';
 flex: 0 0 auto;
@@ -145,7 +146,7 @@ color: #ff8a8a;
 
 - ✅ Mutually exclusive selection within radio groups
 - ✅ Controlled and uncontrolled state management
-- ✅ Form integration with hidden inputs
+- ✅ Form integration through a visually hidden native radio input per item
 - ✅ Group-level and item-level disabled states
 - ✅ Configurable orientation (`vertical` / `horizontal`)
 - ✅ Configurable selection behavior with `selectOnFocus`
@@ -201,9 +202,10 @@ import { Radio } from '@turkish-technology/spar';
 **Data Flow:**
 
 - `Radio.Root` manages selected value and provides context
-- Each `Radio.Item` registers itself for index-based focus navigation
-- `Radio.Root` renders a hidden `input[type="hidden"]` only when a value is selected
-- Each `Radio.Item` renders its own hidden `input[type="radio"]` for form compatibility
+- Each enabled `Radio.Item` registers itself for index-based focus navigation (in DOM order)
+- `Radio.Item` renders a `<span role="radio">` by default; its text content is the radio's accessible name
+- Each `Radio.Item` renders its own visually hidden `input[type="radio"]` for form compatibility — the selected value reaches form data exactly once
+- Consumer `onKeyDown` / `onFocus` / `onBlur` (root) and `onClick` / `onKeyDown` / `onFocus` (item) run before the built-in behavior; calling `event.preventDefault()` in a consumer handler skips the built-in navigation or selection for that event
 
 ## Code Examples
 
@@ -383,33 +385,34 @@ Root container that manages selection state, registration, and keyboard behavior
 
 **Props**
 
-| Name                | Type                         | Default      | Description                                                                             |
-| ------------------- | ---------------------------- | ------------ | --------------------------------------------------------------------------------------- |
-| `id?`               | `string`                     | `undefined`  | Base id used when generating fallback form `name`                                       |
-| `value?`            | `string`                     | `undefined`  | Controlled selected value                                                               |
-| `defaultValue?`     | `string`                     | `undefined`  | Uncontrolled initial value                                                              |
-| `onChange?`         | `(value: string) => void`    | `undefined`  | Selection change handler                                                                |
-| `name?`             | `string`                     | `undefined`  | Form key for hidden root input (fallback: `${id}-radio-group` or `useId()-radio-group`) |
-| `disabled?`         | `boolean`                    | `false`      | Disables entire radio group                                                             |
-| `readOnly?`         | `boolean`                    | `false`      | Read-only state. Group can be inspected but value cannot change; inherited from Field   |
-| `required?`         | `boolean`                    | `false`      | Marks group as required for forms                                                       |
-| `invalid?`          | `boolean`                    | `false`      | Marks group as invalid (`aria-invalid`); inherited from Field                           |
-| `orientation?`      | `'horizontal' \| 'vertical'` | `'vertical'` | Layout direction for keyboard navigation                                                |
-| `selectOnFocus?`    | `boolean`                    | `true`       | Whether arrow keys automatically select the focused item                                |
-| `autoFocus?`        | `boolean`                    | `false`      | Whether to focus the first focusable item on mount                                      |
-| `aria-label?`       | `string`                     | `undefined`  | Accessible name for the group                                                           |
-| `aria-labelledby?`  | `string`                     | `undefined`  | References element that labels the group                                                |
-| `aria-describedby?` | `string`                     | `undefined`  | References element that describes the group                                             |
-| `as?`               | `React.ElementType`          | `'div'`      | Polymorphic root element                                                                |
-| `children?`         | `React.ReactNode`            | `undefined`  | Radio.Item components                                                                   |
+| Name                | Type                         | Default      | Description                                                                                          |
+| ------------------- | ---------------------------- | ------------ | ---------------------------------------------------------------------------------------------------- |
+| `id?`               | `string`                     | `undefined`  | Base id used when generating fallback form `name`                                                    |
+| `value?`            | `string`                     | `undefined`  | Controlled selected value                                                                            |
+| `defaultValue?`     | `string`                     | `undefined`  | Uncontrolled initial value                                                                           |
+| `onChange?`         | `(value: string) => void`    | `undefined`  | Selection change handler                                                                             |
+| `name?`             | `string`                     | `undefined`  | Form key for the items' native radio inputs (fallback: `${id}-radio-group` or `useId()-radio-group`) |
+| `disabled?`         | `boolean`                    | `false`      | Disables entire radio group                                                                          |
+| `readOnly?`         | `boolean`                    | `false`      | Read-only state. Group can be inspected but value cannot change; inherited from Field                |
+| `required?`         | `boolean`                    | `false`      | Marks group as required for forms                                                                    |
+| `invalid?`          | `boolean`                    | `false`      | Marks group as invalid (`aria-invalid`); inherited from Field                                        |
+| `orientation?`      | `'horizontal' \| 'vertical'` | `'vertical'` | Layout direction for keyboard navigation                                                             |
+| `selectOnFocus?`    | `boolean`                    | `true`       | Whether arrow keys automatically select the focused item                                             |
+| `autoFocus?`        | `boolean`                    | `false`      | Whether to focus the first focusable item on mount                                                   |
+| `aria-label?`       | `string`                     | `undefined`  | Accessible name for the group                                                                        |
+| `aria-labelledby?`  | `string`                     | `undefined`  | References element that labels the group                                                             |
+| `aria-describedby?` | `string`                     | `undefined`  | References element that describes the group                                                          |
+| `as?`               | `React.ElementType`          | `'div'`      | Polymorphic root element                                                                             |
+| `children?`         | `React.ReactNode`            | `undefined`  | Radio.Item components                                                                                |
 
 **Events**
 
-| Name        | Parameters                     | Description                 | When Triggered                                     |
-| ----------- | ------------------------------ | --------------------------- | -------------------------------------------------- |
-| `onChange`  | `(value: string)`              | Selection state changes     | User selects different radio item                  |
-| `onKeyDown` | `(event: React.KeyboardEvent)` | Internal navigation handler | Arrow/Home/End key handling on root element        |
-| `onFocus`   | `(event: React.FocusEvent)`    | Internal focus sync handler | Root receives focus and initializes `focusedValue` |
+| Name        | Parameters                     | Description                                                                                   | When Triggered                                                        |
+| ----------- | ------------------------------ | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `onChange`  | `(value: string)`              | Selection state changes (fires only when the value actually changes)                          | User selects a different radio item                                   |
+| `onKeyDown` | `(event: React.KeyboardEvent)` | Runs before the internal navigation handler; `preventDefault()` skips Arrow/Home/End handling | Key pressed inside the group                                          |
+| `onFocus`   | `(event: React.FocusEvent)`    | Runs before the internal focus sync                                                           | Root or an item receives focus (root then initializes `focusedValue`) |
+| `onBlur`    | `(event: React.FocusEvent)`    | Runs before the internal focus reset                                                          | Focus leaves the root or an item                                      |
 
 **HTML Attributes**
 
@@ -417,6 +420,8 @@ Root container that manages selection state, registration, and keyboard behavior
 | ---------------------- | ---------------------------- | -------------------------------------- |
 | `role`                 | `"radiogroup"`               | Identifies root as a radio group       |
 | `aria-required`        | `true`                       | Present when `required` is `true`      |
+| `aria-readonly`        | `true`                       | Present when `readOnly` is `true`      |
+| `aria-invalid`         | `true`                       | Present when `invalid` is `true`       |
 | `data-orientation`     | `"horizontal" \| "vertical"` | Indicates layout direction             |
 | `data-disabled`        | `""`                         | Present when group disabled            |
 | `data-readonly`        | `""`                         | Present when group is read-only        |
@@ -425,19 +430,11 @@ Root container that manages selection state, registration, and keyboard behavior
 | `data-select-on-focus` | `""`                         | Present when `selectOnFocus` is `true` |
 | `data-autofocus`       | `""`                         | Present when `autoFocus` is `true`     |
 
-**Internal Hidden Input (`Radio.Root`)**
-
-| Attribute       | Value      | Purpose                                |
-| --------------- | ---------- | -------------------------------------- |
-| `type`          | `"hidden"` | Submits selected value with forms      |
-| `name`          | `string`   | Uses `name` prop or generated fallback |
-| `value`         | `string`   | Currently selected value               |
-| `disabled`      | `boolean`  | Mirrors root disabled state            |
-| `data-disabled` | `""`       | Present when root is disabled          |
-
 ### Radio.Item
 
-Individual option inside `Radio.Root`.
+Individual option inside `Radio.Root`. Renders a `<span role="radio">` by default whose text content
+is the radio's accessible name. Use `as` for another element that may carry `role="radio"` — not
+`<label>`, which allows no ARIA role.
 
 **Props**
 
@@ -447,7 +444,7 @@ Individual option inside `Radio.Root`.
 | `disabled?`         | `boolean`                                                               | `false`     | Disables this specific radio item           |
 | `aria-label?`       | `string`                                                                | `undefined` | Accessible name when children insufficient  |
 | `aria-describedby?` | `string`                                                                | `undefined` | References element that describes this item |
-| `as?`               | `React.ElementType`                                                     | `'label'`   | Polymorphic root element                    |
+| `as?`               | `React.ElementType`                                                     | `'span'`    | Polymorphic root element                    |
 | `children?`         | `React.ReactNode \| ((state: RadioItemRenderProps) => React.ReactNode)` | `undefined` | Label content or render props function      |
 
 **Render Props (RadioItemRenderProps)**
@@ -461,11 +458,11 @@ Individual option inside `Radio.Root`.
 
 **Events**
 
-| Name        | Parameters                     | Description                | When Triggered                           |
-| ----------- | ------------------------------ | -------------------------- | ---------------------------------------- |
-| `onClick`   | `(event: React.MouseEvent)`    | Internal selection handler | Item is clicked                          |
-| `onKeyDown` | `(event: React.KeyboardEvent)` | Internal key handler       | Focused item receives `Space` or `Enter` |
-| `onFocus`   | `(event: React.FocusEvent)`    | Internal focus handler     | Item receives focus                      |
+| Name        | Parameters                     | Description                                                              | When Triggered                           |
+| ----------- | ------------------------------ | ------------------------------------------------------------------------ | ---------------------------------------- |
+| `onClick`   | `(event: React.MouseEvent)`    | Runs before the internal selection; `preventDefault()` skips selecting   | Item is clicked                          |
+| `onKeyDown` | `(event: React.KeyboardEvent)` | Runs before the internal key handler; `preventDefault()` skips selecting | Focused item receives `Space` or `Enter` |
+| `onFocus`   | `(event: React.FocusEvent)`    | Runs before the internal focus tracking                                  | Item receives focus                      |
 
 **HTML Attributes**
 
@@ -521,4 +518,5 @@ Notes:
 
 - `ArrowUp` / `ArrowDown` do not navigate in horizontal mode.
 - `ArrowLeft` / `ArrowRight` do not navigate in vertical mode.
-- Disabled items are not skipped by index-based arrow navigation logic.
+- Disabled items are skipped by arrow / Home / End navigation and keep their DOM position when re-enabled.
+- In a `readOnly` group arrow keys and Home / End still move focus but never change the value.

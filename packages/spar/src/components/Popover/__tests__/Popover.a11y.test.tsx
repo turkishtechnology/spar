@@ -54,6 +54,7 @@ describe('Popover Accessibility', () => {
     );
 
     const trigger = screen.getByRole('button', { name: 'Open' });
+    expect(trigger).toHaveAttribute('id', 'a11y-popover-trigger');
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
     expect(trigger).toHaveAttribute('aria-controls', 'a11y-popover-content');
 

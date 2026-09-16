@@ -1,4 +1,5 @@
 export { visuallyHidden, getVisuallyHiddenStyles } from './visuallyHidden';
+export { createCancelableFocusOutsideEvent } from './focusOutside';
 export { getPlacement } from './getPlacement';
 export { createArrowComponent } from './createArrowComponent';
 export type {

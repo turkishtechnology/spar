@@ -287,6 +287,104 @@ describe('Tooltip', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
+  it('does not emit unknown-prop warnings when rendering content', () => {
+    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      render(<BasicTooltip defaultOpen />);
+      expect(screen.getByRole('tooltip')).toBeInTheDocument();
+      expect(consoleError).not.toHaveBeenCalled();
+    } finally {
+      consoleError.mockRestore();
+    }
+  });
+
+  it('calls onEscapeKeyDown and closes when Escape is pressed on the focused trigger', async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+    const onEscapeKeyDown = jest.fn();
+    const onOpenChange = jest.fn();
+    render(
+      <TooltipProvider>
+        <Tooltip defaultOpen onOpenChange={onOpenChange}>
+          <TooltipTrigger>Trigger</TooltipTrigger>
+          <TooltipContent onEscapeKeyDown={onEscapeKeyDown}>Tooltip content</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>,
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Trigger' });
+    act(() => {
+      trigger.focus();
+    });
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
+
+    await user.keyboard('{Escape}');
+
+    expect(onEscapeKeyDown).toHaveBeenCalledTimes(1);
+    expect(onEscapeKeyDown.mock.calls[0][0]).toBeInstanceOf(KeyboardEvent);
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
+  it('keeps the tooltip open when onEscapeKeyDown calls preventDefault on the trigger', async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+    const onEscapeKeyDown = jest.fn((event: KeyboardEvent) => event.preventDefault());
+    const onOpenChange = jest.fn();
+    render(
+      <TooltipProvider>
+        <Tooltip defaultOpen onOpenChange={onOpenChange}>
+          <TooltipTrigger>Trigger</TooltipTrigger>
+          <TooltipContent onEscapeKeyDown={onEscapeKeyDown}>Tooltip content</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>,
+    );
+
+    act(() => {
+      screen.getByRole('button', { name: 'Trigger' }).focus();
+    });
+
+    await user.keyboard('{Escape}');
+    act(() => {
+      jest.advanceTimersByTime(0);
+    });
+
+    expect(onEscapeKeyDown).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
+  });
+
+  it('honours the onEscapeKeyDown veto when Escape is pressed inside focusable content', async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+    const onEscapeKeyDown = jest.fn((event: KeyboardEvent) => event.preventDefault());
+    render(
+      <TooltipProvider>
+        <Tooltip defaultOpen>
+          <TooltipTrigger>Trigger</TooltipTrigger>
+          <TooltipContent tabIndex={-1} onEscapeKeyDown={onEscapeKeyDown}>
+            Tooltip content
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>,
+    );
+
+    const content = screen.getByRole('tooltip');
+    act(() => {
+      content.focus();
+    });
+    expect(content).toHaveFocus();
+
+    await user.keyboard('{Escape}');
+    expect(onEscapeKeyDown).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
+
+    // Without the veto, Escape inside the content closes and refocuses the trigger
+    onEscapeKeyDown.mockImplementation(() => {});
+    await user.keyboard('{Escape}');
+    expect(onEscapeKeyDown).toHaveBeenCalledTimes(2);
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Trigger' })).toHaveFocus();
+  });
+
   it('does not change state when render-props show is invoked while disabled', () => {
     const onOpenChange = jest.fn();
     let showTooltip: (() => void) | null = null;

@@ -69,7 +69,8 @@ export interface DialogTriggerRenderProps {
    */
   disabled: boolean;
   /**
-   * Function to open the dialog
+   * Function to open the dialog.
+   * No-op while the trigger is disabled (`onOpenChange` is not called).
    */
   open: () => void;
   /**
@@ -77,7 +78,8 @@ export interface DialogTriggerRenderProps {
    */
   close: () => void;
   /**
-   * Function to toggle the dialog open/closed state
+   * Function to toggle the dialog open/closed state.
+   * No-op while the trigger is disabled (`onOpenChange` is not called).
    */
   toggle: () => void;
 }

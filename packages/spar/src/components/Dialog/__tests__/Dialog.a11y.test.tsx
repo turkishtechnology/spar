@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import userEvent from '@testing-library/user-event';
@@ -339,6 +340,60 @@ describe('Dialog Accessibility', () => {
       await user.keyboard('{Escape}');
 
       expect(trigger).toHaveFocus();
+    });
+
+    it('should restore focus to trigger when dialog closes with Escape', async () => {
+      const user = userEvent.setup();
+      render(<DialogTestComponent />);
+
+      const trigger = screen.getByRole('button', { name: 'Open Dialog' });
+      await user.click(trigger);
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: 'Close' })).toHaveFocus();
+      });
+
+      await user.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
+      expect(trigger).toHaveFocus();
+    });
+
+    it('should focus finalFocus instead of the trigger when provided', async () => {
+      const user = userEvent.setup();
+      const FinalFocusDialog = () => {
+        const targetRef = React.useRef<HTMLButtonElement>(null);
+        return (
+          <>
+            <Dialog>
+              <DialogTrigger>Open Dialog</DialogTrigger>
+              <DialogContent finalFocus={() => targetRef.current!}>
+                <DialogTitle>Dialog Title</DialogTitle>
+                <DialogClose>Close</DialogClose>
+              </DialogContent>
+            </Dialog>
+            <button type='button' ref={targetRef}>
+              After Close Target
+            </button>
+          </>
+        );
+      };
+      render(<FinalFocusDialog />);
+
+      const trigger = screen.getByRole('button', { name: 'Open Dialog' });
+      await user.click(trigger);
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      await user.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
+      expect(screen.getByRole('button', { name: 'After Close Target' })).toHaveFocus();
+      expect(trigger).not.toHaveFocus();
     });
 
     it('should handle custom initial focus', async () => {

@@ -13,6 +13,7 @@ import { PopoverContentProps } from './types';
 import { usePopoverContext } from './hooks/usePopoverContext';
 import { PopoverContentContext } from './hooks/usePopoverContentContext';
 import { getFocusableElements } from './utils/index';
+import { createCancelableFocusOutsideEvent } from '@/utils';
 import type { Side, Align } from '../../types';
 
 /**
@@ -94,15 +95,19 @@ export const PopoverContent = <T extends ElementType = 'div'>({
 
     const contentElement = contentRef.current;
 
-    // Focus first focusable element when opening
-    const focusableElements = getFocusableElements(contentElement);
-    if (focusableElements.length > 0) {
-      focusableElements[0]?.focus({ preventScroll: true });
-    } else {
-      contentElement.focus({ preventScroll: true });
-    }
+    // Let the consumer veto the auto-focus before it happens
+    const openEvent = new Event('openautofocus', { cancelable: true });
+    onOpenAutoFocusRef.current?.(openEvent);
 
-    onOpenAutoFocusRef.current?.(new Event('openautofocus'));
+    if (!openEvent.defaultPrevented) {
+      // Focus first focusable element when opening
+      const focusableElements = getFocusableElements(contentElement);
+      if (focusableElements.length > 0) {
+        focusableElements[0]?.focus({ preventScroll: true });
+      } else {
+        contentElement.focus({ preventScroll: true });
+      }
+    }
 
     return () => {
       // Return focus to trigger when closing
@@ -151,7 +156,9 @@ export const PopoverContent = <T extends ElementType = 'div'>({
         closePopover();
       }
     },
-    onFocusOutside: (event) => {
+    onFocusOutside: (nativeEvent) => {
+      // `focusin` is not cancelable, so hand consumers a cancelable event instead
+      const event = createCancelableFocusOutsideEvent(nativeEvent);
       onFocusOutside?.(event);
       onInteractOutside?.(event);
 

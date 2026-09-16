@@ -21,13 +21,17 @@ export interface TabsOwnProps {
   value?: string;
 
   /**
-   * Uncontrolled initial tab selection
+   * Uncontrolled initial tab selection. When omitted (and `value` is not set),
+   * the first tab in DOM order is selected without calling `onValueChange`.
    * @defaultValue First tab value
    */
   defaultValue?: string;
 
   /**
-   * Callback when tab selection changes
+   * Callback when the selected tab changes through user interaction (click,
+   * keyboard activation or `select()`). Not called for the automatic
+   * first-tab selection on mount, nor when the already selected tab is
+   * activated again.
    * @param value - The new selected tab value
    */
   onValueChange?: (value: string) => void;

@@ -19,6 +19,7 @@ export const PopoverTrigger = <T extends ElementType = 'button'>({
 }: PopoverTriggerProps<T>) => {
   const {
     isOpen,
+    triggerId,
     contentId,
     triggerRef,
     togglePopover,
@@ -64,6 +65,7 @@ export const PopoverTrigger = <T extends ElementType = 'button'>({
 
   const buttonProps = {
     ...(as && { as }),
+    id: triggerId,
     disabled,
     ref: mergedRef,
     onClick: handleClick,

@@ -165,6 +165,8 @@ function PolymorphicButtons() {
 }
 ```
 
+While `disabled` or `isLoading`, a non-native element cancels the click's default action, and a plain `as='a'` additionally drops its `href`, so an inert link cannot navigate (`aria-disabled`, `tabIndex` and `aria-busy` are unchanged).
+
 ### Auto-focus and Disabled States
 
 Button with auto-focus and disabled state management:

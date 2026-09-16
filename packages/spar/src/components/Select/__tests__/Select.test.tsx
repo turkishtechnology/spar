@@ -199,6 +199,172 @@ describe('Select', () => {
     consoleErrorSpy.mockRestore();
   });
 
+  describe('onEscapeKeyDown', () => {
+    const renderWithEscape = (
+      onEscapeKeyDown: (event: KeyboardEvent) => void,
+      onOpenChange: (open: boolean) => void,
+    ) =>
+      render(
+        <Select onOpenChange={onOpenChange}>
+          <SelectTrigger aria-label='Choose option' placeholder='Select...' />
+          <SelectContent onEscapeKeyDown={onEscapeKeyDown}>
+            <SelectItem value='option1' label='Option 1'>
+              Option 1
+            </SelectItem>
+          </SelectContent>
+        </Select>,
+      );
+
+    it('receives the native event, closes and returns focus to the trigger', async () => {
+      const user = userEvent.setup();
+      const onEscapeKeyDown = jest.fn();
+      const onOpenChange = jest.fn();
+
+      renderWithEscape(onEscapeKeyDown, onOpenChange);
+
+      const trigger = screen.getByRole('combobox');
+      await user.click(trigger);
+      expect(screen.getByRole('listbox')).toHaveFocus();
+
+      await user.keyboard('{Escape}');
+
+      expect(onEscapeKeyDown).toHaveBeenCalledTimes(1);
+      expect(onEscapeKeyDown.mock.calls[0]?.[0]).toBeInstanceOf(KeyboardEvent);
+      expect(onOpenChange).toHaveBeenLastCalledWith(false);
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+      expect(trigger).toHaveFocus();
+    });
+
+    it('keeps the select open when preventDefault is called on the native event', async () => {
+      const user = userEvent.setup();
+      const onEscapeKeyDown = jest.fn((event: KeyboardEvent) => event.preventDefault());
+      const onOpenChange = jest.fn();
+
+      renderWithEscape(onEscapeKeyDown, onOpenChange);
+
+      await user.click(screen.getByRole('combobox'));
+      await user.keyboard('{Escape}');
+
+      expect(onEscapeKeyDown).toHaveBeenCalledTimes(1);
+      expect(onOpenChange).toHaveBeenCalledTimes(1);
+      expect(onOpenChange).not.toHaveBeenCalledWith(false);
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
+      expect(screen.getByRole('listbox')).toHaveFocus();
+    });
+  });
+
+  describe('onCloseAutoFocus', () => {
+    const renderWithCloseAutoFocus = (onCloseAutoFocus: (event: FocusEvent) => void) =>
+      render(
+        <>
+          <button type='button'>Outside</button>
+          <Select>
+            <SelectTrigger aria-label='Choose option' placeholder='Select...' />
+            <SelectContent onCloseAutoFocus={onCloseAutoFocus}>
+              <SelectItem value='option1' label='Option 1'>
+                Option 1
+              </SelectItem>
+              <SelectItem value='option2' label='Option 2'>
+                Option 2
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </>,
+      );
+
+    it('is called before focus returns to the trigger on Escape', async () => {
+      const user = userEvent.setup();
+      const onCloseAutoFocus = jest.fn();
+
+      renderWithCloseAutoFocus(onCloseAutoFocus);
+
+      const trigger = screen.getByRole('combobox');
+      await user.click(trigger);
+      await user.keyboard('{Escape}');
+
+      expect(onCloseAutoFocus).toHaveBeenCalledTimes(1);
+      const event = onCloseAutoFocus.mock.calls[0]?.[0] as FocusEvent;
+      expect(event.cancelable).toBe(true);
+      expect(trigger).toHaveFocus();
+    });
+
+    it('is called when an item is picked by click or Enter', async () => {
+      const user = userEvent.setup();
+      const onCloseAutoFocus = jest.fn();
+
+      renderWithCloseAutoFocus(onCloseAutoFocus);
+
+      const trigger = screen.getByRole('combobox');
+      await user.click(trigger);
+      await user.click(screen.getByRole('option', { name: 'Option 1' }));
+      expect(onCloseAutoFocus).toHaveBeenCalledTimes(1);
+      expect(trigger).toHaveFocus();
+
+      await user.keyboard('{ArrowDown}');
+      await user.keyboard('{ArrowDown}');
+      await user.keyboard('{Enter}');
+      expect(onCloseAutoFocus).toHaveBeenCalledTimes(2);
+      expect(trigger).toHaveTextContent('Option 2');
+      expect(trigger).toHaveFocus();
+    });
+
+    it('skips the focus return when preventDefault is called', async () => {
+      const user = userEvent.setup();
+      const onCloseAutoFocus = jest.fn((event: FocusEvent) => event.preventDefault());
+
+      renderWithCloseAutoFocus(onCloseAutoFocus);
+
+      const trigger = screen.getByRole('combobox');
+      await user.click(trigger);
+      await user.keyboard('{Escape}');
+
+      expect(onCloseAutoFocus).toHaveBeenCalledTimes(1);
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+      expect(trigger).not.toHaveFocus();
+    });
+
+    it('is not called for outside pointer dismissal, which moves no focus', async () => {
+      const user = userEvent.setup();
+      const onCloseAutoFocus = jest.fn();
+
+      renderWithCloseAutoFocus(onCloseAutoFocus);
+
+      const trigger = screen.getByRole('combobox');
+      await user.click(trigger);
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+      await user.click(screen.getByRole('button', { name: 'Outside' }));
+
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+      expect(onCloseAutoFocus).not.toHaveBeenCalled();
+      expect(trigger).not.toHaveFocus();
+    });
+  });
+
+  describe('initially open', () => {
+    it('focuses the listbox on mount with defaultOpen so keys work immediately', async () => {
+      const user = userEvent.setup();
+
+      renderSelect({ defaultOpen: true });
+
+      const listbox = screen.getByRole('listbox');
+      expect(listbox).toHaveFocus();
+
+      await user.keyboard('{ArrowDown}');
+      expect(screen.getByRole('option', { name: 'Option 1' })).toHaveAttribute('data-highlighted');
+
+      await user.keyboard('{Escape}');
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+      expect(screen.getByRole('combobox')).toHaveFocus();
+    });
+
+    it('focuses the listbox on mount when controlled open is true', () => {
+      renderSelect({ open: true, onOpenChange: () => {} });
+
+      expect(screen.getByRole('listbox')).toHaveFocus();
+    });
+  });
+
   describe('Select.Viewport', () => {
     it('wraps options as a presentation container and preserves the listbox structure', async () => {
       const user = userEvent.setup();

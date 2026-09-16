@@ -17,6 +17,7 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
 
   const generatedId = useId();
   const baseId = providedId ?? generatedId;
+  const triggerId = `${baseId}-trigger`;
   const contentId = `${baseId}-content`;
 
   const [isOpen = false, setIsOpen] = useControlledState(controlledOpen, defaultOpen, onOpenChange);
@@ -43,6 +44,7 @@ export const usePopover = (props: Omit<PopoverProps, 'children'>) => {
 
   return {
     isOpen,
+    triggerId,
     contentId,
     triggerRef,
     contentRef,

@@ -23,11 +23,15 @@ export const TooltipContent = <T extends ElementType = 'div'>({
   align = 'center',
   container,
   onEscapeKeyDown,
+  onKeyDown,
   ref,
   ...props
 }: TooltipContentProps<T>) => {
   const Component = as || 'div';
   const context = useTooltipContext();
+
+  // Expose the latest handler so TooltipTrigger's Escape paths honour the same veto
+  context.onEscapeKeyDownRef.current = onEscapeKeyDown;
 
   // SSR safety - only render portal after mount
   const [mounted, setMounted] = useState(false);
@@ -73,20 +77,23 @@ export const TooltipContent = <T extends ElementType = 'div'>({
     refs.setReference(context.triggerRef.current);
   }, [refs, context.triggerRef]);
 
-  // Handle escape key
+  // Handle escape key (only reachable when the content itself holds focus)
   const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        event.stopPropagation();
-        onEscapeKeyDown?.(event.nativeEvent);
-        context.onOpenChange(false);
-        // Refocus the trigger after closing
-        const trigger = document.getElementById(context.triggerId);
-        trigger?.focus();
-      }
+    (event: React.KeyboardEvent<HTMLElement>) => {
+      onKeyDown?.(event as React.KeyboardEvent<HTMLDivElement>);
+      if (event.defaultPrevented || event.key !== 'Escape') return;
+
+      // The consumer receives the native event, so read the veto from that same object.
+      onEscapeKeyDown?.(event.nativeEvent);
+      if (event.nativeEvent.defaultPrevented) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      context.onOpenChange(false);
+      // Refocus the trigger after closing
+      context.triggerRef.current?.focus();
     },
-    [onEscapeKeyDown, context],
+    [onKeyDown, onEscapeKeyDown, context],
   );
 
   // Handle mouse enter/leave for hoverable content

@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useRef, useId, type ElementType } from 'react';
+import { useMemo, useCallback, useId, type ElementType } from 'react';
 import { useControlledState, useItemRegistry } from '@/hooks';
 import { TabsContext } from './hooks';
 import type { TabsProps, TabsContextValue } from './types';
@@ -21,9 +21,6 @@ export const Tabs = <T extends ElementType = 'div'>({
 }: TabsProps<T>) => {
   const Component = as || 'div';
 
-  // Check if component is in controlled mode
-  const isControlled = controlledValue !== undefined;
-
   // Generate unique IDs for ARIA relationships
   const generatedId = useId();
   const baseId = providedId ?? generatedId;
@@ -33,11 +30,9 @@ export const Tabs = <T extends ElementType = 'div'>({
     items: tabItems,
     registerItem,
     unregisterItem,
+    getItemIds,
     getItemIndex,
   } = useItemRegistry<HTMLElement>();
-
-  // Track if auto-selection has occurred to prevent multiple selections
-  const hasAutoSelectedRef = useRef(false);
 
   // Manage controlled/uncontrolled state
   const [selectedValue, setSelectedValue] = useControlledState(
@@ -46,35 +41,10 @@ export const Tabs = <T extends ElementType = 'div'>({
     onValueChange,
   );
 
-  const registerTab = useCallback(
-    (value: string, element: HTMLElement): void => {
-      registerItem(value, element);
-
-      // Only auto-select for uncontrolled mode
-      const shouldAutoSelectFirstTab =
-        !isControlled && !selectedValue && !defaultValue && !hasAutoSelectedRef.current;
-
-      if (shouldAutoSelectFirstTab) {
-        hasAutoSelectedRef.current = true;
-        setSelectedValue(value);
-      }
-    },
-    [isControlled, selectedValue, defaultValue, setSelectedValue, registerItem],
-  );
-
-  const unregisterTab = useCallback(
-    (value: string): void => {
-      unregisterItem(value);
-    },
-    [unregisterItem],
-  );
-
-  const getTabIndex = useCallback(
-    (value: string): number => {
-      return getItemIndex(value);
-    },
-    [getItemIndex],
-  );
+  // Without a `value` or `defaultValue` the first tab (in DOM order) is
+  // selected. It is derived rather than stored, so it is never reported
+  // through onValueChange and cannot go stale when that tab unmounts.
+  const currentValue = selectedValue ?? getItemIds()[0];
 
   const focusTab = useCallback(
     (value: string): void => {
@@ -83,18 +53,21 @@ export const Tabs = <T extends ElementType = 'div'>({
     [tabItems],
   );
 
+  // Re-activating the selected tab (click, Enter/Space, or navigation landing
+  // on it) is not a change, so onValueChange only fires for a new value.
   const handleValueChange = useCallback(
     (value: string): void => {
+      if (value === currentValue) return;
       setSelectedValue(value);
     },
-    [setSelectedValue],
+    [currentValue, setSelectedValue],
   );
 
   // Memoize context value to prevent unnecessary re-renders
   const contextValue = useMemo<TabsContextValue>(
     () => ({
       // State
-      selectedValue,
+      selectedValue: currentValue,
       onValueChange: handleValueChange,
 
       // Configuration
@@ -106,21 +79,21 @@ export const Tabs = <T extends ElementType = 'div'>({
 
       // Tab management
       tabItems,
-      registerTab,
-      unregisterTab,
-      getTabIndex,
+      registerTab: registerItem,
+      unregisterTab: unregisterItem,
+      getTabIndex: getItemIndex,
       focusTab,
     }),
     [
-      selectedValue,
+      currentValue,
       handleValueChange,
       orientation,
       activationMode,
       baseId,
       tabItems,
-      registerTab,
-      unregisterTab,
-      getTabIndex,
+      registerItem,
+      unregisterItem,
+      getItemIndex,
       focusTab,
     ],
   );

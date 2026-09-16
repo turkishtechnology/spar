@@ -123,7 +123,11 @@ export interface BreadcrumbLinkOwnProps {
    */
   isExternal?: boolean;
   /**
-   * Press event handler (overrides default navigation)
+   * Press event handler for click, Enter and Space. Replaces the `onNavigate`
+   * flow (the root handler is not called when `onPress` is set). It runs after
+   * the consumer `onClick` / `onKeyDown`, and is skipped when that handler
+   * called `preventDefault()`. On click the anchor's native navigation is left
+   * alone; call `event.preventDefault()` inside `onPress` to cancel it.
    * @param event - The triggering mouse or keyboard event
    */
   onPress?: (event: PressEvent) => void;

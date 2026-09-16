@@ -566,6 +566,178 @@ describe('Accordion', () => {
     });
   });
 
+  describe('Keyboard navigation with disabled and dynamic items', () => {
+    const Item = ({
+      value,
+      label,
+      disabled = false,
+      as,
+    }: {
+      value: string;
+      label: string;
+      disabled?: boolean;
+      as?: 'div';
+    }) => (
+      <AccordionItem value={value} disabled={disabled}>
+        <AccordionHeader>
+          <AccordionTrigger {...(as && { as })}>{label}</AccordionTrigger>
+        </AccordionHeader>
+        <AccordionContent>{label} content</AccordionContent>
+      </AccordionItem>
+    );
+
+    it('skips a disabled middle item and wraps around with arrow keys', async () => {
+      const user = userEvent.setup();
+      render(
+        <Accordion>
+          <Item value='item-1' label='First' />
+          <Item value='item-2' label='Second' disabled />
+          <Item value='item-3' label='Third' />
+        </Accordion>,
+      );
+
+      const first = screen.getByRole('button', { name: 'First' });
+      const third = screen.getByRole('button', { name: 'Third' });
+
+      first.focus();
+      await user.keyboard('{ArrowDown}');
+      expect(third).toHaveFocus();
+
+      await user.keyboard('{ArrowDown}');
+      expect(first).toHaveFocus();
+
+      await user.keyboard('{ArrowUp}');
+      expect(third).toHaveFocus();
+    });
+
+    it('lands Home and End on the first and last enabled items', async () => {
+      const user = userEvent.setup();
+      render(
+        <Accordion>
+          <Item value='item-1' label='First' disabled />
+          <Item value='item-2' label='Second' />
+          <Item value='item-3' label='Third' />
+          <Item value='item-4' label='Fourth' disabled />
+        </Accordion>,
+      );
+
+      const second = screen.getByRole('button', { name: 'Second' });
+      const third = screen.getByRole('button', { name: 'Third' });
+
+      third.focus();
+      await user.keyboard('{Home}');
+      expect(second).toHaveFocus();
+
+      await user.keyboard('{End}');
+      expect(third).toHaveFocus();
+
+      // Wrapping skips the disabled edge items in both directions.
+      await user.keyboard('{ArrowDown}');
+      expect(second).toHaveFocus();
+
+      await user.keyboard('{ArrowUp}');
+      expect(third).toHaveFocus();
+    });
+
+    it('keeps focus in place when every item is disabled by the root', async () => {
+      const user = userEvent.setup();
+      render(
+        <Accordion disabled>
+          <Item value='item-1' label='First' as='div' />
+          <Item value='item-2' label='Second' as='div' />
+        </Accordion>,
+      );
+
+      const first = screen.getByRole('button', { name: 'First' });
+      first.focus();
+      expect(first).toHaveFocus();
+
+      await user.keyboard('{ArrowDown}');
+      await user.keyboard('{End}');
+      expect(first).toHaveFocus();
+    });
+
+    it('navigates in DOM order when an item is inserted between existing ones', async () => {
+      const user = userEvent.setup();
+      const DynamicAccordion = () => {
+        const [inserted, setInserted] = React.useState(false);
+        return (
+          <>
+            <button type='button' onClick={() => setInserted(true)}>
+              Insert
+            </button>
+            <Accordion>
+              <Item value='item-1' label='First' />
+              {inserted && <Item value='item-inserted' label='Inserted' />}
+              <Item value='item-2' label='Second' />
+            </Accordion>
+          </>
+        );
+      };
+
+      render(<DynamicAccordion />);
+      await user.click(screen.getByRole('button', { name: 'Insert' }));
+
+      const first = screen.getByRole('button', { name: 'First' });
+      const insertedItem = screen.getByRole('button', { name: 'Inserted' });
+      const second = screen.getByRole('button', { name: 'Second' });
+
+      first.focus();
+      await user.keyboard('{ArrowDown}');
+      expect(insertedItem).toHaveFocus();
+
+      await user.keyboard('{ArrowDown}');
+      expect(second).toHaveFocus();
+
+      await user.keyboard('{Home}');
+      expect(first).toHaveFocus();
+
+      await user.keyboard('{End}');
+      expect(second).toHaveFocus();
+    });
+
+    it('keeps arrow navigation working after an item is replaced', async () => {
+      const user = userEvent.setup();
+      const ReplaceableAccordion = () => {
+        const [middle, setMiddle] = React.useState('item-2');
+        return (
+          <>
+            <button type='button' onClick={() => setMiddle('item-replaced')}>
+              Replace
+            </button>
+            <Accordion>
+              <Item value='item-1' label='First' />
+              <Item
+                key={middle}
+                value={middle}
+                label={middle === 'item-2' ? 'Second' : 'Replaced'}
+              />
+              <Item value='item-3' label='Third' />
+            </Accordion>
+          </>
+        );
+      };
+
+      render(<ReplaceableAccordion />);
+      await user.click(screen.getByRole('button', { name: 'Replace' }));
+      expect(screen.queryByRole('button', { name: 'Second' })).not.toBeInTheDocument();
+
+      const first = screen.getByRole('button', { name: 'First' });
+      const replaced = screen.getByRole('button', { name: 'Replaced' });
+      const third = screen.getByRole('button', { name: 'Third' });
+
+      first.focus();
+      await user.keyboard('{ArrowDown}');
+      expect(replaced).toHaveFocus();
+
+      await user.keyboard('{ArrowDown}');
+      expect(third).toHaveFocus();
+
+      await user.keyboard('{ArrowUp}');
+      expect(replaced).toHaveFocus();
+    });
+  });
+
   describe('Ref forwarding', () => {
     it('forwards refs to AccordionItem, AccordionHeader, and AccordionTrigger', async () => {
       const itemRef = React.createRef<HTMLDivElement>();

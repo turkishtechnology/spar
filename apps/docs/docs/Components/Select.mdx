@@ -278,7 +278,11 @@ import { Field, Select } from '@turkish-technology/spar';
     { name: 'group', label: 'Group', description: 'Groups related items together' },
     { name: 'label', label: 'Label', description: 'Label for item groups' },
     { name: 'item', label: 'Item', description: 'Individual selectable option' },
-    { name: 'separator', label: 'Separator', description: 'Visual separator between items/groups' },
+    {
+      name: 'separator',
+      label: 'Separator',
+      description: 'Presentational (aria-hidden) divider between items/groups',
+    },
     { name: 'arrow', label: 'Arrow', description: 'Optional arrow pointing to trigger' },
   ]}
 >
@@ -366,7 +370,7 @@ import { Field, Select } from '@turkish-technology/spar';
 - `Select.Viewport` is an optional scrollable wrapper around the options; it only bounds the height and provides the scroll region. Keeping the highlighted item in view during keyboard navigation and typeahead is handled by `Select.Item`, which scrolls itself into the nearest scrollable region (the viewport when present), so it works with or without a viewport.
 - `Select.Item` updates the selection and changes the Root value through click or keyboard interaction. The `label` prop registers the text used for typeahead and for display in the Trigger.
 - `Select.Group` + `Select.Label` establish the semantic group structure.
-- `Select.Separator` provides a separator role.
+- `Select.Separator` is a purely visual divider. It renders `role="presentation"` + `aria-hidden="true"` by default, because a `listbox` may only own `option`/`group` children (`aria-required-children`); pass `role='separator'` to expose it when the divider carries meaning.
 - `Select.Arrow` is an optional arrow positioned relative to the Content placement.
 
 **Alternative: Tree-shakeable named imports**
@@ -812,25 +816,26 @@ Popup content layer. It does not render when closed.
 
 **Props**
 
-| Name                    | Type                                     | Default         | Description                                                              |
-| ----------------------- | ---------------------------------------- | --------------- | ------------------------------------------------------------------------ |
-| `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`      | Preferred placement side                                                 |
-| `align?`                | `'start' \| 'center' \| 'end'`           | `'center'`      | Alignment relative to the Trigger                                        |
-| `container?`            | `HTMLElement \| null`                    | `document.body` | Portal target                                                            |
-| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`         | `undefined`     | Escape key callback (`preventDefault` can stop closing)                  |
-| `onPointerDownOutside?` | `(event: PointerEvent) => void`          | `undefined`     | Outside click callback (`preventDefault` can stop closing)               |
-| `onCloseAutoFocus?`     | `(event: FocusEvent) => void`            | `undefined`     | Prop type exists; the current implementation does not call this callback |
-| `as?`                   | `React.ElementType`                      | `'div'`         | Polymorphic element for Content                                          |
-| `ref?`                  | `React.Ref<HTMLElement>`                 | `undefined`     | Forwarded ref                                                            |
-| `children?`             | `React.ReactNode`                        | `undefined`     | Content children                                                         |
+| Name                    | Type                                     | Default         | Description                                                                   |
+| ----------------------- | ---------------------------------------- | --------------- | ----------------------------------------------------------------------------- |
+| `side?`                 | `'top' \| 'right' \| 'bottom' \| 'left'` | `'bottom'`      | Preferred placement side                                                      |
+| `align?`                | `'start' \| 'center' \| 'end'`           | `'center'`      | Alignment relative to the Trigger                                             |
+| `container?`            | `HTMLElement \| null`                    | `document.body` | Portal target                                                                 |
+| `onEscapeKeyDown?`      | `(event: KeyboardEvent) => void`         | `undefined`     | Escape key callback (`preventDefault` can stop closing)                       |
+| `onPointerDownOutside?` | `(event: PointerEvent) => void`          | `undefined`     | Outside click callback (`preventDefault` can stop closing)                    |
+| `onCloseAutoFocus?`     | `(event: FocusEvent) => void`            | `undefined`     | Called before focus returns to the Trigger (`preventDefault` keeps focus put) |
+| `as?`                   | `React.ElementType`                      | `'div'`         | Polymorphic element for Content                                               |
+| `ref?`                  | `React.Ref<HTMLElement>`                 | `undefined`     | Forwarded ref                                                                 |
+| `children?`             | `React.ReactNode`                        | `undefined`     | Content children                                                              |
 
 **Events**
 
-| Name                   | Parameters                                     | Description              | When Triggered                                    |
-| ---------------------- | ---------------------------------------------- | ------------------------ | ------------------------------------------------- |
-| `onKeyDown`            | `(event: React.KeyboardEvent<HTMLDivElement>)` | Content keydown callback | When keydown occurs while Content is focused      |
-| `onEscapeKeyDown`      | `(event: KeyboardEvent)`                       | Escape callback          | When `Escape` is pressed while Content is focused |
-| `onPointerDownOutside` | `(event: PointerEvent)`                        | Outside click callback   | When pointer down happens outside Trigger/Content |
+| Name                   | Parameters                                     | Description              | When Triggered                                                                                                                                                                    |
+| ---------------------- | ---------------------------------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onKeyDown`            | `(event: React.KeyboardEvent<HTMLDivElement>)` | Content keydown callback | When keydown occurs while Content is focused                                                                                                                                      |
+| `onEscapeKeyDown`      | `(event: KeyboardEvent)`                       | Escape callback          | When `Escape` is pressed while Content is focused                                                                                                                                 |
+| `onPointerDownOutside` | `(event: PointerEvent)`                        | Outside click callback   | When pointer down happens outside Trigger/Content                                                                                                                                 |
+| `onCloseAutoFocus`     | `(event: FocusEvent)`                          | Focus-return callback    | When Content closes from inside (Escape, Enter/Space, Tab, item click), right before focus returns to the Trigger. Not called for outside-pointer dismissal, which moves no focus |
 
 **HTML Attributes**
 
@@ -971,14 +976,16 @@ Group label part.
 
 ### Select.Separator
 
-Separator part between groups or items.
+Visual divider between groups or items. It is presentational by default: a `listbox` may only own `option`/`group` children, so exposing `role="separator"` inside Content would fail `aria-required-children`.
 
 **Props**
 
-| Name        | Type                | Default     | Description                       |
-| ----------- | ------------------- | ----------- | --------------------------------- |
-| `as?`       | `React.ElementType` | `'div'`     | Polymorphic element for Separator |
-| `children?` | `React.ReactNode`   | `undefined` | Optional content                  |
+| Name           | Type                | Default          | Description                                                                          |
+| -------------- | ------------------- | ---------------- | ------------------------------------------------------------------------------------ |
+| `as?`          | `React.ElementType` | `'div'`          | Polymorphic element for Separator                                                    |
+| `role?`        | `string`            | `'presentation'` | Pass `'separator'` (plus `aria-orientation` if needed) to expose the divider to AT   |
+| `aria-hidden?` | `boolean`           | `true`           | Defaults to `true` only while `role` is `'presentation'`; omitted for any other role |
+| `children?`    | `React.ReactNode`   | `undefined`      | Optional content                                                                     |
 
 **Events**
 
@@ -988,10 +995,10 @@ Separator part between groups or items.
 
 **HTML Attributes**
 
-| Attribute          | Value          | Purpose               |
-| ------------------ | -------------- | --------------------- |
-| `role`             | `"separator"`  | Separator semantics   |
-| `aria-orientation` | `"horizontal"` | Indicates orientation |
+| Attribute     | Value            | Purpose                                                  |
+| ------------- | ---------------- | -------------------------------------------------------- |
+| `role`        | `"presentation"` | Keeps the divider out of the listbox's owned children    |
+| `aria-hidden` | `"true"`         | Hides the divider from assistive technology (by default) |
 
 ### Select.Arrow
 
@@ -1050,16 +1057,16 @@ Optional arrow part positioned according to the Content/Trigger placement.
 
 Keyboard behavior in the current implementation:
 
-| Key                | Action                                                 | Context         | Notes                                                |
-| ------------------ | ------------------------------------------------------ | --------------- | ---------------------------------------------------- |
-| `Enter` / `Space`  | Toggle open/close                                      | Trigger focused | Works through the `Button` activation flow           |
-| `ArrowDown`        | Open and set focus strategy to the selected/first item | Trigger focused | Only opens when currently closed                     |
-| `ArrowUp`          | Open and set focus strategy to the selected/first item | Trigger focused | Only opens when currently closed                     |
-| `Escape`           | Close and return focus to Trigger                      | Content focused | Unless `preventDefault` is used in `onEscapeKeyDown` |
-| `Enter` / `Space`  | Select the highlighted item, close, and focus Trigger  | Content focused | No selection happens if nothing is highlighted       |
-| `ArrowDown`        | Highlight the next enabled item                        | Content focused | Wraps from the end of the list to the start          |
-| `ArrowUp`          | Highlight the previous enabled item                    | Content focused | Wraps from the start of the list to the end          |
-| `Home` / `PageUp`  | Highlight the first enabled item                       | Content focused | -                                                    |
-| `End` / `PageDown` | Highlight the last enabled item                        | Content focused | -                                                    |
-| `Tab`              | Close the Content                                      | Content focused | Calls `event.preventDefault()`                       |
-| `A-Z` / `a-z`      | Highlight the matching enabled item via typeahead      | Content focused | Default timeout is `700ms`                           |
+| Key                | Action                                                 | Context         | Notes                                                                                              |
+| ------------------ | ------------------------------------------------------ | --------------- | -------------------------------------------------------------------------------------------------- |
+| `Enter` / `Space`  | Toggle open/close                                      | Trigger focused | Works through the `Button` activation flow                                                         |
+| `ArrowDown`        | Open and set focus strategy to the selected/first item | Trigger focused | Only opens when currently closed                                                                   |
+| `ArrowUp`          | Open and set focus strategy to the selected/first item | Trigger focused | Only opens when currently closed                                                                   |
+| `Escape`           | Close and return focus to Trigger                      | Content focused | Unless `preventDefault` is used in `onEscapeKeyDown`; `onCloseAutoFocus` can veto the focus return |
+| `Enter` / `Space`  | Select the highlighted item, close, and focus Trigger  | Content focused | No selection happens if nothing is highlighted                                                     |
+| `ArrowDown`        | Highlight the next enabled item                        | Content focused | Wraps from the end of the list to the start                                                        |
+| `ArrowUp`          | Highlight the previous enabled item                    | Content focused | Wraps from the start of the list to the end                                                        |
+| `Home` / `PageUp`  | Highlight the first enabled item                       | Content focused | -                                                                                                  |
+| `End` / `PageDown` | Highlight the last enabled item                        | Content focused | -                                                                                                  |
+| `Tab`              | Close the Content                                      | Content focused | Calls `event.preventDefault()`                                                                     |
+| `A-Z` / `a-z`      | Highlight the matching enabled item via typeahead      | Content focused | Default timeout is `700ms`                                                                         |
