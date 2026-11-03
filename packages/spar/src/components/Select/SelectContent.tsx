@@ -100,7 +100,7 @@ export const SelectContent = <T extends ElementType = 'div'>({
   }, [onCloseAutoFocus, context.triggerRef]);
 
   // Handle outside interactions
-  useInteractOutside([context.contentRef, context.triggerRef], {
+  const insideHandlers = useInteractOutside([context.contentRef, context.triggerRef], {
     enabled: context.open,
     onPointerDownOutside: (event) => {
       onPointerDownOutside?.(event);
@@ -371,6 +371,16 @@ export const SelectContent = <T extends ElementType = 'div'>({
     onKeyDown: handleKeyDown,
     style: contentStyle,
     ...props,
+    // Interactions inside this layer's React subtree (including portaled
+    // children such as a nested Select) are not outside interactions.
+    onPointerDownCapture: (event: React.PointerEvent<HTMLDivElement>) => {
+      props.onPointerDownCapture?.(event);
+      insideHandlers.onPointerDownCapture(event);
+    },
+    onFocusCapture: (event: React.FocusEvent<HTMLDivElement>) => {
+      props.onFocusCapture?.(event);
+      insideHandlers.onFocusCapture(event);
+    },
   };
 
   const portalContainer = container || document.body;

@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Dialog, Popover, DropdownMenu, Select
+
+#### Fixed
+
+- **Nested floating layers no longer dismiss their parent.** Picking an option
+  in a `Select`, or pressing inside a `Popover` or `DropdownMenu`, that is
+  rendered inside a `DialogContent` (or another layer) closed the parent,
+  because nested content is portaled to `document.body` and the outside check
+  only looked at the parent's DOM node. An interaction that starts in a
+  layer's React subtree, portaled children included, now counts as inside, for
+  pointer and focus events alike. Genuine outside presses still dismiss, and
+  consumer `onPointerDownCapture` / `onFocusCapture` handlers on the content
+  are composed, not replaced.
+
 ## [0.3.0] - 2026-09-16
 
 ### Accordion

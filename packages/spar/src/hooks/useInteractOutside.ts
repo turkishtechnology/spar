@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 
 export interface UseInteractOutsideOptions {
   /**
@@ -36,28 +36,48 @@ export interface UseInteractOutsideOptions {
 }
 
 /**
+ * Handlers returned by {@link useInteractOutside}. Spread them onto the
+ * element rendered for the layer (composing any consumer handlers) so that
+ * interactions starting in its React subtree are treated as inside.
+ */
+export interface UseInteractOutsideReturn {
+  onPointerDownCapture: (event: React.PointerEvent) => void;
+  onFocusCapture: (event: React.FocusEvent) => void;
+}
+
+/**
  * Custom hook for detecting pointer and focus interactions outside specified elements.
  * Commonly used for closing modals, dropdowns, popovers, etc.
  *
+ * An interaction counts as inside when its target is a DOM descendant of one
+ * of `refs`, or when it starts in the React subtree of the element that the
+ * returned handlers are attached to. The second check covers nested layers
+ * that are portaled elsewhere in the DOM (a Select or Popover opened inside a
+ * Dialog), because React events propagate through portals along the React
+ * tree and React's listeners run before this hook's `document` listeners.
+ *
  * @param refs - Array of refs to elements that should be considered "inside"
  * @param options - Configuration options for the hook
+ * @returns Capture handlers to spread onto the layer's element
  *
  * @example
  * ```tsx
  * const contentRef = useRef<HTMLDivElement>(null);
  * const triggerRef = useRef<HTMLButtonElement>(null);
  *
- * useInteractOutside([contentRef, triggerRef], {
+ * const insideHandlers = useInteractOutside([contentRef, triggerRef], {
  *   enabled: isOpen,
  *   onPointerDownOutside: () => setIsOpen(false),
  *   onInteractOutside: (event) => console.log('Outside interaction:', event)
  * });
+ *
+ * return <div ref={contentRef} {...insideHandlers}>…</div>;
  * ```
  */
 export function useInteractOutside(
   refs: Array<React.RefObject<Element | null>>,
   options: UseInteractOutsideOptions = {},
-) {
+): UseInteractOutsideReturn {
   const {
     enabled = true,
     onPointerDownOutside,
@@ -67,6 +87,20 @@ export function useInteractOutside(
     preventDefault = false,
   } = options;
 
+  // Native events that reached the layer through the React tree (including
+  // through portals). They are inside even when the DOM says otherwise.
+  const insideTreeEvents = useRef<WeakSet<Event>>(new WeakSet());
+
+  const isOutside = useCallback(
+    (event: Event, target: Node) =>
+      !insideTreeEvents.current.has(event) &&
+      refs.every((ref) => {
+        const element = ref.current;
+        return !element || !element.contains(target);
+      }),
+    [refs],
+  );
+
   const handlePointerDown = useCallback(
     (event: PointerEvent) => {
       if (!enabled) return;
@@ -74,13 +108,7 @@ export function useInteractOutside(
       const target = event.target as Node | null;
       if (!target) return;
 
-      // Check if the click is outside all specified elements
-      const isOutside = refs.every((ref) => {
-        const element = ref.current;
-        return !element || !element.contains(target);
-      });
-
-      if (isOutside) {
+      if (isOutside(event, target)) {
         onPointerDownOutside?.(event);
         onInteractOutside?.(event);
 
@@ -89,7 +117,7 @@ export function useInteractOutside(
         }
       }
     },
-    [enabled, refs, onPointerDownOutside, onInteractOutside, preventDefault],
+    [enabled, isOutside, onPointerDownOutside, onInteractOutside, preventDefault],
   );
 
   const handleFocusIn = useCallback(
@@ -99,13 +127,7 @@ export function useInteractOutside(
       const target = event.target as Node | null;
       if (!target) return;
 
-      // Check if the focus is outside all specified elements
-      const isOutside = refs.every((ref) => {
-        const element = ref.current;
-        return !element || !element.contains(target);
-      });
-
-      if (isOutside) {
+      if (isOutside(event, target)) {
         onFocusOutside?.(event);
         onInteractOutside?.(event);
 
@@ -114,7 +136,7 @@ export function useInteractOutside(
         }
       }
     },
-    [enabled, includeFocus, refs, onFocusOutside, onInteractOutside, preventDefault],
+    [enabled, includeFocus, isOutside, onFocusOutside, onInteractOutside, preventDefault],
   );
 
   useEffect(() => {
@@ -135,4 +157,14 @@ export function useInteractOutside(
       }
     };
   }, [enabled, handlePointerDown, handleFocusIn, includeFocus]);
+
+  const onPointerDownCapture = useCallback((event: React.PointerEvent) => {
+    insideTreeEvents.current.add(event.nativeEvent);
+  }, []);
+
+  const onFocusCapture = useCallback((event: React.FocusEvent) => {
+    insideTreeEvents.current.add(event.nativeEvent);
+  }, []);
+
+  return { onPointerDownCapture, onFocusCapture };
 }

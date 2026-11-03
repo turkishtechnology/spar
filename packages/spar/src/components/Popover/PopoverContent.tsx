@@ -144,7 +144,7 @@ export const PopoverContent = <T extends ElementType = 'div'>({
   useFocusTrap(contentRef, !!(isOpen && isFocusTrapped));
 
   // Outside interaction handling
-  useInteractOutside([contentRef, triggerRef], {
+  const insideHandlers = useInteractOutside([contentRef, triggerRef], {
     enabled: isOpen,
     includeFocus: !isFocusTrapped, // Only include focus events if focus is not trapped
     onPointerDownOutside: (event) => {
@@ -225,6 +225,16 @@ export const PopoverContent = <T extends ElementType = 'div'>({
     },
     onKeyDown: handleKeyDown,
     ...props,
+    // Interactions inside this layer's React subtree (including portaled
+    // children such as a nested Select) are not outside interactions.
+    onPointerDownCapture: (event: React.PointerEvent<HTMLDivElement>) => {
+      props.onPointerDownCapture?.(event);
+      insideHandlers.onPointerDownCapture(event);
+    },
+    onFocusCapture: (event: React.FocusEvent<HTMLDivElement>) => {
+      props.onFocusCapture?.(event);
+      insideHandlers.onFocusCapture(event);
+    },
   };
 
   const contentElement = (

@@ -158,7 +158,7 @@ export const DialogContent = <T extends ElementType = 'div'>({
 
   // Outside interaction handler — works for both modal and non-modal dialogs.
   // Excludes triggerRef so clicking the trigger doesn't double-fire dismiss.
-  useInteractOutside([contentRef, triggerRef], {
+  const insideHandlers = useInteractOutside([contentRef, triggerRef], {
     enabled: isOpen,
     onPointerDownOutside: (event) => {
       onPointerDownOutside?.(event);
@@ -202,6 +202,16 @@ export const DialogContent = <T extends ElementType = 'div'>({
     ...ariaAttributes,
     ...dataAttributes,
     onKeyDown: handleKeyDown,
+    // Interactions inside this layer's React subtree (including portaled
+    // children such as a nested Select) are not outside interactions.
+    onPointerDownCapture: (event: React.PointerEvent<HTMLDivElement>) => {
+      props.onPointerDownCapture?.(event);
+      insideHandlers.onPointerDownCapture(event);
+    },
+    onFocusCapture: (event: React.FocusEvent<HTMLDivElement>) => {
+      props.onFocusCapture?.(event);
+      insideHandlers.onFocusCapture(event);
+    },
   };
 
   const portalContainer = container || document.body;
