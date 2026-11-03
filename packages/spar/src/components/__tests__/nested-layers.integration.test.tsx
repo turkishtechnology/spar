@@ -93,7 +93,9 @@ describe('Nested floating layers', () => {
       const { onOpenChange } = renderDialog();
 
       await user.click(screen.getByRole('button', { name: 'Actions' }));
-      await user.click(screen.getByRole('menuitem', { name: 'Pick seat' }));
+      const item = screen.getByRole('menuitem', { name: 'Pick seat' });
+      expect(getDialog()?.contains(item)).toBe(false);
+      await user.click(item);
 
       expect(onOpenChange).not.toHaveBeenCalled();
       expect(getDialog()).toBeInTheDocument();
