@@ -20,9 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   pointer and focus events alike. This applies to any React portal rendered
   from inside the layer, not only Spar layers: pressing in a toast or a
   third-party overlay rendered from inside `DialogContent` no longer calls
-  `onPointerDownOutside` or dismisses the dialog. Genuine outside presses still dismiss, and
-  consumer `onPointerDownCapture` / `onFocusCapture` handlers on the content
-  are composed, not replaced.
+  `onPointerDownOutside` or dismisses the dialog. Genuine outside presses
+  still dismiss, and consumer `onPointerDownCapture` / `onFocusCapture`
+  handlers on the content are composed, not replaced.
 
 ## [0.3.0] - 2026-09-16
 
