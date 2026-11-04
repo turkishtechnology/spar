@@ -49,6 +49,38 @@ describe('useInteractOutside', () => {
     expect(onFocusOutside).not.toHaveBeenCalled();
   });
 
+  it('treats a React child as inside through the capture handlers alone', () => {
+    // No refs: only the returned handlers can mark the events as inside.
+    const NoRefLayer = (options: UseInteractOutsideOptions) => {
+      const insideHandlers = useInteractOutside([], options);
+      return (
+        <div {...insideHandlers}>
+          <button type='button'>Handler only</button>
+        </div>
+      );
+    };
+    const onPointerDownOutside = jest.fn();
+    const onFocusOutside = jest.fn();
+    render(
+      <>
+        <button type='button'>Outside</button>
+        <NoRefLayer
+          includeFocus
+          onPointerDownOutside={onPointerDownOutside}
+          onFocusOutside={onFocusOutside}
+        />
+      </>,
+    );
+
+    fireEvent.pointerDown(button('Handler only'));
+    fireEvent.focusIn(button('Handler only'));
+    expect(onPointerDownOutside).not.toHaveBeenCalled();
+    expect(onFocusOutside).not.toHaveBeenCalled();
+
+    fireEvent.pointerDown(button('Outside'));
+    expect(onPointerDownOutside).toHaveBeenCalledTimes(1);
+  });
+
   it('treats a portaled React child as inside although it is outside the DOM node', () => {
     const { onPointerDownOutside, onFocusOutside } = renderLayer();
     const portaled = button('Portaled child');
