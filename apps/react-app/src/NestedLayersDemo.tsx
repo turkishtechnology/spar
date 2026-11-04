@@ -71,13 +71,12 @@ export function NestedLayersDemo() {
               <Popover.Trigger style={styles.ghostButton}>Bagaj (Popover)</Popover.Trigger>
               <Popover.Content style={styles.floating}>
                 <p style={styles.popoverText}>Bagaj hakki: 23 kg</p>
-                <button
-                  type='button'
+                <Popover.Close
                   style={styles.ghostButton}
-                  onClick={() => record('popover butonuna basildi')}
+                  onClick={() => record('popover Tamam ile kapandi')}
                 >
                   Tamam
-                </button>
+                </Popover.Close>
               </Popover.Content>
             </Popover>
 
