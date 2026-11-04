@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from 'react';
 import { Dialog } from '@turkish-technology/spar';
+import { NestedLayersDemo } from './NestedLayersDemo';
 
 function App() {
   const [controlledOpen, setControlledOpen] = useState(false);
@@ -120,6 +121,8 @@ function App() {
           </Dialog.Content>
         </Dialog.Root>
       </section>
+
+      <NestedLayersDemo />
     </main>
   );
 }
