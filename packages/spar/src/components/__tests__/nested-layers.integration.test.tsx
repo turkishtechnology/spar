@@ -135,6 +135,41 @@ describe('Nested floating layers', () => {
     });
   });
 
+  describe('inside a DropdownMenu', () => {
+    it('stays open when focus and pointer move into a nested Popover', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = jest.fn();
+      render(
+        <>
+          <button type='button'>Elsewhere</button>
+          <DropdownMenu defaultOpen onOpenChange={onOpenChange}>
+            <DropdownMenuTrigger>Actions</DropdownMenuTrigger>
+            <DropdownMenuContent aria-label='Actions menu'>
+              <Popover>
+                <PopoverTrigger>Seat details</PopoverTrigger>
+                <PopoverContent>
+                  <button type='button'>Inside popover</button>
+                </PopoverContent>
+              </Popover>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </>,
+      );
+
+      const menu = screen.getByRole('menu');
+      await user.click(screen.getByRole('button', { name: 'Seat details' }));
+      const inside = screen.getByRole('button', { name: 'Inside popover' });
+      expect(menu.contains(inside)).toBe(false);
+      await user.click(inside);
+
+      expect(onOpenChange).not.toHaveBeenCalledWith(false);
+      expect(screen.getByRole('menu')).toBeInTheDocument();
+
+      await user.click(screen.getByRole('button', { name: 'Elsewhere' }));
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+  });
+
   describe('inside a non-modal Popover', () => {
     it('stays open when focus and pointer move into a nested Select', async () => {
       const user = userEvent.setup();

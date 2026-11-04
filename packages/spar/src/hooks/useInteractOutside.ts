@@ -145,11 +145,12 @@ export function useInteractOutside(
     const doc = document;
 
     // These listeners must stay in the bubble phase. The React-tree check
-    // relies on React's own listeners (on the root and portal containers, or
-    // on `document` when it is the root, registered earlier) running first and
-    // recording the event through the returned capture handlers. Switching to
-    // `{ capture: true }` would run before React and treat every portaled
-    // nested layer as outside again.
+    // relies on React's capture-phase listener (on the root or portal
+    // container, or on `document` itself when it is the root) running first
+    // and recording the event through the returned capture handlers. Any
+    // capture-phase listener runs before a bubble-phase one, whatever the
+    // registration order. Switching these to `{ capture: true }` could run
+    // before React and treat every portaled nested layer as outside again.
 
     doc.addEventListener('pointerdown', handlePointerDown);
 
