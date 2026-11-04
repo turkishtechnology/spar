@@ -8,6 +8,8 @@ import {
   type UseInteractOutsideOptions,
 } from '../useInteractOutside';
 
+const NO_REFS: never[] = [];
+
 const Layer = (options: UseInteractOutsideOptions) => {
   const ref = useRef<HTMLDivElement>(null);
   const insideHandlers = useInteractOutside([ref], options);
@@ -52,7 +54,7 @@ describe('useInteractOutside', () => {
   it('treats a React child as inside through the capture handlers alone', () => {
     // No refs: only the returned handlers can mark the events as inside.
     const NoRefLayer = (options: UseInteractOutsideOptions) => {
-      const insideHandlers = useInteractOutside([], options);
+      const insideHandlers = useInteractOutside(NO_REFS, options);
       return (
         <div {...insideHandlers}>
           <button type='button'>Handler only</button>
