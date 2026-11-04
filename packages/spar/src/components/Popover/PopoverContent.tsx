@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useMemo, useRef, type ElementType } from 'react';
 import { createPortal } from 'react-dom';
 import {
+  composeInsideHandlers,
   useInteractOutside,
   useMergedRef,
   useFloating,
@@ -144,7 +145,7 @@ export const PopoverContent = <T extends ElementType = 'div'>({
   useFocusTrap(contentRef, !!(isOpen && isFocusTrapped));
 
   // Outside interaction handling
-  useInteractOutside([contentRef, triggerRef], {
+  const insideHandlers = useInteractOutside([contentRef, triggerRef], {
     enabled: isOpen,
     includeFocus: !isFocusTrapped, // Only include focus events if focus is not trapped
     onPointerDownOutside: (event) => {
@@ -225,6 +226,9 @@ export const PopoverContent = <T extends ElementType = 'div'>({
     },
     onKeyDown: handleKeyDown,
     ...props,
+    // Interactions inside this layer's React subtree (including portaled
+    // children such as a nested Select) are not outside interactions.
+    ...composeInsideHandlers(insideHandlers, props),
   };
 
   const contentElement = (

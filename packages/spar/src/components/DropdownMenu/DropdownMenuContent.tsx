@@ -10,6 +10,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import {
+  composeInsideHandlers,
   useInteractOutside,
   useMergedRef,
   useFloating,
@@ -246,7 +247,7 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
   }, [menu.open, highlightedId, items]);
 
   // --- Outside interaction ---
-  useInteractOutside([contentRef, menu.triggerRef], {
+  const insideHandlers = useInteractOutside([contentRef, menu.triggerRef], {
     enabled: menu.open,
     includeFocus: true,
     onPointerDownOutside: (event) => {
@@ -415,6 +416,9 @@ export const DropdownMenuContent = <T extends ElementType = 'div'>({
       ...floatingStyles,
       ...props.style,
     },
+    // Interactions inside this layer's React subtree (including portaled
+    // children such as a nested Select) are not outside interactions.
+    ...composeInsideHandlers(insideHandlers, props),
   };
 
   const contentElement = (
