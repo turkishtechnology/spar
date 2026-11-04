@@ -2,7 +2,11 @@ import React, { useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { useInteractOutside, type UseInteractOutsideOptions } from '../useInteractOutside';
+import {
+  composeInsideHandlers,
+  useInteractOutside,
+  type UseInteractOutsideOptions,
+} from '../useInteractOutside';
 
 const Layer = (options: UseInteractOutsideOptions) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -73,5 +77,37 @@ describe('useInteractOutside', () => {
     fireEvent.pointerDown(button('Outside'));
 
     expect(onPointerDownOutside).not.toHaveBeenCalled();
+  });
+});
+
+describe('composeInsideHandlers', () => {
+  it('runs the consumer handler first, then the inside handler', () => {
+    const calls: string[] = [];
+    const composed = composeInsideHandlers(
+      {
+        onPointerDownCapture: () => calls.push('inside:pointer'),
+        onFocusCapture: () => calls.push('inside:focus'),
+      },
+      {
+        onPointerDownCapture: () => calls.push('consumer:pointer'),
+        onFocusCapture: () => calls.push('consumer:focus'),
+      },
+    );
+
+    composed.onPointerDownCapture({} as React.PointerEvent<Element>);
+    composed.onFocusCapture({} as React.FocusEvent<Element>);
+
+    expect(calls).toEqual(['consumer:pointer', 'inside:pointer', 'consumer:focus', 'inside:focus']);
+  });
+
+  it('works without consumer handlers', () => {
+    const inside = { onPointerDownCapture: jest.fn(), onFocusCapture: jest.fn() };
+    const composed = composeInsideHandlers(inside, {});
+
+    composed.onPointerDownCapture({} as React.PointerEvent<Element>);
+    composed.onFocusCapture({} as React.FocusEvent<Element>);
+
+    expect(inside.onPointerDownCapture).toHaveBeenCalledTimes(1);
+    expect(inside.onFocusCapture).toHaveBeenCalledTimes(1);
   });
 });

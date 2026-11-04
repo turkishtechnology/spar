@@ -4,7 +4,9 @@ export { useDocumentEvent } from './useDocumentEvent';
 export { useFocusTrap } from './useFocusTrap';
 export { useMergedRef } from './useMergedRef';
 export {
+  composeInsideHandlers,
   useInteractOutside,
+  type InsideHandlerProps,
   type UseInteractOutsideOptions,
   type UseInteractOutsideReturn,
 } from './useInteractOutside';

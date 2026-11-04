@@ -176,3 +176,39 @@ export function useInteractOutside(
 
   return { onPointerDownCapture, onFocusCapture };
 }
+
+/**
+ * Consumer capture handlers that a layer's content may receive as props.
+ */
+export interface InsideHandlerProps<E extends Element = Element> {
+  onPointerDownCapture?: (event: React.PointerEvent<E>) => void;
+  onFocusCapture?: (event: React.FocusEvent<E>) => void;
+}
+
+/**
+ * Compose the handlers returned by {@link useInteractOutside} with the
+ * consumer's own `onPointerDownCapture` / `onFocusCapture`, so a layer can
+ * spread one object onto its content element without dropping either. The
+ * consumer's handler runs first.
+ *
+ * @example
+ * ```tsx
+ * const insideHandlers = useInteractOutside([contentRef], { ... });
+ * return <div {...props} {...composeInsideHandlers(insideHandlers, props)} />;
+ * ```
+ */
+export function composeInsideHandlers<E extends Element>(
+  insideHandlers: UseInteractOutsideReturn,
+  consumer: InsideHandlerProps<E>,
+): Required<InsideHandlerProps<E>> {
+  return {
+    onPointerDownCapture: (event) => {
+      consumer.onPointerDownCapture?.(event);
+      insideHandlers.onPointerDownCapture(event);
+    },
+    onFocusCapture: (event) => {
+      consumer.onFocusCapture?.(event);
+      insideHandlers.onFocusCapture(event);
+    },
+  };
+}
